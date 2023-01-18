@@ -1,0 +1,18 @@
+<!-- BEGIN ./domain/fix_phpbb.sbm  -->
+<assign success = "true">
+<assign phpbb=account.getResource(request.uid)>
+<if phpbb>
+  <assign result=phpbb.fixConfig()>
+  <if result.status!="OK">
+      <assign res=session.addMessage(result.msg)>
+      <assign success = "false">
+  </if>
+</if>
+<if success=="true">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!-- END ./domain/fix_phpbb.sbm  -->
+
+

@@ -1,0 +1,6 @@
+<center> urlscnt </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Specifies the number of "bad" URLs to be sent to the Comodo antispam database. It is activated if badurls parameter is on.
+<br>Default: 5
+<br>

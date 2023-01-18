@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/billing/miva_add_confirm.html  -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_empresa" accept-charset="UTF-8">
+
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="submit/miva/empresa_add.sbm">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+<assign stype = account.plan.getResourceType(type).description>
+<assign total="0">
+<if cgidir_price && cgidir_price=="0">
+  <assign total="0">
+  <list cgidir_price.entries as entry>
+    <assign res=empresa_price.entries.addHash("type",entry.type,"description",entry.description,"amount",entry.amount)>
+    <assign total=toolbox.add(total,entry.amount)>
+  </list>
+</if>
+<assign message=toolbox.compose(lang.billing.add_msg1, stype)>
+<if setup!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg2a,toolbox.currency(setup))>
+</if>
+<if recurrent!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg3,toolbox.currency(recurrent))>
+</if>
+<if recurrentAll!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg4,toolbox.currency(recurrentAll))>
+</if>
+<if cgidir_price.free=="0" && empresa.free=="1">
+  <assign res=empresa_price.put("free","0")>
+</if>
+<assign res=toolbox.add(empresa_price.total,total)>
+<assign res=empresa_price.put("total",res)>
+<call draw_warn_invoice_with_charge_info(message,empresa_price,"","","f_add_empresa")>
+</form>
+<!--  END ./control/billing/miva_add_confirm.html  -->

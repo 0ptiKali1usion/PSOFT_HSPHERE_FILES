@@ -1,0 +1,135 @@
+<!-- BEGIN ./common/control/servmon/server_info_unix.html -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver = eeman.getPserver(request.server_id)>
+<assign si = pserver.server_info>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("7", lang.servmon.header1)>
+
+
+<if !si>
+<tr>
+<td colspan="7"><call draw_label(lang.servmon.failed)></td>
+</tr>
+<else>
+<tr>
+<td><call draw_label_bold(lang.servmon.server)></td>
+<td colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html&rid="+pserver.id, pserver.name)></td>
+<td><call draw_label_bold(lang.servmon.hostname)></td>
+<td><call draw_label(si.hostname)></td>
+<td><call draw_label_bold(lang.label.hostip)></td>
+<td><call draw_label(si.ip)></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.servmon.os.name)></td>
+<td colspan="2"><call draw_label(si.os("name"))></td>
+<td><call draw_label_bold(lang.servmon.os.machine)></td>
+<td><call draw_label(si.os("machine"))></td>
+<td><call draw_label_bold(lang.servmon.os.kernel)></td>
+<td><call draw_label(si.os("kernel"))></td>
+</tr>
+<assign cpu=si.cpu>
+<tr>
+<td><call draw_label_bold(lang.servmon.os.release)></td>
+<td colspan="2"><call draw_label(si.os("release"))></td>
+<td><call draw_label_bold(lang.servmon.cpu.proc)></td>
+<td><call draw_label(si.processors("count"))></td>
+<td><call draw_label_bold(lang.servmon.cpu.speed)></td>
+<td><call draw_label(cpu("speed"))></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.servmon.cpu.model)></td>
+<td nowrap colspan="2"><call draw_label(cpu("model"))></td>
+<td><call draw_label_bold(lang.servmon.cpu.cache)></td>
+<td><call draw_label(cpu("cache"))></td>
+<td><call draw_label_bold(lang.servmon.cpu.bogomips)></td>
+<td><call draw_label(cpu("bogomips"))></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.label.date)></td>
+<td colspan="2"><call draw_label(si.date)></td>
+<td><call draw_label_bold(lang.servmon.uptime)></td>
+<td colspan="3"><call draw_label(si.uptime)></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.servmon.load)></td>
+<td nowrap colspan="2"><call draw_label(si.load)></td>
+<td><call draw_label_bold(lang.servmon.users)></td>
+<td colspan="3"><call draw_label(si.users("count"))>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=servmon/logged_users.html&server_id="+request.server_id, lang.servmon.users.view)></td>
+</tr>
+<tr>
+<td colspan="7" class="control_header"><call draw_header(lang.servmon.header2)></td>
+</tr>
+<tr>
+<td colspan="3"><call draw_label_bold(lang.servmon.mem.type)></td>
+<td><call draw_label_bold(lang.servmon.perc)></td>
+<td><call draw_label_bold(lang.servmon.free)></td>
+<td><call draw_label_bold(lang.servmon.used)></td>
+<td><call draw_label_bold(lang.servmon.size)></td>
+</tr>
+<assign memory=si.memory>
+<tr>
+<td colspan="3"><call draw_label_bold(lang.servmon.mem.phys)></td>
+<td><call draw_label(toolbox.percent(memory("used"), memory("total"))+"%")></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(memory("free")))></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(memory("used")))></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(memory("total")))></td>
+</tr>
+<assign swap=si.swap>
+<tr>
+<td colspan="3"><call draw_label_bold(lang.servmon.mem.swap)></td>
+<td><call draw_label(toolbox.percent(swap("used"), swap("total"))+"%")></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(swap("free")))></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(swap("used")))></td>
+<td nowrap><call draw_label(toolbox.smartTraffic(swap("total")))></td>
+</tr>
+<tr>
+<td colspan="7" class="control_header"><call draw_header(lang.servmon.header3)></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.servmon.disk.mount)></td>
+<td><call draw_label_bold(lang.servmon.disk.type)></td>
+<td><call draw_label_bold(lang.servmon.disk.partition)></td>
+<td nowrap><call draw_label_bold(lang.servmon.perc)></td>
+<td><call draw_label_bold(lang.servmon.free)></td>
+<td><call draw_label_bold(lang.servmon.used)></td>
+<td><call draw_label_bold(lang.servmon.size)></td>
+</tr>
+<list si.filesystem as fs>
+<tr>
+<td><call draw_label(fs("mount"))></td>
+<td><call draw_label(fs("type"))></td>
+<td><call draw_label(fs("partition"))></td>
+<td><call draw_label(fs("use"))></td>
+<td><call draw_label(toolbox.smartTraffic(fs("available")))></td>
+<td><call draw_label(toolbox.smartTraffic(fs("used")))></td>
+<td><call draw_label(toolbox.smartTraffic(fs("total")))></td>
+</tr>
+</list>
+
+<!--
+<tr>
+<td colspan="7">
+<list pserver.getUniqueTypes() as g_type>
+<switch g_type>
+<case "1"><include "control/servmon/info_web.html"><break></case>
+<case "2"><include "control/servmon/info_dns.html"><break></case>
+<case "3"><include "control/servmon/info_mail.html"><break></case>
+<case "4"><include "control/servmon/info_mysql.html"><break></case>
+<case "6"><include "control/servmon/info_real.html"><break></case>
+<case "7"><include "control/servmon/info_real.html"><break></case>
+<case "10"><include "control/servmon/info_cp.html"><break></case>
+<case "18"><include "control/servmon/info_pgsql.html"><break></case>
+</switch>
+</list>
+</td>
+</tr>
+-->
+</if>
+
+
+<call draw_table_footer()>
+<!-- END ./common/control/servmon/server_info_unix.html -->

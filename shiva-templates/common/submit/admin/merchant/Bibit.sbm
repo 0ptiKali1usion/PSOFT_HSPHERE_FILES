@@ -1,0 +1,14 @@
+<!-- BEGIN ./admin/merchant/Bibit.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+<assign result=mm.update(request.mid, "TITLE", request.title,"SERVER", request.server, "PATH", request.path, "PORT", request.port, "MERCH_CODE", request.merchcode, "USERNAME", request.username, "PASSWORD", request.password, "CURRCODE", request.curr_code, "CLASS_NAME", "psoft.epayment.Bibit","TEMPLATE", "admin/merchant/Bibit.html")>
+<else>
+<assign result=mm.new("TITLE", request.title, "MERCH_CODE", request.merchcode,"SERVER", request.server, "PATH", request.path, "PORT", request.port, "USERNAME", request.username, "PASSWORD", request.password, "CURRCODE", request.curr_code, "CLASS_NAME", "psoft.epayment.Bibit", "TEMPLATE", "admin/merchant/Bibit.html")>
+</if>
+<if result>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+<else>
+<include request.stemplate>
+</if>
+<!-- END ./admin/merchant/Bibit.sbm -->

@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/settings/change_icon_image_set.sbm -->
+<if !admin><assign admin = account.getChild("admin")></if>
+<if !design_id><assign design_id = request.design_id></if>
+<if !icon_image_set>
+  <assign icon_image_set = request.icon_image_set>
+  <assign custom_scheme = "custom">
+</if>
+<if design_id && icon_image_set>
+  <if !design_prefix><assign design_prefix = design.get_design_prefix(design_id)></if>
+  <if icon_image_set == "_clear_"><assign icon_image_set = ""></if>
+  <call save_v(design_prefix + "icon_image_set", icon_image_set)>
+<else>
+ <assign res=session.addMessage(toolbox.compose(
+   lang.msg.iconset_failed_change, icon_set))>
+ <assign failure="1">
+</if>
+<if !failure>
+  <if custom_scheme>
+    <call save_v(design_prefix + "color_scheme", custom_scheme)>
+    <assign res = design.refreshCurrent()>
+    <include request.stemplate>
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<function save_v(name,value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/change_icon_image_set.sbm -->

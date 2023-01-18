@@ -1,0 +1,29 @@
+<!-- BEGIN ./common/msexchange/add_smtpdomain.sbm -->
+<assign result=yafv.common.s_domain.vTransferDomainName(lang.label.domain,request.domain)>
+<assign success="0">
+<if result.status=="OK">
+<assign bizorg=account.getChild("bizorg")>
+<if bizorg.checkDomain(request.domain)>
+<assign result = bizorg.addChild("domain", "", request.domain)>
+<if result.status=="OK">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added,lang.label.domain,request.domain))>
+            <assign success="1">
+<else>
+            <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+   <assign res=session.addMessage(toolbox.compose(
+                	  lang.msg.domain_name_taken,request.domain))>
+</if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success == "1">
+    <include request.stemplate>
+<else>
+    <assign domain=request.domain>
+    <include request.ftemplate>
+</if>
+
+<!-- END ./common/msexchange/add_smtpdomain.sbm -->

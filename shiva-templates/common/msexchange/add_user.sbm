@@ -1,0 +1,38 @@
+<!-- BEGIN: ./msexchange/add_user.sbm -->
+<assign bizorg=account.getChild("bizorg")>
+<assign bizuser=bizorg.addChild("bizuser", request.i_bizuser_plan,
+        request.principalName,
+        request.password,
+        request.description,
+        request.i_bizuser_admin,
+        request.i_bizuser_plan,
+        request.displayName,
+        request.givenName,
+        request.middleName,
+        request.sn,
+        request.initials,
+	request.physicalDeliveryOfficeName,
+	request.telephoneNumber,
+	request.street,
+	request.postOfficeBox,
+	request.city,
+	request.state,
+	request.country)>
+<if bizuser.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.label.mail_box,request.principalName))>
+    <assign success="1">
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.mail_box,request.principalName))>
+
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success=="1">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+
+
+<!-- END: ./msexchange/add_user.sbm -->

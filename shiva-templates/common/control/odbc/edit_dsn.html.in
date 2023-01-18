@@ -1,0 +1,53 @@
+<!-- BEGIN ./control/odbc/edit_dsn.html  -->
+<assign unixuser=account.getChild("unixuser")>
+<assign odbc = unixuser.getChild("odbc")>
+<assign dsn = account.getResource(request.rid)>
+<assign cf_dsn = dsn.getChild("cf_dsn_record")>
+<call draw_tooltip()>
+<if odbc>
+<yafv s_odbc>
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/odbc/update_dsn.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="driver_name" value="${dsn["driver-name"]}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<call draw_table_header("3", lang.odbc.drivers(dsn["driver-name"]))>
+
+<tr>
+    <td class="control_header_align_center" width="20%"><call draw_header(lang.odbc.name)></td>
+    <td class="control_header_align_center" width="20%"><call draw_header(lang.odbc.value)></td>
+    <td class="control_header_align_center" width="60%"><call draw_header(lang.label.descr)></td>
+</tr>
+<tr >
+    <td width="20%"><call draw_label(lang.odbc.dsn)></td>
+    <td width="20%" NOWRAP><call draw_label(dsn.DSN)></td>
+    <td width="60%"><call draw_label(lang.odbc.dsnname)></td>
+</tr>
+<if dsn["driver-name"]!="">
+<list odbc.getDriversParamsList(dsn["driver-name"]) as driver_params>
+<tr >
+    <assign Name=driver_params.Name>
+    <assign Value=dsn[Name]>
+    <assign Description="&nbsp;"+driver_params.Description>
+    <assign Select=driver_params.Select>
+    <include "control/odbc/"+driver_params.template+".html">
+</tr>
+</list> 
+<if cf_dsn || account.plan.areResourcesAvailable("cf_dsn_record")>
+    <tr>
+      <td><call draw_label(lang.odbc.cf_dsn)></td>
+      <td><call onoff(dsn, "cf_dsn_record")></td>
+      <td><call draw_label(lang.odbc.create_cf_dsn.text)></td>
+    </tr>
+</if>
+</if>
+<tr>
+    <td   class="control_align_center" colspan="3" ><input type="submit" value="${lang.button.update}"></td>
+</tr>
+<call draw_table_footer()>
+
+</form>
+</if>
+<!--  END ./control/odbc/edit_dsn.html  -->

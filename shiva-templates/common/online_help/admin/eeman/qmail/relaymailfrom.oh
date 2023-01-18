@@ -1,0 +1,11 @@
+<center> relaymailfrom </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of senders ("Mail From:") allowed to relay independently even if open relay is closed. 
+Entries in relaymailfrom can be E-Mail addresses, or just the domain (with the @ sign). 
+Unlike relaydomains, native addresses should be entered. Examples:
+<br>joeblow@domain1.com
+<br>@domain2.com			      
+<br>Default: the relaymailfrom file is absent (no senders are allowed to relay independently).
+<br><i>Important:</i>For antispam security reasons, we strongly recommend not to add this parameter to SMTP configuration.
+

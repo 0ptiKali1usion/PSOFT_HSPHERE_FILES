@@ -1,0 +1,205 @@
+<!-- BEGIN: common/migrator/wizard.html.in -->
+<include "functions">
+<call START_PAGE("migrator/wizard.html", "migration")>
+<yafv s_hsphere>
+<call draw_tooltip()>
+
+<include "control/misc/mini_calendar.html">
+
+<assign mtype=request.mtype>
+<if mtype=="raq">
+<assign mgr=obj.raq4_migrator>
+</if>
+<if mtype=="cpanel">
+<assign mgr=obj.cpanel_migrator>
+</if>
+
+<if mgr>
+<form name="f_mig" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" NAME="template_name" value="migrator/new_job.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="mtype" value="${mtype}">
+
+<if mtype=="raq">
+<assign header_lbl = lang.label.raq_migration>
+</if>
+<if mtype=="cpanel">
+<assign header_lbl = lang.label.cpanel_migration>
+</if>
+
+<call draw_table_header("2", header_lbl)>
+<tr>
+  <td><call draw_label(lang.label.ftpserver)></td>
+  <td><input type="text" name="ftpserver"></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.ftplogin)></td>
+  <td><input type="text" name="ftplogin"></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.ftppsw)></td>
+  <td><input type="password" name="ftppassword"></td>
+</tr>
+
+<tr>
+  <td>
+    <if mtype == "raq"><assign arch_lbl = lang.label.raq_cmuexport_archive></if>
+    <if mtype == "cpanel"><assign arch_lbl = lang.label.cpanel_archive></if>
+    <call draw_label(arch_lbl)>
+  </td>
+  <td><input type="text" name="ftpfile"></td>
+</tr>
+<call draw_table_footer()>
+
+<call draw_table_header("2", lang.planeditor.adminedit.general)>
+
+<tr>
+
+   <td ><call draw_label(lang.label.username)></td>
+   <td ><input type="text" name="login" value="${result.user.login}" check="vUsername"></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.password)></td>
+  <td><input type="text" name="password" value="${result.user.password}" check="vPassword"></td>
+</tr>
+
+
+<script language="javascript">
+var _BP = new Array(
+   <list account.plan.getAccessiblePlanList(account.plan.id) as group><list group.plans as plan><if plan.values["_CREATED_BY_"] == "unix">
+       <assign periods=plan.values["_PERIOD_TYPES"]><if periods>
+${plan.id}, new Array(
+   <assign counter=toolbox.counter("0", periods)><assign onc=toolbox.counter()><list onc as c><if counter==periods>${c.stop}<else>${counter}, ${plan.values["_PERIOD_SIZE_"+counter]},
+   "${plan.values["_PERIOD_TYPE_"+counter]}", ${counter.next}</if></list>-1),
+</if></if></list></list>
+-1, null);
+
+function setBillingPeriod(form) {
+    var plan_id = form.plan_id.options[form.plan_id.selectedIndex].value;
+    var bpselect = form.bpselect;
+     for (i = bpselect.options.length; i >= 0; i--) {
+		bpselect.options[i] = null;
+     }
+    for (i = 0; i < _BP.length; i=i+2) {
+        id = _BP[i];
+        if (id == plan_id) {
+            options = _BP[i+1];
+            for (j = 0; j < options.length - 1 ; j+=3) {
+                bpselect.options[j/3] = new Option(options[j+1] + " " + options[j+2],
+                options[j]);
+            }
+            break;
+        } else if (id == -1) {
+            bpselect.options[0].value="NONE";
+        }
+    }
+}
+
+</script>
+<tr>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><select name="plan_id" size="1" onChange="setBillingPeriod(this.form)">
+   <list account.plan.getAccessiblePlanList(account.plan.id) as group>
+     <list group.plans as plan>
+     <if plan.values["_CREATED_BY_"] == "unix">
+      <option value="${plan.id}">${plan.description}
+     </if>
+     </list>
+   </list>
+   </select></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.bp)></td>
+  <td><select name="bpselect" size="1"><option>NONE</select</td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.label.start_date)></td>
+   <td valign="bottom"><call dateField("f_mig","start_date")></td>
+</tr>
+
+<tr>
+    <td><call draw_label(lang.admin.searchbalance.balance)></td>
+    <td><input name="balance" label="${lang.admin.searchbalance.balance}" size="8" check="vBalanceAmount"></td>
+</tr>
+<call draw_table_footer()>
+
+<call draw_table_header("2", lang.label.contact_info)>
+<tr>
+  <td><call draw_label(lang.bci.fname)></td>
+  <td><input name="first_name" label="${lang.bci.fname}" check="vSinglename" size="15" value="${vfirst_name}"></TD>
+</TR>
+
+<TR>
+  <td><call draw_label(lang.bci.lname)></td>
+  <td><input name="last_name" label="${lang.bci.lname}" size="15" value="${vlast_name}" check="vSinglename"></TD>
+</TR>
+
+<TR>
+  <td><call draw_label(lang.bci.company)></td>
+  <td><input name="org_name" size="30" value="${vorg_name}" label="${lang.bci.company}" check="vOrganization"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.adr1)></td>
+  <td><input name="address1" size="30" value="${vaddress1}" check="vAddress" label="${lang.bci.adr1}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.adr2)></TD>
+  <td><input name="address2" size="30" value="${vaddress2}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.adr3)></td>
+  <td><input name="address3" size="30" value="${vaddress3}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.city)></td>
+  <td><input name="city" size="15" value="${vcity}" check="vCity" label="lang.bci.city"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.state)></td>
+  <td>
+    <select name="state">
+    <call buildStates(vstate)>
+    </select>
+  </td>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.country)></td>
+  <td>
+    <SELECT NAME="country" onChange="checkForm(this.form)">
+    <call buildCountries(vcountry)>
+    </SELECT>
+  </td>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.pcode)></td>
+  <td><input name="postal_code" size="15" value="${vpostal_code}" check="vPostal_Code" label="${lang.bci.pcode}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")></td>
+  <td><input name="phone" size="20" value="${vphone}" check="vPhoneCountry(this, country)" label="${lang.bci.phone}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+  <td><input name="fax" size="20" value="${vfax}" check="vFaxCountry(this, country)" label="${lang.bci.fax}"></TD>
+</TR>
+<TR>
+  <td><call draw_label(lang.bci.email)></td>
+  <td><input name="email" label="${lang.bci.email}" check="vEmail" size="30" value="${vemail}"></TD>
+</TR>
+<tr>
+  <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}" name="submit"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<script>
+setBillingPeriod(document.forms.f_mig);
+</script>
+</if>
+<call END_PAGE()>
+<!-- END: common/migrator/wizard.html.in -->

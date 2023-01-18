@@ -1,0 +1,55 @@
+<!-- BEGIN submit/adnsmanager/disable_reseller_ssl.sbm -->
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign isReseller = "0">
+  <assign eeman = account.getChild("eeman")>
+<else>
+  <assign isReseller = "1">
+  <assign eeman = account.getChild("reseller_eeman")>
+</if>
+
+<assign admin = account.getChild("admin")>
+<if isReseller == "1">
+    <list eeman.aliases as alias>
+      <if alias.l_server.type == "10">
+        <assign zone_id = alias.zone_id>
+        <assign rec_id = alias.id>
+        <assign lserver = alias.l_server>
+        <assign pref="">
+        <list toolbox.tokenizer(lserver.name,".") as tokName>
+          <if pref==""><assign pref=tokName></if>
+        </list>
+        <assign lserver_id = lserver.id>
+      </if>
+    </list>
+    <if admin.isCPSSLEnabled("ip_based") == "1">
+      <assign r1 = eeman.delAlias(zone_id, rec_id)>
+      <assign result = eeman.deleteResellerSSL(request.ssl_id)>
+      <assign r2 = eeman.addAlias(lserver_id, zone_id, pref)>
+    <else>
+      <if admin.isCPSSLEnabled("port_based") == "1">
+	<assign result = eeman.deleteResellerSSL(request.ssl_id)>
+      </if>
+    </if>
+<else>
+  <assign lservers = eeman.getLserverList()>
+  <list lservers as lserver>
+    <if eeman.getGroupType(lserver.group) == "10">
+      <assign lserver_id = lserver.id>
+    </if>
+  </list>
+  <!--${lserver_id}, ${zone_id},${pref} -->
+  <assign r1 = eeman.delAlias(zone_id, rec_id)>
+  <assign result = eeman.deleteResellerSSL(request.ssl_id)>
+  <assign r2 = eeman.addAlias(lserver_id, zone_id, pref)>
+</if>
+
+<if result.status == "OK">
+    <include request.stemplate>
+<else>
+    <assign res = session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+
+<!-- END submit/adnsmanager/disable_reseller_ssl.sbm -->

@@ -1,0 +1,16 @@
+<!-- BEGIN ./email/delete_forward.sbm  -->
+<assign resource= account.getResource( request.did )>
+<assign result= resource.delete>
+<if result.status == "OK" >
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted, lang.label.mail_forward, ""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete, lang.label.mail_forward, ""))>
+    <assign res = session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+   
+<!--  END ./email/delete_forward.sbm  -->

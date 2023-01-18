@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE user_emails [
+  <!ELEMENT user_emails (groups+,emails+)>
+  <!ELEMENT groups (group+)>
+  <!ELEMENT group (#PCDATA)>
+  <!ELEMENT emails (email+)>
+  <!ELEMENT email (subject+)>
+  <!ELEMENT subject (#PCDATA)>
+
+  <!ATTLIST group id CDATA #REQUIRED>
+  <!ATTLIST group name CDATA #REQUIRED>
+  <!ATTLIST email tag CDATA #REQUIRED>
+  <!ATTLIST email group_id CDATA #REQUIRED>
+  <!ATTLIST email template CDATA #REQUIRED>
+  <!ATTLIST email massmail_applicable CDATA #IMPLIED>
+  <!ATTLIST email no_cc CDATA #IMPLIED>
+  <!ATTLIST email admin_only CDATA #IMPLIED>
+]>
+<user_emails>
+    <groups>
+	<group id="1" name="ce_groups.misc"/>
+	<group id="2" name="ce_groups.custom_registrar"/>
+	<group id="3" name="ce_groups.m_debtors"/>
+	<group id="4" name="ce_groups.welcome"/>
+	<group id="5" name="ce_groups.tax_exmp"/>
+	<group id="6" name="ce_groups.registrar"/>
+	<group id="7" name="ce_groups.m_trials"/>
+	<group id="8" name="ce_groups.tt_system"/>
+	<group id="9" name="ce_groups.accounting"/>
+	<group id="10" name="ce_groups.suspend"/>
+    </groups>
+    <emails>
+	<email tag="VPS_INIT" template="mail/vps-init.txt" group_id="1">
+	    <subject>Virtual Private Server Initialization Notification</subject>
+	</email>
+	<email tag="SSH_NOTIFICATION" template="mail/ssh_notification.txt" group_id="1">
+	    <subject>${subject}</subject>
+	</email>
+	<email tag="LOST_PASSWORD" template="mail/forgot_passwd.txt" group_id="1" massmail_applicable="1">
+	    <subject>Lost Password</subject>
+	</email>
+	<email tag="OVERLIMIT" template="mail/overlimit.txt" group_id="1">
+	    <subject>Warning (Approaching resource limit)</subject>
+	</email>
+        <email tag="ASYNC_DONE" template="mail/async-done.txt" group_id="2">
+            <subject>Completed Async. Processes</subject>
+        </email>
+        <email tag="ASYNC_CANCELED" template="mail/async-canceled.txt" group_id="2">
+            <subject>Canceled Async. Processes</subject>
+        </email>
+	<email tag="ACCOUNT_BALANCE" template="mail/balance.txt" group_id="1" massmail_applicable="1">
+            <subject>Account Balance</subject>
+        </email>
+        <email tag="CUSTOM_REGISTRAR_REGISTRATION" template="mail/custom_registrar_registration.txt" group_id="2" admin_only="true">
+	    <subject>Domain Registration Request</subject>
+ 	</email>
+	<email tag="CUSTOM_REGISTRAR_RENEW" template="mail/custom_registrar_renew.txt" group_id="2" admin_only="true">
+	    <subject>Domain Renewal Request</subject>
+	</email>
+	<email tag="CUSTOM_REGISTRAR_CONTACT_CHANGED" template="mail/custom_registrar_contact_changed.txt" group_id="2" admin_only="true">
+	    <subject>Contact Information of customer ${username} has been changed</subject>
+	</email>
+	<email tag="DEBT_WARN_NOTIFICATION" template="mail/debt_warn_notification.txt" group_id="3">
+	    <subject>Outstanding Balance Notification</subject>
+	</email>
+	<email tag="DEBT_DEL_NOT" template="mail/debt_del_not.txt" group_id="3">
+	    <subject>Your hosting account will be deleted soon</subject>
+	</email>
+	<email tag="DEBT_DEL_REASON" template="mail/debt_del_reason.txt" group_id="3">
+	    <subject>Your hosting account has been deleted</subject>
+	</email>
+	<email tag="DEBT_SUSP_NOT" template="mail/debt_susp_not.txt" group_id="3">
+	    <subject>Your hosting account will be suspended soon</subject>
+	</email>
+	<email tag="DEBT_SUSP_REASON" template="mail/debt_susp_reason.txt" group_id="3">
+	    <subject>Your hosting account has been suspended</subject>
+	</email>
+        <email tag="TRIAL_SUSP_REGISTER" template="mail/trial_account_susp.txt" group_id="3">
+	    <subject>You have registered as paid user: ${plan.description}</subject>
+	</email>
+        <email tag="NEW_MODERATED" template="mail/new_account_moderated.txt" group_id="4">
+	    <subject>New Account: ${plan.description}</subject>
+	</email>
+	<email tag="TRIAL_MODERATED" template="mail/trial_moderated.txt" group_id="4">
+	    <subject>New Account: ${plan.description}</subject>
+	</email>
+        <email tag="NEW_MODERATED_CC" template="mail/new_account_moderated_cc.txt" group_id="4">
+	    <subject>New Account: ${plan.description}</subject>
+	</email>
+        <email tag="TRIAL_REGISTER" template="mail/trial_account.txt" group_id="4" massmail_applicable="1">
+	    <subject>You have registered as paid user: ${plan.description}</subject>
+	</email>
+        <email tag="NEW_ACCOUNT" template="mail/new_account.txt" group_id="4" massmail_applicable="1">
+	    <subject>New Account: ${plan.description}</subject>
+	</email>
+        <email tag="FAILED_SIGNUP" template="mail/you_have_files_signups.txt" group_id="4">
+	    <subject>Your system has ${failed_signups_q} inactive accounts</subject>
+	</email>
+        <email tag="NEW_MODERATED_TEXEMPT" template="mail/new_account_tax_exemption.txt" group_id="5">
+	    <subject>New Account: ${plan.description}</subject>
+	</email>
+	<email tag="MODERATED_TEXEMPT_APPROVED" template="mail/tax_exemption_approved_new.txt" group_id="5">
+	    <subject>Tax Exemption Code Approved</subject>
+	</email>
+	<email tag="ACCOUNT_TEXEMPT_APPROVED" template="mail/tax_exemption_approved.txt" group_id="5">
+	    <subject>Tax Exemption Code Approved</subject>
+	</email>
+	<email tag="MODERATED_TEXEMPT_REJECTED" template="mail/tax_exemption_rejected_new.txt" group_id="5">
+	    <subject>Tax Exemption Code Rejected</subject>
+	</email>
+	<email tag="ACCOUNT_TEXEMPT_REJECTED" template="mail/tax_exemption_rejected.txt" group_id="5">
+	    <subject>Tax Exemption Code Rejected</subject>
+	</email>
+        <email tag="DOMAIN_TRANSFER" template="mail/transfer_domain.txt" group_id="6">
+	    <subject>Transfer domain notification</subject>
+	</email>
+	<email tag="REGISTRAR_RENEW_WARN" template="mail/registrar_warn.txt" group_id="6">
+	    <subject>Your domain ${osrs.domain_name} will expire soon</subject>
+	</email>
+	<email tag="REGISTRAR_EXPIRED_WARN" template="mail/registrar_expired_warn.txt" group_id="6">
+	    <subject>Your domain ${osrs.domain_name} has expired</subject>
+	</email>
+	<email tag="REGISTRAR_FAILED_RENEWAL" template="mail/registrar_failed_renewal.txt" group_id="6">
+	    <subject>Failed renewal</subject>
+	</email>
+        <email tag="TRIAL_APPROACH_NOT" template="mail/trial_approach_not.txt" group_id="7">
+	    <subject>Trial period of your hosting account will expire soon</subject>
+	</email>
+	<email tag="TRIAL_SUSP_NOT" template="mail/trial_susp_not.txt" group_id="7">
+	    <subject>Your trial account will be suspended soon</subject>
+	</email>
+	<email tag="TRIAL_DEL_NOT" template="mail/trial_del_not.txt" group_id="7">
+	    <subject>Your trial account will be deleted soon</subject>
+	</email>
+	<email tag="TRIAL_DEL_REASON" template="mail/trial_del_reason.txt" group_id="7">
+	    <subject>Your trial account has been deleted</subject>
+	</email>
+        <email tag="INTERNAL_TICKET" template="mail/ticket_internal.txt" group_id="8">
+	    <subject>Internal Problem: ${root.title}#${root.id}</subject>
+	</email>
+        <email tag="INVOICE" template="mail/invoice.txt" group_id="9">
+	    <subject>Order Confirmation (#${order_id})</subject>
+	</email>
+	<email tag="MONEY_BACK" template="mail/money_back.txt" group_id="9">
+	    <subject>Money Back Request: ${account.description} ${account.id}</subject>
+	</email>
+        <email tag="ACCOUNTING_ERROR" template="mail/accounting_error.txt" group_id="9">
+	    <subject>Accounting Error: [${user.login}:${account.id}] ${error_subject}</subject>
+	</email>
+        <email tag="PREPAY_INVOICE" template="mail/prepay_invoice.txt" group_id="9" massmail_applicable="1">
+	    <subject>Prepay Order Confirmation</subject>
+	</email>
+	<email tag="NO_CHARGES_ANNIVERSARY" template="mail/no_charges_anniversary.txt" group_id="9">
+	    <subject>No Charges Made For Your Account</subject>
+	</email>
+	<email tag="NO_CHARGES_CREDIT_LIMIT" template="mail/no_charges_credit_limit.txt" group_id="9">
+            <subject>No Charges Made For Your Account</subject>
+        </email>
+        <email tag="SUSPEND" template="mail/suspended_account.txt" group_id="10" massmail_applicable="1">
+	    <subject>Account has been suspended: ${plan.description}</subject>
+	</email>
+	<email tag="RESUME" template="mail/resumed_account.txt" group_id="10" massmail_applicable="1">
+	    <subject>Account has been resumed: ${plan.description}</subject>
+	</email>
+	<email tag="DS_AUTOCANCEL" template="mail/ds_autocancel_notification.txt" group_id="1">
+	    <subject>Dedicated Server '${ds.name}' will be cancelled soon</subject>
+	</email>
+    </emails>
+</user_emails>
+

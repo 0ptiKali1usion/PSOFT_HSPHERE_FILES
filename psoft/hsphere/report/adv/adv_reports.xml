@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE adv_report [
+ <!ELEMENT adv_report (report+)>
+ <!ELEMENT report (PCDATA)>
+ <!ATTLIST report name CDATA #REQUIRED>
+ <!ATTLIST report class CDATA #REQUIRED>
+]>
+
+<adv_report>
+    <report name="ttreport" class="psoft.hsphere.report.adv.TTReport"/>
+    <report name="ttstatistics" class="psoft.hsphere.report.adv.TTStatistics"/>    
+    <report name="all_ttreport" class="psoft.hsphere.report.adv.AllUserTTReport"/>
+    <report name="billreport" class="psoft.hsphere.report.adv.BillingReport"/>
+    <report name="charge_log" class="psoft.hsphere.report.adv.ChargeLog"/>
+    <report name="cc_charge" class="psoft.hsphere.report.adv.CC_Charge"/>
+    <report name="balancereport" class="psoft.hsphere.report.adv.BillingBalance"/>
+    <report name="signup_stat" class="psoft.hsphere.report.adv.SignupStat"/>
+    <report name="signup_stat_detail" class="psoft.hsphere.report.adv.UserDetails"/>
+    <report name="moneytransaction" class="psoft.hsphere.report.adv.TransactionsReport"/>
+    <report name="usersearch" class="psoft.hsphere.report.adv.UserSearchReport"/>
+    <report name="usersearch_byci" class="psoft.hsphere.report.adv.UserSearchByCIReport"/>
+    <report name="domainsearch" class="psoft.hsphere.report.adv.DomainSearchReport"/>
+    <report name="suspendedsearch" class="psoft.hsphere.report.adv.SuspendedSearchReport"/>
+    <report name="deletedsearch" class="psoft.hsphere.report.adv.DeletedSearchReport"/>
+    <report name="allusersearch" class="psoft.hsphere.report.adv.AllUserSearchReport"/>
+    <report name="alldomainsearch" class="psoft.hsphere.report.adv.AllDomainSearchReport"/>
+    <report name="ds_user_search" class="psoft.hsphere.report.adv.DSUserSearchReport"/>
+    <report name="reseller_billview" class="psoft.hsphere.report.adv.ResellerBillViewer"/>
+    <report name="transfer_report" class="psoft.hsphere.report.adv.TrafficReport"/>
+    <report name="balance_exhaustion_date" class="psoft.hsphere.report.adv.BalanceExhaustionDateReport"/>
+    <report name="ipreport" class="psoft.hsphere.report.adv.IpReport"/>
+    <report name="usersreport" class="psoft.hsphere.report.adv.UsersReport"/>
+    <report name="usage_report" class="psoft.hsphere.report.adv.UsageReport"/>
+    <report name="inreseller_usage_report" class="psoft.hsphere.report.adv.ResellersUsageReport"/>
+    <report name="inreseller_transfer_report" class="psoft.hsphere.report.adv.ResellersTrafficReport"/>
+    <report name="fatts" class="psoft.hsphere.report.adv.FailedTransactionUsersReport"/>
+    <report name="plans" class="psoft.hsphere.report.adv.PlansReport"/>
+    <report name="content_move" class="psoft.hsphere.report.adv.ContentMoving"/>
+    <report name="tp_report" class="psoft.hsphere.report.adv.TPReport"/>
+    <report name="pkg_files" class="psoft.hsp.HSPkgFilesReport"/>
+    <report name="registrar_log" class="psoft.hsphere.report.adv.RegistrarLogInfo"/>
+    <report name="ds_report" class="psoft.hsphere.report.adv.DedicatedServersReport"/>
+    <report name="backup_schedule" class="psoft.hsphere.report.adv.BackupTasksReport"/>
+    <report name="allocatedserver" class="psoft.hsphere.report.adv.AllocatedServerReport"/>
+    <report name="webpayment_log" class="psoft.hsphere.report.adv.WebPaymentLog"/>
+    <report name="vpssearch" class="psoft.hsphere.report.adv.VPSSearchReport"/>
+</adv_report>
+

@@ -1,0 +1,68 @@
+<!-- BEGIN ./email/update_spf_html  -->
+<assign template="email/update_spf.html">
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" name="f_update_spf"  method="POST"  accept-charset="UTF-8" onSubmit="return checkForm(this,true);">
+
+<if request.end_template>
+  <input type="hidden" name="template_name" value="${request.end_template}">
+<else>
+  <input type="hidden" name="template_name" value="submit/email/update_spf.sbm">
+</if>
+<input type="hidden" name="end_template" value="${request.end_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="mid" value="${request.mid}">
+<input type="hidden" name="mail_service" value="${request.mail_service}">
+
+<if !request.uid>
+  <if request.mid>
+    <assign mail_service_or_mail_domain_alias=account.getResource(request.mid)>
+    <if request.rid_type=="mail_service">
+      <assign domain_or_alias_name=mail_service_or_mail_domain_alias.domain_name>
+    <else>
+      <assign domain_or_alias_name=mail_service_or_mail_domain_alias.domain_alias>
+    </if>  
+  </if>
+<else>
+  <assign domain_or_alias_name=request.name>
+</if>
+<if domain_or_alias_name>
+  <call draw_table_header("2",toolbox.compose(lang.email.spf.edit.header,domain_or_alias_name))>
+<else>
+  <call draw_table_header("2",lang.email.spf.set_prefs_for_all_das)>
+</if>
+<tr>
+<td>
+<call draw_label(lang.email.spf.prefix)><call draw_help("user-mailinfo-spf_prefs","")>
+</td>
+<td>
+<if !request.processing || request.processing=="fail"><assign check="CHECKED"><else><assign check=""></if>
+<input size="10" type="radio" name="processing" value="fail" ${check}><call draw_label(lang.email.spf.fail)>
+<br>
+<if request.processing=="softfail"><assign check="CHECKED"><else><assign check=""></if>
+<input size="10" type="radio" name="processing" value="softfail" ${check}><call draw_label(lang.email.spf.softfail)>
+<br>
+<if request.processing=="pass"><assign check="CHECKED"><else><assign check=""></if>
+<input size="10" type="radio" name="processing" value="pass" ${check}><call draw_label(lang.email.spf.pass)>
+<br>
+<if request.processing=="neutral"><assign check="CHECKED"><else><assign check=""></if>
+<input size="10" type="radio" name="processing" value="neutral" ${check}><call draw_label(lang.email.spf.neutral)>
+</td>
+</tr>
+<if request.domain_type!="domain_alias" && !request.for_da>
+  <tr>
+    <td><call draw_label(lang.email.spf.apply_for_domain_aliases)></td>
+    <td><input type="checkbox" name="use_in_domain_aliases" ${vchecked} value="1"></td>
+  </tr>
+</if>
+<tr>
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./email/update_spf.html  -->

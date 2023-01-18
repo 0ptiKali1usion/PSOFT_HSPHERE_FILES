@@ -1,0 +1,116 @@
+<!-- BEGIN ./control/tt/admin.html  -->
+<call draw_tooltip()>
+<assign ttadmin = account.getChild("ttadmin")>
+<if !ttadmin><assign ttadmin = account.addChild("ttadmin","",account.login,account.description,account.ci.email)></if>
+
+<if ttadmin>
+
+
+
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/tt_search.html">
+<input type="hidden" name="search_step" value="25">
+
+
+<call draw_table_header("6", lang.label.quicksearch)>
+
+
+<tr>
+  <td colspan="6">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="control_align_center">
+      <tr>
+	<td nowrap><call draw_label(lang.tt.id)>&nbsp;<input type="text" name="sc_id" size="6">&nbsp;
+	<call draw_label(lang.label.title)>&nbsp;<input type="text" name="sc_title">&nbsp;
+	<call draw_label(lang.tt.email)>&nbsp;<input type="text" name="sc_email">&nbsp;
+        <call draw_label(lang.tt.search.closed)><input type="checkbox" name="sc_not_closed" value="1">
+	<input type="submit" value="${lang.button.search}"></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</form>
+
+
+
+<tr bgcolor="${HEADER_COLOR}"><td colspan="6" ><call draw_header(lang.tt.admin.open)></td></tr>
+<tr>
+  <td class="control_align_center"><call draw_label(lang.tt.id)></td>
+  <td class="control_align_center"><call draw_label(lang.label.title)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.priority)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.admin.lastmod)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.type)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.admin.close)></td>
+</tr>
+<list ttadmin.tickets as ttid>
+<assign ticket=ttadmin.getTicket(ttid)>
+<if !ticket.isAnswered>
+
+<if !ticket.onHold>
+<tr>
+  <td class="control_align_center"><call draw_label(ticket.id)></td>
+  <td class="control_align_center"><call display_ticket_link(ticket)></td>
+    <td class="control_align_center">
+	<switch ticket.priority>
+	    <case "0"><call draw_label(lang.tt.normal)><break>
+	    <case "-1"><call draw_label(lang.tt.low)><break>
+	    <case "1"><call draw_label(lang.tt.high)><break>
+	</switch>
+        <if ticket.onHold><call draw_label("*")></if>
+    </td>
+  <td class="control_align_center"><call draw_label(ticket.lastmod)></td>
+  <td class="control_align_center"><call draw_label(ticket.rDesc)></td>
+  <td class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_close.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id,lang.tt.admin.close)></td>
+</tr>
+</if>
+</if>
+</list> 
+
+<if settings.TT_ONHOLD_SHOW><include "control/tt/onhold_list.html"></if>
+<if settings.TT_ANSWERED_SHOW><include "control/tt/answered_list.html"></if>
+
+<if account.plan.getResourceType("ttadmin").getValue("_ASSIGN_TT") == "TRUE">
+<tr>
+  <td colspan="6" bgcolor="${HEADER_COLOR}"   ><call draw_header(lang.tt.admin.new)></td>
+</tr>
+<tr>
+  <td class="control_align_center"><call draw_label(lang.tt.id)></td>
+  <td class="control_align_center"><call draw_label(lang.label.title)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.priority)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.admin.created)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.type)></td>
+  <td class="control_align_center"><call draw_label(lang.tt.admin.pickup)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/admin_mass_process.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<list ttadmin.new_tickets as tid>
+<assign ticket=ttadmin.getTicket(tid)>
+<tr>
+  <td class="control_align_center"><call draw_label(ticket.id)><br><input type="checkbox" name="ttid" value="${ticket.id}"></td>
+  <td class="control_align_center"><call display_ticket_link(ticket)></td>
+    <td class="control_align_center">
+	<switch ticket.priority>
+	    <case "0"><call draw_label(lang.tt.normal)><break>
+	    <case "-1"><call draw_label(lang.tt.low)><break>
+	    <case "1"><call draw_label(lang.tt.high)><break>
+	</switch>
+        <if ticket.onHold><call draw_label("*")></if>
+    </td>
+  <td class="control_align_center"><call draw_label(ticket.created)></td>
+  <td class="control_align_center"><call draw_label(ticket.rDesc)></td>
+  <td class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_assign.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id+"&force=0", lang.tt.admin.assign)></td>
+</tr>
+</list>
+<tr><td bgcolor="${HEADER_COLOR}" colspan="4"><input type="radio" name="act" value="assign" checked><call draw_header(lang.tt.admin.assign)><input type="radio" name="act" value="close"><call draw_header(lang.tt.admin.close)></td><td bgcolor="${HEADER_COLOR}" colspan="2" class="control_align_center"><input type="submit" value="${lang.button.apply}"></td></tr>
+</form>
+</if>
+
+
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/tt/admin.html  -->

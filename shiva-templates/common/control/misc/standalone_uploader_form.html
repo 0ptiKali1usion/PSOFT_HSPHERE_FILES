@@ -1,0 +1,29 @@
+<!-- BEGIN ./control/misc/standalone_uploader_form.html  -->
+<if request.uploader_form><assign uplForm = request.uploader_form><else><assign uplForm = "upload"></if>
+<if request.target_form><assign targForm = request.target_form><else><assign targForm = "f_new_tt"></if>
+<if request.file_field><assign ffield = request.file_field><else><assign ffield = "att"></if>
+
+<call draw_table_header("", lang.tt.select_uploaded_file)>
+
+<form name="${uplForm}" action="${config.UPLOADER_URL}" method="POST" ENCTYPE="multipart/form-data" accept-charset="UTF-8">
+
+<tr>
+  <td><input type="file" name="${ffield}" size="25"></td>
+</tr>
+<tr>
+  <td class="control_align_center">
+    <input type="hidden" name="target_form" value="${targForm}">
+    <input type="hidden" name="template_name" value="attachmets_uploader.html">
+    <input type="submit" name="upl" value="${lang.button.upload}">
+  </td>
+</tr>
+
+</form>
+
+<call draw_table_footer()>
+
+<SCRIPT language="Javascript"><!--
+  document.forms['${uplForm}'].elements['${ffield}'].focus();
+  document.forms['${uplForm}'].elements['${ffield}'].select();
+//--></SCRIPT>
+<!--  END ./control/misc/standalone_uploader_form.html -->

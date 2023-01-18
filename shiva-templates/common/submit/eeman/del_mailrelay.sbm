@@ -1,0 +1,14 @@
+<!-- BEGIN ./eeman/del_mailrelay.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<if ! config.IRIS_USER>
+  <assign result=eeman.delMailRelay(request.id,request.action,request.ip)> 
+<else>
+  <assign result=eeman.delIMailRelay(request.ip)>
+</if>  
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./eeman/del_mailrelay.sbm  -->

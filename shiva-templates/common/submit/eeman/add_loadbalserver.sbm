@@ -1,0 +1,37 @@
+<!-- BEGIN ./submit/eeman/add_loadbalserver.sbm  -->
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+
+ <if request.action == "update">
+     <assign pserver = eeman.getLoadBalServer(request.rid)>
+     <if pserver.hasChild != "0" >
+       <assign hasChild = "1"> 
+     </if>
+ </if>
+
+ <if !hasChild>
+ 	<assign result = eeman.insertLoadBalancedPServer(request.rid, request.lb_parentId)>
+
+ 	<if result.status=="OK">
+     		<include request.stemplate>
+	<else>
+     		<assign res=session.addMessage( lang.eeman.loadbalserver.add_failed )>
+                <if result.status=="containsLServers">
+			<assign res=session.addMessage( lang.eeman.loadbalserver.contain_lservers(request.rid) )>
+                </if>
+                <if result.status=="webAlreadyContainsSlave">
+			<assign res=session.addMessage( lang.eeman.loadbalserver.web_already_contains_slave(request.lb_parentId) )>
+                </if>
+                <if result.status=="noWebOrMail">
+			<assign res=session.addMessage( lang.eeman.loadbalserver.no_web_or_mail(request.rid) )>
+                </if>
+     		<include request.stemplate>
+ 	</if>
+ <else>
+ 	<assign res=session.addMessage(
+		lang.eeman.loadbalserver.has_child(pserver.name))>
+	<include request.ftemplate>
+ </if>
+</if>
+<!--  END ./submit/eeman/add_loadbalserver.sbm  -->

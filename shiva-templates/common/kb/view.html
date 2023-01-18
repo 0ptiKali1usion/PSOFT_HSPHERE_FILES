@@ -1,0 +1,14 @@
+<!-- BEGIN ./kb/view.html  -->
+<assign template="kb/view.html">
+<assign inPanel="1">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.getChild("ttadmin")>
+<call top_tt()>
+<call ticket_menu("kb-search")>
+<else>
+<call draw_menu("kb-search")>
+</if>
+<include "control/kb/view.html">
+<call bottom()>
+<!--  END ./kb/view.html  -->

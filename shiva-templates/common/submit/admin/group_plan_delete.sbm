@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/admin/group_plan_delete.sbm -->
+<assign cmp_groups = account.getChild("cmp_groups")>
+<assign result = cmp_groups.deleteGroup(request.group_id)>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete,lang.label.plan_group,""))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/group_plan_delete.sbm -->
+

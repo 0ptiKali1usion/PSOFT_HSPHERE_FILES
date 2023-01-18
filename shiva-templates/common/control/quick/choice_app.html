@@ -1,0 +1,42 @@
+<!-- BEGIN ./control/quick/choice_app.html -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign platform = unixuser.host.platform_type>
+<if platform=="unix">
+  <assign colspan="3">
+<else>
+  <assign colspan="2">
+</if>
+
+<function draw_hosting(hosting)>
+<assign platform_type = hosting.server>
+<tr>
+  <td><call draw_label(hosting.parent.name)></td>
+  <td  class="control_align_center"><call draw_app(hosting, hosting.server, stype)></td>
+  <if (platform_type == "apache") || (platform_type == "zeus")>
+  <td  class="control_align_center"><call draw_apache_status(hosting, template)></td>
+  </if>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+
+
+<call draw_table_header(colspan, lang.app[stype].name)>
+
+
+<tr>
+  <td><call draw_label_bold(lang.label.domain)></td>
+  <td width="30%" nowrap><call draw_label_bold(lang.label.control)></td>
+  <if platform=="unix"><td width="10%"><call draw_label_bold(lang.label.status)></td></if>
+</tr>
+
+<list account.findAllChildren("hosting") as hosting>
+<call draw_hosting(hosting)>
+</list>
+
+<call draw_table_footer()>
+
+<!--  END ./control/quick/choice_app.html -->

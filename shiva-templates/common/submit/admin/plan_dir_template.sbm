@@ -1,0 +1,19 @@
+<assign result=yafv.common.s_admin.vLocalDirOpt(lang.label.template_dir, request.template)>
+<if result.status=="OK">
+   <assign admin = account.getChild("admin")> 
+   <assign plan = admin.getPlan(request.plan_id)>
+   <assign result = plan.putValue("_TEMPLATES_DIR", request.template)>
+    <if result.status=="OK">
+      <assign success="1">
+    <else>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vtemplate_dir=toolbox.html_encode(request.template)>
+    <include request.ftemplate>
+</if>

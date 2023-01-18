@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/PGSQL/change_db_quota.html.in  -->
+<call draw_tooltip()>
+<assign database = account.getResource(request.db_id)>
+<assign quota = database.getChild("pgsqldb_quota")>
+<yafv s_pgsql>
+
+<form action="${config.CLIENT_CP_URL}" name="f_adm_database" method="POST" check! accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="submit/PGSQL/change_db_quota_check.sbm">
+<input type="hidden" name="next_template" value="submit/PGSQL/change_db_quota.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="db_id" value="${request.db_id}">
+<input type="hidden" name="type" value="pgsqldb_quota">
+
+
+
+
+
+<call draw_table_header("2", lang.pgsql.chquo.header(database.db_name))>
+
+
+
+<tr>
+  <td><call draw_label(lang.label.quota)></td>
+  <td><input type="text" name="quota" value="${quota.limitMb}" label="${lang.label.quota}" check="vQuota"></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/PGSQL/change_db_quota.html.in  -->

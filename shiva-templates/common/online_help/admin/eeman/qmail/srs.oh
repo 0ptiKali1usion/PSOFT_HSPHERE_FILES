@@ -1,0 +1,5 @@
+<center> srs </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>The Sender Rewriting Scheme (SRS, http://www.annarres.org/projects/srs, http://spf.pobox.com/srs.html) is a mechanism for rewriting sender addresses when a mail is forwarded in such a way that mail forwarding continues to work in an SPF compliant world.
+<br>

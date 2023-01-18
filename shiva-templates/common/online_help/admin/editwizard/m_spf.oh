@@ -1,0 +1,8 @@
+<center> SPF </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to create<i> SPFs </i>(Sender Policy Framework) which are used to preventing sender forgery in SMTP transaction, thus allowing domain owners control over who may send mail from their domain.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		Check the<i> Include </i>box to make this resource available under the plan. Later you can define the amount of SPFs a user can create for free, its setup and recurrent fee.<br>
+	

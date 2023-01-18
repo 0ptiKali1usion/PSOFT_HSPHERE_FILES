@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/ds_pool/unassign_range.sbm-->
+<assign result = obj.subnet_manager.unassignRange(request.subnet_id, request.range_id, request.ds_id)>
+<if result != "OK">
+   <assign res = session.addMessage(result.msg)>
+   <assign failure="1">
+</if>
+
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/unassign_range.sbm  -->

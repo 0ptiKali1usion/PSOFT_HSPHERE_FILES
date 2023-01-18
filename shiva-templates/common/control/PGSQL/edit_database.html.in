@@ -1,0 +1,70 @@
+<!-- BEGIN ./PGSQL/edit_database.html  -->
+<call draw_tooltip()>
+<yafv s_pgsql>
+
+<assign pgsql=account.getChild("pgsql")>
+
+<if !database>
+ <if !request.db_id>
+  <assign database = account.getResource(request.rid)>
+ <else>
+  <assign database = account.getResource(request.db_id)>
+ </if>
+</if>
+
+
+
+
+<call draw_table_header("2", lang.pgsql.eddb.header)>
+
+
+<tr>
+<td><call draw_label(lang.label.hostname)>&nbsp;<call draw_help("user-pgsql-hostname","")></td>
+<td><call draw_label(pgsql.host.name+" ("+toolbox.int2ext(pgsql.host.ip)+")")></td>
+</tr>
+ 
+<tr   >
+<td><call draw_label(lang.label.port_number)>&nbsp;<call draw_help("user-pgsql-port","")></td>
+<td><call draw_label("5432")></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.database_name)></td>
+<td><call draw_label(database.db_name)>&nbsp;
+<if request.dtemplate>
+  <assign final_template=request.dtemplate>
+<else>
+  <assign final_template="PGSQL/databases.html">
+</if>
+<call disableNWJump(pgsql,database, final_template)>
+
+</td>
+</tr>
+
+<tr >
+<td><call draw_label("phpPgAdmin")></td>
+
+<if pgsql.phppgadminhost>
+<td><call draw_tlink("http://"+pgsql.phppgadminhost+"/phpPgAdmin/index.php","_BLANK", lang.pgsql.eddb.pgadmincp)>
+<else>
+<td><call draw_tlink("/phpPgAdmin/index.php","_BLANK", lang.pgsql.eddb.pgadmincp)>
+</if>
+<call draw_label(lang.pgsql.eddb.dbauser)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.pgsql.eddb.dbdescr)></td>
+<td><call draw_label(database.db_description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=PGSQL/change_db_dscr.html"+"&db_id="+database+"&stemplate="+template+"&ftemplate="+template,lang.pgsql.eddb.chdbdescr)></td>
+</tr>
+
+<if account.plan.isResourceAvailable("pgsqldb_quota")>
+<assign quota=database.getChild("pgsqldb_quota")>
+<tr >
+<td><call draw_label(lang.label.quota)>&nbsp;<call draw_help("user-pgsql-db_qota","")></td>
+<td><call draw_label(toolbox.compose(lang.pgsql.eddb.used, quota.usedMb, quota.limitMb))><call draw_change(config.CLIENT_CP_URL+"?template_name=PGSQL/change_db_quota.html"+"&db_id="+database+"&stemplate="+template+"&ftemplate="+template,lang.pgsql.eddb.changequota)></td>
+</tr>
+</if>
+
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./PGSQL/edit_database.html  -->

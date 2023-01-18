@@ -1,0 +1,62 @@
+<!-- BEGIN ./control/admin/view_module_details.html  -->
+<assign reseller_su=account.getChild("reseller_su")>
+<if reseller_su>
+<assign module = reseller_su.getContentMoveItem(request.cmi_id)>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("2", lang.admin.rsync.view_postponed)>
+
+
+<tr>
+    <td><call draw_label(lang.label.contentmove.src_server)></td>
+    <td><call draw_label(module.srcServer.name)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.target_server)></td>
+    <td><call draw_label(module.targetServer.name)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.path)></td>
+    <td><call draw_label(module.srcPath)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.started)></td>
+    <td><call draw_label(module.started)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.finished)></td>
+    <td><call draw_label(module.finished)></td>
+</tr>
+<!--         ------------------------    -->
+<tr >
+<td colspan="2">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="control_align_center" bgcolor="${design.color("border_color")}">
+<tr><td>
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="control_align_center">
+<tr>
+ <td colspan="3" class="control_header"><call draw_header(lang.label.contentmove.postponed_resources)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.contentmove.postponed_res_descr)></td>
+<td><call draw_label(lang.label.contentmove.expires)></td>
+<td><call draw_label(lang.label.contentmove.deleted)></td>
+</tr>
+<list module.posponed_resources as pr>
+<tr >
+<td><call draw_label(pr.description)></td>
+<td><call draw_label(pr.expires)></td>
+<td><call draw_label(pr.deleted)></td>
+</tr>
+</list>
+</table>
+</td></tr>
+</table>
+</td>
+</tr>
+</td></tr>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/admin/view_module_details.html  -->

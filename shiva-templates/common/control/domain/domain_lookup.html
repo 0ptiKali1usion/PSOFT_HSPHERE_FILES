@@ -1,0 +1,23 @@
+<!-- BEGIN ./domain/domain_lookup.html  -->
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/domain/order_unsupported_result.sbm">
+<input type="hidden" name="domain" value="${name}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+
+<call draw_table_header("", lang.domain.domainlookup.header(name))>
+
+<tr>
+<td><call draw_label(toolbox.compose(lang.domain.domainlookup.text, name))><br></td>
+</tr>
+<tr>
+	  <td  class="control_align_center">
+	    <input type="submit" value="${lang.domain.domainlookup.submit}">
+	  </td>
+    </tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/domain_lookup.html  -->

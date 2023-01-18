@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/signup/order_info.html.in  -->
+<tr>
+<td colspan="2"  >
+<br>
+<!--${request.ext} -->
+<assign regrar = toolbox.getRegistrarInfoByExt(request.ext)>
+<if regrar.signature != "Enom"><call draw_label(settings.registrar_text)><else><call draw_label(settings.enoim_text)></if>
+<br>
+<br>
+</td>
+</tr>
+
+<tr>
+<if request.flag_use_contact_info_ci><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<td colspan="2"><input type=checkbox name="flag_use_contact_info_ci" ${vchecked} onClick="checkForm(this.form,false)">&nbsp;<call draw_label(lang.signup.orderinfo.useci)></TD>
+<assign excludeFields=excludeFields+"flag_use_contact_info_ci;">
+</tr>
+<assign isBilling = new_user.plan.b_info>
+<if isBilling != "0">
+<tr>
+<if request.flag_use_billing_info_bi><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<td colspan="2"><input type=checkbox name="flag_use_billing_info_bi" ${vchecked} onClick="checkForm(this.form,false)">&nbsp;<call draw_label(lang.signup.orderinfo.usebi)></TD>
+<assign excludeFields=excludeFields+"flag_use_billing_info_bi;">
+</tr>
+</if>
+<!--  END ./control/signup/order_info.html.in  -->

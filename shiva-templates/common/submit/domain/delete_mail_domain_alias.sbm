@@ -1,0 +1,19 @@
+<!-- BEGIN ./email/delete_alias.sbm  -->
+${redirect.is_more}
+<assign resource= account.getResource( request.did )>
+<assign result= resource.delete>
+<if result.status == "OK" >
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted, lang.domain.addmaildomainalias.alias, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete, lang.domain.addmaildomainalias.alias, ""))>
+    <assign res = session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if> 
+<!--  END ./email/delete_alias.sbm  -->

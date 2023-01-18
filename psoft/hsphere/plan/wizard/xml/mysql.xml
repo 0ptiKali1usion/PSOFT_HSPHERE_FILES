@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<PlanWizard name="mysql" description="planeditor.res_mysql">
+  <DefaultName>MySQL I</DefaultName>
+  <DefaultValues>
+    <value name="_template">MySQL/databases.html</value>
+    <value name="_TEMPLATES_DIR">mysql/</value>
+    <value name="menuId">mysql</value>
+  </DefaultValues>
+
+  <categories>
+     <category>
+       <resource name="account" required="1" class="psoft.hsphere.Account" />
+       <resource name="billviewer" required="1" noprice="1" class="psoft.hsphere.resource.BillViewer" />
+       <resource name="tt" required="1" noprice="1" class="psoft.hsphere.resource.tt.TroubleTicket" />
+       <resource name="custom_billing" required="1" noprice="1" class="psoft.hsphere.resource.CustomizableBillingResource"/>
+     </category>
+
+     <category description="planeditor.quotas">
+       <resource name="summary_quota" unit="MB" help="admin-editwizard-o_sumquota" class="psoft.hsphere.resource.SummaryQuota"/>
+     </category>
+
+
+     <category description="planeditor.other">
+           <ifgroup name="mysql" else="MySQL">
+             <resource name="MySQL" required="1" help="admin-editwizard-o_mysql" class="psoft.hsphere.resource.mysql.MySQLResource" showable="1"/>
+             <resource name="MySQLUser" required="1" class="psoft.hsphere.resource.mysql.MySQLUser"/>
+             <resource name="MySQLDatabase" required="1" class="psoft.hsphere.resource.mysql.MySQLDatabase"/>
+             <resource name="mysqldb_quota" required="1" unit="MB" class="psoft.hsphere.resource.mysql.MySQLDbQuota"/>
+             <LogicalGroup name="mysql" type="mysql" help="admin-editwizard-o_lsgmysql"/>
+           </ifgroup>
+     </category>
+  </categories>
+
+  <billable></billable>
+
+  <options demomode="1" billable="1"/>
+
+  <resources>
+   <res_account>
+        <mod>
+            <initresource name="billviewer"/>
+            <initresource name="summary_quota"/>
+        </mod>
+    </res_account>
+
+   <res_summary_quota>
+       <mod>
+           <initvalue type="plan_free"/>
+       </mod>
+   </res_summary_quota>
+
+   <res_MySQL>
+      <mod>
+        <initvalue type="hostgroup" label="MySQL Server">mysql</initvalue>
+      </mod>
+    </res_MySQL>
+
+
+   <res_mysqldb_quota>
+       <mod>
+         <initvalue type="plan_free" label="MySQL Quota"/>
+       </mod>
+    </res_mysqldb_quota>
+
+   <res_MySQLDatabase>
+       <mod>
+          <initresource name="mysqldb_quota"/>
+       </mod>
+       <mod name="import">
+         <initvalue type="field" label="Database Name">name</initvalue>
+         <initvalue type="field" label="Database Description">description</initvalue>
+         <initresource name="mysqldb_quota"/>
+       </mod>
+    </res_MySQLDatabase>
+
+   <res_MySQLUser>
+       <mod name="import">
+          <initvalue type="field" label="User Login">name</initvalue>
+          <initvalue type="field" label="Password">password</initvalue>
+       </mod>
+    </res_MySQLUser>
+
+      <res_custom_billing>
+          <values>
+              <value name="_RECURRENT_CALC">psoft.hsphere.calc.StandardCalc</value>
+              <value name="_UNIT_PRICE_">1</value>
+              <value name="_REFUND_CALC">psoft.hsphere.calc.StandardRefundCalc</value>
+          </values>
+      </res_custom_billing>
+
+  </resources>
+
+
+</PlanWizard>
+

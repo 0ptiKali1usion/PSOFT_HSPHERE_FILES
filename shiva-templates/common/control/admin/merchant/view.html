@@ -1,0 +1,190 @@
+<!-- BEGIN ./common/control/admin/merchant/view.html -->
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<assign mm = account.getChild("merchant_manager")>
+
+<if !mm><assign mm = account.addChild("merchant_manager", "")></if>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.admin.view.header)>
+
+<assign gateways = toolbox.getGateways().merchgateways.gateway>
+
+<tr>
+<td width="25%"><call draw_label(lang.admin.view.add)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="template_name">
+    <list gateways as gateway>
+    <if gateway("deprecated") != "1">
+    <option value="${gateway("template")}">${lang[gateway("description")]}</option>
+    </if>
+    </list>
+    </select>
+    <input type="submit" value="${lang.button.add}">
+    </td>
+</form>
+</tr>
+
+<tr>
+    <td><call draw_label(lang.admin.view.active)></td>
+    <td>
+    <assign mms = mm.listActive()>
+    <list mms as active>
+    <assign merchant=mm.get(active.id)>
+    <call draw_label(active.type)>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?mid="+active.id+"&template_name=admin/merchant/edit.html&stemplate="+template,merchant.TITLE)>
+    <assign ms = mm.settings(active.id)><call draw_label(ms.amount+"/"+ms.maxAmount+" "+ms.transactions+"/"+ms.maxTransactions+" "+pstart.pend)>
+    <call draw_link(config.CLIENT_CP_URL+"?type="+active.type+"&template_name=submit/admin/merchant/delete.sbm&stemplate="+template+"&ftemplate="+template, lang.admin.view.deact)><br>
+    </list>
+    <if !mms>&nbsp;</if>
+    </td>
+</tr>
+
+<tr>
+    <td><call draw_label(lang.admin.view.setact)></td>
+
+<assign mlist=mm.list()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td nowrap>
+    <input type="hidden" name="template_name" value="submit/admin/merchant/activate.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="mid" size="1">
+    <assign vselected = "SELECTED">
+    <list mlist as merchant>
+      <option value="${merchant.id}" ${vselected}>${merchant.title}
+      <if vselected><assign vselected = ""></if>
+    </list>
+    </select>
+    <call draw_label(lang.label.ptype)>&nbsp;<select name="type" size="1">
+    <assign vselected = "SELECTED">
+	<list mm.getCCbrands() as ccb>
+	    <option value="${ccb.name_sh}" ${vselected}>${ccb.name}
+	    <if vselected><assign vselected = ""></if>
+	</list>
+    </select>
+    <if mlist>
+    <input type="submit" value="${lang.admin.view.submact}">
+    </if>
+    </td>
+</form>
+</tr>
+
+<tr>
+    <td><call draw_label(lang.admin.view.edit)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="template_name" value="admin/merchant/edit.html">
+    <input type="hidden" name="stemplate" value="${template}">
+    <select name="mid" size="1">
+    <assign vselected = "SELECTED">
+    <list mlist as merchant>
+      <option value="${merchant.id}" ${vselected}>${merchant.title}
+      <if vselected><assign vselected = ""></if>
+    </list>
+    </select>
+    <if mlist>
+    <input type="submit" value="${lang.admin.view.submedit}">
+    </if>
+    </td>
+</form>
+</tr>
+
+<!-- editing cc descripton -->
+<tr >
+<td valign="top"><call draw_label(lang.admin.view.cc_desc_edit)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<td>
+<call draw_label_small(lang.admin.view.cc_desc_expl)><br>
+<input type="hidden" name="template_name" value="submit/admin/merchant/cc_desc.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="text" name="cc_desc" value="${settings.CC_DESCRIPTION}">
+<input type="checkbox" name="cc_desc_only" value="1"<if settings.CC_DESCRIPTION_ONLY> CHECKED</if>>
+<call draw_label(lang.admin.view.cc_desc_only)>
+<input type="submit">
+</td></form>
+</tr>
+
+<!-- end of editing cc description -->
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr >
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/admin/settings/change_sitem.sbm">
+<input type="hidden" name="siname" value="max_fatts">
+<td><call draw_label(lang.cc.maxfatts)></td><td><input type="text" name="sivalue" size ="3" value="<if settings.max_fatts>${settings.max_fatts}</if>">&nbsp;<input type="submit" value="${lang.domain.submiturl.submit}"></td></tr>
+</form>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr >
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/admin/settings/change_sitem.sbm">
+<input type="hidden" name="siname" value="fatt_ri">
+<td><call draw_label(lang.cc.fatt_ri)></td><td><input type="text" name="sivalue" size ="5" value="<if settings.fatt_ri>${settings.fatt_ri}</if>">&nbsp;<input type="submit" value="${lang.domain.submiturl.submit}"></td></tr>
+</form>
+
+<tr>
+    <td colspan="2" class="control_header"><call draw_header(lang.admin.view.header2)></td>
+</tr>
+
+<assign processors = toolbox.getGateways().processors.processor>
+
+<tr ><td width="25%"><call draw_label(lang.admin.view.addwebprocessor)></td>
+<form name="f_select_web_processor" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="template_name">
+    <list processors as processor>
+    <call draw_label(processor("name"))>
+    <assign name=processor("name")>
+    <if settings[name+"_enabled"]!= "1"><option value="${processor("template")}">${lang[processor("description")]}</option></if>
+    </list>
+    </select>
+    <input type="submit" value="${lang.button.edit}">
+    </td>
+</form>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.view.active)></td>
+<td>
+  <list processors as processor>
+  <assign name=processor("name")>
+  <if settings[name+"_enabled"]== "1">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name="+processor("template")+"&stemplate="+template+"&enabled=1",lang[processor("description")])>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/WebProcessor_action.sbm&action=disable&name="+processor("name")+"&stemplate="+template+"&ftemplate="+template, lang.admin.view.deact)>
+    <br>
+  </if>
+  </list>
+</td>
+</tr>
+
+<tr>
+    <td colspan="2" class="control_header"><call draw_header(lang.admin.view.header3)></td>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.view.moderated_cc)></td>
+    <td>
+<call draw_state(settings.moderated_cc, config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/turn_moderated.sbm&state=off&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/turn_moderated.sbm&state=on&stemplate="+template+"&ftemplate="+template)>
+    </td>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.view.accept_checks)></td>
+    <td>
+     <call draw_state(settings.checks_disabled=="", config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/turn_checks_enabled.sbm&state=on&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/turn_checks_enabled.sbm&state=off&stemplate="+template+"&ftemplate="+template)>
+    </td>
+</tr>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!-- BEGIN ./common/control/admin/merchant/view.html -->
+
+

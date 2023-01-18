@@ -1,0 +1,7 @@
+<center> concurrencyremote </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>The number of qmail-send processes of message delivery to remote addresses.
+<br>Default: 100. Max: 500. If Max is exceeded, Max value is set.
+<br>
+

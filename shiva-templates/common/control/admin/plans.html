@@ -1,0 +1,175 @@
+<!-- BEGIN ./control/admin/plans.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<assign show_deleted_plans = request.deleted_sign>
+<assign show_signup_links = request.signup_links>
+<assign viewer = account.getChild("reportviewer")>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+      <else><assign step = request.sc_step></if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("plans")>
+  <assign result = report(request.deleted_sign)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="20">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+
+
+
+
+<call draw_table_header("6", lang.label.plans)>
+
+<tr>
+<td width="7%" class="control_header"><call advReportLabel(report, lang.admin.plans.h_plan_id, "plan_id")></td>
+<td class="control_header"><call advReportLabel(report, lang.admin.plans.h_plan_description, "description")></td>
+<td class="control_header"><call advReportLabel(report, lang.label.group, "group")></td>
+<td width="10%" class="control_header"><call draw_header(lang.admin.plans.h_plan_access)></td>
+<td width="10%" class="control_header"><call draw_header(lang.admin.plans.h_plan_advanced)></td>
+<td width="10%" class="control_header"><call draw_header(lang.label.action)></td>
+</tr>
+
+
+<assign entries = report.page()>
+<list entries as entry>
+<assign plan = entry.plan>
+<if plan.deleted == show_deleted_plans>
+<tr>
+<td  class="control_align_center"><call draw_label(entry.plan_id)></td>
+<assign createdby = plan.values["_CREATED_BY_"]>
+<!--createdby = ${createdby} -->
+<assign pe_template_name = "">
+<switch createdby>
+<case "6">
+  <assign pe_template_name = "plan_editor/reseller.html">
+<break>
+<case "10">
+  <assign pe_template_name = "plan_editor/dnsmail_wizard_edit.html">
+  <break>
+<case "12">
+  <assign pe_template_name = "plan_editor/vps_edit.html">
+<break>
+</switch>
+<td>
+<if plan.id != admin.getAdminPlanId()>
+    <if createdby>
+        <if pe_template_name>
+          <call draw_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name="+pe_template_name, plan.description)>
+        <else>
+          <call draw_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/wizards/edit.html", plan.description)>
+        </if>
+    <else>
+        <call draw_label(plan.description)>
+    </if>
+    <if !show_deleted_plans && (plan.disabled != "1") && plan.accessCheck(account.plan.id)>&nbsp;
+        <call draw_preview(user.CP_URL+"?action=signup&plan_id="+plan.id+"&signup=yes&template_name=signup/begin.html", "")>
+    </if>
+<else>
+    <call draw_label(plan.description)>
+</if>&nbsp;</td>
+
+<td><call draw_label(entry.group)></td>
+
+<td  nowrap>
+<if plan.id != admin.getAdminPlanId()>
+    <if !plan.deleted>
+        <if !plan.disabled>
+            <call draw_state_on(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=submit/admin/plan_disable.sbm&stemplate="+template+"&ftemplate="+template)>
+        <else>
+            <call draw_state_off(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=submit/admin/plan_disable.sbm&do=1&stemplate="+template+"&ftemplate="+template)>
+        </if>&nbsp;
+        <call draw_palink(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_access.html", "access", lang.admin.plans.acc)>
+        <if !plan.access>
+            <call draw_label(lang.admin.plans.full)>
+        </if>
+    <else>
+        <call draw_plan_disabled()>
+    </if>
+    <if plan.type!="" && plan.type!= "6" && plan.type!= "admin">
+        <call draw_palink(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_showable.html", "show", lang.admin.plans.show)>
+    </if>
+</if>&nbsp;</td>
+
+<td  nowrap>
+<if plan.id != admin.getAdminPlanId()>
+<call draw_palink(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit.html", "resources", lang.admin.plans.res)>&nbsp;
+<call draw_palink(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_settings.html", "settings", lang.admin.plans.sets)>
+</if>&nbsp;
+</td>
+
+<td  nowrap class="control_align_right">
+<if plan.id != admin.getAdminPlanId()>
+    <if !plan.deleted>
+        <if createdby>
+          <if pe_template_name>
+            <call draw_edit(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name="+pe_template_name, "")>
+          <else>
+            <call draw_edit(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/wizards/edit.html", "")>
+          </if>
+        </if>
+        <call draw_palink(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=submit/admin/plan_copy.sbm&stemplate="+template+"&ftemplate="+template, "copy", lang.admin.plans.copy)>&nbsp;
+        <call draw_delete(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=/admin/del_plan_warn.html&stemplate="+template+"&ftemplate="+template, lang.admin.plans.del)>
+    <else>
+        <call draw_label(lang.admin.plans.deleted)>
+    </if>
+</if>&nbsp;
+</td>
+</if>
+</list>
+<tr><td  colspan="6" class="control_align_center"><br>
+<if !show_deleted_plans>
+    <if !show_signup_links>
+        <call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&signup_links=1"+"&search_action=pos"+"&search_page="+request.search_page, lang.admin.plans.signup)>
+    <else>
+        <call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&search_action=pos"+"&search_page="+request.search_page, lang.admin.plans.signup)>
+    </if>&nbsp;&nbsp;&nbsp;&nbsp;
+    <call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&deleted_sign=1", lang.admin.plans.delplans)>
+<else>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=admin/plans.html", lang.admin.plans.live)>
+</if><br>&nbsp;</td></tr>
+
+<tr><td  colspan="6"><call advReportNav(report)></td></tr>
+<call draw_table_footer()>
+
+<if !show_deleted_plans && show_signup_links>
+    <br>&nbsp;<br>
+
+<call draw_table_header("2", lang.admin.plans.signup)>
+    <list entries as entry>
+    <assign plan = entry.plan>
+    <if plan.disabled != "1" && plan.accessCheck(account.plan.id)>
+        <tr >
+        <td><call draw_label_small(plan.description)></td>
+        <td><i><call draw_label_small(user.CP_URL+"?action=signup&plan_id="+plan.id+"&signup=yes&template_name=signup/begin.html")></i></td>
+        </tr>
+    </if>
+    </list>
+
+<call draw_table_footer()>
+</if>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/plans.html  -->

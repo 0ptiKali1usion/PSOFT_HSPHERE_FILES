@@ -1,0 +1,9 @@
+<center> badmailfrom-unknown </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>If the domain part of sender's address matches a host in this list, qmail checks if sender's IP has a PTR record. Example :
+<br>@21cn.com
+<br>@aol.com 
+<br>Default: the badmailfrom-unknown file is absent (reverse DNS check is disabled for all IPs).
+<br>
+

@@ -1,0 +1,26 @@
+<!--BEGIN: common/msexchange/admin_settings.html.in -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/admin_settings.html.in", "e.manager-he")>
+<call draw_tooltip()>
+<assign mpf=obj.mpf>
+<if account.getChild("admin")>
+<call draw_table_header("2", lang.mpf_label)>
+<form name="f_settigns" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/admin_settings.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<tr><td width="20%"><call draw_label(lang.label.url)> ${mpf}</td><td><input type="text" size="50" name="url" value="${mpf.url}"></td></tr>
+<tr><td width="20%"><call draw_label(lang.label.pdc)></td><td><input type="text" size="50" name="pdc" value="${mpf.pdc}"></td></tr>
+<tr><td width="20%"><call draw_label(lang.label.ldap)></td><td><call draw_label("LDAP://")><input type="text" name="ldap" size="50" value="${mpf.ldap}"></td></tr>
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+<else>
+NOT AUTHORIZED
+</if>
+<call END_PAGE()>
+<!--END: common/msexchange/admin_settings.html.in -->

@@ -1,0 +1,433 @@
+<!-- BEGIN ./domain/order.html  -->
+<assign tld = request.tld>
+<assign domainManager = account.getChild("unixuser")>
+<if !domainManager><assign domainManager = account.id></if>
+<if request.profile_domain && request.profile_domain!="NEW">
+<assign tmp = account.getResource(request.profile_domain)>
+<assign contact_info=tmp.getChild("contact_info")>
+<assign billing_info=tmp.getChild("billing_info")>
+  <else>
+<assign contact_info=account.ci>
+<assign billing_info=account.bi>
+</if>
+
+<if !srs_owner_first_name><assign srs_owner_first_name=contact_info.first_name></if>
+<if !srs_owner_last_name><assign srs_owner_last_name=contact_info.last_name></if>
+<if !srs_owner_org_name><assign srs_owner_org_name=contact_info.org_name></if>
+<if !srs_owner_address1><assign srs_owner_address1=contact_info.address1></if>
+<if !srs_owner_address2><assign srs_owner_address2=contact_info.address2></if>
+<if !srs_owner_address3><assign srs_owner_address3=contact_info.address3></if>
+<if !srs_owner_city><assign srs_owner_city=contact_info.city></if>
+<if !srs_owner_state><assign srs_owner_state=contact_info.state></if>
+<if !srs_owner_country><assign srs_owner_country=contact_info.country></if>
+<if !srs_owner_postal_code><assign srs_owner_postal_code=contact_info.postal_code></if>
+<if !srs_owner_phone><assign srs_owner_phone=contact_info.phone></if>
+<if !srs_owner_fax><assign srs_owner_fax=contact_info.fax></if>
+<if !srs_owner_email><assign srs_owner_email=contact_info.email></if>
+
+<if !srs_billing_first_name><assign srs_billing_first_name=billing_info.first_name></if>
+<if !srs_billing_last_name><assign srs_billing_last_name=billing_info.last_name></if>
+<if !srs_billing_org_name><assign srs_billing_org_name=billing_info.org_name></if>
+<if !srs_billing_address1><assign srs_billing_address1=billing_info.address1></if>
+<if !srs_billing_address2><assign srs_billing_address2=billing_info.address2></if>
+<if !srs_billing_address3><assign srs_billing_address3=billing_info.address3></if>
+<if !srs_billing_city><assign srs_billing_city=billing_info.city></if>
+<if !srs_billing_state><assign srs_billing_state=billing_info.state></if>
+<if !srs_billing_country><assign srs_billing_country=billing_info.country></if>
+<if !srs_billing_postal_code><assign srs_billing_postal_code=contact_info.postal_code></if>
+<if !srs_billing_phone><assign srs_billing_phone=contact_info.phone></if>
+<if !srs_billing_fax><assign srs_billing_fax=contact_info.fax></if>
+<if !srs_billing_email><assign srs_billing_email=contact_info.email></if>
+
+<call draw_tooltip()>
+<yafv s_domain>
+<form name="f_order" acton="${config.CLIENT_CP_URL}" method="POST" check! onSubmit="changeMod()" accept-charset="UTF-8">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <input type="hidden" name="stemplate" value="${request.stemplate}">
+<!--      <input type="hidden" name="template_name" value="submit/domain/order_result.sbm"> -->
+      <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+      <input type="hidden" name="domain_name" value="${request.domain_name}">
+      <input type="hidden" name="next_template" value="submit/domain/order_result.sbm">
+      <input type="hidden" name="type" value="domain">
+      <input type="hidden" name="rid" value="${domainManager}">
+      <input type="hidden" name="mod" value="opensrs">
+      <input type="hidden" name="tld" value="${tld}">
+      <if SESSION_PLATFORM == "mail_only">
+      <input type="hidden" name="password" value="${account.password}">
+      </if>
+<assign billviewer = account.getChild("billviewer")>
+<assign prices = billviewer.getTLDPrices(tld)>
+<assign prices_size=toolbox.add(prices.size, "1")>
+
+<call draw_table_header("2", lang.domain.order.header)>
+<tr>
+<td colspan="2" >
+<table class="inner_control_grid">
+<tr>
+  <td colspan="${prices_size}" class="inner_control_grid_header"><call draw_header(lang.label.srs_prices)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.registrar.duration)></td>
+<list prices.KEYS as key>
+<td><call draw_label(key)></td>
+</list>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.registrar.price)></td>
+<list prices.KEYS as key>
+<td><call draw_label(toolbox.currency(prices[key], "0"))></td>
+</list>
+</tr>
+</table>
+
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.domain)>&nbsp;<call draw_label_bold(request.domain_name)></td>
+<td>
+<call draw_label(lang.label.period)>
+<assign years = toolbox.getYearsByTLDAndPlan(tld, account.planId)>
+<if years.size == "0">
+    <call draw_label("Not configured")>
+<else>
+  <if !period><assign vsel = "SELECTED"><else><assign vsel = ""></if>
+  <select name="period" size="1">
+    <list years as year>
+      <if period && (year == period)><assign vsel = "SELECTED"></if>
+      <option ${vsel}>${year}</option>
+      <assign vsel = "">
+    </list>
+  </select>
+  &nbsp;
+</if>
+</td>
+</tr>
+<tr>
+  <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<tr>
+	<td colspan=2  class="control_align_center"  ><call draw_label_bold(lang.domain.order.new)></td>
+</TR>
+<TR>
+	<td COLSPAN="2" class="control_header"><call draw_header(lang.label.ci)></td>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.fname)></td>
+	<TD><input name="_srs_owner_first_name" size=15 value="${srs_owner_first_name}" label="${lang.bci.fname}" check="vSinglename"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.lname)></td>
+	<TD><input name="_srs_owner_last_name" size=15 value="${srs_owner_last_name}" label="${lang.bci.lname}" check="vSinglename"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.company)></td>
+	<TD><input name="_srs_owner_org_name" size=30 value="${srs_owner_org_name}" label="${lang.bci.company}" check="vOrganization"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr1)></td>
+	<TD><input name="_srs_owner_address1" size=30 value="${srs_owner_address1}" label="${lang.bci.adr1}" check="vAddress"></TD>
+</TR>
+<TR>
+	<TD><call draw_label(lang.bci.adr2)></TD>
+	<TD><input name="_srs_owner_address2" size=30 value="${srs_owner_address2}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr3)></td>
+	<TD><input name="_srs_owner_address3" size=30 value="${srs_owner_address3}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.city)></td>
+	<TD><input name="_srs_owner_city" size=15 value="${srs_owner_city}" label="${lang.bci.city}" check="vCity"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.state)></td>
+	<TD><input name="_srs_owner_state" size=15 label="${lang.bci.state}" value="${srs_owner_state}" check="vState"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.country)></td>
+	<TD>
+	    <SELECT NAME="_srs_owner_country" onChange="checkForm(this.form)">
+		<call buildCountries(srs_owner_country)>
+	    </SELECT>
+	</TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.pcode)></td>
+	<TD><input name="_srs_owner_postal_code" label="${lang.bci.pcode}" size=15 value="${srs_owner_postal_code}" check="vPostal_Code"></TD>
+</TR>
+<TR>
+	<td    valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></td>
+	<TD    valign="top"><input name="_srs_owner_phone" label="${lang.bci.phone}" size=20 value="${srs_owner_phone}" check="vPhoneOSRS(this, _srs_owner_country, tld)"><br><call draw_label(lang.bci.country_phone_examples)></TD>
+</TR>
+<switch tld>
+  <case "cn">
+  <case "com.cn">
+  <case "net.cn">
+  <case "de">
+    <assign faxValidation = "vFaxOSRSReq">
+    <break>
+  <default>
+    <assign faxValidation = "vFaxOSRS">
+</switch>
+<TR>
+	<TD    valign="top"><call draw_label(lang.label.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+	<TD    valign="top"><input name="_srs_owner_fax" label="${lang.label.fax}" size=20 value="${srs_owner_fax}" check="${faxValidation}(this, _srs_owner_country, tld)"></TD>
+
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.email)></td>
+	<TD><input name="_srs_owner_email" label="${lang.bci.email}" size=30 value="${srs_owner_email}" check="vEmail"></TD>
+</TR>
+<TR><td COLSPAN=2 class="control_header"><call draw_header(lang.label.bi)></td></TR>
+<if flag_use_contact_info=="1">
+    <assign checked_ci="CHECKED">
+</if>
+
+<TR>
+	<TD COLSPAN=2    ><call draw_label(lang.domain.order.sameci)> <input type=checkbox name="flag_use_contact_info" value="1" onClick="changeMod();checkForm(this.form,false)" ${checked_ci}></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.fname)></td>
+	<TD><input name="_srs_billing_first_name" size=15 value="${srs_billing_first_name}" label="${lang.bci.fname}" check="vBiName(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.lname)></td>
+	<TD><input name="_srs_billing_last_name" size=15 value="${srs_billing_last_name}" label="${lang.bci.lname}" check="vBiName(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.company)></td>
+	<TD><input name="_srs_billing_org_name" size=30 value="${srs_billing_org_name}" label="${lang.bci.company}" check="vBiOrganization(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr1)></td>
+	<TD><input name="_srs_billing_address1" size=30 value="${srs_billing_address1}" label="${lang.bci.adr1}" check="vBiAddress(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<TD><call draw_label(lang.bci.adr2)></TD>
+	<TD><input name="_srs_billing_address2" size=30 value="${srs_billing_address2}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr3)></td>
+	<TD><input name="_srs_billing_address3" size=30 value="${srs_billing_address3}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.city)></td>
+	<TD><input name="_srs_billing_city" size=15 value="${srs_billing_city}" label="${lang.bci.city}" check="vBiCity(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.state)></td>
+	<TD><input name="_srs_billing_state" size=15 value="${srs_billing_state}" label="${lang.bci.state}" check="vBiState(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.country)></td>
+	<TD>
+ 	    <SELECT NAME="_srs_billing_country" onChange="checkForm(this.form)">
+		<call buildCountries(srs_billing_country)>
+	    </SELECT>
+	</TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.pcode)></td>
+	<TD><input name="_srs_billing_postal_code" size=15 value="${srs_billing_postal_code}" label="${lang.bci.pcode}" check="vBiPostal_Code(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td    valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></td>
+	<TD    valign="top"><input name="_srs_billing_phone" size=20 value="${srs_billing_phone}" label="${lang.bci.phone}" check="vBiPhoneOSRS(this, _srs_billing_country, tld, flag_use_contact_info)"></TD>
+</TR>
+<switch tld>
+  <case "cn">
+  <case "com.cn">
+  <case "net.cn">
+  <case "de">
+    <assign faxValidation = "vBiFaxOSRSReq">
+    <break>
+  <default>
+    <assign faxValidation = "vBiFaxOSRS">
+</switch>
+<TR>
+	<TD    valign="top"><call draw_label(lang.label.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+	<TD    valign="top"><input name="_srs_billing_fax" size=20 value="${srs_billing_fax}" label="${lang.label.fax}" check="${faxValidation}(this, _srs_billing_country, tld, flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.email)></td>
+	<TD><input name="_srs_billing_email" size=30 value="${srs_billing_email}" label="${lang.bci.email}" check="vBiEmail(this,flag_use_contact_info)"></TD>
+</TR>
+
+
+<if (tld == "us") || (tld == "kids.us") || (tld == "ca") || (tld == "de") || (tld == "co.uk") || tld == "org.uk">
+<TR><td COLSPAN=2 class="control_header"><call draw_header(lang.label.extra_info)></td></TR>
+<switch tld>
+  <case "us">
+  <case "kids.us">
+    <tr>
+    <td colspan="2" ><call draw_label(lang.common_signup_order_us_extrafields_text)>
+      <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_tld;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_app_purpose_label)></td>
+    <td>
+    <select name="_srs_owner_extra_app_purpose">
+      <option value="P1" SELECTED>${lang.signup_oie_app_purpose_profit_buisiness("P1")}</option>
+      <option value="P2">${lang.signup_oie_app_purpose_nonprofit_business("P2")}</option>
+      <option value="P3">${lang.signup_oie_app_purpose_personal_use("P3")}</option>
+      <option value="P4">${lang.signup_oie_app_purpose_education("P4")}</option>
+      <option value="P5">${lang.signup_oie_app_purpose_government("P5")}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_app_purpose;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_nexus_label)></td>
+    <td>
+    <select name="_srs_owner_extra_nexus_category">
+      <option value="C11" SELECTED>'C11'</option>
+      <option value="C12">'C12'</option>
+      <option value="C21">'C21'</option>
+      <option value="C31">'C31'</option>
+      <option value="C32">'C32'</option>
+    </select>
+    </td>
+    </tr>
+    <tr><td colspan="2" >
+	<call draw_label(lang.signup_oie_nexus_tip_C11)><br>
+	<call draw_label(lang.signup_oie_nexus_tip_C12)><br>
+	<call draw_label(lang.signup_oie_nexus_tip_C21)><br>
+	<call draw_label(lang.signup_oie_nexus_tip_C31)><br>
+	<call draw_label(lang.signup_oie_nexus_tip_C32)><br>
+    </td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_nexus_category;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_validator_label)></td>
+    <td>
+    <select name="_srs_owner_extra_nexus_validator">
+      <call buildCountries(vcountry)>
+    </select>
+    </td>
+    </tr>
+    <tr><td colspan="2" ><call draw_label(lang.signup_oie_validator_tip)></td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_nexus_validator;">
+    <break>
+  <case "ca">
+    <tr>
+    <td colspan="2" ><call draw_label(lang.common_signup_order_ca_extrafields_text)>
+      <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_tld;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_isa_trademark_label)></td>
+    <td>
+    <select name="_srs_owner_extra_isa_trademark">
+      <option value="0" SELECTED>${lang.signup_oie_isa_trademark_no}</option>
+      <option value="1">${lang.signup_oie_isa_trademark_yes}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_isa_trademark;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_legal_type_label)></td>
+    <td>
+    <select name="_srs_owner_extra_legal_type">
+      <option value="ABO" SELECTED>${lang.signup_oie_legal_type_abo("ABO")}</option>
+      <option value="ASS">${lang.signup_oie_legal_type_ass("ASS")}</option>
+      <option value="CCO">${lang.signup_oie_legal_type_cco("CCO")}</option>
+      <option value="CCT">${lang.signup_oie_legal_type_cct("CCT")}</option>
+      <option value="EDU">${lang.signup_oie_legal_type_edu("EDU")}</option>
+      <option value="GOV">${lang.signup_oie_legal_type_gov("GOV")}</option>
+      <option value="HOP">${lang.signup_oie_legal_type_hop("HOP")}</option>
+      <option value="INB">${lang.signup_oie_legal_type_inb("INB")}</option>
+      <option value="LAM">${lang.signup_oie_legal_type_lam("LAM")}</option>
+      <option value="LGR">${lang.signup_oie_legal_type_lgr("LGR")}</option>
+      <option value="MAJ">${lang.signup_oie_legal_type_maj("MAJ")}</option>
+      <option value="OMK">${lang.signup_oie_legal_type_omk("OMK")}</option>
+      <option value="PLT">${lang.signup_oie_legal_type_plt("PLT")}</option>
+      <option value="PRT">${lang.signup_oie_legal_type_prt("PRT")}</option>
+      <option value="RES">${lang.signup_oie_legal_type_res("RES")}</option>
+      <option value="TDM">${lang.signup_oie_legal_type_tdm("TDM")}</option>
+      <option value="TRD">${lang.signup_oie_legal_type_trd("TRD")}</option>
+      <option value="TRS">${lang.signup_oie_legal_type_trs("TRS")}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_legal_type;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_lang_pref_label)></td>
+    <td>
+    <select name="_srs_owner_extra_lang_pref">
+      <option value="EN" SELECTED>${lang.signup_oie_lang_pref_en}</option>
+      <option value="FR">${lang.signup_oie_lang_pref_fr}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_lang_pref;">
+    <tr>
+    <td><call draw_label(lang.signup_oie_domain_description_label)><br>
+      <call draw_label(lang.signup_oie_domain_description_tip)>
+    </td>
+    <td><input name="_srs_owner_extra_domain_description" type="text" check="vDomainDescription"></td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_domain_description;">
+    <break>
+  <case "de">
+    <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+    <tr>
+    <td><call draw_label(lang.common_signup_order_de_extrafields_text)></td>
+    <td  colspan="2"><input name="_srs_owner_extra_confirmaddress" type="checkbox" value="DE"></td>
+    </tr>
+    <tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_confirmaddress;">
+    <break>
+  <case "org.uk">
+  <case "co.uk">
+  <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+  <tr>
+    <td><call draw_label(lang.signup_oie_uk_legal_type)></td>
+    <td>
+    <select name="_srs_owner_extra_uk_legal_type">
+      <option value="LTD">${lang.signup_oie_uk_legal_type_ltd}</option>
+      <option value="PLC">${lang.signup_oie_uk_legal_type_plc}</option>
+      <option value="PTNR">${lang.signup_oie_uk_legal_type_ptnr}</option>
+      <option value="STRA">${lang.signup_oie_uk_legal_type_stra}</option>
+      <option value="SCH">${lang.signup_oie_uk_legal_type_sch}</option>
+      <option value="RCHAR">${lang.signup_oie_uk_legal_type_rchar}</option>
+      <option value="GOV">${lang.signup_oie_uk_legal_type_gov}</option>
+      <option value="CRC">${lang.signup_oie_uk_legal_type_crc}</option>
+      <option value="STAT">${lang.signup_oie_uk_legal_type_stat}</option>
+      <option value="OTHER">${lang.signup_oie_uk_legal_type_other}</option>
+      <option value="IND">${lang.signup_oie_uk_legal_type_ind}</option>
+      <option value="FCORP">${lang.signup_oie_uk_legal_type_fcorp}</option>
+    </select>
+    </td>
+    </tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_uk_reg_co_no)></td>
+    <td><input type="text" name="_srs_owner_extra_uk_reg_co_no"></td>
+    </tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_registered_for)></td>
+    <td><input type="text" name="_srs_owner_extra_registered_for"></td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_uk_legal_type;">
+    <assign excludeFields=excludeFields+"_srs_owner_extra_uk_reg_co_no;">
+    <assign excludeFields=excludeFields+"_srs_owner_extra_registered_for;">
+  <break>
+</switch>
+</if>
+<tr>
+  <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<script language="javascript">
+  function changeMod() {
+    if (document.f_order.flag_use_contact_info.checked) {
+       document.f_order.mod.value="opensrsmix";
+    } else {
+       document.f_order.mod.value="opensrs";
+    }
+  }
+</script>
+<!--  END ./domain/order.html  -->

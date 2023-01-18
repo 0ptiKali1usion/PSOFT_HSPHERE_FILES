@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/misc/check_amount_resource.sbm -->
+<function checkFree(res, periodId, res_list)>
+    <if account.findAllChildren(res).size != "0">
+    	<assign rtype = account.plan.getResourceType(res)>
+    	<assign free=rtype.values["_FREE_UNITS_"+periodId]>
+    	<if free=="">
+       	    <assign free=rtype.values["_FREE_UNITS_"]>
+    	</if>
+    	<assign rtype = plans[request.plan_id].getResourceType(res)>
+    	<assign free_new=rtype.values["_FREE_UNITS_"+periodId]>
+    	<if free_new=="">
+             <assign free_new=rtype.values["_FREE_UNITS_"]>
+    	</if>
+    	<if toolbox.gt(free,free_new)=="1">
+	    <assign r=res_list.put(res,free+" to "+free_new)>
+    	</if>
+    </if>
+</function>
+<compress>
+<assign res_hash=toolbox.new_hash>
+<call checkFree("traffic",period_id,res_hash)>
+<call checkFree("reseller_traffic",period_id,res_hash)>
+<call checkFree("quota",period_id,res_hash)>
+<call checkFree("mail_quota",period_id,res_hash)>
+<call checkFree("mysqldb_quota",period_id,res_hash)>
+<call checkFree("MSSQLQuota",period_id,res_hash)>
+<call checkFree("pgsqldb_quota",period_id,res_hash)>
+</compress>
+<list res_hash.KEYS as key>
+    <!--${key}  =  ${res_hash[key]}-->
+</list>
+<!-- END ./submit/misc/check_amount_resource.sbm -->

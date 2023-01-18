@@ -1,0 +1,13 @@
+<!-- BEGIN ./common/quick/quick_view.html  -->
+<assign check_admin_ci = yafv.checkall(
+ yafv.common.s_admin.vPhoneCountry(lang.bci.phone, settings.phone, settings.country),
+ yafv.common.s_admin.vFaxCountry(lang.bci.phone, settings.fax, settings.country))>
+<if check_admin_ci.status != "OK">
+  <assign res = session.addMessage(lang.admin.info.ci_data_incorrect)>
+</if>
+<assign template="quick/quick_view.html">
+<include "functions">
+<call draw_menu("acct-pref-quick")>
+<include "control/quick/quick_view.html">
+<call bottom()>
+<!--  END ./common/quick/quick_view.html  -->

@@ -1,0 +1,72 @@
+<!-- BEGIN ./admin/plan_wizards.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+<if account.getChild("reseller_su")><assign master_admin = "1"><else><assign master_admin = ""></if>
+<if admin.thereAreAvailableGroups("unix_hosting")>
+  <assign draw_dnsmail = "1">
+  <if !admin.isPlatformDisabled("unix_platform")>
+    <assign draw_unix = "1">
+  </if>
+</if>
+<if admin.thereAreAvailableGroups("unix_real")>
+  <assign draw_unix_real = "1">
+</if>
+<if admin.thereAreAvailableGroups("mysql") && !admin.isResourceDisabled("MySQL")>
+  <assign draw_mysql = "1">
+</if>
+<if admin.thereAreAvailableGroups("windows_hosting") && !admin.isPlatformDisabled("windows_platform")>
+  <assign draw_windows = "1">
+</if>
+<if admin.thereAreAvailableGroups("windows_real")>
+  <assign draw_win_real = "1">
+</if>
+<if admin.thereAreAvailableGroups("mail")>
+  <assign draw_mail = "1">
+</if>
+<if admin.thereAreAvailableGroups("vps") && !admin.isResourceDisabled("vps")>
+  <assign draw_vps = "1">
+</if>
+<assign draw_zeus = "">
+<if admin>
+
+
+
+<call draw_table_header("2", lang.admin.planwizs.header)>
+
+
+
+<call draw_wizard_line(draw_unix, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/unix.html", lang.admin.planwizs.unixwiz)>
+
+<call draw_wizard_line(draw_unix_real, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/unix_rs.html", lang.admin.planwizs.realwiz)>
+
+<call draw_wizard_line(draw_mysql, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/mysql.html", lang.admin.planwizs.mysqlwiz)>
+
+<call draw_wizard_line(draw_windows, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/windows.html", lang.admin.planwizs.winwiz)>
+
+<call draw_wizard_line(draw_win_real, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/windows_rs.html", lang.admin.planwizs.winrealwiz)>
+
+<call draw_wizard_line(master_admin, "", config.CLIENT_CP_URL+"?template_name=plan_wizard/reseller.html", lang.admin.planwizs.resellerwiz)>
+
+<call draw_wizard_line("1", "1", config.CLIENT_CP_URL+"?template_name=plan_wizard/admin.html", lang.admin.planwizs.adminwiz)>
+
+<call draw_wizard_line(draw_mail, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/email_only.html", lang.admin.planwizs.email_only)>
+
+<call draw_wizard_line(draw_zeus, draw_zeus, config.CLIENT_CP_URL+"?template_name=plan_wizard/zeus.html", lang.admin.planwizs.zeuswiz)>
+
+<call draw_wizard_line(draw_vps, draw_vps, config.CLIENT_CP_URL+"?template_name=plan_wizard/vps.html", lang.admin.planwizs.vps_wiz)>
+
+<if !"COMMENT"><call draw_wizard_line(draw_dnsmail, master_admin, config.CLIENT_CP_URL+"?template_name=plan_wizard/dnsmail.html", lang.admin.planwizs.dnsmailwiz)></if>
+
+
+<call draw_table_footer()>
+
+<function draw_wizard_line(isConfigured, isAlwaysDrawable, wizardURL, label)>
+<if isConfigured || isAlwaysDrawable>
+  <tr >
+  <td width="85%"><call draw_label(label)></td>
+  <td width="15%" class="control_align_center"><if isConfigured><call draw_select(wizardURL, label)><else><call draw_label(lang.planwizard.support_unavailable)></if></td>
+</tr>
+</if>
+</function>
+</if>
+<!--  END ./admin/plan_wizards.html  -->

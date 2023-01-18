@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/misc/changeplan.sbm -->
+<assign oldPeriod=account.getPeriodAsString(account.periodId)>
+<assign plan=plans[request.plan_id]>
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<assign counter=toolbox.counter("0", periods)>
+<assign onc=toolbox.counter()>
+<compress>
+<if periods != "">
+  <list onc as c>
+    <if counter == periods>
+      <assign res = c.stop>
+    <else>
+      <if plans[request.plan_id].getPeriodAsString(counter.value) == oldPeriod><assign period_id=counter.value></if>
+      <assign res = counter.next>
+    </if>
+  </list>
+</if>
+</compress>
+<if period_id != "">
+  <include "submit/misc/invalid_resources.sbm">
+<else>
+  <include "misc/changeplan2.html">
+</if>
+<!-- END ./submit/misc/changeplan.sbm -->

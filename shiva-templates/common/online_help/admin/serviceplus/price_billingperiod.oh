@@ -1,0 +1,8 @@
+<center>Price</center>
+<hr>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>
+Debit amount: the price of the service that the user is charged for.<br>
+<br>
+* Charged at the beginnig of each billing period.<br>
+* If user changes to another billing period, the price amount is prorated according to a new billing period length.
+

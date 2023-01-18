@@ -1,0 +1,183 @@
+<function setTTAdmin()>
+  <if account.plan.isResourceAvailable("ttadmin")>
+    <assign ttadmin = account.getChild("ttadmin")>
+    <if !ttadmin>
+      <assign ttadmin=account.addChild("ttadmin", "", account.login, account.description, account.ci.email)>
+      <assign result=ttadmin.reload()>
+    </if>
+  </if>
+</function>
+
+<function check_to_answer(t__ticket)><compress>
+  <if ttadmin.info.email && ttadmin.info.description>
+    <if t__ticket.assigned.id>
+      <if ttadmin.id == t__ticket.assigned.id>
+        <assign unable_answer__mes = "">
+      <else>
+        <assign unable_answer__mes = lang.tt.you_are_not_ticket_owner>
+      </if>
+    <else>
+      <assign unable_answer__mes = lang.tt.assign_to_answer>
+    </if>
+  <else>
+    <assign unable_answer__mes = lang.tt.enter_admin_info>
+  </if>
+</compress></function>
+
+<function draw_suggestions(insert__field)>
+<script language="javascript"><!--
+function fillInAnswer(answer) {
+  ${insert__field}.value=answer;
+}
+//--></script>
+
+<if ttadmin && settings.TT_KB>
+  <assign kb=ttadmin.kb_manager.getReadOnlyKB(settings.TT_SUPPORT_KB)>
+  <if settings.KB_MAX_SUG><assign max=settings.KB_MAX_SUG><else><assign max="5"></if>
+  <assign result=kb.filteredSearch(last_question, max)>
+  <tr>
+  <td colspan="2">
+  <if result>
+    <call draw_label_small(lang.kb.sugest)><br>
+    <assign counter=toolbox.counter>
+    <list result as eid>
+      <assign e=kb.getEntryById(eid)>
+      ${counter.next}
+      <call draw_label_small(counter.value)> <a href="javascript:fillInAnswer('${toolbox.js_encode(e.a)}')" onmouseover="popup('${toolbox.js_encode("Q: "+e.q)}<hr>A: ${toolbox.js_encode(e.a)}', 'beige')" onmouseout="kill()"><call draw_label_small(toolbox.shrink_string(toolbox.js_encode(e.q), "80"))></a> <call draw_label_small("["+kb.category[e.cat]+"]")><br>
+    </list>
+  <else>
+    <call draw_label_small(lang.kb.nosugest)>
+  </if>
+  </td>
+  </tr>
+</if>
+</function>
+
+<function gain_sc_params(setPage)><compress>
+ <if request.search_step>
+  <assign sc_params="&search_step="+toolbox.url_escape(request.search_step)>
+ <else>
+  <assign sc_params="">
+ </if>
+ <list params as sc_param>
+  <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1") && sc_param.value>
+   <if (sc_param.name != "sc_page") || (!setPage)>
+     <assign sc_params=sc_params+"&"+sc_param.name+"="+toolbox.url_escape(sc_param.value)>
+   <else>
+     <assign sc_params=sc_params+"&"+sc_param.name+"="+toolbox.url_escape(setPage)><assign setPage="">
+   </if> 
+  </if>
+ </list>
+ <if setPage><assign sc_params=sc_params+"&sc_page="+toolbox.url_escape(setPage)></if>
+</compress></function>
+
+<function draw_sc_form_params()><compress>
+ <if request.search_step><input type="hidden" name="search_step" value="${request.search_step}"></if>
+ <list params as sc_param>
+  <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1") && sc_param.value>
+   <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+  </if>
+ </list>
+</compress></function>
+
+<function show_ticket_states_options(ticket_state)>
+ <if "1"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="1" ${vselected}><call draw_label(lang.tt.state1)></option>
+ <if "2"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="2" ${vselected}><call draw_label(lang.tt.state2)></option>
+ <if "3"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="3" ${vselected}><call draw_label(lang.tt.state3)></option>
+ <if "4"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="4" ${vselected}><call draw_label(lang.tt.state4)></option>
+ <if "5"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="5" ${vselected}><call draw_label(lang.tt.state5)></option>
+ <if "6"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="6" ${vselected}><call draw_label(lang.tt.state6)></option>
+ <if "7"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="7" ${vselected}><call draw_label(lang.tt.state7)></option>
+ <if "8"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="8" ${vselected}><call draw_label(lang.tt.state8)></option>
+ <if "9"==ticket_state><assign vselected="selected"><else><assign vselected=""></if> <option value="9" ${vselected}><call draw_label(lang.tt.state9)></option>
+</function>
+
+<function show_ticket_state(ticket_state)>
+   <if "1"==ticket_state><call draw_label(lang.tt.state1)></if>
+   <if "2"==ticket_state><call draw_label(lang.tt.state2)></if>
+   <if "3"==ticket_state><call draw_label(lang.tt.state3)></if>
+   <if "4"==ticket_state><call draw_label(lang.tt.state4)></if>
+   <if "5"==ticket_state><call draw_label(lang.tt.state5)></if>
+   <if "6"==ticket_state><call draw_label(lang.tt.state6)></if>
+   <if "7"==ticket_state><call draw_label(lang.tt.state7)></if>
+   <if "8"==ticket_state><call draw_label(lang.tt.state8)></if>
+   <if "9"==ticket_state><call draw_label(lang.tt.state9)></if>   
+</function>  
+
+<function show_ticket_state_bold(ticket_state)>
+   <if "1"==ticket_state><call draw_label_bold(lang.tt.state1)></if>
+   <if "2"==ticket_state><call draw_label_bold(lang.tt.state2)></if>
+   <if "3"==ticket_state><call draw_label_bold(lang.tt.state3)></if>
+   <if "4"==ticket_state><call draw_label_bold(lang.tt.state4)></if>
+   <if "5"==ticket_state><call draw_label_bold(lang.tt.state5)></if>
+   <if "6"==ticket_state><call draw_label_bold(lang.tt.state6)></if>
+   <if "7"==ticket_state><call draw_label_bold(lang.tt.state7)></if>
+   <if "8"==ticket_state><call draw_label_bold(lang.tt.state8)></if>
+   <if "9"==ticket_state><call draw_label_bold(lang.tt.state9)></if>   
+</function>  
+
+<function show_tickets(step)>
+  <option value="5" <if step=="5">selected</if>>5</option>
+  <option value="10" <if step=="10">selected</if>>10</option>
+  <option value="20" <if step=="20">selected</if>>20</option>
+  <option value="50" <if step=="50">selected</if>>50</option>
+</function>
+
+<function tt_states_options()>
+  <option value="" selected><call draw_label(lang.tt.state0)></option>
+  <option value="1"><call draw_label(lang.tt.state1)></option>
+  <option value="2"><call draw_label(lang.tt.state2)></option>
+  <option value="3"><call draw_label(lang.tt.state3)></option>
+  <option value="4"><call draw_label(lang.tt.state4)></option>
+  <option value="5"><call draw_label(lang.tt.state5)></option>
+  <option value="6"><call draw_label(lang.tt.state6)></option>
+  <option value="7"><call draw_label(lang.tt.state7)></option>
+  <option value="8"><call draw_label(lang.tt.state8)></option>
+  <option value="9"><call draw_label(lang.tt.state9)></option>  
+</function>
+
+<include "control/quick/quick.fn">
+
+<function ticket_menu(current)>
+<table width="80%" border="0" cellspacing="5" cellpadding="0" bgcolor=${MENU_COLOR1} bordercolor=${BUTTON_SELECTED} align="center">
+<tr bgcolor=${MENU_COLOR1}>
+ <if (current=="tt-admin")><assign bg1 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>         <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg1}><call draw_icon("tt_admin")></td>
+ <if (current=="search-tt")><assign bg2 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>       <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg2}><call draw_icon("adm_info_tt_search")></td>
+ <if (current=="search-all-tt")><assign bg3 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>        <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg3}><call draw_icon("sup_all_tt_search")></td>
+ <if (current=="new-ticket")><assign bg4 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>     <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg4}><call draw_icon("ttadm_info_make_tt")></td>
+ <if (current=="tt-admin-info")><assign bg5 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>        <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg5}><call draw_icon("adm_info_tt_info")></td>
+ <if (current=="kb-search")><assign bg6 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>        <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg6}><call draw_icon("tt_kb_search")></td>
+ <if (current=="kb-admin")><assign bg7 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>       <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg7}><call draw_icon("tt_kb_admin")></td>
+ <if (current=="config-tt")><assign bg8 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>      <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg8}><call draw_icon("config_tt")></td>
+ <if (current=="tt-stats")><assign bg9 ="bgcolor=\"" + BUTTON_SELECTED+"\""></if>      <td WIDTH="11.1%" ALIGN="center" VALIGN="top" ${bg9}><call draw_icon("tt_stats")></td>
+</tr>
+</table>
+</TD>
+</TR>
+<TR bgcolor=${design.color("border_color")}>
+        <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+        <call draw_spacer("151", "1")></TD>
+        <TD WIDTH="100%" HEIGHT="1">
+        <call draw_spacer("1", "1")></TD>
+</TR>
+<TR bgcolor=${design.color("border_color")}>
+        <TD WIDTH="14" HEIGHT="11" BGCOLOR="${design.color("logo_bgcolor")}">
+        <call draw_spacer("14", "11")></TD>
+        <TD WIDTH="1" HEIGHT="11">
+        <call draw_spacer("1", "11")></TD>
+        <TD WIDTH="135" HEIGHT="11" BGCOLOR=${design.color("menu_color3")}>
+        <call draw_spacer("135", "11")></TD>
+        <TD WIDTH="1" HEIGHT="11">
+        <call draw_spacer("1", "11")></TD>
+        <TD WIDTH="100%" HEIGHT="11" BGCOLOR=${design.color("menu_color4")}>
+        <call draw_spacer("1", "11")></TD>
+</TR>
+<TR bgcolor=${design.color("border_color")}>
+        <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+        <call draw_spacer("151", "1")></TD>
+        <TD WIDTH="100%" HEIGHT="1">
+        <call draw_spacer("1", "1")></TD>
+</TR>
+</TABLE>
+<br>
+</function>					

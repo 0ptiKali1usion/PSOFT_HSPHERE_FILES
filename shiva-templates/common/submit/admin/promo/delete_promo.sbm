@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/admin/promo/delete_promo.sbm -->
+
+<assign billman = account.getChild("billman")>
+
+<if billman>
+  <assign promo = billman.getPromo(request.promo_id)>
+  <assign result = promo.delete()>
+  <if result.status != "OK">
+     <assign failure="1">
+     <assign res = session.addMessage(result.msg)>
+  </if>
+</if>
+
+<if !failure>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/promo/delete_promo.sbm -->
+

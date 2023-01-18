@@ -1,0 +1,17 @@
+Dear ${account.ci.first_name} ${account.ci.last_name},
+
+Your account will be suspended on ${suspend_date} due to the fact that as of
+${current_date} your account has an outstanding balance of ${toolbox.displayBalance(bill.balance)}.
+Please remit payment immediately.
+
+Account details:
+Login:      ${account.login}
+nAccount ID: #${account.id.id}
+Plan:       ${account.plan.description}
+Balance:    ${toolbox.displayBalance(bill.balance)}
+
+If you have any questions, don't hesitate to contact us.
+
+Regards,
+Support Team
+${settings.TT_EMAIL}

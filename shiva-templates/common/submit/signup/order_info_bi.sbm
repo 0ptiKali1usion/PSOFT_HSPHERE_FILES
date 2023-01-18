@@ -1,0 +1,60 @@
+<!-- BEGIN ./common/submit/signup/order_info_bi.sbm -->
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(toolbox.compose(
+  lang.label.field_name_bi,lang.label.first_name),request["_srs_billing_first_name"]),
+yafv.common.s_signup.vSinglename(toolbox.compose(
+  lang.label.field_name_bi,lang.label.last_name),request["_srs_billing_last_name"]),
+yafv.common.s_signup.vOrganization(toolbox.compose(
+  lang.label.field_name_bi,lang.label.organization),request["_srs_billing_org_name"]),
+yafv.common.s_signup.vAddress(toolbox.compose(
+  lang.label.field_name_bi,lang.label.address),request["_srs_billing_address1"]),
+yafv.common.s_signup.vCity(toolbox.compose(
+  lang.label.field_name_bi,lang.label.city),request["_srs_billing_city"]),
+yafv.common.s_signup.vState(toolbox.compose(
+  lang.label.field_name_bi,lang.label.state),request["_srs_billing_state"]),
+yafv.common.s_signup.vPostal_Code(toolbox.compose(
+  lang.label.field_name_bi,lang.label.postal_code),request["_srs_billing_postal_code"]),
+yafv.common.s_signup.vCountry(toolbox.compose(
+  lang.label.field_name_bi,lang.label.country),request["_srs_billing_country"]),
+yafv.common.s_signup.vPhoneOSRS(toolbox.compose(
+ lang.label.field_name_bi,lang.label.phone),request["_srs_billing_phone"], request["_srs_billing_country"], tld),
+yafv.common.s_signup.vFaxOSRS(toolbox.compose(
+ lang.label.field_name_bi,lang.label.fax),request["_srs_billing_fax"], request["_srs_billing_country"], tld),
+yafv.common.s_signup.vEmail(toolbox.compose(
+  lang.label.field_name_bi,lang.label.email),request["_srs_billing_email"])
+) >
+<if (result.status!="OK") || (request.back!="")>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign domain_name=toolbox.html_encode(request.domain_name)>
+    <assign srs_billing_first_name=toolbox.html_encode(request["_srs_billing_first_name"])>
+    <assign srs_billing_last_name=toolbox.html_encode(request["_srs_billing_last_name"])>
+    <assign srs_billing_org_name=toolbox.html_encode(request["_srs_billing_org_name"])>
+    <assign srs_billing_address1=toolbox.html_encode(request["_srs_billing_address1"])>
+    <assign srs_billing_address2=toolbox.html_encode(request["_srs_billing_address2"])>
+    <assign srs_billing_address3=toolbox.html_encode(request["_srs_billing_address3"])>
+    <assign srs_billing_city=toolbox.html_encode(request["_srs_billing_city"])>
+    <assign srs_billing_state=toolbox.html_encode(request["_srs_billing_state"])>
+    <assign srs_billing_country=toolbox.html_encode(request["_srs_billing_country"])>
+    <assign srs_billing_postal_code=toolbox.html_encode(request["_srs_billing_postal_code"])>
+    <assign srs_billing_phone=toolbox.html_encode(request["_srs_billing_phone"])>
+    <assign srs_billing_fax=toolbox.html_encode(request["_srs_billing_fax"])>
+    <assign srs_billing_email=toolbox.html_encode(request["_srs_billing_email"])>
+    <include "signup/order_info_bi.html">
+<else>
+    <if request["_srs_billing_org_name"]=="">
+      <assign tmp_company = toolbox.html_encode(request["_srs_billing_first_name"])+" "+toolbox.html_encode(request["_srs_billing_last_name"])>
+      <!--tmp_company = ${tmp_company} -->
+      <assign res=params.addHash("name","_srs_billing_org_name","value",tmp_company)>
+    </if>
+    <if request.type_domain == "domain_transfer">
+       <include "signup/end_osrs.html">
+    <else>
+      <if (tld == "us") || (tld == "kids.us") || (tld == "ca") || (tld == "de") || (tld == "co.uk") || tld == "org.uk">
+        <include "signup/order_info_extra.html">
+      <else>
+        <include "signup/end_osrs.html">
+      </if>
+    </if>
+</if>
+<!-- END ./common/submit/signup/order_info_bi.sbm -->

@@ -1,0 +1,24 @@
+<!-- BEGIN .submit/admin/break_user.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_admin.vUsername(lang.label.username, request.login),
+    yafv.common.s_admin.vPassword1(lang.label.password, request.p1, request.login),
+    yafv.common.s_admin.vPassword2(lang.label.password2, request.p1, request.p2)
+    )>
+<if result.status == "OK">
+  <assign reseller_su=account.getChild("reseller_su")>
+  <if reseller_su>
+    <assign result = reseller_su.breakUser(request.aid, request.login, request.p1)>
+    <if result.status=="OK">
+      <assign success = "1">
+    <else>
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+  </if>
+</if>
+
+<if success>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END .submit/admin/break_user.sbm  -->

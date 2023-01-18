@@ -1,0 +1,94 @@
+<!-- BEGIN ./control/admin/ip.html  -->
+<call draw_tooltip()>
+<if account.plan.isResourceAvailable("eeman")>
+<assign eeman = account.getChild("eeman")>
+<assign lservers = eeman.getLserverList()>
+<assign pservers = eeman.getPserverList()>
+<yafv s_eeman>
+<form method="POST" action="${config.CLIENT_CP_URL}" name="f_ip_select" check! accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_ip_header)>
+
+<tr>
+  <td nowrap><call draw_label(lang.label.ip_address)> <call draw_label(lang.label.from)></td>
+  <td nowrap>
+    <input type="text" name="sc_ip_from" size="15" label="${lang.label.from}" check="vIPAddrOpt">
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.label.to)></td>
+  <td>
+    <input type="text" name="sc_ip_to" size="15" label="${lang.label.to}" check="vIPAddrOpt">
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.eeman.lserveredit.header)></td>
+  <td>
+    <select name="sc_lserver" size="1">
+      <option value="">${lang.label.any}</option>
+      <list lservers as lserver>
+      <option value="${lserver.id}">${lserver.name}</option>
+      </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.eeman.pserver)></td>
+  <td>
+    <select name="sc_pserver" size="1">
+      <option value="">${lang.label.any}</option>
+      <list pservers as pserver>
+      <option value="${pserver.id}">${pserver.name}</option>
+      </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.label.group)></td>
+  <td>
+    <select name="sc_group" size="1">
+      <option value="">${lang.label.any}</option>
+      <list eeman.groups as group>
+      <option value="${group.id}">${group.name}</option>
+      </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.label.type)></td>
+  <td>
+    <select name="sc_type" size="1">
+      <option value="">${lang.label.any}</option>
+      <option value="0">${lang.eeman.lserveredit.freededip}</option>
+      <option value="1">${lang.eeman.lserveredit.busydedip}</option>
+      <option value="2">${lang.eeman.lserveredit.defship}</option>
+      <option value="3">${lang.eeman.lserveredit.sysmip}</option>
+      <option value="4">${lang.eeman.lserveredit.servip}</option>
+      <option value="5">${lang.eeman.lserveredit.freednsip}</option>
+      <option value="6">${lang.eeman.lserveredit.busydnsip}</option>
+      <option value="7">${lang.eeman.lserveredit.sslip}</option>
+      <option value="8">${lang.eeman.lserveredit.tsslip}</option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.entries)></td>
+  <td><call searchStepBox("10")></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="search/ip.html">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+      
+<call draw_table_footer()>
+</form>
+<else>
+<call draw_table_header("2", lang.misc.compareplans.unavailable)>
+<call draw_table_footer()>
+</if>
+<call bottom()>
+<!-- END ./control/admin/ip.html  -->

@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/eshops/add_oscommerce.sbm  -->
+<assign parent=account.getResource(request.rid)>	
+<!-- ${db_id} ${user_id} -->
+<assign result=parent.addChild(request.resource_name,"", db_id, user_id)>
+<if result.status=="OK">
+    <assign hosting=account.getResource(request.rid)>
+    <assign success="1">
+    <if !hosting.getChild("php3")>
+	<assign price = hosting.estimateCreate("php3", "")>
+	<if price.status!="ERROR">
+  	    <if price.free=="1">
+		<assign res=hosting.addChild("php3","")>
+		<if res.status=="OK">
+		    <assign oscomm="1">
+		</if>
+	    </if>
+	</if>
+	<if oscomm!="1">
+    	    <assign res=session.addMessage(lang.eshops.add_oscommerce.php_warn)>
+	</if>
+    </if>
+    <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, "osCommerce", ""))>
+    <assign unixuser=account.getChild("unixuser")>
+    <if unixuser.host.platform_type=="unix">
+        <assign res=session.addMessage(lang.eshops.add_oscommerce.htaccess_warn)>
+    </if>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.parent_template>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END /submit/eshops/add_oscommerce.sbm  -->

@@ -1,0 +1,118 @@
+<!-- BEGIN ./eeman/mserver_params_edit.sbm  -->
+
+<assign eeman = account.getChild("eeman") >
+<function checkValidation(verifyres,key,value) >
+    <if verifyres.status == "OK"><assign verifyresult = "OK"><assign tmp = params(key,value) >
+    <else>
+      <assign verifyresult = "ERROR"><list verifyres.msgs as msg>
+      <assign mes = session.addMessage(msg)></list>
+    </if>
+</function>
+
+
+<assign protocol_auth_checked="">
+<if eeman>
+    <assign verifyresult = "OK"><assign res = "">
+    <assign mid = request.rid>
+<!-- check outgoingip parameter -->
+    <if request["outgoingip"]>
+      <assign outgoingipparam = eeman.getMailServerParam(mid,"outgoingip")>
+      <assign res = outgoingipparam.checkNewValue(mid, request["outgoingip"])>
+      <if !res || res!="0">
+        <assign mes=session.addMessage(lang.eeman.qmail.incorrect_outgoingip)>
+        <assign result="ERROR">
+      </if>
+    </if>
+    <if result != "ERROR">
+      <assign params = eeman.getMailServerParamsList(mid)>
+      <list params as param>
+      <assign key = param.param_name>
+      <assign type = param.param_type>
+      <switch param.param_type>
+	<case "list">	
+	<case "slist">
+	<case "emailslist">
+	<case "domainslist">
+	<case "iplist">
+	<case "patternslist">
+            <assign val = param.param_value>
+	    <if request[key + "_add"] != "">
+	        <assign tmp = param(key + "_add", request[key + "_val"])>
+	    <else>
+	      <if request[key + "_del"] != "">
+	          <assign tmp = param(key + "_del", request[key])>
+	      <else>
+	        <if request[key + "_save"] != "">
+	            <assign tmp = param(key + "_old", request[key])>
+	            <assign tmp = param(key + "_save", request[key + "_val"])>
+	        </if>
+	      </if>
+	    </if>
+	    <break>
+	<case "radio">
+	<case "radiogroup">
+	<case "select">
+		<assign tmp = param(param.param_name,request[param.param_name])>
+	    <break>
+	<case "text">
+		<assign tmp = params(param.param_name,request[param.param_name])>
+            <break>
+	<case "ipparam">
+	    <assign changed = param.ischanged(request[param.param_name])>
+	    <if changed>
+                <assign res = yafv.checkall(yafv.common.s_eeman.vIPAddrOpt(param.param_name,request[param.param_name])) >
+                <call checkValidation(res,key,request[param.param_name]) >	
+	    </if>
+	    <assign tmp = params(key,request[param.param_name])>
+	    <break>
+	<case "unixpathparam">
+	    <assign changed = param.ischanged(request[param.param_name])>
+	    <if changed>
+	        <assign res = yafv.checkall(yafv.common.s_domain.vLocalDir(param.param_name,request[param.param_name])) >
+	        <call checkValidation(res,key,request[param.param_name]) >
+	    </if>
+	    <assign tmp = params(key,request[param.param_name])>	
+	    <break>
+	<case "winpathparam">
+	    <assign changed = param.ischanged(param.param_name,request[param.param_name])>
+	    <if changed>
+	        <assign res = yafv.checkall(yafv.common.s_eeman.vWinPathWithSlash(param.param_name,request[param.param_name])) >
+	        <call checkValidation(res,key,request[param.param_name]) >
+	    </if>
+	    <assign tmp = params(key,request[param.param_name])>
+	    <break>
+	<case "checklist">
+	    <assign subparams = param.param_list>
+	    <list param.param_list as subparam><assign tmp = param(subparam.full_name,request[subparam.full_name])></list>	
+	    <break>
+        <case "check">
+	    <if (param.param_name=="smtpauth" || param.param_name=="popbeforesmtp" ) && protocol_auth_checked!="1">
+		<if request[param.param_name]>
+		  <assign protocol_auth_checked="1">
+		<else>
+		  <assign protocol_auth_checked="0">
+		</if>
+	    </if>
+	    <assign value = request[param.param_name]><assign tmp = params(key,value) >
+	    <break>	
+	<default>
+	    <assign value = request[param.param_name]><assign tmp = params(key,value) >
+	    <break>
+      </switch>    
+      </list>
+      <if verifyresult == "OK" && protocol_auth_checked!="0">
+	<assign result = eeman.updateMailServerParams(mid)><assign res = eeman.setUnchanged(mid)>
+      <else>
+	<if protocol_auth_checked=="0">
+	   <assign mes=session.addMessage(lang.eeman.qmail.not_chosen_protocol_error)>	
+        </if>
+        <assign result = "ERROR">
+      </if>
+    </if>
+    <if result == "OK">
+        <include request.stemplate>
+    <else>
+      <include request.ftemplate>
+    </if>
+</if>
+<!--  END ./eeman/mserver_params_edit.sbm  -->

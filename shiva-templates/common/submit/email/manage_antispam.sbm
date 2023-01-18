@@ -1,0 +1,62 @@
+<!-- BEGIN ./email/manage_antispam.sbm  -->
+<assign result = yafv.checkall(
+  yafv.common.s_email.vEmailsMask(lang.email.antispam.whitelist,request.whiteList),
+  yafv.common.s_email.vEmailsMask(lang.email.antispam.blacklist,request.blackList),
+  yafv.common.s_email.vMailProcessing(lang.email.antispam.processing,request.move_to,request.spam_processing)
+)>
+<if result.status=="OK">
+  <if request.spam_processing=="remove" && request.spamMaxScore!="undefined">
+    <assign res=session.addMessage(lang.msg.antispam.wrong_processing_value)>
+    <assign failure="1">
+  </if>
+  <if !failure>
+    <if request.spam_processing=="move">
+      <assign spam_processing=request.move_to>
+    <else>
+      <assign spam_processing=request.spam_processing>
+    </if> 
+    <if request.type=="mdomain">
+      <assign mdomain=account.getResource(request.md_id)>
+      <assign mname=mdomain.name>
+      <assign result=mdomain.setAntiSpamPreferences(request.whiteList,request.blackList,request.spamLevel,spam_processing,request.spamMaxScore)>
+    <else>
+      <assign antispam=account.getResource(request.mid)>
+      <assign mname=antispam.email>
+      <if request["set_mdomain_prefs"]!="">
+        <assign result=antispam.onMailDomainPreferences()>
+      <else>
+        <assign result=antispam.setAntiSpamPreferences(0,request.whiteList,request.blackList,request.spamLevel,spam_processing,request.spamMaxScore)>
+      </if>
+    </if>
+    <if result.status=="OK">
+        <assign res=session.addMessage(toolbox.compose(
+              lang.msg.name_res_changed,lang.label.antispam_pref,mname))>
+    
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_change,lang.label.antispam_pref,mname))>
+      <assign failure="1">	     
+      <list result.msgs as msg>
+        <assign res=session.addMessage(result.msg)>
+      </list>
+    </if>
+  </if>
+<else>
+  <list result.msgs as msg>
+    <assign res=session.addMessage(msg)>
+  </list>
+  <assign failure="1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign vvalues="1">
+  <assign vspamLevel=toolbox.html_encode(request.spamLevel)>
+  <assign vspam_processing=toolbox.html_encode(request.spam_processing)>
+  <assign vmove_to=toolbox.html_encode(request.move_to)>
+  <assign vspamMaxScore=toolbox.html_encode(request.spamMaxScore)>
+  <assign vwhiteList=toolbox.html_encode(request.whiteList)>
+  <assign vblackList=toolbox.html_encode(request.blackList)>
+  <include request.ftemplate>
+</if>
+<!--  END ./email/manage_antispam.sbm  -->

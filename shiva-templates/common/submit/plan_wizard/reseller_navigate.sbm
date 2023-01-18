@@ -1,0 +1,41 @@
+<!-- BEGIN ./submit/plan_wizard/reseller_navigate.sbm -->
+<!-- CURRENT_SPECIAL=${request.current_special} -->
+<switch request.current_special>
+   <case "plan_wizard/reseller.html">
+       <if !request.leave_osrs_prices>
+          <assign page_to_display="plan_wizard/reseller_srs.html">
+       <else>
+          <if !request.leave_domain_transfer_prices>
+             <assign page_to_display="plan_wizard/reseller_domain_transfer.html">
+          <else>
+             <if request.allow_ds_resell>
+                 <assign page_to_display="plan_wizard/reseller_ds_prices.html"> 
+             <else>
+                 <assign page_to_display="plan_wizard/reseller2.html">
+             </if>
+          </if>    
+       </if>
+       <break>
+   <case "plan_wizard/reseller_srs.html">
+       <if !request.leave_domain_transfer_prices>
+           <assign page_to_display="plan_wizard/reseller_domain_transfer.html">
+       <else>
+           <if request.allow_ds_resell>
+               <assign page_to_display="plan_wizard/reseller_ds_prices.html">
+           <else>
+               <assign page_to_display="plan_wizard/reseller2.html">
+           </if>
+       </if>
+       <break>
+   <case "plan_wizard/reseller_domain_transfer.html">
+       <if request.allow_ds_resell>
+           <assign page_to_display="plan_wizard/reseller_ds_prices.html">
+       <else>
+           <assign page_to_display="plan_wizard/reseller2.html">
+       </if>
+       <break>
+   <case "plan_wizard/reseller_ds_prices.html">
+       <assign page_to_display="plan_wizard/reseller2.html">
+       <break>
+</switch>
+<!-- END ./submit/plan_wizard/reseller_navigate.sbm -->

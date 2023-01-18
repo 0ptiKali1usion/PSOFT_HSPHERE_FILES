@@ -1,0 +1,10 @@
+<!-- BEGIN ./tt/admin_sv.html  -->
+<assign template="tt/admin.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign result=ttadmin.setSeverity(request.ttid, request.severity)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>

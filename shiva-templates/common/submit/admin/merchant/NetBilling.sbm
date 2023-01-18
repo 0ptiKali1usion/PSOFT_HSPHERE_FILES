@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/NetBilling.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "PROTOCOL", request.protocol ,"SERVER", request.server, "ACCOUNT", request.account, "SITETAG", request.sitetag, "EMAILADDR", request.emailaddr, "CLASS_NAME", "psoft.epayment.NetBilling", "MODE", "LIVE", "TEMPLATE", "admin/merchant/NetBilling.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "PROTOCOL", request.protocol ,"SERVER", request.server, "ACCOUNT", request.account, "SITETAG", request.sitetag, "EMAILADDR", request.emailaddr, "CLASS_NAME", "psoft.epayment.NetBilling", "MODE", "LIVE", "TEMPLATE", "admin/merchant/NetBilling.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/NetBilling.sbm -->

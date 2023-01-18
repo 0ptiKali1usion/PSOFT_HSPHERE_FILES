@@ -1,0 +1,69 @@
+<!-- BEGIN ./domain/add_redirect.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<form name="f_add_redirect"  action="${config.CLIENT_CP_URL}" method="post" check! onSubmit="changeMod();return checkForm(this,true);" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_redirect_submit.sbm">
+
+<if !vstatus>
+    <assign redirect_status="temp">
+    <assign vstatus = "temp">
+</if>
+    
+
+
+
+<call prepare_table_header("2", lang.domain.addredirect.header)>
+<call add_table_header_help("user-ds_domaininfo-redirect-h","")>
+<call draw_table_header_prepared()>
+
+<tr>
+   <td><call draw_label(lang.domain.addredirect.from)></td>
+   <td    nowrap><call draw_label("http://www."+account.getResource(request.rid).parent.name+"/")><input type="text" name="url_path" size="10" value="${vurl_path}" check="vOldURL" onChange="changeMod();checkForm(this.form,false)"></td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.domain.addredirect.to)></td>
+   <td    nowrap>
+
+   <if vprotocol=="http"><assign http_sel = "SELECTED"></if>
+   <if vprotocol=="ftp"><assign ftp_sel = "SELECTED"></if>
+   <if vprotocol=="https"><assign https_sel = "SELECTED"></if>
+
+
+   <select name="protocol">
+   <option value="http" ${http_sel}>http://</option>
+   <option value="ftp" ${ftp_sel}>ftp://</option>
+   <option value="https" ${https_sel}>https://</option>
+   </select>
+
+<input type="text" name="url" size="40" value="${vurl}" check="vNewURL(this,redirect_status)"></td>
+</tr>
+
+<if vstatus=="permanent"><assign permanent_ch="CHECKED"><else><assign permanent_ch=""></if>
+<if vstatus=="temp"><assign temp_ch="CHECKED"><else><assign temp_ch=""></if>
+<if vstatus=="seeother"><assign seeother_ch="CHECKED"><else><assign seeother_ch=""></if>
+<if vstatus=="gone"><assign gone_ch="CHECKED"><else><assign gone_ch=""></if>
+
+<tr>
+   <td><call draw_label(lang.domain.addredirect.status)></td>
+   <td>
+   <input TYPE="radio" VALUE="permanent" NAME="redirect_status" ${permanent_ch} onClick="checkForm(this.form)"><call draw_label(lang.domain.addredirect.perm)><br>
+   <input TYPE="radio" VALUE="temp" NAME="redirect_status" ${temp_ch} onClick="checkForm(this.form)"><call draw_label(lang.domain.addredirect.temp)><br>
+   <input TYPE="radio" VALUE="seeother" NAME="redirect_status" ${seeother_ch} onClick="checkForm(this.form)"><call draw_label(lang.domain.addredirect.other)><br>
+   <input TYPE="radio" VALUE="gone" NAME="redirect_status" ${gone_ch} onClick="checkForm(this.form)"><call draw_label(lang.domain.addredirect.gone)><br>
+   <call draw_label(lang.domain.addredirect.note)>
+   </td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_redirect.html.in  -->

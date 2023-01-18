@@ -1,0 +1,73 @@
+<!-- BEGIN ./control/ds/upgrade_request.html -->
+<call draw_tooltip()>
+<if !ds_id><assign ds_id = request.ds_id></if>
+<assign ds = account.getResource(ds_id)>
+<assign cur_ds_template = ds.template>
+<if cur_ds_template><assign cur_dst_id = cur_ds_template.id><else><assign cur_dst_id = ""></if>
+<assign dstemplates = toolbox.availableDSTemplates(account.plan.id)>
+<assign areAvailUpgrades = "">
+
+<call draw_table_header("2", lang.ds.upgrade_header)>
+<form name="f_ds_upgrade" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<list dstemplates as dst>
+  <if dst.has_available_servers && (cur_dst_id != dst.id)>
+    <if !areAvailUpgrades>
+	<assign areAvailUpgrades = "1">
+	<assign vchecked = "CHECKED">
+	<call showUpgHeader()>
+    <else>
+	<assign vchecked = "">
+    </if>
+    <assign price = account.estimateCreate("ds","",dst.id)>
+    <tr>
+    <td><input type="radio" name="dst_id" value="${dst.id}" ${vchecked}></td>
+    <td>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=ds/upgrade_server_confirm.html&ds_id="+ds_id+"&stemplate="+template+"&ftemplate="+template+"&dst_id="+dst.id, dst.name)>
+    </td>
+    </tr>
+  </if>
+</list>
+<if account.plan.areResourcesAvailable("ds_custom_build")>
+  <if !areAvailUpgrades>
+    <assign areAvailUpgrades = "1">
+    <assign vchecked = "CHECKED">
+    <call showUpgHeader()>
+  <else>
+    <assign vchecked = "">
+  </if>
+  <tr>
+    <td valign="top" width="3%"><input type="radio" name="dst_id" value="custom" ${vchecked}></td>
+    <td><call draw_label(lang.ds.upgrade_quote)><br><textarea name="description" cols="50" rows="3"></textarea></td>
+  </tr>
+</if>
+<if areAvailUpgrades>
+  <tr>
+    <td class="control_align_center" colspan="2">
+      <input type="hidden" name="ds_id" value="${ds_id}">
+      <input type="hidden" name="template_name" value="ds/upgrade_server_confirm.html">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <if request.stemplate>
+        <input type="hidden" name="stemplate" value="${request.stemplate}">
+      <else>
+        <input type="hidden" name="stemplate" value="${template}">
+      </if>
+      <input type="submit" value="${lang.button.submit}">
+    </td>
+  </tr>
+<else>
+  <tr>
+  <td colspan="2"><call draw_label(lang.ds.no_avail_upgrades)></td>
+  </tr>
+</if>
+</form>
+<call draw_table_footer()>
+
+<function showUpgHeader()>
+  <tr>
+    <td colspan="2"><call draw_label(lang.ds.upgrade_text)></td>
+  </tr>
+  <tr>
+    <td class="control_header" colspan="2"><call draw_header(lang.ds.upgrade_srv)></td>
+  </tr>
+</function>
+<!-- END ./control/ds/upgrade_request.html -->

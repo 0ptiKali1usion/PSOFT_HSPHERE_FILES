@@ -1,0 +1,39 @@
+<compress>
+<assign result=yafv.common.s_admin.vMax(lang.label.max, request["_MAX"])>
+<if result.status=="OK"> 
+    <assign admin = account.getChild("admin")> 
+    <assign plan = admin.getPlan(request.plan_id)>
+    <assign rtype = plan.getResourceType(request.r_id)>
+    <assign result=rtype.putValue("_MAX", toolbox.numberToUSLocale(request["_MAX"]))>
+    <if result.status!="OK">
+        <assign unsuccess="1">
+        <assign res=session.addMessage(result.msg)>
+    </if> 
+    <if request["_REMOVABLE"]=="1">
+	<assign result=rtype.putValue("_REMOVABLE","")>
+    <else>
+	<assign result=rtype.putValue("_REMOVABLE", "0")>
+    </if>
+    <if result.status!="OK">
+        <assign unsuccess="1">
+        <assign res=session.addMessage(result.msg)>
+    </if>
+    <if request["_ADDABLE"]=="1">
+	<assign result=rtype.putValue("_ADDABLE", "")>
+    <else>
+	<assign result=rtype.putValue("_ADDABLE", "0")>
+    </if>
+    <if result.status!="OK">
+        <assign unsuccess="1">
+        <assign res=session.addMessage(result.msg)>
+    </if> 
+<else>
+    <assign unsuccess="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+</compress>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>  

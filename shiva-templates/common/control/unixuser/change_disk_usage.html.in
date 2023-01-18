@@ -1,0 +1,40 @@
+<!-- BEGIN ./unixuser/change_disk_usage.html.in  -->
+<yafv s_unixuser>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.unixuser.changedisk_usage.header)>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_disk_usage" check! accept-charset="UTF-8">
+
+<tr>
+    <td><call draw_label(lang.unixuser.changedisk_usage.newquota)></td>
+<td>
+
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="template_name" value="submit/unixuser/change_disk_usage_check.sbm">
+<input type="hidden" name="next_template" value="submit/unixuser/change_disk_usage.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="summary_quota">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<if ! vsize>
+<assign u=account.id>
+<assign quota = u.getChild("summary_quota")>
+<assign vsize=quota.limitMb>
+</if>
+<input type="text" name="size"  label="${lang.label.quota}" check="vQuota" size="5" value="${vsize}">&nbsp;<call draw_label(lang.unixuser.changedisk_usage.mb)></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>
+    <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./unixuser/change_disk_usage.html.in  -->

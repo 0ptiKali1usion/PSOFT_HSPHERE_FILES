@@ -1,0 +1,22 @@
+<center> SSL Support</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp; SSL (Secure Sockets Layer protocol) is a standard for 
+transmitting confidential data such as credit card numbers over the Internet. 
+Most true business sites support this feature, as it allows more security in transmitting data over the WWW. This is the standard minimum safe security level for 
+true business on the Internet. SSL works by using a private key to encrypt data 
+that is transferred over the SSL connection. <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+	SSL is a protocol by which a client (web browser) and server (Apache, for example) can communicate with one another securely, using encrypted messages. Anyone intercepting the message will receive only garbage, since the messages are encoded with the public keys of the conversants, but must be decrypted with their private keys, which are not distributed. 
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp; The security it provides is three-fold. Firstly, the 
+data is encrypted - which basically means that the information is jumbled up so 
+that it can't be read by the wrong people. Secondly, SSL provides server authentication 
+- that is, it ensures that the server you're communicating with is who they say 
+they are. Finally, SSL provides data integrity, which ensures that a third party 
+can't modify the data along its journey. <br>
+&nbsp;&nbsp;&nbsp;&nbsp; Because of the way SSL works, you can't use SSL on shared 
+IP. There are no configuration tricks that you can do to make this work. <br>
+To enable SSL for your domain, you have to switch to dedicated IP.
+run on the dedicated IP. <br>
+&nbsp;&nbsp;&nbsp;&nbsp; With SSL Support ON, you are charged for private 
+secure certificate that you get. 

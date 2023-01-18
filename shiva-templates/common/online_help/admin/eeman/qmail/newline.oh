@@ -1,0 +1,6 @@
+<center> newline </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Accept or reject mail from mail user agents (MUA) that send commands without CR (carriage return). 
+<br>Default: 0 (disabled)
+<br>

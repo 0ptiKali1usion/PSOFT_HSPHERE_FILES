@@ -1,0 +1,428 @@
+<!-- BEGIN ./functions  -->
+<assign SHOW_RES_ADV = "">
+
+<compress>
+
+<if lang.text_direction == "rtl">
+  <assign RTL_DIRECTION = "1">
+<else>
+  <assign RTL_DIRECTION = "">
+</if>
+<if account>
+  <assign SESSION_PLATFORM = account.getPlatformType()>
+<else>
+  <assign SESSION_PLATFORM = "">
+</if>
+
+<function setActivityOff(op)>
+<assign res=op.setActive("false")>
+<if op.isHolder()>
+  <list op.children as child>
+   <call setActivityOff(child)>
+  </list>
+</if>
+</function>
+
+<function draw_js(name)><script language="javascript" src="${config.JS}${name}"></script>
+</function>
+
+<assign brDetectionIncluded = "">
+<function include_browser_detection()>
+<if !brDetectionIncluded><call draw_js("/common/JS/br_detection.js")><assign brDetectionIncluded = "1"></if>
+</function>
+
+<function onoff(rid, type)>
+<assign tmp_val=rid.getChild(type)><if tmp_val><call disable(rid, tmp_val)><else><call enable(rid, type)></if>
+</function>
+
+<function onoff_mod(rid, type, mod)>
+<assign tmp_val=rid.getChild(type)><if tmp_val><call disable(rid, tmp_val)><else><call enable_mod(rid, type, mod)></if>
+</function>
+
+<function enable(rid, type)>
+<call addResource(lang.functions.enable, rid, rid,  type, "", template, template)>
+</function>
+
+<function enable_mod(rid, type, mod)>
+<call addResource(lang.functions.enable, rid, rid,  type, mod, template, template)>
+</function>
+
+<function enableWizard(rid, type, next_template)>
+<call addResourceWizard(lang.functions.enable, rid, rid,  type, "", template, template, next_template)>
+</function>
+
+<function addNewWizard(rid, type, next_template, label)>
+<call addNewResourceWizard(label, rid, rid,  type, "", template, template, next_template)>
+</function>
+
+<function disable(rid, did)>
+<call delResource(lang.functions.disable, rid,  did, template, template, "0")>
+</function>
+
+<function disableNew(rid, did)>
+<call delNewResource(lang.functions.disable, rid,  did, template, template, "0")>
+</function>
+
+<function disableWarn(rid, did)>
+<call delResource(lang.functions.disable, rid,  did, template, template, "1")>
+</function>
+
+<function disableNewWarn(rid, did)>
+<call delNewResource(lang.functions.disable, rid,  did, template, template, "1")>
+</function>
+
+<function disableNWJump(rid, did, jTemplate)>
+<call delNewResource(lang.functions.disable, rid,  did, jTemplate, template, "1")>
+</function>
+
+<function addResource(label, rid, aid, type, mod, stemplate, ftemplate)>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+rid+"&aid="+aid+"&mod="+mod+"&type="+type+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, "off", lang.functions.action_enable)>
+</function>
+
+<function addResourceWizard(label, rid, aid, type, mod, stemplate, ftemplate, next_template)>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+rid+"&aid="+aid+"&mod="+mod+"&type="+type+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&next_template="+next_template+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, "off", lang.functions.action_enable)>
+</function>
+
+<function addNewResourceWizard(label, rid, aid, type, mod, stemplate, ftemplate, next_template)>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+rid+"&aid="+aid+"&mod="+mod+"&type="+type+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&next_template="+next_template+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, "add", label)>
+</function>
+
+<function delResource(label, rid, did, stemplate, ftemplate, warn)>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+rid+"&did="+did+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn="+warn, "on", lang.functions.action_disable)>
+</function>
+
+<function delNewResource(label, rid, did, stemplate, ftemplate, warn)>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+rid+"&did="+did+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn="+warn, "del", lang.functions.action_remove)>
+</function>
+
+<function advReportNav(report)>
+<if sc_params>
+<if toolbox.startsWith(sc_params, "&") != "1"><assign sc_params_new = "&" + sc_params>
+<else><assign sc_params_new = sc_params>
+</if>
+<else>
+<assign sc_params_new = "">
+</if>
+<if report.isPrev>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&arid="+report.id+"&search_action=prev"+sc_params_new,lang.functions.prev)>
+<else><if report.isNext><call draw_label(lang.functions.prev)></if>
+</if>
+<list report.pages as p>
+<if p != report.currentPage>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&arid="+report.id+"&search_action=pos&search_page="+p+sc_params_new,"["+p+"]")>
+<else><call draw_label("["+p+"]")>
+</if>
+</list>
+<if report.isNext>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&arid="+report.id+"&search_action=next"+sc_params_new,lang.functions.next)>
+<else><if report.isPrev><call draw_label(lang.functions.next)></if>
+</if>
+</function>
+
+<function advReportLabel(report, label, field)>
+<a href="${config.CLIENT_CP_URL}?template_name=${template}&arid=${report.id}&search_action=reorder&search_field=${field}<if sc_params>&${sc_params}</if><if !(report.field==field && report.direction)>&search_direction=true</if>">
+<call draw_header(label)></a>
+</function>
+
+<function advReportInit(report)>
+<if request.search_action=="next"><assign result=report.next()></if>
+<if request.search_action=="prev"><assign result=report.prev()></if>
+<if request.search_action=="pos"><assign result=report.setPage(request.search_page)></if>
+<if request.search_action=="reorder"><assign result=report.reorder(request.search_field, request.search_direction)></if>
+<if request.search_step><assign result=report.setStep(request.search_step)></if>
+</function>
+
+<function searchStepBox(step)>
+<if step==""><assign step="5"></if>
+<select name="search_step" size="1">
+<option<if step=="5"> SELECTED</if>>5
+<option<if step=="10"> SELECTED</if>>10
+<option<if step=="25"> SELECTED</if>>25
+<option<if step=="50"> SELECTED</if>>50
+<option<if step=="100"> SELECTED</if>>100
+</select>
+</function>
+
+<function draw_warn_invoice(invoice)>
+&nbsp;
+<table align="CENTER" class="warn_invoice">
+<tr>
+<td colspan="3" class="warn_invoice_header">
+<call draw_header(lang.functions.invoice)>
+</td>
+</tr>
+<list invoice.entries as entry><tr>
+  <td><call draw_label(entry.type)></td>
+  <td>
+    <call draw_label(toolbox.formatForHTML(entry.description))>
+    <if entry.note>
+      <call draw_colored_note(toolbox.formatForHTML(entry.note), billing_text_color)>
+    </if>
+  </td>
+  <td class="warn_invoice_align_right"><call draw_label(toolbox.currency(entry.amount))></td>
+</tr></list>
+<assign new_taxes=toolbox.calculateTaxes(invoice.total)>
+<if new_taxes.taxes>
+<tr>
+  <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.subtotal)></td>
+  <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.sub_total))></td>
+</tr>
+<list new_taxes.taxes.KEYS as tax_id>
+<tr>
+  <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(toolbox.taxes[tax_id].description+"("+toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")+"%)")></td>
+  <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.taxes[tax_id]))></td>
+</tr>
+</list>
+</if>
+<tr>
+  <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.functions.total)></td>
+  <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.total))></td>
+</tr>
+</table>
+&nbsp;
+</function>
+
+<function draw_warn_invoice_with_charge_info(add_message,add_invoice,del_message,del_invoice,form_name)>
+<call draw_tooltip()>
+<assign not_empty_invoice="0">
+<if add_invoice && add_invoice.free=="0">
+  <assign not_empty_invoice="1">
+  <if del_invoice>
+    <assign delta=toolbox.sub(add_invoice.total,del_invoice.refund)>
+  <else>
+    <if add_invoice>
+        <assign delta=add_invoice.total>
+    </if>
+  </if>
+  <if toolbox.lt(delta,"0")=="1">
+    <assign need_charge="-1">
+  <else>
+    <assign need_charge=account.bill.paymentNeedsCharge(delta)>
+  </if>
+  <call draw_table_header("",lang.billing.addconfirm)><br>
+  <tr>
+  <td><call draw_label(add_message)>
+    <if account.bi.type=="CC">
+      <br>
+      <if need_charge!="-1">
+        <if need_charge>
+          <call draw_important_label(lang.billing.cc_charge_immediatly)>
+        <else>
+          <call draw_important_label(lang.billing.cc_nocharge_immediatly)>
+	</if>
+      </if>
+    </if>
+  <table align="CENTER" class="warn_invoice">
+  <tr>
+    <td colspan="3" class="warn_invoice_header">
+    <call draw_header(lang.functions.invoice)>
+    </td>
+  </tr>
+  <list add_invoice.entries as entry>
+    <tr>
+    <td><call draw_label(entry.type)></td>
+    <td><call draw_label(toolbox.formatForHTML(entry.description))>
+    <if entry.note>
+      <call draw_colored_note(toolbox.formatForHTML(entry.note), billing_text_color)>
+    </if>
+    </td>
+    <td class="warn_invoice_align_right"><call draw_label(toolbox.currency(entry.amount))></td>
+   </tr>
+  </list>
+  <assign new_taxes=toolbox.calculateTaxes(add_invoice.total)>
+  <if new_taxes.taxes>
+    <tr>
+    <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.subtotal)></td>
+    <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.sub_total))></td>
+    </tr>
+    <list new_taxes.taxes.KEYS as tax_id>
+      <tr>
+      <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(toolbox.taxes[tax_id].description+"("+toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")+"%)")></td>
+      <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.taxes[tax_id]))></td>
+      </tr>
+    </list>
+  </if>
+  <tr>
+  <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.functions.total)></td>
+  <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_taxes.total))></td>
+  </tr>
+  </table>
+  &nbsp;
+<br>
+  </td>
+  </tr>
+  <if !del_invoice || del_invoice.free=="1">
+    <tr><td>
+    <center>
+    <if need_charge=="-1">
+      <call draw_link ("javascript:document."+form_name+".submit()",lang.billing.confirm_yes)>
+    <else>
+      <if need_charge>
+        <call draw_link("javascript:document."+form_name+".submit()",toolbox.compose(lang.billing.cc_charge_yes,toolbox.currency(delta)))>
+      <else>
+        <call draw_link("javascript:document."+form_name+".submit()",toolbox.compose(lang.billing.account_billed_yes,toolbox.currency(delta)))>
+      </if>
+    </if>
+    <br>	
+    <call draw_link("javascript:history.go(-1)",lang.billing.confirm_no)>
+    </center>
+    </td></tr>
+  </if>
+  <call draw_table_footer()>
+</if>
+<if (del_invoice && del_invoice.free=="0") || drop_aliased_by>
+  <assign not_empty_invoice="1">
+  <call draw_table_header("",lang.billing.delconfirm)>   
+  <tr>
+  <td><call draw_label(del_message)></td>
+  </tr>
+    <tr><td>
+    <center>
+      <if need_charge=="-1">
+	<call draw_link ("javascript:document."+form_name+".submit()",lang.billing.confirm_yes)>
+      <else>
+        <if need_charge>
+          <call draw_link("javascript:document."+form_name+".submit()",toolbox.compose(lang.billing.cc_charge_yes,toolbox.currency(delta)))>
+        <else>
+	  <if delta && toolbox.gt(delta,"0")=="1">
+	    <call draw_link("javascript:document."+form_name+".submit()",toolbox.compose(lang.billing.account_billed_yes,toolbox.currency(delta)))>
+	  <else>	  
+	    <call draw_link("javascript:document."+form_name+".submit()",lang.billing.confirm_yes)>
+	  </if>
+	</if>
+      </if>
+      <br>	
+      <call draw_link("javascript:history.go(-1)",lang.billing.confirm_no)>
+    </center>
+    </td></tr>
+  <call draw_table_footer()>
+</if>
+<if not_empty_invoice=="0">
+  <call draw_table_header("",lang.label.error)>
+  <tr><td><call draw_label(lang.billing.estimation_error)></td> </tr>
+  <call draw_table_footer()>
+</if>
+</function>
+
+<function buildStates(defaultState)>
+<assign delim="">
+<if defaultState=="NA">
+    <option value="NA" SELECTED>${lang.functions.other}
+<else>
+    <option value="NA">${lang.functions.other}
+</if>
+<list toolbox.tokenizer(config.STATE_COUNTRY) as country>
+    <if !delim>
+	<assign delim="-----------------------------">
+    <else>
+        <option value="NA">${delim}
+    </if>
+    <switch country>
+	<case "US">
+	    <assign states=toolbox.states>
+	    <break>
+	<case "CA">
+	    <assign states=toolbox.statesCanada>
+	    <break>
+    </switch>
+    <list states as curstate>
+	<if curstate.tag==defaultState>
+	    <option value="${curstate.tag}" SELECTED>${curstate.name}
+	<else>
+	    <option value="${curstate.tag}">${curstate.name}
+	</if>
+    </list>
+</list>
+</function>
+
+<function buildCountries(defaultCountry)>
+<if !defaultCountry>
+  <assign defaultCountry = settings.country>
+</if>
+<if !defaultCountry>
+    <list toolbox.tokenizer(config.STATE_COUNTRY) as country>
+	<if !defaultCountry><assign defaultCountry=country></if>
+    </list>
+</if>
+<list toolbox.countries as curcountry>
+    <if defaultCountry==curcountry.code>
+	<option value="${curcountry.code}" SELECTED><call draw_label(lang[curcountry.name])>
+    <else>
+	<option value="${curcountry.code}"><call draw_label(lang[curcountry.name])>
+    </if>
+</list>
+</function>
+
+<function buildCurrencies(defaultCurrency)>
+<list toolbox.currencies as curcurrency>
+    <if defaultCurrency==curcurrency.code>
+        <option value="${curcurrency.code}" SELECTED>${curcurrency.name}
+    <else>
+        <option value="${curcurrency.code}">${curcurrency.name}
+    </if>
+</list>
+</function>
+
+
+<function admBillView(accountId)>
+<call draw_preview(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+accountId+"&display_template=billing_info.html", lang.search.view_invoice)>
+</function>
+
+<function admBillViewDeleted(accountId)>
+<call draw_preview(config.CLIENT_CP_URL+"?template_name=account_preview/view_deleted.html&aid="+accountId+"&display_template=deleted_billing_info.html", lang.search.view_invoice)>
+</function>
+
+
+<function spellcheck(form, field)>
+<a href="javascript:spellcheck('${form}', '${field}')"><call draw_label_small(lang.spellcheck.label)></a>
+</function>
+
+<function spellCheckInit()>
+<script language="javascript">
+function spellcheck(form_name, form_field) {
+var form = document.forms["spellcheck"];
+form.words.value=document.forms[form_name].elements[form_field].value;
+form.form_name.value=form_name;
+form.form_field.value=form_field;
+spell=window.open("", "SPELLCHECK", "dependent=yes,location=0,scrollbars=yes,menubar=0,status=0,titlebar=0,toolbar=0,width=400,height=500,top=200,left=200");
+form.submit();
+spell.focus();
+}
+</script>
+
+<form name="spellcheck" action="${config.CLIENT_CP_URL}" target="SPELLCHECK" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="tools/spellcheck.html">
+<input type="hidden" name="words">
+<input type="hidden" name="form_name">
+<input type="hidden" name="form_field">
+</form>
+</function>
+
+<function js_back()>
+<call draw_link("javascript:history.back()", lang.button.back)>
+</function>
+
+<function draw_popup_window(url, windowName)>
+<SCRIPT language="Javascript"><!--
+  function openPopUpWithHTML(url, windowName) {
+    var assigner=window.open(url,windowName, "resizable=yes,scrollbars=yes,width=640,height=550");
+    assigner.focus();
+  }
+  openPopUpWithHTML("${url}", "${windowName}");
+//--></SCRIPT>
+</function>
+
+
+<function START_PAGE(TEMPLATE_NAME, MENU_NAME)>
+<assign template=TEMPLATE_NAME>
+<call draw_menu(MENU_NAME)>
+</function>
+
+<function END_PAGE()>
+<call bottom()>
+</function>
+</compress>
+<include "design.fn">
+<include "extra.fn">
+<include "tags">
+<!--  END ./functions  -->

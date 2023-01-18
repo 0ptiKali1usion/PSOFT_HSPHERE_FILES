@@ -1,0 +1,67 @@
+<!-- BEGIN ./billing/reseller_price.html  -->
+<call draw_tooltip()>
+<assign reseller = account.getChild("reseller")>
+<assign prices = reseller.getResellerPrices()>
+<if reseller>
+
+
+
+
+<call draw_table_header("8", lang.admin.resprices.header)>
+
+
+<tr>
+  <td rowspan="2"><call draw_label_bold(lang.label.resource)></td>
+  <td class="control_align_center" colspan="3"><call draw_label_bold(lang.billing.units)></td>
+  <td class="control_align_center" colspan="3"><call draw_label_bold(lang.billing.fees)></td>
+  <td rowspan="2" width="10%"><call draw_label_bold(lang.label.refund_perc)></td>
+</tr>
+<tr >
+  <td><call draw_label_bold(lang.billing.free)></b></td>
+  <td><call draw_label_bold(lang.billing.in_use)></b></td>
+  <td><call draw_label_bold(lang.label.max)></b></td>
+  <td><call draw_label_bold(lang.billing.setup)></td>
+  <td><call draw_label_bold(lang.billing.recurr)></td>
+  <td><call draw_label_bold(lang.billing.usage)></td>
+</tr>
+<list prices as price>
+<tr >
+<td nowrap><call draw_label(price.type)></td>
+<td class="control_align_right"><if price.free><call draw_label(toolbox.numberToCurLocale(price.free, "0"))><else>&nbsp;</if></td>
+<td class="control_align_right">&nbsp;<call draw_label(toolbox.numberToCurLocale(price.amount, "0"))></td>
+<td class="control_align_right"><if price.max><if price.max=="-1.0"><call draw_label(lang.label.unlimited)><else><call draw_label(toolbox.numberToCurLocale(price.max, "0"))></if><else>&nbsp;</if></td>
+<td class="control_align_right"><if price.setup><call draw_label(toolbox.currency(price.setup))><else>&nbsp;</if></td>
+<td class="control_align_right"><if price.recurrent><call draw_label(toolbox.currency(price.recurrent))><else>&nbsp;</if></td>
+<td class="control_align_right"><if price.usage><call draw_label(toolbox.currency(price.usage))><else>&nbsp;</if></td>
+<td class="control_align_right"><if price.refund><call draw_label(toolbox.numberToCurLocale(price.refund, "false")+"%")><else><call draw_label("100%")></if></td>
+</tr>
+</list>
+
+<call draw_table_footer()>
+
+<if account.plan.isResourceAvailable("ds_enable")>
+    <assign usageInfo = reseller.getResellerDedicatedServersUsageInfo()>
+    <if usageInfo.size != "0">
+      <call draw_table_header("5", lang.admin.dsprices.header)>
+      <tr>
+         <td><call draw_label_bold(lang.admin.dsprices.ds_name)></b></td>
+         <td><call draw_label_bold(lang.billing.setup)></td>
+         <td><call draw_label_bold(lang.billing.recurr)></td>
+         <td><call draw_label_bold(lang.billing.in_use)></b></td>
+         <td><call draw_label_bold(lang.admin.dsprices.servers_available)></td>
+      </tr>
+
+      <list usageInfo as item>
+        <tr>
+          <td><call draw_label(item.name)></td>
+          <td class="control_align_right"><call draw_label(toolbox.currency(item.setup))></td>
+          <td class="control_align_right"><call draw_label(toolbox.currency(item.recurrent))></td>
+          <td class="control_align_right"><call draw_label(item.in_use)></td>
+          <td class="control_align_right"><call draw_label(item.available)></td>
+        </tr>
+      </list>
+      <call draw_table_footer()>
+    </if>
+</if>
+</if>
+<!-- END ./billing/reseller_price.html  -->

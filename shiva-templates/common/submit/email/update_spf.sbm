@@ -1,0 +1,47 @@
+<!--  BEGIN ./email/update_spf.sbm -->
+<if !request.processing>
+  <assign res=session.addMessage(lang.email.spf.choose_type_processing)>
+  <assign failure="true">
+</if>
+<if !failure>
+  <if request.uid>
+    <assign spf=account.getResource(request.uid)> 
+    <assign result=spf.update(request.processing,request.use_in_domain_aliases)>
+    <if result.status=="OK">
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_updated,lang.label.spf,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.spf,
+					mail_service_or_mail_domain_alias.domain_name))>
+      <assign failure="true">
+    </if>
+  <else>
+    <assign mail_service_or_mail_domain_alias=account.getResource(request.mid)>
+    <assign result=mail_service_or_mail_domain_alias.getChild("spf")>
+    <if result.status=="OK">
+      <assign res=session.addMessage(lang.msg.misc_already_enabled)>
+    <else>
+      <assign result=mail_service_or_mail_domain_alias.addChild("spf","",request.processing)>
+      <if result.status=="OK">
+	<assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,lang.label.spf,""))>
+	<if request.use_in_domain_aliases>
+          <assign result=result.update(request.processing,request.use_in_domain_aliases)>
+          <if result.status!="OK">
+            <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.spf,""))>	
+            <assign failure="true">
+          </if>
+        </if>
+      <else>
+	<assign failure="true">
+	<assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.spf,
+				mail_service_or_mail_domain_alias.domain_name))>
+      </if>
+    </if>
+  </if>
+</if>
+<if failure=="true">
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!--  END ./email/update_spf.sbm  -->

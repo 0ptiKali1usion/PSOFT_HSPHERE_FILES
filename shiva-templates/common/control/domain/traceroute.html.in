@@ -1,0 +1,60 @@
+<!-- BEGIN ./control/domain/traceroute.html  -->
+<yafv s_domain>
+<call draw_tooltip()>
+<assign res=toolbox.getClientLocation()>
+<if request.trace_domain>
+   <assign trace_domain=request.trace_domain>
+<else>
+   <assign trace_domain=toolbox.getClientLocation()>
+</if>
+
+<call draw_table_header("", lang.domain.traceroute.header)>
+
+<tr>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_quota" check! accept-charset="UTF-8">
+   <td    nowrap>
+   <input type="hidden" name="template_name" value="${template}">
+   <input type="hidden" name="stemplate" value="${request.stemplate}">
+   <input type="hidden" name="ftemplate" value="${template}">
+   <input type="text" name="trace_domain" value="${trace_domain}" check="vDomainOrIP" label="${lang.label.hostname}">
+   <call draw_label(lang.domain.traceroute.timeout)>
+   <select name="time_out">
+	<option value="60">1 min</option>
+	<option value="120">2 min</option>
+	<option value="180">3 min</option>
+	<option value="240">4 min</option>
+	<option value="300">5 min</option>
+   </select>
+   <input type="submit" value="${lang.domain.traceroute.submit}">
+   </td>
+</form>
+</tr>
+<if request.trace_domain!="">
+<assign result=yafv.checkall(
+    yafv.common.s_domain.vDomainOrIP(lang.domain.traceroute.name, request.trace_domain)
+    )>
+<if result.status!="OK">
+    <list result.msgs as msg>
+	<tr>
+	    <td><call draw_label("<font color=\""+settings.error_color+"\">"+msg+"</font>")></td>
+	</tr>
+    </list>
+<else>
+
+<tr>
+
+<assign lst=toolbox.traceRoute(request.trace_domain, request.time_out)>
+<td    nowrap>
+<list lst as str>
+<pre>
+ <call draw_label(str)></list>
+</pre>
+</td>
+
+</tr>
+</if>
+</if>
+
+
+<call draw_table_footer()>
+<!--  END ./control/domain/traceroute.html  -->

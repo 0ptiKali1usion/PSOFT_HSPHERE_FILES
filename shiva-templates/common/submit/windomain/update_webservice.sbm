@@ -1,0 +1,15 @@
+<!-- BEGIN ./windomain/update_webservice.html  -->
+<assign result=account.getResource(request.rid).updateSettings(request.index, request.iis_status)>
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success=="1">
+    <include request.stemplate>
+<else>
+    <assign vindex=toolbox.html_encode(request.index)>
+    <assign viis_status=toolbox.html_encode(request.iis_status)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/update_webservice.html  -->

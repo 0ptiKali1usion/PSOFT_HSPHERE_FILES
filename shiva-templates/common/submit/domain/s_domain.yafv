@@ -1,0 +1,43 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vMessage,
+ 	vOrganReq, vOrganUnit, vSinglename, vName, vOrganization,
+ 	vAddress, vAddress2, vCity, vState, vStateOther, vPostal_Code,
+ 	vCountry, vPhone, vFax, vEmail, vLocality, vLocalFileName,
+ 	vTransferDomainName, vHostName, vNewDomainName, vSubDomain, vAlias,
+ 	vfileExt, vmimeType, vApacheCode, vJSZone, vnURL, vOldURL, vLocalDir,
+ 	vLocalDoc, vIPMask, vIPAddr, vCustomDomain, vWildCardDomain,
+ 	v3LDomainName, vCustomAName, vCustomMXName, vCustomCName, vStringEmpty,
+ 	vDomainDescription, vHttpResURL, vFilePathReq;
+
+include common.s_hsphere.yafv: vPriority(integer), vSize(integer), vPassword1(string, string),
+	vBiName(string, boolean), vBiSinglename(string, boolean),
+	vBiAddress(string, boolean), vBiCity(string, boolean), vBiState(string, boolean),
+	vBiOrganization(string, boolean), vBiPostal_Code(string, boolean), vBiCountry(string, boolean),
+	vBiPhone(string, boolean), vBiFax(string, boolean),
+	vBiEmail(string, boolean), vApacheMU(string, string, string),
+	vRenew(string, string), vRegistrationPeriod(integer),
+	vPhoneCountry(string, string), vFaxCountry(string, string),
+	vPhoneOSRS(string, string, string), vFaxOSRS(string, string, string),
+	vBiPhoneOSRS(string, string, string, boolean), vBiFaxOSRS(string, string, string, boolean),
+	vFaxOSRSReq(string, string, string), vBiFaxOSRSReq(string, string, string, boolean),
+	vDomainOrIP(string);
+
+regexp vOsrs_Domain_Name= "([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="79", fail=yafv.vOsrs_Domain_Name.fail;
+
+regexp vPercent=	"\d{1,2}|100",	fail=yafv.vPercent.fail;
+regexp vNumber=		"\d{1,7}",	fail=yafv.vNumber.fail;
+
+constrain vNewURL,  fail=yafv.vNewURL.fail (string newurl, string errstatus) {
+    return ((vnURL(newurl) && ((errstatus=="permanent") || (errstatus=="temp") || (errstatus=="seeother"))) || ((errstatus=="gone") && vStringEmpty(newurl)));
+}
+
+constrain vHttpURLMessage, fail=yafv.vHttpURLMessage.fail (string url_mes, string mtype, string code) {
+    if (mtype == "URL") {
+        if (code != "401") {
+	    return vHttpResURL(url_mes);
+	} else {
+	    return vFilePathReq(url_mes);
+	}
+    } else {
+	return vMessage(url_mes);
+    }
+}

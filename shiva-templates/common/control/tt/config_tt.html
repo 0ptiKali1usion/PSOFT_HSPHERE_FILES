@@ -1,0 +1,39 @@
+<!-- BEGIN ./control/tt/config_tt.html  -->
+<call draw_tooltip()>
+
+<include "control/tt/ttfunctions.fn">
+<call setTTAdmin()>
+
+
+
+
+<call draw_table_header("4", lang.queue.config.header)>
+
+
+<list ttadmin.queue_list as que_id>
+<tr><td height="30">
+<assign que=ttadmin.getQueue(que_id)>
+<call draw_label(que.name)>
+</td>
+<td>
+<if que.def_qu == "1"><call draw_colored_label(lang.queue.default,ERROR_COLOR)>
+<else><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/def_queue.sbm&quid="+que.id, lang.queue.make_def)></if>
+</td>
+<td>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/queue_admins.html&stemplate=tt/config_tt.html&quid="+que.id, lang.queue.adm_subscr)>
+</td>
+<td>
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=tt/update_queue.html&stemplate=tt/config_tt.html&quid="+que.id, "edit", lang.button.edit)>&nbsp;&nbsp;
+<if ttadmin.queue_count != "1">
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=tt/delete_queue.html&stemplate=tt/config_tt.html&quid="+que.id+"&qname="+que.name, "delete", lang.button.delete)>
+</if>
+</td>
+</tr></list>
+<tr><td colspan="4" height="30">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/new_queue_form.html&stemplate=tt/config_tt.html", lang.queue.create)>
+</td></tr>
+<call draw_table_footer()>
+
+
+<!--  END ./control/tt/config_tt.html  -->
+											 

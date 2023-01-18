@@ -1,0 +1,31 @@
+<!-- BEGIN ./design/forget_passw.html.in  -->
+
+<include "functions">
+<call draw_blank_menu()>
+<call draw_tooltip()>
+<yafv s_login>
+
+<form action="${config.CP_URI}" name="f_login" method="POST" check! accept-charset="UTF-8">
+
+<input type="hidden" name="action" value="sendPassw">
+<input type="hidden" name="ftemplate" value="design/forget_password.html">
+<input type="hidden" name="requestURL" value="${loginURL}">
+
+<call draw_table_header("2", lang.design.forgetpsw.remind)>
+
+<tr>
+   <td width="20%"><call draw_label(lang.design.forgetpsw.login)></td>
+   <td nowrap><input name="login" type="text" check="vUsername">
+   </td>
+</tr>
+<tr>
+   <td colspan="2" class="control_align_center">
+	<input type="submit" name="action" value="${lang.design.forgetpsw.submit}">
+   </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<call bottom()>
+
+<!--  END ./design/forget_passw.html.in  -->

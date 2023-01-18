@@ -1,0 +1,22 @@
+<!-- BEGIN ./submit/eeman/path_edit.sbm  -->
+<assign result=yafv.checkall(yafv.common.s_hsphere.vFilePath(lang.eeman.fpath,request.path))>
+<if result.status=="OK">
+   <assign eeman = account.getChild("eeman")>
+   <assign lserver=eeman.getLserver(request.rid)>
+   <assign result = lserver.setFilePath(request.path)>
+   <if result.status!="OK">
+      <assign res=session.addMessage(result.msg)>
+      <assign failure="1">
+   </if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+   <assign failure="1">
+</if>
+<if failure>
+   <assign path = request.path>
+   <include request.ftemplate>
+<else>
+   <include request.stemplate>
+</if>
+
+<!--  END ./submit/eeman/path_edit.sbm  -->

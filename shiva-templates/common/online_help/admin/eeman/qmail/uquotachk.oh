@@ -1,0 +1,7 @@
+<center> uquotachk </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables(1) or disables(0) checking whether the recipient mailbox quota is overlimited.
+<br>Default: 0 (no check).
+<br>
+

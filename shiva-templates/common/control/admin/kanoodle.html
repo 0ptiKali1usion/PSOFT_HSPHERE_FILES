@@ -1,0 +1,53 @@
+<!-- BEGIN ./control/admin/kanoodle..html  -->
+<assign signup = account.getChild("signupadm")>
+<assign kanoodlemanager = account.getChild("kanoodlemanager")>
+<assign acc = account.id>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.admin.kanoodle)>
+
+  
+
+<tr >
+<td   colspan="2"><call draw_label(lang.admin.kanoodle_manager)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.kanoodle)></td>
+<td><call onoff(acc, "kanoodlemanager")></td>
+</tr>
+
+<if kanoodlemanager>
+
+<assign vuserid = kanoodlemanager.userId>
+
+<form  name="set_kanoodle_params" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="submit/admin/kanoodle_params.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${kanoodlemanager}">
+
+<tr >
+<td><call draw_label(lang.admin.kanoodle.userid)></td>
+<td><input type = "text" name="userid" value=${vuserid}></td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<tr >
+<td colspan ="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/kanoodle_signup.html&rid="+kanoodlemanager+"&stemplate="+template+"&ftemplate="+template, lang.admin.kanoodle.register)>
+</td>
+</tr>
+</if>
+
+
+
+<call draw_table_footer()>
+
+<!-- END ./control/admin/kanoodle.html  -->

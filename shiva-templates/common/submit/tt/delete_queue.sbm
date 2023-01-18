@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/tt/delete_queue.sbm  -->
+<assign ttadm=account.getChild("ttadmin")>
+<assign queue=ttadm.getQueue(request.quid)>
+<if request.tick_flag == "0"><assign flag = "0">
+<else><assign flag = request.new_quid>
+</if> 
+<assign result = queue.delete(flag)>
+  <if result.status=="OK">
+     <assign success="1">
+  <else>
+      <assign res=session.addMessage(result.msg)>
+  </if>
+<include "tt/config_tt.html">
+
+<!--  END ./submit/tt/delete_queue.sbm  -->

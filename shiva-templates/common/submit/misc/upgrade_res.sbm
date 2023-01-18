@@ -1,0 +1,22 @@
+<!-- BEGIN ./submit/misc/upgrade_res.sbm -->
+<!-- ${account.bill.balance} ${account.bill.credt} -->
+<if toolbox.le(toolbox.mul("-1",account.bill.balance), account.bill.credit) == "1">
+<assign plan_id=account.plan.id>
+	<!--include "submit/misc/downgrade_traffic.sbm"-->
+	<include "submit/misc/downgrade_traffic.sbm">
+	<!--include "submit/misc/downgrade_reseller_traffic.sbm"-->
+	<include "submit/misc/downgrade_reseller_traffic.sbm">
+	<!--include "submit/misc/downgrade_quota.sbm"-->
+	<include "submit/misc/downgrade_quota.sbm">
+	<!--include "submit/misc/downgrade_mail_quota.sbm"-->
+	<include "submit/misc/downgrade_mail_quota.sbm">
+	<!--include "submit/misc/downgrade_mysqldb_quota.sbm"-->
+	<include "submit/misc/downgrade_mysqldb_quota.sbm">
+	<!--include "submit/misc/downgrade_mssql_quota.sbm"-->
+	<include "submit/misc/downgrade_mssql_quota.sbm">
+	<!--include "submit/misc/downgrade_pgsqldb_quota.sbm"-->
+	<include "submit/misc/downgrade_pgsqldb_quota.sbm">
+<else>
+    <assign res=session.addMessage(lang.misc.changeplan.over)>
+</if>
+<!-- END ./submit/misc/upgrade_res.sbm -->

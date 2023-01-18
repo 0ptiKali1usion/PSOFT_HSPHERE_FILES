@@ -1,0 +1,8 @@
+<!-- BEGIN ./domain/urchin_passwd.html  -->
+<include "functions">
+<call draw_menu("domain-list")>
+<assign template = "domain/urchin_passwd.html">
+<assign domain = account.getResource(request.rid)>
+<include "control/domain/urchin_passwd.html">
+<call bottom()>
+<!--  END ./domain/urchin_passwd.html  -->

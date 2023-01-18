@@ -1,0 +1,30 @@
+<!-- BEGIN ./ftp/add_vdir_submit.sbm  -->
+<assign result= yafv.common.s_ftp.vLocalDir(lang.ftp.dir, request.dir)>
+<if result.status=="OK">
+    <assign ftp = account.getResource(request.rid)>
+    <if request.read!=""><assign read="1"><else><assign read="0"></if>
+    <if request.write!=""><assign write="1"><else><assign write="0"></if>
+    <if request.list!=""><assign list="1"><else><assign list="0"></if>
+    <if request.forall!=""><assign forall="1"><else><assign forall="0"></if>
+    <assign result=ftp.addChild("ftp_vhost_directory","",request.dir,read,write,list,forall)>
+    <if result.status=="OK">
+       <assign res=session.addMessage(toolbox.compose(
+	 lang.msg.name_res_added,lang.ftp.dir,request.dir))>
+    <else>
+        <assign res=session.addMessage(result.msg)>
+        <assign failure="1">
+   </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>	
+</if>
+<if !failure>
+    <include request.stemplate>
+<else>
+    <assign vdir=toolbox.html_encode(request.dir)>
+    <assign vread=request.read>
+    <include request.ftemplate>
+</if>
+<!--  END ./ftp/add_vdir_submit.sbm  -->

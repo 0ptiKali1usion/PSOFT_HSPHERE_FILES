@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE users SYSTEM "/hsphere/local/home/cpanel/shiva/psoft/hsphere/migrator/users.dtd">
+
+<users>
+
+    <user login="${user.login}" password="${user.password}" reseller="${user.reseller}">
+	<account
+	<if user.bpid !="NONE"> balance="${user.balance}" bpid="${user.bpid}"</if> plan="${user.plan}" startdate="${user.start_date}">
+	<info prefix="_ci_">
+	    <item name="first_name">${user.ci.first_name}</item>
+	    <item name="last_name">${user.ci.last_name}</item>
+	    <item name="company">${user.ci.company}</item>
+	    <item name="address1">${user.ci.address1}</item>
+	    <item name="city">${user.ci.city}</item>
+	    <item name="state">${user.ci.state}</item>
+	    <item name="postal_code">${user.ci.postal_code}</item>
+	    <item name="country">${user.ci.country}</item>
+	    <item name="phone">${user.ci.phone}</item>
+	    <item name="email">${user.ci.email}</item>
+	    <item name="type"/>
+	</info>
+	<info prefix="_bi_">
+	    <item name="first_name">${user.bi.first_name}</item>
+	    <item name="last_name">${user.bi.last_name}</item>
+	    <item name="company">${user.bi.company}</item>
+	    <item name="address1">${user.bi.address1}</item>
+	    <item name="city">${user.bi.city}</item>
+	    <item name="state">${user.bi.state}</item>
+	    <item name="postal_code">${user.bi.postal_code}</item>
+	    <item name="country">${user.bi.country}</item>
+	    <item name="phone">${user.bi.phone}</item>
+	    <item name="email">${user.bi.email}</item>
+	    <item name="type">Check</item>
+	</info>
+	<limits>
+	    <quota>${user.quota}</quota>
+	</limits>
+
+	<ftpsubaccounts>
+	    <list user.domain.subusers as subuser>
+		<if subuser.subftp=="1">
+		    <subaccount login="${subuser.name}" password="${subuser.password}" homesuffix="/${user.domain.name}/${subuser.prefix}"/>
+		</if>
+	    </list>
+	</ftpsubaccounts>
+
+	<domain name="${user.domain.name}" type="${user.domain.type}"
+	<if user.domain.ssl> ip="dedicated"</if>>
+	<webservice>
+	    <settings index="fancy" multiview="disabled" ssi="${user.domain.ssi}" symlink="enabled"/>
+	    <cgi>
+		<cgilistitem ext=".cgi"/>
+	    </cgi>
+	    <cgidir>
+		<listitem>/cgi-bin</listitem>
+	    </cgidir>
+	    <if user.domain.php>
+		<php3>
+		    <listitem>.php3</listitem>
+		    <listitem>.php</listitem>
+		    <listitem>.phps</listitem>
+		</php3>
+	    </if>
+
+	    <if user.domain.frontpage>
+		<frontpage>
+		</frontpage>
+	    </if>
+	    <vhost_alias>
+		<listitem>www</listitem>
+	    </vhost_alias>
+
+	    <if user.domain.ssl>
+		<ssl>
+		    <ssl_key>${ssl_key}</ssl_key>
+		    <ssl_cert>${ssl_cert}</ssl_cert>
+		</ssl>
+	    </if>
+	</webservice>
+
+	<mailservice<if user.domain.catchall> catchall="${user.domain.catchall}"</if>>
+	    <list user.domain.subusers as subuser>
+		<mailbox name="${subuser.name}" password="${subuser.password}" description="${subuser.fullname}">
+		    <list subuser.aliases as alias>
+			<mailalias name="${alias}"/>
+		    </list>
+		</mailbox>
+		<if subuser.forwards>
+		    <forward name="${subuser.name}">
+			<list subuser.forwards as forward>
+			    <subscriber email="${forward}"/>
+			</list>
+		    </forward>
+
+
+		    <if subuser.autoresponder>
+			<autoresponder local="${subuser.name}" subject="${subuser.autoresponder_sbj}">${subuser.autoresponder}</autoresponder>
+		    </if>
+		</if>
+	    </list>
+
+	</mailservice>
+
+	<if user.domain.AnonFTP>
+	    <ftp>
+		<ftpvhost admin="${admin.email}" server="${domain.name}">
+		    <unixanonymous value="ON" upload="ON"/>
+		</ftpvhost>
+	    </ftp>
+	</if>
+
+	<if user.domain.aliases>
+	    <aliases>
+		<list user.domain.aliases as alias>
+		    <alias name="${alias.name}" dns="1" mail="${alias.mail}"/>
+		</list>
+	    </aliases>
+	</if>
+
+    </domain>
+
+</account>
+</user>
+</users>

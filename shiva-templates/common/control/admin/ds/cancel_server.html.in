@@ -1,0 +1,60 @@
+<!-- BEGIN common/control/admin/ds/cancel_server.html -->
+<yafv s_admin>
+
+<call draw_tooltip()>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager")>
+</if>
+
+<if ds_manager>
+<include "control/misc/mini_calendar.html">
+
+<assign ds_id = request.ds_id>
+<assign ds = ds_manager.getDServer(ds_id)>
+<assign takenByInfo = ds.taken_by>
+
+<call prepare_table_header("", lang.ds.cancel_ds_header)>
+<call add_table_header_help("", "")>
+<call draw_table_header_prepared()>
+<form name="f_schedule_cancel" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<tr>
+<if takenByInfo.cancellation>
+  <td><call draw_label(lang.ds.cancel_ds_text2(ds.name, ds.scheduled_cancel))></td>
+  <assign vCHECKED = "">
+<else>
+  <td><call draw_label(lang.admin.ds.cancel_ds_text(ds.name))></td>
+  <assign vCHECKED = "CHECKED">
+</if>
+</tr>
+<tr>
+  <td>
+    <input type="radio" name="schedule" value="period_end" ${vCHECKED} onClick="checkForm(this.form)"><call draw_label(lang.admin.ds.cancel_period_end(takenByInfo.account_id))>
+    <BR><input type="radio" name="schedule" value="date" onClick="checkForm(this.form)"><call draw_label(lang.admin.ds.cancel_on_date)>&nbsp;
+	<input type="text" name="date" size="20" check="vDateDep(this, schedule)">&nbsp;<call draw_calendar_checkForm("f_schedule_cancel","date","")>
+    <if takenByInfo.cancellation><BR><input type="radio" name="schedule" value="discard" CHECKED onClick="checkForm(this.form)"><call draw_label(lang.admin.ds.discard_cancellation)></if>
+  </td>
+</tr>
+
+<tr>
+  <td class="control_align_center">
+    <input type="hidden" name="ds_id" value="${request.ds_id}">
+    <input type="hidden" name="template_name" value="admin/ds/cancel_server_confirm.html">
+    <if request.ftemplate>
+      <input type="hidden" name="ftemplate" value="${request.ftemplate}">
+    <else>
+      <input type="hidden" name="ftemplate" value="${template}">
+    </if>
+    <if request.stemplate>
+      <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <else>
+      <input type="hidden" name="stemplate" value="${template}">
+    </if>
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+</form>
+<call draw_table_footer()>
+</if>
+<!-- END common/control/admin/ds/cancel_server.html -->

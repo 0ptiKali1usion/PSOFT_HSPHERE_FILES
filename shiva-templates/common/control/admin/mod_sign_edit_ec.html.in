@@ -1,0 +1,29 @@
+<!-- BEGIN ./admin/mod_sign_edit.ec.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+
+<if admin>
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<call draw_tooltip()>
+<assign bi=tmpAcc.bi>
+<comment><assign tmpbi = tmpAcc.bi></comment>
+<yafv s_signup>
+<form action="${config.CLIENT_CP_URL}" name="f_binfo_view" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_ec.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<call draw_table_header("2", lang.search.userinfo.bi(bi.first_name+" "+bi.last_name, tmpAcc.plan.description))>
+<if !vexemption_code><assign vexemption_code = bi.exemption_code></if>
+<tr>
+<td  valign="top" width="60%"><call draw_label(lang.signup.payinfo.exemption_code)></td>
+<td  valign="top"><input type="text" name="_bi_exemption_code" value="${vexemption_code}" check="vExemptionCodeReq"></td>
+</tr>
+<tr>
+<td  class="control_align_center" colspan="2"  nowrap><input type="submit" value="${lang.button.save}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./admin/mod_sign_edit_ec.html  -->

@@ -1,0 +1,9 @@
+<center>Redirect Status</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Redirect Status tells visitor's browser about the nature of the redirect:<br>
+<i>The exact URL entered above</i> &nbsp; redirects requests  for any files in the indicated directory to one file.<br>
+- For example, to redirect all requests for files in the 'products' virtual directory to the file new_products.html, type 'www.demo2.com/new_products.html in the 'to' text box and select this option.<br>
+<i>A directory below this one</i> &nbsp; redirects a parent directory to a child directory.
+- For example, to redirect your 'demo2.com/products/new' directory to a subdirectory named 'products', type 'products' in the 'to' text box and select this option. Without this option, the Web server will continually map the parent to itself.
+<i>A permanent redirection for this resource</i> &nbsp; sends the following message to the client: '301 Permanent Redirect'. Redirects are considered temporary, and the client browser receives the following message: '302 Temporary Redirect'. Some browsers can use the '301 Permanent Redirect' message as the signal to permanently change a URL, such as a bookmark.

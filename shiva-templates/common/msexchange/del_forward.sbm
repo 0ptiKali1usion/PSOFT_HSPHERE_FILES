@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/del_forward.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.deleteForward(request.proxy)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted,lang.label.mail_forward,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_deleted,lang.label.mail_forward,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/del_forward.sbm -->

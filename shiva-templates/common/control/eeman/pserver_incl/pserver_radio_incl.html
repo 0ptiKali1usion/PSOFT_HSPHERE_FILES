@@ -1,0 +1,14 @@
+<!--  Begin ./control/eeman/pserver_radio_incl.html  -->
+<tr>
+<td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>
+<div aling="CENTER">       
+<input type="radio" name="${param.param_name}" value="Yes" ${param.checked}>
+<call draw_label(lang.eeman.params.yes)>
+<input type="radio" name="${param.param_name}" value="No"  ${param.unchecked}>
+<call draw_label(lang.eeman.params.no)>
+</div><br>
+<include "control/eeman/pserver_incl/pserver_param_description_incl.html">
+</td></tr>
+<!--  END ./control/eeman/pserver_radio_incl.html  -->

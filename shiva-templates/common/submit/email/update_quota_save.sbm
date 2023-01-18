@@ -1,0 +1,53 @@
+<!-- BEGIN ./email/update_quota_save.sbm  -->
+<if r_quota==""><assign r_quota=request.quota></if>
+<if mid==""><assign mid=request.mid></if>
+<assign result = yafv.common.s_email.vMailQuota(lang.label.quota,r_quota)>
+<if result.status == "OK">
+  <assign failure = "">
+  <assign mailbox=account.getResource(mid)>
+  <assign quota = mailbox.getChild("mail_quota")>
+  <assign quotas = mailbox.findChildren("mail_quota")>
+  <if quota>
+    <if toolbox.gt(quota.usedMb,r_quota)=="1">
+      <assign res=session.addMessage(toolbox.compose(
+		lang.msg.failed_set_smallquota, r_quota, quota.usedMb))>
+    <else>
+      <assign res=toolbox.setBillingNote(lang.billingnote.change_email_quota(quota.limitMb, r_quota))>
+      <if silent=="1">
+	    <assign res=account.setNoRefund("1")>
+	</if>
+      <list quotas as dquota>
+      	<if dquota.id != quota.id>
+            <assign result=dquota.delete>
+        </if>
+      </list>
+      <if silent=="1">
+	    <assign res=account.setNoRefund("0")>
+	</if>
+        <assign result=quota.change(r_quota)>
+        <if result.status != "OK">
+          <assign res=session.addMessage(result.msg)>
+          <assign failure = "1">
+        </if>
+    </if>
+  <else>
+    <assign result=mailbox.addChild("mail_quota","",r_quota)>
+    <if result.status!="OK">
+      <assign res=session.addMessage(result.msg)>
+      <assign failure = "1">
+    </if>
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure = "1">
+</if>
+
+<if !silent>
+  <if !failure>
+    <include request.stemplate>
+  <else>
+    <assign vquota=toolbox.html_encode(request.quota)>
+    <include request.ftemplate>
+  </if>
+</if>
+<!--  END ./email/update_quota_save.sbm  -->

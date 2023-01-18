@@ -1,0 +1,4 @@
+<center>Demo only mode</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Check this box if you want to use this plan for demonstration purposes.  Although actual resource creation/usage will be prohibited when this option is on, users will be able to see how the system works in the simulation mode. You will not be able to turn this option off in the plan editor later.

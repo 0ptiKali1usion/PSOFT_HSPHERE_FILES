@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/eeman/lservers_reload.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.reloadHosts()>
+<if result.status=="OK">
+  <assign res=session.addMessage(lang.msg.eeman.changes_applied)>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(
+    lang.msg.eeman.failed_reload)>
+  <assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/eeman/lservers_reload.sbm  -->

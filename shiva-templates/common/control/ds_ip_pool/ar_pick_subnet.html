@@ -1,0 +1,30 @@
+<!-- BEGIN ./control/ds_ip_pool/list.html -->
+<call draw_tooltip()>
+<yafv s_hsphere>
+<assign subnets = obj.subnet_manager.getSubnets()>
+
+<call draw_table_header("7", lang.ds.pool.header)>
+<tr>
+ <td><call draw_label(lang.ds.pool.start_ip)></td>
+ <td><call draw_label(lang.ds.pool.end_ip)></td>
+ <td><call draw_label(lang.ds.pool.netmask)></td>
+ <td><call draw_label(lang.ds.pool.gw)></td>
+ <td><call draw_label(lang.ds.pool.broadcast)></td>
+ <td><call draw_label(lang.ds.pool.stat)></td>
+ <td><call draw_label(lang.ds.pool.control)></td>
+</tr>
+<list subnets as subnet>
+<if toolbox.gt(subnet.free_ips, "0") == "1">
+  <tr>
+     <td><call draw_label(subnet.start_ip)></td>
+     <td><call draw_label(subnet.end_ip)></td>
+     <td><call draw_label(subnet.netmask)></td>
+     <td><call draw_label(subnet.gateway)></td>
+     <td><call draw_label(subnet.broadcast)></td>
+     <td class="control_align_center"><call draw_label(subnet.stats)></td>
+     <td class="control_align_center"><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/ds_ip_pool/assign_range_nav.sbm" + "&ds_id="+request.ds_id + "&subnet_id=" + subnet.id + "&stemplate="+request.stemplate + "&ftemplate="+request.ftemplate, "select", lang.button.select)>&nbsp;</td>
+  </tr>
+</if>
+</list>
+<call draw_table_footer()>
+<!-- END ./control/ds_ip_pool/list.html -->

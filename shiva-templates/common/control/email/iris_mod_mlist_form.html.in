@@ -1,0 +1,63 @@
+<!-- BEGIN ./control/email/mod_mlist_form.html  -->
+<call draw_tooltip()>
+<yafv s_email>
+<assign mlist = account.getResource(request.uid)>
+<assign stat = mlist.stat()>
+<compress>
+<if stat.error != "ERROR"><assign flag = stat.flag></if>
+<function isChecked(option)>
+  <if toolbox.consists(flag, option)=="1">CHECKED</if>
+</function>
+</compress>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_mod_mlist" check! accept-charset="UTF-8">
+
+<call draw_table_header("4", "")>
+
+<tr>
+  <td colspan="2" width="50%"><call draw_label(lang.email.modmlistform.header)></td>
+  <td colspan="2">
+    <input type="hidden" name="template_name" value="submit/email/mod_mlist_save.sbm">
+    <input type="hidden" name="rid" value="${request.rid}">
+    <input type="hidden" name="uid" value="${request.uid}">
+    <input type="hidden" name="md_id" value="${request.md_id}">
+    <input type="hidden" name="mo_id" value="${mlist}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="sc_page" value="${request.sc_page}">
+    <input type="text" size="30" name="owner" value="${stat.owner}" label="${lang.email.modmlistform.header}" check="vEmailOpt">
+</td>
+</tr>
+<tr>
+   <td><input type=radio name=param1 value="a" <call isChecked("a")>></td>
+   <td><call draw_label(lang.email.modmlistform.a_yes)></td>
+   <td><input type=radio name=param1 value="A" <call isChecked("A")>></td>
+   <td><call draw_label(lang.email.modmlistform.a_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param2 value="h" <call isChecked("h")>></td>
+   <td><call draw_label(lang.email.modmlistform.h_yes_iris)></td>
+   <td><input type=radio name=param2 value="H" <call isChecked("H")>></td>
+   <td><call draw_label(lang.email.modmlistform.h_no_iris)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param3 value="m" <call isChecked("m")>></td>
+   <td><call draw_label(lang.email.modmlistform.m_yes_iris)></td>
+   <td><input type=radio name=param3 value="M" <call isChecked("M")>></td>
+   <td><call draw_label(lang.email.modmlistform.m_no_iris)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param4 value="o" <call isChecked("o")>></td>
+   <td><call draw_label(lang.email.modmlistform.o_yes_iris)></td>
+   <td><input type=radio name=param4 value="O" <call isChecked("O")>></td>
+   <td><call draw_label(lang.email.modmlistform.o_no_iris)></td>
+</tr>
+<tr>
+  <td colspan=4 class="control_align_center">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/email/mod_mlist_form.html  -->

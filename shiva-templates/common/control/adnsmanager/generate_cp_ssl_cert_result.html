@@ -1,0 +1,54 @@
+<!-- BEGIN ./adnsmanager/generate_cp_ssl_cert_result.html  -->
+<call draw_tooltip()>
+
+<if account.getChild("admin")>
+
+<form name="ext" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_cp_ssl.sbm">
+
+<call draw_table_header("", lang.domain.sslcertresult.signrequest)>
+
+<tr>
+ <td><call draw_label(lang.domain.sslcertresult.text)>
+ </td>
+</tr>
+
+<tr>
+ <td>
+   <textarea name="req" rows="10" cols="64" nowrap>${ssl.req}</textarea>
+ </td>
+</tr>
+<tr>
+ <td class="control_header">
+   <call draw_header(lang.domain.sslcertresult.key)>
+ </td>
+</tr>
+<tr>
+ <td>
+   <textarea name="key" rows="10" cols="64" nowrap>${ssl.key}</textarea>
+ </td>
+</tr>
+<tr>
+ <td class="control_header">
+    <call draw_header(lang.domain.sslcertresult.temp)>
+ </td>
+</tr>
+<tr>
+ <td>
+   <textarea name="file" rows="10" cols="64" nowrap>${ssl.file}</textarea>
+ </td>
+</tr>
+<tr>
+  <td  class="control_align_center">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/generate_cp_ssl_cert_result.html  -->

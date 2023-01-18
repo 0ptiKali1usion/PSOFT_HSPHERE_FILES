@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/admin/spamassassin_rules_del.sbm -->
+
+<assign sa_man=account.getChild("spamassassin_manager")>
+<assign result=sa_man.delRulesCron(request.ms_id)>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_deleted,lang.admin.spamassassin.rules_du_jour,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/spamassassin_rules_del.sbm -->

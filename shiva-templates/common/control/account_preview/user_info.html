@@ -1,0 +1,96 @@
+<include "control/misc/mini_calendar.html">
+<assign ci=account.ci>
+<assign bi=account.bi>
+
+<assign header_text1 = toolbox.compose(lang.search.userinfo.header, ci.first_name+" "+ci.last_name, account.plan.description)>
+<call draw_table_header("2", header_text1)>
+
+<tr><td><call draw_label(lang.search.userinfo.name)></td><td><call draw_label(ci.first_name+" "+ci.last_name)></td></tr>
+<tr><td><call draw_label(lang.bci.company)></td><td><call draw_label(ci.company)></td></tr>
+<tr><td><call draw_label(lang.bci.adr1)></td><td><call draw_label(ci.address1)></td></tr>
+<tr><td><call draw_label(lang.bci.adr2)></td><td><call draw_label(ci.address2)></td></tr>
+<tr><td><call draw_label(lang.bci.city)></td><td><call draw_label(ci.city)></td></tr>
+<tr><td><call draw_label(lang.bci.country)></td><td>
+<assign country_name=toolbox.countries[ci.country]>
+<call draw_label(lang[country_name])></td></tr>
+<tr><td><call draw_label(lang.bci.state)></td><td>
+<assign state_name="">
+<if ci.state=="NA"><assign state_name=ci.state></if>
+<if !state_name><assign state_name=toolbox.statesCanada[ci.state]></if>
+<if !state_name><assign state_name=toolbox.states[ci.state]></if>
+<call draw_label(state_name)></td></tr>
+<tr><td><call draw_label(lang.bci.pcode)></td><td><call draw_label(ci.postal_code)></td></tr>
+<tr><td><call draw_label(lang.bci.phone)></td><td><call draw_label(ci.phone)></td></tr>
+<tr><td><call draw_label(lang.bci.email)></td><td><call draw_link("mailto:"+ci.email,ci.email)></td></tr>
+<call draw_table_footer()>
+&nbsp;
+<assign header_text2 = toolbox.compose(lang.search.userinfo.bi, bi.first_name+" "+bi.last_name, account.plan.description)>
+<call draw_table_header("2", header_text2)>
+
+
+<tr><td><call draw_label(lang.search.userinfo.name)></td><td><call draw_label(bi.first_name+" "+bi.last_name)></td></tr>
+<tr><td><call draw_label(lang.bci.company)></td><td><call draw_label(bi.company)></td></tr>
+<tr><td><call draw_label(lang.bci.adr1)></td><td><call draw_label(bi.address1)></td></tr><tr><td><call draw_label(lang.bci.adr2)></td><td><call draw_label(bi.address2)></td></tr><tr><td><call draw_label(lang.bci.city)></td><td><call draw_label(bi.city)></td></tr>
+<tr><td><call draw_label(lang.bci.country)></td><td>
+<assign country_name=toolbox.countries[ci.country]>
+<call draw_label(lang[country_name])></td></tr>
+<tr><td><call draw_label(lang.bci.state)></td><td>
+<assign state_name="">
+<if bi.state=="NA"><assign state_name=bi.state></if>
+<if !state_name><assign state_name=toolbox.statesCanada[bi.state]></if>
+<if !state_name><assign state_name=toolbox.states[bi.state]></if>
+<call draw_label(state_name)></td></tr>
+<tr><td><call draw_label(lang.bci.pcode)></td><td><call draw_label(bi.postal_code)></td></tr>
+<tr><td><call draw_label(lang.bci.phone)></td><td><call draw_label(bi.phone)></td></tr>
+<tr><td><call draw_label(lang.bci.email)></td><td><call draw_link("mailto:"+bi.email,bi.email)></td></tr>
+
+<if bi.exemption_code>
+<!-- TAX EXEMPTION -->
+<assign template_params = "stemplate=account_preview/user_preview.html&ftemplate=account_preview/user_preview.html&aid=" + request.aid>
+<tr><td colspan="2" >
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="${design.color("border_color")}">
+<tr><td>
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+<tr>
+  <assign tax_exemption_approved = bi.taxExemptionApproved()>
+  <assign tax_exemption_rejected = bi.taxExemptionRejected()>
+  <td><call draw_label(lang.bci.exemption_code)></td>
+  <td><call draw_label_bold(bi.exemption_code)>&nbsp;
+    <if tax_exemption_approved>
+      <call draw_label(lang.admin.billman.approved_mes(tax_exemption_approved))>
+    <else>
+      <if tax_exemption_rejected><call draw_label(lang.admin.billman.rejected_mes(tax_exemption_rejected))><else><call draw_label_bold(lang.admin.billman.notapproved)></if>
+    </if>
+  </td>
+  <td>
+    <if !tax_exemption_approved><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ec_action_confirm_fr.html&act=approve&next_template=submit/admin/approve_tax_exemption.sbm&bi="+bi.id+"&exemption_code="+bi.exemption_code+"&"+template_params, lang.admin.billman.approve)></if>
+    <if !tax_exemption_rejected><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ec_action_confirm_fr.html&act=reject&next_template=submit/admin/reject_tax_exemption.sbm&bi="+bi.id+"&exemption_code="+bi.exemption_code+"&"+template_params, lang.admin.billman.reject)></if>
+  </td>
+</tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</if>
+
+<if request.negative_date>
+  <assign res = bi.setNegativeDate(request.negative_date)>
+</if>
+<form name="f_date" method="POST" action="${config.CLIENT_CP_URL}" accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.bci.negative_date)></td>
+<td>
+  <input type="text" name="negative_date" size="11" value="${bi.negative_date}">&nbsp;<call draw_calendar("f_date","negative_date","")>
+  <input type="hidden" name="template_name" value="account_preview/user_preview.html">
+  <input type="hidden" name="ftemplate" value="account_preview/user_preview.html">
+  <input type="hidden" name="stemplate" value="account_preview/user_preview.html">
+  <input type="hidden" name="aid" value="${request.aid}">
+  <input type="submit" value="${lang.button.set}">
+</td>
+</tr>
+</form>
+
+<assign pi=bi.pi>
+<include "control/search/pi."+bi.type>
+
+<call draw_table_footer()>

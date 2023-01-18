@@ -1,0 +1,69 @@
+<!-- BEGIN ./control/admin/promo/add_promo.html -->
+<yafv s_hsphere>
+<call draw_tooltip()>
+
+<assign billman = account.getChild("billman")>
+
+<if billman>
+<assign promo_config=billman.getAvailablePromotionsConfig()>
+<assign promotions=promo_config.promotions>
+<assign calculators=promo_config.calculators>
+
+<form  action="${config.CLIENT_CP_URL}" name="f_add_promo"  method="post" accept-charset="UTF-8" check!>
+<input type="hidden" name="template_name" value="admin/promo/add_promo_params.html">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+<call draw_table_header("2", lang.admin.promo.add_promo)>
+<tr>
+  <td><call draw_label(lang.admin.promo.promo_type)></td>
+  <td><select name="promo_type">
+      <list promotions["*"] as promo>
+        <assign p_descr=promo("description")>
+        <assign p_id=promo("id")>
+        <option value="${p_id}">${p_descr}</option>
+      </list></select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.promo.promo_calc_type)></td>
+  <td><select name="promo_calc">
+      <list calculators["*"] as calc>
+        <assign c_descr=calc("description")>
+        <assign c_id=calc("id")>
+        <option value="${c_id}">${c_descr}</option>
+      </list></select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.promo.promo_name)></td>
+  <td><input name="promo_name" type="text" size="50" check="vName"></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.promo.promo_bill_descr)></td>
+  <td><input name="promo_bill_descr" type="text" size="50" check="vDescription"></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.promo.promo_code)></td>
+  <td><input name="promo_code" type="text" size="20" check="vComboPromocode(this, code_less)">&nbsp;<input type="checkbox" name="code_less" onChange="checkForm(this.form)"><call draw_label(lang.admin.promo.code_less)></td>
+</tr>
+
+
+<tr>
+  <td><call draw_label(lang.admin.promo.affected_charges)></td>
+  <td>
+     <input type="checkbox" name="i_setup" CHECKED><call draw_label(lang.admin.promo.i_setup)><br>
+     <input type="checkbox" name="i_recurrent" CHECKED><call draw_label(lang.admin.promo.i_recurrent)><br>
+     <input type="checkbox" name="i_usage" CHECKED><call draw_label(lang.admin.promo.i_usage)><br>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2"  class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/promo/add_promo.html -->

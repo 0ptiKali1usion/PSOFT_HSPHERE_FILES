@@ -1,0 +1,108 @@
+<!-- BEGIN ./control/search/cc_charge.html  -->
+<assign billman=account.getChild("billman")>
+<if !billman>
+  <assign res=session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("cc_charge")>
+  <assign result = report(request.sc_account, request.sc_username, request.sc_cc_type, request.sc_created_before, request.sc_created_after, request.sc_only_live, request.sc_tr_result)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<assign sc_params="&sc_account="+toolbox.url_escape(request.sc_account)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_cc_type="+toolbox.url_escape(request.sc_cc_type)+
+ "&sc_created_before="+toolbox.url_escape(request.sc_created_before)+
+ "&sc_created_after="+toolbox.url_escape(request.sc_created_after)+
+ "&sc_only_live="+toolbox.url_escape(request.sc_only_live)+
+ "&sc_tr_result="+toolbox.url_escape(request.sc_tr_result)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="8">
+<call draw_table_header(colspan, lang.admin.cc_charge.header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call draw_header(lang.label.username)></td>
+  <td class="control_header"><call draw_header(lang.label.accid)></td>
+  <td class="control_header"><call draw_header(lang.cc.number)></td>
+  <td class="control_header"><call draw_header(lang.search.cc_charge.cc_type)></td>
+  <td class="control_header"><call draw_header(lang.search.cc_charge.charge_id)></td>
+  <td class="control_header"><call draw_header(lang.label.performed)></td>
+  <td class="control_header"><call draw_header(lang.search.cc_charge.amount)></td>
+  <td class="control_header"><call draw_header(lang.search.cc_charge.result)></td>
+</tr>  
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr >
+  <if entry.tabId=="0">
+    <if entry.username>
+        <assign username=entry.username>
+    <else>
+        <assign username=lang.search.delusr>
+    </if>
+    <td>
+        <call draw_tlink(config.CLIENT_CP_URL+
+            "?template_name=account_preview/user_preview.html&aid="+
+            entry.accountId,"USER_INFO", username)>
+    </td>
+    <td class="control_align_right"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)></td>
+    <td><call draw_label(entry.ccNumber)></td>
+    <td><call draw_label(entry.ccType)></td>
+    <td><call draw_label(entry.chargeId)></td>
+    <td><call draw_label(entry.created)></td>
+    <td class="control_align_right"><call draw_label(toolbox.currency(entry.amount))></td>
+    <td><call draw_label(entry.result)></td>
+  </if>
+  <if entry.tabId=="1">
+    <assign date_short=entry.date("MEDIUM")>
+    <td colspan="6" class="control_align_right"><call draw_label(lang.search.cc_charge.day_total + date_short)></td>
+    <td class="control_align_right"><call draw_label(toolbox.currency(entry.total))></td>
+    <td></td>
+  </if>
+  <if entry.tabId=="2">
+    <td colspan="6" class="control_align_right"><call draw_label(lang.search.cc_charge.total)></td>
+    <td class="control_align_right"><call draw_label(toolbox.currency(entry.total))></td>
+    <td></td>
+  </if>
+</tr>
+</list>
+<tr ><td colspan="${colspan}">
+<call advReportNav(report)><a href="${config.CLIENT_CP_URL}/cc_charge.csv?template_name=control/search/cc_charge.csv&arid=${report.id}&_content_type=csv">${lang.search.export}</a>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<!--  END ./control/search/cc_charge.html  -->

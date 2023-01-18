@@ -1,0 +1,32 @@
+<!-- BEGIN .submit/domain/eeshops/upgrade.sbm  -->
+
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+<assign hosting = account.getResource(request.rid)>
+<assign url="http://"+hosting.parent.name+"/catalog/install/upgrade.php?step=3">
+<assign oscommerce = account.getResource(request.uid)>
+<assign db = oscommerce.db>
+<assign user = oscommerce.user>
+<assign dbname = db.db_name>
+<assign dbuser = user.name>
+<assign dbpass = user.password>
+<assign dbhost = db.parent.host.name>
+
+<form name="upgrade" action="${url}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="step" value="3">
+<input type="hidden" name="DB_SERVER" value="${dbhost}">
+<input type="hidden" name="DB_DATABASE" value="${dbname}">
+<input type="hidden" name="DB_SERVER_USERNAME" value="${dbuser}">
+<input type="hidden" name="DB_SERVER_PASSWORD" value="${dbpass}">
+
+</form>
+
+<script language="javascript">
+document.upgrade.submit();
+</script>
+
+</body>
+</html>
+<!-- END submit/domain/eeshops/upgrade.sbm  -->

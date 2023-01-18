@@ -1,0 +1,162 @@
+<compress>
+<if account>
+  <assign menu__top = account.plan.getPlanMenu(account.getPlanValue("menuId"))>
+  <assign menu__items = menu__top.children>
+  <if toolbox.gt(menu__items.size, "0") == "1">
+    <assign isMenuDefined = "1">
+  </if>
+</if>
+
+<function draw_menu(activeItem)>
+<call top()>
+<if isMenuDefined>
+  <compress>
+  <assign menu = menu__top.getMenu(activeItem)>
+  <list menu as items><list items as item><call setActivityOff(item)></list></list>
+  <assign res = menu__top.getItemByName(activeItem).turnActivitySign()>
+  </compress>
+  <if browser.css1 || request.static_menu>
+    <call draw_osm_menu_table()>
+  <else>
+    <DIV id="leftMenu" class="leftMenu"><call draw_hl_table()></DIV>
+    <call include_browser_detection()>
+    <call draw_js("/common/JS/slmenu.js")>
+    <call get_img_attributes("mpointer")>
+    <assign mPointerImg = toolbox.strlit_encode(s__CurImgFile)>
+    <call get_img_attributes("ampointer")>
+    <assign amPointerImg = toolbox.strlit_encode(s__CurImgFile)>
+    <SCRIPT language="javascript">
+      initMenu("leftMenu", "${SPACER_IMAGE}", "${mPointerImg}", "${amPointerImg}", "${RTL_DIRECTION}");
+      <list menu__items as item><if item.isHolder()><call draw_sub(item, "")><else><call draw_item(item, "")></if></list>
+      showLeftMenu();
+    </SCRIPT>
+  </if>
+<else>
+ &nbsp;
+</if>
+</TD>
+<TD WIDTH="1" HEIGHT="100%" BGCOLOR=${design.color("border_color")}>
+   <call draw_spacer("1", "1")></TD>
+<TD WIDTH="100%" HEIGHT="100%" VALIGN="top">
+   <TABLE WIDTH="100%" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+</function>
+
+<function getLinkTarget(item)><compress>
+  <if item.new_window == "1"><assign itemTarget = "_blank"><else><assign itemTarget = ""></if>
+</compress></function>
+
+<function draw_sub(item, parentMenu)>addMenu("${parentMenu}","${item.name}","${item.label}","","${itemTarget}","${item.active}"); <call draw_sub_items(item)></function>
+
+<function draw_item(item, parentMenu)><call getLinkTarget(item)>addItem("${parentMenu}","${item.name}","${item.label}","${config.CLIENT_CP_URL}?template_name=${item.URL}","${itemTarget}","${item.active}"); </function>
+
+<function draw_sub_items(holder)><list holder.children as sub_item><if sub_item.isHolder()><call draw_sub(sub_item, holder.name)><else><call draw_item(sub_item, holder.name)></if></list></function>
+
+<function draw_blank_menu()>
+<call top()>
+<call left()>
+</function>
+
+<function draw_hl_table()>
+  <TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+  <if account>
+	<TR>
+	<TD width="14" align="center"><call draw_spacer("14", "1")></TD>
+	<TD class="menuLeftSeparator"><call draw_spacer("1", "1")></TD>
+	<TD width="${main_col_width}" class="menuLeftColor1"><a href="${config.CLIENT_CP_URL}?static_menu=1&template_name=quick/quick_view.html">&nbsp;${lang.label.home_lnk}&nbsp;</a></TD>
+	</TR>
+	<call draw_lseparator("0")>
+	<TR>
+	<TD width="14" align="center"><call draw_spacer("14", "1")></TD>
+	<TD class="menuLeftSeparator"><call draw_spacer("1", "1")></TD>
+	<TD width="${main_col_width}" class="menuLeftColor1"><a href="${config.CLIENT_CP_URL}?template_name=design/logout.html&action=logout">&nbsp;${lang.label.logout_lnk}&nbsp;</a></TD>
+	</TR>
+	<call draw_lseparator("0")>
+  <else>
+	<TR>
+	<TD width="14" align="center"><call draw_spacer("14", "1")></TD>
+	<TD class="menuLeftSeparator"><call draw_spacer("1", "1")></TD>
+	<TD width="${main_col_width}" class="menuLeftColor1"><a href="${config.CLIENT_CP_URL}">&nbsp;${lang.label.login_page_lnk}&nbsp;</a></TD>
+	</TR>
+	<call draw_lseparator("0")>
+  </if>
+  </TABLE>
+</function>
+
+<function draw_lseparator(level)>
+  <if level == "0"><TR><TD colspan="3" class="menuLeftSeparator"><call draw_spacer("100%", "1")></TD></TR>
+  <else><TR><TD width="14" height="1"><call draw_spacer("14", "1")></TD><TD colspan="2" class="menuLeftSeparator"><call draw_spacer("100%", "1")></TD></TR>
+  </if>
+</function>
+
+<function get_osm_defaultURL(holder)><compress>
+<assign defaultItem = holder.default_item>
+<if !defaultItem>
+  <list holder.children as subItem><if !defaultItem>
+    <if subItem.isHolder()>
+      <call get_defaultURL(subItem)>
+    <else>
+      <assign defaultItem = subItem>
+    </if>
+  </if></list>
+</if>
+<if defaultItem>
+  <assign defaultURL = defaultItem.URL>
+  <if defaultItem.new_window == "1"><assign defaultTarget = "target=\"_blank\""><else><assign defaultTarget = ""></if>
+<else>
+  <assign defaultURL = "">
+  <assign defaultTarget = "">
+</if>
+</compress></function>
+
+<function draw_osm_item(item, level)>
+  <assign CURR_BG_COLOR = toolbox.mod(level, "4")>
+  <if (level != "0") && (CURR_BG_COLOR == "0")>
+    <assign CURR_BG_COLOR = "4">
+  <else>
+    <assign CURR_BG_COLOR = toolbox.add(CURR_BG_COLOR, "1")>
+  </if>
+  <assign CURR_BG_COLOR = design.color("menu_color" + CURR_BG_COLOR)>
+  <assign disp = "">
+  <if level != 0>
+    <list toolbox.counter("0", level) as c><assign disp = disp + "&nbsp;"></list>
+    <call draw_lseparator(level)>
+  </if>
+  <if item.isHolder()>
+    <call get_osm_defaultURL(item)>
+    <if level == "0"><TD width="14" align="center" valign="middle"><call draw_image("mpointer")></TD>
+    <else><TD width="14"><call draw_spacer("14", "1")></TD>
+    </if>
+    <TD class="menuLeftSeparator" width="1"><call draw_spacer("1", "1")></TD>
+    <TD width="100%" bgcolor="${CURR_BG_COLOR}" align="left" valign="middle" style="padding:2">${disp}<compress>
+	<if level != "0"><call draw_image("mpointer")>&nbsp;</if></compress>
+	<if defaultURL><a href="${config.CLIENT_CP_URL}?static_menu=1&template_name=${defaultURL}" title="${item.tip}" ${defaultTarget}></if>
+	<font color="${design.color("menu_text_color")}" style="font-family: Verdana, sans-serif; font-size: 10pt;">
+	<if item.active><b></if>${item.label}<if item.active></b></if></font>
+	<if defaultURL></a></if>
+    </TD>
+    <if item.active><call draw_osm_submenu(item, toolbox.add(level, "1"))></if>
+  <else>
+    <TD width="14" align="center"><call draw_spacer("14", "1")></TD>
+    <TD width="1" class="menuLeftSeparator"><call draw_spacer("1", "1")></TD>
+    <TD width="100%" bgcolor="${CURR_BG_COLOR}" align="left" style="padding:2">${disp}
+	<a href="${config.CLIENT_CP_URL}?static_menu=1&template_name=${item.URL}" title="${item.tip}">
+	<if item.active><b></if><font color="${design.color("menu_text_color")}" style="font-family: Verdana, sans-serif; font-size: 10pt;">${item.label}</font><if item.active></b></if>
+	</a>
+    </TD>
+  </if>
+  <if level == 0>
+      <call draw_lseparator(level)>
+  </if>
+</function>
+
+<function draw_osm_submenu(holder, level)>
+  <list holder.children as sub_item><call draw_osm_item(sub_item, level)></list>
+</function>
+
+<function draw_osm_menu_table()>
+  <TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+  <list menu__items as item><call draw_osm_item(item, "0")></list>
+  </TABLE>
+</function>
+
+</compress>

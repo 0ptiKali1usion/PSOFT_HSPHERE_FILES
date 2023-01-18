@@ -1,0 +1,16 @@
+<!-- BEGIN ./email/mlist_add_subscribers.sbm  -->
+<assign mlist = account.getResource(request.uid)>
+<assign result = mlist.batchSubscribe(request.emails)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign newsubs="1">
+    <assign res=session.addMessage(lang.msg.mail_subscribers_added)>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./email/mlist_add_subscribers.sbm  -->

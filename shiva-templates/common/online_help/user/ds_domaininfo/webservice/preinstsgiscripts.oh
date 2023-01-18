@@ -1,0 +1,4 @@
+<center> Pre-installed CGI scripts </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	H-Sphere comes with free pre-installed CGI scripts written in Perl, PHP, and ASP. These are the counter, guestbook and a web-chat. If you accidentally delete any of your CGI scripts and/or index page (index.html), you can restore it by clicking the <i>Restore to default</i> link. The system will create the missing files and skip any of existing ones: this way you will not lose any of your changes. If you want to get rid of any undesirable changes in you CGi scripts and restore H-Sphere's default settings, you will have to delete the files you want to restore and then click the Restore to default link.

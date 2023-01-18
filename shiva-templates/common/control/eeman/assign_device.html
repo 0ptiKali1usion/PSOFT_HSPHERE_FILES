@@ -1,0 +1,29 @@
+<!-- BEGIN ./control/eeman/assign_device.html  -->
+<call draw_tooltip()>
+<assign reseller_su=account.getChild("reseller_su")>
+<assign eeman=account.getChild("eeman")>
+<if eeman>
+<call draw_table_header("3", lang.label.eeman.vservers)>
+<assign server = eeman.getLserver(request.server_id)>
+<tr><td><call draw_label(server.name)>
+<assign gateway = eeman.getNetwrokGateway(request.addr)>
+<td><call draw_label(gateway.addr)></td>
+<td>
+<form action="${config.CLIENT_CP_URL}" method="POST">
+<input type="hidden" name="template_name" value="submit/eeman/assign_device.sbm">
+<input type="hidden" name="stemplate" value="eeman/assigned_devices.html">
+<input type="hidden" name="ftemplate" value="eeman/assigned_devices.html">
+<input type="hidden" name="server_id" value="${request.server_id}">
+<input type="hidden" name="addr" value="${request.addr}">
+<select name="device">
+<assign devices = server.getDevices()>
+<list devices as device><option name="device" value="${device}">${device}</option></list>
+</td>
+</tr>
+<tr><td colspan="3">
+<input type="submit">
+</td></tr>
+</form>
+</if>
+<call draw_table_footer()>
+<!-- END ./eeman/assign_device.html  -->

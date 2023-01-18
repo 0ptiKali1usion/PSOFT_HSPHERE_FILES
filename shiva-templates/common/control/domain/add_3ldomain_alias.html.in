@@ -1,0 +1,50 @@
+<!-- BEGIN ./domain/add_3ldomain_alias.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign hosting = account.getResource(request.rid)>
+<assign domain = hosting.parent>
+<assign ip = domain.getChild("ip")>
+
+<if !vAlias><list toolbox.tokenizer(domain.name, ".") as part><if !vAlias><assign vAlias=part></if></list></if>
+
+<form name="f_add_3lalias"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="aid" value="${domain}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_3ldomain_alias.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.domain.add3ldomainalias.header)>
+
+
+<tr>
+   <td    colspan="2"><call draw_label(lang.domain.add3ldomainalias.info)></td>
+</tr>
+<tr>
+   <td><call draw_label(toolbox.compose(lang.domain.add3ldomainalias.alias, domain.name))></td>
+   <td><input type="text" name="alias" value="${vAlias}" check="vAlias">
+   <select name="zone">
+      <if ip.shared == "0">
+	<list toolbox.ssl_zones as zone>
+	   <option <if zone.name == vZone>SELECTED</if>>${zone.name}
+	</list>
+       <else>
+	 <option SELECTED>${toolbox.getSSLZoneByTag(ip.tag).name}
+      </if>
+  </select>
+   </td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_3ldomain_alias.html.in  -->

@@ -1,0 +1,12 @@
+<!-- BEGIN ./ftp/add_vdir_perm_submit.sbm  -->
+<assign vdir = account.getResource(request.uid)>
+<assign result = vdir.addUser(request.user_rid)>
+<if result.status=="OK">
+  <assign res=session.addMessage(lang.msg.ftp_permissions_added)>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(lang.msg.ftp_failed_add)>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./ftp/add_vdir_perm_submit.sbm  -->

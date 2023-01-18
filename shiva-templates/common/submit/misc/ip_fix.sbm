@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/misc/ip_fix.sbm -->
+
+<assign result = toolbox.fixDomainStatus(request.ip, request.flag, request.l_server_id)>
+
+<if result>
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!-- END ./submit/misc/ip_fix.sbm -->

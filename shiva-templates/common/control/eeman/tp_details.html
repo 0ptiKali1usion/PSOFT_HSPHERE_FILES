@@ -1,0 +1,84 @@
+<!-- BEGIN ./control/eeman/tp_details.html  -->
+<assign eeman=account.getChild("eeman")>
+<if eeman>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.eeman.tp.details.title)>
+
+<tr>
+ <td><call draw_label(lang.eeman.tp.stage.label)></td>
+ <td><call draw_label(tp.stage_description)></td>
+</tr>
+
+<tr>
+ <td colspan="2" ><call draw_label(tp.stage_description_long)></td>
+</tr>
+
+<if tp.errorsDetected>
+<tr>
+ <td colspan="2" ><call draw_label(lang.eeman.tp.errors_detected_long)><call draw_palink(config.CLIENT_CP_URL+"?template_name=eeman/tp_errors.html&tp_id="+tp.id+"&stemplate="+template+"&ftemplate="+template,"help",lang.eeman.tp.stage.suspend_reasons)></td>
+</tr>
+</if>
+
+<tr>
+<td colspan="2" >
+<table class="inner_control_grid">
+<tr>
+<td class="control_header" colspan="4"><call draw_header(lang.eeman.tp.hdr.title)></td>
+</tr>
+<tr>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.res_id)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.descr)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.created)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.deleted)></td>
+</tr>
+<list tp.resources as resource>
+<tr>
+ <td  class="control_align_right"><call draw_label(resource.id)></td>
+ <td><call draw_label(resource.description)></td>
+ <td  class="control_align_center"><call draw_label(resource.created)></td>
+ <td  class="control_align_center"><call draw_label(resource.deleted)></td>
+</tr>
+</list>
+</table>
+</td>
+</tr>
+
+<if toolbox.gt(tp.stage, "1") == "1">
+<tr>
+<td colspan="2" >
+<table class="inner_control_grid">
+<tr>
+<td class="control_header" colspan="5"><call draw_header(lang.eeman.tp.hdr.title)></td>
+</tr>
+<tr>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.res_id)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.hdr.descr)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.content.started)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.content.finished)></td>
+<td class="control_align_center"><call draw_label(lang.eeman.tp.content.control)></td>
+</tr>
+<list tp.resources as resource>
+<if resource.has_content>
+ <tr>
+  <td  class="control_align_right"><call draw_label(resource.id)></td>
+  <td><call draw_label(resource.description)></td>
+  <td  class="control_align_center"><call draw_label(resource.cmove_started)></td>
+  <td  class="control_align_center"><call draw_label(resource.cmove_finished)></td>
+  <td  class="control_align_center">
+  <call draw_palink(config.CLIENT_CP_URL+"?rid="+resource.id+"&tp_id="+tp.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/launch_sync.sbm"+sc_params, "llaunch", lang.admin.rsync.launch)>
+  </td>
+ </tr>
+</if>
+</list>
+</table>
+</td>
+</tr>
+</if>
+
+</td></tr>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/eeman/tp_details.html  -->

@@ -1,0 +1,26 @@
+<!-- BEGIN ./adnsmanager/add_txt_record.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<assign check=yafv.checkall(
+  yafv.common.s_adnsmanager.vCustomAName(lang.label.domain.name,request.dname),
+  yafv.common.s_adnsmanager.vTTL(lang.dns.ttl,request.ttl) )>
+<if check.status=="OK">
+<assign result=adnsmanager.addCustomDNSRecord(request.zone_id,request.data,request.dname,"TXT",request.ttl,"")>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.dns.txt_record,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdip=request.dip>
+    <assign vdname=request.dname>
+    <assign vttl=request.dmask>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_txt_record.sbm  -->

@@ -1,0 +1,71 @@
+<!-- BEGIN ./control/admin/backup_schedule_params.html  -->
+<call draw_tooltip()>
+<yafv s_hsphere>
+<assign admin=account.getChild("admin")>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8" check!>
+  <input type="hidden" name="template_name" value="search/backup_schedule.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+
+
+<assign currDate = toolbox.getCurrentDateFormated("MM/dd/yyyy")>
+<call draw_table_header("2", lang.ds.backup_schedule.header)>
+<tr>
+ <td><call draw_label(lang.label.backup_report.from)></td>
+ <td  nowrap><input type="text" name="sc_from" size="10" value="${currDate}" check="vMDYDate">&nbsp;<call draw_calendar("f_search","sc_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.backup_report.to)></td>
+ <td  nowrap><input type="text" name="sc_to" size="10" value="${currDate}" check="vMDYDate">&nbsp;<call draw_calendar("f_search","sc_to","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.username)></td>
+ <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+<tr>
+<tr><td><call draw_label(lang.label.plan)></td>
+ <td>
+<select name="sc_plan" size="1">
+<option value="">${lang.label.any}
+<list admin.plans as plan>
+<if !plan.deleted><option value="${plan.id}">${plan.description}</if>
+</list>
+</select>
+ </td>
+</tr>
+<tr><td><call draw_label(lang.label.backup.task_status)></td>
+ <td>
+   <select name="sc_task_status" size="1">
+     <option value="">${lang.label.any}
+     <option value="1">${lang.backup.status.scheduled}
+     <option value="3">${lang.backup.status.completed}
+     <option value="4">${lang.backup.status.canceled}
+   </select>
+ </td>
+</tr>
+<tr><td><call draw_label(lang.label.backup.task_type)></td>
+ <td>
+   <select name="sc_task_type" size="1">
+     <option value="">${lang.label.any}
+     <option value="1">${lang.backup.task.type_planned}
+     <option value="2">${lang.backup.task.type_ondemand}
+   </select>
+ </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.entries)></td>
+  <td><call searchStepBox("")>
+  <tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/backup_schedule.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/backup_schedule_params.html  -->

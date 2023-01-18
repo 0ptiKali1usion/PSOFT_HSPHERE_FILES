@@ -1,0 +1,18 @@
+<center> PostgreSQL Database </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+As opposed to other 'SQL' databases supported by H-Sphere PostgreSQL users are 'principal' relatively to PostgreSQL databases, which means a database can't be created without a user. In other words, each database should be bound to the owner. This means you must first create a user and then create a database. There is only one owner for each database, however the database can be used by others who obtain permissions from the owner.
+<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+- Click the Add icon to create a new PostgreSQL database.
+<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+- Click the Database Name link (or the Edit icon in the Controls field alternatively) to view/change its settings.
+<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+- Click the Trash Can icon to remove a database.
+

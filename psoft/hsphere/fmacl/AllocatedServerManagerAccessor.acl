@@ -1,0 +1,6 @@
+scan a
+allocateServer a
+assignToPlan a
+getAllocatedPServer a
+unassignPServer a
+getscanReport a

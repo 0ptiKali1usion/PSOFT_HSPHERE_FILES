@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/misc/invalid_resources.sbm -->
+<assign planid = request.plan_id>
+<if account.bi.type=="NONE" && plans[planid].b_info != "0">
+  <assign next_template = "billing/view.html">
+  <include "misc/fillbinfo.html">
+<else>
+  <if period_id==""><assign period_id=request.period_id></if>
+  <assign inv_resources = account.estimateChangePlan(request.plan_id, period_id)>
+  <if inv_resources.status != "OK">
+    <assign res=session.addMessage(inv_resources.msg)>
+    <include request.ftemplate>
+  <else>
+    <if inv_resources.entries.size == "0">
+      <include "submit/misc/changeplan2.sbm">
+    <else>
+      <include "misc/incompat_resources.html">
+    </if>
+  </if>
+</if>
+<!-- END ./submit/misc/invalid_resources.sbm -->

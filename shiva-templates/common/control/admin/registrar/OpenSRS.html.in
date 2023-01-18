@@ -1,0 +1,43 @@
+<yafv s_hsphere>
+<if account.getChild("reseller_su")>
+<assign mm=account.getChild("registrar_manager")>
+<assign admin = account.getChild("admin")>
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/registrar/OpenSRS.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.rid><input type="hidden" name="rid" value="${request.rid}"></if>
+
+<call draw_table_header("2", lang.admin.registrar.opensrs)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="description" value="<if registrar>${registrar.description}<else>${lang.admin.registrar.opensrs}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.server)></td><td><input type="text" name="host" value="<if registrar>${registrar.host}<else>209.123.144.46</if>"></td></tr>
+<if registrar>
+   <assign vport=registrar.port>
+<else>
+   <assign vport="443">
+</if>
+<tr ><td><call draw_label(lang.admin.registrar.port)></td><td><input type="text" name="port" value="${vport}" check="vIntegerRequired"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.ip)></td><td><input type="text" name="ip" value="<if registrar>${registrar.ip}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="username" value="<if registrar>${registrar.username}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.key)></td><td><input type="text" name="key" value="<if registrar>${registrar.key}</if>"></td></tr>
+
+<!--registrar_text -->
+<assign regrar_text = toolbox.html_encode(settings.registrar_text)>
+
+<if !regrar_text><assign regrar_text = toolbox.html_encode(lang.admin.registrar.regrar_text)></if>
+
+
+<tr ><td><call draw_label(lang.admin.registrar.text)></td><td><textarea rows="10" cols="40" name="registrar_text">${regrar_text}</textarea></td></tr>
+
+<include "control/admin/registrar/common_params.html">
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>

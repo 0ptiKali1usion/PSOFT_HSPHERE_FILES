@@ -1,0 +1,7 @@
+<center> mfdnscheck </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables (1) or disables (0) DNS check of domain name in sender's address. 
+<br>Default: 0 (disabled)
+<br>
+

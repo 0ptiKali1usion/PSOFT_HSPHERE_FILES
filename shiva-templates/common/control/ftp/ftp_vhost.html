@@ -1,0 +1,92 @@
+<!-- BEGIN ./ftp/ftp_vhost.html  -->
+<assign ip = account.findChild("ip")>
+<assign ftp_traffic = ip.getChild("ftp_traffic")>
+<assign res=ftp_traffic.reload>
+<call draw_tooltip()>
+<if !final_template && request.dtemplate>
+  <assign final_template=request.dtemplate>
+</if>
+<if !final_template> <assign final_template="ftp/ftp.html"></if>
+
+
+
+
+
+<call draw_table_header("3", lang.ftp.ftpvhost.header)>
+
+
+
+<if SESSION_PLATFORM != "win2k">
+<tr>
+	<td><call draw_tt_help("","user-ftp-homedir","")></td>
+	<td><call draw_label(lang.label.home_dir)></td>
+	<td><call draw_label(ftp.homeDir)></td>
+</tr>
+</if>
+
+<tr>
+	<td><call draw_tt_help("","user-ftp-existservername","")></td>
+	<td><call draw_label(lang.ftp.ftpvhost.ftpservername)></td>
+	<td><call draw_label(ftp.serverName)><call disableNWJump("", ftp, final_template)></td>
+</tr>
+<tr>
+	<td><call draw_tt_help("","user-ftp-adminexistemail","")></td>
+	<td><call draw_label(lang.ftp.ftpvhost.ftpadminemail)></td>
+	<td><call draw_label(ftp.serverAdmin)></td>
+</tr>
+<tr>
+	<td><call draw_tt_help("","user-ftp-vftpsip","")></td>
+	<td><call draw_label(lang.ftp.ftpvhost.ftpserverip)></td>
+	<td><call draw_label(toolbox.int2ext(ftp.ip))></td>
+</tr>
+<if account.plan.isResourceAvailable("ftp_traffic")>
+<assign ip = account.findChild("ip")>
+<assign ftp_traffic = ip.getChild("ftp_traffic")>
+<assign res=ftp_traffic.reload>
+<tr>
+	<td><call draw_tt_help(ftp_traffic,"user-ftp-vftpstraffic","")></td>
+        <td><call draw_label(lang.ftp.ftpvhost.virtftptraff)></td>
+        <td><call draw_label("<b>"+ftp_traffic.text_traffic+"</b> used out of ")><call draw_link(config.CLIENT_CP_URL+"?template_name=ftp/change_traffic.html&rid="+ftp+"&rid_parent="+ip+"&traffic_type=3&stemplate="+template, ftp_traffic.size+" GB")><call draw_label(" limit")><call draw_edit(config.CLIENT_CP_URL+"?template_name=ftp/change_traffic.html&rid="+ftp+"&rid_parent="+ip+"&traffic_type=3&stemplate="+template, lang.ftp.ftpvhost.changelimit)></td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("ftp_vhost_user")>
+<tr><assign tmp=ftp.getChildren("ftp_vhost_user")>
+	<td    valign="top" nowrap><if !tmp><call draw_tt_help(account.id,"user-ftp-users","")><else><list tmp as vuser><call draw_tt_help(vuser,"user-ftp-users","")><br></list></if></td>
+        <td><call draw_label(lang.ftp.ftpvhost.virtusrs)></td>
+        <td><list tmp as vuser><call draw_link(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vuser+"&template_name=ftp/update_vuser.html"+"&stemplate="+template+"&ftemplate="+template,vuser.vlogin)><call draw_change(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vuser+"&template_name=ftp/update_vuser.html"+"&stemplate="+template+"&ftemplate="+template, lang.ftp.ftpvhost.changeusrpsw)><call disableNew(ftp, vuser)><br></list>
+<call addNewWizard(ftp,"ftp_vhost_user","ftp/add_vuser.html", lang.ftp.ftpvhost.addusr)>
+</td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("ftp_vhost_directory")>
+<tr><assign tmp=ftp.getChildren("ftp_vhost_directory")>
+	<td    valign="top" nowrap><if !tmp><call draw_tt_help(account.id,"user-ftp-ftpdir","")><else><list tmp as vdir><call draw_tt_help(vdir,"user-ftp-ftpdir","")><br></list></if></td>
+        <td><call draw_label(lang.ftp.ftpvhost.virtftpdir)></td>
+        <td><list tmp as vdir><call draw_link(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vdir+"&template_name=ftp/update_vdir.html"+"&stemplate="+template+"&ftemplate="+template,vdir.name)><call draw_edit(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vdir+"&template_name=ftp/update_vdir.html"+"&stemplate="+template+"&ftemplate="+template, lang.ftp.ftpvhost.editperm)><call disableNew(ftp, vdir)><br></list>
+<call addNewWizard(ftp,"ftp_vhost_directory","ftp/add_vdir.html", lang.ftp.ftpvhost.adddir)>
+</td>
+</tr>
+</if>
+<tr><assign anonymous=ftp.getChild("ftp_vhost_anonymous")>
+	<td><if anonymous><assign tt_rid=anonymous><else><assign tt_rid=account.id></if><call draw_tt_help(tt_rid,"user-ftp-anonftp","")></td>
+	<td><call draw_label(lang.ftp.ftpvhost.ftpanonymous)></td>
+	<td>
+<if anonymous>
+ <call disable(ftp,anonymous)>
+	</td>
+</tr>
+<tr>
+	<td><call draw_tt_help(anonymous,"user-ftp-anonftpup","")></td>
+        <td><call draw_label(lang.ftp.ftpvhost.ftpanonymousincoming)></td>
+	<td>
+ <call draw_state(anonymous.allowIncoming=="1",config.CLIENT_CP_URL+"?template_name=submit/ftp/disable_incoming.sbm"+"&rid="+ftp+"&did="+anonymous+"&stemplate="+template+"&ftemplate="+template,config.CLIENT_CP_URL+"?template_name=submit/ftp/enable_incoming.sbm"+"&rid="+ftp+"&did="+anonymous+"&stemplate="+template+"&ftemplate="+template)>
+<else><call enable(ftp,"ftp_vhost_anonymous")>
+</if>
+	</td>
+</tr>
+<!-- <tr><td><call draw_label("Anonymous FTP Directory")></td><td>/home/sobaka/anonftp/psoft40.net</td></tr> -->
+
+
+<call draw_table_footer()>
+
+<!--  END ./ftp/ftp_vhost.html  -->

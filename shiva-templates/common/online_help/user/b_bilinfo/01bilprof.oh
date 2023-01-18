@@ -1,0 +1,5 @@
+<center>New Billing Profile</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+A billing profile is a collection of your billing details, such as the number of your credit card or your postal address (for checks). HSphere 2.0 supports multiple billing profiles. This feature gives you an opportunity to use several credit cards in turn, activating the one you would like to be charged. Also, you can share Billing information between your accounts. This means you can pay with one card / check for all your accounts. Settings are configured individually for each billing profile. You cannot delete your billing profiles.  You cannot modify billing information in any billing profile either. You can only create a new profile.<br>
+To create a new billing profile select the payment type (either by credit card or by check) and click the <i>Create</i> button.

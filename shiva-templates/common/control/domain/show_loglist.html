@@ -1,0 +1,40 @@
+<!-- BEGIN show_logfile.html-->
+<include "control/domain/webservice.fn">
+<call draw_menu("domain-list")>
+<assign template = "control/domain/show_logfile.html">
+<assign domain = account.getResource(request.rid)>
+<assign hosting = domain.getChild("hosting")>
+<switch request.type>
+  <case "ErrorLog">
+    <assign log = hosting.getChild("errorlog")>
+    <break>
+  <case "TransferLog">
+    <assign log = hosting.getChild("transferlog")>
+    <break>
+  <case "RefererLog">
+    <assign log = hosting.getChild("referrerlog")>
+    <break>
+</switch>
+
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("", log.filename)>
+
+
+<tr>
+<td    nowrap>
+
+<assign lst=log.showLogList()>
+    <list lst as str>
+      <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=control/domain/show_logfile.html"+"&log="+str+"&line=end&count=10"+"&type="+request.type, str)>
+      <br>
+    </list>
+</td>
+</tr>
+
+<call draw_table_footer()>
+	
+<call bottom()>
+<!-- END show_logfile.hrml-->

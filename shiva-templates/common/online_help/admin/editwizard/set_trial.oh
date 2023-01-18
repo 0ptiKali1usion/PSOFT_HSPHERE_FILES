@@ -1,0 +1,15 @@
+<center>Trial Period </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Trial registration enables users to signup for evaluation without paying. Users are given a certain number of days to decide if they want to continue with this service for fee. If a user decides not to pay, the account gets suspended when the trial period ends. You can delete it later.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Trial users are not charged for the resources they use. However, when they become pay users, they are charged for the resources they have used during the trial period. Trial users become pay users at the moment when their billing information is verified and accepted, and their custom settings remain unchanged.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Check the box to  enable trial registration for this plan. If the box is checked you will have to fill in the rest fields of the entry.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>Duration</i>: enter the duration of the trial period in days. Usually trial period does not exceed one month. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>Credit Limit</i>: maximum amount of credit a trial user can run up acquiring paid resources. If you leave the field empty, the Trial Credit Limit is set to zero. In this case users can acquire only free resources. Usually <i>credit limit </i>amount either equals the initial registration payment plus the recurrent fee for one payment period, or exceeds it a bit to enable trial users to buy some extra resources. After this amount has been reached, the user cannot purchase any more resources. When trial users become pay users, they are charged the amount they have run up during the trial period. 

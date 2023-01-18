@@ -1,0 +1,60 @@
+<!-- BEGIN ./tt/user_view.html  -->
+
+<assign tt=account.getChild("tt")>
+<assign ticket=tt.getTicket(request.ttid)>
+
+<call draw_tooltip()>
+
+<yafv s_tt>
+
+<call draw_table_header("3", "")>
+<tr>
+    <td class="control_header" colspan="2"><call draw_header(lang.tt.userview.header+toolbox.html_encode(ticket.title)+" ("+ticket.created+")")></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<td class="control_header">
+<input type="hidden" name="template_name" value="submit/tt/user_close.sbm">
+<input type="hidden" name="stemplate" value="tt/user_view_tts.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="ttid" value="${request.ttid}">
+<input type="submit" value="${lang.tt.admin.close}">
+</td>
+</form>    
+</tr>
+
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_change_email" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/user_change_email.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="ttid" value="${request.ttid}">
+<if !vemail><assign vemail=ticket.email></if>
+<tr>
+<td class="control_header"><call draw_label(lang.tt.email)></td>
+<td class="control_header"><input type="text" name="email" value="${vemail}" label="${lang.tt.email}" check="vTTMail(this,flags)">
+    <input type="checkbox" name="flags" onClick="checkForm(this.form)" value="1"<if (ticket.isWebOnly)||(request.flags)> CHECKED</if>><call draw_label(lang.tt.web)>
+</td>
+<td class="control_header"><input type="submit" value="${lang.button.change}"></td>
+</form>
+</tr>
+<tr>
+  <td colspan="3">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="CENTER">
+<include "control/tt/display_tt.html">
+</table>
+  </td>
+</tr>
+<tr><td colspan="3" class="control_header"><call draw_header(lang.tt.userview.add)></td></tr>
+<tr><td colspan="3">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/user_edit_save.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="ttid" value="${request.ttid}">
+<textarea name="message" rows="4" cols="60"></textarea>
+</td></tr>
+<tr>
+    <td colspan="3" class="control_align_center"><input type="submit" value="${lang.button.submit}">
+</td></tr>
+</form>
+<call draw_table_footer()>
+<!--  END ./tt/user_view.html  -->

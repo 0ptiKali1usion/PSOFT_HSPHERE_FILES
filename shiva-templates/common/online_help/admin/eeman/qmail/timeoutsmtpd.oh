@@ -1,0 +1,7 @@
+<center> timeoutsmtpd </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>TCP connection timeout in seconds.
+<br>Default: 1200.
+<br>
+

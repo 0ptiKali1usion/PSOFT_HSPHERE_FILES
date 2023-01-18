@@ -1,0 +1,16 @@
+<center>  Server Alias</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+Server aliases are additional names for your virtual host. 
+<br>
+   Unlike domain aliases, they are not added to your DNS zone, and are registered only with apache.
+   <br>
+    For instance, if your virtual host name is example.com and you also would like it to be available at www.example.com, you should add www server alias to the example.com domain.
+<br>
+   To add a server alias, do the folowing:
+   
+<ul>
+  <li>Scroll down to the Server alias field and click the Add icon.</li> 
+  <li>Enter server alias name. Click <i>Submit</i>. 
+ <li>It will be added to the list of server aliases for this virtual host name.</li> 
+ </ul>

@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/admin/ds/cancel_server_confirm.html  -->
+<call draw_tooltip()>
+<assign ds_manager = account.getChild("ds_manager")>
+
+<if ds_manager>
+
+<assign ds_id = request.ds_id>
+<assign ds = ds_manager.getDServer(ds_id)>
+
+<call draw_table_header("", lang.admin.ds.cancel_server_confirm_h)>
+
+<tr>
+<td class="control_align_center">
+  <if request.schedule == "period_end"><call draw_label(lang.admin.ds.cancel_server_pe_confirm_mes(ds.name))>
+  <else><call draw_label(lang.admin.ds.cancel_server_date_confirm_mes(ds.name, request.date))>
+  </if>
+</td>
+</tr>
+<tr>
+<td>
+<form name="cancel_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/cancel_server.sbm">
+<input type="hidden" name="ds_id" value="${ds_id}">
+<input type="hidden" name="schedule" value="${request.schedule}">
+<input type="hidden" name="date" value="${request.date}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+ </if>
+</list>
+</compress>
+
+<center>
+<call draw_link("javascript:document.forms['cancel_confirm'].submit()", lang.admin.ds.cancel_server.yes_conf)><br>
+<call draw_link("javascript:history.go(-1)", lang.admin.ds.cancel_server.no_conf)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/ds/cancel_server_confirm -->

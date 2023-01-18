@@ -1,0 +1,7 @@
+<html>
+<body bgcolor="${BG_COLOR}">
+<assign preview=account.getChild("account_preview")>
+<if !preview><assign preview = account.addChild("account_preview", "")></if>
+${preview.displayDeleted(request.aid, request.display_template)}
+</body>
+</html>

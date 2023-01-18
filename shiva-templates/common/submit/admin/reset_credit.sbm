@@ -1,0 +1,30 @@
+<!-- BEGIN ./common/submit/admin/reset_credit.sbm -->
+<assign admin = account.findChild("admin")>
+<if request.all=="1">
+  <assign reseller_su = account.getChild("reseller_su")>
+  <if reseller_su>
+     <assign result = reseller_su.resetCredit()>
+     <if result.status=="OK">
+	<assign success="1">
+     <else>
+	<assign res=session.addMessage(result.msg)>
+     </if>
+  <else>
+     <assign res=session.addMessage(lang.search.permissionsmsg)>
+  </if>
+<else>
+     <assign result = admin.resetCredit()>
+     <if result.status=="OK">
+	<assign success="1">
+     <else>
+	<assign res=session.addMessage(result.msg)>
+     </if>
+</if>
+
+<if success=="1">
+     <assign res = session.addMessage(lang.admin.other.done)>
+     <include request.stemplate>
+<else>
+     <include request.ftemplate>
+</if>
+<!-- END ./common/submit/admin/reset_credit.sbm -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./common/submit/admin/merchant/PlugnPay.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign base="/hsphere/local/home/cpanel/shiva/psoft_config/psigate/">
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, 
+"USERNAME", request.login, "PASSWORD", request.password, "EMAIL", request.email, "CERT_DIR", request.cert_dir, "DONTSNDMAIL", request.dontsndemail, 
+"CLASS_NAME", "psoft.epayment.PlugnPay","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/PlugnPay.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, 
+"USERNAME", request.login, "PASSWORD", request.password, "EMAIL", request.email, "CERT_DIR", request.cert_dir, "DONTSNDMAIL", request.dontsndemail, 
+"CLASS_NAME", "psoft.epayment.PlugnPay","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/PlugnPay.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./common/submit/admin/merchant/PlugnPay.sbm -->

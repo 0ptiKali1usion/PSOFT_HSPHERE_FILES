@@ -1,0 +1,182 @@
+<!-- BEGIN ./plan_editor/reseller3.html.in  -->
+<include "control/admin/plan_function.html">
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<if period_id>
+<assign period_id=toolbox.add(period_id,"1")>
+<else>
+<assign period_id="0">
+</if>
+
+
+<call draw_tooltip()>
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" name="f_reseller" method="POST" check! accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="submit/plan_editor/reseller3.sbm">
+<if toolbox.add(period_id,"1") == request.periods>
+  <input type="hidden" name="stemplate" value="admin/plans.html">
+  <input type="hidden" name="ftemplate" value="plan_editor/reseller.html">
+<else>
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+</if>
+<input type="hidden" name="period_id" value="${period_id}">
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate" && param.name != "period_id">
+    <call checkParamForBP(param.name, period_id)>
+    <if !isParamForBP><input type="hidden" name="${param["name"]}" value="${param["value"]}"></if>
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+
+<call draw_table_header("2", toolbox.compose(lang.planeditor.header, lang.planeditor.res_reseller, toolbox.add(period_id,"3"), request.steps))>
+
+<tr >
+  <td><call draw_label(lang.planeditor.plan_name)></td>
+  <td><call draw_label(plan.description)></td>
+</tr>
+
+
+<tr >
+<td colspan="2"><call draw_label(lang.planeditor.reseller_text1)></td>
+</tr>
+ 
+<tr >
+<td><call draw_label(lang.planeditor.period_type)></td>
+<td><call draw_label(plan.values["_PERIOD_TYPE_"+period_id])></td>
+</tr>
+ 
+<tr >
+<td><call draw_label(lang.planeditor.period_size)></td>
+<td><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+period_id],"false"))></td>
+</tr>
+ 
+<tr >
+<td><call draw_label(lang.planeditor.setup_disc)></td>
+<if plan.values["_PERIOD_SETUP_DISC_"+period_id]>
+  <assign setup_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_SETUP_DISC_"+period_id],"false")>
+<else>
+   <assign setup_disc="0">
+</if>
+<td><call draw_label(setup_disc+"%")></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.planeditor.usage_disc)></td>
+<if plan.values["_PERIOD_USAGE_DISC_"+period_id]>
+  <assign usage_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_USAGE_DISC_"+period_id],"false")>
+<else>
+   <assign usage_disc="0">
+</if>
+<td><call draw_label(usage_disc+"%")></td>
+</tr>
+ 
+<tr >
+<td><call draw_label(lang.planeditor.price_disc)></td>
+<if plan.values["_PERIOD_UNIT_DISC_"+period_id]>
+  <assign unit_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_UNIT_DISC_"+period_id],"false")>
+<else>
+  <assign unit_disc="0">
+</if>
+<td><call draw_label(unit_disc+"%")></td>
+</tr>
+
+<call header(lang.planeditor.prices)>
+<call prices("account",cursym)>
+<if request.i_reseller_traffic>
+<call prices("reseller_traffic",cursym)>
+</if>
+<if request.i_summary_quota>
+<call prices("summary_quota",cursym)>
+</if>
+<if request.i_r_ds_bandwidth>
+<call prices("r_ds_bandwidth", cursym)>
+</if>
+<if request.i_reseller_backup>
+<call prices("reseller_backup",cursym)>
+</if>
+<if request.i_allocated_server>
+<call prices("allocated_server",cursym)>
+</if>
+
+<tr >
+<if toolbox.add(request.periods,"1") == toolbox.add(period_id,"2")>
+    <if !plan.deleted><td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td><else>&nbsp;</if>
+ <else>
+    <td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+</if>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+
+<function header(topic)>
+<tr>
+ <td colspan="2" class="control_header_align_center">
+   <call draw_header(topic)>
+ </td>
+</tr>
+</function>
+
+
+<function prices(resource,unit)>
+<assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(resource))>
+<if resource=="account">
+<assign title = lang.label.reseller_account>
+<else>
+<assign title = toolbox.getResourceDescription(toolbox.getTypeId(resource))>
+</if>
+<assign rtype=plan.getResourceType(resource)>
+<tr >
+<td nowrap>
+<call draw_label(title)>
+<if request["i_"+resource]><input type="hidden" name="i_${resource}" value="on"></if>
+<if request["e_"+resource]><input type="hidden" name="e_${resource}" value="on"></if>
+</td>
+<td NOWRAP>
+ 
+<if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+ <if failure>
+    <assign vf=toolbox.html_encode(request["f_"+resource+"_"+period_id])>
+ <else>
+    <assign vf=toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"+period_id],"false")>
+ </if>
+ <call draw_label(lang.planeditor.free)>&nbsp;<input type="text" name="f_${resource}_${period_id}" value="${vf}" size="4" label="${title} (${lang.planeditor.free})"check="vPriceOpt">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+</if>
+<if toolbox.consists(priceType,"S")=="1">
+ <if failure>
+    <assign vs=toolbox.html_encode(request["s_"+resource+"_"+period_id])>
+ <else>
+    <assign vs=toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"+period_id],"false")>
+ </if>
+ <call draw_label(lang.planeditor.setup)>&nbsp;<input type="text" name="s_${resource}_${period_id}" value="${vs}" size="4" label="${title} (${lang.planeditor.setup})" check="vPriceOpt">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+</if>
+<if toolbox.consists(priceType,"R")=="1">
+ <if failure>
+    <assign vm=toolbox.html_encode(request["m_"+resource+"_"+period_id])>
+ <else>
+    <assign vm=toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"+period_id],"false")>
+ </if>
+<call draw_label(lang.planeditor.recurrent)> <input type="text" name="m_${resource}_${period_id}" value="${vm}" size="4" label="${title} (${lang.planeditor.recurrent})" check="vPriceOpt">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+</if>
+<if toolbox.consists(priceType,"U")=="1">
+ <if failure>
+    <assign vu=toolbox.html_encode(request["u_"+resource+"_"+period_id])>
+ <else>
+    <assign vu=toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"+period_id],"false")>
+ </if>
+ <call draw_label(lang.planeditor.extra)> <input type="text" name="u_${resource}_${period_id}" value="${vu}" size="4" label="${title} (${lang.planeditor.extra})" check="vPriceOpt">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+</if>
+<input type="hidden" name="ref_${resource}" value="${toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"+period_id],"false")}">
+</td>
+</tr>
+</function>
+
+<!--  END ./plan_editor/reseller3.html.in  -->

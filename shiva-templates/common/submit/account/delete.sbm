@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/account/delete.sbm  -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.deleteUserAccount(request.user, request.aid, request.billlingtype)>
+<if result.status != "OK"><!-- deletion error -->
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <if account.id.id != request.aid>
+    <include request.stemplate>
+  <else><!-- account self deletion -->
+    <include "design/logout.html">
+  </if>
+</if>
+<!--  END ./submit/account/delete.sbm  -->

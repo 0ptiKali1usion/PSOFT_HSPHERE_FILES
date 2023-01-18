@@ -1,0 +1,8 @@
+<!-- BEGIN ./admin/add_custom_billing.html  -->
+<assign template="admin/add_custom_billing.html">
+<include "functions">
+<if !request.cur_menu><assign cur_menu="search-accounts"><else><assign cur_menu=request.cur_menu></if>
+<call draw_menu(cur_menu)>
+<include "control/admin/add_custom_billing.html">
+<call bottom()>
+<!-- END ./admin/add_custom_billing.html  -->

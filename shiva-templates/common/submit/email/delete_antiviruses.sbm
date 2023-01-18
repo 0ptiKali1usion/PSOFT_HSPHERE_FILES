@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/email/delete_antiviruses.sbm  -->
+<if toolbox.gt(dids.size,"0")=="1" || toolbox.gt(request.dids_count,"0")=="1">
+  <if toolbox.gt(dids.size,"0")=="1">
+    <list dids as did>
+      <assign antivirus=account.getResource(did)>
+      <assign result=antivirus.delete>
+      <if result.status=="OK">
+	<assign success="1">
+      </if> 
+    </list>
+  <else>
+    <list params as rq_param>
+      <if rq_param.name && (toolbox.startsWith(rq_param.name,"did_")=="1")>
+        <assign antivirus=account.getResource(rq_param.value)>
+        <assign result=antivirus.delete>
+	<if result.status=="OK">
+          <assign success="1">
+	</if>
+      </if>
+    </list>
+  </if>
+</if>
+<if success>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_deleted, lang.label.antiviruses, ""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete, lang.label.antiviruses, ""))>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/email/delete_antiviruses.sbm  -->

@@ -1,0 +1,11 @@
+<!--  BEGIN ./submit/admin/plan_copy.sbm  -->
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign result=plan.copy()>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if> 
+<!--  END ./submit/admin/plan_copy.sbm  -->

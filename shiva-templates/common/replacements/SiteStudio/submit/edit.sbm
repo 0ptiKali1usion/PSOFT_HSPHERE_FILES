@@ -1,0 +1,9 @@
+<!-- BEGIN ./SiteStudio/submit/edit.sbm -->
+<assign ss=account.getResource(request.rid)>
+<assign result=ss.update(request.login, request.server, request.port, request.url, request.dir, request.email)>
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!-- BEGIN ./SiteStudio/submit/edit.sbm -->

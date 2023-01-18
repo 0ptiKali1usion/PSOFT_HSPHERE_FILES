@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/email/create_mlist.sbm  -->
+<assign result = yafv.checkall(
+			yafv.common.s_email.vLocalEmail(lang.email.local_name, request.email),
+			yafv.common.s_email.vStringSafeOptional(lang.email.descr, request.descr))>
+<if result.status == "OK">
+    <assign rid = account.getResource(request.rid)>
+    <assign result = rid.addChild("mailing_list", "", request.email, request.description)>
+    <if result.status == "OK">
+        <assign success = "1">
+	<assign mo_id = result>
+        <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.mail_list, ""))>
+    <else>
+        <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_add, lang.label.mail_list, ""))>
+        <assign res = session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+    <assign name = request.email>	
+    <assign type = "mailing_list">	
+    <include request.stemplate>
+<else>
+    <assign vemail = toolbox.html_encode(request.email)>
+    <assign vdescription = toolbox.html_encode(request.description)>
+    <include request.ftemplate>
+</if> 
+<!--  END ./submit/email/create_mlist.sbm  -->

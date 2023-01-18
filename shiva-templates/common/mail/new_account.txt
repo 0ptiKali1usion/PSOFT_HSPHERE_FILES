@@ -1,0 +1,53 @@
+${toolbox.compose(lang.massmail.welcome_header, account.ci.first_name, account.ci.last_name)}
+<compress>
+<assign u = account.getChild("unixuser")>
+<assign domain = u.getChild("domain")>
+<assign cp_url = user.CP_URL>
+<if domain>
+    <assign opensrs=domain.getChild("opensrs")>
+</if>
+<assign size=account.plan.values["_PERIOD_SIZE_"+account.periodId]>
+<assign billviewer = account.getChild("billviewer")>
+<if billviewer>
+<list billviewer.list() as b><assign bill=billviewer.view(b.id)>
+  <list bill.entries as entry><if entry.type=="5" || entry.type=="8"><assign paid=entry.amount></if></list>
+</list>
+</if>
+</compress>
+${toolbox.compose(lang.massmail.welcome_thanks, settings.name)}
+<if account.bi.type=="TRIAL">${toolbox.compose(lang.massmail.welcome_trial, account.trial_time_left)}</if>
+<if (paid!="") && (paid!="0")>${lang.massmail.welcome_paid} ${toolbox.currency(paid)}.
+<if opensrs>${lang.massmail.welcome_opensrs}<else>${lang.massmail.welcome_setup}</if> ${size} ${account.plan.values["_PERIOD_TYPE_"+account.periodId]}<if size!="1">s</if>.</if>
+<compress>
+<assign domain=account.findChild("domain")>
+<if !domain>
+    <assign domain=account.findChild("service_domain")>
+</if>
+<if !domain>
+    <assign domain=account.findChild("3ldomain")>
+</if>
+<if !domain>
+    <assign domain=account.findChild("nodomain")>
+</if>
+</compress>
+<if domain && (account.findChild("hosting"))>${lang.massmail.welcome_dns}
+<assign idomain=domain.findChild("idomain_alias")>${lang.massmail.welcome_access}
+<if domain.ip.shared=="1">http://${idomain.alias}<else>http://${toolbox.int2ext(domain.ip.ip)}</if>
+</if>
+
+${lang.massmail.welcome_logCP}
+${lang.massmail.welcome_access_account} ${cp_url}
+${toolbox.compose(lang.massmail.welcome_login, user.login)}
+${toolbox.compose(lang.massmail.welcome_psw, user.password)}
+${lang.massmail.welcome_account(account.id.id)}
+
+<if u>${lang.massmail.welcome_useFTP}
+${lang.massmail.welcome_host(u.host.name)}
+${lang.massmail.welcome_ftplogin(u.login)}
+${lang.massmail.welcome_ftppsw(u.password)}</if>
+
+<if settings.support>${lang.massmail.welcome_support}
+${settings.support}</if>
+
+${lang.massmail.welcome_closing}
+${settings.name}

@@ -1,0 +1,75 @@
+<!-- BEGIN ./control/eeman/transfers_filter.html  -->
+<assign eeman = account.getChild("eeman")>
+<call draw_tooltip()>
+<if eeman>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<call draw_table_header("2", lang.eeman.tp.search)>
+<tr>
+    <td><call draw_label(lang.label.accid)></td>
+    <td><input type="text" name="sc_account"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+    <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.eeman.tp.search_started)></td>
+ <td nowrap>
+    <call draw_label(lang.label.from)>&nbsp;
+    <input type="text" name="sc_startedafter" size="10" value="01/31/2000">&nbsp;
+    <call draw_calendar("f_search","sc_startedafter","")>&nbsp;
+    <call draw_label(lang.label.to)>&nbsp;
+    <input type="text" name="sc_startedbefore" size="10" value="">&nbsp;
+    <call draw_calendar("f_search","sc_startedbefore","")>
+ </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.eeman.tp.search_finished)></td>
+ <td nowrap>
+    <call draw_label(lang.label.from)>&nbsp;
+    <input type="text" name="sc_finishedafter" size="10" value="">&nbsp;
+    <call draw_calendar("f_search","sc_finishedafter","")>&nbsp;
+    <call draw_label(lang.label.to)>&nbsp;
+    <input type="text" name="sc_finishedbefore" size="10" value="">&nbsp;
+    <call draw_calendar("f_search","sc_finishedbefore","")>
+ </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.eeman.move.source_lserver.title)></td>
+  <td>
+    <select name="sc_source" size="1">
+        <option value="" SELECTED>${lang.label.any}
+        <list eeman.getMoveableLServersList() as lserver>
+            <option value="${lserver.id}">${lserver.name} ${lserver.allocation_descr}</option>
+        </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td nowrap><call draw_label(lang.eeman.move.target_lserver.title)></td>
+  <td>
+    <select name="sc_target" size="1">
+        <option value="" SELECTED>${lang.label.any}
+        <list eeman.getMoveableLServersList() as lserver>
+            <option value="${lserver.id}">${lserver.name} ${lserver.allocation_descr}</option>
+        </list>
+    </select>
+  </td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.entries)></td>
+    <td><call searchStepBox(request.sc_step)></td>
+</tr>
+<tr>
+    <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="eeman/transfers.html">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="submit" value="${lang.button.search}">
+    </td>
+</tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/eeman/transfers_filter.html  -->

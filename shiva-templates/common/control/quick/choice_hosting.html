@@ -1,0 +1,44 @@
+<!-- BEGIN ./quick/choice_hosting.html.html  -->
+<assign unixuser=account.getChild("unixuser")>
+
+<if (!account.plan.isResourceAvailable("unixuser")) && (account.plan.isResourceAvailable("mail_service"))><assign isMailOnly = "1"></if>
+
+<function draw_hosting(hosting)>
+<switch hosting.server>
+  <case "apache"><assign web_template="domain/webservice.html"><break>
+  <case "IIS"><assign web_template="windomain/webservice.html"><break>
+  <case "zeus"><assign web_template="zeus/webservice.html"><break>
+</switch>
+<tr>
+<td>
+  <call draw_link(config.CLIENT_CP_URL+"?template_name="+web_template+"&rid="+hosting, hosting.parent.name)>
+</td>
+<td width="10%">
+  <call draw_edit(config.CLIENT_CP_URL+"?template_name="+web_template+"&rid="+hosting, lang.quick.choicehosting.edit)>
+  <if !isMailOnly><call draw_preview_large("http://"+hosting.parent.name, lang.quick.choicehosting.preview)></if>
+</td>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.quick.choicehosting.select)>
+
+
+<assign hostings = account.findAllChildren("hosting")>
+<if !hostings>
+<tr >
+ <td colspan="2" ><call draw_label(lang.quick.choicehosting.noanydomain)></td>
+</tr>
+<else>
+<list hostings as hosting>
+<call draw_hosting(hosting)>
+</list>
+</if>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choice_hosting.html  -->

@@ -1,0 +1,28 @@
+<!-- BEGIN ./domain/add_cgidir.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+<form name="f_add_cgidir"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_cgidir_submit.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.domain.addcgidir.header)>
+
+
+<tr>
+   <td><call draw_label(lang.domain.addcgidir.path)></td>
+   <td><input type="text" name="path" value="${vpath}" label="${lang.domain.addcgidir.path}" check="vLocalDir"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_cgidir.html.in  -->

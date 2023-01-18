@@ -1,0 +1,40 @@
+<!-- BEGIN ./search/tts_detail.html  -->
+<assign template="search/tts_detail.html">
+<if request.search_step><assign search_step=request.search_step><else><assign search_step="10"></if>
+<assign viewer=account.getChild("reportviewer")>
+<if request.cid><assign report = viewer.getCachedReport(request.cid)>
+<assign start=request.start>
+</if>
+<if !request.tt_id><assign tt_id="%"><else><assign tt_id=request.tt_id></if>
+<if !report><assign report = viewer.getReport("tt_detail", tt_id)></if>
+<if !start><assign start="0"></if>
+<!--assign_to=${assign_to}<br>
+priority=${priority}<br>
+severity=${severity}<br>-->
+<call draw_tooltip()>
+
+<call draw_table_header("3", lang.search.ttsdetail.header(request.tt_title))>
+
+<assign next=report.next(start, search_step)>
+<tr>
+  <td class="control_header" width="40%"><call draw_header(lang.search.ttsdetail.when)></td>
+  <td class="control_header" width="30%"><call draw_header(lang.search.ttsdetail.assigner)></td>
+  <td class="control_header" width="30%"><call draw_header(lang.search.ttsdetail.assign)></td>
+</tr>  
+<list report.entrySet(start, next) as entry>
+<tr>
+   <td width="40%"><call draw_label(entry.when_assigned)></td>
+   <td width="30%"><call draw_label(entry.assigner)></td>
+   <td class="control_align_center" width="30%"><call draw_label(entry.assignedto)></td>
+</tr>   
+</list>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"&?template_name="+template+"&cid="+report.id+"&plan="+toolbox.url_escape(request.plan)+"&payment="+toolbox.url_escape(request.payment)+"&email="+toolbox.url_escape(request.email)+"&start="+start+"&search_step="+search_step+"&r_from="+toolbox.url_escape(request.r_from)+"&r_to="+toolbox.url_escape(request.r_to)+"&username="+toolbox.url_escape(request.username),label)>
+</function>
+<if start!="0"><call reportLink(report.prev(start, search_step), lang.search.prev)></if>
+<if next!=report.size><call reportLink(next, lang.search.next)></if>
+<br>
+<list report.pages(search_step) as pstart><call reportLink(pstart.start, "["+pstart.id+"]")></list>
+<!--  END ./search/tts_detail.html  -->

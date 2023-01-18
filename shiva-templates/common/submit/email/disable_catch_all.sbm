@@ -1,0 +1,21 @@
+<!-- BEGIN ./email/disable_catch_all.sbm  -->
+<assign rid = account.getResource(request.rid)>
+<assign result=rid.disableCatchAll()>
+<if result.status == "OK" >
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_disabled, lang.label.mail_catch_all, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_disable, lang.label.mail_catch_all, ""))>
+    <assign res = session.addMessage(result.msg)>
+</if>
+<if success>
+    <assign name = request.name>
+    <assign mailType = "mail_object">
+    <include request.stemplate>	
+<else>
+    <include request.ftemplate>
+</if>   
+
+<!--  END ./email/disable_catch_all.sbm  -->

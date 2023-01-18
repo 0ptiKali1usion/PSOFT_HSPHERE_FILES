@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/email/add_da_spfs.sbm  -->
+
+<if !request.processing>
+  <assign res=session.addMessage(lang.email.spf.choose_type_processing)>
+  <assign failure="true">
+</if>
+<if !failure>
+  <assign mail_service=account.getResource(request.mail_service)>
+  <assign result=mail_service.addDomainAliasSPFs(request.processing)>
+  <if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_created, lang.label.spfs, ""))>
+  <else>
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_create, lang.label.spfs, ""))>
+    <assign res=session.addMessage(result.msg)>
+    <assign failure="true">
+  </if>
+</if>
+<if !failure>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/email/add_da_spfs.sbm  -->

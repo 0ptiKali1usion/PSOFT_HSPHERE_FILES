@@ -1,0 +1,13 @@
+<center>Domain Registration</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;
+<br>
+Enables/disables second level domain registration directly from the user control panel.
+(Among others, supported registrars include OpenSRS, Enom, and AllDomains).<br> 
+<br>If you disable <i>Domain registration</i>, your customers will only be able to: 
+<br>- transfer an existing domain;  
+<br>- register a third level domain;  
+<br>- register a stop-gap (dummy) domain;  
+<br>- register without any other domain.  
+<br><br>
+If you check <i>Leave registrar prices as they are</i>, the wizard will skip the pages with Domain Registration prices.

@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/billing/delete_confirm_mass.html  -->
+<assign stype = account.plan.getResourceType(account.getResource(dids[0]).type).description>
+<assign message = toolbox.compose(lang.billing.del_msg1_mass, dids.size, stype)>
+<if price.refund!="0">
+  <assign message = message + toolbox.compose(lang.billing.del_msg2_mass, toolbox.currency(price.refund))>
+</if>
+<assign message = message + lang.billing.del_msg3>
+<if price.setup!="0">
+  <assign message = message + toolbox.compose(lang.billing.del_msg4_mass, dids.size, stype, toolbox.currency(price.setup))>
+</if>
+
+<call draw_tooltip()>
+<form name="delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<compress>
+<list params as param>
+<if param.name != "template_name" && param.name != "next_template">
+<input type="hidden" name="${param.name}" value="${param.value}">
+</if>
+</list>
+</compress>
+<if request.next_template>
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="dids_count" value="${dids.size}">
+<assign i="0">
+<list dids as did>
+<input type="hidden" name="did_${i}" value="${dids[i]}">
+<assign i=toolbox.add(i,"1")>
+</list>
+<else>
+<input type="hidden" name="template_name" value="submit/misc/delete.sbm">
+</if>
+
+<call draw_table_header("", lang.billing.delconfirm)>
+
+
+<tr>
+<td><call draw_label(message)><br>
+<center>
+<call draw_link("javascript:document.delete_confirm.submit()", lang.billing.del_yes)><br>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no_mass, dids.size, stype))>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/billing/delete_confirm_mass.html  -->

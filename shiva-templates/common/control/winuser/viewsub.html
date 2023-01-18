@@ -1,0 +1,76 @@
+<!-- BEGIN ./control/winuser/viewsub.html  -->
+<assign u=account.getResource(request.rid)>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("3", "")>
+
+<tr>
+ <td width="5%" class="control_header_align_center" nowrap><call draw_TT_header()></td>
+ <td width="30%" class="control_header_align_center" ><call draw_header(lang.label.parameter)></td>
+ <td class="control_header_align_center" ><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+  <td><call draw_tt_help(u,"","")></td>
+  <td><call draw_label(lang.label.login)></td>
+
+  <td><call draw_label(u.login)>
+      <switch config.WEBSHELL>
+        <case "3">
+          <call draw_tlink(config.CLIENT_CP_URL+"?template_name=submit/quick/choice_webshell3.sbm"+"&weblogin="+u.login+"&webpasswd="+u.password+"&host="+u.host.name, "_blank", lang.unixuser.webshell3)><call draw_help("user-ftpuser-webshell","")>
+          <break>
+        <case "4">
+          <call draw_tlink(config.CLIENT_CP_URL+"?template_name=submit/quick/choice_webshell4.sbm"+"&weblogin="+u.login+"&webpasswd="+u.password+"&host="+u.host.name, "_blank", lang.unixuser.webshell4)><call draw_help("user-ftpuser-webshell","")>
+          <break>
+        <default>
+          <call draw_tlink(config.CLIENT_CP_URL+"?template_name=quick/choice_webshell.html", "_blank", lang.unixuser.webshell)><call draw_help("user-ftpuser-webshell","")>&nbsp;
+          <break>
+      </switch>
+  </td>
+</tr>
+<tr>
+   <td><call draw_tt_help(u,"","")></td>
+   <td><call draw_label(lang.label.password)></td>
+   <td><call draw_change(config.CLIENT_CP_URL+"?template_name=winuser/change.html&rid="+u+"&ftemplate="+template+"&stemplate="+template, lang.label.changepassword)></td>
+</tr>
+<if account.plan.isResourceAvailable("ftp_user_traffic")>
+<assign ftp_user_traffic = u.getChild("ftp_user_traffic")>
+<if ftp_user_traffic>
+<assign res=ftp_user_traffic.reload>
+</if>
+<tr>
+	<td><call draw_tt_help(ftp_user_traffic,"","")></td>
+        <td><call draw_label(lang.unixuser.ftptransfer)></td>
+        <td><call draw_label(toolbox.compose(lang.label.traffic.used, ftp_user_traffic.text_traffic))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, ftp_user_traffic.start_date))></td>
+</tr>
+</if>
+
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-group","")></td>
+   <td><call draw_label(lang.label.group)></td>
+   <td><call draw_label(u.group)></td>
+</tr>
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-homedir","")></td>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td><call draw_label(u.dir)></td>
+</tr>
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-hostname","")></td>
+   <td><call draw_label(lang.label.hostname)></td>
+   <td><call draw_label(u.host.name)></td>
+</tr>
+<assign domains=u.getChildren("domain")>
+<if domains>
+  <tr>
+     <td    valign="top" nowrap><list domains as domain><call draw_tt_help(domain,"","")><br></list></td>
+     <td><call draw_label(lang.label.dname)></td>
+     <td    valign="top" nowrap><list domains as domain><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)> <call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain, lang.unixuser.editdomain)> <call draw_preview("http://"+ domain.name, lang.unixuser.preview)><br></list></td>
+  </tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/winuser/viewsub.html  -->

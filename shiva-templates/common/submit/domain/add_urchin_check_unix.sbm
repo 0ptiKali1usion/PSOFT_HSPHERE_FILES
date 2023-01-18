@@ -1,0 +1,33 @@
+<!-- BEGIN ./submit/domain/add_urchin_check_unix.sbm  -->
+<assign hosting=account.getResource(request.rid)>
+<assign notfree="0">
+<assign type="urchin">
+<assign trans=hosting.getChild("transferlog")>
+<if !trans>
+    <assign trans=hosting.addChild("transferlog","simple")>
+</if>
+<assign urchin_price = trans.estimateCreate("urchin", "")>
+<if urhin_price.status!="ERROR">
+  <if urchin_price.free=="0">
+    <assign notfree="1">
+    <assign setup=urchin_price.setup>
+    <assign recurrent=urchin_price.recurrent>
+    <assign recurrentAll=urchin_price.recurrentAll>
+  </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.urchin,""))>
+  <assign res = session.addMessage(urchin_price.msg)>
+  <assign failure="1">
+</if>
+
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/urchin_add_confirm.html">
+  <else>
+    <include "submit/domain/add_urchin_submit_unix.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/domain/add_urchin_check_unix.sbm  -->

@@ -1,0 +1,16 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="${design.color("bgcolor")}">
+<assign reseller=account.getChild("reseller")>
+<FORM name="login" action="${reseller.admin.CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="action" value="login">
+<input type="hidden" name="login" value="${reseller.admin.login}">
+<input type="hidden" name="password" value="${reseller.adm_password}">
+</FORM>
+ 
+<SCRIPT language="javascript">
+ document.login.submit();
+</SCRIPT>
+</BODY>
+</HTML>

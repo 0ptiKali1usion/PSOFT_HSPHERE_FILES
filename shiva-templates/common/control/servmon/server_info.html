@@ -1,0 +1,9 @@
+<!-- BEGIN ./common/control/servmon/server_info.html -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver = eeman.getPserver(request.server_id)>
+<if pserver.os_type == "2">
+  <include "control/servmon/server_info_win.html">
+<else>
+  <include "control/servmon/server_info_unix.html">
+</if>
+<!-- END ./common/control/servmon/server_info.html -->

@@ -1,0 +1,31 @@
+<!-- BEGIN ./domain/webservice_restart_check.sbm  -->
+
+<assign u=account.getResource(request.rid)>
+<assign domain = u.parent>
+<assign ip = domain.getChild("ip")>
+
+<if (domain.type=="domain_alias") || (domain.type=="3ldomain_alias")>
+    <assign a_records=domain.dns_zone.getChildren("domain_alias_a_record")>
+<else>
+    <assign a_records=ip.getChildren("a_record")>
+</if>
+
+<assign vhIP=ip.ip>
+
+<list a_records as a_record>
+  <if !dns_not_equal_vhIP>
+   <if vhIP!=a_record.data>
+        <assign dns_not_equal_vhIP = "web">
+   </if>
+  </if>
+</list>
+<assign rid=request.rid>
+
+<if !dns_not_equal_vhIP>
+    <include "submit/domain/webservice_restart.sbm">
+<else>
+    <assign stemplate=request.stemplate>
+    <include "./domain/dns_not_equal_vhIP.html">
+</if>
+
+<!--  END ./domain/webservice_restart_check.sbm  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./PGSQL/databases.html.in  -->
+  <assign template="PGSQL/databases.html">
+<include "functions">
+<assign pgsql=account.getChild("pgsql")>
+<assign databases=pgsql.findAllChildren("pgsqldatabase")>
+<assign users=pgsql.findAllChildren("pgsqluser")>
+<if users>
+  <call draw_menu("pgsql-dbs")>
+  <include "control/PGSQL/databases.html">
+  <call bottom()>
+<else>
+  <include "PGSQL/add_user.html">
+</if>
+<!--  END ./PGSQL/databases.html.in  -->

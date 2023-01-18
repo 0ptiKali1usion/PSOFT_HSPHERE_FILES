@@ -1,0 +1,7 @@
+<assign result=account.turnTooltips(request.state)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>

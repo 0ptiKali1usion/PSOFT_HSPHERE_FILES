@@ -1,0 +1,13 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+<compress>
+  <assign zone=domain.dns_zone>
+  <assign slave1=zone.slave1>
+  <assign slave2=zone.slave2>
+</compress>
+${lang.massmail.transfer_text(domain.name)}
+
+${lang.massmail.transfer_dns}
+${lang.massmail.transfer_domain} ${domain.name}
+${lang.massmail.transfer_server1} ${zone.master.name} ${toolbox.int2ext(zone.master.ip)}
+<if slave1>${lang.massmail.transfer_server2} ${slave1.name} ${toolbox.int2ext(slave1.ip)}</if>
+<if slave2>${lang.massmail.transfer_server3} ${slave2.name} ${toolbox.int2ext(slave2.ip)}</if>

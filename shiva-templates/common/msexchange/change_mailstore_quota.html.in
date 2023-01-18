@@ -1,0 +1,35 @@
+<!-- BEGIN ./msexchange/change_mailstore_quota.html.in  -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/change_mailstore_quota.html", "he-users")>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.unixuser.changequota.header)>
+<tr><td><call draw_label(lang.unixuser.changequota.newquota)></td><td>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_quota" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/change_quota_check.sbm">
+<input type="hidden" name="next_template" value="msexchange/change_mailstore_quota.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="type" value="mailstore">
+<input type="hidden" name="bizorg" value="${request.bizorg}">
+<input type="hidden" name="used" value="${request.used}">
+
+
+<assign quota=account.getResource(request.rid)>
+
+<input type="text" name="size"  label="${lang.label.quota}" check="vQuota" size="5" value="${quota.size}">&nbsp;<call draw_label(lang.unixuser.changequota.mb)></td>
+
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>
+    <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--  END ./msexchange/change_mailstore_quota.html.in  -->

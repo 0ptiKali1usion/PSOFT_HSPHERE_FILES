@@ -1,0 +1,48 @@
+<!-- BEGIN ./quick/choice_domain.html  -->
+<if (!account.plan.isResourceAvailable("unixuser")) && (account.plan.isResourceAvailable("mail_service"))><assign isMailOnly = "1"></if>
+
+<function draw_domain(domain)>
+<tr>
+	<td><call draw_label(domain.name)></td>
+	<td  width="15%"   >
+<if unixuser.host.platform_type=="win2k">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain, lang.quick.choicedomain.edit)>
+<else>
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain, lang.quick.choicedomain.edit)>
+</if>
+<if !isMailOnly>&nbsp;<call draw_preview_large("http://"+domain.name, lang.quick.choicedomain.preview)></if>
+</td>
+</tr>
+</function>
+
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.quick.choicedomain.select)>
+
+
+<list account.findAllChildren("domain") as domain>
+<call draw_domain(domain)>
+</list>
+<list account.findAllChildren("subdomain") as domain>
+<call draw_domain(domain)>
+</list>
+<list account.findAllChildren("nodomain") as domain>
+<call draw_domain(domain)>
+</list>
+<list account.findAllChildren("3ldomain") as domain>
+<call draw_domain(domain)>
+</list>
+<list account.findAllChildren("service_domain") as domain>
+<call draw_domain(domain)>
+</list>
+<list account.findAllChildren("parked_domain") as domain>
+<call draw_domain(domain)>
+</list>
+
+
+<call draw_table_footer()>
+<!--  END ./quick/choice_domain.html  -->

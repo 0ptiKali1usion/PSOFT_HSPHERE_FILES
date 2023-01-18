@@ -1,0 +1,11 @@
+<center>Disk Space</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The Web box disc space you've run up and the Web box disc <i>quota</i> you can use up; It doesn't include disc space you have got allocated for mailboxes, MySQL and RealMedia.<br>
+*select<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<i>- MySQL Databases</i>, <i>MySQL Database</i>menu to see or change disk space quota for your <i>MySQL Databases</i>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<i>- Mail Info</i>, <i>Mail Info</i> menu to see or change disk space quota for your mailboxes, mail forwards, mailing lists and mail aliases.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Although you might have some free disk space under your plan, you can always purchase some additional disk space or on the contrary decrease your disk space. To change your disk space, click either the <i>Disk Space</i> link or the <i>Change</i> icon.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+When you set your quota to exceed the free amount, you are charged for this difference.
+To learn if you have any free disk space and its amount along with the range of prices, select <i>Online Price</i> in the <i>Billing</i> menu.<br>

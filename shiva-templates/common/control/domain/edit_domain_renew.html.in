@@ -1,0 +1,29 @@
+<!-- BEGIN ./domain/edit_domain_renew.html.in  -->
+<call draw_tooltip()>
+<yafv s_domain>
+
+<assign osrs = account.getResource(request.oid)>
+<form name="f_change_renew"  action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="oid" value="${request.oid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/edit_domain_renew.sbm">
+
+<call draw_table_header("2", lang.label.osrs.renew)>
+
+<tr>
+<td><call draw_label(lang.label.opensrs.renew_mode)></td>
+
+<td>
+<input type="radio" value="auto" name="mode" <if osrs.isAutoRenew>CHECKED</if>><call draw_label(lang.label.opensrs.auto_renew)>&nbsp;<input type="text" size="2" name="renew_period" value="${osrs.renew}">&nbsp;<input type="radio" value="manual" name="mode" <if !osrs.isAutoRenew>CHECKED</if>><call draw_label(lang.label.opensrs.manual_renew)>
+</td>
+</tr>
+    
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/edit_domain_renew.html.in  -->

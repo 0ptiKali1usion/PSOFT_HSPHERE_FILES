@@ -1,0 +1,43 @@
+<assign generalMaintainer=account.getChild("generalMaintainer")>
+<assign result=generalMaintainer.reload()>
+<assign contract=generalMaintainer.contract>
+<H2>Contrat</H2>
+<table BORDER  bordercolor="${design.color("border_color")}" border="2">
+<td align=right><b>Contract ID</b></td><td align = left>${contract.contract_id}</td></tr>
+<tr><td class="control_align_right"><b>Company</b></td><td>${contract.company}</td></tr>
+<tr><td class="control_align_right"><b>Description</b></td><td>${contract.description}</td></tr>
+<tr>
+   <td align=right><b>Count admins</b></td>
+   <td align=left>${contract.count_admins}</td>
+</tr>
+<tr>
+   <td align=right><b>Count Maintainers</b></td>
+   <td align=left>${contract.count_maintainers}</td>
+</tr>
+</table>
+<table border="2" bordercolor="${design.color("border_color")}"  cellspacing="0">
+    <tr>
+    <td><b>User name</b></td>
+    <td><b>User email</b></td>
+    <td><b>Created</b></td>
+    <td><b>Admin name</b></td>
+    <td><b>Admin email</b></td>
+    <td><b>Accepted</b></td>
+    <td><b>Hours</b></td>
+    <td><b>Max hours</b></td>
+    <td><b>Closed</b></td>
+    </tr>
+    <list contract.tasks as task>
+    <tr>
+    <td>${task.account_info.user_name}</td>
+    <td>${task.account_info.ci.email}</td>
+    <td>${task.created}</td>
+    <td>${task.admin_info.user_name}</td>
+    <td>${task.admin_info.ci.email}</td>
+    <td>${task.accepted}</td>
+    <td>${task.hours}</td>
+    <td>${task.max_hours}</td>
+    <td>${task.closed}</td>
+    </tr>
+    </list>
+</table>

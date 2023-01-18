@@ -1,0 +1,52 @@
+<!-- BEGIN ./eeman/add_ip_lserver_submit.html  -->
+<!--${request.flag} -->
+<if !request.to || (request.flag!="0" && request.flag!="5" && request.flag!="7" && request.flag!="1000")><assign ip_to=request.from><else><assign ip_to=request.to></if>
+<assign result=yafv.checkall(
+yafv.common.s_eeman.vIPAddr(lang.label.from,request.from),
+yafv.common.s_eeman.vIPAddrOpt(lang.label.to,ip_to),
+yafv.common.s_eeman.vIPMask(lang.eeman.mask,request.mask),
+yafv.common.s_eeman.vIPTagOpt(lang.eeman.ip_tag,request.tag)
+)>
+<if result.status=="OK">
+ <if request.flag=="2">
+  <if !request.tag><assign ip_tag="2"><else><assign ip_tag=request.tag></if>
+ <else>
+  <assign ip_tag=request.flag>
+ </if>
+ <assign eeman = account.getChild("eeman")>
+ <assign lserver=eeman.getLserver(request.rid)>
+
+ <if request.flag == "1000">
+ 	<assign subnet_mask = eeman.getSubnetMaskByIP(request.from)>
+ 	<if subnet_mask>
+ 		<assign result=lserver.addIPRange(request.from, ip_to, subnet_mask, ip_tag)>
+ 		 <if result.status!="OK">
+  			<assign res=session.addMessage(result.msg)>
+			<assign failure="1">
+ 		</if>
+ 	<else>
+		<assign res=session.addMessage(lang.eeman.net_gateway.subnet_not_set(request.from))>
+		<assign failure="1">
+ 	</if>
+ <else>
+ 	<assign result=lserver.addIPRange(request.from, ip_to, request.mask, ip_tag)>
+ 	<if result.status!="OK">
+  		<assign res=session.addMessage(result.msg)>
+		<assign failure="1">
+ 	</if>
+ </if>
+<else>
+ <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+ <assign failure="1">
+</if>
+<if failure>
+ <assign vfrom=toolbox.html_encode(request.from)>
+ <assign vto=toolbox.html_encode(ip_to)>
+ <assign vflag=request.flag>
+ <assign vtag=toolbox.html_encode(request.tag)>
+ <assign vmask=toolbox.html_encode(request.mask)>
+ <include request.ftemplate>
+<else>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/add_ip_lserver_submit.html  -->

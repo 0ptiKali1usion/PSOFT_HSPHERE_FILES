@@ -1,0 +1,14 @@
+<!-- BEGIN ./admin/merchant/PayAndShop.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+<assign result=mm.update(request.mid, "TITLE", request.title, "MERCHANT_ID", request.merchant_id, "SECRET", request.secret, "ACCOUNT", request.account, "CURRCODE", request.curr_code, "CLASS_NAME", "psoft.epayment.PayAndShop","TEMPLATE", "admin/merchant/PayAndShop.html")>
+<else>
+<assign result=mm.new("TITLE", request.title, "MERCHANT_ID", request.merchant_id, "SECRET", request.secret, "ACCOUNT", request.account, "CURRCODE", request.curr_code, "CLASS_NAME", "psoft.epayment.PayAndShop", "TEMPLATE", "admin/merchant/PayAndShop.html")>
+</if>
+<if result>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+<else>
+<include request.stemplate>
+</if>
+<!-- END ./admin/merchant/PayAndShop.sbm -->

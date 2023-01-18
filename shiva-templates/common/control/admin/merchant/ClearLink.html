@@ -1,0 +1,31 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/ClearLink.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.clearlink)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.clearlink}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.clearlink.config)></td><td><input type="text" name="conffile" value="<if merchant>${merchant.CONFIG_FILE}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.clearlink.key)></td><td><input type="text" name="keyfile" value="<if merchant>${merchant.KEY_FILE}<else>/hsphere/shared/ssl/cert.pem</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="host" value="<if merchant>${merchant.HOST}<else>secure.linkpt.net</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>1129</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.avs)></td>
+<if merchant><assign avs=merchant.AVS><else><avc="N"></if>
+<td><select name="avs">
+<option value="F" <if avs=="F">SELECTED</if>>${lang.admin.signio.avsfull}
+<option value="M" <if avs=="M">SELECTED</if>>${lang.admin.signio.avsmedium}
+<option value="L" <if avs=="L">SELECTED</if>>${lang.admin.signio.avslight}
+<option value="N" <if avs=="N">SELECTED</if>>${lang.admin.signio.avsnone}
+</select></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.test)></td><td><select name="mode"><option>FALSE<option<if merchant && merchant.MODE=="TRUE"> selected</if>>TRUE</select></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+</form>
+
+<call draw_table_footer()>

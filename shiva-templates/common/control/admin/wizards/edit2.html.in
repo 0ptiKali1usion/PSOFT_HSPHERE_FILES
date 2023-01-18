@@ -1,0 +1,252 @@
+<!-- BEGIN ./control/admin/wizards/edit2.html.in  -->
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign isReseller=admin.isReseller()>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign changer=admin.getPlanChanger(plan.id)>
+<assign cursym = toolbox.getCurrencySymbol()>
+<assign wizard = changer.getWizard()>
+
+<call draw_tooltip()>
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" name="f_wizard" method="POST" check! accept-charset="UTF-8">
+<if request.periods>
+<input type="hidden" name="periods" value="${request.periods}">
+
+<if request.trial!="0" && plan.values["_EMULATION_MODE"]!="1">
+  <input type="hidden" name="stemplate" value="admin/wizards/edit3.html">
+<else>
+  <input type="hidden" name="stemplate" value="admin/plans.html">
+</if>
+<else>
+<input type="hidden" name="stemplate" value="admin/plans.html">
+</if>
+<input type="hidden" name="template_name" value="submit/admin/wizards/edit2.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_name" value="${toolbox.html_encode(plan.description)}">
+
+<list wizard.categories.category as cat>
+<call memCat(cat)>
+</list>
+<function memCat(cat)><list cat["*"] as r><call memElement(r)></list></function>
+<function memElement(r)>
+<switch r.node_name>
+<case "resource">
+  <call mem("i_"+r("name"))>
+  <call mem("e_"+r("name"))>
+  <list r.field as field>
+    <call mem(field("name"))>
+  </list>
+  <break>
+<case "LogicalGroup">
+  <call mem(r("name"))>
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name"))><call memCat(r)></if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))><call memCat(r)></if>
+  <break>
+</switch>
+</function>
+
+<call mem("plan_id")>
+<call mem("homedir")>
+<call mem("mixedip")>
+<call mem("shared_ip_tag")>
+<call mem("idomain_alias")>
+<call mem("idomain_alias_prefix")>
+<call mem("iparent_host")>
+<call mem("iparent_host_number_prefix")>
+<call mem("calias")>
+<call mem("stopgapalias")>
+<call mem("trial")>
+<call mem("trial_duration")>
+<call mem("trial_credit")>
+<call mem("hard_credit")>
+<call mem("money_back_days")>
+<call mem("money_back")>
+<call mem("send_invoice")>
+<call mem("steps")>
+
+<list params as param><if toolbox.startsWith(param.name, "_TLD_") == "1" ||
+  toolbox.startsWith(param.name, "_TRANSFER_") == "1" ||
+  toolbox.startsWith(param.name, "_PSSL_") == "1" || 
+  toolbox.startsWith(param.name, "DST_") == "1" ||
+  toolbox.startsWith(param.name, "_DST_") == "1">
+    <input type="hidden" name="${param.name}" value="${param.value}"></if></list>
+
+<if request.trial=="0" || plan.values["_EMULATION_MODE"]=="1">
+  <assign wizard_steps="2">
+<else>
+  <assign wizard_steps=request.steps>
+</if>
+<call draw_table_header("2", lang.planeditor.header(lang[wizard("description")], "2", wizard_steps))>
+
+<tr >
+  <td><call draw_label(lang.planeditor.plan_name)></td>
+  <td><call draw_label(plan.description)></td>
+</tr>
+<tr >
+<td colspan="2"><call draw_label(lang.planeditor.text1)></td>
+</tr>
+<call header(lang.planeditor.prices)>
+
+<list wizard.categories.category as cat>
+<if cat("description")><call header(lang[cat("description")])></if>
+<call listCat(cat)>
+</list>
+
+<function listCat(cat)>
+<list cat["*"] as r>
+<call displayElement(r)>
+</list>
+</function>
+
+<function displayElement(r)>
+<switch r.node_name>
+<case "resource">
+  <if (request["i_"+r("name")] || (r("required") == "1"))
+  	&& (!isReseller || (r("adminonly") != "1")) && (r("noprice") != "1")
+	&& toolbox.getResourcePriceType(toolbox.getTypeId(r("name")))>
+    <assign free_unit=r("unit")>
+    <if free_unit && (toolbox.startsWith(free_unit, "#lang.") == "1")>
+        <assign uparams = toolbox.tokenizer(toolbox.substring(free_unit, 6), "|")>
+        <assign free_unit = lang[uparams[0]][request[uparams[1]]]>
+    </if>
+    <if free_unit>
+        <assign cur=cursym+"/"+free_unit>
+    <else>
+        <assign cur=cursym>
+    </if>
+    <call servicePrice(r, cur, free_unit)>
+  </if>
+  <break>
+<case "LogicalGroup">
+<!-- logical group - do nothing -->
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name")) && request["i_"+r("name")]>
+    <if r("description")><call header(lang[r("description")])></if>
+    <call listCat(r)>
+  </if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))>
+    <call listCat(r)>
+  </if>
+  <break>
+</switch>
+</function>
+
+<tr >
+<if request.periods>
+ <td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+<else>
+ <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</if>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+
+<function header(topic)>
+<tr>
+ <td colspan="2" class="control_header_align_center">
+   <call draw_header(topic)>
+ </td>
+</tr>
+</function>
+
+
+<function servicePrice(r_node, unit, free_unit)>
+<assign tag = r_node("name")>
+<assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+<assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+<assign rtype = plan.getResourceType(tag)>
+<assign free_inpt_name = "f_" + tag>
+<assign check_free_label = name + " (" + lang.planeditor.free + ")">
+<assign check_free_req_val = r_node("check_free_req")>
+<assign check_free_opt_val = r_node("check_free_opt")>
+
+<if request.trial == "0" || plan.values["_EMULATION_MODE"]=="1">
+  <if toolbox.consists(priceType,"M")=="1">
+    <tr >
+      <td><call draw_label(name)></td>
+      <td nowrap>
+         <if failure && oldValues["f_"+tag]>
+            <assign vf=toolbox.html_encode(oldValues["f_"+tag])>
+         <else>
+          <assign vf=toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"],"false")>
+        </if>
+        <call draw_label(lang.planeditor.free)>&nbsp;
+        <input type="text" name="f_${tag}" size="5" value="${vf}" label="${name} (${lang.planeditor.free})" check="vPriceReq"><if free_unit>&nbsp;<call draw_label(free_unit)>&nbsp;</if>
+      </td>
+    </tr>
+  </if>
+<else>
+
+<tr >
+<td nowrap><call draw_label(name)></td>
+<td nowrap>
+    <if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+        <if failure && oldValues["f_"+tag]>
+          <assign vf=toolbox.html_encode(oldValues["f_"+tag])>
+        <else>
+          <assign vf=toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"],"false")>
+        </if>
+        <call draw_label(lang.planeditor.free)>&nbsp;
+        <if toolbox.consists(priceType,"F")=="1">
+	  <if check_free_opt_val>
+	    <input type="text" name="${free_inpt_name}" size="5" value="${vf}" label="${check_free_label}" check="${check_free_opt_val}">
+	  <else>
+            <input type="text" name="${free_inpt_name}" size="5" value="${vf}" label="${check_free_label}" check="vPriceOpt">
+          </if>
+        <else>
+	  <if check_free_req_val>
+	    <input type="text" name="${free_inpt_name}" size="5" value="${vf}" label="${check_free_label}" check="${check_free_req_val}">
+	  <else>
+            <input type="text" name="${free_inpt_name}" size="5" value="${vf}" label="${check_free_label}" check="vPriceReq">
+	  </if>
+	</if>
+        <if free_unit>&nbsp;<call draw_label(free_unit)>&nbsp;</if>
+    </if>
+    <if toolbox.consists(priceType,"S")=="1">
+       <if failure && oldValues["s_"+tag]>
+            <assign vs=toolbox.html_encode(oldValues["s_"+tag])>
+       <else>
+            <assign vs=toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"],"false")>
+       </if>
+        <call draw_label(lang.planeditor.setup)>&nbsp;<input type="text" name="s_${tag}" size="5" value="${vs}" label="${name} (${lang.planeditor.setup})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+    </if>
+    <if toolbox.consists(priceType,"R")=="1">
+       <if failure && oldValues["m_"+tag]>
+          <assign vm=toolbox.html_encode(oldValues["m_"+tag])>
+       <else>
+          <assign vm=toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"],"false")>
+       </if>
+       <call draw_label(lang.planeditor.monthly)>&nbsp;<input type="text" name="m_${tag}" size="5" value="${vm}" label="${name} (${lang.planeditor.monthly})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+    </if>
+    <if toolbox.consists(priceType,"U")=="1">
+      <if failure && oldValues["u_"+tag]>
+	<assign vu=toolbox.html_encode(oldValues["u_"+tag])>
+      <else>
+	<assign vu=toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"],"false")>
+      </if>
+      <call draw_label(lang.planeditor.extra)>&nbsp;<input type="text" name="u_${tag}" size="5" value="${vu}" label="${name} (${lang.planeditor.extra})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+    </if>
+    <input type="hidden" name="ref_${tag}" value="${toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"],"false")}">
+</td>
+</tr>
+</if>
+</function>
+
+<function mem(name)>
+<if request[name]>
+<input type="hidden" name="${name}" value="${request[name]}">
+</if>
+</function>
+
+</if>
+<!-- END ./control/admin/wizards/edit2.html.in  -->

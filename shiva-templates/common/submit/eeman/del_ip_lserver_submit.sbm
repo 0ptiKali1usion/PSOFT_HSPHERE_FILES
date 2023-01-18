@@ -1,0 +1,9 @@
+<!-- BEGIN ./eeman/del_ip_lserver_submit.html  -->
+<assign eeman = account.getChild("eeman")>
+<assign lserver=eeman.getLserver(request.rid)>
+<assign result=lserver.delIPRange(request.from, request.to, request.flag)>
+<if result.status!="OK">
+    <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!--  END ./eeman/del_ip_lserver_submit.html  -->

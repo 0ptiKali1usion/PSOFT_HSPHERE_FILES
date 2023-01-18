@@ -1,0 +1,42 @@
+<!-- BEGIN ./winuser/change_quota_check.sbm  -->
+<assign result=yafv.common.s_unixuser.vQuota(lang.label.quota, request.size)> 
+<if result.status == "OK">
+  <assign u=account.getResource(request.rid)>
+  <assign quota=u.getChild("quota")>
+  <if quota>
+   <if toolbox.gt(quota.usedMb,request.size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.failed_set_smallquota, request.size, quota.usedMb))>
+       <assign failure="1">
+   <else>
+   	<assign price=quota.estimateChange(request.size)>
+	 <if price.status!="ERROR">
+	    <assign success = "1">
+         <else>
+  	    <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  	    <assign res = session.addMessage(price.msg)>
+  	    <include request.ftemplate>
+	 </if>
+   </if>
+  <else>
+    <assign price=u.estimateCreate("quota","",request.size)>
+    <if price.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(price.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if failure>
+    <assign vsize=toolbox.html_encode(request.size)>
+    <include request.ftemplate>
+<else>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>    
+</if>
+<!--  END ./winuser/change_quota_check.sbm  -->

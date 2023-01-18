@@ -1,0 +1,66 @@
+<!-- BEGIN: common/submit/admin/wizards/checkvalues.sbm -->
+<compress>
+<assign ops=wizard.options>
+<if request.wizard>
+<call check(yafv.common.s_wizard.vPlanName(
+             lang.planeditor.plan_name, request.plan_name))>
+</if>
+
+<if ops("sharediptag")=="1">
+<call check(yafv.common.s_wizard.vSharedIPTag
+    (lang.label.shared_ip_tag,request.shared_ip_tag))>
+</if>
+
+<if wizard.billable>
+<call check(yafv.common.s_wizard.vMoneyBack(
+            lang.planeditor.money_back, request.money_back_days, request.money_back))>
+<call check(yafv.common.s_wizard.vDurationRel(
+            lang.planeditor.trial_duration,
+            request.trial_duration,
+            request.trial))>
+<call check(yafv.common.s_wizard.vPriceRel(
+             lang.planeditor.trial_credit_limit,request.trial_credit,request.trial))>
+</if>
+
+<if ops("ialias")=="1">
+<if !request.calias>
+    <assign res=session.addMessage(lang.msg.plan_requred_define_dns)>
+    <assign failure="1">
+</if>
+<if !request.stopgapalias>
+    <assign res=session.addMessage(lang.msg.plan_requred_define_dns)>
+    <assign failure="1">
+</if>
+</if>
+
+<list wizard.categories.category as cat><list cat["*"] as r>
+  <if (r.node_name == "resource") && (request["i_"+r("name")] || r("required") == "1") && (!isReseller || (r("adminonly") != "1"))>
+    <list r.field as field>
+      <if (field("type") == "input") && (field("check") != "")>
+	<assign f_name = field("name")>
+	<if field("label")><assign label = lang[field("label")]><else><assign label = f_name></if>
+	<if field("check_include")>
+	  <call check(yafv.common.s_wizard[field("check")](label, request[f_name], request["i_" + r("name")]))>
+	<else>
+	  <call check(yafv.common.s_wizard[field("check")](label, request[f_name]))>
+	</if>
+      </if>
+    </list>
+  </if>
+</list></list>
+
+<if !failure>
+    <assign vplan_name=toolbox.html_encode(request.plan_name)>
+    <assign vhomedir=toolbox.html_encode(request.homedir)>
+    <assign vmixedip=toolbox.html_encode(request.mixedip)>
+    <assign vshared_ip_tag=toolbox.html_encode(request.shared_ip_tag)>
+</if>
+
+<function check(result)>
+  <if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</function>
+</compress>
+<!-- END:  common/submit/admin/wizards/checkvalues.sbm -->

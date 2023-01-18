@@ -1,0 +1,289 @@
+<!-- BEGIN ./domain/registration.html.in  -->
+<call draw_tooltip()>
+<assign unixuser = account.getChild("unixuser")>
+<if unixuser>
+  <assign rid = unixuser>
+<else>
+  <assign rid = account.id>
+</if>
+
+<yafv s_domain>
+
+<assign is_opensrs=account.plan.isResourceAvailable("opensrs")>
+<assign is_domain_transfer=account.plan.isResourceAvailable("domain_transfer")>
+
+<if is_opensrs>
+  <assign tlds = toolbox.getActiveTLDs()>
+  <if tlds && tlds.size != "0">
+    <list tlds as tld>
+	<assign years = toolbox.getYearsByTLDAndPlan(tld, account.planId)>
+	<!-- TLD ${tld} configured years ${years.size} -->
+        <if years.size != "0">
+	    <assign allow_domain_registration = "1">
+        </if>
+    </list>
+  </if>
+</if>
+
+<if is_domain_transfer>
+  <assign transfer_tlds = toolbox.getActiveTransferTLDs()>
+  <if transfer_tlds && transfer_tlds.size != "0">
+    <assign allow_domain_transfer="1">
+  </if>
+</if>
+
+
+<if allow_domain_registration>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_registration_osrs" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/domain/registration_osrs.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<call draw_table_header("2", lang.domain.registration.header)>
+
+<if (account.bi.type != "TRIAL") && (!account.plan.isDemoPlan())>
+<tr>
+        <td   colspan="2"><call draw_label(lang.domain.registration.type)></td>
+</tr>
+<tr>
+        <td><call draw_label(lang.label.dname)></td>
+        <td  NOWRAP ><call draw_label("www.")><input type="text" name="domain_name" label="${lang.label.dname}" value="${domain_name}" check="vNewDomainName"><b>.</b>
+	<assign tlds = toolbox.getActiveTLDs()>
+	<select name="tld">
+	<list tlds as tld1>
+	<option <if tld==tld1> SELECTED</if>>${tld1}</option>
+	</list>
+	</select>
+	</td>
+</tr>
+<tr>
+    <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<else>
+<tr>
+  <td  colspan="2" >
+    <if account.bi.type == "TRIAL"><call draw_label(lang.domain.registration.notavailable)>
+    <else><call draw_label(lang.domain.registration.indemonotavailable)></if>
+</td>
+</tr>
+</if>
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+
+
+<if allow_domain_transfer>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_domain_transfer" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/domain/domain_transfer.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<call draw_table_header("2", lang.domain.transfer.header)>
+
+<if (account.bi.type != "TRIAL") && (!account.plan.isDemoPlan())>
+<tr>
+        <td   colspan="2"><call draw_label(lang.domain.transfer.type)></td>
+</tr>
+<tr>
+        <td><call draw_label(lang.label.dname)></td>
+        <td  NOWRAP ><call draw_label("www.")><input type="text" name="domain_name" label="${lang.label.dname}" value="${domain_name}" check="vNewDomainName"><b>.</b>
+	<assign tlds = toolbox.getActiveTLDs()>
+	<select name="tld">
+	<list transfer_tlds as tld1>
+	<option <if tld==tld1> SELECTED</if>>${tld1}</option>
+	</list>
+	</select>
+	</td>
+</tr>
+<tr>
+    <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<else>
+<tr>
+  <td  colspan="2" >
+    <if account.bi.type == "TRIAL"><call draw_label(lang.domain.registration.notavailable)>
+    <else><call draw_label(lang.domain.registration.indemonotavailable)></if>
+</td>
+</tr>
+</if>
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+
+
+<if account.plan.isResourceAvailable("domain")>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_registration_other" check! accept-charset="UTF-8">
+
+<!--<input type="hidden" name="template_name" value="submit/domain/registration_transfer.sbm">-->
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+<input type="hidden" name="next_template" value="submit/domain/registration_transfer.sbm">
+<input type="hidden" name="type" value="domain">
+<input type="hidden" name="rid" value="${rid}">
+<input type="hidden" name="mod" value="">
+
+<call draw_table_header("2", lang.domain.registration.other)>
+<tr>
+  <td  colspan="2"><call draw_label(lang.domain.registration.order)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td  NOWRAP><call draw_label("www.")><input type="text" name="domain_name" value="${vdomain_name}" label="${lang.label.dname}" check="vTransferDomainName"></td>
+</tr>
+<tr>
+  <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>  
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+
+<assign zones=toolbox.hosted_zones>
+<if account.plan.isResourceAvailable("3ldomain") && zones>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_3l_registration" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<input type="hidden" name="next_template" value="submit/domain/register_3ldomain.sbm">
+<input type="hidden" name="type" value="3ldomain">
+<input type="hidden" name="rid" value="${rid}">
+<input type="hidden" name="mod" value=""> 
+
+<call draw_table_header("2", lang.domain.registration.third)>
+ 
+<tr>
+  <td   colspan="2"><call draw_label(lang.domain.registration.thirdorder)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td  NOWRAP><call draw_label("www.")>
+   <input label="${lang.label.dname}" name="third_l_domain_name" type="text" value="${v3ldomain_name}" check="v3LDomainName">
+   <select name="domain_zone" size=1>
+    <assign selected="SELECTED">
+    <list zones as zone>
+     <if (vdomain_zone) && (zone.name == vdomain_zone)>
+        <assign selected="SELECTED">
+     </if>
+     <option VALUE="${zone.name}" ${selected}>${zone.name}</option>
+     <assign selected="">
+    </list>
+   </select>
+  </td>
+</tr>
+<tr>
+  <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+
+<if account.plan.isResourceAvailable("nodomain")>
+<assign nodomain=account.findChild("nodomain")>
+<if !nodomain>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_nodoman_registration" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<input type="hidden" name="next_template" value="submit/domain/register_nodomain.sbm">
+<input type="hidden" name="type" value="nodomain">
+<input type="hidden" name="rid" value="${rid}">
+<input type="hidden" name="mod" value="">
+
+<call prepare_table_header("2", lang.domain.registration.stopgap)>
+<call add_table_header_help("user-ds_adddomain-stopgap","")>
+<call draw_table_header_prepared()>
+ 
+<tr>
+  <td   colspan="2"><call draw_label(lang.domain.registration.stopgaptext)></td>
+</tr>
+<tr>
+  <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("parked_domain")>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_park_domain" check! accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+<input type="hidden" name="next_template" value="submit/domain/registration_park.sbm">
+<input type="hidden" name="type" value="parked_domain">
+<input type="hidden" name="rid" value="${rid}">
+<input type="hidden" name="mod" value="parked">
+
+<call prepare_table_header("2", lang.domain.registration.park)>
+<call add_table_header_help("user-ds_adddomain-domainparking","")>
+<call draw_table_header_prepared()>
+<tr>
+  <td   colspan="2"><call draw_label(lang.domain.registration.parkorder)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td  NOWRAP><input type="text" name="domain_name" value="${vdomain_name}" label="${lang.label.dname}" check="vTransferDomainName"></td>
+</tr>  
+<tr>
+  <td><call draw_label(lang.domain.registration.ip)></td>
+  <td  NOWRAP><input type="text" name="domain_ip" value="${vdomain_ip}" label="${lang.domain.registration.ip}" check="vIPAddr"></td>
+</tr>
+<tr>
+  <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>  
+<call draw_table_footer()>
+</form>
+&nbsp;
+</if>
+
+
+<assign zones=toolbox.free_zones>
+<if account.plan.isResourceAvailable("service_domain") && zones>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_service_registration" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/domain/register_service_domain.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+<call prepare_table_header("2", lang.domain.registration.service)>
+<call add_table_header_help("user-ds_adddomain-servicedomain","")>
+<call draw_table_header_prepared()>
+ 
+<tr>
+  <td   colspan="2"><call draw_label(lang.domain.registration.serviceorder)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td  NOWRAP><call draw_label("www.")>
+   <select name="domain_zone" size=1>
+    <assign selected="SELECTED">
+    <list zones as zone>
+     <option VALUE="${zone.name}" ${selected}>${zone.name}</option>
+     <assign selected="">
+    </list>
+   </select>
+  </td>
+</tr>
+<tr>
+  <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+
+<!--  END ./domain/registration.html.in  -->

@@ -1,0 +1,27 @@
+<!--BEGIN ./submit/odbc/update_dsn.sbm-->
+<assign dsn = account.getResource(request.rid)>
+<assign unixuser=account.getChild("unixuser")>
+<assign odbc = unixuser.getChild("odbc")>
+<if (odbc!="") && (dsn!="") && (request.driver_name!="")>
+    <assign updater=dsn.dsn_updater>
+    <list odbc.getDriversParamsList(request.driver_name) as driver_params>
+	<assign key=driver_params.Name>
+	<assign value=request[driver_params.Name]>
+	<assign res=updater( key , value )>	
+    </list>
+    <assign result=updater()>
+    <if result.status!="OK">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_update, lang.label.dsn, ""))>
+        <assign res=session.addMessage(result.msg)>
+	<assign unsuccess="1">
+    </if>
+<else>
+    <assign unsuccess="1">
+</if>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--END ./submit/odbc/update_dsn.sbm-->

@@ -1,0 +1,24 @@
+<!-- BEGIN ./windomain/add_cf_entry.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_windomain.vfileExt(lang.label.file_ext, request.ext))>
+<if result.status=="OK">
+  <assign hosting=account.getResource(request.rid)>
+  <assign cf=hosting.getChild("cf")>
+  <assign result=cf.addChild("cfentry", "", request.ext)>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.cf_ext,request.ext))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vext=toolbox.html_encode(request.ext)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/add_cf_entry.sbm  -->

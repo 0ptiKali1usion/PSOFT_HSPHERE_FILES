@@ -1,0 +1,68 @@
+<!-- BEGIN ./commont/control/admin/merchant/GestPay.html -->
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/GestPay.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+<call draw_table_header("2", lang.admin.gestpay.header)>
+
+<tr >
+  <td><call draw_label(lang.admin.gestpay.login)></td>
+  <td><input type="text" name="login" value = "${settings.GestPay_LOGIN}"></td>
+</tr>
+
+<assign itaselected = "SELECTED">
+<assign engselected = "">
+<assign esselected = "">
+<assign frselected = "">
+<assign deselected = "">
+
+<switch settings.GestPay_LANGUAGE>
+<case "1"><assign itaselected = "SELECTED"><break>
+<case "2"><assign engselected = "SELECTED"><break>
+<case "3"><assign esselected = "SELECTED"><break>
+<case "4"><assign frselected = "SELECTED"><break>
+<case "5"><assign deselected = "SELECTED"><break>
+</switch>
+
+<tr ><td><call draw_label(lang.admin.epayment.lang)></td>
+<td>
+<select name="language">
+<option value="1" ${itaselected}><call draw_label(lang.misc.langs.italang)></option>
+<option value="2" ${engselected}><call draw_label(lang.misc.langs.englang)></option>
+<option value="3" ${esselected}><call draw_label(lang.misc.langs.eslang)></option>
+<option value="4" ${frselected}><call draw_label(lang.misc.langs.frlang)></option>
+<option value="5" ${deselected}><call draw_label(lang.misc.langs.delang)></option>
+</select>
+</td>
+</tr>
+
+
+<assign liraselected = "">
+<assign euroselected = "">
+
+<switch settings.GestPay_CURRENCY>
+<case "18"><assign  liraselected = "SELECTED"><break>
+<case "242"><assign euroselected = "SELECTED"><break>
+</switch>
+
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td>
+<td>
+<select name="currency">
+<option value="18" ${liraselected}><call draw_label("Italian Lira")></option>
+<option value="242" ${euroselected}><call draw_label("Euro")></option>
+</select>
+</td>
+</tr>
+
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./common/control/admin/merchant/GestPay.html -->
+

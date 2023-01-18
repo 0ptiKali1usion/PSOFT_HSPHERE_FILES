@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/admin/search_ci.html  -->
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/ci_search.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.search_ci_header)>
+
+
+<tr>
+ <td><call draw_label(lang.bci.fname)></td>
+ <td><input type="text" name="sc_first_name"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.lname)></td>
+ <td><input type="text" name="sc_last_name"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.company)></td>
+ <td><input type="text" name="sc_company"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.city)></td>
+ <td><input type="text" name="sc_city"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.state)></td>
+ <td>
+   <select name="sc_state" size="1">
+<option value="" SELECTED>Any
+<call buildStates("NONE")>
+   </select>
+ </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.pcode)></td>
+ <td><input type="text" name="sc_postal_code"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.bci.country)></td>
+ <td>
+   <select name="sc_country" size="1">
+<option value="" SELECTED>Any
+<call buildCountries("NONE")>
+   </select>
+ </td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.search}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/search_ci.html  -->

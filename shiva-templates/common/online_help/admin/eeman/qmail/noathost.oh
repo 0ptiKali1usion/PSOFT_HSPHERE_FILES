@@ -1,0 +1,6 @@
+<center> noathost </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Fully qualified domain email address required in RCPT TO and MAIL FROM smtp commands
+<br>Default: 0 (disabled).
+<br>

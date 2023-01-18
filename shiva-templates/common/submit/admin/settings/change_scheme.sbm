@@ -1,0 +1,38 @@
+<!-- BEGIN ./submit/admin/settings/change_scheme.sbm -->
+<compress>
+<assign design_id = request.design_id>
+<if !color_scheme><assign color_scheme = request.color_scheme></if>
+<if design_id && color_scheme>
+  <assign design_prefix = design.get_design_prefix(design_id)>
+  <assign designHash = design.all_designs[design_id]>
+  <assign colorSetHash = designHash.color_schemes[color_scheme]>
+  <assign colorHash = colorSetHash.colors>
+  <if colorHash>
+    <assign admin = account.getChild("admin")>
+    <list designHash.color_list as color_id>
+      <call save_v(design_prefix + color_id, colorHash[color_id])>
+    </list>
+  <else>
+    <assign failure="1">
+  </if>
+<else>
+  <assign failure="1">
+</if>
+</compress>
+<if !failure>
+  <call save_v(design_prefix + "color_scheme", color_scheme)>
+  <assign image_set = colorSetHash.image_set>
+  <if !image_set><assign image_set = "_clear_"></if>
+  <include "submit/admin/settings/change_image_set.sbm">
+  <assign icon_image_set = colorSetHash.icon_image_set>
+  <if !icon_image_set><assign icon_image_set = "_clear_"></if>
+  <include "submit/admin/settings/change_icon_image_set.sbm">
+  <assign res = design.refreshCurrent()>
+  <include request.stemplate>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.colscheme_failed_change, color_scheme))>
+    <include request.ftemplate>
+</if>
+<function save_v(name,value)><assign res=admin.setSettingsValue(name,value)></function>
+<!-- END ./submit/admin/settings/change_scheme.sbm -->

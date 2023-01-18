@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+</HEAD>
+           <BODY>
+<assign unix_user=account.getChild("unixuser")>
+<form method="POST" action="${config.PATH_SITE_STUDIO}" name="SBLauncher" accept-charset="UTF-8">
+<input type="hidden" name="action" value="useraction">
+<input type="hidden" name="useraction" value="login">
+<input type="hidden" name="requestURL" value="${config.SITE_STUDIO_CLASS}">
+<input type="hidden" name="login" value="">
+<input type="hidden" name="password" value="${unix_user.password}">
+<input name="email" type="hidden" value="">
+<input name="url" type="hidden" value="">
+ 
+<input name="real_login" type="hidden" value="${unix_user.login}">
+<input name="dir" type="hidden" value="">
+<input name="server" type="hidden" value="">
+ 
+<input name="port" type="hidden" value="21">
+</form>
+<script language="javascript">
+     function launchSiteBuilder( login, domain, url, dir, server) {
+        window.document.SBLauncher.login.value=login;
+        window.document.SBLauncher.email.value="webmaster@"+domain;
+        window.document.SBLauncher.url.value="http://"+url+"/";
+        window.document.SBLauncher.dir.value=dir;
+        window.document.SBLauncher.server.value=server;
+        window.document.SBLauncher.submit();
+     }
+    <compress>
+    <assign hosting=account.findChild("hosting")>
+    <assign ip=hosting.parent.getChild("ip")>
+    <if ip.shared == "1">
+       <assign ialias = hosting.getChild("idomain_alias")>
+       <if ialias>
+	  <assign tmp_url=hosting.getChild("idomain_alias").alias>
+       <else>
+          <assign tmp_url=hosting.parent.name>
+       </if>
+    <else>
+       <assign tmp_url=toolbox.int2ext(ip.ip)>
+    </if>
+    <assign login=hosting.parent.id>
+    <assign domain=hosting.parent.name>
+    <if unix_user.host.platform_type=="win2k">
+         <assign dir="/"+unix_user.login+"/"+hosting.local_dir+"/">
+    <else>
+         <assign dir="/"+hosting.local_dir+"/">
+    </if>
+    <assign server = unix_user.host.name>
+    </compress>
+    launchSiteBuilder('${login}', '${domain}', '${tmp_url}', '${dir}', '${server}');
+</script>
+</BODY>
+</HTML>

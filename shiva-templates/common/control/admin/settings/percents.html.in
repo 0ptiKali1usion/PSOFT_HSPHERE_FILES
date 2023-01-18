@@ -1,0 +1,88 @@
+<!-- BEGIN ./control/admin/settings/percents.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<yafv s_admin>
+<form name="f_percents" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/percents.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+<assign twarn = settings["traffic_warn"]><if !twarn><assign twarn="80"></if>
+<assign tsusp = settings["traffic_susp"]><if !tsusp><assign tsusp="120"></if>
+<assign qwarn = settings["quota_warn"]><if !qwarn><assign qwarn="80"></if>
+<assign usage_warn = settings["disk_usage_warn"]><if !usage_warn><assign usage_warn="80"></if>
+<assign usage_susp = settings["disk_usage_susp"]><if !usage_susp><assign usage_susp="120"></if>
+<if settings["dis_twarn"]=="true"><assign check_twarn = "CHECKED"><else><assign check_twarn = ""></if>
+<if settings["enable_tsusp"]=="true"><assign check_tsusp = "CHECKED"><else><assign check_tsusp = ""></if>
+<if settings["dis_qwarn"]=="true"><assign check_qwarn = "CHECKED"><else><assign check_qwarn = ""></if>
+<if settings["dis_disk_usage_warn"]=="true"><assign check_usage_warn = "CHECKED"><else><assign check_usage_warn = ""></if>
+<if settings["enable_disk_usage_susp"]=="true"><assign check_usage_susp = "CHECKED"><else><assign check_usage_susp = ""></if>
+
+<call draw_table_header("2", lang.admin.percents.header)>
+
+<tr>
+<td class="control_header_align_center" colspan="2"><call draw_header(lang.admin.percents.traffic)></td>
+</tr>
+<tr >
+<td colspan="2"><input TYPE="checkbox" VALUE="true" NAME="dis_twarn" ${check_twarn}><call draw_label(lang.admin.percents.dis_twarn)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.percents.perc_twarn)></td>
+<td><input type="text" name="traffic_warn" size="5" value="${twarn}" check="vPositiveIntOpt" label="${lang.admin.percents.perc_twarn}">&nbsp;<call draw_label("%")></td>
+</tr>
+<tr >
+<td colspan="2"><input TYPE="checkbox" VALUE="true" NAME="enable_tsusp" ${check_tsusp}><call draw_label(lang.admin.percents.enable_tsusp)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.percents.perc_tsusp)></td>
+<td><input type="text" name="traffic_susp" size="5" value="${tsusp}" check="vPositiveIntOpt" label="${lang.admin.percents.perc_tsusp}">&nbsp;<call draw_label("%")></td>
+</tr>
+<tr>
+<td class="control_header_align_center" colspan="2"><call draw_header(lang.admin.percents.quota)></td>
+</tr>
+<tr >
+<td colspan="2"><input TYPE="checkbox" VALUE="true" NAME="dis_qwarn" ${check_qwarn}><call draw_label(lang.admin.percents.dis_qwarn)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.percents.perc_qwarn)></td>
+<td><input type="text" name="quota_warn" size="5" value="${qwarn}" check="vPositiveIntOpt" label="${lang.admin.percents.perc_qwarn}">&nbsp;<call draw_label("%")></td>
+</tr>
+<tr >
+<td colspan="2"><call draw_label_small(lang.admin.percents.comment)></td>
+</tr>
+
+<tr>
+<td class="control_header_align_center" colspan="2"><call draw_header(lang.admin.percents.summary_disk_usage)></td>
+</tr>
+<tr >
+<td colspan="2"><input TYPE="checkbox" VALUE="true" NAME="dis_usage_warn" ${check_usage_warn}><call draw_label(lang.admin.percents.dis_disk_usage_warn)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.percents.perc_disk_usage_warn)></td>
+<td><input type="text" name="usage_warn" size="5" value="${usage_warn}" check="vPositiveIntOpt" label="${lang.admin.percents.perc_disk_usage_warn}">&nbsp;<call draw_label("%")></td>
+</tr>
+<tr >
+<td colspan="2"><input TYPE="checkbox" VALUE="true" NAME="enable_usage_susp" ${check_usage_susp}><call draw_label(lang.admin.percents.enable_disk_usage_susp)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.percents.perc_disk_usage_susp)></td>
+<td><input type="text" name="usage_susp" size="5" value="${usage_susp}" check="vPositiveIntOpt" label="${lang.admin.percents.perc_disk_usage_susp}">&nbsp;<call draw_label("%")></td>
+</tr>
+<!--<tr >
+<td colspan="2"><call draw_label(lang.admin.percents.comment)></td>
+</tr>-->
+<tr >
+<td class="control_align_center" colspan="2">
+
+  <input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/percents.html -->

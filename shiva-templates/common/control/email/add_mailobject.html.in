@@ -1,0 +1,253 @@
+<!-- BEGIN ./control/email/add_mailobject.html.in  -->
+
+<call draw_js("/common/JS/attachment.js")>
+<call draw_js("/common/JS/selection.js")>
+
+<assign md_id = account.getResource( request.md_id )>
+<call draw_tooltip()>
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_mailobject" check! accept-charset="UTF-8">
+
+<call draw_table_header("", lang.email.add)>
+<tr>
+<td>
+<table class="inner_control_grid">
+<tr>
+<td width="21" nowrap>
+  <input type="hidden" name="template_name" value="submit/email/create_confirm_joined.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="md_id" value="${request.md_id}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="sc_page" value="${request.sc_page}">
+  &nbsp;
+</td>   
+<td><call draw_label(lang.email.adr)></td>
+<td colspan="3"><input type="text" name="local" label="${lang.email.adr}" value="${vlocal}" check="vMBoxName"><call draw_label("@"+md_id.name)></td>
+</tr>
+
+<if vcatchall>
+    <assign vchecked="CHECKED">
+<else>
+    <assign vchecked="">
+</if>
+
+<tr>
+<td width="21" nowrap><call draw_tt_help(account.id, "user-mailinfo-catch", "")></td>
+<td><call draw_label(lang.email.mailboxes2incl.catch)></td>
+<td colspan="3"><input type="checkbox" name="catchall" ${vchecked} value="1"></td>
+</tr>
+<if account.plan.areResourcesAvailable("antispam")>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.label.antispam)></td>
+<td colspan="3">
+<if vi_antispam || account.preferences.spamcheck=="on">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<input type="checkbox" name="i_antispam" ${vchecked} value="1"></td>
+</tr>
+</if>
+<if account.plan.areResourcesAvailable("antivirus")>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.label.antivirus)></td>
+<td colspan="3">
+<if vi_antivirus || account.preferences.viruscheck=="on">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<input type="checkbox" name="i_antivirus" ${vchecked} value="1"></td>
+</tr>
+</if>
+
+</tr>
+</table>
+</td>
+</tr>
+
+<if account.plan.areResourcesAvailable("mailbox")>
+<if vi_mailbox>
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td>
+<table class="inner_control_grid">
+
+<tr>
+<td width="21" nowrap><call draw_tt_link(md_id,"")></td>
+<td colspan="4"><input type="checkbox" name="i_mailbox" ${vchecked} value="1"><call draw_label_bold(lang.email.mailbox)></td>
+</tr>
+
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.label.password)></td>
+<td colspan="3"><input type="password" name="password" label="${lang.label.password}" check="vPasswordDep(password,i_mailbox)" value="${vpassword}"></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.label.comment)></td>
+<td colspan="3"><input type="text" name="description" value="${vdescription}"></td>
+</tr>
+
+<if vdiscard>
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.email.mailboxes2incl.drop)></td>
+<td colspan="3"><input type="checkbox" name="discard" ${vchecked} value="1"></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.email.alias_by)></td>
+<td colspan="3"><input type="text" name="aliased_by" value="${valiased_by}" size="35" check="vAliasedBy(aliased_by,i_mailbox)"><call draw_label("@"+md_id.name)><br>
+<call draw_label(lang.email.alias_by.add_note)>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</if>
+
+
+<if account.plan.areResourcesAvailable("mail_forward")>
+  <if vi_forward>
+    <assign vchecked="CHECKED">
+  <else>
+    <assign vchecked="">
+  </if>
+<tr>
+<td>
+<table class="inner_control_grid">
+<tr>
+<td width="21"><call draw_tt_link(md_id,"")></td>
+<td colspan="4"><input type="checkbox" name="i_forward" ${vchecked} value="1"><call draw_label_bold(lang.email.forward)></td>
+</tr>
+
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td colspan="4"><call draw_label(lang.email.forward.add_note)><br><textarea rows="5" cols="60" name="subscribers" check="vSubscribersDep(subscribers,i_forward)">${vsubscribers}</textarea></td>
+</tr>
+</table>
+</td>
+</tr>
+</if>
+
+<if account.plan.areResourcesAvailable("mailbox_alias")>
+<if vi_alias>
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td>
+<table class="inner_control_grid">
+<tr>
+<td width="21" nowrap><call draw_tt_link(md_id,"")></td>
+<td colspan="4"><input type="checkbox" name="i_alias" ${vchecked} value="1"><call draw_label_bold(lang.email.alias)></td>
+</tr>
+
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td class="inner_control_grid_align_center"><call draw_label(lang.email.alias.choose_mailboxes)></td>
+<td class="inner_control_grid_align_center"><call draw_label(lang.label.control)></td>
+<td colspan="2" width="43%" class="inner_control_grid_align_center"><call draw_label(lang.label.chosen)></td>
+</tr>
+
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td class="inner_control_grid_align_center">
+<select name="list_available" size="11" style="width:200">
+<option value="postmaster">postmaster</option>
+<list md_id.getChildren("mailbox")  as mbox>
+    <option value="${mbox.email}" SELECTED>${mbox.email}</option>
+</list>
+</select>
+</td>
+<td class="inner_control_grid_align_center">
+<input type="button" value="${lang.button.add_dir}" style="width:80;" onclick="javascript:createItem('f_add_mailobject','list_available','list_chosen','val_chosen',''); checkForm(this.form);">
+<br>
+<br>
+<input type="button" value="${lang.button.delete_dir}" style="width:80;" onclick="javascript:deleteItem('f_add_mailobject','list_chosen','val_chosen','${lang.email.alias.no_mailboxes_chosen}',''); checkForm(this.form);">
+</td>
+<td colspan="2" class="inner_control_grid_align_center">
+<select name="list_chosen" size="11" style="width:200">
+  <assign sel="SELECTED">
+  <list alias.subscribers as subscriber>
+    <option value="${subscriber}" ${sel}>${subscriber}</option>
+    <assign sel="">
+  </list>
+  <if sel!="">
+     <option value="_NO_CHOSEN_" ${sel}>${lang.email.alias.no_mailboxes_chosen}</option>
+  </if>
+</select>
+<input type="hidden" name="val_chosen" value="" check="vSelectCheck(list_chosen,i_alias)">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</if>
+
+
+<if account.plan.areResourcesAvailable("responder")>
+  <if vi_responder>
+    <assign vchecked="CHECKED">
+  <else>
+    <assign vchecked="">
+  </if>
+  <if vinclude_incoming>
+    <assign vchecked_incoming="CHECKED">
+  <else>
+    <assign vchecked_incoming="">
+  </if>
+<tr>
+<td>
+<table class="inner_control_grid">
+<tr>
+<td width="21" nowrap><call draw_tt_link(md_id,"")></td>
+<td colspan="4"><input type="checkbox" name="i_responder" ${vchecked} value="1"><call draw_label_bold(lang.email.autoresponder)></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.email.autoresponder.include_incoming)></td>
+<td colspan="3"><input type="checkbox" name="include_incoming" ${vchecked_incoming} value="1"></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.email.subject)></td>
+<td colspan="3"><input type="text" name="subject" value="${vsubject}" label="${lang.email.addresponder.subj}"></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td colspan="4"><call draw_label(lang.email.addresponder.msg)></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td colspan="4"><textarea rows="10" cols="60" name="message">${vmessage}</textarea></td>
+</tr>
+<tr>
+<td width="21" nowrap>&nbsp;</td>
+<td><call draw_label(lang.label.attachments)></td>
+<td colspan="3"  class="control_align_center"><select name="new_responder_atts" size=5 multiple><option value="NA">${lang.tt.select_attachments}</select><input type="button" value="${lang.button.add}" onclick="javascript:addAttachments('f_add_mailobject','new_responder_atts','${config.UPLOADER_URL}','${lang.label.add_attachment}','${lang.tt.select_uploaded_file}');"></td>
+</tr>
+
+</table>
+</td>
+</tr>
+</if>
+<tr>
+  <td class="control_align_center"><input type="submit" value="${lang.button.submit}" onclick="javascript:getSelectedItems('f_add_mailobject','list_chosen','val_chosen')"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+
+<!-- END ./control/email/add_mailobject.html.in  -->

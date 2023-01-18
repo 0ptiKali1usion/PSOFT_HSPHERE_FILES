@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="${design.color("bgcolor")}">
+
+<FORM name="login" action="${url}" method="post" accept-charset="UTF-8">
+<!-- Product Information -->
+<INPUT type="hidden" name="product1" value="${descripton}">
+<INPUT type="hidden" name="total" value="${amount}">
+<!-- Merchant Information -->
+<INPUT type=hidden name="companyid" value="${accountID}"><!-- Change to your company ID -->
+<!-- Redirect Information -->
+<INPUT type=hidden name="formget" value="N"> <!-- if enabled, we use GET method for redirect -->
+<INPUT type=hidden name="redirect" value="${ok_url}">
+<INPUT type=hidden name="redirectfail" value="http://www.paysystemsfail.com">
+<input type=hidden name="delivery" value="N">
+<input type=hidden name="option1" value="${option1}">
+</FORM>
+
+<SCRIPT language="javascript">
+ window.document.forms['login'].submit();
+</SCRIPT>
+</BODY>
+</HTML>

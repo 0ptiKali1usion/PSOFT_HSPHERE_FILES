@@ -1,0 +1,10 @@
+<if !request.back>
+<if request["_eul_accept"]=="1">
+    <include "signup/ci_info.html">
+<else>
+    <assign res=session.addMessage(lang.msg.signup_unsigned_eul)>
+    <include "signup/eul.html">
+</if>
+<else>
+<include "signup/eul.html">
+</if>

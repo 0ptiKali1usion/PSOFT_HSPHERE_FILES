@@ -1,0 +1,28 @@
+<!--BEGIN ./submit/odbc/create_dsn.sbm-->
+<assign unixuser=account.getChild("unixuser")>
+<assign odbc = unixuser.getChild("odbc")>
+<if (odbc!="") && (request.driver_name!="")>
+   <assign creater=odbc.dsn_creater("dsn_record",request.dsn_rec_mod)>
+   <assign res=creater("driver-name",request.driver_name)>	
+   <assign res=creater("DSN",request.DSN)>	
+   <list odbc.getDriversParamsList(request.driver_name) as driver_params>
+	<assign key=driver_params.Name>
+	<assign value=request[driver_params.Name]>
+	<assign res=creater(key,value)>	
+   </list>
+   <assign result=creater()>
+   <if result.status!="OK">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_add, lang.label.dsn, ""))>
+        <assign res=session.addMessage(result.msg)>
+	<assign unsuccess="1">
+   </if>
+<else>
+    <assign unsuccess="1">
+</if> 
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--END ./submit/odbc/create_dsn.sbm-->

@@ -1,0 +1,54 @@
+<assign billman = account.getChild("billman")>
+<assign prices = billman.getTLDPrices(request.tld)>
+<assign tr_price = billman.getDefaultTransferPrice(request.tld)>
+<if user.reseller_id != "1">
+<assign rprices = billman.getResellerTLDPrices(request.tld)>
+<assign tr_rprice = billman.getResellerTransferPrice(request.tld)>
+</if>
+
+<assign registrar = toolbox.getRegistrarInfo(request.tld)>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/registrar/set_prices.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="tld" value="${request.tld}">
+
+<assign entries = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ] >
+
+
+<call draw_table_header("12", lang.admin.registrar.prices.title(registrar.description, request.tld))>
+
+
+
+<tr ><td colspan="12"><call draw_label(lang.admin.registrar.prices.descr)></td>
+</tr>
+<tr ><td><call draw_label(lang.admin.registrar.duration)></td>
+<list entries as key>
+<td class="control_align_center"><call draw_label(key)></td>
+</list>
+<td class="control_align_center"><call draw_label(lang.label.transfer)></td>
+</tr>
+
+<if user.reseller_id != "1">
+<tr ><td><call draw_label(lang.admin.registrar.rprice)></td>
+<list entries as key>
+<td class="control_align_right"><if rprices[key]><call draw_label(toolbox.currency(rprices[key], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+</list>
+<td class="control_align_right"><if tr_rprice><call draw_label(toolbox.currency(tr_rprice, "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+</tr>
+</if>
+
+<tr ><td><call draw_label(lang.admin.registrar.price)></td>
+<list entries as key>
+<td><if rprices[key] || user.reseller_id == "1"><input type="text" name="price${key}" value="${toolbox.numberToCurLocale(prices[key], "0")}" size="5"><else>&nbsp;</if></td>
+</list>
+<td><if tr_rprice || user.reseller_id == "1"><input type="text" name="price-1" value="${toolbox.numberToCurLocale(tr_price, "0")}" size="5"><else>&nbsp;</if></td>
+</tr>
+
+
+<tr ><td colspan="12" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+

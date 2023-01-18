@@ -1,0 +1,28 @@
+<!-- BEGIN ./submit/miva/add.sbm  -->
+<assign hosting=account.getResource(request.rid)>
+<assign cgidir=hosting.getChild("cgidir")>
+<assign empresa=hosting.getChild("empresa")>
+<if !cgidir>
+<assign result=hosting.addChild("cgidir","")>
+</if>
+<if !empresa>
+  <assign result=hosting.addChild("empresa","")>
+  <if result.status=="OK">
+    <if hosting.server=="apache">
+       <assign r=session.addMessage(lang.msg.miva.empresa_activated)>
+    </if>
+  </if>
+</if>
+<assign result=hosting.addChild("miva", "")>
+<if result.status=="OK">
+  <assign success="1">
+<else>
+  ${session.addMessage(result.msg)}
+</if>
+
+<if success=="1">
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/miva/add.sbm  -->

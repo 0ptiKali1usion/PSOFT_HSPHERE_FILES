@@ -1,0 +1,64 @@
+<!-- BEGIN ./control/admin/debit.html  -->
+<call draw_tooltip()>
+<yafv s_admin>
+
+<if aid==""><assign aid=request.aid></if>
+<form name="f_debit" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/add_debit.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="aid" value="${aid}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.admin.debit.header)>
+
+<tr>
+<td><call draw_label(lang.label.amount)></td>
+<td>
+		<input type="text" name="amount" value="${toolbox.numberToCurLocale(amount, true)}" label="${lang.label.amount}" check="vAmount">
+	</td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.descr)></td>
+<td>
+		<select name="text" size="1">
+<option value="MONETARY REFUND" SELECTED>${lang.admin.debit.refund}
+<option value="SPECIAL">${lang.admin.debit.spec}
+<option value="OTHER">${lang.admin.debit.other}
+		</select>
+	</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.id)></td>
+<td>
+		<input type="text" name="id" value="${id}">
+	</td>
+</tr>
+<tr>
+<td  colspan="2">
+		<call draw_label(lang.label.comment)>
+	</td>
+</tr>
+<tr>
+<td  colspan="2">
+		<textarea name="desc" rows="5" cols="40">${desc}</textarea>
+	</td>
+</tr>
+<tr>
+<td  colspan="2" class="control_align_center">
+		<input type="submit" value="${lang.button.submit}">
+	</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/debit.html  -->

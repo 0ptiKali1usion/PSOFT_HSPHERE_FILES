@@ -1,0 +1,39 @@
+<!-- BEGIN ./control/mailman/settings.html -->
+<call draw_tooltip()>
+<assign admin=account.getChild("admin")>
+<assign email_manager = account.getChild("admin").email_manager>
+
+<if email_manager>
+<assign recipients = admin.listRecipients()>
+<call draw_table_header("2", lang.mailman.settings.header)>
+<tr>
+<td class="control_header_align_center"><call draw_header(lang.label.action)></td>
+<td class="control_header_align_center"><call draw_header(lang.mailman.settings.recips)></td>
+</tr>
+<assign groups = email_manager.groups>
+<list groups as group>
+<call showAction(group.name, group.id)>
+</list>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+
+<function showAction(label, action)>
+<tr >
+<td valign="top"><call draw_label(label)></td>
+<td>
+<list recipients[action] as rcpt>
+<if rcpt.name>
+${rcpt.name}
+<if rcpt.email><i>&lt;${rcpt.email}&gt;</i></if>
+<else>${rcpt.email}
+</if>
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/mailman/remove.sbm&type="+action+"&email="+rcpt.email+"&stemplate="+template, lang.label.delete)><br>
+</list>
+<call draw_add(config.CLIENT_CP_URL+"?template_name=mailman/add.html&type="+action+"&stemplate="+template, lang.mailman.settings.add)>&nbsp;
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/mailman/removeall.sbm&type="+action+"&stemplate="+template, lang.mailman.settings.delall)>
+</td>
+</tr>
+</function>
+<!-- END ./control/mailman/settings.html -->

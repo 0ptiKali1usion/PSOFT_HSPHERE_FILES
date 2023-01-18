@@ -1,0 +1,87 @@
+<!-- BEGIN ./common/control/signup/order_info_ci.html.in  -->
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<TR>
+	<TD ><call draw_label(lang.bci.fname)></TD>
+	<TD ><input name="_tld_" type="hidden" value="${tld}"><input name="_srs_owner_first_name" size=15 value="${srs_owner_first_name}" check="vSinglename" label="${lang.bci.fname}"></TD>
+<assign excludeFields=excludeFields+"_tld_;">
+<assign excludeFields=excludeFields+"_srs_owner_first_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.lname)></TD>
+	<TD ><input name="_srs_owner_last_name" size=15 value="${srs_owner_last_name}" check="vSinglename" label="${lang.bci.lname}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_last_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.company)></TD>
+	<TD ><input name="_srs_owner_org_name" size=30 value="${srs_owner_org_name}" check="vOrganization" label="${lang.bci.company}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_org_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr1)></TD>
+	<TD ><input name="_srs_owner_address1" size=30 value="${srs_owner_address1}" check="vAddress" label="${lang.bci.adr1}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_address1;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr2)></TD>
+	<TD ><input name="_srs_owner_address2" size=30 value="${srs_owner_address2}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_address2;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr3)></TD>
+	<TD ><input name="_srs_owner_address3" size=30 value="${srs_owner_address3}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_address3;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.city)></TD>
+	<TD ><input name="_srs_owner_city" size=15 value="${srs_owner_city}" check="vCity" label="${lang.bci.city}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_city;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.state)></TD>
+	<TD >
+   <select name="_srs_owner_state" size="1">
+	<call buildStates(srs_owner_state)>
+   </select>
+</TD>
+<assign excludeFields=excludeFields+"_srs_owner_state;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.country)></TD>
+	<TD >
+          <select name="_srs_owner_country" size="1" onChange="checkForm(this.form)">
+	    <call buildCountries(srs_owner_country)>
+          </select>  
+        </TD>
+        <assign excludeFields=excludeFields+"_srs_owner_country;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.pcode)></TD>
+	<TD ><input name="_srs_owner_postal_code" size=15 value="${srs_owner_postal_code}" check="vPostal_Code" label="${lang.bci.pcode}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_postal_code;">
+</TR>
+<TR>
+	<TD valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></TD>
+	<TD valign="top"><input name="_srs_owner_phone" size=20 value="${srs_owner_phone}" check="vPhoneOSRS(this, _srs_owner_country, _tld_)" label="${lang.bci.phone}"><br><call draw_label(lang.bci.country_phone_examples)></TD>
+<assign excludeFields=excludeFields+"_srs_owner_phone;">
+</TR>
+<switch tld>
+  <case "cn">
+  <case "com.cn">
+  <case "net.cn">
+  <case "de">
+    <assign faxValidation = "vFaxOSRSReq">
+    <break>
+  <default>
+    <assign faxValidation = "vFaxOSRS">
+</switch>
+<TR>
+	<TD valign="top"><call draw_label(lang.label.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+	<TD valign="top"><input name="_srs_owner_fax" size=20 value="${srs_owner_fax}" check="${faxValidation}(this, _srs_owner_country, _tld_)" label="${lang.label.fax}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_fax;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.email)></TD>
+	<TD ><input name="_srs_owner_email" size=30 value="${srs_owner_email}" check="vEmail" label="${lang.bci.email}"></TD>
+<assign excludeFields=excludeFields+"_srs_owner_email;">
+</TR>
+<!--  END common/control/signup/order_info_ci.html.in  -->

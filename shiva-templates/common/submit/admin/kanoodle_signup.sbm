@@ -1,0 +1,41 @@
+<!-- BEGIN ./common/submit/admin/kanoodle_signup.sbm -->
+<assign check=yafv.checkall(yafv.common.s_signup.vPassword(lang.label.password, request.p1), yafv.common.s_signup.vPassword2(lang.label.password2, request.p1,request.p2), yafv.common.s_admin.vEmail(lang.bci.email, request.email), yafv.common.s_signup.vStateOther(lang.label.state_other,request["state2"]), yafv.common.s_signup.vStateOther(lang.label.state_other,request["billstate2"]), yafv.common.s_admin.vnURL(lang.admin.kanoodle.url,request["url"])  )>
+
+<if check.status=="OK">
+
+<if request.state == "other">
+<assign vvstate = request.state_other>
+<else>
+<assign vvstate = request.state>
+</if>
+
+<if request.billstate == "other">
+<assign vvbillstate = request.billstate_other>
+<else>
+<assign vvbillstate = request.billstate>
+</if>
+
+<assign kanoodle = account.getResource(request.rid)>
+<assign result=kanoodle.registerPartner(request.login, request.p1, request.firstName, request.lastName, request.companyName, request.addr1, request.addr2, request.city, vvstate, request.pZCode, request.country, request.email, request.phoneNo, request.spam, request.billfirstName, request.billlastName, request.billcompanyName, request.billaddr1, request.billaddr2, request.billcity, vvbillstate, request.billpZCode, request.billcountry, request.billphoneNo, request.protocol+"://"+ request.url)>
+
+<if result.status!="OK">
+<assign res=session.addMessage(result.msg)>
+<assign failure="1">
+</if>
+
+<else>
+<list check.msgs as msg><assign res=session.addMessage(msg)></list>
+<assign failure="1">
+</if>
+
+<if !failure>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!-- END ./common/submit/admin/kanoodle_signup.sbm
+
+
+
+
+

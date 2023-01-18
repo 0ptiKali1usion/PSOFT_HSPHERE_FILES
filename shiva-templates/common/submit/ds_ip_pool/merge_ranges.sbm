@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/ds_pool/merge_ranges.sbm-->
+<assign result = obj.subnet_manager.mergeRanges(request.subnet_id, request.range_id, request.mrange_id)>
+<if result != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+</if> 
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/merge_ranges.sbm  -->

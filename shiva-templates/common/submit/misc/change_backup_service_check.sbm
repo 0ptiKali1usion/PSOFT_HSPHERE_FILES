@@ -1,0 +1,37 @@
+<!-- BEGIN submit/misc/change_backup_service_check.sbm  -->
+<assign result=yafv.common.s_misc.vPositiveIntReq(lang.label.reseller_backup.backup_number, request.backup_number)>
+<assign res_backup=account.getResource(request.rid)>
+<!-- res_backup=${res_backup} -->
+<if res_backup.status == "OK">
+  <if res_backup>
+    <assign price=res_backup.estimateChange(request.backup_number)>
+    <!-- price=${price} -->
+    <if price.status!="ERROR">
+      <assign success = "1">
+    <else>
+      <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+      <assign res = session.addMessage(price.msg)>
+      <include request.ftemplate>
+    </if>
+  <else>
+    <assign price = database.estimateCreate("reseller_backup","",request.backup_number)>
+    <if price.status!="ERROR">
+      <assign success = "1">
+    <else>
+      <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+      <assign res = session.addMessage(price.msg)>
+      <include request.ftemplate>
+    </if>
+  </if>
+</if>
+<if success>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign vsize=toolbox.html_encode(request.size)>
+  <include request.ftemplate>
+</if>
+<!--  END submit/misc/change_backup_service_check.sbm  -->

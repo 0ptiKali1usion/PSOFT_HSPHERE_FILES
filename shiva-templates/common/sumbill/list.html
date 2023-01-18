@@ -1,0 +1,14 @@
+<!-- BEGIN ./sumbill/list.html  -->
+<assign template="sumbill/list.html">
+<include "functions">
+<call draw_menu("billing-suminvoice")>
+<if request.bi_id>
+  <assign bi_id=request.bi_id>
+<else>
+  <list user.billing_infos as bi>
+     <assign bi_id=bi.bi_id>
+  </list>
+</if>
+<include "control/sumbill/list.html">
+<call bottom()>
+<!--  END ./sumbill/list.html  -->

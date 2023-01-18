@@ -1,0 +1,10 @@
+<!-- BEGIN ./admin/merchant/SecureTrading.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign base="/hsphere/local/home/cpanel/shiva/psoft_config/securetrading/">
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "CURRCODE", request.currency, "SITEREFERENCE", request.sitereference, "NOTIFICATIONEMAIL", request.notificationemail,"CERT_FILE", base+request.mid+"_cert.pem", "CLASS_NAME", "psoft.epayment.SecureTrading", "TEMPLATE", "admin/merchant/SecureTrading.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "CURRCODE", request.currency, "SITEREFERENCE", request.sitereference, "NOTIFICATIONEMAIL", request.notificationemail, "CLASS_NAME", "psoft.epayment.SecureTrading", "TEMPLATE", "admin/merchant/SecureTrading.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/SecureTrading.sbm -->

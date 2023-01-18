@@ -1,0 +1,8 @@
+<center>Domain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The Domain resource is responsible for DNS hosting and is required by all specific domain types, such as Domain Registration, Domain Transfer, Third Level Domain, etc.
+<br>
+<br>
+Prices for the <i>Domain</i> resource are, therefore, collected for DNS hosting.  If you set prices both for the <i>Domain</i> resource and for any specific domain type, e.g. <i>Domain Registration</i>, users will be charged both the prices when creating this type of domain.<br>
+

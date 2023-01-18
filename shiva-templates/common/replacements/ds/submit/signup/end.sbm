@@ -1,0 +1,231 @@
+<!-- BEGIN ./common/submit/signup/end.sbm -->
+<function autoLogin()>
+  <HTML>
+  <HEAD>
+   <SCRIPT language="JavaScript">
+    function auto_login() {
+      if (window.opener != null) {
+         window.opener.location.href="${config.CP_URI}/${request.login}/";
+         window.close();
+      } else {
+         document.location="${config.CP_URI}/${request.login}/";
+      }
+      return true;
+    }
+   </SCRIPT>
+  </HEAD>
+  <BODY onLoad="auto_login()">
+    <if settings.use_aff=="1">
+      <if settings.aff_link><img src="${toolbox.includeText(settings.aff_link)}" width="1" height="1"></if>
+      <if settings.aff_link2><img src="${toolbox.includeText(settings.aff_link2)}" width="1" height="1"></if>
+      <if settings.aff_link3><img src="${toolbox.includeText(settings.aff_link3)}" width="1" height="1"></if>
+      <if settings.aff_link4><img src="${toolbox.includeText(settings.aff_link4)}" width="1" height="1"></if>
+      <if settings.aff_link5><img src="${toolbox.includeText(settings.aff_link5)}" width="1" height="1"></if>
+    </if>
+    <a TARGET="javascript:window.opener.name" href="${config.CP_URI}/${request.login}/">
+    <call draw_colored_label(lang.msg.signup_login_account_link, design.color("link_color"))>
+    </a>
+  </BODY>
+  </HTML>
+</function>
+
+<assign processors = toolbox.getGateways().processors.processor>
+
+<if user>
+    <assign result=yafv.checkall(
+        yafv.common.s_signup.vUsername(lang.label.username, request.login),
+        yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login)
+    )>
+<else>
+    <assign result=yafv.checkall(
+      yafv.common.s_signup.vUsername(lang.label.username, request.login),
+      yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login),
+      yafv.common.s_signup.vPassword2(lang.label.password2, request.password, request.password2)
+    )>
+</if>
+<if result.status!="OK">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign failure="1">
+</if>
+<!-- new_user.plan.b_info ${new_user.plan.b_info}-->
+<!-- new_user.plan.c_info ${new_user.plan.c_info}-->
+<if new_user.plan.c_info=="0">
+    <assign failure="1">
+    <assign res=session.addMessage(lang.msg.signup_needed_enable_ci)>
+</if>
+<if new_user.plan.b_info!="0" && request.use_bi_id=="" && request["_bi_type"]!="TRIAL">
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(toolbox.compose(
+  lang.label.field_name_bi,lang.label.first_name),request["_bi_first_name"]),
+yafv.common.s_signup.vSinglename(toolbox.compose(
+  lang.label.field_name_bi,lang.label.last_name),request["_bi_last_name"]),
+yafv.common.s_signup.vOrganization(toolbox.compose(
+  lang.label.field_name_bi,lang.label.organization),request["_bi_company"]),
+yafv.common.s_signup.vAddress(toolbox.compose(
+  lang.label.field_name_bi,lang.label.address),request["_bi_address1"]),
+yafv.common.s_signup.vCity(toolbox.compose(
+  lang.label.field_name_bi,lang.label.city),request["_bi_city"]),
+yafv.common.s_signup.vState(toolbox.compose(
+  lang.label.field_name_bi,lang.label.state),request["_bi_state"]),
+yafv.common.s_signup.vPostal_Code(toolbox.compose(
+  lang.label.field_name_bi,lang.label.postal_code),request["_bi_postal_code"]),
+yafv.common.s_signup.vCountry(toolbox.compose(
+  lang.label.field_name_bi,lang.label.country),request["_bi_country"]),
+yafv.common.s_signup.vPhone(toolbox.compose(
+  lang.label.field_name_bi,lang.label.phone),request["_bi_phone"]),
+yafv.common.s_signup.vEmail(toolbox.compose(
+  lang.label.field_name_bi,lang.label.email),request["_bi_email"]),
+yafv.common.s_signup.vExemptionCode(
+  lang.signup.payinfo.exemption_code, request["_bi_exemption_code"])
+)>
+<if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+ 
+<if request.bi_if.type=="CC">
+<assign result=yafv.checkall(
+yafv.common.s_signup.vcc_name(lang.cc.name, request["_bi_cc_name"]),
+yafv.common.s_signup.vCCNumber(lang.cc.number, request["_bi_cc_number"],request["_bi_cc_type"]),
+yafv.common.s_signup.vcc_month(lang.cc.month, request["_bi_cc_exp_month"]),
+yafv.common.s_signup.vcc_year(lang.cc.year, request["_bi_cc_exp_year"]),
+yafv.common.s_signup.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"]),
+yafv.common.s_signup.vCardDateMMYY(lang.signup.card_start_date,request["_bi_cc_start_month"],request["_bi_cc_start_year"],request["_bi_cc_type"])
+)>
+ 
+<if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+</if>   
+</if>
+<if new_user.plan.c_info!="0">
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(toolbox.compose(
+ lang.label.field_name_ci,lang.label.first_name),request["_ci_first_name"]),
+yafv.common.s_signup.vSinglename(toolbox.compose(
+ lang.label.field_name_ci,lang.label.last_name),request["_ci_last_name"]),
+yafv.common.s_signup.vOrganization(toolbox.compose(
+ lang.label.field_name_ci,lang.label.company),request["_ci_company"]),
+yafv.common.s_signup.vAddress(toolbox.compose(
+ lang.label.field_name_ci,lang.label.address),request["_ci_address1"]),
+yafv.common.s_signup.vCity(toolbox.compose(
+ lang.label.field_name_ci,lang.label.city),request["_ci_city"]),
+yafv.common.s_signup.vState(toolbox.compose(
+ lang.label.field_name_ci,lang.label.state),request["_ci_state"]),
+yafv.common.s_signup.vPostal_Code(toolbox.compose(
+ lang.label.field_name_ci,lang.label.postal_code),request["_ci_postal_code"]),
+yafv.common.s_signup.vCountry(toolbox.compose(
+ lang.label.field_name_ci,lang.label.country),request["_ci_country"]),
+yafv.common.s_signup.vPhone(toolbox.compose(
+ lang.label.field_name_ci,lang.label.phone),request["_ci_phone"]),
+yafv.common.s_signup.vEmail(toolbox.compose(
+ lang.label.field_name_ci,lang.label.email),request["_ci_email"])
+)>
+<if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if> 
+</if>
+<if !request.plan_id>
+    <assign failure="1">
+    <assign res=session.addMessage(lang.msg.signup_invalid_value_list)>
+</if>
+<if (failure!="") || (request.back!="")>
+    <include "signup/end.html">
+<else>
+    <if (user) && (request.admin_signup!="")>
+	<assign signup = account.getChild("signupadm")>
+	<assign result=signup.createUser(request.login, request.password, request.referal_id, request.referal_group, "New Account "+request.plan_id, request.plan_id, request["_mod"],new_user.plan.reseller_id)>
+    <else>
+	<assign result=new_user.signup>
+    </if>
+	<!--${result.status}-->
+    <if result.status!="OK">
+	<if result.code=="DUP">
+            <assign submit_template="end.sbm">
+	    <assign login=toolbox.html_encode(request.login)>
+            <include "signup/dup_login.html">
+	<else>
+	    <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_create, lang.label.account, ""))>
+	    <assign res=session.addMessage(result.msg)>
+	    <include "signup/end.html">
+	</if>
+    <else>
+        <assign newAccount=result.active_account>
+	<assign invoice = toolbox.getInvoice(request["_mod"])>
+	<assign new_invoice=toolbox.calculateTaxes(invoice.total)>
+	<assign f_amount=new_invoice.total>
+<!-- amount = ${f_amount} -->
+        <assign bildescription="">
+        <assign processorname="">
+        <assign servletname="">
+	<if (user) && (request.admin_signup!="")>
+          <list processors as processor>
+            <if processor("name")==request["_bi_type"]>
+              <assign bildescription=lang[processor("description")]>
+              <assign processorname=processor("name")>
+              <assign servletname=processor("servlet")>
+            </if>
+          </list>
+	  <if processorname!="">
+	    <assign ftemplate=template>
+	    <include "control/signup/WebProcessorRedirect.html">
+	  <else>
+	    <include "signup/signup_ok.html">
+	  </if>
+        <else>
+	  <if settings.use_aff=="1">
+	    <if account>
+	      <!-- online account creation -->
+	      <assign billviewer = account.getChild("billviewer")>
+	      <assign amount="0">
+	      <assign full_amount="0">
+	      <assign account_id = account.id.id>
+	      <if !billviewer><assign billviewer=account.addChild("billviewer", "")></if>
+	      <list billviewer.list() as b>
+		<assign bill=billviewer.view(b.id)>
+		<assign amount = bill.subamount>
+		<assign full_amount = bill.amount>
+	      </list>
+	    <else>
+	      <!-- moderated signup -->
+	      <assign invoice = toolbox.getInvoice(request["_mod"])>
+	      <assign amount = invoice.subtotal>
+	      <assign full_amount = invoice.localized_total>
+	    </if>
+	    <assign plan_id = request.plan_id>
+	    <assign plan_name = new_user.plan.description>
+	    <assign user_name = request.login>
+	</if>
+
+	<assign bildescription="">
+        <assign processorname="">
+        <assign servletname="">
+        <list processors as processor>
+          <if processor("name")==request["_bi_type"]>
+            <assign bildescription=lang[processor("description")]>
+            <assign processorname=processor("name")>
+            <assign servletname=processor("servlet")>
+          </if>
+        </list>
+	<if processorname!="" && (toolbox.gt(f_amount,"0")=="1")>
+	  <assign ftemplate=template>
+	  <assign full_amount = "">
+	  <include "control/signup/WebProcessorRedirect.html">
+	<else>
+	  <call autoLogin()>
+	</if>
+      </if>
+    </if>
+</if>
+<!-- END ./common/submit/signup/end.sbm -->

@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/mod_sign_set_ec.sbm  -->
+<assign check = yafv.common.s_billing.vExemptionCodeReq(lang.bci.exemption_code, request["_bi_exemption_code"])>
+<if check.status != "OK">
+  <assign fail = "1">
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if !fail>
+  <assign result = account.updateExemptionCode(request["_bi_exemption_code"], request.suspend)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(result.msg)>
+    <assign fail = "1">
+  </if>
+</if>
+
+<if !fail>
+  <if account.suspended>
+    <include "suspended/suspended.html">
+  <else>
+    <include request.stemplate>
+  </if>
+<else>
+  <assign vexemption_code = request["_bi_exemption_code"]>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_set_ec.sbm  -->
+

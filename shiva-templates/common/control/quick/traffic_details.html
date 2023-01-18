@@ -1,0 +1,171 @@
+<!-- BEGIN ./quick/traffic_details.html -->
+<call draw_tooltip()>
+
+<assign traffic=account.getChild("traffic")>
+<assign ftp_user_traffic=account.findAllChildren("ftp_user_traffic")>
+<assign ftp_traffic=account.findAllChildren("ftp_traffic")>
+<assign http_traffic=account.findAllChildren("http_traffic")>
+<assign mail_traffic=account.findAllChildren("mail_traffic")>
+<assign real_server_traffic=account.findAllChildren("real_server_traffic")>
+<assign row_height = "21">
+
+<call prepare_table_header("5", lang.quick.trafficdetails.header)>
+<call add_table_header_help("user-ai_quick-detailtraffic-h","")>
+<call add_table_header_palink(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&stemplate="+template+"&ftemplate="+template, "change", lang.label.changetraffic)>
+<call draw_table_header_prepared()>
+
+<if http_traffic>
+  <assign sp = http_traffic.size>
+  <assign was_dr1 = "0">
+  <assign was_dr2 = "0">
+  <assign cnt = "0">
+<tr>
+<td class="control_header_align_center"><call draw_header(lang.quick.quickview.traffic_type)></td>
+<td class="control_header_align_center"><call draw_header(lang.quick.quickview.traffic_name)></td>
+<td class="control_header_align_center"><call draw_header(lang.quick.quickview.traffic_in)></td>
+<td class="control_header_align_center"><call draw_header(lang.quick.quickview.traffic_out)></td>
+<td class="control_header_align_center"><call draw_header(lang.quick.quickview.traffic_total)></td>
+</tr>
+<list http_traffic as tr>
+    <tr>
+      <assign cnt = toolbox.add(cnt, "1")>
+      <if was_dr1 =="0">
+      <td rowspan="${sp}"><call draw_label(lang.quick.trafficdetails.http)></td>
+      <assign was_dr1="1">
+      </if>
+<assign hosting = tr.parent.getChild("hosting")>
+<assign webalizer = tr.parent.findChild("webalizer")>
+<assign modlogan = tr.parent.findChild("modlogan")>
+<assign awstats = tr.parent.findChild("awstats")>
+<assign unixuser=account.getChild("unixuser")>
+<if unixuser.host.platform_type=="win2k">
+  <assign webdir="/webalizer/">
+<else>
+  <assign webdir=webalizer.web_dir>
+</if>
+<if hosting.server == "IIS">
+  <assign def_page="default.html">
+<else>
+ <assign def_page="/index.html">
+</if>
+<assign res = tr.reload>
+<td>
+<call draw_label(tr.parent.name)>
+<if webalizer><call draw_link("http://"+hosting.parent.name+webdir+def_page, "["+lang.label.webalizer+"]")></if>
+<if modlogan><call draw_link("http://"+hosting.parent.name+modlogan.mod_dir+def_page, "["+lang.label.modlogan+"]")></if>
+<if awstats><call draw_link(awstats.awstats_url, "["+lang.domain.webservice.awstats+"]")></if>
+</td>
+      <td class="control_align_right"><call draw_label(tr.text_in_traffic)></td>
+      <td class="control_align_right"><call draw_label(tr.text_out_traffic)></td>
+      <td class="control_align_right"><call draw_label(tr.text_traffic)></td>
+      <assign was_dr2="1">
+</tr>
+  </list>
+</if>
+
+<if ftp_user_traffic>
+  <assign sp = ftp_user_traffic.size>
+  <assign was_dr1 = "0">
+  <assign was_dr2 = "0">
+  <assign cnt = "0">
+<list ftp_user_traffic as tr>
+<assign res = tr.reload>
+    <tr>
+      <assign cnt = toolbox.add(cnt, "1")>
+      <if was_dr1 =="0">
+      <td rowspan="${sp}"><call draw_label(lang.quick.trafficdetails.ftpuser)></td>
+      <assign was_dr1="1">
+      </if>
+      <td><call draw_label(tr.parent.login)></td>
+      <td class="control_align_right" colspan="3"><call draw_label(tr.text_traffic)></td>
+      <assign was_dr2 ="1">
+</tr>
+  </list>
+</if>
+
+<if ftp_traffic>
+  <assign sp = ftp_traffic.size>
+  <assign was_dr1 = "0">
+  <assign was_dr2 = "0">
+  <assign cnt = "0">
+<list ftp_traffic as tr>
+<assign res = tr.reload>
+    <tr>
+      <assign cnt = toolbox.add(cnt, "1")>
+      <if was_dr1 =="0">
+      <td rowspan="${sp}"><call draw_label(lang.quick.trafficdetails.ftp)></td>
+      <assign was_dr1="1">
+      </if>
+      <td><call draw_label(tr.parent.parent.name)></td>
+      <td class="control_align_right" colspan="3"><call draw_label(tr.text_traffic)></td>
+      <assign was_dr2 ="1">
+</tr>
+  </list>
+</if>
+
+
+<if mail_traffic>
+<assign f_ok="0">
+<list mail_traffic as mt>
+<assign ms=mt.parent.findChild("mail_service")>
+<assign res = mt.reload>
+<if f_ok=="0" && (ms || mt.traffic!="0.0")>
+<assign f_ok="1">
+</if>
+</list>
+
+<if f_ok=="1">
+  <assign sp = mail_traffic.size>
+  <assign was_dr1 = "0">
+  <assign was_dr2 = "0">
+  <assign cnt = "0">
+<list mail_traffic as mt>
+<assign ms=mt.parent.findChild("mail_service")>
+<if ms || mt.traffic!="0.0">
+      <tr>
+        <assign cnt = toolbox.add(cnt, "1")>
+        <if was_dr1 =="0">
+        <td rowspan="${sp}"><call draw_label(lang.quick.trafficdetails.mail)></td>
+        <assign was_dr1="1">
+</if>
+        <assign res = mt.reload>
+        <td><call draw_label(mt.parent.name)></td>
+        <td class="control_align_right" colspan="3"><call draw_label(mt.text_traffic)></td>
+        <assign was_dr2="1">
+</tr>
+</if>
+  </list>
+</if>
+</if>
+
+<if real_server_traffic>
+  <assign sp = mail_traffic.size>
+  <assign was_dr1 = "0">
+  <assign was_dr2 = "0">
+  <assign cnt = "0">
+<list real_server_traffic as tr>
+<assign res = tr.reload>
+    <tr>
+      <assign cnt = toolbox.add(cnt, "1")>
+      <if was_dr1 =="0">
+      <td rowspan="${sp}"><call draw_label(lang.quick.trafficdetails.realserver)></td>
+      <assign was_dr1="1">
+      </if>
+      <td><call draw_label(tr.parent.name)></td>
+      <td class="control_align_right" colspan="3"><call draw_label(tr.text_traffic)></td>
+      <assign was_dr2="1">
+</tr>
+  </list>
+</if>
+
+<tr>
+<td colspan="4">
+    <call draw_label(toolbox.compose(lang.quick.trafficdetails.summary, traffic.size))>&nbsp;
+    <call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, traffic.start_date))>
+</td>
+<assign res = traffic.reload>
+  <td class="control_align_right"><call draw_label(traffic.text_traffic)></td>
+</tr>
+
+<call draw_table_footer()>
+<!-- END ./quick/traffic_details.html -->

@@ -1,0 +1,55 @@
+<!-- BEGIN ./control/tt/tt_mass_action.html  -->
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+<assign report = viewer.getAdvReportById(request.arid)>
+<if report.status=="OK">
+  <assign report_ok="1">
+<else>
+  <assign report_ok="0">
+  ${session.addMessage(toolbox.compose(lang.label.errorrepmsg, report.msg))}
+</if>
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_action" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/mass_action.sbm">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="arid" value="${request.arid}">
+
+
+
+
+
+<call draw_table_header("2", lang.tt.adminmass.title)>
+
+
+<tr>
+<td><call draw_label(lang.tt.adminmass.selected)></td>
+<td><if report_ok=="1"><call draw_label(report.size)><else>&nbsp;</if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.action)></td>
+<td>
+<select name="maction">
+<option value="close">${lang.tt.admin.close}
+<option value="delete">${lang.label.del}
+<option value="assign">${lang.tt.adminedit.assign}
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.tt.adminmass.assignto)></td><td>
+<select name="admin_id">
+  <list ttadmin.admin_list as adm><option value="${adm.id}">${adm.name}</list>
+</select>
+</td></tr>
+
+<tr><td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/tt/tt_mass_action.html  -->

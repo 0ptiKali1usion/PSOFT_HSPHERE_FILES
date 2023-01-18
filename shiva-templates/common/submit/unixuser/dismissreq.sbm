@@ -1,0 +1,10 @@
+<!-- BEGIN ./submit/unixuser/dismissreq.sbm  -->
+<assign result=toolbox.dismissReq()>
+<if result.status=="OK">
+<assign res=session.addMessage(lang.msg.unixuser_dismiss_ok)>
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(lang.msg.unixuser_dismiss_err)>
+<include request.ftemplate>
+</if>
+<!-- END ./submit/unixuser/dismissreq.sbm  -->

@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/ds/add_ip_request.sbm  -->
+<assign result=yafv.common.s_admin.vPositiveIntReq(lang.ds.add_ip_ipnum, request.ip)>
+<if result.status=="OK">
+  <assign result = obj.user_requests.dsAddIPRequest(request.ds_id, request.ip, request.note)>
+  <if result.status == "OK">
+    <assign res = session.addMessage(lang.ds.add_ip_request_sent)>
+  <else>
+    <assign res = session.addMessage(result.msg)>
+    <assign failure = "1">
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure = "1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds/add_ip_request.sbm  -->

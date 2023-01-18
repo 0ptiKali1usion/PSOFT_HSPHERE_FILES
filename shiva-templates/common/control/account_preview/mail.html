@@ -1,0 +1,106 @@
+<!--- MAIL PREVIEW START -->
+<call draw_table_header("2", lang.accprev.mail_info)>
+<list account.findChildren("domain") as domain>
+<call displayMail(domain)>
+</list>
+<list account.findChildren("service_domain") as domain>
+<call displayMail(domain)>
+</list>
+<list account.findChildren("3ldomain") as domain>
+<call displayMail(domain)>
+</list>
+<list account.findChildren("domain_alias") as domain>
+<call displayMail(domain)>
+</list>
+
+<call draw_table_footer()>
+<!--- MAIL PREVIEW END -->
+
+<function displayMail(domain)>
+<call displayMailOptions(domain)>
+<list domain.getChildren("domain") as subdomain><call displayMail(subdomain)></list>
+</function>
+
+<function displayMailOptions(domain)>
+<assign mail_service=domain.findChild("mail_service")>
+<if mail_service>
+<assign mail_domain=mail_service.findChild("mail_domain")>
+<tr>
+  <td class="control_header"><call draw_header(toolbox.compose(lang.accprev.mail.server, mail_domain.name))></td>
+  <td class="control_header"><call draw_header(mail_domain.parent.mail_server.name)></td>
+</tr>
+<assign mail_relay=mail_service.findChild("mail_relay")>
+<if mail_relay>
+<tr>
+  <td><call draw_label(mail_relay.mail_server_name)><call draw_label("->")>
+      <call draw_label(mail_service.mail_server_name)></td>
+  <td><call draw_label(lang.accprev.mail.mail_relay)></td>
+</tr>
+</if>
+<assign spf=mail_service.findChild("spf")>
+<if spf>
+<tr>
+  <td><call draw_label(mail_domain.name)></td>
+  <td><call draw_label(lang.accprev.mail.spf)></td>
+</tr>
+</if>
+<td><call draw_label(mail_domain.fullemail)> <if mail_domain.catchAll == "postmaster">*</if></td>
+<td><call draw_label(lang.accprev.mail.mailbox)></td>
+<list mail_domain.getChildren("mailbox") as mailbox>
+<tr>
+  <td><call draw_label(mailbox.email+"@"+mail_domain.name)> <if mail_domain.catchAll == mailbox.email>*</if></td>
+  <td><call draw_label(lang.accprev.mail.mailbox)></td>
+</tr>
+</list>
+<list mail_domain.getChildren("mail_forward") as forward>
+<tr>
+  <td><call draw_label(forward.local+"@"+mail_domain.name+" -&gt; ")>
+	<assign subs="">
+	<list forward.subscribers as subscriber>
+	  <if subs=="">
+	    <assign subs=subscriber>
+	  <else>
+	    <assign subs=subs+", "+subscriber>
+	  </if>
+	</list>
+	<call draw_label(subs)>
+  </td>
+  <td><call draw_label(lang.accprev.mail.forward)></td>
+</tr>
+</list>
+<list mail_domain.getChildren("mailbox_alias") as alias>
+<tr>
+  <td><call draw_label(alias.local+"@"+mail_domain.name+" -&gt; ")>
+	<assign subs="">
+	<list alias.subscribers as subscriber>
+	  <if subs=="">
+	    <assign subs=subscriber>
+	  <else>
+	    <assign subs=subs+", "+subscriber>
+	  </if>
+	</list>
+        <call draw_label(subs)>
+  </td>
+  <td><call draw_label(lang.label.mail_alias)></td>
+</tr>
+</list>
+<list mail_domain.getChildren("responder") as responder>
+<tr>
+  <td><call draw_label(responder.local+"@"+mail_domain.name)></td>
+  <td><call draw_label(lang.accprev.mail.resp)></td>
+</tr>
+</list>
+<list mail_domain.getChildren("antispam") as antispam>
+<tr>
+  <td><call draw_label(antispam.email)></td>
+  <td><call draw_label(lang.accprev.mail.antispam)></td>
+</tr>
+</list>
+<list mail_domain.getChildren("antivirus") as antivirus>
+<tr>
+  <td><call draw_label(antivirus.email)></td>
+  <td><call draw_label(lang.accprev.mail.antivirus)></td>
+</tr>
+</list>
+</if>
+</function>

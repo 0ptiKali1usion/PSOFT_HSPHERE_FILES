@@ -1,0 +1,73 @@
+<!-- BEGIN ./domain/list.html  -->
+<compress>
+<if (!account.plan.isResourceAvailable("unixuser")) && (account.plan.isResourceAvailable("mail_service"))><assign isMailOnly = "1"></if>
+
+<assign domainManager = account.getChild("unixuser")>
+<if domainManager>
+  <assign platform = domainManager.host.platform_type>
+  <assign parent_id = domainManager>
+<else>
+  <assign domainManager = account>
+  <assign platform = "unix">
+  <assign parent_id = account.id>
+</if>
+
+<if account.plan.isResourceAvailable("ip")>
+  <assign with_ip = "1"><assign t_colspan = "4">
+<else>
+  <assign t_colspan = "3">
+</if>
+
+<if platform == "unix">
+  <assign edit_template="domain/edit.html">
+<else>
+  <assign edit_template="windomain/edit.html">
+</if>
+</compress>
+<function displayDomain(level, domain, parent)>
+<tr>
+  <td    valign="middle" nowrap><if level><call draw_label(level)>&gt;</if><call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain,domain.name)><if !isMailOnly>&nbsp;<call draw_preview("http://"+domain.name, lang.domain.list.open)></if></td>
+  <if with_ip><td     nowrap><assign ip=domain.getChild("ip")><if ip><call draw_label(toolbox.int2ext(ip.ip))> <if ip.shared=="1"><call draw_label("(shared)")></if><else><call draw_label("-")></if></td></if>
+  <td><call draw_label(lang.label[domain.type])></td>
+  <td  class="control_align_center" nowrap><call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain, lang.domain.list.edit)>&nbsp;<assign hosting=domain.getChild("hosting")>
+<assign hosting=domain.getChild("hosting")>
+<if hosting>
+  <if (hosting.server=="IIS") || (hosting.server=="zeus")>
+    <call disableNewWarn(parent,domain)>
+  <else>
+    <call draw_palink(config.CLIENT_CP_URL+"?rid="+parent+"&did="+domain+"&stemplate=domain/list.html"+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&next_template=domain/del_content_request.html&hosting="+hosting+"&res_to_del=domain", "del",lang.functions.action_remove)>
+  </if>
+<else>
+  <call disableNewWarn(parent,domain)>
+</if>
+</td>
+</tr>
+<list domain.getChildren("subdomain").sortNatural("name") as subdomain>
+  <call displayDomain(level+"-", subdomain, domain)>
+</list>
+</function>
+
+<call draw_tooltip()>
+<call draw_table_header(t_colspan, lang.domain.list.header)>
+
+<if (domains.size=="0") && (nodomains.size=="0") && (threeldomains.size=="0") && (service_domains.size=="0") && (parked_domains.size=="0")>
+<tr>
+  <td    colspan="${t_colspan}"><call draw_label(lang.domain.list.noanydomain)></td>
+</tr>
+<else>
+<tr>
+  <td  class="control_align_center"><call draw_label_bold(lang.label.dname)>&nbsp;<call draw_help("user-ds_domaininfo-domainname-h","")></td>
+  <if with_ip><td  class="control_align_center"><call draw_label_bold(lang.domain.list.ipaddress)>&nbsp;<call draw_help("user-ds_domaininfo-ipaddress-h","")></td></if>
+  <td  class="control_align_center"><call draw_label_bold(lang.domain.list.type)>&nbsp;<call draw_help("user-ds_domaininfo-domaintype","")></td>
+  <td  class="control_align_center" width="5%"><call draw_label_bold(lang.label.control)></td>
+</tr>
+
+<list account.findAllChildrenList("domain", "nodomain", "3ldomain", "service_domain", "parked_domain").sortNatural("name") as domain>
+<call displayDomain("", domain, parent_id)>
+</list>
+</if>
+<tr >
+  <td colspan="${t_colspan}" class="control_align_right"><call draw_label_bold(lang.label.adddomain)><call draw_add(config.CLIENT_CP_URL+"?template_name=domain/registration.html&stemplate="+template+"&ftemplate="+template, lang.label.adddomain)></td>
+</tr>
+<call draw_table_footer()>
+<!--  END ./domain/list.html -->

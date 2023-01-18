@@ -1,0 +1,5 @@
+include common.s_hsphere.yafv: vcc_name, vcc_number, vSS_number, vcc_month, vcc_year, vSinglename, vName, vOrganization, vAddress, vAddress2, vCity, vState, vStateOther, vPostal_Code, vCountry, vPhone, vFax, vEmail, vIssueNum, vDateYY, vExemptionCode, vExemptionCodeReq, vCvvNum, vPayPalAmount;
+include common.s_hsphere.yafv: vSSCards(string), vCardIssueNum(string, string), vCardDateMMYY(string, string, string), vCCNumber(string, string), vCardCvvNum(string, string);
+
+regexp vAmount=		"\d+",		fail=yafv.vAmount.billing.fail;
+

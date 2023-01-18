@@ -1,0 +1,8 @@
+<center>VPS process limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Process Limit is the maximum number of processes running inside a VPS server.<br>
+<br>
+<i>Process Limit</i> cannot be exceeded. No new processes will be created if the number of running processes reaches <i>Process Limit</i>.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Minimal VPS installation requires ~10-20 processes to run.</i>

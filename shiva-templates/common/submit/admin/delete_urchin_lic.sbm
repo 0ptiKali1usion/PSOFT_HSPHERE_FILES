@@ -1,0 +1,10 @@
+<assign lic_man = account.getChild("urchin_lic_manager")>
+<assign result = lic_man.deleteLicense(request.l_server_id,request.lic_id)>
+<if result.status=="OK">
+  <assign res=session.addMessage(
+  toolbox.compose(lang.msg.name_res_deleted,lang.label.license,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>

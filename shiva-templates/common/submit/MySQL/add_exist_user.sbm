@@ -1,0 +1,39 @@
+<assign database=account.getResource(request.db_id)>
+<assign m_user=account.getResource(request.u_id)>
+<if (database.status=="OK") && (m_user.status=="OK")>
+   <assign user_pr=m_user.loadUserPrivilegesOn(database.db_name)>
+   <if user_pr.status=="OK">
+      <assign privileges = result.getDatabasePrivileges()>
+      <switch request.user_role>
+         <case "1">
+           <assign privileges="select">
+           <break>
+         <case "2">
+           <assign privileges="select,insert,delete,update">
+           <break>
+         <case "3">
+           <assign privileges="all,grant">
+           <break>
+         </switch>
+      <assign result=user_pr.setDatabasePrivileges(privileges)>
+   <else>
+      <assign res = session.addMessage(lang.msg.mysql.failed_get_uprivileges)>
+      <assign failure="1">
+   </if>
+<else>   
+   <assign res=session.addMessage(lang.msg.internal_problem)>
+   <assign failure="1">
+</if>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.mysql.granted_uprivileges, m_user.name, database.db_name))>
+<else>
+  <assign res=session.addMessage(lang.msg.internal_problem)>
+</if>
+
+<if !failure>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+

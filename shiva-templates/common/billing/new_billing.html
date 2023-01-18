@@ -1,0 +1,8 @@
+<!-- BEGIN ./billing/new_billing.html.in  -->
+<assign template="billing/new_billing.html">
+<include "functions">
+<call draw_menu("billing-bi")>
+<assign stemplate=request.stemplate>
+<include "control/billing/new_billing.html">
+<call bottom()>
+<!--  END ./billing/new_billing.html.in  -->

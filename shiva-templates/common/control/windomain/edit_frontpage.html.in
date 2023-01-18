@@ -1,0 +1,42 @@
+<!-- BEGIN ./windomain/edit_frontpage.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<if request.uid>
+<assign frontpage=account.getResource(request.uid)>
+<assign ivalues = frontpage.getProperties("MailSender", "MailReplyTo")>
+<if ivalues.status != "ERROR">
+  <assign vsender=ivalues.MailSender>
+  <assign vreply=ivalues.MailReplyTo>
+</if>
+<br>
+<form name="f_tune_frontpage"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/mod_frontpage.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.domain.addfrontpage.header3)>
+
+
+<tr>
+   <td><call draw_label(lang.domain.addfrontpage.sender)></td>
+   <td><input type="text" name="MailSender" size="30" label="${lang.email.adr}" check="vEmail" value="${vsender}"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.domain.addfrontpage.replyto)></td>
+   <td><input type="text" name="MailReplyTo" size="30" label="${lang.email.adr}" check="vEmail" value="${vreply}"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./windomain/edit_frontpage.html.in  -->

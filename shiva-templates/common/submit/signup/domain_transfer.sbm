@@ -1,0 +1,32 @@
+<!-- BEGIN ./common/submit/signup/domain_transfer.sbm -->
+
+<assign name = request.domain+request.ext>
+<!--checked name === ${name} -->
+<assign result=yafv.common.s_signup.vOsrsDomainName(lang.label.osrs_domain_name, name)>
+
+<if (result.status=="OK") && (request.back=="")>
+    <assign result=toolbox.isTransferable(name)>
+    <if result.status != "OK">
+      <assign res=session.addMessage(result.msg)>
+    <else>
+      <assign success="1">
+    </if>
+<else>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if (success!="") && (request.back=="")>
+    <assign domain=toolbox.html_encode(request.domain)>
+    <assign ext=request.ext>
+    <assign domain_name=name>
+    <assign res=params.addHash("name","domain_name","value",name)>
+    <include "signup/order_domain_transfer.html">
+<else>
+    <assign domainaction="domain_transfer">
+    <assign domain_name=toolbox.html_encode(request.domain_name)>
+    <assign ext=request.ext>
+    <include "signup/domains.html">
+</if>
+
+<!-- END ./common/submit/signup/domain_transfer.sbm -->

@@ -1,0 +1,53 @@
+<!-- BEGIN ./common/control/admin/async/async_manager.html -->
+<assign admin = account.getChild("admin")>
+<call draw_tooltip()>
+
+<call draw_table_header("5", lang.label.async_manager)>
+
+<tr>
+<td class="control_header"><call draw_header(lang.label.descr)></th>
+<td class="control_header"><call draw_header(lang.label.user)></th>
+<td class="control_header"><call draw_header(lang.label.last_check)></th>
+<td class="control_header"><call draw_header(lang.label.interval_in_hr)></th>
+<td class="control_header"><call draw_header(lang.label.state)></th>
+</tr>
+
+<list admin.async_manager.descriptors as d>
+
+<tr><td><call draw_label(d.description)></td>
+<td><call draw_label(d.user.login)></td>
+<td><call draw_label(d.last_check("TS_SHORT"))></td>
+<td><call draw_label(d.interval)></td>
+<td>
+<switch d.state>
+<case "0">
+<call draw_label(lang.button.done)>
+<break>
+<case "1">
+<call draw_label(lang.label.in_progress)>
+<break>
+<case "2">
+<call draw_label(lang.label.rejected)>
+<break>
+<case "3">
+<a href="javascript:alert('Error: ${d.error_code}:${d.error}')"><call draw_label(lang.label.error)></a>
+<break>
+<case "4">
+<call draw_label(lang.label.timeout)>
+<break>
+<case "5">
+<call draw_label(lang.search.deleted)>
+<break>
+</switch>
+<br>
+<if d.state != "5" && d.state != "0">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/async/cancel.sbm&rid="+d.rid+"&stemplate="+template, "cancel")>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/async/reset.sbm&rid="+d.rid+"&stemplate="+template, "reset")>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/async/check.sbm&rid="+d.rid+"&stemplate="+template, "check")>
+</if>
+</td>
+</tr>
+</list>
+<call draw_table_footer()>
+
+<!-- END ./common/control/admin/async/async_manager.html -->

@@ -1,0 +1,36 @@
+<!-- BEGIN ./PGSQL/add_new_user.sbm  -->
+<assign cdb_id=request.db_id>
+<assign check=yafv.checkall(
+    yafv.common.s_pgsql.vPSQLCombLogin(lang.label.username,request.user_name, request.suffix),
+    yafv.common.s_pgsql.vPassword1(lang.label.password,request.user_password, request.user_name),
+    yafv.common.s_pgsql.vPassword2(lang.label.password2,request.user_password,request.user_password1))>
+<if check.status=="OK">
+  <if request.user_password==request.user_password1>
+    <assign pgsql = account.getChild("pgsql")>
+    <assign exist = pgsql.isUserExist(request.user_name)>
+       <if exist>
+         <assign res=session.addMessage(toolbox.compose(
+           lang.msg.name_res_exists,lang.label.user,request.user_name))>
+         <assign res=session.addMessage(lang.msg.different_pgsqluser_name_required)>
+         <include request.ftemplate>
+       <else>
+           <assign result = pgsql.addChild("pgsqluser","",request.user_name,request.user_password)>
+           <if result.status!="OK">
+             <assign res=session.addMessage(lang.msg.failed_add_pgsqluser)>
+             <include request.ftemplate>
+           <else>
+             <assign res=session.addMessage(toolbox.compose(
+               lang.msg.name_res_added,lang.label.user,request.user_name))> 
+             <assign user=account.getResource(result)>
+             <include request.stemplate>
+           </if>
+       </if>  
+  <else>
+    <assign res=session.addMessage(lang.msg.failed_compare_passwords)>
+    <include request.ftemplate>
+  </if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+    <include request.ftemplate>
+</if>
+<!-- END ./PGSQL/add_new_user.sbm  -->

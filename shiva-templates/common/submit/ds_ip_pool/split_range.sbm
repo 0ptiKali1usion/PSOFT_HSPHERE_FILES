@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/ds_pool/split_range.sbm-->
+<assign result = obj.subnet_manager.splitRange(request.subnet_id, request.range_id, request.limit)>
+<if result != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+</if> 
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/split_range.sbm  -->

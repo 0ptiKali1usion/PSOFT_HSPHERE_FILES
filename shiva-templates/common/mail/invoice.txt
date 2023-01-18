@@ -1,0 +1,23 @@
+${lang.massmail.invoice_header(account.ci.first_name, account.ci.last_name)}
+
+${lang.massmail.invoice_inform}
+${lang.massmail.invoice_login(account.login)}
+${lang.massmail.invoice_account(account.id.id)}
+${lang.massmail.invoice_plan(account.plan.description)}
+${lang.massmail.invoice_order(order_id)}
+
+<list entries as bill_entry>${bill_entry.description} ${toolbox.currency(bill_entry.amount)}
+</list>
+<if (taxes.size != "") && (taxes.size!="0")>${lang.massmail.new_account_subtotal} ${toolbox.currency(subtotal)}<list taxes.KEYS as tax_id>
+${toolbox.taxes[tax_id].description}(${toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")} %) ${toolbox.currency(taxes[tax_id])}</list></if>
+${lang.massmail.new_account_total} ${toolbox.currency(total)}
+${lang.massmail.invoice_balance}     ${toolbox.currency(account.bill.balance)}
+
+<if account.bi.type!="CC">
+<if toolbox.lt(account.bill.balance, "0") == "1"><assign in_value=toolbox.sub("0", account.bill.balance)>
+<if account.bi.type=="Check">${lang.massmail.invoice_check} ${settings.check}<else>${lang.massmail.url} ${toolbox.getPaymentLink(account.bi.type, in_value, "acc-", account.id, account.description)}</if>
+</if>
+</if>
+
+${lang.massmail.invoice_support}
+${settings.support}

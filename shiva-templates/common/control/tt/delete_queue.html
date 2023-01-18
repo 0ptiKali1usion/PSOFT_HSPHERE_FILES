@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/tt/delete_queue.html  -->
+<call draw_tooltip()>
+
+<assign ttadmin = account.getChild("ttadmin")>
+<form name="delete_confirm" action="${config.CLIENT_CP_URL}" method="post">
+<input type="hidden" name="template_name" value="submit/tt/delete_queue.sbm">
+<if request.stemplate>
+    <input type="hidden" name="stemplate" value=${request.stemplate}>
+<else>
+    <input type="hidden" name="stemplate" value="tt/config_tt.html">
+</if>
+<input type="hidden" name="quid" value=${request.quid}>
+
+<call draw_table_header("", lang.queue.deleteconfirm.header + request.qname + " ?")>
+<tr>
+<td nowrap>
+    <input type="radio" name="tick_flag" value="0" CHECKED>
+        <call draw_label(lang.queue.tickets.delete)>
+</td>
+</tr>
+<tr>
+<td nowrap>
+    <input type="radio" name="tick_flag" value="1">
+    <call draw_label(lang.queue.tickets.move)>
+    <select name="new_quid" size="1">
+      <list ttadmin.queue_list as que_id>
+      <assign que=ttadmin.getQueue(que_id)>
+    <if request.quid != que.id>
+       <option value="${que.id}" <if que.id == ticket.qid>SELECTED</if>>${que.name}</option>
+    </if>   
+</list>
+</select>
+</td>
+</tr>
+<tr>
+<td class="control_align_center" colspan="2">
+  <input type="submit" value="Delete">
+  <input type="button" value="Cancel" onClick()=javascript:history.go(-1)>
+</td>
+</tr>
+
+
+<call draw_table_footer()>
+
+</form>
+<!--  END ./control/tt/delete_queue.html  -->

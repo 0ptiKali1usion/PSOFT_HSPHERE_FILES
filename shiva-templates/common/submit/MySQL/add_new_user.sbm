@@ -1,0 +1,52 @@
+<assign check=yafv.checkall(
+    yafv.common.s_mysql.vMySQLCombLogin(lang.label.username, request.user_name, request.suffix),
+    yafv.common.s_mysql.vPassword1(lang.label.password, request.user_password, request.user_name),
+    yafv.common.s_mysql.vPassword2(lang.label.password2, request.user_password, request.user_password1))>
+<if check.status=="OK">
+    <assign mysql = account.getChild("MySQL")>
+    <assign exist = mysql.isUserExist(request.user_name)>
+    <if exist=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.name_res_exists, lang.label.user, request.user_name))>
+       <assign failure="1">
+    <else>
+       <assign m_user = mysql.addChild("MySQLUser","",request.user_name,request.user_password)>
+       <if m_user.status!="OK">
+         <assign res=session.addMessage(m_user.msg)>
+	 <assign failure="1">
+       <else>
+         <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_added, lang.label.user, request.user_name))>
+         <assign database=account.getResource(request.db_id)>
+         <assign user_pr=m_user.loadUserPrivilegesOn(database.db_name)>
+         <if user_pr.status == "OK">
+            <switch request.user_role>
+               <case "1">
+	         <assign privileges="select,">
+                 <break>
+               <case "2">
+	         <assign privileges="select,insert,delete,update">
+                 <break>
+               <case "3">
+	         <assign privileges="all,grant">
+                 <break>
+               </switch>
+	       <assign p = user_pr.setDatabasePrivileges(privileges)>
+         <else>
+            <assign res=session.addMessage(lang.msg.mysql.failed_get_uprivileges)>
+	    <assign failure="1">
+         </if>
+       </if>
+    </if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+
+
+<if !failure>
+   <assign user_id=m_user>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>

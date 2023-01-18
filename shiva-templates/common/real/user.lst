@@ -1,0 +1,5 @@
+UserList [
+<list userlist as user>
+{${user.user}, /hsphere/${user.user}/, ${user.min_con}, ${user.max_con}},
+</list>
+]             

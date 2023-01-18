@@ -1,0 +1,10 @@
+<!-- BEGIN ./control/billing/pi.Check  -->
+<tr>
+   <td colspan="2" bgcolor="${LIGHT_STRIP}" align="center">${lang.billing.picheck.text}
+<address>
+<pre>
+${settings.check}
+</pre>
+</address></td>
+</tr>
+<!--  END ./control/billing/pi.Check  -->

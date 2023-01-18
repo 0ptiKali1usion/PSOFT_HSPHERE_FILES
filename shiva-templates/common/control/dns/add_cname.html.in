@@ -1,0 +1,44 @@
+<!-- BEGIN ./control/dns/add_cname.html.in  -->
+<yafv s_dns>
+<call draw_tooltip()>
+<assign domain=account.getResource(request.rid)>
+<form name="f_add_cip"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/dns/add_cname_submit.sbm">
+
+
+
+
+
+<call draw_table_header("5", lang.dns.addcname.header)>
+
+
+
+<tr>
+    <td  colspan="5"  ><call draw_label("$ORIGIN "+domain.name)></td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.dns.name)></td>
+   <td><call draw_label(lang.dns.ttl)></td>
+   <td><call draw_label(lang.dns.class)></td>
+   <td><call draw_label(lang.dns.type)></td>
+   <td><call draw_label(lang.dns.data)></td>
+</tr>
+<tr>
+<td    nowrap><input type="text" name="name" value="${vname}" check="vCustomCName" label="${lang.dns.name}"></td>
+<td    nowrap><input type="text" name="ttl" <if vttl> value="${vttl}" <else> value="86400"</if> label="${lang.dns.ttl}" maxlength="6" size="6" label="5 digits" check="vTTL"></td>
+<td  class="control_align_center" nowrap><call draw_label("IN")></td>
+<td  class="control_align_center" nowrap><call draw_label("CNAME")></td>
+<td    nowrap><input type="text" name="data" value="${vdata}" label="${lang.dns.data}" check="vTransferDomainName"></td>
+
+<tr>
+   <td colspan="5"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/dns/add_cname.html.in  -->

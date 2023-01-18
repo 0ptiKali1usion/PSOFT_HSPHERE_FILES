@@ -1,0 +1,64 @@
+<!-- BEGIN ./submit/admin/settings/change_images.sbm -->
+<compress>
+  <assign admin = account.getChild("admin")>
+  <assign logo_cell_width="135">
+  <assign logo_cell_height="60">
+  <call savel("banner")>
+  <call save("logo_url")>
+  <call save("signup_image_url")>
+  <call save("login_image_url")>
+  <call save("login_image_width")>
+  <call save("login_image_height")>
+  <call save("cp_agent")>
+</compress>
+<assign result=yafv.checkall(
+  yafv.common.s_admin.vNumberReqParent(lang.admin.logo_img_width,request.logo_url,request.logo_image_width),
+  yafv.common.s_admin.vNumberReqParent(lang.admin.logo_img_height,request.logo_url,request.logo_image_height) )>
+<if result.status=="OK">
+  <if (toolbox.gt(request.logo_image_width,logo_cell_width) == "1") 
+	|| (toolbox.gt(request.logo_image_height,logo_cell_height) == "1")>
+    <if toolbox.gt(request.logo_image_width, logo_cell_width) == "1">
+       <assign coef=toolbox.div(request.logo_image_width, logo_cell_width)>
+    <else>
+       <assign coef=toolbox.div(request.logo_image_height, logo_cell_height)>
+    </if>
+    <call save_v("logo_image_height", toolbox.ceil(toolbox.div(request.logo_image_height, coef)))>
+    <call save_v("logo_image_width", toolbox.ceil(toolbox.div(request.logo_image_width, coef)))>
+  <else>
+    <call save("logo_image_width")>
+    <call save("logo_image_height")>
+  </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+
+<assign result=yafv.checkall(
+  yafv.common.s_admin.vNumberReqParent(lang.admin.signup_img_width,request.signup_image_url,request.signup_image_width),
+  yafv.common.s_admin.vNumberReqParent(lang.admin.signup_img_height,request.signup_image_url,request.signup_image_height) )>
+<if result.status=="OK">
+  <if (toolbox.gt(request.signup_image_width,"200")=="1") || (toolbox.gt(request.signup_image_height,"200")=="1")>
+    <if toolbox.gt(request.signup_image_width,request.signup_image_height) == "1">
+       <assign coef=toolbox.div(request.signup_image_width,"200")>
+    <else>
+       <assign coef=toolbox.div(request.signup_image_height,"200")>
+    </if>
+    <call save_v("signup_image_height",toolbox.div(request.signup_image_height,coef))>
+    <call save_v("signup_image_width",toolbox.div(request.signup_image_width,coef))>
+  <else>
+    <call save("signup_image_width")>
+    <call save("signup_image_height")>
+  </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<function save(name)><assign res=admin.setSettingsValue(name, request[name])></function>
+<function save_v(name,value)><assign res=admin.setSettingsValue(name,value)></function>
+<function savel(name)><assign res=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/change_images.sbm -->

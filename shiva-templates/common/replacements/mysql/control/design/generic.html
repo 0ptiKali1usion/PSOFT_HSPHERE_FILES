@@ -1,0 +1,36 @@
+<!-- BEGIN control/unixuser/generic.html  -->
+<assign rmserver=account.getChild("realserver_user")>
+<assign rmuser=rmserver.getChild("real_user")>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("3", "")>
+
+<tr>
+ <td width="5%" class="control_header"><call draw_TT_header()></td>
+ <td width="25%" class="control_header"><call draw_header(lang.label.parameter)></td>
+ <td  class="control_header"><call draw_header(lang.label.parameter)></td>
+</tr>
+
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)></td></tr>
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.acc_manager_login)></td>
+   <td><call draw_label(user.login)></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+<td><call draw_label(lang.label.tooltips_state)></td>
+<td>
+
+<call draw_state(account.tooltips, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=off"+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template)>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END control/unixuser/generic.html  -->

@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/edit_entry.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).updateEntry(request.eid, request.q, request.a)>
+<if result>
+	<assign res=session.editMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success editing an entry">
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/edit_entry.sbm -->

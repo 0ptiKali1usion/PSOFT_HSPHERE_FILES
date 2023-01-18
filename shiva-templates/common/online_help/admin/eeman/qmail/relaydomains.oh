@@ -1,0 +1,11 @@
+<center> relaydomains </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of host and domain names allowed to relay mail through this host. 
+<br>This is an additional mail relay check by the domain name, in case if relay via the tcp.cdb static relay database is forbidden. 
+<br>Addresses in relaydomains may be wildcarded:
+<br>heaven.af.mil:
+<br>.heaven.af.mil:
+<br>Default: the relaydomains file is absent (all domains are allowed to relay mail).
+<br>
+

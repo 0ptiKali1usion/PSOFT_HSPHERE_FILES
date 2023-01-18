@@ -1,0 +1,4 @@
+<!-- BEGIN ./commont/submit/account_preview/createjob.sbm -->
+<assign result=account.getChild("ttadmin").cjadmin.createJob(request.account_id, request.subject, request.description)>
+    <include request.stemplate>
+<!-- END ./commont/submit/account_preview/createjob.sbm -->

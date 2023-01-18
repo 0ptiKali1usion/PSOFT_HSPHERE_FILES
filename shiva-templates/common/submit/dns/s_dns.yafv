@@ -1,0 +1,4 @@
+include common.s_hsphere.yafv: vDomain_Name, vTransferDomainName, vIPAddr, vIPMask, vCustomAName, vCustomMXName, vCustomCName, vTTL, vPriority(integer), vDomainOrIP(string), vDNSTXTRecord, vCustomTXTName;
+
+regexp vCustomDomain= "([a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]\.)*[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="255", fail=yafv.vCustomDomain.fail;
+

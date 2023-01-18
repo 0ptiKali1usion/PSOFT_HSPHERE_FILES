@@ -1,0 +1,40 @@
+<!-- BEGIN ./submit/domain/update_errordoc.sbm  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign doc=account.getResource(request.uid)>
+<assign code = doc.code>
+<if !vmsg><assign vmsg=doc.msg></if>
+
+<form name="f_update_ed" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="domain/update_errordoc.html">
+<input type="hidden" name="template_name" value="submit/domain/update_errordoc_submit.sbm">
+
+<call draw_table_header("2", lang.domain.updateerrordoc.header)>
+
+<tr>
+	<td><call draw_label(lang.domain.updateerrordoc.doccode)></td>
+	<td><call draw_label(code)></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.domain.updateerrordoc.messageurl)></td>
+	<td nowrap><input type="text" name="msg" size="49" value="${vmsg}" label="${lang.domain.updateerrordoc.messageurl}" check="vHttpURLMessage(this, type, '${code}')"></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.domain.updateerrordoc.type)></td>
+	<td>
+	<if doc.mtype=="URL"><assign vurl_selected="CHECKED"><else><assign vmess_selected="CHECKED"></if>
+	<input type="radio" name="type" value="URL" ${vurl_selected} onClick="checkForm(this.form)"><call draw_label(lang.domain.updateerrordoc.redirect)>
+	<input type="radio" name="type" value="MESS" ${vmess_selected} onClick="checkForm(this.form)"><call draw_label(lang.domain.updateerrordoc.message)>
+	</td>
+</tr>		
+<tr>
+	<td  class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./submit/domain/update_errordoc.sbm  -->
+

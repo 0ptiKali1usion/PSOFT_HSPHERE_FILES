@@ -1,0 +1,11 @@
+<!-- BEGIN ./adnsmanager/delete_mail_srs.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+<assign srs = mail_manager.mail_srs>
+<assign result = srs.delete()>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/delete_mail_srs.sbm  -->

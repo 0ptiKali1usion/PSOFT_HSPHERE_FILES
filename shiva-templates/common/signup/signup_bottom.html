@@ -1,0 +1,34 @@
+<!--BEGIN Bootom of signup signup/signup_bottom-->
+			</td>
+		    </tr>
+		</TABLE>
+		</TD>
+	 </TR>
+<!-- End Text -->
+	 </TABLE>
+	</TD>
+</TR>
+
+<TR>
+<TD style="border: 0; padding: 0; spacing: 0; background-color: ${LIGHT_STRIP}; vertical-align: bottom;">
+    <form name="back" method="POST" accept-charset="UTF-8">
+  <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; vertical-align: bottom; width: 100%">
+	<TR>
+        <!--disable_back = ${disable_back} -->
+      <td style="border: 0px; padding: 0; spacing: 0;">
+	  <input type="hidden" name="template_name" value="${ftemplate}">
+	  <input type="hidden" name="back" value="1">
+	  <assign excludeFields=excludeFields+"template_name;"><call genHiddenField(excludeFields)>
+	  &nbsp;<if !disable_back><a href="#" onClick="document.forms['back'].submit();return false;"><call draw_image("button_back")></a></if>
+	</td>
+	<!--disable_next = ${disable_next} -->
+	<td style="border: 0px; padding: 0; spacing: 0;" align="right"><if !disable_next><a href="#" onClick="if (${v__checkMethod}) { window.document.forms['login'].submit(); } return false"><call draw_image("button_next")></a></if>&nbsp;</td>
+	</TR>
+      </TABLE>
+    </form>
+  </TD>
+</TR>
+</TABLE>
+<!--END Bootom of signup signup/signup_bottom-->
+</BODY>
+</HTML>

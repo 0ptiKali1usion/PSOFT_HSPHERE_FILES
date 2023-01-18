@@ -1,0 +1,40 @@
+<!-- BEGIN ./control/eeman/lserver_options/extwebmail.html  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_role" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="ext_webmail">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.extwebmail)></td>
+  <td>
+    <assign web_id=optManipulator.getOption(lserverId)>
+    <select name="value">
+        <option value=""><call draw_label(lang.eeman.lserveredit.options.na)></option>
+        <if useXML == "false">
+            <assign lServers = eeman.getLserverList()>
+        <else>
+            <assign lServers = confhs.getLserverList()>
+        </if>
+        <list lServers as lserver>
+            <if lserver.type == 1>
+                <assign selected = "">
+                <if web_id == lserver.id>
+                    <assign selected = "SELECTED">
+                </if>
+                <option value="${lserver.id}" ${selected}>${lserver.name}</option>
+            </if>
+        </list>
+    </select>
+    &nbsp;&nbsp;<input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+</form>
+<!-- END ./control/eeman/lserver_options/extwebmail.html  -->

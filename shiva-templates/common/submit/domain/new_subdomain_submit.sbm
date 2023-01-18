@@ -1,0 +1,21 @@
+<!-- BEGIN ./domain/new_subdomain_submit.html  -->
+<assign result=yafv.common.s_domain.vSubDomain(lang.label.subdomain,request.name)>
+<if result.status=="OK">
+    <assign domain=account.getResource(request.rid)>
+    <assign result=domain.addChild("subdomain", "", request.name+"."+domain.name)>
+    <if result.status=="OK">
+	<assign success="1">
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign name=toolbox.html_encode(request.name)>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/new_subdomain_submit.html  -->

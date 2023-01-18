@@ -1,0 +1,140 @@
+<!-- BEGIN ./control/eeman/allocservers.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+
+<form name="f_allocservers" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="is_secondary_view" value="1">
+
+<if request.sc_unassigned=="true" || request.is_secondary_view!="1">
+    <assign check_unassigned = "CHECKED">
+    <assign arg_unussigned = "1">
+<else>
+    <assign check_unassigned = "">
+    <assign arg_unussigned = "0">
+</if>
+<if request.sc_available=="true" || request.is_secondary_view!="1">
+    <assign check_available = "CHECKED">
+    <assign arg_available = "1">
+<else>
+    <assign check_available = "">
+    <assign arg_available = "0">
+</if>
+<if request.sc_taken=="true" || request.is_secondary_view!="1">
+    <assign check_taken = "CHECKED">
+    <assign arg_taken = "1">
+<else>
+    <assign check_taken = "">
+    <assign arg_taken = "0">
+</if>
+
+
+<call draw_table_header("3", lang.eeman.allocservers.header)>
+
+<tr>
+  <td colspan="3" class="control_header"><call draw_header(lang.eeman.allocservers.chooseservers)></td>
+</tr>
+
+<tr>
+   <td>
+    <call draw_label(lang.eeman.allocservers.unassigned)>
+    <input type="checkbox" name="sc_unassigned" value="true" ${check_unassigned} >
+   </td>
+   <td>
+    <call draw_label(lang.eeman.allocservers.available)>
+    <input type="checkbox" name="sc_available" value="true" ${check_available}>
+   </td>
+   <td>
+    <call draw_label(lang.eeman.allocservers.taken)>
+    <input type="checkbox" name="sc_taken" value="true" ${check_taken}>
+   </td>
+</tr>
+<tr>
+    <td class="control_align_center" colspan="3">
+      <input type="submit" value="${lang.button.submit}">
+    </td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = obj.as_manager.getscanReport(request.arid)>
+  <if report.status == "OK">
+    <if request.sc_step>
+        <assign step = request.sc_step>
+    <else>
+        <assign step="5">
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<if !report_ok>
+    <assign report = obj.as_manager.scan(arg_unussigned, arg_available, arg_taken)>
+    <if request.sc_step>
+        <assign step = request.sc_step>
+    <else>
+        <assign step="5">
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page>
+        <assign page = request.sc_page>
+    <else>
+        <assign page = "1">
+    </if>
+</if>
+
+<if report.status == "OK">
+    <call advReportInit(report)>
+</if>    
+<!--${step} ${page}-->
+<assign sc_params="&sc_unassigned=" + toolbox.url_escape(request.sc_unassigned)+
+ "&sc_available="+toolbox.url_escape(request.sc_available)+
+ "&sc_taken="+toolbox.url_escape(request.sc_taken)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)+
+ "&is_secondary_view="+toolbox.url_escape(request.is_secondary_view)>
+
+<call draw_table_header("8", lang.eeman.allocservers.searchresult)>
+<tr>
+    <td class="control_header"><call advReportLabel(report, lang.eeman.allocservers.pserver_id, "ps_id")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.pserver_name, "ps_name")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.state, "state")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.plan_id, "plan_id")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.plan_name, "plan_name")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.account_id, "account_id")></td>
+    <td class="control_header"><call advReportLabel(report,lang.eeman.allocservers.username, "username")></td>
+    <td class="control_header"><call draw_header(lang.eeman.allocservers.controls)></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+    <tr>
+        <td><call draw_label(entry.ps_id)></td>
+        <td><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html"+"&rid="+entry.ps_id,entry.ps_name)></td>
+        <td><call draw_label(entry.state_description)></td>
+        <td><call draw_label(entry.plan_id)></td>
+        <td><call draw_label(entry.plan_name)></td>
+        <td><call draw_label(entry.account_id)></td>
+        <td><call draw_label(entry.username)></td>
+        <td>
+            <if entry.state=="0" || entry.state == "1">
+                <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/assign_plan_to_allocserver.html&ps_id="+entry.ps_id+"&stemplate="+template+sc_params, lang.eeman.allocservers.allocate)>
+                <if entry.state == "1">
+                   <br><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/eeman/unassign_pserver.sbm&ps_id="+entry.ps_id+"&stemplate="+template+sc_params, lang.eeman.allocservers.unassign)>
+                </if>
+            </if>
+        </td>
+    </tr>
+</list>
+
+<tr><td colspan="8">
+<call advReportNav(report)>
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/eeman/allocservers.html  -->

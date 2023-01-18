@@ -1,0 +1,133 @@
+<!-- BEGIN ./control/search.html  -->
+<assign su=account.getChild("su")>
+<assign reseller_su=account.getChild("reseller_su")>
+
+<if !su>
+    <if account.plan.isResourceAvailable("su")>
+	<assign su=account.addChild("su","")>
+	<if su.status!="OK">
+	    <assign su="">
+	</if>
+    </if>
+</if>
+
+<assign recreation_tool=account.plan.areResourcesAvailable("recreation_manager")>
+
+<if !recreation_tool>
+    <if account.plan.isResourceAvailable("recreation_manager")>
+        <assign recreation_tool=account.addChild("recreation_manager","")>
+	<if recreation_tool.status!="OK">
+             <assign recreation_tool="">
+        </if>
+    </if>
+</if>
+
+<assign admin=account.getChild("admin")>
+<!-- check permissions -->
+<if !(admin && reseller_su)>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("allusersearch")>
+  <assign result = report(request.sc_account_id,
+                        request.sc_reseller,
+                        request.sc_email,
+                        request.sc_username,
+                        request.sc_r_from,
+                        request.sc_r_to,
+                        request.sc_bci_email)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_reseller="+toolbox.url_escape(request.sc_reseller)+
+ "&sc_bci_email="+toolbox.url_escape(request.sc_email)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.sc_account_id)+
+ "&sc_r_from="+toolbox.url_escape(request.sc_r_from)+
+ "&sc_r_to="+toolbox.url_escape(request.sc_r_to)+
+ "&sc_bci_email="+toolbox.url_escape(request.sc_bci_email)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)+
+ "&sc_reseller="+toolbox.url_escape(request.sc_reseller)>
+
+<call draw_tooltip()>
+
+<assign colspan="6">
+<call draw_table_header(colspan, lang.admin.search_res_header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.reseller, "resellerId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td>
+<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)><if entry.suspended !=""><br><call draw_label_bold("suspended "+entry.suspended)></if></td>
+  <td  class="control_align_right">
+	<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)>
+  </td>
+  <td  class="control_align_center"><call draw_label(entry.created)></td>
+  <td><call draw_label(entry.resellerDescription)></td>
+  <td><call draw_label(entry.email)></td>
+  <td  nowrap>
+<if su><call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/admin/login.sbm&login="+toolbox.url_escape(entry.username)+"&account_id="+toolbox.url_escape(entry.accountId), lang.search.changelogin)></if><if reseller_su && entry.moveable=="1">
+<assign canBeMoved = reseller_su.canAccountBeMoved(entry.accountId)>
+<if canBeMoved>
+  <call draw_palink(config.CLIENT_CP_URL+"?user="+entry.username+"&res_descr="+entry.resellerDescription+"&crid="+entry.resellerId+"&stemplate="+template+"&ftemplate="+template+"&user_id="+entry.userId+"&template_name=admin/move_to_reseller.html"+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "move_to_reseller", lang.admin.move_to_reseller)></if>
+</if>
+<if recreation_tool && entry.demo != "1">
+    <call draw_palink(config.CLIENT_CP_URL+"?aid="+entry.accountId+"&user="+entry.username+"&template_name_first="+template+"&template_name=search/dns_operations.html&stemplate="+template+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start)+"&ftemplate="+template+"&zone="+entry.domain+"&recr_tool="+recreation_tool+"&plan_id="+entry.planId,"recreation_tools", lang.search.recreate_operations)>
+</if>
+<assign canBeSeparated = reseller_su.canAccountBeSeparated(entry.accountId)>
+<if canBeSeparated>
+<call draw_palink(config.CLIENT_CP_URL+"?aid="+entry.accountId+"&template_name=admin/break_user.html&stemplate="+template+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start)+"&ftemplate="+template, "br_acc", lang.search.break_user)>
+</if>
+  </td>
+</tr>
+</list>
+<tr><td  colspan="6">
+<call advReportNav(report)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/search.html  -->

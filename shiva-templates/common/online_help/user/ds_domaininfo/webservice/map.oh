@@ -1,0 +1,9 @@
+<center>	Server Side Imagemap</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	This feature allows your server to regard files with a specific extension as map files. In other words, the server checks the file with the specified extension to define the links of an image (unlike a client-side image map, which uses the info inserted into the HTML code) and reports back to the browser where to go. Server Side Imagemap replaces the functionality of the imagemap CGI program. <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	To add an imagemap file extension, click the <i>Add</i> icon.<br>
+<br>
+<b>NOTE:</b>The files extension must begin woth a dot, for example<i> .map</i>

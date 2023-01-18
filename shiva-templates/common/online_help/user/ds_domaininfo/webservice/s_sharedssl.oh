@@ -1,0 +1,38 @@
+<center>
+  Shared SSL Support 
+</center>
+<hr>
+  
+&nbsp;&nbsp;&nbsp;&nbsp; A shared SSL certificate allows you to use SSL (Secure 
+  Sockets Layer) encryption and business authentication <b>without the need to 
+  obtain a unique digital certificate, which usually costs more. </b> This is 
+  a quick and economical way of providing SSL functionality. It gives you the 
+  ability to communicate securely with your web customers. It protects all communications 
+  with your clients, so you can take credit card orders, protect sensitive personal 
+  information, and ensure that hackers do not detect your passwords. SSL security 
+  makes eavesdropping on your web traffic almost impossible. <br><br>
+
+Shared SSL uses WildCard (server-wide) certificates to service multiple domains on the contrary to SSL which servs a single domain. 
+  <i>Thawte</i> determines a wildcard certificate as "a single certificate, with 
+  a wildcard character in the domain name field. This allows the certificate to 
+  secure multiple hosts within the same domain. For example, a certificate for 
+  <i>*.domain.com</i>, could be used for <i>www.domain.com</i>, <i>www1.domain.com</i>, 
+  <i>www2.domain.com</i>, in fact, any host in the <i>domain.com</i> domain. When 
+  a client checks the host name in this certificate, it uses a shell expansion 
+  procedure to see if it matches."<br>
+  <br>
+  WildCard certificates work <b>only for third level domains</b>. For example, 
+  if you get a domain name for <i>*.domain.com</i>, it will work for <i>www.domain.com</i> 
+  and <i>products.domain.com</i>. But it will not work for <i>www.products.domain.com.</i> 
+  <br>
+<br>
+Example:<br>
+  When a website is using shared SSL certificate, visitors access it using <i>https://www.mydomain.com</i> 
+  instead of <i>http://</i><i>www.mydomain.com</i>. The information exchanged 
+  between the browser and the hosting server then is encrypted.<br>
+  <br>
+  * You can have Shared SSL certifiacate work for third-level domains created 
+  both via Frontpage and Site Studio.<br>
+  * Sites with shared SSL protection support CGI scripts and all other resources 
+  available at the <i>Web Services</i> page.<br>
+  <br>

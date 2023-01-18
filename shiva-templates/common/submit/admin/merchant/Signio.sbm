@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Signio.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PARTNER", request.partner, "AVS", request.avs, "LOGIN", request.login, "VENDOR", request.vendor, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.Signio", "TEMPLATE", "admin/merchant/Signio.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PARTNER", request.partner, "AVS", request.avs, "LOGIN", request.login, "VENDOR", request.vendor, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.Signio", "TEMPLATE", "admin/merchant/Signio.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Signio.sbm -->

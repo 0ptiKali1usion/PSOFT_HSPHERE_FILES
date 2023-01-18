@@ -1,0 +1,23 @@
+<center>osCommerce e-shop</center>
+<hr>
+<p><br>
+  &nbsp;&nbsp;&nbsp;&nbsp; <br>
+osCommerce is an open source e-commerce solution that allows you to create   multiple online stores with custom-fitted features.</p>
+To set up osCommerce, do the following:<br>
+  &nbsp;&nbsp;&nbsp;&nbsp; Toggle the ON/OFF button to enable/disable the resource.<br>
+
+* Switching off your osCommerce will irretrievably remove all your osCommerce settings, databases, etc. 
+<br>
+So the next time you enable it, you'll have to do it from  scratch and you might be charged the osCommerce setup fee
+set by administrator.<br>
+  <br>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;
+EDIT - click the icon, in case you  corrupted the templates somehow and want to get them fixed. Also, use it if you set your e-shop to use SSL security sertificate.<br>
+* 'Editing' your osCommerce e-shop you recreate the config file using the current hosting settings and restore the osCommerce files from bundle.<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+E-SHOP - click the icon to go directly to your on-line store.<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+ADMIN - click the icon  to go to your osCommerce administrative panel. 

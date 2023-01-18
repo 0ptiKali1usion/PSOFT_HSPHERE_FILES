@@ -1,0 +1,19 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+
+Please be aware that your hosting account ${account.id.id} has had an outstanding
+balance since ${negative_date}.  As of ${current_date}, your current outstanding
+balance is ${toolbox.displayBalance(bill.balance)}.  Please make arrangements to
+remit payment immediately.  If payment is not remitted in a timely manner your
+account will be suspended on ${suspend_date}.
+
+Account details:
+Login:      ${account.login}
+Account ID: #${account.id.id}
+Plan:       ${account.plan.description}
+Balance:    ${toolbox.displayBalance(bill.balance)}
+
+If you have any questions, don't hesitate to contact us.
+
+Regards,
+Support Team
+${settings.TT_EMAIL}

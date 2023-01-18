@@ -1,0 +1,40 @@
+<!-- BEGIN: ./submit/admin/comodossl_prices.sbm -->
+<assign cm=obj.comodo_manager>
+<if cm>
+  <compress>
+  <call check_3yr("24")>
+  <call check_3yr("34")>
+  <call check_3yr("7")>
+  <call check_3yr("62")>
+  <call check_3yr("63")>
+  <call check_3yr("64")>
+  </compress>
+  <if !failure>
+    <assign result = cm.setPrices()>
+    <if result.status == "ERROR">
+      <assign res = session.addMessage(result.msg)>
+      <include request.ftemplate>
+    <else>
+      <comment><!--assign res=session.addMessage("OK")--></comment>
+      <include request.stemplate>
+    </if>
+  <else>
+    <include request.ftemplate>
+  </if>
+</if>
+
+<function check_3yr(id)>
+  <call check_product(id, "1")>
+  <call check_product(id, "2")>
+  <call check_product(id, "3")>
+</function>
+
+<function check_product(id, term)>
+  <assign label = lang.comodossl["product_"+id] + " (" + term + ")">
+  <assign result = yafv.common.s_hsphere.vPriceOpt(label, request["product_" + id + "_" + term])>
+  <if result.status!="OK">
+    <assign failure = "1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</function>
+<!-- END: ./submit/admin/comodossl_prices.sbm -->

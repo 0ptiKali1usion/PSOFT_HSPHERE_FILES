@@ -1,0 +1,15 @@
+<center>Preinstalled Scripts</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp; Some pre-installed CGI scripts written in Perl, PHP, 
+and ASP come with your account for free. These are the counter, guestbook and 
+a web-chat. To see free pre-installed scripts available under your account, click 
+the <i>View</i> icon. If you accidentally delete any of your CGI scripts and/or 
+index page (index.html), you can restore it by clicking the <i>Restore to default 
+</i>link. The system will create the missing files and skip any of existing ones: 
+this way you will not lose any of your changes. If you want to get rid of any 
+undesirable changes in you CGI scripts and restore the system's default settings, 
+you will have to delete the files you want to restore and then click the <i>Restore 
+to default </i>link. <br>
+<br>
+Also, use the <i>Restore to default</i> link to fix up your temporary index page and graphics to default.<br><br>
+See the<i> Contents of Your Home Directory</i> chapter of User Guide for more information on the files and catalogues not to be deleted. 

@@ -1,0 +1,82 @@
+<!-- BEGIN ./submit/admin/wizards/edit.sbm -->
+
+<assign admin=account.getChild("admin")>
+<assign changer=admin.getPlanChanger(request.plan_id)>
+<assign wizard=changer.getWizard()>
+<assign plan=admin.getPlan(request.plan_id)>
+<include "submit/admin/wizards/checkvalues.sbm">
+
+<if !failure>
+  <include "submit/admin/wizards/process_special.sbm">
+  <if processNextSpecial=="1">
+    <if request.leave_prices>
+      <assign leave_prices="1">
+      <list wizard.categories.category as cat>
+        <call listCat(cat)>
+      </list>
+    </if>
+
+    <if leave_prices>
+      <assign plan = admin.savePlan(request.plan_id)>
+      <if plan.status != "OK">
+        <assign failure="1">
+        <assign res=session.addMessage(lang.msg.plan_unable_modify)>
+        <assign res=session.addMessage(plan.msg)>
+      <else>
+        <assign res=session.addMessage(lang.msg.plan_oldprices_saved)>
+      </if>
+      <include "admin/plans.html">
+    <else>
+      <include "admin/wizards/edit2.html">
+    </if>
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+
+
+<function listCat(cat)>
+<assign isReseller=admin.isReseller()>
+<list cat["*"] as r>
+<call checkElement(r)>
+</list>
+</function>
+
+<function checkElement(r)>
+<switch r.node_name>
+<case "resource">
+ <if (request["i_"+r("name")] || r("required")=="1") && (!isReseller || r("adminonly")!="1") && r("noprice")!="1">
+       <call vServicePrice(r("name"))>
+  </if>
+  <break>
+<case "LogicalGroup">
+<!-- logical group - do nothing -->
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name")) && request["i_"+r("name")]>
+    <call listCat(r)>
+  </if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))>
+    <call listCat(r)>
+  </if>
+  <break>
+</switch>
+</function>
+
+<function vServicePrice(tag)>
+     <assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+     <if toolbox.consists(priceType,"M")=="1">
+       <assign rtype = plan.getResourceType(tag)>
+       <assign val =   rtype.values["_FREE_UNITS_"]>
+       <if !val>
+       <assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+       <assign res=session.addMessage(toolbox.compose(
+             lang.msg.plan_requires_res_prices, name))>
+       <assign leave_prices="">
+       </if>
+     </if>
+</function>
+
+<!-- END ./submit/admin/wizards/edit.sbm -->

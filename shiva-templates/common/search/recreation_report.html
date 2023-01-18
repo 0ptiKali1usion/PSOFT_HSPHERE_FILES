@@ -1,0 +1,6 @@
+<assign template = "search/recreation_report.html">
+<include "functions">
+<if !request.cur_menu><assign cur_menu="search-accounts"><else><assign cur_menu=request.cur_menu></if>
+<call draw_menu(cur_menu)>
+<include "control/search/recreation_report.html">
+<call bottom()>

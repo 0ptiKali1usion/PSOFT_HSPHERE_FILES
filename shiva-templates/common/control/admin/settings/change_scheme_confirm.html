@@ -1,0 +1,23 @@
+<!-- BEGIN ./control/billing/change_scheme_confirm.html  -->
+<call draw_tooltip()>
+
+<form name="f_change_confirm" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<call draw_table_header("", lang.admin.changescheme.header)>
+<tr>
+<td>
+<input type="hidden" name="template_name" value="${next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="color_scheme" value="${request.color_scheme}">
+<input type="hidden" name="design_id" value="${request.design_id}">
+<input type="hidden" name="design_editing" value="1">
+<call draw_label(lang.admin.changescheme.text)><br>&nbsp;<br>
+<center>
+<call draw_link("javascript:document.f_change_confirm.submit()", lang.admin.changescheme.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.admin.changescheme.no)>
+</center>
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/billing/change_scheme_confirm.html  -->

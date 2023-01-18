@@ -1,0 +1,6 @@
+<center> sanetcheck </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables/disables network check for SpamAssassin.
+<br>Default: 0 (disabled).
+<br>

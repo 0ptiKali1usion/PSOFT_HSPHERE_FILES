@@ -1,0 +1,13 @@
+<!-- BEGIN ./kb/search.html  -->
+<assign template="kb/search.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.getChild("ttadmin") && request.inPanel != "0" >
+<call top_tt()>
+<call ticket_menu("kb-search")>
+<else>
+<call draw_menu("kb-search")>
+</if>
+<include "control/kb/search.html">
+<call bottom()>
+<!--  END ./kb/search.html  -->

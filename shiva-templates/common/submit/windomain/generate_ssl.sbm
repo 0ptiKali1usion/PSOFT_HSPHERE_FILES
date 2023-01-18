@@ -1,0 +1,35 @@
+<!-- BEGIN ./submit/windomain/generate_ssl.sbm  -->
+<assign result=yafv.checkall(
+yafv.common.s_windomain.vCustomDomain(lang.label.site_name,request.site),
+yafv.common.s_windomain.vEmail(lang.label.email,request.email),
+yafv.common.s_windomain.vOrganReq(lang.label.organization,request.organization),
+yafv.common.s_windomain.vOrganUnit(lang.label.org_unit,request.organ_unit),
+yafv.common.s_windomain.vLocality(lang.label.locality,request.locality) )>
+<if result.status=="OK">
+  <assign state_name="">
+  <if request.state=="NA"><assign state_name=request.state></if>
+  <if !state_name><assign state_name=toolbox.statesCanada[request.state]></if>
+  <if !state_name><assign state_name=toolbox.states[request.state]></if>
+  <assign ssl = toolbox.generateSSL(request.country, state_name, request.locality, request.organization, request.organ_unit, request.site, request.email)>
+  <if !ssl>
+   <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_generate, lang.label.ssl_certificate, ""))>
+   <assign failure="1">
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+  <assign vemail=toolbox.html_encode(request.email)>
+  <assign vorganization=toolbox.html_encode(request.organization)>
+  <assign vorgan_unit=toolbox.html_encode(request.organ_unit)>
+  <assign vlocality=toolbox.html_encode(request.locality)>
+  <assign vcountry=request.country>
+  <assign vstate=request.state>
+  <assign vsite=request.site>
+  <include request.ftemplate>
+<else>
+ <include "windomain/generate_new_ssl_cert_result.html">
+</if>
+<!--  END ./submit/windomain/generate_ssl.sbm  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./common/submit/admin/merchant/PSiGate.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign base="/hsphere/local/home/cpanel/shiva/psoft_config/psigate/">
+<if request.mid>
+  <if request.formType == "0">
+  	<assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "EMAIL", request.email, "CONFIG_FILE", request.config_file, "KEY_FILE", base+request.mid+"_key.der", "CERT_FILE", base+request.mid+"_cert.der", "CLASS_NAME", "psoft.epayment.PSiGate","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/PSiGate.html")>
+  <else>
+  	<assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "EMAIL", request.email, "CONFIG_FILE", request.config_file, "mg_private_key_pwd", request.file_key_data, "mg_upload_file_cert", request.file_cert_data, "CLASS_NAME", "psoft.epayment.PSiGate","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/PSiGate.html")>
+  </if>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "EMAIL", request.email,  "CONFIG_FILE", request.config_file, "mg_private_key_pwd", request.file_key_data, "mg_upload_file_cert", request.file_cert_data, "CLASS_NAME", "psoft.epayment.PSiGate","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/PSiGate.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./common/submit/admin/merchant/PSiGate.sbm -->

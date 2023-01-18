@@ -1,0 +1,16 @@
+<!-- BEGIN ./submit/admin/merchant/PaySystems.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<if admin>
+<assign mm=account.getChild("merchant_manager")>
+<assign res = mm.webprocessorparams("PaySystems","ID",request.accid, "enabled", enabled)>
+<if res.status=="OK">
+ <if enabled == "1"><assign res = mm.addNewIP("PaySystems", "216.15.223.203")></if>
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(result.msg)>
+ <include request.ftemplate>
+</if>
+</if>
+<!-- END ./submit/admin/merchant/PaySystems.sbm -->
+

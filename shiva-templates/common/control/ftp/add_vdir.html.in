@@ -1,0 +1,40 @@
+<!-- BEGIN ./ftp/add_vdir.html.in  -->
+<call draw_tooltip()>
+<yafv s_ftp>
+<form name="f_add_vdir"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/ftp/add_vdir_submit.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.ftp.addvdir.header)>
+
+
+<tr>
+   <td><call draw_label(lang.ftp.dir)></td>
+   <td><input type="text" name="dir" label="${lang.ftp.dir}" size="20" value="${vdir}" check="vLocalDir"></td>
+</tr>
+<if !failure || (request.read)><assign vread="CHECKED"><else><assign vread=""></if>
+<if request.write><assign vwrite="CHECKED"><else><assign vwrite=""></if>
+<if !failure || request.list><assign vlist="CHECKED"><else><assign vlist=""></if>
+<if !failure || request.forall><assign vforall="CHECKED"><else><assign vforall=""></if>
+<tr>
+   <td><call draw_label(lang.ftp.perm)></td>
+   <td><input type="checkbox" name="read" ${vread}>
+	<call draw_label(lang.ftp.read)><input type="checkbox" name="write" ${vwrite}>
+	<call draw_label(lang.ftp.write)><input type="checkbox" name="list" ${vlist}>
+	<call draw_label(lang.ftp.list)><input type="checkbox" name="forall" ${vforall}>
+	<call draw_label(lang.ftp.grant)>
+   </td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/add_vdir.html.in  -->

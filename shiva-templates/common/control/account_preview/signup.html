@@ -1,0 +1,50 @@
+<!-- START ./common/control/account_preview/signup.html -->
+<if request.sid>
+<assign signup=account.getChild("signupadm")>
+<assign signup_record=signup.getSignupRecordById(request.sid)>
+<else>
+<if request.uid>
+<assign admin=account.getChild("admin")>
+<!--UID ${request.uid}-->
+<assign signup_record=admin.getSignupRecord(request.uid)>
+<else>
+<!--RID ${request.rid}-->
+<assign signup=account.getChild("signupadm")>
+<assign signup_record=signup.getSignupRecord(request.rid)>
+</if>
+</if>
+<assign warnings=admin.getSignupGuard().getWarnings(request.uid)>
+
+
+
+<if warnings>
+  <call draw_table_header("4", lang.label.moderation_warning)>
+<list warnings as warning>
+  <tr >
+<td colspan="4"><call draw_important_label(warning)></td></tr>
+</list>
+<else>
+  <call draw_table_header("4", lang.label.signup_info)>
+</if>
+<if signup_record.id>
+<tr><td colspan="4" class="control_header"><call draw_header(lang.label.signup_record)></td></tr>
+<tr >
+<td><call draw_label(lang.accprev.signup.started)></td><td><call draw_label(signup_record.created)></td>
+<td><call draw_label(lang.accprev.signup.finished)></td><td><call draw_label(signup_record.updated)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.remote_ip)></td><td><call draw_label(signup_record.ip)></td>
+<td><call draw_label(lang.label.country)></td><td><if signup_record.country>
+<call draw_label(lang[toolbox.countries[(signup_record.country)]]+" ("+signup_record.country+")")><else><call draw_label("Unknown")></if>
+</td>
+</tr>
+<tr><td colspan="4" class="control_header"><call draw_header(lang.accprev.signup.values)></td></tr>
+<list signup_record.values as pair>
+<tr ><td colspan="2"><call draw_label(pair.name)></td><td colspan="2"><call draw_label(pair.value)></td></tr>
+</list>
+<else>
+<tr><td colspan="4" class="control_header"><call draw_header(lang.label.unknown_signup)></td></tr>
+</if>
+
+<call draw_table_footer()>
+<!-- END ./common/control/account_preview/signup.html -->

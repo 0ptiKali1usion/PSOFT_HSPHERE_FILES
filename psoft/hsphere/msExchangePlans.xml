@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<plans>
+    <plan type="base_mail">
+	<planName>BaseMail</planName>
+	<planDescription>Base Mail</planDescription>
+	<planFeatures>
+	    <feature>
+		<featureName>OWA</featureName>
+		<featureDescription>Outlook Web Access Disabled</featureDescription>
+		<featureValue>1</featureValue>
+	    </feature>
+	    <feature>
+		<featureName>IMAP</featureName>
+		<featureDescription>IMAP Access Disabled</featureDescription>
+		<featureValue>1</featureValue>
+	    </feature>
+	    <feature>
+		<featureName>POP</featureName>
+		<featureDescription>POP Access Enabled</featureDescription>
+		<featureValue>0</featureValue>
+	    </feature>
+	    <feature>
+		<featureName>MailboxSize</featureName>
+		<featureDescription>Mailbox size in kilobytes</featureDescription>
+		<featureValue>10000</featureValue>
+		<unitDescription>kb</unitDescription>
+	    </feature>
+	</planFeatures>
+    </plan>
+    <plan type="gold_mail">
+	<planName>GoldMail</planName>
+	<planDescription> Gold plan with OWA E-mail, calendaring, contacts, and collaboration</planDescription>
+	<planFeatures>
+	    <feature>
+		<featureName>MailboxSize</featureName>
+		<featureDescription>Mailbox size in kilobytes</featureDescription>
+		<featureValue>20000</featureValue>
+		<unitDescription>kb</unitDescription>
+		<nativeAttribute>size</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>POP</featureName>
+		<featureDescription>POP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disablePOP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OwaSegment</featureName>
+		<featureDescription>Enhanced Outlook Web Access Features</featureDescription>
+		<featureValue>108303</featureValue>
+		<nativeAttribute>msExchMailboxFolderSet</nativeAttribute>
+		<parentNode>properties</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OWA</featureName>
+		<featureDescription>Outlook Web Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableHTTP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>IMAP</featureName>
+		<featureDescription>IMAP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableIMAP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	</planFeatures>
+    </plan>
+    <plan type="plat_mail">
+	<planName>PlatinumMail</planName>
+	<planDescription>Platinum plan with full OWA</planDescription>
+	<planFeatures>
+	    <feature>
+		<featureName>MailboxSize</featureName>
+		<featureDescription>Mailbox size in kilobytes</featureDescription>
+		<featureValue>20000</featureValue>
+		<unitDescription>kb</unitDescription>
+		<nativeAttribute>size</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>POP</featureName>
+		<featureDescription>POP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disablePOP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OwaSegment</featureName>
+		<featureDescription>Full Outlook Web Access</featureDescription>
+		<featureValue>131007</featureValue>
+		<nativeAttribute>msExchMailboxFolderSet</nativeAttribute>
+		<parentNode>properties</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OWA</featureName>
+		<featureDescription>Outlook Web Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableHTTP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>IMAP</featureName>
+		<featureDescription>IMAP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableIMAP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	</planFeatures>
+    </plan>
+    <plan type="plat_mailp">
+	<planName>PlatinumPlusMail</planName>
+	<planDescription>Platinum Plus plan with Rich E-mail Outlook Access</planDescription>
+	<planFeatures>
+	    <feature>
+		<featureName>MailboxSize</featureName>
+		<featureDescription>Mailbox size in kilobytes</featureDescription>
+		<featureValue>20000</featureValue>
+		<unitDescription>kb</unitDescription>
+		<nativeAttribute>size</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>POP</featureName>
+		<featureDescription>POP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disablePOP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OwaSegment</featureName>
+		<featureDescription>Full Outlook Web Access</featureDescription>
+		<featureValue>131071</featureValue>
+		<nativeAttribute>msExchMailboxFolderSet</nativeAttribute>
+		<parentNode>properties</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OutlookClient</featureName>
+		<featureDescription>Full Outlook Client Access enabled</featureDescription>
+		<nativeAttribute>showInAddressLists</nativeAttribute>
+		<parentNode>options</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>OWA</featureName>
+		<featureDescription>Outlook Web Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableHTTP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	    <feature>
+		<featureName>IMAP</featureName>
+		<featureDescription>IMAP Mail Access</featureDescription>
+		<featureValue>0</featureValue>
+		<nativeAttribute>disableIMAP</nativeAttribute>
+		<parentNode>mail</parentNode>
+	    </feature>
+	</planFeatures>
+    </plan>
+</plans>

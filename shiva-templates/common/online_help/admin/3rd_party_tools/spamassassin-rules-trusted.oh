@@ -1,0 +1,35 @@
+<center> Rules Du Jour configuration. Custom trusted rule sets parameter.</center>
+<hr>
+<br>
+Choose a set of custom rules to be updated.
+<br>
+<b>ANTIDRUG</b> - intended to detect common "pill spam" however, it is not appropriate for all environments. It may not be appropriate for a medical or pharmaceutical environment.<br>
+<b>BLACKLIST</b> - a blacklist of spammers.<br>
+<b>BLACKLIST_URI</b> - looks for these domains inside URL's in the message.<br>
+<b>BOGUSVIRUS</b> - lists bogus virus warnings and similar.<br>
+<b>RANDOMVAL</b> - list of tags spammers sometimes forget to convert in spam.<br>
+<b>SARE_ADULT</b> - designed to catch spam with "Adult" material.<br>
+<b>SARE_BAYES_POISON_NXM</b> - using lists of words with equal length.<br>
+<b>SARE_BML</b> - designed to catch "business, marketing and educational" spam.<br>
+<b>SARE_BML_PRE25X</b> - designed to catch "business, marketing and educational" spam.<br>
+<b>SARE_EVILNUMBERS</b> - addresses and phone numbers harvested from spam.<br>
+<b>SARE_FRAUD</b> - designed to catch "Nigerian 419", "International Lotto", etc. type scams.<br>
+<b>SARE_FRAUD_PRE25X</b> - designed to catch "Nigerian 419", "International Lotto", etc. type scams.<br>
+<b>SARE_GENLSUBJ</b> - contain Subject header rules that are not found in other SARE rulesetsi.<br>
+<b>SARE_HEADER</b> - rulesets contain Header rules that are not found in other SARE rule sets.<br>
+<b>SARE_HIGHRISK</b> - is developed because there are spam signs which readily detect spam, and which in our testing do not flag significant ham, but theoretically there is no reason for such rules to not  flag ham. We therefore consider these to be "high risk" rules, useful for many systems at this time, but not suitable for systems that must be very conservative and cautious in their spam detection.<br>
+<b>SARE_HTML</b> - rulesets contain HTML coding rules that detect various spammer tricks applied through HTML coding within messages.<br>
+<b>SARE_OBFU</b> -  files look for obfuscation within emails. It looks for the various tricks spammers use to hide their message from spam filters, while keeping their messages readable to humans. It treats these as spamsign.<br>
+<b>SARE_OEM</b> - tries to detect people selling OEM software to consumers.<br>
+<b>SARE_RANDOM</b> - tries to detect common mis-fires on bulk mail software. Many signs are found like: %RND_NUMBER, etc.<br>
+<b>SARE_REDIRECT</b> - detect commonly abused redirectors and uri obfuscation techniques.<br>
+<b>SARE_SPAMCOP_TOP200</b> - top 200 spam relays condensed into as few rules as possible.<br>
+<b>SARE_SPECIFIC</b> - rule set which flags specific spam and/or spam from specific spammers.<br>
+<b>SARE_SPOOF</b> - tries to detect common spoofing attempts by spammers. Many use a Message-ID of one provider but the message was never pa
+ssed through the suggested system.<br>
+<b>SARE_STOCKS</b> - set of rules for stock spams.<br>
+<b>SARE_UNSUB</b> - looks for common unsubscribe phrases and codes in spam.<br>
+<b>SARE_URI</b> - files look for spamsign in URI links within emails. It is not intended to replace SURBL or BigEvil, but instead will use characteritics that these domain-based tests cannot track.<br>
+<b>SARE_WHITELIST</b> - used to whitelist newsletters and mailing lists that are controlled/monitored to be free of spam, but might occasioanlly be flagged as spam by SpamAssassin because of "spammy" contents.<br>
+<b>TRIPWIRE</b> - searches for 3 characters that shouldn't be together. This is based on the English language.<br>
+<b>ZMI_GERMAN</b> - German ruleset<br>

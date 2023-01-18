@@ -1,0 +1,10 @@
+<center>IP Address</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+This is your domain name's numeric address at which it is accessible from the Internet. Your domain name can have either:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Shared IP</b> - one IP address is assigned to several domains and access to a site is available only by its domain name. Shared IP is used by more than one virtual hosts. This approach is known as name-based Virtual Host Support, as opposed to the traditional IP-based Virtual Host approach, and is used to avoid assigning a dedicated IP address to every virtual host, which is hard to implement on some machines.Shared IP does not allow to create FTP Virtual Hosts.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Dedicated IP</b> - one IP address is assigned to one domain name. To access a site you can use either its IP address or its domain name. Dedicated IP is a paid service and is required to create Virtual FTP Server and uses SSL on your web server. If you switch back from Dedicated IP to Shared IP, any your FTP and SSL resources will be removed.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+By default every domain has a Shared IP. You can change the type of IP at any time as you work with the system. To change the type of the IP, click the <i>Change to Shared/Dedicated IP</i> link in the<i> Edit Domain </i>page.

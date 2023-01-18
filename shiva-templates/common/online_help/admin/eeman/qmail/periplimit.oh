@@ -1,0 +1,6 @@
+<center> periplimit </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Restricts the number of simultaneous SMTP connections from the same IP.
+<br>Default: 20.
+<br>

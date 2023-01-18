@@ -1,0 +1,7 @@
+<!-- BEGIN submit/easy_app/upgrade.sbm -->
+<assign easyapp = account.getChild(request.typename)>
+<assign app=easyapp.getApp(request.eid)>
+<assign res=app.upgrade()>
+<assign typename=request.typename>
+<include "easy_app/easy_app.html">
+<!-- END submit/easy_app/upgrade.sbm -->

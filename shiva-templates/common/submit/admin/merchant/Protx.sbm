@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Protx.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "AUTHPATH", request.authpath, "REPEATPATH", request.repeatpath, "LOGIN", request.login, "CURRENCY", request.currency, "NOTIFICATIONEMAIL", request.email, "CLASS_NAME", "psoft.epayment.Protx", "TEMPLATE", "admin/merchant/Protx.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "AUTHPATH", request.authpath, "REPEATPATH", request.repeatpath, "LOGIN", request.login, "CURRENCY", request.currency, "NOTIFICATIONEMAIL", request.email, "CLASS_NAME", "psoft.epayment.Protx", "TEMPLATE", "admin/merchant/Protx.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Protx.sbm -->

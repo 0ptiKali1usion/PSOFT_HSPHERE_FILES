@@ -1,0 +1,11 @@
+<center> AntiSpam </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to create<i> AntiSpams </i>which are used to trace, filter out and delete spam messages coming to users' mailbox. The system doesn't delete messages recognized as spam. User can enable antispam protection:
+- on the account level
+- on the mail domain level
+- on the mail resource level<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		Check the<i> Include </i>box to make this resource available under the plan. Later you can define the amount of AntiSpams a user can create for free, its setup and recurrent fee.<br>
+	

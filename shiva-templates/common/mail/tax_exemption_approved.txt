@@ -1,0 +1,7 @@
+${lang.massmail.new_account_header(bi.first_name, bi.last_name)}
+
+${lang.massmail.tax_exemption_approved}
+
+${lang.massmail.new_account_support}
+
+${settings.support}

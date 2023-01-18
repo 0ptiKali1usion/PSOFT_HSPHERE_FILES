@@ -1,0 +1,71 @@
+<!-- BEGIN ./submit/order_info.html.in  -->
+<tr>
+<td colspan="2"  >
+<br>
+<!--${request.ext} -->
+<assign regrar = toolbox.getRegistrarInfoByExt(request.ext)>
+<if regrar.signature != "Enom"><call draw_label(settings.registrar_text)><else><call draw_label(settings.enoim_text)></if>
+<br>
+<br>
+</td>
+</tr>
+<tr>
+<td colspan="2"  >
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<!--${tld} -->
+<assign prices = new_user.getTLDPrices>
+<assign prices_size=toolbox.add(prices.size, "1")>
+
+<table class="inner_control_grid">
+<tr>
+  <td colspan="${prices_size}" class="inner_control_grid_header"><call draw_header(lang.label.srs_prices)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.registrar.duration)></td>
+<list prices.KEYS as key>
+<td class="inner_control_grid_align_right"><call draw_label(key)></td>
+</list>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.registrar.price)></td>
+<list prices.KEYS as key>
+<td class="inner_control_grid_align_right"><call draw_label(toolbox.currency(prices[key], "0"))></td>
+</list>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td colspan="2"   >
+<call draw_label(lang.signup.orderinfo.select)><br>
+<assign years = toolbox.getYearsByTLDAndPlan(request.ext, request.plan_id)>
+<if years.size == "0">
+    <call draw_label("Not configured")>
+<else>
+I want to use domain <call draw_label_bold(domain_name)> 
+for    <select name="period" size="1">
+        <list years as year>
+	    <if period==year><assign vsel = "SELECTED"><else><assign vsel = ""></if>
+            <option ${vsel}>${year}</option>
+        </list>
+       </select>
+years.
+<assign excludeFields=excludeFields+"period;">
+</if>
+</td>
+</tr>
+<tr>
+<if request.flag_use_contact_info_ci><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<td colspan="2"><input type=checkbox name="flag_use_contact_info_ci" ${vchecked} onClick="checkForm(this.form,false)">&nbsp;<call draw_label(lang.signup.orderinfo.useci)></TD>
+<assign excludeFields=excludeFields+"flag_use_contact_info_ci;"> 
+</tr>
+<assign isBilling = new_user.plan.b_info>
+<if isBilling != "0">
+<tr>
+<if request.flag_use_billing_info_bi><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<td colspan="2"><input type=checkbox name="flag_use_billing_info_bi" ${vchecked} onClick="checkForm(this.form,false)">&nbsp;<call draw_label(lang.signup.orderinfo.usebi)></TD>
+<assign excludeFields=excludeFields+"flag_use_billing_info_bi;"> 
+</tr>
+</if>
+<!--  END ./submit/order_info.html.in  -->

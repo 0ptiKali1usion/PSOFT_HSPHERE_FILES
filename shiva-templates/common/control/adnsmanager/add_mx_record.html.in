@@ -1,0 +1,51 @@
+<!-- BEGIN ./adnsmanager/add_mx_record.html.in  -->
+<call draw_tooltip()>
+<assign adnsmanager=account.getChild("adnsmanager")>
+
+<if adnsmanager>
+
+<assign zone=adnsmanager.getZone(request.zone_id)>
+<yafv s_adnsmanager>
+<form name="f_add_cmail_service"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="zone_id" value="${request.zone_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_mx_record.sbm">
+
+
+
+
+
+<call draw_table_header("5", lag.adnsmanager.addmx.header)>
+
+
+
+<tr>
+    <td  colspan="5"  ><call draw_label("$ORIGIN "+zone.name)></td>
+</tr>
+
+<tr>
+   <td><call draw_label_bold(lang.dns.name)></td>
+   <td><call draw_label_bold(lang.dns.class)></td>
+   <td><call draw_label_bold(lang.dns.type)></td>
+   <td    colspan="2" ><call draw_label(lang.dns.data)></td>
+</tr>
+
+<tr>
+   <td    nowrap><input type="text" name="dname" value="${vdname}" label="${lang.dns.name}" check="vCustomMXName"></td>
+   <td><call draw_label("IN")></td>
+   <td><call draw_label("MX")></td>
+   <td    nowrap><input type="text" name="dpriority" value="${vdpriority}" size="2" maxlength="2" label="${lang.dns.type}" check="vPriority"></td>
+   <td    nowrap><input type="text" name="dmail_server" value="${vdmail_server}" label="${lang.dns.data}" check="vDomain_Name"></td>
+</tr>
+<tr>
+   <td colspan="5"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/add_mx_record.html.in  -->

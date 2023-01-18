@@ -1,0 +1,17 @@
+<!-- BEGIN ./signup/tt_admin.html  -->
+<tr>
+<td><call draw_label(lang.signup.ttadmin.name)></td>
+<td><input type="text" name="name" value="${name}" check="vName" label="${lang.signup.ttadmin.name}"></td>
+<assign excludeFields=excludeFields+"name;">
+</tr>
+<tr>
+<td><call draw_label(lang.label.descr)></td>
+<td><input type="text" name="description" value="${description}"></td>
+<assign excludeFields=excludeFields+"description;">
+</tr>
+<tr>
+<td><call draw_label(lang.label.email)></td>
+<td><input type="text" name="email" value="${email}" check="vEmail" label="${lang.label.email}"></td>
+<assign excludeFields=excludeFields+"email;">
+</tr>
+<!--  END ./signup/tt_admin.html  -->

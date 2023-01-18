@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/add_entry.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).addEntry(request.q, request.a, request.cat)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success creating an entry">
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/add_entry.sbm -->

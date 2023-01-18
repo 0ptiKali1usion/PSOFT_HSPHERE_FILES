@@ -1,0 +1,56 @@
+<!-- BEGIN ./control/MSSQL/change_db_quota.html.in  -->
+<call draw_tooltip()>
+<assign database = account.getResource(request.database)>
+<assign old_perc = database.quota_perc>
+<assign quota = database.getChild("MSSQLQuota")>
+<yafv s_mssql>
+<form action="${config.CLIENT_CP_URL}" name="f_adm_database" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/MSSQL/change_db_quota_check.sbm">
+<input type="hidden" name="next_template" value="submit/MSSQL/change_db_quota.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="database" value="${request.database}">
+<input type="hidden" name="quota" value="${request.quota}">
+<input type="hidden" name="type" value="MSSQLQuota">
+
+
+
+
+<call draw_table_header("2", lang.mssql.quota.header(database.db_name))>
+
+
+
+
+<tr>
+        <td><call draw_label(lang.mssql.quota.oldperc)></td>
+        <td><call draw_label_bold(old_perc + "%")></td>
+</tr>                                                                                                                                      
+
+<tr>
+        <td><call draw_label(lang.mssql.quota.perc)></td>
+        <td>
+            <select name="perc">
+                <option value="10" <if old_perc == "10">selected</if>><call draw_label("10%")></option>
+                <option value="20" <if old_perc == "20">selected</if>><call draw_label("20%")></option>
+                <option value="30" <if old_perc == "30">selected</if>><call draw_label("30%")></option>
+                <option value="40" <if old_perc == "40">selected</if>><call draw_label("40%")></option>
+                <option value="50" <if old_perc == "50">selected</if>><call draw_label("50%")></option>
+                <option value="60" <if old_perc == "60">selected</if>><call draw_label("60%")></option>
+                <option value="70" <if old_perc == "70">selected</if>><call draw_label("70%")></option>
+                <option value="80" <if old_perc == "80">selected</if>><call draw_label("80%")></option>
+                <option value="90" <if old_perc == "90">selected</if>><call draw_label("90%")></option>
+            </select>
+	</td>
+</tr>                                                                                                                                      
+
+<tr>
+        <td><call draw_label(lang.mssql.quota.size)></td>
+        <td><input type="text" name="quota_size" value="${quota.limitMb}" label="${lang.mssql.quota.size}" check="vQuota" size="6"></td>
+</tr>
+<tr>
+        <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/MSSQL/change_db_quota.html.in  -->

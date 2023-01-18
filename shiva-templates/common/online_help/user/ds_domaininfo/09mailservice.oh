@@ -1,0 +1,5 @@
+<center>Mail Service</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Click the <i>Edit</i> icon to configure your mail resources' settings. By clicking the <i>On/Off</i> button you can enable or disable mail resources.<br>
+<b>Warning</b>: disabling mail service will permanently remove all your server settings. After that, you will have to configure them from scratch.

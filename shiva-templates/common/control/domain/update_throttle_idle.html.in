@@ -1,0 +1,10 @@
+<!-- BEGIN ./domain/update_throttle_idle.html.in  -->
+
+<tr >
+<td>&nbsp;</td>
+<td><call draw_label(lang.domain.update_throttle.idle)></td>
+<td><input type="text" name="interval" value="${throttle_interval}" check="vNumber">
+</td> 
+</tr>
+
+<!--  END ./domain/update_throttle_idle.html.in  -->

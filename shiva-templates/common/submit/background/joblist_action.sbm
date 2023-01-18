@@ -1,0 +1,30 @@
+<!-- BEGIN ./common/submit/background/joblist_action.sbm  -->
+<list request.jobid as jobid>
+<assign jobMgr = account.jobManager
+<switch request.act>
+  <case "start">
+     <assign result=jobMgr.startJob(jobid)>
+     <break>
+  <case "disable">
+     <assign result=jobMgr.disableJob(jobid)>
+     <break>
+  <case "enable">
+     <assign result=jobMgr.enableJob(jobid)>
+     <break>
+  <case "restart">
+     <assign result=jobMgr.restartJob(jobid)>
+     <break>
+  <case "suspend">
+     <assign result=jobMgr.suspendJob(jobid)>
+     <break>
+  <case "resume">
+     <assign result=jobMgr.resumeJob(jobid)>
+     <break>
+  <case "interrupt">
+     <assign result=jobMgr.interruptJob(jobid)>
+     <break>
+</switch>
+
+</list>
+<include request.stemplate>
+<!-- END ./commont/submit/background/joblist_action.sbm  -->

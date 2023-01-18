@@ -1,0 +1,34 @@
+<call draw_tooltip()>
+
+
+<call prepare_table_header("3", lang.misc.chooseaccount.selectacc)>
+<call add_table_header_help("user-ai_choose-choose","")>
+<call draw_table_header_prepared()>
+
+	<assign current_design = design.design_id>
+	<assign aids=user.getAccountIds()>
+	<if aids>
+	<list aids as aid>
+	<assign res = user.setAccount(aid)>
+    	<assign template=user.getAccount(aid).getPlanValue("_template")>
+        <if !template><assign template="account.html"></if>
+    <tr>
+        <assign domain=aid.findChild("domain")>
+        <if !domain><assign domain=aid.findChild("3ldomain")></if>
+        <if !domain><assign domain=aid.findChild("nodomain")></if>
+        <if !domain><assign domain=aid.findChild("service_domain")></if>
+        <if domain><assign desc=" [<b>"+domain.name+"</b>]"><else><assign desc=""></if>
+	<assign res = design.enforceCurrent(current_design)>
+	<td  width="15%"><call draw_label(aid.id)></td>
+	<td><call draw_label(aid.plan.description + desc)></td>
+	<td  width="10%" class="control_align_center"><call draw_select(config.CP_URI+"/"+user.login+"/"+aid+config.CP_URI+"?template_name="+template, lang.misc.chooseaccount.select)></td>
+    </tr>
+	</list>
+	<else>
+    <tr>
+	<td  colspan="3"><call draw_label(lang.misc.chooseaccount.thanks)><br><call draw_label(lang.misc.chooseaccount.checkemail)></td>
+    </tr>
+	</if>
+
+<call draw_table_footer()>
+<!--  END ./design/choose_account.html  -->

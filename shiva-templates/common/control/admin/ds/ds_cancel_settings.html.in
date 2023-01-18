@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/admin/ds/ds_cancel_settings.html.in -->
+<yafv s_admin>
+
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+<if admin>
+
+<assign ds_cancel_days_adv = settings["ds_cancel_notify"]>
+
+<call draw_table_header("2", lang.admin.ds.cancel_settings_h)>
+
+<form name="f_ds_cancel" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/ds_cancel_settings.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<if ds_cancel_days_adv><assign vChecked = "CHECKED"><else><assign vChecked = ""></if>
+<tr>
+<td width="50%"><call draw_label(lang.admin.ds.cancel_settings_notify)></td>
+<td>
+  <input type="checkbox" name="ds_cancel_notify" value="1" ${vChecked} onClick="checkForm(this.form)">&nbsp;
+  <input type="text" name="ds_cancel_days_adv" size="3" value="${ds_cancel_days_adv}" check="vPeriodDependent(this, ds_cancel_notify)" label="${lang.admin.ds.cancel_settings_warn_days}">
+  <call draw_label(lang.admin.ds.cancel_settings_days_adv)>
+</td>
+</tr>
+<td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.save}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/ds/ds_cancel_settings.html.in -->
+

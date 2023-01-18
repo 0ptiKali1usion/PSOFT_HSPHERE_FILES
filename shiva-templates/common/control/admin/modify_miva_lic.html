@@ -1,0 +1,25 @@
+<!-- BEGIN ./control/admin/modify_miva_lic.html  -->
+<call draw_tooltip()>
+<assign lic_man=account.getChild("miva_lic_manager")>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/update_miva_lic.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="old_lic" value="${request.lic}">
+
+
+
+<call draw_table_header("2", lang.admin.modmivalic.header)>
+
+
+<tr>
+<td><call draw_label(lang.miva.license)></td>
+<td><input type="text" name="miva_lic" value="${request.lic}"></td>
+</tr>
+<tr>
+<td  class="control_align_center" colspan="2"><input type="submit" name="${lang.button.update}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/modify_miva_lic.html  -->

@@ -1,0 +1,78 @@
+<!-- BEGIN ./control/misc/suspended.html  -->
+<call draw_tooltip()>
+
+<call draw_table_header("3", lang.misc.suspended.header)>
+
+<tr>
+<td colspan="3">
+<call draw_label(toolbox.compose(lang.misc.suspended.reason, account.suspend_reason))>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=suspended/view.html", lang.misc.suspended.billprofile)>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=suspended/list.html", lang.misc.suspended.viewinvoice)>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/new_tt_form.html", lang.misc.suspended.tickets)>
+</td>
+</tr>
+<assign invoice=account.estimateOpenPeriod(account.planId,account.periodId)>
+<if invoice>
+
+<assign entries = invoice.entries>
+<if entries && (entries.size != "0")>
+
+<tr>
+<td class="control_header" colspan="3"><call draw_header(lang.misc.suspended.invoice)></td>
+</tr>
+
+<tr>
+<assign total=account.bill.balance>
+<td colspan="3"><call draw_label_bold(toolbox.compose(lang.misc.suspended.billing_message,account.p_end))></td>
+</tr>
+
+<assign total=toolbox.mul(total,"-1")>
+<list invoice.entries as entry>
+<tr>
+<td    width="15%">
+<call draw_label(entry.type)></td>
+<td>
+<call draw_label(entry.description)></td>
+<td  class="control_align_right">
+<call draw_label(toolbox.currency(entry.amount))></td>
+</tr>
+</list>
+<assign new_taxes=toolbox.calculateTaxes(invoice.total)>
+<if new_taxes.taxes>
+<tr>
+  <td colspan="2" class="control_header_align_right"><call draw_header(lang.label.subtotal)></td>
+  <td class="control_header_align_right"><call draw_header(toolbox.currency(new_taxes.sub_total))></td>
+</tr>
+<list new_taxes.taxes.KEYS as tax_id>
+<tr>
+  <td colspan="2" class="control_header_align_right"><call draw_header(toolbox.taxes[tax_id].description+"("+toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")+"%)")></td>
+  <td class="control_header_align_right"><call draw_header(toolbox.currency(new_taxes.taxes[tax_id]))></td>
+</tr>
+</list>
+</if>
+<tr>
+<td class="control_header_align_right" colspan="2">
+<call draw_header(lang.label.total)></td>
+<td class="control_header_align_right">
+<assign total=new_taxes.total>
+<call draw_header(toolbox.currency(total))></td>
+</tr>
+
+</if>
+
+</if>
+
+<call draw_table_footer()>
+<!-- END ./control/misc/suspended.html  -->

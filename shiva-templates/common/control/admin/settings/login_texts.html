@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/admin/settings/login_texts.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<form name="f_login_texts" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/login_texts.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.logintexts.header)>
+
+
+<tr>
+<td colspan="2"><call draw_label(lang.admin.logintexts.message)><br>
+<textarea name="welcome_message" rows="5" cols="60"><if settings.welcome_message>${toolbox.html_encode(settings.welcome_message)}<else>${toolbox.html_encode(lang[html_help["welcome_message"]["tip"]])}</if></textarea>
+</td>
+</tr>
+<tr >
+<td colspan="2"><call draw_label(lang.admin.logintexts.text)><br>
+<textarea name="welcome_text" rows="5" cols="60"><if settings.welcome_text>${toolbox.html_encode(settings.welcome_text)}<else>${toolbox.html_encode(lang[html_help["welcome_text"]["tip"]])}</if></textarea>
+</td></tr>
+<tr >
+<td colspan="2"><call draw_label(lang.admin.logintexts.services)><br>
+<textarea name="welcome_services" rows="5" cols="60"><if settings.welcome_services>${toolbox.html_encode(settings.welcome_services)}<else>${toolbox.html_encode(lang[html_help["welcome_services"]["tip"]])}</if></textarea>
+</td>
+</tr>
+<tr ><td colspan="2" class="control_align_right"><input type="reset" value="${lang.button.reset}">&nbsp;<input type="submit" value="${lang.button.save}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/login_texts.html -->
+

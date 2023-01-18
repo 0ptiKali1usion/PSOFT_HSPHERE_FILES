@@ -1,0 +1,20 @@
+<!-- BEGIN submit/eeman/assign_plan_to_allocserver.sbm -->
+<if request.plan_id!="">
+    <assign result = obj.as_manager.assignToPlan(request.ps_id, request.plan_id)>
+<else>
+    <assign no_plan_avail="true">
+</if>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign failure="1">
+    <assign v_plan_id=request.plan_id>
+    <if no_plan_avail=="true">
+        <assign res=session.addMessage(lang.eeman.allocservers.noplanavail)>
+    <else>
+        <assign res=session.addMessage(result.msg)>
+    </if>
+    <include request.ftemplate>
+</if>
+
+<!-- END submit/eeman/assign_plan_to_allocserver.sbm -->

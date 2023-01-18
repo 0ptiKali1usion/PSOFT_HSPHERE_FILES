@@ -1,0 +1,59 @@
+<!-- BEGIN ./control/account_preview/customjobs.html  -->
+
+<assign cjadmin=account.getChild("ttadmin").cjadmin>
+
+
+<call draw_table_header("6", lang.accprev.cjs.header)>
+
+<tr>
+  <td class="control_header"><call draw_label(lang.accprev.cj.id)></td>
+  <td class="control_header"><call draw_label(lang.accprev.cj.subj)></td>
+  <td class="control_header"><call draw_label(lang.accprev.cj.entered)></td>
+  <td class="control_header"><call draw_label(lang.accprev.cj.start)></td>
+  <td class="control_header"><call draw_label(lang.accprev.cj.end)></td>
+  <td class="control_header"><call draw_label(lang.accprev.cj.status)></td>
+</tr>
+<list cjadmin.getJobs(request.account_id) as cj>
+<tr >
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=account_preview/customjob.html&account_id="+request.account_id+"&job_id="+cj.id, cj.id)></td>
+<td><call draw_label(cj.subject)></td>
+<td><call draw_label(cj.entered_by)></td>
+<td><call draw_label(cj.start_date("TS_MEDIUM"))></td>
+<td><if cj.end_date><call draw_label(cj.end_date("TS_MEDIUM"))><else><call draw_label("-")></if></td>
+<td>
+<switch cj.status>
+<case "0"><call draw_label(lang.accprev.cj.status_label_new)><break>
+<case "1"><call draw_label(lang.accprev.cj.status_label_progress)><break>
+<case "2"><call draw_label(lang.accprev.cj.status_label_finished)><break>
+<case "3"><call draw_label(lang.accprev.cj.status_label_canceled)><break>
+<case "4"><call draw_label(lang.accprev.cj.status_label_aborted)><break>
+<case "5"><call draw_label(lang.accprev.cj.status_label_onhold)><break>
+</switch>
+</td>
+</tr>
+</list>
+<tr>
+<td colspan="6" class="control_header"><call draw_header(lang.accprev.cj.add_job)></td>
+<form action="config.CLIENT_CP_URL" method="POST" accept-charset="UTF-8">
+<tr >
+<td colspan="2"><call draw_label(lang.accprev.cj.subj)></td>
+<td colspan="4"><input type="text" size="40" name="subject"></td>
+</tr>
+<tr >
+<td colspan="2"><call draw_label(lang.accprev.cj.descr)></td>
+<td colspan="4"><textarea name="description" rows="5" cols="60"></textarea></td>
+</tr>
+<tr >
+<td colspan="6" class="control_align_center">
+<input type="hidden" name="template_name" value="submit/account_preview/createjob.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="account_id" value="${request.account_id}">
+<input type="submit" value="${lang.accprev.cj.add_job}">
+</td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+
+<!--  END ./control/account_preview/customjobs.html  -->

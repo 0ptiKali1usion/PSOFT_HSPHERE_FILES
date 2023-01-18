@@ -1,0 +1,30 @@
+<!-- BEGIN ./submit/admin/ds/add_netswitch.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign result=yafv.checkall(
+  yafv.common.s_ds.vDomainOrIP(lang.admin.netswitch.device, request.device),
+  yafv.common.s_ds.vNetswitchComName(lang.admin.netswitch.com_name, request.com_name),
+  yafv.common.s_ds.vStringReq(lang.admin.netswitch.description, request.description),
+  yafv.common.s_ds.vHttpResURL(lang.admin.netswitch.web_url, request.web_url),
+)>
+
+<if result.status=="OK"> 
+    <assign res=ds_manager.addNetSwitch(request.device, request.com_name, request.description, request.web_url, request.mrtg_host)>
+    <if res.status!="OK">
+	<list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        <assign failure="1">
+    </if>
+<else>
+    <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+<if failure>
+    <assign v_device = toolbox.html_encode(request.device)>
+    <assign v_com_name = toolbox.html_encode(request.com_name)>
+    <assign v_description = toolbox.html_encode(request.description)>
+    <assign v_web_url = toolbox.html_encode(request.web_url)>
+    <assign v_mrtg_host = toolbox.html_encode(request.mrtg_host)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/add_netswitch.sbm  -->

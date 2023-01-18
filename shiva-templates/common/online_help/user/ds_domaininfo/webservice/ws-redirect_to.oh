@@ -1,0 +1,6 @@
+<center>Redirect To</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	The URL to which a visitor will be redirected.  You can enter a URL with parameters, e.g.:<br>
+<i>http://www.example.net/customers.php?customer_id=14</i>
+

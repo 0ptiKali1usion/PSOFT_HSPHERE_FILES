@@ -1,0 +1,23 @@
+<!--BEGIN ./vps/password_form.sbm-->
+    <assign result=yafv.checkall(
+	yafv.common.s_quick.vPassword1(lang.label.password, request.new_password, "root"),
+	yafv.common.s_quick.vPassword2(lang.label.password2, request.new_password,request.new_password1))>
+    <if result.status == "OK">
+	<assign vps = account.getChild("vps")>
+	<assign result=account.getChild("vps").setRootPassword(request.new_password)>
+	<if result.status=="OK">
+	    <assign success="1">
+	<else>
+	    <assign res=session.addMessage(result.msg)>
+	</if>
+    <else>
+	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+    <if success>
+	<assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_changed, lang.label.password, ""))>
+	<include request.stemplate>
+    <else>
+	<include request.ftemplate>
+    </if>
+<!--END ./quick/password_form.sbm-->

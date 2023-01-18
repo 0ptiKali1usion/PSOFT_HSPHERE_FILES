@@ -1,0 +1,164 @@
+<!-- BEGIN ./adnsmanager/cp_ssl_edit.html  -->
+<call draw_tooltip()>
+
+<if account.getChild("admin")>
+
+<assign dnsmanager=account.getChild("adnsmanager")>
+<if !dnsmanager>
+<assign dnsmanager=account.addChild("adnsmanager","")>
+</if>
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign eeman = account.getChild("eeman")>
+<else>
+  <assign eeman = account.getChild("reseller_eeman")>
+</if>
+
+<assign res_ssl = eeman.getResellerSSL(eeman.isSSLEnabled)>
+
+
+
+
+
+<call draw_table_header("2", lang.domain.ssledit.header)>
+
+
+<tr>
+  <td    width="20%">
+    <call draw_label_bold(lang.label.dname)>
+  </td>
+  <td>
+    <call draw_label(res_ssl.server_alias)>
+  </td>
+</tr>
+
+<!--old version -->
+<!--
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instprev)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert">
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instnew)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="key">
+    <call draw_label_bold(lang.domain.ssledit.key)><br>
+    <textarea name="key" rows="10" cols="64" nowrap></textarea><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+-->
+<!--end of old version -->
+
+<!--new version -->
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instprev)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert_only">
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instnew)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="key">
+    <call draw_label_bold(lang.domain.ssledit.key)><br>
+    <textarea name="key" rows="10" cols="64" nowrap></textarea><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.chain)>
+  </td>
+  <td>
+    <if ssl.chain=="1"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/cp_ssl_edit_submit.sbm&type=u_chain&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="chain">
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.auth)>
+  </td>
+  <td>
+    <if ssl.cert=="1"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/cp_ssl_edit_submit.sbm&type=u_cert&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert">
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.revoc)>
+  </td>
+  <td>
+    <if ssl.rev=="1"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/cp_ssl_edit_submit.sbm&type=u_rev&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/cp_ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="rev">
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+<!--end of new version -->
+
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!-- END ./adnsmanager/cp_ssl_edit.html  -->

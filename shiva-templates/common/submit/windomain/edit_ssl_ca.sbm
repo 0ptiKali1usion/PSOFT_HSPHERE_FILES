@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/windomain/edit_ssl_ca.sbm  -->
+<assign ssl=account.getResource(request.uid)>
+<assign result=ssl.installCACert(request.cert)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_updated,lang.label.ssl_certificate,""))>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vcert=toolbox.html_encode(request.cert)>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/windomain/edit_ssl_ca.sbm  -->

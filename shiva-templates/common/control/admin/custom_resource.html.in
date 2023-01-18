@@ -1,0 +1,151 @@
+<!-- BEGIN ./control/admin/custom_resource.html  -->
+<function draw_service_options(duration, duration_count,frequency, billing_type)>
+<i>
+  <call draw_label_small("[")>
+  <if duration=="0">
+    <call draw_label_small(lang.admin.custom_billing.infinite)>
+  <else>
+    <call draw_label_small(lang.admin.custom_billing.duration+":"+duration_count+"("+duration+") "+lang.admin.custom_billing.duration_period)>
+  </if>
+  <call draw_label_small(", "+lang.admin.custom_billing.frequency+":"+lang.admin.custom_billing.frequency_period+" "+frequency+" "+lang.admin.custom_billing.duration_period)>
+  <switch billing_type>
+    <case "1">
+      <call draw_label_small(", "+lang.admin.custom_billing.start+": " + lang.admin.custom_billing.start_on_the_first_day_prorated+"]")>
+      <break>
+    <case "2">
+      <call draw_label_small(", "+lang.admin.custom_billing.start+": " + lang.admin.custom_billing.start_on_the_first_day+"]")>
+      <break>
+    <case "3">
+      <call draw_label_small(", "+lang.admin.custom_billing.start+": " + lang.admin.custom_billing.start_right_now+"]")>
+      <break>
+  </switch>
+</i>
+</function>
+
+<assign billman=account.getChild("billman")>
+<call draw_tooltip()>
+<yafv s_admin>
+<if aid==""><assign aid=request.aid></if>
+<assign admin = account.getChild("admin")>
+<if s_description==""><assign s_description=request.description></if>
+<if s_price==""><assign s_price=request.price></if>
+<if billman>
+<if !request.sc_stemplate><assign stemplate=request.stemplate></if>
+
+<call draw_table_header("5", lang.label.acc_info)>
+<tr>
+	<td class="control_header"><call draw_header(lang.label.username)></td>
+	<td class="control_header"><call draw_header(lang.label.accid)></td>
+	<td class="control_header"><call draw_header(lang.search.created)></td>
+	<td class="control_header"><call draw_header(lang.label.plan)></td>
+	<td class="control_header"><call draw_header(lang.label.email)></td>
+</tr>
+<tr >
+	<td><call draw_label(request.username)></td>
+	<td><call draw_label(request.aid)></td>
+	<td><call draw_label(request.created)></td>
+	<td><call draw_label(admin.getPlan(request.planId).description)></td>
+	<td><call draw_label(request.email)></td>
+</tr>
+
+<call draw_table_footer()>
+&nbsp;
+<call prepare_table_header("3", lang.admin.custom_billing.title)>
+<call add_table_header_help("admin-serviceplus-existingdebits", "")>
+<call draw_table_header_prepared()>
+
+
+<assign debits_list=billman.getCustomEntries("debits",aid)>
+<if debits_list.size!="0">
+<tr>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.one_time)></td>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.price)></td>
+	<td class="control_header">&nbsp;</td>
+</tr>
+<assign current_bill_id=billman.getCustomEntries("current_bill",aid)>
+<list debits_list as entry>
+<tr >
+	<td><call draw_custom_billing_note(entry.description,entry.note,"")></td>
+	<td class="control_align_right"><call draw_label(toolbox.currency(entry.amount))></td>
+	<td>&nbsp;</td>
+</tr>
+</list>
+</if>
+
+<assign services=billman.getCustomEntries("services",aid)>
+<if services.size!="0">
+<tr>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.monthly)>&nbsp;<call draw_help("admin-serviceplus-monthbased_debit", "")></td>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.price)></td>
+	<td class="control_header"><call draw_header(lang.label.action)></td>
+</tr>
+<list services as service>
+<tr >
+	<td><call draw_custom_billing_note(service.description,service.note,service.admin_note)><br><call draw_service_options(service.duration, service.duration_count, service.frequency, service.billing_type)></td>
+	<td class="control_align_right"><call draw_label(toolbox.currency(service.amount))></td>
+	<td class="control_align_center"><if !service.deleted><call draw_onclick_palink("del", "deleteCustomResource("+service.id+", 2)", lang.admin.custom_billing.del)><else><call draw_image_alt("deleted",lang.admin.custom_billing.deleted(service.deleted))><br><call draw_label_small(lang.admin.custom_billing.deleted(service.deleted("SHORT")))></if></td>
+</tr>
+</list>
+</if>
+
+<assign custom_resource_list=billman.getCustomEntries("custom_resources",aid)>
+<if custom_resource_list.size!="0">
+<tr>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.billing_cycle)></td>
+	<td class="control_header"><call draw_header(lang.admin.custom_billing.price)></td>
+	<td class="control_header"><call draw_header(lang.label.action)></td>
+</tr>
+<list custom_resource_list as custom_resource>
+<tr >
+	<td><call draw_custom_billing_note(custom_resource.description,custom_resource.note,custom_resource.admin_note)></td>
+	<td class="control_align_right"><call draw_label(toolbox.currency(custom_resource.price))></td>
+	<td class="control_align_center"><call draw_onclick_palink("delete", "deleteCustomResource("+custom_resource.id+", 3)", lang.admin.custom_billing.del)></td>
+</tr>
+</list>
+</if>
+
+<call draw_table_footer()>
+&nbsp;
+<assign type="1">
+<include "control/admin/add_custom_billing.html">
+&nbsp;
+<assign type="2">
+<include "control/admin/add_custom_billing.html">
+&nbsp;
+<assign type="3">
+<include "control/admin/add_custom_billing.html">
+&nbsp;
+<else>
+
+<call draw_table_header("", lang.admin.permission)>
+<call draw_table_footer()>
+
+</if>
+<if (custom_resource_list.size!="0") || (services.size!="0")>
+<form name="f_del_custom_resource" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/del_custom_resource.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="aid" value="${aid}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+<input type="hidden" name="did" value="">
+<input type="hidden" name="type" value="">
+</form>
+<script language="javascript">
+     function deleteCustomResource( did, type) {
+        window.document.f_del_custom_resource.did.value=did;
+        window.document.f_del_custom_resource.type.value=type;
+        window.document.f_del_custom_resource.submit();
+     }
+</script>
+</if>
+<!--  END ./control/admin/custom_resource.html  -->

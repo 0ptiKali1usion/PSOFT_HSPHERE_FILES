@@ -1,0 +1,144 @@
+<!-- BEGIN ./quick/quick_view.html  -->
+<include "control/quick/quick.fn">
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.statistics)>
+
+<if account.plan.isResourceAvailable("r_ds_bandwidth")>
+  <assign r_ds_bandwidth_avail= "1">
+  <assign r_ds_bandwidth = account.getChild("r_ds_bandwidth")>
+  <assign res = r_ds_bandwidth.reload()>
+</if>
+
+<if account.plan.isResourceAvailable("reseller_traffic")>
+  <assign res_traffic_avail= "1">
+  <assign res_traffic = account.getChild("reseller_traffic")>
+  <if res_traffic>
+    <assign res = res_traffic.reload>
+    <assign res_limit=toolbox.mul(res_traffic.size,"1024")>
+  </if>
+</if>
+
+<if account.plan.isResourceAvailable("summary_quota")>
+  <assign quota=account.getChild("summary_quota")>
+  <assign summary_quota_avail = "1">
+  <if account.plan.isResourceAvailable("reseller")>
+    <assign showQuotaDetails = "">
+  <else>
+    <assign showQuotaDetails = "1">
+  </if>
+</if>
+
+<tr>
+<td  width="50%">
+<b><call draw_label(lang.label.plan)></b>&nbsp;<call draw_label(account.plan.description)><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)><call draw_help("user-ai_quick-plan","")><br>
+
+<if account.plan.b_info != "0">
+<b><call draw_label(lang.label.bp)></b>&nbsp;<call draw_label(account.plan.values["_PERIOD_SIZE_"+account.periodId]+"&nbsp;"+account.plan.values["_PERIOD_TYPE_"+account.periodId])>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=billing/change_period.html&stemplate="+template+"&ftemplate="+template, lang.quick.quickview.changebp)>
+<call draw_help("user-ai_quick-billingperiod","")>
+<br>
+</if>
+
+<b><call draw_label(lang.quick.quickview.user)></b>&nbsp;<call draw_label(user.login)><call draw_help("user-ai_quick-username","")>
+</td>
+
+<td  valign="top" nowrap>
+<if r_ds_bandwidth_avail>
+  <call draw_label_bold(lang.ds.summary_bandwidth_l)><call draw_help("user-ai_quick-ds_bandwidth","")>&nbsp;
+  <if r_ds_bandwidth>
+    <comment><call draw_palink(config.CLIENT_CP_URL+"?template_name=quick/r_ds_bandwidth_details.html","lupa", lang.quick.quickview.view_bd)></comment>
+    <br>
+    <call draw_load_diagram(r_ds_bandwidth.bandwidth, r_ds_bandwidth.size, "90", "70%")>
+    <call draw_label(lang.ds.used_bandwidth(r_ds_bandwidth.start_date, r_ds_bandwidth.text_bandwidth, r_ds_bandwidth.size, lang.dsbandwidth_unit[r_ds_bandwidth.billing_type]))>
+    <call draw_change(config.CLIENT_CP_URL+"?template_name=ds/change_res_bandwidth.html&stemplate=quick/quick_view.html&ftemplate="+template, lang.ds.changebandwidth.clk)>
+  <else>
+    &nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=ds/change_res_bandwidth.html&stemplate=quick/quick_view.html&ftemplate="+template, lang.ds.setbandwidth.clk)>
+  </if>
+<else>
+&nbsp;
+</if>
+</td>
+</tr>
+
+<if res_traffic_avail || summary_quota_avail>
+<tr>
+  <td valign="top" width="50%">
+  <if res_traffic_avail>
+    <call draw_label_bold(lang.nomenu.restraffic)>
+    <if res_traffic>
+      <br>
+      <call draw_load_diagram(res_traffic.traffic, res_limit, "90", "95%")>
+      <call draw_label(toolbox.compose(lang.quick.quickview.usedtraffic, res_traffic.text_traffic, res_traffic.size))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+account.id+"&ftemplate="+template+"&stemplate="+template+"&traffic_type=-1", lang.label.changetraffic)>
+      <assign traffic_details = "1">
+    <else>
+      &nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+account.id+"&ftemplate="+template+"&stemplate="+template+"&traffic_type=-1", lang.label.changetraffic)>
+    </if>
+  <else>
+    &nbsp;
+  </if>
+  </td>
+  <td valign="top">
+  <if summary_quota_avail>
+    <call draw_label_bold(lang.label.disk_usage)><call draw_help("user-ai_quick-disk_usage","")>
+    <if quota>
+      <br>
+      <call draw_load_diagram(quota.usedMb, quota.limitMb, "90", "70%")>
+      <call draw_label(lang.quick.quickview.average_usage(quota.start_date, quota.usedMb, quota.limitMb))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=unixuser/change_disk_usage.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changedisk_usage)>
+      <br>
+      <call draw_label(lang.quick.quickview.last_day_usage(quota.lastDayUsedMb))>
+      <if showQuotaDetails>
+        <assign dk_usage_details = "1">
+      </if>
+    <else>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=unixuser/change_disk_usage.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changedisk_usage)>
+    </if>
+  <else>
+    &nbsp;
+  </if>
+  </td>
+</tr>
+
+<if dk_usage_details || traffic_details>
+<tr>
+  <td valign="top">
+    <if traffic_details>
+      <call draw_label_bold(lang.quick.quickview.trafficdetails)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=quick/traffic_details.html","lupa", lang.quick.quickview.viewtd)>
+    <else>&nbsp;
+    </if>
+  </td>
+  <td valign="top">
+    <if dk_usage_details>
+      <call draw_label_bold(lang.quick.quickview.dk_usage_details)>
+      <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=search/usage_details.html&account_id=${account.id.id}&sc_r_from=${quota.short_start_date}','Details','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false">
+          <call draw_image_align_alt("lupa", "absmiddle", lang.admin.search_usage_detail_info)>
+      </a>
+    <else>&nbsp;
+    </if>
+  </td>
+</tr>
+</if>
+<tr>
+  <td    colspan="2">
+    <call draw_diagram_legend()>
+  </td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+
+<br>
+<br>
+<call draw_table_header("", lang.label.qa)>
+
+<tr>
+<td width="100%" style="padding:5">
+<call draw_icon_table()>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./quick/quick_view.html  -->

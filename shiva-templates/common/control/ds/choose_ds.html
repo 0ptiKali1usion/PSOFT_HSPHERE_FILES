@@ -1,0 +1,21 @@
+<!-- BEGIN ./quick/choose_ds.html  -->
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.ds.choose_server_h)>
+
+<assign ds_servers = account.findChildren("ds").sortNatural("name")>
+
+<if !ds_servers>
+  <tr><td colspan="2"><call draw_label(lang.ds.no_upgrade_servers)></td></tr>
+<else>
+  <list ds_servers as ds>
+    <tr>
+    <td><call draw_link(config.CLIENT_CP_URL+"?template_name=ds/upgrade_request.html&ds_id="+ds+"&stemplate="+template+"&ftemplate="+template, ds.name)></td>
+    <td width="5%"><call draw_select(config.CLIENT_CP_URL+"?template_name=ds/upgrade_request.html&ds_id="+ds+"&stemplate="+template+"&ftemplate="+template, "")></td>
+    </tr>
+  </list>
+</if>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choose_ds.html  -->

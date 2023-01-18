@@ -1,0 +1,26 @@
+<!-- BEGIN ./adnsmanager/add_zone.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<if request.hosting><assign vhosting="1"><else><assign vhosting="0"></if>
+<assign result=yafv.checkall(
+    yafv.common.s_adnsmanager.vDomain_Name(lang.dns.zone_name,request.name),
+    yafv.common.s_adnsmanager.vDNSEmail(lang.dns.email,request.email) )>
+<if result.status=="OK">
+   <assign result=adnsmanager.addDNSZone(request.name,request.email,vhosting,request.master,request.slave1,request.slave2)>
+      <if result.status=="OK">
+         <assign success="1">
+         <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,lang.dns.zone,""))>
+      <else>
+         <assign res=session.addMessage(result.msg)>
+      </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vname=request.name>
+    <assign vemail=request.email>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_zone.sbm  -->

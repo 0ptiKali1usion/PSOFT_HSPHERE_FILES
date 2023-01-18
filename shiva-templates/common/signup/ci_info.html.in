@@ -1,0 +1,32 @@
+<!-- BEGIN ./signup/ci_info.html.in -->
+
+<assign template="signup/ci_info.html">
+<include "functions">
+<include "control/signup/signup_function.html">
+<assign title=lang.common_signup_ci_info_title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+    <td colspan="2"><call draw_label(lang.common_signup_ci_info_text)></td>
+</tr>
+
+<if (user) && (request.admin_signup=="") && (request.back=="")>
+    <assign ci=user.getLastContactInfo()>
+</if>
+
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/ci_info.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <include "control/signup/ci_info.html">
+    <if request.admin_signup != "">
+      <assign ftemplate="submit/signup/begin.sbm">
+    <else>
+      <assign ftemplate="submit/signup/eul.sbm">
+    </if>
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+
+<!-- END ./signup/ci_info.html.in -->

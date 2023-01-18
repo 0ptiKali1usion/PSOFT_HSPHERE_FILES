@@ -1,0 +1,14 @@
+<!-- BEGIN ./control/eeman/lservers.html  -->
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+<assign lservers = eeman.getLserverList()>
+<call draw_tooltip()>
+<include "control/misc/popup_note.html">
+<call draw_table_header("4", lang.eeman.lserversincl.header)>
+<assign has_header = "1">
+<include "control/eeman/lservers_incl.html">
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/lservers.html  -->

@@ -1,0 +1,17 @@
+<!-- BEGIN ./MySQL/drop_database.sbm  -->
+<assign database=account.getResource(request.db_id)>
+<assign db_name=database.db_name>
+<assign result=database.delete>
+<!--${result.status}-->
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted, lang.label.database, db_name))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_delete, lang.label.database, db_name))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./MySQL/drop_database.sbm  -->

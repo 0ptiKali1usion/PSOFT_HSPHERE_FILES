@@ -1,0 +1,131 @@
+This is a legal and binding agreement between you, the Customer, and ${settings.name}. 
+By using, installing or accessing the ${settings.name} website, the Services and 
+certain Products that are offered, as our Customer you agree to all of the terms 
+and conditions of this agreement. If you do not agree to these terms, the Acceptable 
+Use Policy or any other Terms and Conditions posted on the ${settings.name} web site, 
+all services will be discontinued, activation of the account will cease and your 
+account terminated.
+ 
+END USER LICENSE AGREEMENT
+ 
+LICENSE GRANT. Subject to the provisions contained herein and payment of applicable 
+fees, ${settings.name} hereby grants to you a non-exclusive, nontransferable, license 
+to use its accompanying proprietary software application products offered on the 
+${settings.name} web site ("Software",) for your own use. Such Software is protected 
+by the ${settings.name} laws of the United States and international ${settings.name} 
+treaties.
+ 
+RESTRICTED USE. All rights not expressly granted herein are retained by ${settings.name} 
+and its licensors. Except as stated above, this Agreement does not grant the Customer  
+any intellectual property rights in the Software. Customer shall not rent, lease, 
+transfer or sublicense the Software. Customer shall not under any circumstances nor  
+shall Customer permit a third party to 
+(i) decompile, disassemble, reverse engineer or otherwise attempt to reconstruct or 
+discover the source code of the Software or 
+(ii) prepare derivative of the Software or (iii) remove any product identification, 
+${settings.name}, trademark or other notice from the Software. Any such copy made 
+by you shall be subject to this Agreement and shall contain all of ${settings.name}'s 
+notices regarding ${settings.name}'s, trademarks and other proprietary rights as 
+contained in the Software originally provided to you.
+
+
+TITLE. The Software's organization, structure, sequence, logic, and source code are 
+valuable to the Company.  Any and all title, ownership rights, and intellectual
+property rights in and to the Software and Documentation shall remain at any and all 
+times in ${settings.name} and/or its suppliers.  Title, ownership rights, and 
+intellectual property rights in and to the content accessed through the Software is 
+the property of the applicable content owner and may be protected by applicable 
+${settings.name} or other law. This License does not give Customer any rights to 
+such content.
+ 
+LIMITED WARRANTY. ${settings.name} warrants to the Customer, for a period of 
+ninety (90) days from the date of this agreement, installation of Software, or
+use of services, whichever is earlier, that it will replace any defective media 
+on which the Software is provided and that the Software, if not modified and if 
+properly installed and used, will substantially conform to the material 
+specifications set forth in the documentation, Such warranties are for the 
+Customer's benefit only and  are not transferable. ${settings.name} does not 
+warrant that the Software will operate error free or uninterrupted or will meet 
+your requirements. Except for the express warranties stated in this section, the 
+Software are licensed "as is" and ${settings.name} specifically excludes and 
+disclaims all warranties of merchantability, fitness for a particular purpose, 
+statutory noninfringement of third party intellectual property rights and any 
+warranty that may arise by reason of trade usage, custom or course of dealing 
+and Customer hereby expressly waives any and all such warranties.
+ 
+THIS WARRANTY GIVES YOU SPECIFIC LEGAL RIGHTS, AND YOU MAY HAVE OTHER LEGAL RIGHTS 
+THAT VARY FROM STATE TO STATE OR BY JURISDICTION.
+ 
+LIMITATION OF LIABILITY. UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, TORT, 
+CONTRACT, OR OTHERWISE, SHALL ${settings.name} OR ITS SUPPLIERS OR RESELLERS BE 
+LIABLE TO YOU OR ANY OTIER PERSON FOR ANY INDIRECT, SPECIAL, INCIDENTAL, OR 
+CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES 
+FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND 
+ALL OTFER COMMERCIAL DAMAGES OR LOSSES, OR FOR ANY DAMAGES IN EXCESS OF 
+${settings.name}'S LIST PRICE FOR A LICENSE TO THE SOFTWARE AND DOCUMENTATION, 
+EYEN IF ${settings.name} SHALL HAVE BEEN INFORMED OF TFE POSSIBILITY OF SUCH 
+DAMAGES, OR FOR ANY CLAIM BY ANY OTFER PARTY. THIS LIMITATION OF LIABILITY SHALL 
+NOT APPLY TO LIABILITY FOR DEATH OR PERSONAL INJURY TO THE EXTENT APPLICABLE LAW 
+PROHIBITS SUCH LIMITATION. FURTHERMORE, SOME STATES DO NOT ALLOW THE EXCLUSION OR 
+LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS LIMITATION AND EXCLUSION 
+MAY NOT APPLY TO YOU.
+ 
+EXPORT CONTROLS. You may not download, use or otherwise export the Software or any 
+underlying information or technology except in full compliance with all United 
+States  and other applicable laws and regulations. In particular, but without 
+limitation, none of the Software or underlying information or technology may be 
+downloaded, used or otherwise exported or reexported (i) into (or to a national 
+or resident of) Cuba, Haiti, Iraq, Libya, Yugoslavia, North Korea, Iran, Syria or 
+any other country to which the U.S. has embargoed goods; or (ii) to anyone on the 
+U.S. Treasury Department's list of Specially Designated Nationals or the U.S. 
+Commerce Department's Table of Deny Orders. By downloading or using the Software, 
+you are agreeing to the foregoing and you are representing and warranting that you
+are not located in, under the control of, or a national or resident of any such
+country or on any such list.
+ 
+TERMINATION. This Agreement is effective until terminated. ${settings.name}
+may terminate this Agreement immediately if Customer attempts to reverse engineer 
+the Software or otherwise violate any of the restrictive uses as described herein.  
+Otherwise, this Agreement may be terminated by either party for a breach of any of 
+its material terms, provided the non-breaching party provides to the breaching party 
+30 days written notice describing such breach and offering the breaching party an 
+opportunity to cure.  Failure to cure a material breach within the notice period 
+shall result in automatic termination of this Agreement.  Should this Agreement be 
+terminated for your material breach, Customer agrees to remove all copies of the
+Software or any part of the Software from any and all computer storage devices,
+and destroy the Software and all Documentation.  At ${settings.name}'s request, 
+Customer or any of Customer's authorized signatory on the account, shall certify 
+in writing to ${settings.name} that all complete and partial copies of the 
+Software and the Documentation have been destroyed and that none remain in 
+Customer's possession or under its control. The provisions of this Agreement except 
+for the Section 1, "License Grant," shall survive.
+ 
+ 
+MISCELLANEOUS. This Agreement represents the complete and exclusive statement 
+of the agreements concerning this license between the parties and supersedes 
+all prior agreements and representations between them. It may be amended only 
+by a writing executed by both parties. THE ACCEPTANCE OF ANY PURCHASE ORDER 
+PLACED BY YOU IS EXPRESSLY MADE CONDITIONAL ON YOUR ASSENT TO TIE TFRMS SET 
+FORTH HEREIN, AND ${settings.name} AGREES TO FURNISH TFE SOFTWARE AND 
+DOCUMENTATION ONLY UPON THESE TERMS AND NOT THOSE CONTAINED IN YOUR PURCHASE 
+ORDER. If any provision of this Agreement is held to be unenforceable for any 
+reason, such provision shall be reformed only to the extent necessary to make. 
+It enforceable, and such decision shall not affect the enforceability 
+(i) of such provision under other circumstances or 
+(ii) of the remaining provisions hereof under all circumstances. Headings shall 
+not be considered in interpreting this Agreement. This Agreement shall be 
+governed by and construed under the law of ${settings.name} <state> as such law applies 
+to agreements between ${settings.name} <state> residents entered into and to be performed 
+entirely within ${settings.name} <state>, except as governed by Federal Law. This 
+Agreement will not be governed by the United Nations Convention of Contracts for 
+the International Sale of Goods, the application of which is hereby expressly 
+excluded.
+ 
+U.S. GOVERNMENT RESTRICTED RIGHTS. Use, duplication or disclosure by the 
+Government is subject to restrictions set forth in subparagraphs (a) through 
+(d) of the Commercial Computer-Restricted Rights clause at FAR 52.227-19 when 
+applicable, or in subparagraph (c)(l)(ii) of the Rights in Technical Data and 
+Computer Software clause at DFARS 252.227-7013, and in similar clauses in the 
+NASA FAR Supplement. Contractor / manufacturer is ${settings.name}. 
+${settings.address}<if settings.address2> ${settings.address2}</if>, ${settings.city}, ${settings.state} ${settings.zip}
+

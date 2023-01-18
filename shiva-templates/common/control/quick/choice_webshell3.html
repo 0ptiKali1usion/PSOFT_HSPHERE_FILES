@@ -1,0 +1,22 @@
+<!-- BEGIN ./quick/choice_webshell3.html  -->
+<html>
+<head>
+</head>
+<body>
+<assign host=request.host>
+<assign u=account.getChild("unixuser")>
+
+<form name=webshell3 action="http://${u.host.name}/webshell3/index2.php" method="post" accept-charset="UTF-8">
+  <input type="hidden" name="login" value="${toolbox.url_escape(u.login)}">
+  <input type="hidden" name="password" value="${toolbox.url_escape(u.password)}">
+  <input type="hidden" name="host" value="${u.host.name}">
+  <input type="hidden" name="protocol" value="http">
+</form>
+
+<script language="javascript"><!--
+  document.webshell3.submit();
+//--></script>
+
+</body>
+</html>
+<!--  END ./quick/choice_webshell3.html  -->

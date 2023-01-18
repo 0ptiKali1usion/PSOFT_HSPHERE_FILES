@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/ds_ip_pool/assign_range.sbm-->
+<assign result = obj.subnet_manager.deleteIPSubnet(request.subnet_id)>
+<if result != "OK">
+   <assign res = session.addMessage(result.msg)>
+   <assign failure="1">
+</if>
+
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/assign_range.sbm  -->

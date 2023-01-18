@@ -1,0 +1,23 @@
+<!-- BEGIN ./zeus/add_cgi_submit.html  -->
+<assign result=yafv.common.s_windomain.vfileExt(lang.label.file_ext,request.ext)>
+<if result.status=="OK">
+    <assign hosting=account.getResource(request.rid)>
+    <assign result=hosting.addChild("cgi", "", request.ext, request.handler)>
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_added,lang.label.cgi_alias,request.ext))>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vext=toolbox.html_encode(request.ext)>
+    <assign vhandler=toolbox.html_encode(request.handler)>
+    <include request.ftemplate>
+</if>
+<!--  END ./zeus/add_cgi_submit.html  -->

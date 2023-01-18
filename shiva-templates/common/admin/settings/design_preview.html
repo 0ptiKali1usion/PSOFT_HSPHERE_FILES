@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/admin/settings/design_preview.html  -->
+<assign template="">
+<assign res = design.enforceCurrent(request.design_id)>
+<assign res = session.addMessage(lang.admin.lookfeel.preview_design_message)>
+<include "functions">
+<call draw_menu("acct-pref-quick")>
+<assign a__preview = "1">
+<include "control/quick/quick_view.html">
+<call bottom()>
+<!--  END ./common/admin/settings/design_preview.html  -->

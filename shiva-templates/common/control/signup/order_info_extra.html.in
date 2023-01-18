@@ -1,0 +1,166 @@
+<!-- BEGIN ./submit/order_info_extra.html.in  -->
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<assign registrar = toolbox.getRegistrarInfoByExt(request.ext)>
+<!--${request.ext} : ${tld} -->
+<switch tld>
+  <case "us">
+  <case "kids.us">
+    <tr>
+    <td colspan="2"><call draw_label(lang.common_signup_order_us_extrafields_text)></td>
+    </tr>
+    <tr><td colspan="2"><input name="_srs_owner_extra_tld" type="hidden" value="${tld}">&nbsp;</td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_tld;">
+    <tr>
+    <td width="40%"><call draw_label(lang.signup_oie_app_purpose_label)></td>
+    <td>
+    <select name="_srs_owner_extra_app_purpose">
+      <option value="P1" SELECTED>${lang.signup_oie_app_purpose_profit_buisiness("P1")}</option>
+      <option value="P2">${lang.signup_oie_app_purpose_nonprofit_business("P2")}</option>
+      <option value="P3">${lang.signup_oie_app_purpose_personal_use("P3")}</option>
+      <option value="P4">${lang.signup_oie_app_purpose_education("P4")}</option>
+      <option value="P5">${lang.signup_oie_app_purpose_government("P5")}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_app_purpose;">
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_nexus_label)></td>
+    <td>
+    <select name="_srs_owner_extra_nexus_category">
+      <option value="C11" SELECTED>'C11'</option>
+      <option value="C12">'C12'</option>
+      <option value="C21">'C21'</option>
+      <option value="C31">'C31'</option>
+      <option value="C32">'C32'</option>
+    </select>
+    </td>
+    </tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_nexus_tip_C11)></td></tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_nexus_tip_C12)></td></tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_nexus_tip_C21)></td></tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_nexus_tip_C31)></td></tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_nexus_tip_C32)></td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_nexus_category;">
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_validator_label)></td>
+    <td>
+    <select name="_srs_owner_extra_nexus_validator">
+      <call buildCountries(vcountry)>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_nexus_validator;">
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_validator_tip)></td></tr>
+
+    <break>
+  <case "ca">
+    <tr>
+    <td colspan="2"><call draw_label(lang.common_signup_order_ca_extrafields_text)></td>
+    </tr>
+    <tr><td colspan="2"><input name="_srs_owner_extra_tld" type="hidden" value="${tld}">&nbsp;</td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_tld;">
+    <tr>
+    <td width="40%"><call draw_label(lang.signup_oie_isa_trademark_label)></td>
+    <td>
+    <select name="_srs_owner_extra_isa_trademark">
+      <option value="0" SELECTED>${lang.signup_oie_isa_trademark_no}</option>
+      <option value="1">${lang.signup_oie_isa_trademark_yes}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_isa_trademark;">
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_legal_type_label)></td>
+    <td>
+    <select name="_srs_owner_extra_legal_type">
+      <option value="ABO" SELECTED>${lang.signup_oie_legal_type_abo("ABO")}</option>
+      <option value="ASS">${lang.signup_oie_legal_type_ass("ASS")}</option>
+      <option value="CCO">${lang.signup_oie_legal_type_cco("CCO")}</option>
+      <option value="CCT">${lang.signup_oie_legal_type_cct("CCT")}</option>
+      <option value="EDU">${lang.signup_oie_legal_type_edu("EDU")}</option>
+      <option value="GOV">${lang.signup_oie_legal_type_gov("GOV")}</option>
+      <option value="HOP">${lang.signup_oie_legal_type_hop("HOP")}</option>
+      <option value="INB">${lang.signup_oie_legal_type_inb("INB")}</option>
+      <option value="LAM">${lang.signup_oie_legal_type_lam("LAM")}</option>
+      <option value="LGR">${lang.signup_oie_legal_type_lgr("LGR")}</option>
+      <option value="MAJ">${lang.signup_oie_legal_type_maj("MAJ")}</option>
+      <option value="OMK">${lang.signup_oie_legal_type_omk("OMK")}</option>
+      <option value="PLT">${lang.signup_oie_legal_type_plt("PLT")}</option>
+      <option value="PRT">${lang.signup_oie_legal_type_prt("PRT")}</option>
+      <option value="RES">${lang.signup_oie_legal_type_res("RES")}</option>
+      <option value="TDM">${lang.signup_oie_legal_type_tdm("TDM")}</option>
+      <option value="TRD">${lang.signup_oie_legal_type_trd("TRD")}</option>
+      <option value="TRS">${lang.signup_oie_legal_type_trs("TRS")}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_legal_type;">
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_lang_pref_label)></td>
+    <td>
+    <select name="_srs_owner_extra_lang_pref">
+      <option value="EN" SELECTED>${lang.signup_oie_lang_pref_en}</option>
+      <option value="FR">${lang.signup_oie_lang_pref_fr}</option>
+    </select>
+    </td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_lang_pref;">
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_domain_description_label)></td>
+    <td><input name="_srs_owner_extra_domain_description" type="text" check="vDomainDescription"></td>
+    </tr>
+    <tr><td colspan="2"><call draw_label(lang.signup_oie_domain_description_tip)></td></tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_domain_description;">
+
+    <break>
+  <case "de">
+    <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+    <tr>
+    <td><call draw_label(lang.common_signup_order_de_extrafields_signuptext)></td>
+    <td  colspan="2"><input name="_srs_owner_extra_confirmaddress" type="checkbox" value="DE"></td>
+    </tr>
+    <tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_confirmaddress;">
+    <break>
+  <case "org.uk">
+  <case "co.uk">
+    <input name="_srs_owner_extra_tld" type="hidden" value="${tld}">
+    <tr>
+    <td><call draw_label(lang.signup_oie_uk_legal_type)></td>
+    <td>
+    <select name="_srs_owner_extra_uk_legal_type">
+      <option value="LTD">${lang.signup_oie_uk_legal_type_ltd}</option>
+      <option value="PLC">${lang.signup_oie_uk_legal_type_plc}</option>
+      <option value="PTNR">${lang.signup_oie_uk_legal_type_ptnr}</option>
+      <option value="STRA">${lang.signup_oie_uk_legal_type_stra}</option>
+      <option value="SCH">${lang.signup_oie_uk_legal_type_sch}</option>
+      <option value="RCHAR">${lang.signup_oie_uk_legal_type_rchar}</option>
+      <option value="GOV">${lang.signup_oie_uk_legal_type_gov}</option>
+      <option value="CRC">${lang.signup_oie_uk_legal_type_crc}</option>
+      <option value="STAT">${lang.signup_oie_uk_legal_type_stat}</option>
+      <option value="OTHER">${lang.signup_oie_uk_legal_type_other}</option>
+      <option value="IND">${lang.signup_oie_uk_legal_type_ind}</option>
+      <option value="FCORP">${lang.signup_oie_uk_legal_type_fcorp}</option>
+    </select>
+    </td>
+    </tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_uk_reg_co_no)></td>
+    <td><input type="text" name="_srs_owner_extra_uk_reg_co_no"></td>
+    </tr>
+    <tr>
+    <td><call draw_label(lang.signup_oie_registered_for)></td>
+    <td><input type="text" name="_srs_owner_extra_registered_for"></td>
+    </tr>
+    <assign excludeFields=excludeFields+"_srs_owner_extra_uk_legal_type;">
+    <assign excludeFields=excludeFields+"_srs_owner_extra_uk_reg_co_no;">
+    <assign excludeFields=excludeFields+"_srs_owner_extra_registered_for;">
+  <break>
+
+</switch>
+<!--  END ./submit/order_info_extra.html.in  -->

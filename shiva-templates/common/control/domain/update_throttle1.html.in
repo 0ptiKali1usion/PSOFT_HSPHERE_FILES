@@ -1,0 +1,55 @@
+<!-- BEGIN ./domain/update_throttle1.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign throttle_limit = "">
+<assign throttle_interval = "">
+
+<if request.uid>
+  <assign throttle=account.getResource(request.uid)>
+  <if throttle.policy == request.policy>
+    <assign throttle_limit = throttle.limit>
+    <assign throttle_limit_u = throttle.limitUn>
+    <assign throttle_interval = throttle.interval>
+    <assign throttle_interval_u = throttle.intervalUn>
+  </if>
+</if>
+
+
+<form name="update_throttle1"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/update_throttle.sbm">
+<input type="hidden" name="policy" value="${request.policy}">
+
+
+
+
+
+
+<call draw_table_header("3", lang.domain.update_throttle.header)>
+
+
+<tr >
+<td valign="top" width="3%"   nowrap><call draw_tt_help(throttle,"user-ds_domaininfo-throttle","")></td>
+<td   colspan="2"><call draw_label_bold(lang.domain.update_throttle.policy+": "+request.policy)></td>
+</tr>
+
+<if request.policy=="Concurrent"><include "control/domain/update_throttle_conc.html"></if>
+<if request.policy=="Document"><include "control/domain/update_throttle_conc.html"></if>
+<if request.policy=="Idle"><include "control/domain/update_throttle_idle.html"></if>
+<if request.policy=="Original"><include "control/domain/update_throttle_orig.html"></if>
+<if request.policy=="Random"><include "control/domain/update_throttle_rand.html"></if>
+<if request.policy=="Request"><include "control/domain/update_throttle_conc.html"></if>
+<if request.policy=="Speed"><include "control/domain/update_throttle_orig.html"></if>
+<if request.policy=="Volume"><include "control/domain/update_throttle_orig.html"></if> 
+
+<tr >
+<td colspan="3" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/update_throttle1.html.in  -->

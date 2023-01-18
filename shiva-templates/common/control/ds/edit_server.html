@@ -1,0 +1,165 @@
+<!-- BEGIN common/control/ds/edit_server.html -->
+<call draw_tooltip()>
+
+<assign g_periods = ["day", "week", "month", "year"]>
+<if !request.ds_id>
+  <assign ds = account.getResource(request.rid)>
+<else>
+  <assign ds = account.getResource(request.ds_id)>
+</if>
+<if !request.ni_period><assign ni_period = "month"><else><assign ni_period = request.ni_period></if>
+<assign ni_id = request.ni_id>
+<assign net_interfaces = ds.getNetInterfaces()>
+
+<SCRIPT language="JavaScript">
+var graphUrls = {};
+
+<list net_interfaces as net_interface>
+  <if !ni_id || (ni_id == net_interface.id)>
+    <if !ni_id><assign ni_id = net_interface.id></if>
+    <assign ni_graph_url = net_interface.getGraphURL(ni_period)>
+  </if>
+  graphUrls['${net_interface.id}'] = {
+	day:'${net_interface.getGraphURL("day")}',
+	week:'${net_interface.getGraphURL("week")}',
+	month:'${net_interface.getGraphURL("month")}',
+	year:'${net_interface.getGraphURL("year")}'};
+</list>
+
+function refreshGraph() {
+  var fme = document.forms["f_graph"].elements;
+  var gpf = fme["ni_period"];
+  var gp = gpf.options[gpf.selectedIndex].value;
+  var ni = "${ni_id}";
+  if (fme['ni_id'] != null) {
+    var nif = fme['ni_id'];
+    ni = nif.options[nif.selectedIndex].value;
+  }
+  document.images['ni_graph_i'].src = graphUrls[ni][gp];
+}
+</SCRIPT>
+
+<call draw_table_header("2", lang.ds.edit_ds_header)>
+<tr>
+<td colspan="2" class="control_header"><call draw_header(lang.ds.stats(ds.name))></td>
+</tr>
+
+<form name="f_graph" action="${config.CLIENT_CP_URL}" method="POST">
+<if ni_graph_url>
+<tr>
+  <td colspan="2" valign="top">
+    <IMG NAME="ni_graph_i" SRC="${ni_graph_url}" ALIGN="LEFT">
+    <if net_interfaces.size != "1">
+      <nobr>
+      <call draw_label(lang.ds.bandwidth_ni_l)>
+      <select name="ni_id" onChange="javascript:refreshGraph()">
+        <foreach net_interface in net_interfaces>
+	  <if net_interface.id == ni_id><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+	  <option value="${net_interface.id}" ${vselected}>${net_interface.description}
+        </foreach>
+      </select>
+      </nobr>&nbsp;
+    </if>
+    <nobr>
+    <call draw_label(lang.ds.bandwidth_period_l)>
+    <select name="ni_period" onChange="javascript:refreshGraph()">
+      <foreach c_period in g_periods>
+	<if c_period == ni_period><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+	<option value="${c_period}" ${vselected}>${lang.ds.bandwidth_period[c_period]}
+      </foreach>
+    </select>
+    </nobr>&nbsp;
+    <input type="hidden" name="template_name" value="${template}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${request.ftemplate}">
+    <input type="hidden" name="ds_id" value="${request.ds_id}">
+    <input type="submit" value="${lang.button.go}">
+  </td>
+</tr>
+</if>
+</form>
+
+<tr>
+<td colspan="2" class="control_header"><call draw_header(lang.ds.info)></td>
+</tr>
+
+<assign takenByInfo = ds.taken_by>
+<tr>
+  <td valign="top"><call draw_label(lang.ds.name)></td>
+  <td>
+    <call draw_label(ds.name)>&nbsp;
+    <call draw_palink(config.CLIENT_CP_URL+"?template_name=ds/cancel_server.html&stemplate=" + template + "&ftemplate=" + template+"&ds_id="+ds, "ds_cancel", lang.ds.cancel_server)>
+    <if ds.taken><BR><call draw_label(lang.ds.edit_ds_taken(ds.taken))></if>
+    <if ds.scheduled_cancel><BR><call draw_label(lang.ds.edit_ds_cancellation(ds.scheduled_cancel))></if>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.ds.os_name)></td>
+  <td><call draw_label(ds.os)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.cpu)></td>
+<td><call draw_label(ds.cpu)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.ram)></td>
+<td><call draw_label(ds.ram)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.storage)></td>
+<td><call draw_label(ds.storage)></td>
+</tr>
+<tr>
+<td class="control_align_right" colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=ds/upgrade_request.html&ds_id="+ds+"&stemplate="+template+"&ftemplate="+template, lang.ds.upgrade_req)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.ds.main_ip)></td>
+  <td><call draw_label(ds.ip)></td>
+</tr>
+
+<assign ds_ip_range = ds.getChild("ds_ip_range")>
+<tr>
+<td><call draw_label(lang.ds.extra_ips)></td>
+<td>
+   <if ds_ip_range>
+     <list ds_ip_range.ranges as range>
+        <call draw_label(range.descr)><br>
+     </list>
+   </if>
+   <call draw_link(config.CLIENT_CP_URL+"?template_name=ds/add_ip.html&stemplate=" + template + "&ftemplate=" + template+"&ds_id="+ds.id, lang.ds.add_ips.label)>
+</td>
+</tr>
+<tr>
+   <td><call draw_label(lang.ds.su)></td>
+   <td><call draw_label(ds.su)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.ds.su_passwd)></td>
+   <td><call draw_label(ds.su_passwd)></td>
+</tr>
+
+<assign backup = ds.getChild("backup")>
+<if backup>
+  <tr>
+    <td><call draw_label(lang.ds.edit_ds_backup)></td>
+    <td>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=ds/backup_service.html&ds_id="+ds, "edit", "")>
+      <call disableNew(ds, backup)>
+  </tr>
+<else>
+  <if account.plan.areResourcesAvailable("backup")>
+    <tr>
+      <td><call draw_label(lang.ds.edit_ds_backup)></td>
+      <td><call draw_palink(config.CLIENT_CP_URL+"?template_name=ds/setup_backup.html&ds_id="+ds, "setup", "")></td>
+    </tr>
+  </if>
+</if>
+<if account.plan.areResourcesAvailable("ds_reboot_enable")>
+  <tr>
+  <td><call draw_label(lang.ds.edit_ds_remote_reboot)></td>
+  <td><call draw_link(config.CLIENT_CP_URL+"?template_name=ds/reboot_request.html&stemplate=" + template + "&ftemplate=" + template+"&ds_id="+ds.id, lang.ds.edit_ds_reboot)></td>
+  </tr>
+</if>
+<call draw_table_footer()>
+<!-- END common/control/ds/edit_server.html -->

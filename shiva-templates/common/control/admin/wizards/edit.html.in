@@ -1,0 +1,519 @@
+<!-- BEGIN ./control/admin/wizards/edit.html.in -->
+<call draw_tooltip()>
+<yafv s_wizard>
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign isReseller=admin.isReseller()>
+<if plan_id><assign plan=admin.getPlan(plan_id)><else><assign plan=admin.getPlan(request.plan_id)></if>
+<assign changer=admin.getPlanChanger(plan.id)>
+<assign periods = plan.values["_PERIOD_TYPES"]>
+<assign wizard = changer.getWizard()>
+<assign ops=wizard.options>
+<if ops("billable") == "1"><assign steps = toolbox.add(periods, "2")><else><assign steps="1"></if>
+
+<include "control/admin/plan_function.html">
+
+<form action="${config.CLIENT_CP_URL}" name="f_wizard" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/wizards/edit.sbm">
+<if ops("billable") != "1">
+    <input type="hidden" name="stemplate" value="admin/wizards/edit2.html">
+<else>
+    <input type="hidden" name="stemplate" value="admin/wizards/edit_final.sbm">
+</if>
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="periods" value="${periods}">
+<input type="hidden" name="steps" value="${steps}">
+
+<call prepare_table_header("2",lang.planeditor.header_step1(lang[wizard("description")]))>
+<call add_table_header_help("admin-editwizard-step1-h", "")>
+<call draw_table_header_prepared()>
+
+<tr >
+  <td><call draw_label(lang.planeditor.plan_name)></td>
+  <td><call draw_label(plan.description)></td>
+</tr>
+
+<assign addedHiddenRes = toolbox.new_list>
+
+<list wizard.categories.category as cat>
+<if cat("description")><call header(lang[cat("description")])></if>
+<call listCat(cat)>
+</list>
+
+<function listCat(cat)>
+<list cat["*"] as r>
+<call displayElement(r)>
+</list>
+</function>
+
+<function displayElement(r)>
+<switch r.node_name>
+<case "resource">
+  <if r("required") == "1">
+    <call i_resource_hidden(r("name"))>
+  <else><if (isReseller && r("adminonly")!="1") || (!isReseller && r("reselleronly")!="1")>
+    <call service(r("name"), r("active"), r("help"))>
+  </if></if>
+  <list r.field as field>
+   <call draw_field(r, field)>
+  </list>
+  <break>
+<case "LogicalGroup">
+  <call select_ls_group(r("type"), r("name"), changer.getLogicalServerGroup(r("name")), r("help"))>
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name"))>
+    <call listCat(r)>
+  <else>
+     <call draw_unavailable(r("else"))>
+  </if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))>
+    <call listCat(r)>
+  <else>
+    <call draw_unavailable(r("else"))>
+  </if>
+  <break>
+</switch>
+</function>
+
+<function draw_unavailable(un)>
+<if un><call draw_unavail(un)></if>
+</function>
+
+
+<if ops("billable")=="1" || ops("iptype")=="1" || ops("sharediptag")=="1" || ops("ialias")=="1" || ops("stopgap")=="1" || ops("demomode")=="1">
+<call header(lang.planeditor.settings)>
+</if>
+
+<if ops("billable")=="1">
+<tr >
+<td><call draw_label(lang.planeditor.money_back)>&nbsp;<call draw_help("admin-editwizard-set_moneyback","")></td>
+<if !failure>
+        <assign vmoney_back_days=plan.values["MONEY_BACK_DAYS"]>
+<else>
+        <assign vmoney_back_days=toolbox.html_encode(request.money_back_days)>
+</if>
+<td NOWRAP><input type="text" name="money_back_days" value="${vmoney_back_days}" size="4" label="${lang.planeditor.money_back}" check="vMoneyBack(this,money_back)"><call draw_label(lang.planeditor.days)>&nbsp;
+<if ( !failure && (plan.values["MONEY_BACK_CALC"]) ) || request.money_back >
+        <assign vchecked="CHECKED">
+<else>
+        <assign vchecked="">
+</if>
+<input type="checkbox" name="money_back" onClick="checkForm(this.form,false)" ${vchecked}><call draw_label(lang.label.enable)>
+</td></tr>
+
+<tr >
+<td><call draw_label(lang.planeditor.send_invoice)>&nbsp;<call draw_help("admin-editwizard-emailnotification", "")></td>
+<td>
+<if plan.values["_SEND_INVOICE"]>
+<assign send_invoice_checked="CHECKED">
+</if>
+<input type="checkbox" name="send_invoice" ${send_invoice_checked}>
+</td> 
+</tr>
+
+<tr >
+<td><call draw_label(lang.planwizard.bill_type)>&nbsp;<call draw_help("admin-editwizard-set_billing","")></td>
+<td nowrap>
+
+<if radio_trial>
+  <if radio_trial=="1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+<else>
+  <if plan.b_info=="1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+</if>
+<input TYPE="radio" VALUE="1" NAME="trial" onClick="checkForm(this.form,false)" ${vchecked}><call draw_label(lang.planwizard.normal_bill)><br>
+
+<if radio_trial>
+  <if radio_trial=="2"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+<else>
+  <if plan.b_info=="2"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+</if>
+<input TYPE="radio" VALUE="2" NAME="trial" onClick="checkForm(this.form,false)" ${vchecked}><call draw_label(lang.label.trial)>&nbsp;&nbsp;<call draw_label(lang.planeditor.duration)>&nbsp;<input type="text" size="4" name="trial_duration" value="${plan.values["_TRIAL_PERIOD"]}" label="Trial period duration" check="vDurationRel(this,trial)"><call draw_label(lang.planeditor.credit_limit)>&nbsp;<input type="text" size="4" name="trial_credit" value="${toolbox.numberToCurLocale(plan.values["_TRIAL_CREDIT"],"false")}" label="Trial period credit limit" check="vPriceRel(this,trial)"><br>
+
+<if radio_trial>
+  <if radio_trial=="0"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+<else>
+  <if plan.b_info=="0"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+</if>
+<input TYPE="radio" VALUE="0" NAME="trial" onClick="checkForm(this.form,false)" ${vchecked}><call draw_label(lang.planwizard.without_bill)>
+</td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.planeditor.credit_limit)>&nbsp;<call draw_help("admin-editwizard-set_credit","")></td>
+<td><input type="text" size="4" name="hard_credit" value="${toolbox.numberToCurLocale(plan.values["_HARD_CREDIT"],"false")}" label="${lang.planeditor.credit_limit}" check="vPriceOpt"></td>
+</tr>
+
+</if>
+
+
+
+<!-- IP SELECTION -->
+<if ops("iptype")=="1">
+<assign ip_type=changer.getIPType()>
+<tr >
+<td><call draw_label(lang.planeditor.def_ip_type)>&nbsp;<call draw_help("admin-editwizard-set_iptype","")></td>
+<td><call draw_label(ip_type)><br>
+<if ip_type=="shared" || ip_type=="shard_no_a">
+<assign vchecked1="CHECKED">
+<assign vchecked2="">
+<else>
+<assign vchecked1="">
+<assign vchecked2="CHECKED">
+</if>
+<input type="radio" name="mixedip" value="shared" ${vchecked1}><call draw_label(lang.planeditor.shared)> <input type="radio" name="mixedip" value="dedicated" ${vchecked2}><call draw_label(lang.planeditor.dedicated)>
+</td>
+</tr>
+</if>
+
+<!-- ALIASES SELECTION -->
+<if ops("sharediptag")=="1">
+<script language="javascript">
+   zones = new Array();
+   prefixs = new Array();
+   atags = new Array();
+   <assign i="0">
+   <list toolbox.getAliases() as alias>
+     zones[${i}] = "${alias.zone}";
+     prefixs[${i}] = "${alias.prefix}";
+     atags[${i}] = "${alias.tag}";
+     <assign i=toolbox.add(i,"1")>
+   </list>
+</script>
+
+<!-- SHARED IP -->
+<assign def_shared_ip_tag = changer.getSharedIPTag()>
+<tr >
+<td><call draw_label(lang.planeditor.unixwizardedit.shared_ip)>&nbsp;<call draw_help("admin-editwizard-set_iptag","")></td>
+
+<assign siptags = toolbox.getSharedIPTags()>
+<td>
+<select name="shared_ip_tag" onchange="javascript:fillAliases()">
+<if siptags && (siptags.size != "0")>
+  <list siptags as siptag><option value=${siptag}<if siptag==def_shared_ip_tag> SELECTED</if>>${siptag}</option></list>
+<else>
+  <option value="">-</option>
+</if>
+</select>
+</td>
+</tr>
+
+<if ops("ialias")=="1">
+
+<if !failure>
+<assign vidomain_alias=plan.getResourceType("idomain_alias").modDefault.getInitValue("0")>
+<assign vidomain_alias_prefix=plan.getResourceType("idomain_alias").modDefault.getInitValue("1")>
+<else>
+<assign vidomain_alias=toolbox.html_encode(request.idomain_alias)>
+<assign vidomain_alias_prefix=toolbox.html_encode(request.idomain_alias_prefix)>
+</if>
+
+<assign vcalias=vidomain_alias_prefix+"NNN"+vidomain_alias>
+<tr >
+<td><call draw_label(lang.planeditor.inst_alias)>&nbsp;<call draw_help("admin-editwizard-set_instalias","")></td>
+<td>
+<select name="calias">
+  <option value="">-</option>
+</select>
+</td>
+</tr>
+</if>
+
+<if ops("stopgap")=="1">
+<if !failure>
+<assign vdummy_domain=plan.getResourceType("nodomain").modDefault.getInitValue("0")>
+<assign vdummy_domain_prefix=plan.getResourceType("nodomain").modDefault.getInitValue("1")>
+<else>
+<assign vdummy_domain=toolbox.html_encode(request.dummy_domain)>
+<assign vdummy_domain_prefix=toolbox.html_encode(request.dummy_domain_prefix)>
+</if>
+<assign vstopgapalias=vdummy_domain_prefix+"NNN"+vdummy_domain>
+<tr >
+<td><call draw_label(lang.planeditor.stop_gap_ip)>&nbsp;<call draw_help("admin-editwizard-set_stopgapalias","")></td>
+<td>
+<select name="stopgapalias">
+  <option value="">-</option>
+</select>
+</td>
+</tr>
+</if>
+</if>
+
+<if ops("billable")=="1">
+<tr >
+<td><call draw_label(lang.planeditor.res_prices)></td>
+<td><input type="checkbox" name="leave_prices"></td> 
+</tr>
+<else>
+<input type="hidden" name="leave_prices" value="on">
+</if>
+
+<tr >
+  <td colspan="2" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+
+<function draw_field(r, field)>
+<assign oh_id=field("help")>
+  <assign vNAME=field("name")>
+  <assign rtype=plan.getResourceType(r("name"))>
+  <assign vPLANVALUE=rtype.values[field("planvalue")]>
+  <if field("prevent_changing_ifusers") && (toolbox.gt(plan.signuped_users, "0") == "1")>
+    <assign prevent_changing = "1">
+  <else>
+    <assign prevent_changing = "">
+  </if>
+  <switch field("type")>
+    <case "textbox">
+      <tr><td><call draw_label(lang[field("label")])><if oh_id>&nbsp;<call draw_help(oh_id,"")></if></td>
+      <td>
+      <if prevent_changing && (vPLANVALUE != "")>
+        <call draw_label_bold(vPLANVALUE)><br>
+        <call draw_label(lang.planeditor.forbidden_changing_value_plan_in_use)>
+        <input type="hidden" name="${vNAME}" value="${vPLANVALUE}">
+      <else>
+        <if !vPLANVALUE>
+          <assign vVALUE=field("value")>
+	  <if prevent_changing><call draw_important_label(lang.planeditor.missing_value_caution)><br></if>
+        <else>
+          <assign vVALUE=vPLANVALUE>
+        </if>
+        <assign vSIZE=field("size")>
+        <if vSIZE><assign vSIZE=" size="+vSIZE></if>
+        <input type="text" name="${vNAME}" value="${vVALUE}" ${vSIZE}>
+      </if>
+      </td>
+      </tr>
+      <break>
+    <case "checkbox">
+      <tr><td><call draw_label(lang[field("label")])><if oh_id>&nbsp;<call draw_help(oh_id,"")></if></td>
+      <td>
+      <assign vVALUE=field("value")>
+      <if vVALUE==vPLANVALUE><assign vCHECKED="CHECKED"><else><assign vCHECKED=""></if>
+      <if prevent_changing && (vPLANVALUE != "")>
+        <if vCHECKED><call draw_label_bold(lang.label.on)><else><call draw_label_bold(lang.label.off)></if><br>
+        <call draw_label(lang.planeditor.forbidden_changing_value_plan_in_use)>
+        <input type="hidden" name="${vNAME}" value="${vPLANVALUE}">
+      <else>
+	<if !vPLANVALUE && prevent_changing><call draw_important_label(lang.planeditor.missing_value_caution)><br></if>
+        <input type="checkbox" name="${vNAME}" value="${vVALUE}" ${vCHECKED}>
+      </if>
+      </td>
+      </tr>
+      <break>
+    <case "select_one">
+      <tr><td><call draw_label(lang[field("label")])><if oh_id>&nbsp;<call draw_help(oh_id,"")></if></td>
+      <td>
+      <if prevent_changing && (vPLANVALUE != "")>
+        <assign option_label = "">
+        <compress><foreach option in field["option"]>
+          <assign vVALUE=option("value")>
+          <if (vPLANVALUE == vVALUE)><assign option_label = option("label")></if>
+        </foreach></compress>
+        <if option_label><call draw_label_bold(lang[option_label])><br></if>
+        <call draw_label(lang.planeditor.forbidden_changing_value_plan_in_use)>
+        <input type="hidden" name="${vNAME}" value="${vPLANVALUE}">
+      <else>
+	<if !vPLANVALUE && prevent_changing><call draw_important_label(lang.planeditor.missing_value_caution)><br></if>
+        <select name="${vNAME}">
+        <foreach option in field["option"]><compress>
+          <assign vVALUE=option("value")>
+          <if (vPLANVALUE == vVALUE) || ((vPLANVALUE=="") && (option("selected")=="1"))>
+            <assign vSELECTED="SELECTED">
+          <else>
+            <assign vSELECTED="">
+          </if></compress>
+          <option value="${vVALUE}" ${vSELECTED}>${lang[option("label")]}</option>
+        </foreach>
+        </select>
+      </if>
+      </td>
+      </tr>
+      <break>
+    <case "input">
+      <tr><td><call draw_label(lang[field("label")])><if oh_id>&nbsp;<call draw_help(oh_id,"")></if></td>
+      <td>
+      <if prevent_changing && (vPLANVALUE != "")>
+        <call draw_label_bold(vPLANVALUE)><br>
+        <call draw_label(lang.planeditor.forbidden_changing_value_plan_in_use)>
+        <input type="hidden" name="${vNAME}" value="${vPLANVALUE}">
+      <else>
+        <assign check_f = field("check")>
+        <assign size_attr = field("size")>
+        <if !vPLANVALUE>
+	  <assign vVALUE = field("default_value")>
+	  <if prevent_changing><call draw_important_label(lang.planeditor.missing_value_caution)><br></if>
+	<else>
+	  <assign vVALUE=vPLANVALUE>
+	</if>
+        <if size_attr != ""><assign size_attr = "size=\"" + size_attr + "\""></if>
+        <if check_f>
+          <if field("check_include")>
+           <assign check_incl = "i_" + r("name")>
+	   <input name="${vNAME}" value="${vVALUE}" check="${check_f}(this, ${check_incl})" ${size_attr}>
+	  <else>
+	   <input name="${vNAME}" value="${vVALUE}" check="${check_f}" ${size_attr}>
+	  </if>
+        <else>
+          <input name="${vNAME}" value="${vVALUE}" ${size_attr}>
+        </if>
+      </if>
+      </td>
+      </tr>
+      <break>
+    <case "hidden">
+      <if addedHiddenRes.contains(vName) != "1">
+	<assign vVALUE=field("value")>
+	<input type="hidden" name="${vNAME}" value="${vVALUE}">
+	<assign ret = addedHiddenRes.add(vNAME)>
+      </if>
+      <break>
+  </switch>
+</function>
+
+<function service(tag, can_enabled, oh_id)>
+<if !admin.isResourceDisabled(tag)>
+  <assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+  <tr>
+  <td><call draw_label(name)><if oh_id>&nbsp;<call draw_help(oh_id,"")></if></td>
+  <if ( (plan.isResourceAvailable(tag)) && (!failure) ) || (request["i_"+tag]=="on") >
+    <assign included="CHECKED">
+    <if can_enabled>
+      <if request["e_"+tag]=="on">
+	<assign enabled="CHECKED">
+      <else>
+        <if changer.isResourceEnabled(tag)><assign enabled="CHECKED"><else><assign enabled=""></if>
+      </if>
+    </if>
+  <else>
+    <assign included="">
+    <assign enabled="">
+  </if>
+  <td>
+    <input type="checkbox" name="i_${tag}" ${included} <if can_enabled>onClick="incl(this.form, '${tag}')"</if>><call draw_label(lang.planeditor.include)>
+    <if can_enabled><input type="checkbox" name="e_${tag}" ${enabled} onClick="en(this.form, '${tag}')"><call draw_label(lang.planeditor.activated)></if>
+    <call processSpecial(tag)>
+  </td>
+  </tr>
+</if>
+</function>
+
+<function processSpecial(res_tag)>
+  <assign special=wizard.special["res_" + res_tag]>
+  <if special>
+    <list special["field"] as field>
+      <assign field_type= field("type")>
+      <assign vName=field("name")>
+      <assign vValue=field("value")>
+      <switch field_type>
+        <case "checkbox">
+	  <if field("checked")=="1"><assign vTMP="CHECKED"><else><assign vTMP=" "></if>
+	  <input type="checkbox" name="${vName}" value="${vValue}" ${vTMP}>
+	  <call draw_label(lang[field("label")])>
+	  <break>
+        <case "hidden">
+	  <if addedHiddenRes.contains(vName) != "1">
+	    <input type="hidden" name="${vName}" value="${vValue}">
+	    <assign ret = addedHiddenRes.add(vName)>
+	  </if>
+	  <break>
+      </switch>
+    </list>
+  </if>
+</function>
+
+<function i_resource_hidden(tag)>
+  <assign _i_tag = "i_" + tag>
+  <if addedHiddenRes.contains(_i_tag) != "1">
+    <input type="hidden" name="${_i_tag}" value="1">
+    <assign ret = addedHiddenRes.add(_i_tag)>
+    <call processSpecial(tag)>
+  </if>
+</function>
+
+<function header(topic)>
+<tr>
+ <td colspan="2" class="control_header_align_center">
+   <call draw_header(topic)>
+ </td>
+</tr>
+</function>
+
+<function draw_unavail(tag)>
+<assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+<tr ><td><call draw_label(name)></td>
+<td>
+   &nbsp;<call draw_label(lang.planwizard.support_unavailable)>&nbsp;
+</td>
+</tr>
+</function>
+
+<script language="javascript">
+  function incl(form, tag) {
+   if (!form.elements["i_"+tag].checked) {
+      form.elements["e_"+tag].checked = false;
+   }
+  }
+
+  function en(form, tag) {
+    if (form.elements["e_"+tag].checked) form.elements["i_"+tag].checked=true;
+  }
+
+  <if ops("sharediptag")=="1">
+  function fillAliases() {
+    for ( i = window.document.f_wizard.calias.options.length; i>=0; i--) {
+       window.document.f_wizard.calias.options[i]=null;
+       window.document.f_wizard.stopgapalias.options[i]=null;
+    }
+    opt_index=0;
+    for (i=0; i<atags.length; i++) {
+       if (atags[i]==window.document.f_wizard.shared_ip_tag.options[window.document.f_wizard.shared_ip_tag.selectedIndex].value) {
+            al = new Option();
+            al1 = new Option();
+            al.text = "dNNN."+prefixs[i]+"NNN."+zones[i];
+            al1.text = "username."+prefixs[i]+"NNN."+zones[i];
+            
+            al.value = "."+prefixs[i]+"NNN."+zones[i];
+            al1.value = "."+prefixs[i]+"NNN."+zones[i];
+            if (opt_index==0) {
+              al.selected=true;
+              al1.selected=true;
+            }
+
+  	    window.document.f_wizard.calias.options[opt_index] = al;
+  	    window.document.f_wizard.stopgapalias.options[opt_index] = al1;
+            opt_index=opt_index+1;
+       }
+    }
+  }
+
+  function setActiveItems() {
+    if(window.document.f_wizard.shared_ip_tag.options[window.document.f_wizard.shared_ip_tag.selectedIndex].value==${def_shared_ip_tag}) {
+       for ( i = window.document.f_wizard.calias.options.length-1; i>0; i--) {
+	   if (window.document.f_wizard.calias.options[i].value=="${vcalias}") {
+	       window.document.f_wizard.calias.options[i].selected=true;
+	   }
+       }
+       for ( i = window.document.f_wizard.stopgapalias.length-1; i>0; i--) {
+	   if (window.document.f_wizard.stopgapalias.options[i].value=="${vstopgapalias}") {
+	       window.document.f_wizard.stopgapalias.options[i].selected=true;
+	   }
+       }
+    }
+  }
+  fillAliases();
+  setActiveItems();
+  </if>
+</script>
+
+</if>
+
+<!-- END ./control/admin/wizards/edit.html.in -->

@@ -1,0 +1,11 @@
+<center>Type of Your Domain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Your domains can be of different types:<br>
+<b>standard</b> (transfered existing domain or registered with OpenSRS)<br>
+<b>non-standard</b> (transfered existing domain)<br>
+<b>third level domain</b> - registered on your provider's DNS server, contains your provider's domain name. E.g. if your provider's domain name is <i>besthosting.com</i>, and the third level domain you are registering is <i>mythirdlevel</i>, the fully qualified domain name would be <i>mythirdlevel.besthosting.com</i>.<br>
+<i>stopgap domains</i> - not real domains. When you create a stopgap domain, you get no DNS zone, and you cannot use e-mail service. Still, you will be able to access your site using the instant domain alias. Stopgap domains support web site management and FTP services. Also, you can have IP-only access. For this, you have to purchase a dedicated IP.
+For more infromation see the<i>Domain Registration</i> chapter of <i>H-Sphere 2.0 User Guide<i>.
+
+

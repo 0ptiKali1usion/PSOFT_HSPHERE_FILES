@@ -1,0 +1,39 @@
+<!-- BEGIN ./ftp/update_vuser.html.in  -->
+<call draw_tooltip()>
+
+<yafv s_ftp>
+<assign vuser=account.getResource(request.uid)>
+
+<form name="f_update_vuser" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="login" value="${vuser.vlogin}">
+<input type="hidden" name="template_name" value="submit/ftp/update_vuser_submit.sbm">
+
+
+
+
+<call draw_table_header("2", lang.ftp.updatevuser.header)>
+
+
+<tr>
+	<td><call draw_label(lang.label.login)></td>
+	<td><call draw_label(vuser.vlogin)></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.label.password)></td>
+	<td><input type="password" name="password" size="10" label="${lang.label.password}" check="vPassword1(this, login)"></td>
+</tr>
+<tr>
+        <td><call draw_label(lang.label.confirm_psw)></td>
+        <td><input type="password" name="password2" size="10" label="${lang.label.confirm_psw}" check="vPassword2(password,this)"></td>
+</tr>
+<tr>
+	<td  class="control_align_center"  colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/update_vuser.html.in  -->

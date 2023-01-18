@@ -1,0 +1,11 @@
+<!-- BEGIN: ./msexchange/admin_settings.sbm -->
+<assign mpf=obj.mpf>
+<assign result=mpf.setSettings(request.url, request.pdc, request.ldap)>
+<if !result>
+      <assign res=session.addMessage(lang.msg.name_res_updated(lang.mpf_label, " "))>
+    <else>
+      <assign res=session.addMessage(lang.msg.name_res_failed_update(lang.mpf_label, " "))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/admin_settings.sbm -->

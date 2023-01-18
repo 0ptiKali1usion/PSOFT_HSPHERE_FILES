@@ -1,0 +1,53 @@
+<!-- BEGIN .control/domain/phpbb_install.html  -->
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+<assign hosting = account.getResource(request.rid)>
+<assign url="http://"+hosting.parent.name+"/phpBB2/install.php">
+<assign phpbb = account.getResource(request.uid)>
+<assign db = phpbb.db>
+<assign user = phpbb.user>
+<assign dbname = db.db_name>
+<assign dbuser = user.name>
+<assign dbpass = user.password>
+<assign dbhost = db.parent.host.name>
+<assign result = phpbb.restoreConfig()>
+<if result.status == "OK">
+    <form name="phpbb_install" action="${url}" method="post" accept-charset="UTF-8">
+
+    <input type="hidden" name="language" value="english">
+    <input type="hidden" name="dbms" value="mysql">
+    <input type="hidden" name="upgrade" value="0">
+    <input type="hidden" name="dbhost" value="${dbhost}">
+    <input type="hidden" name="dbname" value="${dbname}">
+    <input type="hidden" name="dbuser" value="${dbuser}">
+    <input type="hidden" name="dbpasswd" value="${dbpass}">
+    <input type="hidden" name="prefix" value="phpbb_">
+    <input type="hidden" name="admin_name" value= "${account.login}">
+    <input type="hidden" name="admin_pass1" value= "${account.password}">
+    <input type="hidden" name="admin_pass2" value= "${account.password}">
+    <input type="hidden" name="install_step" value="1">
+
+    </form>
+
+    <script language="javascript">
+    document.phpbb_install.submit();
+    </script>
+
+    </body>
+    </html>
+<else>
+    <include "functions">
+
+    <call draw_table_header("", lang.domain.phpbb.errheader)>
+    <tr>
+    <td align="center" nowrap><call draw_label(result.msg)></td>
+    </tr>
+
+    
+    <call draw_table_footer()>
+</if>
+</body>
+</html>
+<!-- END .control/domain/phpbb_install.html  -->

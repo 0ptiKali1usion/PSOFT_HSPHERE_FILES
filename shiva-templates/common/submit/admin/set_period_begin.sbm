@@ -1,0 +1,23 @@
+<assign result=yafv.common.s_admin.vDate(lang.label.Date,request.period_begin)>
+<if result.status=="OK"> 
+   <assign billman=account.getChild("billman")>
+   <!--${request.aid}, ${request.period_begin}-->
+   <assign result=billman.setNewPeriodBegin( request.aid, request.period_begin)>
+    <if result.status=="OK">   
+      <assign res=session.addMessage(lang.msg.set_period_begin)>
+    <else>
+      <assign res=session.addMessage(lang.msg.set_period_begin_failed)>
+      <assign res=session.addMessage(result.msg)>
+      <assign unsuccess="1">
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign unsuccess="1">
+</if>
+<if unsuccess>
+    <assign period_begin=toolbox.html_encode(request.period_begin)>
+    <assign aid=toolbox.html_encode(requestaid)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

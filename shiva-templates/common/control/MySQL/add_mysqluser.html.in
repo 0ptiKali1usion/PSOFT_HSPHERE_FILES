@@ -1,0 +1,53 @@
+<!-- BEGIN ./control/eshops/add_mysqldb.html -->
+<call draw_tooltip()>
+<yafv s_mysql>
+<assign mysql = account.getChild("MySQL")>
+<if !mysql><assign mysql = account.addChild("MySQL", "")>
+   <if mysql.status!="OK">
+        <assign res = session.addMessage(mysql.msg)>
+   </if>
+</if>
+<assign suffix=mysql.prefix>
+<if !db_id><assign db_id=request.db_id></if>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_new_user" check! accept-charset="UTF-8">
+	
+        <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+        <input type="hidden" name="next_template" value="submit/MySQL/add_new_user.sbm">
+        <input type="hidden" name="db_id" value="${db_id}">
+        <input type="hidden" name="parent_template" value="${request.parent_template}">
+        <input type="hidden" name="stemplate" value="submit/MySQL/add_db_user.sbm">
+	<input type="hidden" name="submit_template" value="${request.submit_template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="rid" value="${request.rid}">
+        <input type="hidden" name="user_role" value="3">
+        <input type="hidden" name="type" value="MySQLUser">
+        <input type="hidden" name="mod" value="">
+        <input type="hidden" name="suffix" value="${suffix}">
+	<input type="hidden" name="resource_name" value="${request.resource_name}">
+
+
+
+
+<call draw_table_header("2", lang.mysql.new_user)>
+
+
+
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+    <td><call draw_label(suffix)><input type="text" name="user_name" size="15" check="vMySQLCombLogin(this,suffix)" label="${lang.label.username}"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.password)></td>
+    <td><input type="password" name="user_password" size="15" check="vPassword1(this, user_name)" label="${lang.label.password}"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.confirm_psw)></td>
+    <td><input type="password" name="user_password1" size="15" check="vPassword2(user_password,this)" label="${lang.label.confirm_psw}"></td>
+</tr>
+    <td   class="control_align_center" colspan="2">
+	<input type="submit" value="${lang.button.next}">
+    </td>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/eshops/add_mysqldb.html -->

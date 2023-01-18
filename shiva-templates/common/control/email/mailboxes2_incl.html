@@ -1,0 +1,58 @@
+<!-- BEGIN ./email/mailboxes2_incl.html  -->
+
+<assign quota=mailbox.getChild("mail_quota")>
+<if quota>
+    <assign used = quota.usedMb>
+    <assign limit = quota.limitMb>
+<else>
+    <assign used = "N/A">
+    <assign limit = "0">
+</if>
+<tr>
+<td><call draw_label(lang.email.mailboxes2incl.mbox)></td>
+<td><call draw_label(mailbox.email)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.descr)></td>
+<td><call draw_label(mailbox.description)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.quota)>&nbsp;<call draw_help("user-mailinfo-quota","")></td>
+<td nowrap><call draw_label("<b>"+used+"</b> MB of ")><call draw_link(config.CLIENT_CP_URL+"?rid="+mail_domain+"&mid="+mailbox+"&template_name=email/update_quota_form.html&stemplate="+template+"&ftemplate="+template+sc_params, limit+" MB")><call draw_change(config.CLIENT_CP_URL+"?rid="+mail_domain+"&mid="+mailbox+"&template_name=email/update_quota_form.html&stemplate="+template+"&ftemplate="+template+sc_params, lang.label.changequota)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.mailboxes2incl.catch)>&nbsp;<call draw_help("user-mailinfo-catch","")></td>
+<td><if mail_domain.catchAll == mailbox.email>
+ <call draw_state_on(config.CLIENT_CP_URL+"?rid="+mail_domain+"&name="+mailbox.email+"&template_name=submit/email/disable_catch_all.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+mailbox+sc_params)>
+<else>
+ <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_domain+"&name="+mailbox.email+"&template_name=submit/email/set_catch_all.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+mailbox+sc_params)>
+</if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.password)></td>
+<td><call draw_change(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mailbox+"&template_name=email/update_password_form.html&stemplate="+template+"&ftemplate="+template+sc_params, lang.email.mailboxes2incl.change)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.mailboxes2incl.webmail)></td>
+<td><call draw_launch(config.CLIENT_CP_URL+"?template_name=/submit/email/webmail.sbm&mail_domain="+mail_domain+"&mailbox="+mailbox, lang.email.mailboxes2incl.launch)></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.email.mailboxes2incl.drop)>&nbsp;</td>
+<td>
+<if mailbox.discard_incomm_mail=="enabled">
+<call draw_state_on(config.CLIENT_CP_URL+"?rid="+mail_domain+"&template_name=submit/email/discard_mail.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+mailbox+"&mbox_action=disable"+sc_params)>
+<else>
+ <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_domain+"&template_name=submit/email/discard_mail.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+mailbox+"&mbox_action=enable"+sc_params)>
+</if></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.label.del)></td>
+<td><if mail_domain.catchAll != mailbox.email><call draw_delete(config.CLIENT_CP_URL+"?did="+mailbox+"&dtemplate=submit/email/delete_mailbox.sbm&template_name=submit/email/delete_confirm.sbm&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&del=1"+sc_params,"Click to delete MailBox")><else><call draw_label(lang.email.mailboxes2incl.imposscatch)></if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.mailboxes2incl.tt)></td>
+<td><call draw_tt_link(mailbox,"")></td>
+</tr>
+<!--  END ./email/mailboxes2_incl.html  -->

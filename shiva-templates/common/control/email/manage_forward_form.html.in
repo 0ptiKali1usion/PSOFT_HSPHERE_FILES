@@ -1,0 +1,49 @@
+<!-- BEGIN ./email/manage_forward_form.html  -->
+<call draw_tooltip()>
+<assign mdomain = account.getResource(request.rid)>
+<assign forward = account.getResource(request.uid)>
+
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_mailing_lists" check! accept-charset="UTF-8">
+<call prepare_table_header("2", lang.email.managemodlistform.mdomain)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?template_name=email/list2.html&mo_id="+forward+"&md_id="+mdomain+"&sc_page="+request.sc_page, mdomain.name)>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td colspan="2"><call draw_label(lang.email.managemodlistform.mdomain)>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html&mo_id="+forward+"&md_id="+mdomain+"&sc_page="+request.sc_page, mdomain.name)></td>
+</tr>
+
+
+<if !forward.subscribers>
+<tr><td  colspan="2"><call draw_label(lang.email.manageforwardform.text)></td>
+</tr>
+<else>
+<tr>
+<td class="control_align_center"><call draw_label_bold(lang.email.adr)></td>
+<td class="control_align_center" width="12%"><call draw_label_bold(lang.label.del)></td>
+</tr>
+<list forward.subscribers as email>
+<tr><td><call draw_label(email)></td>
+<td><call draw_delete(config.CLIENT_CP_URL+"&?rid="+mdomain+"&uid="+forward+"&md_id="+mdomain+"&mo_id="+forward+"&email="+email+"&template_name=submit/email/forward_del_subscriber.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.label.delete)></td>
+</tr>
+</list>
+</if>
+
+<tr>
+<td colspan="2">
+  <call draw_label(lang.email.manageforwardform.add)>&nbsp;&nbsp;
+  <input type="hidden" name="template_name" value="submit/email/forward_add_subscriber.sbm">
+  <input type="hidden" name="rid" value="${mdomain}">
+  <input type="hidden" name="uid" value="${forward}">
+  <input type="hidden" name="md_id" value="${mdomain}">
+  <input type="hidden" name="mo_id" value="${forward}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="sc_page" value="${request.sc_page}">
+  <input type="text" size="20" name="email" value="${vemail}" check="vEmail">&nbsp;&nbsp;<input type="submit" value="${lang.button.add}">
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/manage_forward_form.html  -->

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE utils [
+ <!ELEMENT utils (function+)>
+ <!ELEMENT function (PCDATA)>
+ <!ATTLIST function name CDATA #REQUIRED>
+ <!ATTLIST function class CDATA #REQUIRED>
+]>
+
+<utils>
+
+<function name="utils.diskusagedetails" class="psoft.hsphere.functions.DiskUsageDetailed"/>
+
+</utils>
+
+
+
+
+
+
+
+

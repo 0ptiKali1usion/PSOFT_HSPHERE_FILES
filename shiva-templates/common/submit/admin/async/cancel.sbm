@@ -1,0 +1,4 @@
+<!-- BEGIN ./submit/admin/async/cancel.sbm -->
+<assign admin = account.getChild("admin").async_manager.cancel(request.rid)>
+<include request.stemplate>
+<!-- END ./submit/admin/async/cancel.sbm -->

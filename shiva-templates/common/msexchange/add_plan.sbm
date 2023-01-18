@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/add_plan.sbm -->
+<assign bizorg = account.getChild("bizorg")>
+<assign result=bizorg.addPlan(request.plan_type)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.label.msexchange.plan,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_added,lang.label.msexchange.plan,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/add_plan.sbm -->

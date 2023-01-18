@@ -1,0 +1,18 @@
+<if (user) && (request.admin_signup=="")>
+    <assign res=params.addHash("name","login","value",user.login)> 
+    <assign res=params.addHash("name","password","value",user.password)> 
+</if>
+<if request.back>
+    <include "signup/begin.html">
+<else>
+    <if (user) && (request.admin_signup=="")>
+	<assign plan=plans[request.plan_id]>
+	<if plan.isResourceAvailable("ttadmin")>
+	    <include "signup/tt_admin.html">
+	<else>
+	    <include "signup/end.html">
+	</if>
+    <else>
+	<include "signup/login.html">
+    </if>
+</if>

@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/admin/custom_emails.html  -->
+<assign c_emails = account.getChild("admin").email_manager>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.custom_emails)>
+<assign groups = c_emails.groups>
+<assign show_hint = "true">
+<list groups as group>
+<assign default_templates = c_emails.getTemplates(group.id)>
+<if default_templates.size != "0">
+<tr>
+  <td class="control_header" colspan="2">
+  <table width="100%" class="inner_control_header">
+  <tr>
+  <td>
+  <call draw_header(group.name)>
+  </td>
+  <td class="inner_control_header_align_right">
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/recipients.html&group_id="+group.id, lang.mailman.settings.header)></td>
+  </tr>
+  </table>
+  </td>
+</tr>
+<if show_hint == "true">
+<assign show_hint = "false">
+</if>
+<foreach default_template in default_templates>
+<if default_template.group_id == group.id>
+  <assign tag = default_template.tag>
+  <assign url = config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale>
+  <tr>
+  <td><a href="${url}" style="color:${TEXT_COLOR}"><call draw_label(lang.ce[tag].title)></a></td>
+  <td width="3%">
+  <if default_template.no_cc == "true">
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/set_cc.sbm&no_cc=false&tag="+tag+"&stemplate="+template, "cc_off", lang.custom_email.dont_send_cc)>
+  <else>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/set_cc.sbm&no_cc=true&tag="+tag+"&stemplate="+template, "cc_on", lang.custom_email.send_cc)>
+  </if>
+  </td>
+  </tr>
+</if>
+</foreach>
+</if>
+</list>
+<call draw_table_footer()>
+
+<!--  END ./control/admin/custom_emails.html  -->

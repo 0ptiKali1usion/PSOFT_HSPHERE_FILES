@@ -1,0 +1,22 @@
+<center>Stopgap Domain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to create <i>stopgap domains</i>.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	<i> Stopgap domain</i> allows your customers to use hosting services without a real domain. What they create is a <i>domain instant alias</i>.<br>
+<br>
+<i>Stopgap domain</i>:<br>
+- has IP address (shared or dedicated);<br>
+- can have Web service;<br>
+- can't have Mail services;<br>
+- can't have its DNS zone;<br>
+- can be accessed through FTP;<Br>
+- can't  have subdomains;<br>
+- can't  have aliases.<br>
+<br>
+On the next steps set<br>
+- the setup fee for each stopgapdomain creation;<br>
+- the recurrent fee for maintainance of each stopgapdomain;<br>
+- the number of stopgapdomains you allow each user to create under this plan for free.<br>
+<br>
+* Stopgap domain is a platform independent resource. It requires neither of other <i>domain</i> resources included.

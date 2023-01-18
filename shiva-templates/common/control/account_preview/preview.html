@@ -1,0 +1,158 @@
+<!--- PREVIEW START -->
+<assign bi = account.bi>
+<if session.msg>
+&nbsp;
+<call draw_table_header("", lang.accprev.acc_prev)>
+  <tr><td bgcolor="${design.color("hint_color")}"><call error()></td></tr>
+<call draw_table_footer()>
+</if>
+&nbsp;
+<call draw_table_header("4", lang.accprev.acc_prev)>
+<tr>
+  <td ><call draw_label_bold(lang.accprev.preview.header)></td>
+<td>
+    <list users as user>
+      <call draw_label(user.name)>
+      <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/signup_fr.html&uid="+user.id+"&aid="+account.id+"&sid="+account.signup_record.id, "sub","["+lang.label.signup_info+"]")>
+      <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/customjobs_fr.html&account_id="+account.id.id, "sub", "[Custom Jobs]")>
+      <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/notes_fr.html&account_id="+account.id.id, "sub","["+lang.label.notes+"]")>
+    </list>
+  </td>
+  <td ><call draw_label_bold(lang.label.plan)></td>
+  <td ><call draw_label(account.plan.description)></td>
+</tr>
+<tr>
+  <td >
+<if account.ci.email != account.bi.email>
+  <call draw_label_bold(lang.accprev.preview.contactemail)></td>
+  <td ><call draw_label(account.ci.email)></td>
+  <td ><call draw_label_bold(lang.accprev.preview.billemail)> </td>
+  <td ><call draw_label(account.bi.email)>
+<else>
+  <call draw_label_bold(lang.accprev.preview.cbemail)></td>
+  <td  colspan="3"><call draw_label(account.ci.email)>
+
+</if>
+<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+account.id.id+"&display_template=user_info.html", "sub", lang.accprev.preview.view)>
+</td>
+</tr>
+<tr>
+  <td ><call draw_label_bold(lang.accprev.preview.billtype)></td>
+  <td ><if account.bi.type=="CC"><call draw_label(lang.label.cc)><else><call draw_label(account.bi.type)></if></td>
+<!-- BILLING PERIOD START -->
+<assign size=account.plan.values["_PERIOD_SIZE_"+account.periodId]>
+  <td ><call draw_label_bold(lang.label.bp)></td>
+  <td ><call draw_label(size+" "+account.plan.values["_PERIOD_TYPE_"+account.periodId])><if size!="1"><call draw_label(lang.accprev.preview.s)></if></td>
+</tr>
+
+<tr >
+  <td><call draw_label_bold(lang.accprev.preview.accstatus)></td>
+  <td>
+   <if account.suspended><call draw_label(toolbox.compose(lang.accprev.preview.susp, account.suspend_reason))><else><call draw_label(lang.accprev.preview.ok)></if></td>
+   <td><call draw_label_bold(lang.label.balance)></td>
+   <td><call draw_label(toolbox.displayBalance(account.bill.balance))>
+<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+account.id.id+"&bill_id="+account.bill.id+"&display_template=billing_info.html", "sub", lang.accprev.preview.view)>
+</td>
+  </tr>
+<!-- SYSTEM INFO START -->
+<assign u = account.getChild("unixuser")>
+<tr>
+  <td ><call draw_label_bold(lang.label.ftplogin)></td>
+  <td ><call draw_label(u.login)></td>
+  <td ><call draw_label_bold(lang.accprev.preview.hostname)></td>
+  <td ><call draw_label(u.host.name)></td>
+</tr>
+<tr>
+  <td ><call draw_label_bold(lang.accprev.preview.homedir)></td>
+  <td ><call draw_label(u.dir)></td>
+  <td ><call draw_label_bold(lang.accprev.preview.sysgroup)></td>
+  <td ><call draw_label(u.group)></td>
+</tr>
+
+<assign quota=u.getChild("quota")>
+<if quota>
+<tr>
+  <td ><call draw_label_bold(lang.accprev.preview.diskquota)></td>
+  <td  colspan="3"><call draw_label(toolbox.compose(lang.accprev.preview.used, quota.usedMb, quota.limitMb, quota.usedFiles))> <if quota.limitFiles != "unlimited"><call draw_label(toolbox.compose(lang.accprev.preview.out1, quota.limitFiles))></if><call draw_label(lang.accprev.preview.files)></td>
+</tr>
+</if>
+
+<assign traffic = account.getChild("traffic")>
+<if traffic>
+<assign res=traffic.reload>
+<tr>
+  <td ><call draw_label_bold(lang.label.traffic)></td>
+  <td  colspan="3"><call draw_label(toolbox.compose(lang.accprev.preview.trafficout, traffic.text_traffic, traffic.size))></td>
+</tr>
+</if>
+<!-- SYSTEM INFO END -->
+<if account.plan.type != "6">
+<tr>
+  <td ><call draw_label_bold(lang.accprev.mail_info)></td>
+  <td  colspan="3"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+account.id.id+"&display_template=mail.html", "sub", lang.accprev.preview.view)></td>
+</tr>
+</if>
+<!-- DEDICATED SERVERS BEGIN -->
+<assign d_servers = account.getChildren("ds")>
+<if d_servers.size != "0">
+<tr>
+ <td class="control_align_center" colspan="4"><call draw_label_bold(lang.accprev.preview.d_servers)></td>
+</tr>
+<list d_servers as ds>
+<!--- DS=${ds}-->
+<tr>
+  <td><call draw_label(ds.full_name)></td>
+  <td colspan="3"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+account.id.id+"&display_template=ds_info.html"+"&ds_id="+ds, "sub", lang.accprev.preview.view)></td>
+</tr>
+</list>
+</if>
+<!-- DEDICATED SERVERS END -->
+<if account.plan.type != "6">
+<tr>
+  <td  class="control_align_center" colspan="4"><call draw_label_bold(lang.accprev.preview.domains)></td>
+</tr>
+<list account.findChildren("domain") as domain>
+<call displayDomain(domain)>
+</list>
+<list account.findChildren("nodomain") as domain>
+<call displayDomain(domain)>
+</list>
+<list account.findChildren("3ldomain") as domain>
+<call displayDomain(domain)>
+</list>
+<list account.findChildren("service_domain") as domain>
+<call displayDomain(domain)>
+</list>
+</if>
+<call draw_table_footer()>
+<!--- PREVIEW END -->
+
+<function displayDomain(domain)>
+<tr>
+  <td  colspan="2"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&aid="+account.id.id+"&display_template=websettings.html&rid="+domain, "sub", domain.name)> <call draw_tlink("http://"+domain.name, "_blank", lang.accprev.preview.open)><if domain.getChild("opensrs")><call draw_label(lang.accprev.preview.srs)></if>
+  </td>
+<assign ip=domain.getChild("ip")>
+  <td ><call draw_label_bold(lang.accprev.preview.ip)></td>
+  <td ><if ip.shared == "1"><call draw_label(lang.accprev.preview.shared)><else><call draw_label(toolbox.int2ext(ip.ip))> <call draw_tlink("http://"+toolbox.int2ext(ip.ip), "_blank", lang.accprev.preview.open)></if></td>
+</tr>
+
+<if ip.shared == "1">
+<tr>
+  <td ><call draw_label_bold(lang.accprev.preview.iad)></td>
+  <td  colspan="3"><call draw_label(domain.getChild("hosting").getChild("idomain_alias").alias)> <call draw_tlink("http://"+domain.getChild("hosting").getChild("idomain_alias").alias, "_blank", lang.accprev.preview.open)></td>
+</tr>
+</if>
+<assign zone=domain.getChild("dns_zone")>
+<if zone>
+<tr>
+  <td  valign="top"><call draw_label_bold(lang.accprev.preview.nameservers)></td>
+  <td  colspan="3">
+     <call draw_label(zone.master.name+" ("+toolbox.int2ext(zone.master.ip)+")")>
+     <if zone.slave1><br><call draw_label(zone.slave1.name+" ("+toolbox.int2ext(zone.slave1.ip)+")")></if>
+     <if zone.slave2><br><call draw_label(zone.slave2.name+" ("+toolbox.int2ext(zone.slave2.ip)+")")></if><br>
+  </td>
+</tr>
+</if>
+<list domain.getChildren("subdomain") as subdomain><call displayDomain(subdomain)></list>
+</function>
+

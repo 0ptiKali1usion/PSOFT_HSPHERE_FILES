@@ -1,0 +1,25 @@
+<tr>
+  <td><call draw_label(lang.admin.registrar.notify_before)></td>
+  <td>
+    <if registrar><assign rValue = registrar.email_days><else><assign rValue = ""></if>
+    <input type="text" name="email_days"size="2" label="${rValue}" value="${rValue}" check="vPositiveIntOpt">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.registrar.renew_before)></td>
+  <td>
+    <if registrar><assign rValue1=registrar.renew_days><else><assign rValue1 = ""></if>
+    <input type="text" name="renew_days" size="2" label="${rValue1}" value="${rValue1}" check="vPositiveIntOpt">
+  </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.opensrs.init_renew_mode)></td>
+   <td>
+	<input type="radio" value="auto" name="renew_mode"
+	<if !registrar || !registrar.renew_mode || registrar.renew_mode=="auto">CHECKED</if>>
+	<call draw_label(lang.label.opensrs.auto_renew)>&nbsp;
+	<input type="radio" value="manual" name="renew_mode"
+	<if registrar.renew_mode=="manual">CHECKED</if>>
+	<call draw_label(lang.label.opensrs.manual_renew)>
+   </td>
+</tr>

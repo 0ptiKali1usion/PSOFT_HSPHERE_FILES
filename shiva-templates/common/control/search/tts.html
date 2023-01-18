@@ -1,0 +1,52 @@
+<!-- BEGIN ./search/tts.html  -->
+<assign template="search/tts.html">
+<if request.search_step><assign search_step=request.search_step><else><assign search_step="10"></if>
+<assign viewer=account.getChild("reportviewer")>
+<if request.cid><assign report = viewer.getCachedReport(request.cid)>
+<assign start=request.start>
+</if>
+<if !request.assign_to><assign assign_to="%"><else><assign assign_to=request.assign_to></if>
+<if !request.priority><assign priority="%"><else><assign priority=request.priority></if>
+<if !report><assign report = viewer.getReport("tt_history", assign_to,priority)></if>
+<if !start><assign start="0"></if>
+<!--assign_to=${assign_to}<br>
+priority=${priority}<br>
+severity=${severity}<br>-->
+<call draw_tooltip()>
+
+<assign colspan="7">
+<call draw_table_header(colspan, "")>
+
+<assign next=report.next(start, search_step)>
+<tr>
+  <td class="control_header"><call draw_header(lang.label.action)></td>
+  <td class="control_header"><call draw_header(lang.label.title)></td>
+  <td class="control_header"><call draw_header(lang.search.created)></td>
+  <td class="control_header"><call draw_header(lang.tt.priority)></td>
+  <td class="control_header"><call draw_header(lang.search.lastmod)></td>
+  <td class="control_header"><call draw_header(lang.search.type)></td>
+  <td class="control_header"><call draw_header(lang.search.tts.assigned)></td>
+</tr>  
+<list report.entrySet(start, next) as entry>
+<tr>
+   <td  class="control_align_center" ><call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html"+"&stemplate=tt/tt_history.html"+"&ttid="+entry.id, lang.search.tts.view)></td>
+   <td><call draw_label(entry.title)></td>
+   <td><call draw_label(entry.created)></td>
+   <td  class="control_align_center" >
+<switch entry.priority><case "0"><call draw_label(lang.tt.normal)><break><case "1"><call draw_label(lang.tt.low)><break><case "2"><call draw_label(lang.tt.high)><break></switch>
+</td>
+   <td><call draw_label(entry.lastmod)></td>
+   <td><call draw_label(entry.description)></td>
+   <td><call draw_label(entry.name)></td>
+</tr>   
+</list>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"&?template_name="+template+"&cid="+report.id+"&plan="+toolbox.url_escape(request.plan)+"&payment="+toolbox.url_escape(request.payment)+"&email="+toolbox.url_escape(request.email)+"&start="+start+"&search_step="+search_step+"&r_from="+toolbox.url_escape(request.r_from)+"&r_to="+toolbox.url_escape(request.r_to)+"username="+toolbox.url_escape(request.username),label)>
+</function>
+<if start!="0"><call reportLink(report.prev(start, search_step), lang.search.prev)></if>
+<if next!=report.size><call reportLink(next, lang.search.next)></if>
+<br>
+<list report.pages(search_step) as pstart><call reportLink(pstart.start, "["+pstart.id+"]")></list>
+<!--  END ./search/tts.html  -->

@@ -1,0 +1,30 @@
+<!-- BEGIN ./submit/winuser/add_ftpuser.sbm  -->
+<assign result=yafv.checkall(
+   yafv.common.s_winuser.vUsername(lang.label.login,request.login), 
+   yafv.common.s_winuser.vLocalDir(lang.label.home_dir,request.home), 
+   yafv.common.s_winuser.vPassword1(lang.label.password,request.password, request.login)
+)>
+<if result.status=="OK">
+    <assign unixuser=account.getChild("unixuser")>
+    <assign result=unixuser.addChild("unixsubuser", "", request.login, request.home, request.password)>
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_created, lang.label.ftplogin, ""))>
+    <else>
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_create, lang.label.ftplogin, ""))>
+        <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vlogin=toolbox.html_encode(request.login)>
+    <assign vhome=toolbox.html_encode(request.home)>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/winuser/add_ftpuser.sbm  -->

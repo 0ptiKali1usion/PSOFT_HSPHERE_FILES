@@ -1,0 +1,18 @@
+<!-- BEGIN ./tt/standalone_tt_form.html  -->
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<assign template="tt/standalone_tt_form.html">
+<HTML>
+<HEAD>
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${user.login} (${account.plan.description})</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<yafv>
+<call define_css()>
+</HEAD>
+<BODY>
+<br>&nbsp;
+<include "control/tt/standalone_tt_form.html">
+</BODY>
+</HTML>
+<!--  END ./tt/standalone_tt_form.html  -->

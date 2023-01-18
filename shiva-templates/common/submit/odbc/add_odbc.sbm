@@ -1,0 +1,17 @@
+<!--BEGIN ./submit/odbc/add_odbc.sbm-->
+<assign odbc= account.getChild("odbc")>
+<if !odbc>
+   <assign result=account.addChild("odbc","")>
+   <if result.status!="OK">
+	<assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_add, lang.label.odbc_service, ""))>
+	<assign res=session.addMessage(result.msg)>
+	<assign unsuccess="1">
+   </if>
+</if> 
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--END ./submit/odbc/add_odbc.sbm-->

@@ -1,0 +1,84 @@
+<!-- BEGIN ./control/MSSQL/add_user.html.in -->
+<assign mssql = account.getChild("MSSQL")>
+<assign mssql=account.getChild("MSSQL")>
+<if !mssql>
+  <assign mssql=account.addChild("MSSQL", "")>
+</if>
+<if mssql.status!="OK">
+  <assign res=session.addMessage(mssql.msg)>
+</if>
+<if !database>
+ <if !request.database>
+  <assign database = account.getResource(request.rid)>
+ <else>
+  <assign database = account.getResource(request.database)>
+ </if>
+</if>
+
+<call draw_tooltip()>
+<yafv s_mssql>
+<assign suffix=mssql.prefix>
+ 
+
+
+
+
+
+<call draw_table_header("2", lang.mssql.adduser.header(database.db_name))>
+
+
+
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+<td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_user" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+    <input type="hidden" name="next_template" value="submit/MSSQL/add_user.sbm">
+    <input type="hidden" name="database" value="${request.database}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="MSSQLUser">
+    <input type="hidden" name="rid" value="${database}">
+    <input type="hidden" name="suffix" value="${suffix}">
+    <input type="hidden" name="mod" value="">
+    <call draw_label_bold(suffix)><input type="text" name="user_name" size="15" check="vMSSQLCombLogin(this, suffix)"></td>
+   </tr>
+   <tr>
+    <td><call draw_label(lang.mssql.adduser.login)></td>
+    <td>
+      <select name="user_login">
+	<assign logins = mssql.getChildren("MSSQLLogin")>
+	<assign users = database.getChildren("MSSQLUser")>
+	<if logins>
+		<list logins as login>
+			<if database.login_name != login.name>
+				<if users>
+					<assign count = "0">
+					<list users as user>
+						<if login == user.login>
+							<assign count = toolbox.add(count, "1")>
+						</if>
+					</list>
+					<if count == "0">
+						<option value=${login}><call draw_label(login.name)></option>
+					</if>
+				<else>
+					<option value=${login}><call draw_label(login.name)></option>
+				</if>
+			</if>
+		</list>
+	</if>
+      </select>
+    </td>
+   </tr>
+
+<tr>
+   <td   class="control_align_center" colspan="2">
+     <input type="submit" value="${lang.button.add}">
+   </td>
+</form>
+</tr>
+ 
+
+<call draw_table_footer()>
+<!-- END ./control/MSSQL/add_user.html.in -->

@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/admin/change_ivalue.html  -->
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<if request.key><assign mod=rtype.mods[request.key]><else><assign mod=rtype.modDefault></if>
+<assign iv = mod.getInitValue(request.count)>
+
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.changeivalue.header)>
+<tr>
+  <td><call draw_label(lang.admin.changeivalue.label)></td>
+<td>
+      <input type="text" name="label" value="${iv.label}">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.changeivalue.value)></td>
+  <td>
+<if iv.type=="6">
+<select name="value" size="1">
+<assign eeman=account.getChild("eeman")>
+<list eeman.groups as group><option value="${group.id}"<if group.id==iv> SELECTED</if>>${group.name}</list>
+</select>
+<else>
+    <input type="text" name="value" value="${iv}">
+</if>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.changeivalue.type)></td>
+  <td>
+<select name="iv_type" size="1">
+<option value="0"<if iv.type=="0"> SELECTED</if>>Static
+<option value="1"<if iv.type=="1"> SELECTED</if>>Form Field
+<option value="2"<if iv.type=="2"> SELECTED</if>>Relative
+<option value="3"<if iv.type=="3"> SELECTED</if>>Absolute
+<option value="4"<if iv.type=="4"> SELECTED</if>>Relative/Recursive
+<option value="5"<if iv.type=="5"> SELECTED</if>>Absolute/Recursive
+<option value="6"<if iv.type=="6"> SELECTED</if>>HostGroup
+</select>
+  </td>
+</tr>
+<tr>
+  <td colspan="2"  class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/admin/change_ivalue_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="plan_id" value="${request.plan_id}">
+    <input type="hidden" name="r_id" value="${request.r_id}">
+    <input type="hidden" name="key" value="${request.key}">
+    <input type="hidden" name="count" value="${request.count}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- BEGIN ./control/admin/change_ivalue.html  -->

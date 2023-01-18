@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/admin/ds/view_ds_template.html.in  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager","")>
+</if>
+<call draw_tooltip()>
+<if ds_manager>
+<assign dst=ds_manager.getDSTemplate(request.dst_id)>
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.stemplate}">
+<input type="hidden" name="dst_id" value="${dst.id}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<call draw_table_header("2", lang.admin.ds.view_ds_template_h)>
+<tr>
+    <td width="40%"><call draw_label(lang.admin.ds.template_name)></td><td><call draw_label(dst.name)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.os_name)></td><td><call draw_label(dst.os)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.cpu)></td><td><call draw_label(dst.cpu)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.ram)></td><td><call draw_label(dst.ram)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.storage)></td><td><call draw_label(dst.storage)></td>
+</tr>
+<tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.back}"></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/view_ds_template.html.in  -->

@@ -1,0 +1,71 @@
+<!-- BEGIN ./control/admin/cc_charge.html  -->
+<assign admin=account.getChild("admin")>
+<assign report=account.getChild("daily_report")>
+<if !report><assign report = account.addChild("daily_report", "")></if>
+<if admin>
+    <call draw_tooltip()>
+    <include "control/misc/mini_calendar.html">
+    <form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.cc_charge.header)>
+	    <tr>
+			    <td><call draw_label(lang.label.accid)></td>
+			    <td><input type="text" name="sc_account"></td>
+			</tr>
+      <tr >
+		    	    <td><call draw_label(lang.label.username)></td>
+		    	    <td><input type="text" name="sc_username"></td>
+			</tr>
+      <tr >
+			    <td><call draw_label(lang.admin.cc_charge.cc_type)></td>
+			    <td>
+				<select name="sc_cc_type" size="1">
+				    <option value="">${lang.label.any}
+				    <list toolbox.getActiveCCbrands() as ccb>
+					<option value="${ccb.name_sh}">${ccb.name}
+				    </list>
+				</select>
+			    </td>
+			</tr>
+      <tr >
+			    <td><call draw_label(lang.admin.cc_charge.tr_result)></td>
+			    <td>
+				<select name="sc_tr_result" size="1">
+				    <option value="">${lang.label.any}
+				    <option value="1" selected>${lang.admin.cc_charge.success}
+				    <option value="2">${lang.admin.cc_charge.failed}
+				</select>
+			    </td>
+			</tr>
+      <tr >
+			    <td><call draw_label(lang.label.performed)></td>
+			    <td nowrap>
+        <table class="inner_control">
+				    <tr>
+          <td><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_created_after" size="10" value="${report.defaultDate()}">&nbsp;</td>
+					<td valign="bottom"><call draw_calendar("f_search","sc_created_after","")></td>
+          <td>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_created_before" size="10">&nbsp;</td>
+					<td valign="bottom"><call draw_calendar("f_search","sc_created_before","")></td>
+				    </tr>
+				</table>
+			    </td>
+			</tr>
+      <tr >
+			    <td><call draw_label(lang.admin.cc_charge.live)></td>
+			    <td><input type="checkbox" name="sc_only_live" value="1" CHECKED></td>
+			</tr>
+      <tr >
+			    <td><call draw_label(lang.label.entries)></td>
+			    <td><call searchStepBox("10")></td>
+			</tr>
+      <tr >
+			    <td>&nbsp;</td>
+          <td>
+	<input type="hidden" name="template_name" value="search/cc_charge.html">
+          <input type="submit" value="${lang.button.submit}"></td>
+			</tr>
+
+<call draw_table_footer()>
+    </form>
+</if>
+<!--  END ./control/admin/cc_charge.html  -->

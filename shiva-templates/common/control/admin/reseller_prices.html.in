@@ -1,0 +1,55 @@
+<!-- BEGIN ./control/admin/reseller_prices.html.in  --> 
+<assign reseller_su = account.getChild("reseller_su")>
+
+<form name="f_reseller_pr" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/reseller_prices.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="r_id" value="${request.r_id}">
+
+<call draw_table_header("7", lang.admin.resprices.header)>
+
+<tr>
+<td class="control_header"><call draw_header(lang.admin.resprices.resource)></td>
+<td class="control_header"><call draw_header(lang.admin.resprices.free)></td>
+<td class="control_header"><call draw_header(lang.label.setup)></td>
+<td class="control_header"><call draw_header(lang.admin.resprices.rec)></td>
+<td class="control_header"><call draw_header(lang.admin.resprices.usage)></td>
+<td class="control_header"><call draw_header(lang.admin.resprices.refund)></td>
+<td class="control_header"><call draw_header(lang.admin.resprices.max)></td>
+</tr>
+<list reseller_su.priced_types as priced_type>
+<call resource_price(priced_type)>
+</list>
+<tr ><td colspan="7" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+<call draw_table_footer()>
+</form>
+
+
+<function resource_price(rTypeId)>
+<assign priceType = toolbox.getResellerResourcePriceType(rTypeId)>
+<if priceType>
+<assign typeName = toolbox.getTypeName(rTypeId)>
+<tr >
+<td nowrap><call draw_label(toolbox.getResourceDescription(rTypeId))></td>
+
+<td><if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1"><assign v_free = toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"+typeName+"_"],"false")><input type="text" name="_FREE_UNITS_${typeName}_" value="${v_free}" size="6" check="vUnits"><else>&nbsp;</if></td>
+
+
+<td><if toolbox.consists(priceType,"S")=="1"><assign v_setup = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"+typeName+"_"],"false")><input type="text" name="_SETUP_PRICE_${typeName}_" value="${v_setup}" size="6" check="vPrice"><else>&nbsp;</if></td>
+
+<td><if toolbox.consists(priceType,"R")=="1"><assign v_recurr = toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"+typeName+"_"],"false")><input type="text" name="_UNIT_PRICE_${typeName}_" size="6" value="${v_recurr}" check="vPrice"><else>&nbsp;</if></td>
+
+<td><if toolbox.consists(priceType,"U")=="1"><assign v_usage = toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"+typeName+"_"],"false")><input type="text" name="_USAGE_PRICE_${typeName}_" value="${v_usage}" size="6" check="vPrice"><else>&nbsp;</if></td>
+
+
+<td><assign v_refund=toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"+typeName+"_"],"false")><input type="text" name="_REFUND_PRICE_${typeName}_" value="${v_refund}" size="6" check="vPercent"></td>
+
+<td><assign v_max=toolbox.numberToCurLocale(rtype.values["_MAX_"+typeName+"_"],"false")><input type="text" name="_MAX_${typeName}_" value="${v_max}" size="6" value="${v_max}" check="vUnits"></td>
+
+</tr>
+</if>
+</function>
+<!-- END ./control/admin/reseller_prices.html.in  --> 
+

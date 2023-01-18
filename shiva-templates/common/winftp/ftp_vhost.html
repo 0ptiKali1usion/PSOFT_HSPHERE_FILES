@@ -1,0 +1,10 @@
+<!-- BEGIN ./winftp/ftp_vhost.html  -->
+<assign template="winftp/ftp_vhost.html">
+<include "functions">
+<call draw_menu("ftp_user-ftp")>
+<if !ftp_vhost>
+<assign ftp_vhost = account.getResource(request.rid)>
+</if>
+<include "control/winftp/ftp_vhost.html">
+<call bottom()>
+<!--  END ./winftp/ftp_vhost.html  -->

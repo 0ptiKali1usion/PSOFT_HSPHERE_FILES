@@ -1,0 +1,67 @@
+<!-- BEGIN ./quick/choice_comodossl.html  -->
+<assign unixuser=account.getChild("unixuser")>
+
+<if (!account.plan.isResourceAvailable("unixuser")) && (account.plan.isResourceAvailable("mail_service"))><assign isMailOnly = "1"></if>
+
+<function draw_hosting(hosting)>
+<assign comodossl = hosting.getChild("comodossl")>
+<assign ip=hosting.parent.getChild("ip")>
+<if !isMailOnly>
+<tr>
+   <td><call draw_label(hosting.parent.name)></td>
+   <if ip.shared != "1">
+     <if comodossl>
+       <td  width="20%"  class="control_align_center">
+         <call draw_on()>
+       </td>
+       <td>
+         <call draw_label(comodossl.ext_description)>
+         <if comodossl.cert_available>
+           <if !comodossl.cert_installed>
+             <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/domain/install_comodo_cert.sbm" + "&comodossl="+comodossl+"&stemplate="+template+"&ftemplate="+template+"&rid="+hosting, lang.comodossl.cert.install)>
+           </if>
+           <br><call draw_label(lang.comodossl.cert.expires_on)>&nbsp;<call draw_label(comodossl.expires)>
+         <else>
+           <call draw_link(config.CLIENT_CP_URL+"?template_name=domain/comodossl_purchase_req.html"+"&country="+account.ci.country+"&stemplate="+template+"&ftemplate="+template, lang.comodossl.doc_req)>
+         </if>
+       </td>
+     <else>
+       <td  width="20%"  class="control_align_center">
+        <call draw_palink(config.CLIENT_CP_URL+"?rid="+hosting+"&type=comodossl"+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&template_name=domain/comodossl_purchase.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM, "off", "Add")>
+       </td>
+       <td>&nbsp;</td>
+     </if>
+   <else>
+     <td  width="20%"  class="control_align_center">
+       <call draw_off()>
+     </td>
+     <td>
+       <call draw_label(lang.domain.webservice.dedip)>
+     </td>
+   </if>
+</tr>
+</if>
+</function>
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("4", lang.quick.choicehosting.select)>
+
+
+<assign hostings = account.findAllChildren("hosting")>
+<if !hostings>
+<tr >
+ <td colspan="2" ><call draw_label(lang.quick.choicehosting.noanydomain)></td>
+</tr>
+<else>
+<list hostings as hosting>
+<call draw_hosting(hosting)>
+</list>
+</if>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choice_comodossl.html  -->

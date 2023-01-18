@@ -1,0 +1,57 @@
+<!-- BEGIN ./control/admin/wizards/create_store_form.html -->
+<function mem(name)><if request[name]><input type="hidden" name="${name}" value="${request[name]}"></if></function>
+
+<include "submit/admin/wizards/create_store_special.sbm">
+<input type="hidden" name="plan_name" value="${toolbox.html_encode(request.plan_name)}">
+
+<list wizard.categories.category as cat>
+<call memCat(cat)>
+</list>
+<function memCat(cat)><list cat["*"] as r><call memElement(r)></list></function>
+<function memElement(r)>
+<switch r.node_name>
+<case "resource">
+  <call mem("i_"+r("name"))>
+  <call mem("e_"+r("name"))>
+  <list r.field as field>
+    <call mem(field("name"))>
+  </list>
+  <break>
+<case "LogicalGroup">
+  <call mem(r("name"))>
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name"))><call memCat(r)></if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))><call memCat(r)></if>
+  <break>
+</switch>
+</function>
+
+<call mem("wizard")>
+<call mem("homedir")>
+<call mem("mixedip")>
+<call mem("shared_ip_tag")>
+<call mem("idomain_alias")>
+<call mem("idomain_alias_prefix")>
+<call mem("iparent_host")>
+<call mem("iparent_host_number_prefix")>
+<call mem("calias")>
+<call mem("stopgapalias")>
+<call mem("trial")>
+<call mem("trial_duration")>
+<call mem("trial_credit")>
+<call mem("hard_credit")>
+<call mem("money_back_days")>
+<call mem("money_back")>
+<call mem("send_invoice")>
+<call mem("demo_only")>
+<call mem("steps")>
+<call mem("periods")>
+<call mem("plan_id")>
+<call mem("leave_osrs_prices")>
+<call mem("leave_prices")>
+<comment>NOT NECESSARY<!--call mem("include_ds_prices")--></comment>
+
+<!-- END ./control/admin/wizards/create_store_form.html -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/ds/upgrade_request.sbm  -->
+<assign result = obj.user_requests.dsUpgradeRequest(request.ds_id, request.dst_id, request.description)>
+<if result.status == "OK">
+  <assign res = session.addMessage(lang.ds.upgrade_request_sent)>
+<else>
+  <assign res = session.addMessage(result.msg)>
+  <assign failure = "1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds/upgrade_request.sbm  -->

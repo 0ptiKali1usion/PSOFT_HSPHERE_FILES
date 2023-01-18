@@ -1,0 +1,11 @@
+<center>E-mail Invoice Notification</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	- set the system to send e-mail copies of on-line invoices to resellers registered under the plan.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	- e-mail invoices are sent to the e-mail address that reseller provides in his billing info or contact info (in the absense of the first)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	- the default can be overridden by individual reseller settings<br>
+&nbsp;&nbsp;&nbsp;&nbsp;	
+- toggling the option (through plan edit wizard) doesn't affect settings of the existing resellers
+

@@ -1,0 +1,8 @@
+<!-- BEGIN ./domain/jserv_restart.sbm  -->
+<assign result=account.getResource(request.rid).getChild("servlet").reStart()>
+<if result.status=="OK">
+ <assign success="1">
+<else>${session.addMessage(result.msg)}
+</if>
+<include "domain/webservice.html">
+<!--  END ./domain/jserv_restart.sbm  -->

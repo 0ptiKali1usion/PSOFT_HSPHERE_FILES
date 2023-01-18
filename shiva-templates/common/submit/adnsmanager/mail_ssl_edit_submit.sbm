@@ -1,0 +1,33 @@
+<!-- BEGIN ./adnsmanager/mail_ssl_edit_submit.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+<assign mail_ssl = mail_manager.mail_ssl>
+
+<if mail_ssl>
+  <switch request.type>
+    <case "key">
+      <assign result = mail_ssl.installMailSSL(request.key, request.file)>
+      <break>
+    <case "cert_only">
+      <assign result = mail_ssl.installMailCertOnly(request.file)>
+      <break>
+    <case "rev">
+      <assign result = mail_ssl.installMailRev(request.rev)>
+      <break>
+    <case "cert">
+      <assign result = mail_ssl.installMailCert(request.cert)>
+      <break>
+    <case "chain">
+      <assign result = mail_ssl.installMailChain(request.chain)>
+      <break>
+  </switch>
+  <if result.status == "OK">
+    <include request.stemplate>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+  </if>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/mail_ssl_edit_submit.sbm  -->

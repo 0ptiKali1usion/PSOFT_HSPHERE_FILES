@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/admin/sshrefuse.html  -->
+<call draw_tooltip()>
+<assign sshmanager=account.getChild("sshmanager")>
+<form name="f_sshrefuse" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/refuse_req.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="aid" value="${request.aid}">
+
+
+
+
+<call draw_table_header("2", lang.admin.sshrefuse.prohibit)>
+
+
+<tr>
+<td><call draw_label(lang.admin.sshrefuse.reason)></td>
+<td><textarea rows="5" cols="30" name="reason"></textarea></td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/sshrefuse.html  -->

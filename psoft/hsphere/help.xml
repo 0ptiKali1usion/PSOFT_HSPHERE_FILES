@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE help [
+  <!ELEMENT help (topic+)>
+  <!ELEMENT topic (seealso*)>
+  <!ELEMENT seealso (#PCDATA)>
+ 
+  <!ATTLIST topic name CDATA #REQUIRED>
+  <!ATTLIST topic id CDATA #REQUIRED>
+  <!ATTLIST topic tip CDATA #REQUIRED>
+  <!ATTLIST topic fulltxt CDATA "">
+  <!ATTLIST seealso id CDATA #REQUIRED>
+  ]>
+
+<help>
+
+
+<topic name="title.search_tickets" id="search/tt_search.html" tip="tip.search_tickets" fulltxt="fulltxt.search_tickets" />
+
+<topic name="title.redirect_url" id="windomain/add_redirect.html" tip="tip.redirect_url" fulltxt="fulltxt.redirect_url" />
+
+<topic name="title.mailing_list" id="email/add_mlist.html" tip="tip.mailing_list" fulltxt="fulltxt.mailing_list" />
+
+<topic name="title.web_service" id="domain/webservice.html" tip="tip.web_service" fulltxt="fulltxt.web_service" />
+
+<topic name="title.mysql_users" id="MySQL/users.html" tip="tip.mysql_users" fulltxt="fulltxt.mysql_users" >
+  <seealso id="MySQL/databases.html"/>
+</topic> 
+
+<topic name="title.mysql_change_user_pswd" id="MySQL/change_user_pswd.html" tip="tip.mysql_change_user_pswd" />
+
+<topic name="title.signup_begin" id="signup/begin.html" tip="tip.signup_begin" />
+
+<topic name="title.signup_ci_info_portable" id="signup/ci_info.html" tip="tip.signup_ci_info_portable" />
+
+<topic name="title.signup_ci_info_easy" id="signup/ci_info.html" tip="tip.signup_ci_info_easy" />
+
+<topic name="title.signup_pay_info" id="signup/pay_info.html" tip="tip.signup_pay_info" />
+
+<topic name="title.signup_bi_info_cc" id="signup/bi_info_cc.html" tip="tip.signup_bi_info_cc" />
+
+<topic name="title.signup_login" id="signup/login.html" tip="tip.signup_login" />
+
+<topic name="title.signup_domains" id="signup/domains.html" tip="tip.signup_domains" />
+
+<topic name="title.signup_eul" id="signup/eul.html" tip="tip.signup_eul" />
+
+<topic name="title.mysql_databases" id="MySQL/databases.html" tip="tip.mysql_databases" />
+
+<topic name="title.misc_add_admin_account" id="misc/add_admin_account.html" tip="tip.misc_add_admin_account" />
+
+<topic name="title.misc_adm_account_login" id="misc/adm_account_login.html" tip="tip.misc_adm_account_login" />
+
+<topic name="title.tech_support" id="admin/settings/tt.html" tip="tip.tech_support" fulltxt="fulltxt.tech_support" />
+
+<topic name="title.login_texts" id="admin/settings/login_texts.html" tip="tip.login_texts" />
+
+<topic name="title.add_frontpage" id="domain/add_frontpage.html" tip="tip.add_frontpage" />
+
+<topic name="title.signup_texts" id="admin/settings/signup_texts.html" tip="tip.signup_texts" />
+
+<topic name="title.misc_texts" id="admin/settings/other.html" tip="tip.misc_texts" />
+
+<topic name="title.plan_wizard_unix" id="plan_wizard/unix.html" tip="tip.plan_wizard_unix" />
+
+<topic name="title.admin_add_account" id="admin/add_accounts.html" tip="tip.admin_add_account" />
+
+<topic name="title.misc_add_account" id="misc/add_accounts.html" tip="tip.misc_add_account" />
+
+<topic name="title.welcome_message" id="welcome_message" tip="tip.welcome_message" />
+
+<topic name="title.welcome_text" id="welcome_text" tip="tip.welcome_text" />
+
+<topic name="title.welcome_services" id="welcome_services" tip="tip.welcome_services" />
+
+<topic name="title.traffic_search" id="search/transfer.html" tip="tip.traffic_search" />
+
+<topic name="title.set_period_begin" id="admin/set_period_begin.html" tip="tip.set_period_begin" />
+
+<topic name="title.oscommerce" id="eshops/select_db.html" tip="tip.oscommerce"/>
+
+<topic name="title.add_domain_alias" id="domain/add_domain_alias.html" tip="tip.domain.alias"/>
+
+<topic name="title.disc_usage" id="search/usage.html" tip="tip.search.usage"/>
+
+</help>
+

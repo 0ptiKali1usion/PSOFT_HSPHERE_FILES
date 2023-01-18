@@ -1,0 +1,61 @@
+package psoft.hsphere.calc;
+
+import java.util.Date;
+import java.util.List;
+import psoft.hsphere.Account;
+import psoft.hsphere.BillEntry;
+import psoft.hsphere.BillEntryReseller;
+import psoft.hsphere.Resource;
+import psoft.hsphere.Session;
+
+/* loaded from: hsphere.zip:psoft/hsphere/calc/ResellerRefundCalc.class */
+public class ResellerRefundCalc {
+    public static double getPercentage(Resource r) throws Exception {
+        double per = Session.getReseller().getPrices(r.getId().getType()).getRefundPercent();
+        if (Double.isNaN(per)) {
+            return 100.0d;
+        }
+        return per;
+    }
+
+    public static double calc(Resource r, Date begin, Date end) throws Exception {
+        return calc(r, begin, end, null);
+    }
+
+    public static double calc(Resource r, Date begin, Date end, List entries) throws Exception {
+        double price;
+        if (entries == null) {
+            return 0.0d;
+        }
+        if (end.getTime() - begin.getTime() <= 0) {
+            Session.getLog().info("Price = 0, due to period size (<=0) ");
+            return 0.0d;
+        }
+        Account a = Session.getAccount();
+        double p = getPercentage(r);
+        Session.getLog().info("Percentage: " + p);
+        double sumPrice = 0.0d;
+        for (int i = 0; i < entries.size(); i++) {
+            BillEntry entry = (BillEntry) entries.get(i);
+            BillEntryReseller be = entry.getResellerEntry();
+            if (be != null && be.getAmount() != 0.0d) {
+                Session.getLog().info("Entry -->" + (entry == null ? 0L : entry.getId()));
+                double price2 = be.getAmount();
+                Session.getLog().info("RESELLER Price -->" + price2);
+                Date opened = be.getOpened();
+                Date ended = entry.getEnded();
+                Date from = new Date(Math.max(opened.getTime(), begin.getTime()));
+                try {
+                    Session.getLog().debug("Refund, price=" + price2 + " from:" + from + " to:" + ended + " opened:" + opened + " ened:" + ended + " percent:" + p);
+                    price = (((price2 * (ended.getTime() - from.getTime())) / (ended.getTime() - opened.getTime())) * p) / 100.0d;
+                } catch (ArithmeticException ex) {
+                    Session.getLog().debug("Period Size =" + a.getPeriodSize(), ex);
+                    price = 0.0d;
+                }
+                Session.getLog().debug("Refund proc =" + p + " refund sum" + price);
+                sumPrice += -price;
+            }
+        }
+        return Math.rint(sumPrice * 100.0d) / 100.0d;
+    }
+}

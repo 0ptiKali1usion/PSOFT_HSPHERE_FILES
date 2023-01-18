@@ -1,0 +1,15 @@
+<!-- BEGIN ./email/mlist_del_modsubscriber.sbm  -->
+<assign result=yafv.common.s_email.vEmail(lang.label.email,request.email)>
+<if result.status == "OK">
+    <assign mlist = account.getResource(request.uid)>
+    <assign result = mlist.unsubscribeMod(request.email)>
+</if>
+<if result.status == "OK">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted, lang.label.mail_moderator, ""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if> 
+<!--  END ./email/mlist_del_modsubscriber.sbm  -->

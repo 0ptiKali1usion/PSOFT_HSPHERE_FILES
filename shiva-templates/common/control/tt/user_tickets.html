@@ -1,0 +1,50 @@
+<!-- BEGIN ./control/tt/user_tickets.html  -->
+<include "control/tt/ttfunctions.fn">
+<if mailsort == ""><assign mailsort=request.mailsort></if>
+<tr>
+<td class="control_align_center"><call draw_label_bold(lang.tt.id)></td>
+<td class="control_align_center"><call draw_label_bold(lang.label.title)></td>
+<td class="control_align_center"><call draw_label_bold(lang.tt.priority)></td>
+<td class="control_align_center"><call draw_label_bold(lang.tt.admin.created)></td>
+<td class="control_align_center"><call draw_label_bold(lang.tt.admin.lastmod)></td>
+<td class="control_align_center"><call draw_label_bold(lang.search.assigned)></td>
+<td class="control_align_center"><call draw_label_bold(lang.tt.state)></td>
+</tr>
+
+		
+<assign size = "0">
+<assign count = "5">
+<if settings["TT_USERTICKETS_MAX"]><assign count = settings["TT_USERTICKETS_MAX"]></if>
+<if mailsort == "0"> <list ticket.usertickets(count) as ttid> 
+<assign tick=ttadmin.getTicket(ttid)>
+<if ttadmin.canViewTicket(tick.qid, ttadmin.id) != "0" || tick.assigned.id == ttadmin.id>
+<tr>
+<assign answered=tick.isAnswered> 
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.id)><else><call draw_label(tick.id)></if></td>
+<td class="control_align_center"><if !answered><call display_ticket_link_bold(tick)><else><call display_ticket_link(tick)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.priority)><else><call draw_label(tick.priority)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.created)><else><call draw_label(tick.created)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.lastmod)><else><call draw_label(tick.lastmod)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.assigned.name)><else><call draw_label(tick.assigned.name)></if></td>
+<td class="control_align_center"><if !answered><call show_ticket_state_bold(tick.state)><else><call show_ticket_state(tick.state)></if></td>
+</tr>
+</if>
+</list>
+<else> <list ticket.emailtickets(settings["TT_USERTICKETS_MAX"]) as ttid> 
+<assign tick=ttadmin.getTicket(ttid)>
+<if ttadmin.canViewTicket(tick.quid, ttadmin.id) != "0">
+<tr>
+<assign answered=tick.isAnswered> 
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.id)><else><call draw_label(tick.id)></if></td>
+<td class="control_align_center"><if !answered><call display_ticket_link_bold(tick)><else><call display_ticket_link(tick)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.priority)><else><call draw_label(tick.priority)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.created)><else><call draw_label(tick.created)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.lastmod)><else><call draw_label(tick.lastmod)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(tick.assigned.name)><else><call draw_label(tick.assigned.name)></if></td>
+<td class="control_align_center"><if !answered><call show_ticket_state_bold(tick.state)><else><call show_ticket_state(tick.state)></if></td>
+</tr>
+</if>
+</list>
+</if>
+
+<!-- END ./control/tt/user_tickets.html  -->

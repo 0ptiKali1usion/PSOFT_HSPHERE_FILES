@@ -1,0 +1,21 @@
+<!-- BEGIN ./misc/add_admin_account.html.in  -->
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.reseller.admacc.header)>
+
+
+<tr>
+<td><call draw_label(lang.label.login)></td><td>
+<call draw_fix(config.CLIENT_CP_URL+"?template_name=submit/misc/adm_account_fix.sbm"+"&stemplate=misc/add_admin_account.html&ftemplate=misc/add_admin_account.html", lang.reseller.admaccfix.fix)>
+<call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/misc/adm_login.sbm", lang.reseller.admacc.login)></td>
+</tr>
+<tr >
+<td colspan="2"><call draw_label(lang.reseller.admaccfix.txt)></td></td>
+</td>
+
+<call draw_table_footer()>
+
+<!-- END ./misc/add_admin_account.html.in  -->

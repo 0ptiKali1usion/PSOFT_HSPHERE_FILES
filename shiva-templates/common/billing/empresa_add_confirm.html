@@ -1,0 +1,11 @@
+<!-- BEGIN ./billing/empresa_confirm.html  -->
+<assign template="billing/empresa_add_confirm.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/billing/empresa_add_confirm.html">
+<call bottom()>
+<!--  END ./billing/empresa_confirm.html  -->

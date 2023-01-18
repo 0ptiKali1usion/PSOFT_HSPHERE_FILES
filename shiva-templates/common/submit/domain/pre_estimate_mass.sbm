@@ -1,0 +1,6 @@
+<!-- BEGIN ./submit/domain/pre_estimate_mass.sbm  -->
+<assign estimator=account.getComplexEstimator(request.estimator_id)>
+<assign res = estimator.setCurrentStepId("2")>
+<assign res=estimator.addResource(request.rid, "comodossl","",request.product,request.site)>
+<include "submit/billing/estimate_mass.sbm">
+<!--  END ./submit/domain/pre_estimate_mass.sbm  -->

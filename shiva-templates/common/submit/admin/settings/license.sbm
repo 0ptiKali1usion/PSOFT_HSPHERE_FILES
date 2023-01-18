@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/admin/settings/license.sbm -->
+<if !account.getChild("reseller_su")>
+  ${session.addMessage(lang.search.permissionsmsg)}
+  <include request.stemplate>
+<else>
+  <assign admin = account.getChild("admin")>
+  <call savel("license")>
+  <include request.stemplate>
+</if>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/license.sbm -->

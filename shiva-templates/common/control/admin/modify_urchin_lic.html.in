@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/admin/modify_urchin_lic.html  -->
+<yafv s_admin>
+<call draw_tooltip()>
+<assign lic_man=account.getChild("urchin_lic_manager")>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_modify_urchin_lic" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/update_urchin_lic.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="l_server_id" value="${request.l_server_id}">
+<input type="hidden" name="lic_id" value="${request.lic_id}">
+<input type="hidden" name="lic_used" value="${request.lic_used}">
+
+<call draw_table_header("4", lang.admin.urchin.update)>
+<tr>
+<td><call draw_label(lang.admin.urchin.lserver)></td>
+<td>
+<select name="f_l_server" size="1" onChange="checkForm(this.form,false)">
+<list lic_man.l_servers() as ls>
+    <if ls.id == request.l_server_id><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+    <option value="${ls.id}" ${vselected}>${ls.name}</option>
+</list>
+</select>
+</td>
+<td><call draw_label(lang.admin.urchin.forsites)></td>
+<td><input type="text"" name="f_lic_size" size="3" value="${request.lic_size}" check="vNumberReq"></td>
+<tr>
+<td><call draw_label(lang.admin.urchin.sernumber)></td>
+<td><input type="text" name="f_ser_num" size="18" value="${request.ser_num}" check="vStringReq"></td>
+<td><call draw_label(lang.admin.urchin.liccode)></td>
+<td><input type="text" name="f_lic_code" size="20" value="${request.lic_code}" check="vStringReq"></td>
+</tr>
+<tr>
+<td  class="control_align_center" colspan="4"><input type="submit" value="${lang.button.update}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/modify_urchin_lic.html  -->

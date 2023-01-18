@@ -1,0 +1,190 @@
+<!--BEGIN: common/msexchange/change_user.html.in -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/change_user.html", "he-users")>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.label.mailboxes)>
+<if !bizuser>
+<assign bizuser=account.getResource(request.rid)>
+</if>
+<assign bizorg =account.getChild("bizorg")>
+
+<tr><td><call draw_label(lang.label.principalName)></td>
+<td><call draw_label(bizuser.principalName + "@"+ bizuser.domain.name)>
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.samaccount_name)></td>
+<td><call draw_label(bizuser.sAMAccountName)>
+</td></tr>
+
+<tr>
+<td><call draw_label(lang.label.msexchange.mailbox_size)></td>
+<assign plan=bizuser.plan>
+<td><call draw_label(plan.MailboxSize + "K")></td>
+</tr>
+
+<form name="f_changeplan" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/estimate_change_plan.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="next_template" value="msexchange/change_plan.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<tr><td class="control_header" colspan=2 align="right"><call draw_header(lang.label.msexchange.change_plan)></td></tr>
+<tr><td><call draw_label(lang.label.msexchange.plan)></td>
+<td><call draw_label(bizuser.plan.description)></td></tr>
+<tr>
+<td colspan="2">
+<select name="i_bizuser_plan" size="1">
+<list bizorg.availablePlans as plan>
+<if plan.type!=bizuser.planType><option value="${plan.type}">${plan.settings.description}</option></if>
+</list>
+</select>
+<input type="submit">
+</td></tr>
+<tr><td colspan="2">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=msexchange/compare_plans.html&bizorgid="+bizorg, lang.design.login.compare)>
+</td></tr>
+</form>
+
+<tr><td class="control_header" colspan=2 align="right"><call draw_header(lang.quick.quickview.changepsw)></td></tr>
+
+<tr><td><call draw_label(lang.label.password)></td>
+<td>
+<form name="f_changepw" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/change_pwd.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<input type="password" name="password" value="" check="vPassword">
+<input type="submit">
+</form>
+</td></tr>
+
+<tr><td class="control_header" colspan=2 align="right"><call draw_header(lang.msexchange_proxy)></td></tr>
+<tr><td><call draw_label(lang.msexchange_proxy)></td>
+<td>
+<list bizuser.proxy as proxy><call draw_label(proxy)>
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=msexchange/del_proxy.sbm&stemplate=msexchange/change_user.html&rid="+request.rid+"&proxy="+proxy,lang.label.delete)>
+<br></list>
+<form name="f_addproxy" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/add_proxy.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<input type=text name="proxy" vCheck="vMBoxName"><input type="submit"></td></tr>
+</form>
+</td></tr>
+
+<tr><td class="control_header" colspan=2 align="right"><call draw_header(lang.label.forward_subscriber)></td></tr>
+<tr><td><call draw_label(lang.label.mail_forward)></td>
+<td>
+<assign forward=bizuser.forward>
+<if forward>
+  <call draw_label(forward)>
+  <call draw_delete(config.CLIENT_CP_URL+"?template_name=msexchange/del_forward.sbm&stemplate=msexchange/change_user.html&rid="+request.rid+"&forward="+forward,lang.label.delete)>
+<else>
+<form name="f_addforward" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/add_forward.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type=text name="forward" vCheck="vEmail"><input type="submit"></td></tr>
+</form>
+</if>
+</td></tr>
+<tr><td><call draw_label(lang.msexchange_store_forward)></td>
+<td>
+<call draw_state(bizuser.storeAndForward, config.CLIENT_CP_URL+"?template_name=msexchange/store_forward.sbm&stemplate=msexchange/change_user.html&sf=false&rid="+request.rid,
+                 config.CLIENT_CP_URL+"?template_name=msexchange/store_forward.sbm&stemplate=msexchange/change_user.html&sf=true&rid="+request.rid)>
+</td></tr>
+<tr><td class="control_header" colspan=2 align="right"><call draw_header(lang.label.settings)></td></tr>
+<tr><td><call draw_label(lang.label.isadmin)></td>
+<td>
+<call draw_state(bizuser.isAdmin, config.CLIENT_CP_URL+"?template_name=msexchange/turn_bizuser_admin.sbm"+"&state=off"+"&stemplate="+template+"&ftemplate="+template+"&rid="+bizuser, config.CLIENT_CP_URL+"?template_name=msexchange/turn_bizuser_admin.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template+"&rid="+bizuser)>
+</td></tr>
+
+<form name="f_changeuser" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/change_user.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<tr><td><call draw_label(lang.label.descr)></td>
+<td>
+<input type="text" name="description" value="${bizuser.descr}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.display_name)></td>
+<td>
+<input type="text" name="displayName" value="${bizuser.displayName}" vCheck="vName">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.given_name)></td>
+<td>
+<input type="text" name="givenName" value="${bizuser.givenName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.middle_name)></td>
+<td>
+<input type="text" name="middleName" value="${bizuser.middleName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.sn)></td>
+<td>
+<input type="text" name="sn" value="${bizuser.sn}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.initials)></td>
+<td>
+<input type="text" name="initials" value="${bizuser.initials}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.physicalDeliveryOfficeName)></td>
+<td>
+<input type="text" name="physicalDeliveryOfficeName" value="${bizuser.physicalDeliveryOfficeName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.telephoneNumber)></td>
+<td>
+<input type="text" name="telephoneNumber" value="${bizuser.telephoneNumber}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.street)></td>
+<td>
+<input type="text" name="street" value="${bizuser.street}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.postOfficeBox)></td>
+<td>
+<input type="text" name="postOfficeBox" value="${bizuser.postOfficeBox}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.city)></td>
+<td>
+<input type="text" name="city" value="${bizuser.city}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.state)></td>
+<td>
+<input type="text" name="state" value="${bizuser.state}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.country)></td>
+<td>
+<select name="country" size="1">
+    <call buildCountries(bizuser.country)>
+</select>
+</td></tr>
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/change_user.html.in -->

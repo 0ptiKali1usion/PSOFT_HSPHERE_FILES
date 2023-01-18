@@ -1,0 +1,169 @@
+<!-- BEGIN ./control/eeman/add_lserver.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+
+<yafv s_eeman>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="l_server" check! accept-charset="UTF-8"> 
+<input type="hidden" name="template_name" value="submit/eeman/add_lserver_submit.sbm">
+<input type="hidden" name="stemplate" value="eeman/lserver_edit.html">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+
+
+
+<call draw_table_header("2", lang.eeman.addlserver.header)>
+
+
+<tr>
+  <td><call draw_label(lang.eeman.name)></td>
+  <td><input type="text" name="name" value="${vname}" label="${lang.eeman.name}" check="vDomainName"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.group)></td>
+  <td><select name="group" size="1" onChange="javascript:printListPservers(this.options[this.options.selectedIndex].value)" >
+<if !failure><assign selected="SELECTED"></if>
+<list eeman.groups as group>
+ <if failure && (vgroup==group.id)><assign selected="SELECTED"></if>
+ <option ${selected} value="${group.id}">${group.name}
+ <assign selected="">
+</list>
+</select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.stype)></td>
+  <td><select name="type_id" size="1">
+  <if !failure><assign selected="SELECTED"></if>
+  <list eeman.types as type>
+    <if failure && (vtype_id==type.id)><assign selected="SELECTED"></if>
+    <option ${selected} value="${type.id}">${type.name}
+    <assign selected="">
+  </list>
+  </select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.pserver)></td>
+  <td>
+    <select name="p_server_id">
+    <if !failure><assign selected="SELECTED"></if>
+        <list eeman.getPserverList() as pserver>
+        <if failure && (vp_server_id==pserver.id)><assign selected="SELECTED"></if>
+           <if pserver.lbParentId == "" || pserver.lbIsParent == "1" >
+           	<option ${selected} value="${pserver.id}">${pserver.name}
+           </if>
+           <assign selected="">
+        </list>
+    </select>
+  </td>
+</tr>
+<!--
+<tr>
+  <td><call draw_label(lang.eeman.addlserver.signup)></td>
+  <if !failure || vsignup><assign vchecked="checked"><else><assign vchecked=""></if>
+  <td><input type="checkbox" name="signup" value="1" ${vchecked}></td>
+</tr>
+-->
+<tr>
+  <td><call draw_label(lang.label.descr)></td>
+  <td><input type="text" name="description" value="${vdescription}" label="${lang.label.descr}" check="vDescription"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.fserver)></td>
+  <td><input type="text" name="fileServer" value="${vfileServer}"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.fpath)></td>
+  <td><input type="text" name="path" value="${vpath}"></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<script language="javascript">
+	group=new Array();
+	pname=new Array();
+	osTypeIdByGroup = new Array();
+	osTypeNameByOSTypeId = new Array();
+	<list eeman.getPserverList() as pserver>
+	   <if pserver.lbParentId == "" || pserver.lbIsParent == "1" >
+	   	pname[${pserver.id}] = "${pserver.name}";
+	   </if>
+	</list>
+
+    <list eeman.getGroupsList() as group>
+	<compress>
+	<assign res="null">
+	<assign group_ostype="">
+	<list eeman.getPserversForGroup(group) as pserver>
+	     <if pserver.lbParentId == "" || pserver.lbIsParent == "1" >
+	     	<assign res=res+","+pserver.id>
+	     </if>
+	     <if !group_ostype>
+	     	<assign group_ostype = pserver.os_type>
+	     </if>
+	</list>
+	</compress>
+	group[${group}] = new Array(${res});
+	osTypeIdByGroup[${group}] = ${group_ostype};
+    </list>
+    <list eeman.types as type>
+    	osTypeNameByOSTypeId[${type.id}]="${type.name}";
+    </list>
+    <if !failure>
+       printListPservers("1");
+    <else>
+       printListPservers("${vgroup}");
+       for (i=window.document.l_server.p_server_id.options.length-1; i>=0; i--) {
+          if (window.document.l_server.p_server_id.options[i].value == "${vp_server_id}") {
+            window.document.l_server.p_server_id.options[0].selected = false;
+            window.document.l_server.p_server_id.options[i].selected = true;
+            break;
+          }
+       }
+    </if>
+
+   function printListPservers(groupId) {
+	str = "";
+	for ( i = window.document.l_server.p_server_id.options.length-1; i>=0; i--) {
+	    window.document.l_server.p_server_id.options[i]=null;
+
+	}
+
+	if (group[groupId]) {
+	    for ( i=1; i<group[groupId].length; i++) {
+	        nop=new Option();
+		pid = group[groupId][i];
+		if (pid != null) {
+		    nop.text = pname[pid]; 
+	            nop.value = pid; 
+	            window.document.l_server.p_server_id.options[i-1] = nop;
+	        }
+	    }
+        }
+	if (window.document.l_server.p_server_id.options.length > 0 ) {
+	  window.document.l_server.p_server_id.options[0].selected = true;
+	}
+
+	window.document.l_server.type_id.options[0] = null;
+        window.document.l_server.type_id.options[1] = null;
+        if (osTypeIdByGroup[groupId]) {
+        	nop1=new Option();
+        	nop1.value = osTypeIdByGroup[groupId];
+        	nop1.text = osTypeNameByOSTypeId[nop1.value];
+        	window.document.l_server.type_id.options[0] = nop1;
+        }
+
+	return 1;
+   }
+</script> 
+
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/add_lserver.html  -->

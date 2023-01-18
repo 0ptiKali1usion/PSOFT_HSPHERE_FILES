@@ -1,0 +1,13 @@
+<!-- BEGIN ./adnsmanager/del_ssl.sbm  -->
+<assign manager = account.getChild("adnsmanager")>
+<assign zone = manager.getZone(request.zone_id)>
+<assign result = zone.disableSSL()>
+<if success=="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_disabled, lang.label.ssl_support, ""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/del_ssl.sbm  -->

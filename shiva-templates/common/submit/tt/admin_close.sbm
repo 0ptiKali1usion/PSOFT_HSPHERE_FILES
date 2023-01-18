@@ -1,0 +1,20 @@
+<!-- BEGIN ./common/submit/tt/admin_close.smb  -->
+<assign template="tt/admin.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket = ttadmin.getTicket(request.ttid)>
+<list ttadmin.admin_list as adm>
+  <if adm.id == ttadmin.id>
+    <assign str_ttadmin = adm.name>
+  </if>
+</list>
+<if !str_ttadmin><assign str_ttadmin = lang.label.unknown_admin></if>
+  <assign result=ticket.setstate("9")>
+  <assign system_note = lang.tt.admin_closed_by(str_ttadmin)>
+  <assign result = ticket.addReply("", system_note, "")>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/tt/admin_close.smb  -->

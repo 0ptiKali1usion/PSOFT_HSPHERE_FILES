@@ -1,0 +1,98 @@
+<!-- BEGIN ./windomain/update_redirect.html.in  -->
+<yafv s_windomain>
+<call draw_tooltip()>
+
+<assign redirect=account.getResource(request.uid)>
+
+<if !vexacturl><assign vexacturl=redirect.isExact></if>
+<if !vbelowdir><assign vbelowdir=redirect.isBelow></if>
+<if !vpermanent><assign vpermanent=redirect.isPerm></if>
+<if !vprotocol><assign vprotocol=redirect.protocol></if>
+
+<if !vurl_path><assign vurl_path=redirect.url_path></if>
+<if !vurl><assign vurl=redirect.url></if>
+
+<form name="f_update_redirect"  action="${config.CLIENT_CP_URL}" method="post" check!  onSubmit="changeMod();return checkForm(this,true);" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/windomain/update_redirect_submit.sbm">
+<input type="hidden" name="belowval" value="${vbelowdir}">
+
+
+
+
+
+
+<call draw_table_header("2", lang.domain.updateredirect.header)>
+
+
+
+<tr>
+   <td><call draw_label(lang.domain.updateredirect.from)></td>
+   <td    nowrap><call draw_label("http://www."+account.getResource(request.rid).parent.name+"/")><input type="text" name="url_path" size="10" value="${vurl_path}" check="vOldURL"></td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.domain.updateredirect.to)></td>
+   <td    nowrap>
+
+   <if vprotocol=="http">
+     <assign http_sel = "SELECTED">
+   <else>
+     <if vprotocol=="ftp">
+       <assign ftp_sel = "SELECTED">
+     <else>
+        <if vprotocol=="https">
+          <assign https_sel = "SELECTED">
+        <else>
+          <assign none_sel = "SELECTED">
+        </if>
+     </if>
+    </if>
+
+   <select name="protocol">
+   <option value="http" ${http_sel}>http://</option>
+   <option value="ftp" ${ftp_sel}>ftp://</option>
+   <option value="https" ${https_sel}>https://</option>
+   <option value="" ${none_sel}></option>
+   </select>
+<input type="text" name="url" size="40" value="${vurl}" check="vNewURL(this,belowval)" onChange="changeMod();checkForm(this.form,false)"></td>
+</tr>
+
+<if vexacturl=="exact_on"><assign exact_ch="CHECKED"><else><assign exact_ch=""></if>
+<if vbelowdir=="below_on"><assign belowdir_ch="CHECKED"><else><assign belowdir_ch=""></if>
+<if vpermanent=="perm_on"><assign permanent_ch="CHECKED"><else><assign permanent_ch=""></if>
+
+<tr>
+    <td><call draw_label(lang.domain.updateredirect.status)></td>
+    <td>
+    <call draw_label(lang.windomain.sentto)><br>
+    <input TYPE="checkbox" VALUE="exact_on" NAME="exacturl" ${exact_ch}><call draw_label(lang.windomain.exact)><br>
+    <input TYPE="checkbox" VALUE="below_on" NAME="belowdir" ${belowdir_ch} onClick="changeMod();checkForm(this.form,false)"><call draw_label(lang.windomain.dir)><br>
+    <input TYPE="checkbox" VALUE="perm_on" NAME="permanent" ${permanent_ch}> <call draw_label(lang.windomain.redir)><br>
+</td>
+
+
+
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<script language="javascript">
+function changeMod() {
+    if(document.f_update_redirect.belowdir.checked)
+	document.f_update_redirect.belowval.value="below_on";
+    else
+	document.f_update_redirect.belowval.value="below_off";
+
+}
+</script>
+
+<!--  END ./windomain/update_redirect.html.in  -->

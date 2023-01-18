@@ -1,0 +1,8 @@
+<!-- BEGIN ./common/control/signup/promo_info.html.in  -->
+<if "TRUE" == settings["_PROMO_ENABLED"]>
+<tr>
+   <td><call draw_label_bold(lang.signup.promo.description)></td>
+   <td><input type="text" name="_promo_code" size="20" check="vSignupPromocode(this)"></td>
+</tr>
+</if>
+<!-- END ./common/control/signup/promo_info.html.in  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/ds/cancel_server.sbm  -->
+<assign result = obj.user_requests.dsCancelRequest(request.ds_id, request.schedule, request.date, request.description)>
+<if result.status == "OK">
+  <if request.schedule != "period_end"><assign res = session.addMessage(lang.ds.cancel_request_sent)></if>
+<else>
+  <assign res = session.addMessage(result.msg)>
+  <assign failure = "1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds/cancel_server.sbm  -->

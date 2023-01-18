@@ -1,0 +1,21 @@
+
+<assign billman = account.getChild("billman")>
+<if billman>
+    <assign result = billman.createPromo(request.promo_code,
+    		request.promo_name, request.promo_bill_descr,
+    		request.pv_id, request.pc_id, request.i_setup,
+    		request.i_recurrent, request.i_usage, request.code_less)>
+<if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,lang.admin.promo.promo,""))>
+<else>
+    <assign failure = "1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+</if>
+
+<if !failure>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+

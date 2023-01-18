@@ -1,0 +1,27 @@
+<!-- BEGIN: common/migrator/process.html -->
+<include "functions">
+<call START_PAGE("migrator/process.html", "migration")>
+<call draw_tooltip()>
+<if request.mtype=="raq">
+  <assign mgr=obj.raq4_migrator>
+</if>
+<if request.mtype=="cpanel">
+  <assign mgr=obj.cpanel_migrator>
+</if>
+
+<assign result = mgr.getJob(request.job_id)>
+
+<call draw_table_header("2", lang.label.import_users)>
+<tr>
+  <td><call draw_label(lang.migrator.process_state)></td>
+  <td>${result.job_id} : ${result.step} : ${result.state}</td>
+</tr>
+<tr>
+  <td colspan="2"><i><call draw_label_bold(lang.migrator.process_log)></i>
+  <pre>${result.log}
+  </pre>
+</td>
+</tr>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!-- END: common/migrator/process.html -->

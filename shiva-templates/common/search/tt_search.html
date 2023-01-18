@@ -1,0 +1,13 @@
+<!-- BEGIN ./search/tt_search.html  -->
+<assign template="search/tt_search.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if request.inPanel != "0">
+<call top_tt()>
+<call ticket_menu("tt-search-res")>
+<else>
+<call draw_menu("tt-search")>
+</if>
+<include "control/search/tt_search.html">
+<call bottom()>
+<!--  END ./search/tt_search.html  -->

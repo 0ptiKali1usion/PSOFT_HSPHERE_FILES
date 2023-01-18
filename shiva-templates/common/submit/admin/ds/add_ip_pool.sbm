@@ -1,0 +1,28 @@
+<!-- BEGIN ./submit/admin/ds/add_ip_pool.sbm  -->
+<assign result=yafv.checkall(
+	yafv.common.s_ds.vIPAddr(lang.label.from, request.from),
+	yafv.common.s_ds.vIPAddrOpt(lang.label.to, request.to),
+	yafv.common.s_ds.vIPMask(lang.admin.ds.ip_pool.ip.label,request.mask),
+	yafv.common.s_ds.vIPAddr(lang.admin.ds.ip_pool.gw.label,request.gw)
+)>
+
+<if result.status=="OK"> 
+  <assign res = obj.ds_ip_manager.addIPRange(request.from,request.to,request.mask,request.gw)>
+  <if res.status!="OK">
+    <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+    <assign failure="1">
+  </if>
+<else>
+  <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+    <assign f_from = toolbox.html_encode(request.from)> 
+    <assign f_to = toolbox.html_encode(request.to)>
+    <assign f_mask = toolbox.html_encode(request.mask)>
+    <assign f_gw = toolbox.html_encode(request.gw)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/add_ip_pool.sbm  -->

@@ -1,0 +1,81 @@
+<!-- BEGIN ./common/submit/signup/begin_domain.sbm -->
+
+<if request.back || !request.type_domain>
+    <assign domainaction="begin">
+    <if !request.type_domain><assign res=session.addMessage(lang.msg.signup_undetermined_domin_type)></if>
+    <include "signup/domains.html">
+<else>
+
+<switch request.type_domain>
+<case "transfer_new_misc_domain">
+    <!-- transfer_new_misc_domain -->
+    <assign mod="signup">
+    <assign res=params.addHash("name","_mod","value","signup")>
+    <assign domainaction="new_domain">
+    <include "signup/domains.html">
+<break>
+<case "new_opensrs_domain">
+    <!-- new_opensrs_domain -->
+    <assign mod="opensrs">
+    <assign res=params.addHash("name","_mod","value","opensrs")>
+    <assign domainaction="new_osrs_domain">
+    <include "signup/domains.html">
+<break>
+<case "domain_transfer">
+<!-- transfer domain to this registrar -->
+    <assign mod="dtransfer">
+    <assign res=params.addHash("name", "_mod", "value","dtransfer")>
+    <assign domainaction="domain_transfer">
+    <include "signup/domains.html">
+<break>
+
+<case "without_domain">
+    <!-- without_domain -->
+    <assign mod="nodomain">
+    <assign res=params.addHash("name","_mod","value","nodomain")>
+    <include "signup/end.html">
+<break>
+
+<case "empty_domain">
+    <!-- without_domain -->
+    <assign mod="empty">
+    <assign res=params.addHash("name","_mod","value","empty")>
+    <include "signup/end.html">
+<break>
+
+<case "service_domain">
+    <!-- service_domain -->
+    <assign mod="service">
+    <assign res=params.addHash("name","_mod","value","service")>
+    <assign domainaction="service_domain">
+    <include "signup/domains.html">
+<break>
+
+<case "parked_domain">
+    <!-- parked_domain>
+    <assign mod="parked">
+    <assign res=params.addHash("name","_mod","value","parked")>
+    <assign domainaction="parked_domain">
+    <include "signup/domains.html"> -->
+<break>
+
+<case "no_zone_domain">
+    <!-- no_zone_domain>
+    <assign mod="no_zone">
+    <assign res=params.addHash("name","_mod","value","no_zone")>
+    <assign domainaction="no_zone_domain">
+    <include "signup/domains.html"> -->
+<break>
+
+<case "3ldomain">
+    <!-- 3ldomain -->
+    <assign mod="3ldomain">
+    <assign res=params.addHash("name","_mod","value","3ldomain")>
+    <assign domainaction="3ldomain">
+    <include "signup/domains.html">
+<break>
+
+</switch>
+</if>
+
+<!-- END ./common/submit/signup/begin_domain.sbm -->

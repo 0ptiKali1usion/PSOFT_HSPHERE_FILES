@@ -1,0 +1,33 @@
+<!-- BEGIN ./control/ds/custom_built_request.html -->
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.ds.custom_built_request_header)>
+<form name="f_ds_custom_built" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<if account.plan.areResourcesAvailable("ds_custom_build")>
+  <tr>
+    <td colspan="2"><call draw_label(lang.ds.custom_built_request_text)></td>
+  </tr>
+  <tr>
+    <td valign="top" width="1%" nowrap><call draw_tt_help("", "", "")></td>
+    <td valign="top"><textarea name="description" cols="50" rows="10" style="width:90%"></textarea></td>
+  </tr>
+  <tr>
+    <td class="control_align_center" colspan="2">
+      <input type="hidden" name="ds_id" value="${request.ds_id}">
+      <input type="hidden" name="template_name" value="submit/ds/custom_built_request.sbm">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <input type="hidden" name="stemplate" value="${request.stemplate}">
+      <input type="submit" value="${lang.button.submit}">
+    </td>
+  </tr>
+<else>
+  <tr>
+  <td colspan="2"><call draw_label(lang.ds.custom_built_disallowed)></td>
+  </tr>
+</if>
+</form>
+<call draw_table_footer()>
+
+<function showUpgHeader()>
+</function>
+<!-- END ./control/ds/custom_built_request.html -->

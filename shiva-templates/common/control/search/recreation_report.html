@@ -1,0 +1,56 @@
+<!-- BEGIN ./control/search/recreation_report.html  -->
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.search.recreate_report.header)>
+
+<tr>
+    <td colspan=2  class="control_align_center">
+        <call draw_label(toolbox.compose(lang.search.recreate_report.deeper_description, request.user))>
+
+    </td>
+</tr>
+
+<list recreating_result.result_list as recr_res>
+    <tr>
+        <td><call draw_label(recr_res.name)></td>
+        <td><call draw_label(recr_res.status)></td>
+    </tr>
+</list>
+<tr>
+    <td colspan="2" class="control_align_center">
+      <input type="hidden" name="template_name" value="${request.template_name_first}">
+      <input type="hidden" name="aid" value="${request.aid}">
+      <input type="hidden" name="user" value="${request.user}">
+      <input type="hidden" name="zone" value="${request.zone}">
+      <input type="hidden" name="stemplate" value="search/accounts.html">
+      <input type="hidden" name="ftemplate" value="search/accounts.html">
+      <input type="hidden" name="resource_id" value="${request.resource_id}">
+      <input type="hidden" name="cur_menu" value="${request.cur_menu}">
+      <input type="hidden" name="search_step" value="${request.search_step}">
+      <input type="hidden" name="start" value="${request.start}">
+      <compress>
+	<list params as sc_param>
+ 	<if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   	    <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+ 	</if>
+	</list>
+    </compress>
+      <!--input type="hidden" name="sc_payment" value="${request.sc_payment}">
+      <input type="hidden" name="sc_plan" value="${request.sc_plan}">
+      <input type="hidden" name="sc_email" value="${request.sc_email}">
+      <input type="hidden" name="sc_username" value="${request.sc_username}">
+      <input type="hidden" name="sc_account_id" value="${request.sc_account_id}">
+      <input type="hidden" name="sc_r_from" value="${request.sc_r_from}">
+      <input type="hidden" name="sc_r_to" value="${request.sc_r_to}">
+      <input type="hidden" name="sc_bci_email" value="${request.sc_bci_email}">
+      <input type="hidden" name="sc_step" value="${request.sc_step}">
+      <input type="hidden" name="sc_page" value="${request.sc_page}"-->
+      <input type="submit" value="${lang.button.ok}">
+    </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/search/recreation_report.html  -->

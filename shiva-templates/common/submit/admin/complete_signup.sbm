@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/admin/complete_signup.sbm  -->
+<assign signup = account.getChild("signupadm")>
+<assign result = signup.completeFailedSignup(request.fid, request.charge)>
+<if result.status == "OK">
+     <assign success = "1">
+     <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added, lang.label.account,request.accid))>
+<else>
+     <assign res=session.addMessage(result.msg)>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/complete_signup.sbm  -->
+

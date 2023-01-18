@@ -1,0 +1,13 @@
+<center>Add PostgreSQL User</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+As opposed to other 'SQL' databases supported by H-Sphere PostgreSQL users are 'principal' relatively to PostgreSQL databases, which means a database can't be created without a user. In other words, each database should be bound to the owner. This means you must first create a user and then create a database. There is only one owner for each database, however the database can be utilized by other users who obtain permissions from the owner.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+If you haven't got any PostgreSQL users, you will be taken to this PostgreSQL Users page by default. Otherwise, the first page to appear is PostgreSQL Database listing your H-Sphere system PostgreSQL databases. <br>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+To create a user enter his name and password which he will use to access his PostreSQL database(s).

@@ -1,0 +1,145 @@
+<!-- BEGIN ./control/admin/registration_form.html -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<form name="f_sshrefuse" action="${config.CLIENT_CP_URL}" method="post" target="blank" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="admin/reseller_signup_form.html">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="state" value="on">
+
+
+
+
+<call draw_table_header("2", lang.admin.sitetoolbox_regform)>
+
+  
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.username)></td>
+<td><input type="text" name="username" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.password)></td>
+<td><input type="text" name="password" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.name)></td>
+<td><input type="text" name="name" value="${toolbox.html_encode(settings.ofname)} ${toolbox.html_encode(settings.olname)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.company)></td>
+<td><input type="text" name="company" value="${toolbox.html_encode(settings.name)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.email)></td>
+<td><input type="text" name="email" value="${toolbox.html_encode(settings.email)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.phone)></td>
+<td><input type="text" name="phone" value="${toolbox.html_encode(settings.phone)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.fax)></td>
+<td><input type="text" name="fax" value="${toolbox.html_encode(settings.fax)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.payable)></td>
+<td><input type="text" name="payable" value=""></td>
+</tr>
+<input type="hidden" name="commission" value="25">
+<input type="hidden" name="commission_type" value="%">
+<!---
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.commission)></td>
+<td><input type="text" name="commission" value="">
+<select name="commission_type">
+<option value="%">%</option>
+<option value="$">$</option>
+</select>
+</td>
+</tr>
+-->
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.taxtype)></td>
+<td><input type="text" name="taxtype" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.taxid)></td>
+<td><input type="text" name="taxid" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.socialseq)></td>
+<td><input type="text" name="socialseq" value=""></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.taxid_ssn)></td>
+<td><input type="text" name="taxid_ssn" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.mailaddr)></td>
+<td><input type="text" name="mailaddr" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.city)></td>
+<td><input type="text" name="city" value="${toolbox.html_encode(settings.city)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.state)></td>
+<td>
+<select name="state1">
+<call buildStates(settings.state)>
+</select>
+</td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.label.state_other)></td>
+<assign vstate2 = toolbox.html_encode(settings.state2)>
+<td><input type="text"  name="state2" value="${vstate2}"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.zip)></td>
+<td><input type="text" name="zip" value="${toolbox.html_encode(settings.zip)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.country)></td>
+<td>
+<select name="country">
+<call buildCountries(settings.country)>
+</select>
+</td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.email_yes_no)></td>
+<td>
+<select name="email_yes_no">
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+</td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.website)></td>
+<td><input type="text" name="website" value="${toolbox.html_encode(settings.website)}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.websitetitle)></td>
+<td><input type="text" name="websitetitle" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_regform.comments)></td>
+<td><input type="text" name="comments" value=""></td>
+</tr>
+
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/registration_form.html.html  -->

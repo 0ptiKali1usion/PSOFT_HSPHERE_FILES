@@ -1,0 +1,43 @@
+<!-- BEGIN ./control/admin/settings/langs.html -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<form name="f_langs" action="${config.CLIENT_CP_URL}" method="POST"  accept-charset="UTF-8">
+
+
+
+<call draw_table_header("2", lang.admin.langs.header)>
+
+
+<tr>
+<td><call draw_label(lang.admin.settings.langs.interf_lang)>
+<td>
+  <input type="hidden" name="template_name" value="submit/admin/settings/langs.sbm">
+  <input type="hidden" name="next_template" value="admin/settings/regions.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <select name="_language_">
+  <assign count="0">
+  <list toolbox.lang_list as the_lang>
+    <assign lang_code = the_lang.code>
+    <assign lang_desc = the_lang.desc>
+    <if toolbox.consists(lang_code, settings["lang"]) == "1">
+	<assign vselected="SELECTED">
+    <else>
+	<assign vselected="">
+    </if>
+    <assign count = toolbox.add(count, "1")>
+    <option ${vselected} value="${lang_code}">${lang[lang_desc]}</option>
+  </list>
+  </select>
+</td>
+</tr>
+
+<tr ><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+
+<!-- END ./control/admin/settings/langs.html -->                                                                                           

@@ -1,0 +1,22 @@
+<!-- BEGIN ./control/quick/choice_shellcounter.html  -->
+<html>
+<head>
+</head>
+<body>
+<assign host=request.host>
+<assign u=account.getChild("unixuser")>
+
+<form name=webshell4 action="http://${u.host.name}/webshell4/acdindex.php" method="post" accept-charset="UTF-8">
+  <input type="hidden" name="login" value="${toolbox.url_escape(u.login)}">
+  <input type="hidden" name="password" value="${toolbox.url_escape(u.password)}">
+  <input type="hidden" name="host" value="${u.host.name}">
+  <input type="hidden" name="protocol" value="http">
+</form>
+
+<script language="javascript"><!--
+  document.webshell4.submit();
+//--></script>
+
+</body>
+</html>
+<!--  END ./control/quick/choice_shellcounter.html  -->

@@ -1,0 +1,31 @@
+<!-- BEGIN ./domain/add_3ldomain_alias.sbm  -->
+<assign result=yafv.checkall(
+  yafv.common.s_domain.vAlias(lang.label.alias,request.alias),
+  yafv.common.s_domain.vTransferDomainName(lang.domain.service_zone, request.zone))>
+<assign fullName = request.alias + "." + request.zone>
+<if result.status=="OK">
+    <assign result=toolbox.DBlookup(fullName)>
+    <if result=="0">
+        <assign domain=account.getResource(request.aid)>
+        <assign result=domain.addChild("3ldomain_alias", "", fullName)>
+    	<if result.status=="OK">
+	    <assign success="1">
+    	<else>
+	    <assign res=session.addMessage(result.msg)>
+        </if>
+    <else>
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.domain_name_taken, fullName))>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include "submit/domain/check_sharedssl.sbm">
+<else>
+    <assign vAlias=request.alias>
+    <assign vZone=request.zone>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./domain/add_3ldomain_alias.sbm  -->

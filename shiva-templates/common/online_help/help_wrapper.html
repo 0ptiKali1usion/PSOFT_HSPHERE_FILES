@@ -1,0 +1,62 @@
+<!--BEGIN  ./common/online_help/help_wrapper.html-->
+<include "functions">
+<assign help_template=toolbox.getLocalTemplateName(request.help_file,online_help["file_ext"])>
+<if help_template || (!request.rid)>
+
+<HTML>
+<HEAD>
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${lang.onlinehelp.help_wrapper.title}</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<call define_css()>
+</HEAD>
+
+<BODY>
+
+<table cellpadding="5" BORDER="0">
+<if help_template>
+  <TR>
+    <TD valign="top">
+      <font color="${design.color("text_color")}" class="label_font">
+        <include help_template>
+      </font>
+    </TD>
+  </TR>
+  <if request.rid>
+    <assign tt=account.plan.getResourceType("tt")>
+    <if (tt) && (tt.disabled != "1")>
+      <TR>
+        <TD align="center">
+          <a href="#" onClick="window.location.href='${config.CLIENT_CP_URL}?template_name=tt/standalone_tt_form.html&rid=${request.rid}';return false" >
+            <call draw_colored_label(lang.onlinehelp.help_wrapper.mes1, design.color("link_color"))>
+          </a>
+        </TD>
+      </TR>
+    </if>
+  </if>
+<else>
+  <TR>
+    <TD valign="middle" align="center">
+      <call draw_label_bold(lang.onlinehelp.help_wrapper.nf)>
+      <br>
+      <call draw_label_bold(lang.onlinehelp.help_wrapper.click_close)>
+      <br>&nbsp;<br>
+      <FORM><INPUT type="button" value="${lang.onlinehelp.help_wrapper.close}" onClick="javascript:window.close()"></FORM>
+    </TD>
+  </TR>
+  <TR>
+    <TD align="center" valign="bottom">
+    <a href="#" onClick="window.location.href='${config.CLIENT_CP_URL}?template_name=tt/standalone_tt_form.html&rid=${request.rid}';return false" >
+      <call draw_colored_label(lang.onlinehelp.help_wrapper.mes2, design.color("link_color"))>
+    </a>
+    </TD>
+  </TR>
+</if>
+
+</table>
+</BODY>
+</HTML>
+<else>
+ <include "tt/standalone_tt_form.html">
+</if>
+<!--END  ./common/online_help/help_wrapper.html-->

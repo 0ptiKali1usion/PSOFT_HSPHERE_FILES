@@ -1,0 +1,129 @@
+<!--BEGIN: common/msexchange/add_user.html.in -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/add_user.html", "he-users")>
+<call draw_tooltip()>
+<form name="f_adduser" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/estimate_add_user.sbm">
+<input type="hidden" name="next_template" value="msexchange/add_user.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="msexchange/users.html">
+
+<assign v=request>
+<assign bizorg=account.getChild("bizorg")>
+
+<call draw_table_header("2", lang.label.addmailbox)>
+
+<tr><td><call draw_label(lang.label.msexchange.plan)></td>
+<td>
+<select name="i_bizuser_plan" size="1">
+<list bizorg.availablePlans as plan>
+<option value="${plan.type}">${plan.settings.description}</option>
+</list>
+</select>
+</td></tr>
+
+<tr><td colspan="2">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=msexchange/compare_plans.html&bizorgid="+bizorg, lang.design.login.compare)>
+</td></tr>
+
+<tr><td><call draw_label(lang.label.principalName)></td>
+<td>
+<input type="text" name="principalName" value="${principalName}" check="vMBoxName"><call draw_label("@"+bizorg.primaryDomain.name)>
+</td></tr>
+
+<tr><td><call draw_label(lang.label.password)></td>
+<td>
+<input type="password" name="password" value="${password}" check="vPassword">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.descr)></td>
+<td>
+<input type="text" name="description" value="${description}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.display_name)></td>
+<td>
+<input type="text" name="displayName" value="${displayName}" vCheck="vName">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.given_name)></td>
+<td>
+<input type="text" name="givenName" value="${givenName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.middle_name)></td>
+<td>
+<input type="text" name="middleName" value="${middleName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.sn)></td>
+<td>
+<input type="text" name="sn" value="${sn}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.initials)></td>
+<td>
+<input type="text" name="initials" value="${initials}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.physicalDeliveryOfficeName)></td>
+<td>
+<input type="text" name="physicalDeliveryOfficeName" value="${physicalDeliveryOfficeName}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.telephoneNumber)></td>
+<td>
+<input type="text" name="telephoneNumber" value="${telephoneNumber}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.street)></td>
+<td>
+<input type="text" name="street" value="${street}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.postOfficeBox)></td>
+<td>
+<input type="text" name="postOfficeBox" value="${postOfficeBox}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.city)></td>
+<td>
+<input type="text" name="city" value="${city}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.state)></td>
+<td>
+<input type="text" name="state" value="${state}">
+</td></tr>
+
+<tr><td><call draw_label(lang.label.msexchange.country)></td>
+<td>
+<select name="country" size="1">
+    <call buildCountries(country)>
+</select>
+</td></tr>
+
+<tr><td><call draw_label(lang.label.isadmin)></td>
+<if vvalues>
+  <if vi_bizuser_admin>
+    <assign vchecked="CHECKED">
+  <else>
+    <assign vchecked="">
+  </if>
+</if>
+<td>
+<input type="checkbox" name="i_bizuser_admin" value="true" ${vchecked}>
+</td></tr>
+
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+<call END_PAGE()>
+<!--END: common/msexchange/add_user.html.in -->

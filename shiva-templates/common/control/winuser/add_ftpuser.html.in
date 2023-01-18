@@ -1,0 +1,33 @@
+<!-- BEGIN ./winuser/add_ftpuser.html.in  -->
+<yafv s_winuser>
+<call draw_tooltip()>
+<form name="f_add_ftpuser" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/winuser/add_ftpuser.sbm">
+
+<call draw_table_header("2", lang.unixuser.addftpuser.header)>
+
+<tr>
+   <td><call draw_label(lang.label.login)></td>
+   <td><input type="text" name="login" label="${lang.label.login}" check="vUsername" value="${vlogin}"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.unixuser.addftpuser.subhome)>&nbsp;<call draw_help("user-ftpuser-relativeftppath","")></td>
+   <td><input type="text" name="home" label="${lang.unixuser.addftpuser.subhome}" check="vLocalDir" value="${vhome}"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.password)></td>
+   <td><input type="password" name="password" label="${lang.label.password}" check="vPassword1(this, login)" value="${vpassword}"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.confirm_psw)></td>
+    <td> <input type="password" name="password2" label="${lang.label.confirm_psw}" check="vPassword2(password,password2)"></td>
+</tr>
+<tr> 
+   <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./winuser/add_ftpuser.html.in  -->

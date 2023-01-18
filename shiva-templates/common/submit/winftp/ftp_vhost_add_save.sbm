@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/winftp/ftp_vhost_add_save.sbm  -->
+<assign result=yafv.common.s_winftp.vServerName(lang.label.server_name,request.ftp_name)>
+<if result.status=="OK">
+  <assign rid = account.getResource( request.rid )>
+  <assign result=rid.addChild( "ftp_vhost_anonymous","",request.ftp_upload,request.ftp_status,request.ftp_name)>
+  <if result.status == "OK" >
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_created,
+			lang.label.anonym_ftp_vhost,request.ftp_name))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+  <include request.stemplate>
+<else>
+  <assign vftp_name=toolbox.html_encode(request.ftp_name)>
+  <assign vftp_satus=toolbox.html_encode(request.ftp_status)>
+  <assign vftp_upload=toolbox.html_encode(request.ftp_upload)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/winftp/ftp_vhost_add_save.sbm  -->

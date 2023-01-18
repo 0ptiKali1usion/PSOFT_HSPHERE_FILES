@@ -1,0 +1,16 @@
+<center>Billing Period</center>
+<hr>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+Billing period (or payment interval) determines when you are charged for the services you use. There are only three events that close the billing period:<br><br>
+
+1) start of the next billing period<br>
+2) account suspension<br>
+3) plan/billing period change<br>
+<br>
+Within one plan, you may have several billing periods, usually with different prices and discounts. At the beginnig of each billing period you are charged <i>recurrent fee</i>. At the end of each billing period you are charged <i>usage (extra)</i> fee in case you exceeded your quotas or limits. During the billing period you may be charged <i>setup</i> fee for creating/buying paid resources.<br>
+<br>
+- To switch to a different billing period, go to the Billing Profile, Billing menu and click the Change icon next in the Billing Period field.<br>
+<br>
+- To see when your current billing period started and when it ends up, go to Online Invoice, Billing menu.

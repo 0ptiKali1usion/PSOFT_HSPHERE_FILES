@@ -1,0 +1,88 @@
+<!-- BEGIN ./eeman/pserver_params_edit.html  -->
+<assign eeman = account.getChild("eeman") >
+
+<function checkValidation(verifyres,key,value) >
+    <if verifyres.status == "OK"><assign verifyresult = "OK"><assign tmp = params(key,value) >
+    <else>
+      <assign verifyresult = "ERROR"><list verifyres.msgs as msg>
+      <assign mes = session.addMessage(msg)></list>
+    </if>
+</function>
+
+<if eeman>
+    <assign pserver = eeman.getPserver(request.rid) ><assign params = pserver.getParamsList()>
+    <assign verifyresult = "OK"><assign res = "">
+    
+    <list params as param>
+    <assign key = param.param_name><assign type = param.param_type>
+    <switch param.param_type>
+        <case "list">
+	<case "slist">
+        <case "emailslist">
+	<case "domainslist">
+	<case "iplist">		
+            <assign val = param.param_value> 
+	    <if request[key + "_add"] != "">
+	        <assign tmp = param(key + "_add", request[key + "_val"])>
+	    <else>
+	      <if request[key + "_del"] != "">
+	          <assign tmp = param(key + "_del", request[key])>
+	      <else>
+	        <if request[key + "_save"] != "">
+	            <assign tmp = param(key + "_old", request[key])>
+	            <assign tmp = param(key + "_save", request[key + "_val"])>
+	        </if>
+	      </if>
+	    </if>	
+	    <break>
+	<case "radio">
+	<case "radiogroup">
+	<case "select">
+	    <assign tmp = param(param.param_name,request[param.param_name])>
+	    <break>
+	<case "ipparam">
+	    <assign changed = pserver.ischanged(param.param_name,request[param.param_name])>
+	    <if changed>
+                <assign res = yafv.checkall(yafv.common.s_eeman.vIPAddr(param.param_name,request[param.param_name])) >
+                <call checkValidation(res,key,request[param.param_name]) >	
+	    </if>
+	    <break>
+	<case "unixpathparam">
+	    <assign changed = pserver.ischanged(param.param_name,request[param.param_name])>
+	    <if changed>
+	        <assign res = yafv.checkall(yafv.common.s_domain.vLocalDir(param.param_name,request[param.param_name])) >
+	        <call checkValidation(res,key,request[param.param_name]) >
+	    </if>	
+	    <break>
+	<case "winpathparam">
+	    <assign changed = pserver.ischanged(param.param_name,request[param.param_name])>
+	    <if changed>
+	        <assign res = yafv.checkall(yafv.common.s_eeman.vWinPathWithSlash(param.param_name,request[param.param_name])) >
+	        <call checkValidation(res,key,request[param.param_name]) >
+	    </if>		
+	    <break>
+	<case "checklist">
+	    <assign subparams = param.param_list>
+	    <list param.param_list as subparam><assign tmp = param(subparam.full_name,request[subparam.full_name])></list>	
+	    <break>
+	<default>
+	    <assign value = request[param.param_name]><assign tmp = params(key,value) >
+	    <break>
+    </switch>    
+    </list>
+
+    <if verifyresult == "OK">
+        <assign windows = pserver.iswindows()>
+	<if windows><assign restart = pserver.setrestart(request["restart"])></if>
+	<assign result = pserver.update()><assign res = pserver.setunchanged()>
+    <else>
+      <assign result = "ERROR">
+    </if>
+
+    <if result == "OK">
+        <include request.stemplate>
+    <else>
+      <include request.ftemplate>
+    </if>
+</if>
+<!--  END ./eeman/pserver_params_edit.html  -->

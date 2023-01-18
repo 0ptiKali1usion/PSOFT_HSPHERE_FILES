@@ -1,0 +1,119 @@
+<!-- BEGIN control/signup/signup_function.html -->
+<function genHiddenField(excludeFields)>
+<compress>
+<if new_user><input type="hidden" name="signup_id" value="${new_user.signup_id}"></if>
+<list params as param>
+   <if (toolbox.consists(excludeFields,";"+param.name+";")=="0") && (param.name!="back")
+        && !( (param.value == "") && ( (param.name == "_ci_company")
+                || (param.name == "_srs_billing_org_name")
+                || (param.name == "_srs_owner_org_name")
+                || (param.name == "_bi_company") ) )>
+       <input type="hidden" name="${param.name}" value="${toolbox.html_encode(param.value)}">
+   </if>
+</list>
+</compress>
+</function>
+<assign excludeFields=";">
+
+<function draw_invoice(mod)>
+<assign invoice = toolbox.getInvoice(mod)>
+<br>
+<if toolbox.gt(invoice.total,"0")=="1">
+  <table align="CENTER" class="warn_invoice">
+    <tr>
+      <td colspan="3" class="warn_invoice_header">
+        <call draw_header(lang.signup.signupfunction.invoice)>
+      </td>
+    </tr>
+
+    <list invoice.entries as entry>
+      <tr>
+        <td><call draw_label(entry.type)></td>
+        <td><call draw_label(toolbox.formatForHTML(entry.description))></td>
+        <td class="warn_invoice_align_right" ><call draw_label(toolbox.currency(entry.amount))></td>
+      </tr>
+    </list>
+    <assign new_invoice=toolbox.calculateTaxes(invoice.total)>
+    <assign taxes=new_invoice.taxes>
+    <!--Taxes size = '${taxes.size}' -->
+    <if (taxes.size != "") && (taxes.size!="0")>
+      <tr>
+        <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.subtotal)></td>
+        <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_invoice.sub_total))></td>
+      </tr>
+      <list taxes.KEYS as tax_id>
+        <tr>
+          <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(toolbox.taxes[tax_id].description+" ("+toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")+"%)")></td>
+          <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(taxes[tax_id]))></td>
+        </tr>
+      </list>
+    </if>
+    <tr>
+      <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.total)></td>
+      <td width="20%" class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_invoice.total))></td>
+    </tr>
+  </table>
+<else>
+  <table align="CENTER" class="warn_invoice">
+    <tr>
+      <td class="warn_invoice_header">
+        <call draw_header(toolbox.compose(lang.signup.signupfunction.text, toolbox.currency("0.00")))>
+      </td>
+    </tr>
+  </table>
+</if>
+</function>
+
+<function draw_invoice_separate_taxes(mod)>
+<assign invoice = toolbox.getInvoice(mod)>
+<br>
+<if toolbox.gt(invoice.total,"0")=="1">
+  <table align="CENTER" class="warn_invoice">
+    <tr>
+      <td colspan="3" class="warn_invoice_header">
+        <call draw_header(lang.signup.signupfunction.invoice)>
+      </td>
+    </tr>
+
+    <list invoice.entries as entry>
+      <tr>
+        <td><call draw_label(entry.type)></td>
+        <td><call draw_label(entry.description)></td>
+        <td class="warn_invoice_align_right"><call draw_label(toolbox.currency(entry.amount))></td>
+      </tr>
+    </list>
+    <assign new_invoice=toolbox.calculateTaxes(invoice.total)>
+    <assign taxes=new_invoice.taxes>
+    <!--Taxes size = '${taxes.size}' -->
+    <if (taxes.size != "") && (taxes.size!="0")>
+      <tr>
+        <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.total_without_taxes)></td>
+        <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(invoice.total))></td>
+      </tr>
+      <tr>
+        <td colspan="3"><call draw_label(lang.signup.invoice.tax_exemption_info)></td>
+      </tr>
+
+      <list taxes.KEYS as tax_id>
+        <tr>
+          <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(toolbox.taxes[tax_id].description+" ("+toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")+"%)")></td>
+          <td class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(taxes[tax_id]))></td>
+        </tr>
+      </list>
+    </if>
+    <tr>
+      <td colspan="2" class="warn_invoice_header_align_right"><call draw_header(lang.label.total)></td>
+      <td width="20%" class="warn_invoice_header_align_right"><call draw_header(toolbox.currency(new_invoice.total))></td>
+    </tr>
+  </table>
+<else>
+  <table align="CENTER" class="warn_invoice">
+    <tr>
+      <td class="warn_invoice_header">
+        <call draw_header(toolbox.compose(lang.signup.signupfunction.text, toolbox.currency("0.00")))>
+      </td>
+    </tr>
+  </table>
+</if>
+</function>
+<!-- END control/signup/signup_function.html -->

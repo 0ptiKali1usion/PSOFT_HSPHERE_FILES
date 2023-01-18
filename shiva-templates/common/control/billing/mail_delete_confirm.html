@@ -1,0 +1,30 @@
+<!-- BEGIN ./control/billing/mail_delete_confirm.html  -->
+<assign stype = account.plan.getResourceType(account.getResource(request.did).type).description>
+<assign message = toolbox.compose(lang.billing.del_msg1, stype)>
+<if price.refund!="0">
+  <assign message = message + toolbox.compose(lang.billing.del_msg2, toolbox.currency(price.refund))>
+</if>
+<assign message = message + lang.billing.del_msg3>
+<if price.setup!="0">
+  <assign message = message + toolbox.compose(lang.billing.del_msg4, stype, toolbox.currency(price.setup))>
+</if>
+
+
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("", lang.billing.delconfirm)>
+
+
+<tr>
+<td><call draw_label(message)><br>
+<center>
+<call draw_link(config.CLIENT_CP_URL+"?rid="+request.rid+"&did="+request.did+"&stemplate="+request.stemplate+"&ftemplate="+request.ftemplate+"&md_id="+request.md_id+"&template_name="+request.dtemplate+"&del=1&sc_page="+request.sc_page, lang.billing.del_yes)><br>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no, stype))>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./control/billing/mail_delete_confirm.html  -->

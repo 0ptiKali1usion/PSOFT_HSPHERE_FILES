@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<gateways>
+<merchgateways>
+    <gateway name="dummy" description="admin.epayment.dumpgateway" template="admin/merchant/DumpGateway.html"/>
+    <gateway name="authorizenet" description="admin.epayment.authorizenet" template="admin/merchant/AuthorizeNet.html" deprecated="1"/>
+    <gateway name="authorizenetsim" description="admin.epayment.authorizenetsim" template="admin/merchant/AuthorizeNetSIM.html"/>
+    <gateway name="cybercash" description="admin.epayment.cybercash" template="admin/merchant/CyberCash.html"/>
+    <gateway name="signio" description="admin.epayment.signio" template="admin/merchant/Signio.html"  deprecated="1"/>
+    <gateway name="verisign" description="admin.epayment.verisign" template="admin/merchant/Verisign.html"/>
+    <gateway name="AssureBuy" template="admin/merchant/AssureBuy.html" description="AssureBuy"/>
+    <gateway name="paradata" description="admin.epayment.paradata" template="admin/merchant/Paradata.html"/>
+    <gateway name="clearlink" description="admin.epayment.clearlink" template="admin/merchant/ClearLink.html"/>
+    <gateway name="linkpoint" description="admin.epayment.linkpoint" template="admin/merchant/LinkPoint.html"/>
+    <gateway name="bibit" description="admin.epayment.bibit" template="admin/merchant/Bibit.html"/>
+    <gateway name="epdq" description="admin.epayment.epdq" template="admin/merchant/EPDQ.html"/>
+    <gateway name="payandshop" description="admin.epayment.payandshop" template="admin/merchant/PayAndShop.html"/>
+    <gateway name="psigate" description="admin.epayment.psigate" template="admin/merchant/PSiGate.html"/>
+    <gateway name="payready" description="admin.epayment.payready" template="admin/merchant/PayReady.html"/>
+    <gateway name="securepay" description="admin.epayment.securepay" template="admin/merchant/SecurePay.html"/>
+    <gateway name="echo" description="admin.epayment.echo" template="admin/merchant/ECHO.html"/>
+    <gateway name="ematic" description="admin.epayment.ematic" template="admin/merchant/Ematic.html"/>
+    <gateway name="surepay" description="admin.epayment.surepay" template="admin/merchant/Surepay.html"  deprecated="1"/>
+    <gateway name="iongate" description="admin.epayment.iongate" template="admin/merchant/IonGate.html"/>
+    <gateway name="plugnpay" description="admin.epayment.plugnpay" template="admin/merchant/PlugnPay.html"/>
+    <gateway name="intercept" description="admin.epayment.intercept" template="admin/merchant/InterCept.html"/>
+    <gateway name="skipjack" description="admin.epayment.skipjack" template="admin/merchant/SkipJack.html"/>
+    <gateway name="securetrading" description="admin.epayment.securetrading" template="admin/merchant/SecureTrading.html"/>
+    <gateway name="paygate" description="admin.epayment.paygate" template="admin/merchant/PayGate.html"/>
+    <gateway name="netbilling" description="admin.epayment.netbilling" template="admin/merchant/NetBilling.html"/>
+    <gateway name="eway" description="admin.epayment.eway" template="admin/merchant/EWay.html"/>
+    <gateway name="innovative" description="admin.epayment.innovative" template="admin/merchant/InnovativeGateway.html"/>
+    <gateway name="thepaydesk" description="admin.epayment.thepaydesk" template="admin/merchant/ThePayDesk.html"/>
+    <gateway name="tucows" description="admin.epayment.tucows" template="admin/merchant/Tucows.html"/>
+    <gateway name="mainstreetsoftworks" description="admin.epayment.mainstreetsoftworks" template="admin/merchant/MainStreetSoftWorks.html"/>
+    <gateway name="ntpnow" description="admin.epayment.ntpnow" template="admin/merchant/NTPNow.html"/>
+    <gateway name="protx" description="admin.epayment.protx" template="admin/merchant/Protx.html"/>
+    <gateway name="paymenow" description="admin.epayment.paymenow" template="admin/merchant/PayMeNow.html"/>
+    <gateway name="PayPalMerchantGateway" template="admin/merchant/PayPalMerchantGateway.html" description="admin.epayment.paypalmerchantgateway" deprecated="1"/>
+</merchgateways>
+<processors>
+    <processor name="PayPal" description="label.paypal" template="admin/merchant/PayPal.html" servlet="PayPal.payment" class="psoft.hsphere.payment.PayPal">
+        <value name="enabled"/>
+	<value name="SERVER"/>
+	<value name="PORT"/>
+	<value name="PATH"/>
+        <value name="ID"/>
+        <value name="image_url"/>
+        <value name="CUSTOM"/>
+    </processor>
+    <processor name="WorldPay" description="label.worldpay" template="admin/merchant/WorldPay.html" servlet="WorldPay.payment" class="psoft.hsphere.payment.WorldPay">
+        <value name="enabled"/>
+        <value name="INSTALLATION_ID"/>
+        <value name="ACCOUNT_ID"/>
+        <value name="CURRENCY"/>
+        <value name="TEST_MODE"/>
+        <value name="USE_CUSTOM_PAGE"/>
+        <value name="CUSTOM_PAGE_NAME"/>
+	<value name="IPs"/>
+    </processor>
+    <processor name="2CheckOut" description="label.tocheckout" template="admin/merchant/2CheckOut.html" servlet="2CheckOut.payment" class="psoft.hsphere.payment.ToCheckout">
+        <value name="enabled"/>
+        <value name="ID"/>
+        <value name="Use_Authorize"/>
+        <value name="demo"/>
+        <value name="v2_support"/>
+	<value name="IPs"/>
+    </processor>
+    <processor name="GestPay" description="label.gestpay" template="admin/merchant/GestPay.html" servlet="GestPay.payment" class="psoft.hsphere.payment.GestPay">
+        <value name="enabled"/>
+        <value name="LOGIN"/>
+        <value name="LANGUAGE"/>
+        <value name="CURRENCY"/>
+    </processor>
+    <processor name="PaySystems" description="label.paysystems" template="admin/merchant/PaySystems.html" servlet="PaySystems.payment" class="psoft.hsphere.payment.PaySystems">
+        <value name="enabled"/>
+        <value name="ID"/>
+	<value name="IPs"/>
+    </processor>
+    <processor name="PayNova" description="label.paynova" template="admin/merchant/PayNova.html" servlet="PayNova.payment" class="psoft.hsphere.payment.PayNova">
+        <value name="enabled"/>
+        <value name="testmode"/>
+        <value name="icpaccountid"/>
+        <value name="currency"/>
+        <value name="secretkey"/>
+    </processor>
+    <processor name="WebMoney" description="label.webmoney" template="admin/merchant/WebMoney.html" servlet="WebMoney.payment" class="psoft.hsphere.payment.WebMoney">
+        <value name="enabled"/>
+        <value name="testmode"/>
+        <value name="wmid"/>
+	<value name="secretkey"/>
+    </processor>
+</processors>
+</gateways>
+

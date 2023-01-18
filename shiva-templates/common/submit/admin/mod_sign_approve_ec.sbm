@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/admin/mod_sign_approve_ec.sbm  -->
+<assign signup = account.getChild("signupadm")>
+<if request.exemption_code && request.rid>
+  <assign result = signup.approveTaxExemptionNew(request.exemption_code, request.rid)>
+  <if result.status != "OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign fail = "1">
+  </if>
+<else>
+  <assign res = session.addMessage(lang.admin.billman.unable_perform_operation)>
+  <assign fail = "1">
+</if>
+<if !fail>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_approve_ec.sbm  -->

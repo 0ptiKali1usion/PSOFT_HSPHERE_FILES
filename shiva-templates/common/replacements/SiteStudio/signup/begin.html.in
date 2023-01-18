@@ -1,0 +1,34 @@
+<!-- BEGIN ./signup/begin.html.in -->
+<assign template="signup/begin.html">
+<include "functions">
+<include "control/signup/signup_function.html">
+<if settings.welcome_message>
+  <assign title=settings["welcome_message"]>
+<else>
+  <assign title=lang[html_help["welcome_message"]["tip"]]>
+</if>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<assign plan=plans[request.plan_id]>
+<function showR(resource, label)>
+  <if plan.getResourceType(resource) && plan.getResourceType(resource).disabled=="0">${label}</if>
+</function>
+<table>
+<tr>
+	<td colspan="2">
+	<p  ><font face="arial, verdana, sans-serif, helvetica;" size="2" color="Black"><br>You have chosen to subscribe to the ${plan.description} plan.
+	<br>The plan includes: <!-- After you complete the subscription procedure, you will have: --> SiteStudio Account
+
+<br></font></p>
+
+</td>
+</tr>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/signup/begin.sbm">
+    <assign excludeFields=excludeFields+"template_name;"> 
+    <assign disable_back="1">
+<call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./signup/begin.html.in -->

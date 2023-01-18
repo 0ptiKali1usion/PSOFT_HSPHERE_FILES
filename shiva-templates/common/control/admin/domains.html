@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/admin/domain.html  -->
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.domains_header)>
+
+<tr>
+ <td><call draw_label(lang.admin.mailtype)></td>
+ <td><input type="radio" name="sc_bci_email" value="ci" checked><call draw_label(lang.admin.ci)>&nbsp;&nbsp;<input type="radio" name="sc_bci_email" value="bi"><call draw_label(lang.admin.bi)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td><input type="text" name="sc_domain"></td>
+</tr>
+<tr>
+  <td>
+    <call draw_label(lang.label.entries)>
+  </td>
+  <td><call searchStepBox("")></td>
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="search/domains.html">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="submit" value="${lang.button.search}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/domains.html  -->

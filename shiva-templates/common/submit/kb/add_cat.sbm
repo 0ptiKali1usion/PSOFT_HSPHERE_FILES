@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/add_cat.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).addCategory(request.name)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success creating Category"+request.name>
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/add_cat.sbm -->

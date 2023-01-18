@@ -1,0 +1,8 @@
+<center>Subdomain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+If your plan allows, you can create subdomains to your domain. A subdomain is a lower level domain. The number of subdomains you can create depends on the plan. Domains and subdomains have equal functional capabilities, including web site management, e-mail service, FTP, etc. Subdomains do not have their own DNS zones. 
+To create or add a subdomain to your domain, click the <i>Add</i> icon. For example, if your domain name is <i>mydomain.com</i>, entering <i>mysubdomain</i> will make your full subdomain name look like mysubdomain.mydomain.com. 
+To view or change your subdomain settings, click either the correspondent <i>subdomain name</i> link or the <i>Edit</i> icon. 
+To view the site, click the <i>View</i> icon. 
+To delete a subdomain, click the <i>Trash Can</i> icon. 

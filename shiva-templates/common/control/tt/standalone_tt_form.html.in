@@ -1,0 +1,106 @@
+<!-- BEGIN ./tt/standalone_tt_form.html  -->
+<!--call draw_tooltip()-->
+<if request.rid><assign resource = account.getResource(request.rid)></if>
+
+<assign tt = account.getChild("tt")><if !tt><assign tt=account.addTTResource()></if>
+<assign tts = tt.getTicketsByResourceId(resource.id)>
+<if tts>
+
+<call draw_table_header("4", lang.tt.form.header)>
+
+ <tr>
+   <td width="40%"><call draw_label(lang.label.title)></td>
+   <td width="20%"><call draw_label(lang.tt.priority)></td>
+   <td width="20%"><call draw_label(lang.tt.lastmod)></td>
+   <td width="20%" class="control_align_center"><call draw_label(lang.tt.type)></td>
+ </tr>
+<list tts as tt>
+  <if tt.closed!="1">
+<tr>
+  <td>
+    <if tt.modby=="1">
+      <assign tit="*"+tt.title>
+    <else>
+      <assign tit=tt.title>
+    </if>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/standalone_user_view.html&stemplate="+template+"&ttid="+tt.id,tit)>
+  </td>
+  <td class="control_align_center">
+    <switch tt.priority>
+      <case "0">
+        <call draw_label(lang.tt.normal)>
+        <break>
+      <case "-1">
+        <call draw_label(lang.tt.low)>
+        <break>
+      <case "1">
+        <call draw_label(lang.tt.high)>
+        <break>
+    </switch>
+  </td>
+  <td><call draw_label(tt.lastmod)></td>
+  <td><call draw_label(tt.rDesc)></td>
+</tr>
+  </if>
+</list>
+<call draw_table_footer()>
+&nbsp;
+</if>
+
+<yafv s_tt>
+<form action="${config.CLIENT_CP_URL}" name="f_new_tt" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/new_tt_save.sbm">
+<input type="hidden" name="stemplate" value="tt/standalone_tt_close.html">
+<input type="hidden" name="ftemplate" value="${template}"> 
+<input type="hidden" name="rid" value="${request.rid}">
+
+<call draw_table_header("2", lang.tt.form.descr)>
+
+<if session.msg>
+<tr>
+  <td colspan="2" bgcolor=${design.color("hint_color")}>
+    <call error()>
+  </td>
+</tr>
+</if>
+
+<tr>
+  <td width="20%">&nbsp;<call draw_label(lang.label.title)></td>
+  <td><input type="text" name="title" size="30" value="${vtitle}" label="${lang.label.title}" check="vStringReq"></td>
+</tr>
+<tr>
+  <if !vemail>
+    <assign vemail=account.ci.email>
+  </if>
+  <td>&nbsp;<call draw_label(lang.tt.email)></td>
+  <td>
+    <input type="text" name="email" value="${vemail}" label="E-Mail" check="vTTMail(this,flags)">
+    <if (flag=="1")||(request.flags)><assign v_sel = "CHECKED"><else><assign v_sel = "CHECKED"></if>
+    <input type="checkbox" name="flags" onClick="checkForm(this.form)" value="1" ${v_sel}>
+    <call draw_label(lang.tt.web)>
+  </td>
+</tr>
+<tr>
+  <td>&nbsp;<call draw_label(lang.tt.priority)></td>
+  <td>
+    <select name="priority">
+      <option<if vpriority=="0"> SELECTED</if> value="0"><call draw_label(lang.tt.normal)></option>
+      <option<if vpriority=="-1"> SELECTED</if> value="-1"><call draw_label(lang.tt.low)></option>
+      <option<if vpriority=="1"> SELECTED</if> value="1"><call draw_label(lang.tt.high)></option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td colspan=2>&nbsp;<call draw_label(lang.tt.form.descr2)></td>
+</tr>
+<tr>
+  <td colspan=2 class="control_align_center">
+    <textarea name="description" cols="40" rows="10">${vdescription}</textarea>
+  </td>
+</tr>
+<tr>
+  <td colspan=2 class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./tt/standalone_tt_form.html  -->

@@ -1,0 +1,19 @@
+<!-- BEGIN ./eeman/tp_suspend.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<if tp>
+  <assign result = tp.suspend()>
+  <if result.status != "OK">
+    <assign failure="1">
+  </if>
+<else>
+  <assign failure="1">
+</if>
+
+<if !failure>
+     <include request.stemplate>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./eeman/tp_suspend.sbm  -->

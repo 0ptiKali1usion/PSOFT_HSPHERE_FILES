@@ -1,0 +1,13 @@
+<if account.plan.isResourceAvailable("traffic")>
+<assign rtype = plans[plan_id].getResourceType("traffic")>
+<assign free_new=rtype.values["_FREE_UNITS_"+period_id]>
+<if free_new=="">
+    <assign free_new=rtype.values["_FREE_UNITS_"]>
+</if>
+<assign traffic=account.findChild("traffic")>
+<if toolbox.eq( traffic.size, free_new)!="1">
+    <assign size=free_new>
+    <assign silent="1">
+    <include "submit/ftp/change_traffic_submit.sbm">
+</if>
+</if>

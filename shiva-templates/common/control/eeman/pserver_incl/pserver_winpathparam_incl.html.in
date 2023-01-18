@@ -1,0 +1,9 @@
+<!-- Begin ./control/eeman/pserver_winpathparam_incl.html  -->
+<tr>
+<td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>       
+<input type="text" name="${param.param_name}" value="${param.param_value}" size="${param.param_size}" check="vWinPathWithSlash"><br>
+<include "control/eeman/pserver_incl/pserver_param_description_incl.html">
+</td></tr>
+<!-- END ./control/eeman/pserver_winpathparam_incl.html  -->

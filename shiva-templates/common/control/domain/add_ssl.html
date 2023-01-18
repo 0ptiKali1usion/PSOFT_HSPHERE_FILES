@@ -1,0 +1,61 @@
+<!-- BEGIN ./domain/add_ssl.html  -->
+<call draw_tooltip()>
+<assign hosting=account.getResource(request.rid)>
+<assign comodossl=hosting.getChild("comodossl")>
+<assign domain_name=hosting.parent.name>
+
+<form name="ext" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_ssl_submit.sbm">
+
+<call draw_table_header("1", lang.domain.addssl.header)>
+<if account.plan.areResourcesAvailable("comodossl")>
+<if !comodossl>
+<if obj.comodo_manager.isEnabled()>
+<tr><td>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/comodossl_purchase.html"+"&rid="+request.rid+"&stemplate="+request.stemplate+"&ftemplate="+template, lang.comodossl_purchase)>
+</td></tr>
+</if>
+</if>
+</if>
+<tr>
+ <td><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/generate_new_ssl_cert.html"+"&rid="+request.rid+"&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.addssl.generate)></td>
+</tr>
+
+<tr>
+   <td class="control_header"><call draw_header(lang.domain.addssl.key)></td>
+</tr>
+<tr>
+   <td>
+   <textarea name="key" rows="10" cols="64">${vkey}</textarea>
+</td>
+</tr>
+<tr>
+   <td class="control_header"><call draw_header(lang.domain.addssl.sertificate)></td>
+</tr>
+<tr>
+  <td>
+    <call draw_label(lang.domain.generatenewsslcert.site)>&nbsp;
+    <select name="site">
+      <option SELECTED>${domain_name}
+      <assign tmp=hosting.getChildren("vhost_alias")>
+      <if tmp><list tmp as alias>
+	<option>${alias.alias}.${domain_name}
+      </list></if>
+    </select>
+  </td>
+</tr>
+<tr>
+   <td>
+   <textarea name="file" rows="10" cols="64">${vfile}</textarea>
+</td>
+</tr>
+<tr>
+  <td  class="control_align_center" >
+  <input type="submit" value="${lang.button.submit}">
+</td>
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_ssl.html  -->

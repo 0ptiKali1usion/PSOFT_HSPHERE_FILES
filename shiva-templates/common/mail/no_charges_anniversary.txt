@@ -1,0 +1,13 @@
+${lang.massmail.no_charge_header(account.ci.first_name, account.ci.last_name)}
+${lang.massmail.invoice_login(account.login)}
+${lang.massmail.invoice_account(account.id.id)}
+${lang.massmail.invoice_plan(account.plan.description)}
+
+As of ${current_date} your account #${account.id.id} has ${toolbox.displayBalance(bill.balance)} on a balance.
+You haven't made any purchases or orders that would affect your balance and
+you haven't exceeded any of your monthly resource limits either. Therefore, as
+of now, there's no charges due.
+
+Thank you for cooperation.
+
+Best regards,

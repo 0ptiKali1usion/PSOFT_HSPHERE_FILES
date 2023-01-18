@@ -1,0 +1,70 @@
+<!-- BEGIN ./control/background/job_alive.html  -->
+<call draw_tooltip()>
+
+<SCRIPT language="Javascript">
+<!--
+function selectall(elements) {
+var mode=elements.selector.checked;
+var el;
+for (var i = 0; i < elements.length; i++) {
+  el = elements[i];
+  if (el.type == "checkbox") {
+  el.checked = mode;
+    }
+  }
+}
+//-->
+</SCRIPT>
+
+<call draw_table_header("6", lang.quick.quickview.background_man)
+<tr>
+<td class="control_header"><call draw_header(lang.background.job.id)></td>
+<td class="control_header"><call draw_header(lang.background.job.name)></td>
+<td class="control_header"><call draw_header(lang.background.group.name)></td>
+<td class="control_header"><call draw_header(lang.background.job.priority)></td>
+<td class="control_header"><call draw_header(lang.background.job.cur_status)></td>
+<td class="control_header"><call draw_header(lang.background.job.progress)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+  <input type="hidden" name="template_name" value="submit/background/joblist_action.sbm">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+
+<!-- OUTPUT BEGIN -->
+<assign jobMgr = account.jobManager>
+<assign joblist = jobMgr.getAliveJobList()>
+<list joblist as job>
+<tr>
+<td><input type="checkbox" name="jobid" value="${job.id}"><call draw_label(job.id)></td>
+<td><call draw_label(job.name)></td>
+<td><call draw_label(job.group_id)></td>
+<td><call draw_label(job.priority)></td>
+<if (job.status) == "STUCK">
+  <td class="control_align_center"><call draw_label(lang.bg_job.no_progress_mes(job.no_progress_time))><if job.status_message != ""><br><call draw_label(job.status_message)></if></td>
+  <td class="control_align_center"><call draw_label_bold(lang.bg_job.progress_mes(job.progress))><br><call draw_label(lang.bg_job.last_recorded_mes(job.last_progress_date))></td>
+<else>
+  <td class="control_align_center"><call draw_label(lang.bg_job.STATUS[job.status])><if job.status_message != ""><br><call draw_label(job.status_message)></if></td>
+  <td class="control_align_center"><call draw_label(lang.bg_job.progress_mes(job.progress))></td>
+</if>
+</tr>
+</list>
+<!-- OUTPUT END -->
+
+<tr>
+<td colspan ="6">
+<input type="checkbox" name="selector" onChange="selectall(this.form.elements)">
+<call draw_label(lang.background.admin.selall)>
+<input type="radio" name="act" value="restart">
+<call draw_label(lang.background.action.restart)>
+<input type="radio" name="act" value="interrupt">
+<call draw_label(lang.background.action.interrupt)>
+<input type="radio" name="act" value="suspend">
+<call draw_label(lang.background.action.suspend)>
+<input type="radio" name="act" value="resume">
+<call draw_label(lang.background.action.resume)>
+&nbsp;<input type="submit" value="${lang.button.apply}">
+</td>
+</tr>
+</form>
+<call draw_table_footer()>
+<!--  END ./control/background/job_alive.html  -->

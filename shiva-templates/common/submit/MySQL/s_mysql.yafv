@@ -1,0 +1,15 @@
+include common.s_hsphere.yafv: vPassword, vQuota, vMysqlUserName, vPassword1(string, string), vPassword2(string, string);
+
+regexp vDB_NamePref=	"[a-zA-Z][a-zA-Z0-9_\-]*";
+regexp vDB_Name=	"[a-zA-Z0-9_\-]{3,}", maxlength="64";
+
+regexp vMysqlLogin=	"[a-zA-Z0-9_\-]{3,}", maxlength="16";
+
+constrain vMySQLCombLogin, fail=yafv.vMySQLCombLogin.fail (string login, string suffix) {
+    return (vMysqlUserName(login) && vMysqlLogin(login + suffix));
+} 
+
+constrain vMySQLCombDbName, fail=yafv.vMySQLCombDbName.fail (string dbName, string suffix) {
+    return (vDB_NamePref(dbName) && vDB_Name(dbName + suffix));
+} 
+

@@ -1,0 +1,30 @@
+<!--BEGIN: common/msexchange/smtpdomains.html -->
+<include "functions">
+<call START_PAGE("msexchange/smtpdomains.html", "he-domains")>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.domains)>
+<assign bizorg=account.getChild("bizorg")>
+<tr>
+<td class="control_header" width="80%"><call draw_header(lang.label.dname)></td>
+<td class="control_header"><call draw_header(lang.label.primary)></td>
+</tr>
+<list bizorg.getChildren("domain") as domain>
+<tr><td><call draw_label(domain.name)></td><td>
+<if domain.role == 1><call draw_on()>
+<else>
+  <if !domain.containsUser>
+    <call disableNewWarn(bizorg, domain)>
+  </if>
+  <call draw_state_off(config.CLIENT_CP_URL+"?template_name=msexchange/set_smtpdomain_primary.sbm"+"&rid="+domain+"&ftemplate="+template+"&stemplate="+template)>
+</if>
+</td></tr>
+</list>
+<tr><td colspan="2"><call draw_label_bold(lang.label.adddomain)>
+        <call addNewResourceWizard(lang.label.adddomain ,bizorg,bizorg, "domain","",template, template,"msexchange/add_smtpdomain.html")>
+</td></tr>
+<call draw_table_footer()>
+
+
+<call END_PAGE()>
+<!--END: common/msexchange/smtpdomains.html -->

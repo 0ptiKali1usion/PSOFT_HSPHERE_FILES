@@ -1,0 +1,7 @@
+<center>Select Billing Profile</center>
+<hr>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+The Billing Profile is a collection of your billing (your postal address, e-mail address, etc. [for checks])and credit card info (the number of your credit card and its expiry date). H-Sphere 2.x supports multiple billing profiles. This feature gives you an opportunity to use several credit cards or addresses for receiving checks in turn, activating the one you would like to be charged. Also, you can share Billing Profile between your accounts. This means you can pay with one card / check for all your accounts. Settings are configured individually for each billing profile. You cannot modify billing or credit card info in any billing profile, you can only create a new profile. You can create a new billing profile on the Billing Profile page, Billing menu. You cannot delete your billing profiles. When you sign up as a pay user, a new billing profile is created. If you sign up as a trial user, no billing profile is created. Still, the system keeps track of all your purchases and includes them into your bills.<br>
+Select the  billing profile from the drop-down box and on submitting the query in the <i>Bill</i> section you'll get your invoice.

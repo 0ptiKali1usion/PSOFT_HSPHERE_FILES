@@ -1,0 +1,8 @@
+<!-- BEGIN ./admin/deposit.html  -->
+<assign template="admin/deposit.html">
+<include "functions">
+<if !request.cur_menu><assign cur_menu="search-accounts"><else><assign cur_menu=request.cur_menu></if>
+<call draw_menu(cur_menu)>
+<include "control/admin/deposit.html">
+<call bottom()>
+<!-- END ./admin/deposit.html  -->

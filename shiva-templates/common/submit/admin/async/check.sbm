@@ -1,0 +1,4 @@
+<!-- BEGIN ./submit/admin/async/check.sbm -->
+<assign admin = account.getChild("admin").async_manager.check(request.rid)>
+<include request.stemplate>
+<!-- END ./submit/admin/async/check.sbm -->

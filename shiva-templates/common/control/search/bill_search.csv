@@ -1,0 +1,4 @@
+<compress><assign viewer=account.getChild("reportviewer")><if request.arid><assign report = viewer.getAdvReportById(request.arid)></if></compress>"User name","Acnt Id",Domain,Plan,"B.Period",Created,Type,Amount,Start,End,Description
+<assign entries = report.all()><list entries as entry><compress><if entry.username><assign username=entry.username><else><assign username="Deleted_user"></if></compress>${username},${entry.accountId},${toolbox.csv_escape(entry.domain)},${toolbox.csv_escape(entry.plan)},${toolbox.csv_escape(entry.period)},${toolbox.csv_escape(entry.created)},${entry.type},${toolbox.csv_escape(toolbox.currency(entry.amount))},${toolbox.csv_escape(entry.start)},${toolbox.csv_escape(entry.end)},${toolbox.csv_escape(entry.description)}
+</list>
+

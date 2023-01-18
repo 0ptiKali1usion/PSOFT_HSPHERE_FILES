@@ -1,0 +1,98 @@
+<!-- BEGIN ./control/winuser/view.html  -->
+<call draw_tooltip()>
+<assign u=account.getChild("unixuser")>
+
+
+
+<call draw_table_header("3", lang.unixuser.view.header)>
+
+<tr>
+ <td class="control_header" width="5%" nowrap><call draw_TT_header()></td>
+ <td class="control_header" width="25%"><call draw_header(lang.label.parameter)></td>
+ <td class="control_header" ><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+  <td><call draw_tt_help("","user-ftpuser-ftplogin","")></td>
+  <td><call draw_label(lang.label.login)></td>
+  <td><call draw_label(u.login)>
+    <switch config.WEBSHELL>
+      <case "3">
+        <call draw_tlink(config.CLIENT_CP_URL+"?template_name=submit/quick/choice_webshell3.sbm", "_blank", lang.unixuser.webshell)><call draw_help("user-ftpuser-webshell","")>
+        <break>
+      <case "4">
+        <call draw_tlink(config.CLIENT_CP_URL+"?template_name=submit/quick/choice_webshell4.sbm", "_blank", lang.unixuser.webshell)><call draw_help("user-ftpuser-webshell","")>
+        <break>
+    </switch>
+  </td>
+</tr>
+<tr>
+   <td    nowrap><call draw_tt_help(u,"user-ftpuser-ftppassoword","")></td>
+   <td><call draw_label(lang.label.password)></td>
+   <td><call draw_change(config.CLIENT_CP_URL+"?template_name=winuser/change.html&rid="+u+"&ftemplate="+template+"&stemplate="+template,lang.label.changepassword)></td>
+</tr>
+<assign quota = u.getChild("quota")>
+<tr>
+   <td><call draw_tt_help(quota,"user-ftpuser-quota","")></td>
+   <td><call draw_label(lang.label.quota)></td>
+   <td><if quota.limitFiles != "unlimited"><call draw_label(toolbox.compose(lang.unixuser.limit_quota, quota.usedMb, quota.limitMb, quota.usedFiles, quota.limitFiles))><else><call draw_label(toolbox.compose(lang.unixuser.unlimited_quota, quota.usedMb, quota.limitMb, quota.usedFiles))></if>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=unixuser/change_quotaftp.html&rid="+u+"&ftemplate="+template+"&stemplate="+template,lang.label.changequota)>
+   </td>
+</tr> 
+<if account.plan.isResourceAvailable("ftp_user_traffic")>
+<assign unix_user = account.findChild("unixuser")>
+<assign ftp_user_traffic = unix_user.getChild("ftp_user_traffic")>
+<if ftp_user_traffic>
+<assign res=ftp_user_traffic.reload>
+</if>
+<tr>
+    <td  nowrap><call draw_tt_help(ftp_user_traffic,"user-ftpuser-transferftpt","")></td>
+    <td><call draw_label(lang.winuser.view.transferftp)></td>
+    <td><call draw_label(toolbox.compose(lang.label.traffic.used, ftp_user_traffic.text_traffic))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, ftp_user_traffic.start_date))>
+    </td>
+</tr>
+</if>
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-group","")></td>
+   <td><call draw_label(lang.label.group)></td>
+   <td><call draw_label(u.group)></td>
+</tr>
+<if SESSION_PLATFORM != "win2k">
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-homedir","")></td>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td><call draw_label(u.dir)></td>
+</tr>
+</if>
+
+
+
+<tr>
+   <td><call draw_tt_help("","user-ftpuser-hostname","")></td>
+   <td><call draw_label(lang.label.hostname)></td>
+   <td><call draw_label(u.host.name)></td>
+</tr>
+<assign domains=u.getChildren("domain")>
+<if domains>
+  <tr>
+     <td    valign="top" nowrap><list domains as domain><call draw_tt_help(domain,"user-ftpuser-domainname","")><br></list></td>
+     <td><call draw_label(lang.label.domain.name)></td>
+     <td    valign="top" nowrap><if !domains>&nbsp;</if><list domains as domain><call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain+"&stemplate="+template,domain.name)><call draw_edit(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain+"&stemplate="+template,lang.winuser.view.altsettings)><call draw_preview("http://"+domain.name,lang.winuser.view.altopensite)><br></list></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("unixsubuser")>
+<assign subusers=u.getChildren("unixsubuser")>
+  <tr>
+     <td valign="top" width="1%" class="control_align_center" nowrap><if subusers><list subusers as subuser><call draw_tt_help(subuser,"user-ftpuser-vftpsubaccount","")><br></list><else><call draw_tt_help(account.id,"user-ftpuser-vftpsubaccount","")></if></td>
+     <td><call draw_label(lang.unixuser.view.ftpsubacc)></td>
+     <td valign="top" nowrap>
+     <list subusers as subuser><call draw_label(subuser.login)> <call draw_edit(config.CLIENT_CP_URL+"?template_name=winuser/viewsub.html&rid="+subuser, lang.unixuser.view.editusr)><call disableNew(u, subuser)><br>
+     </list>
+     <call addNewWizard(u, "unixsubuser", "winuser/add_ftpuser.html", lang.unixuser.view.addftp)>
+     </td>
+  </tr>
+</if>
+
+
+<call draw_table_footer()>
+<!--  END ./control/winuser/view.html  -->

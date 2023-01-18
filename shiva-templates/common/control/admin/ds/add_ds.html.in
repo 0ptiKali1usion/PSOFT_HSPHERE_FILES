@@ -1,0 +1,101 @@
+<!-- BEGIN ./admin/ds/add_ds.html  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager")>
+</if>
+<call draw_tooltip()>
+<if ds_manager>
+<if request.dst_id>
+   <assign dst = ds_manager.getDSTemplate(request.dst_id)>
+</if>
+
+<if request.dst_id && !dst>
+   <assign failed_to_get_dst="1">
+</if>
+
+<if failed_to_get_dst>
+<else>
+<form name="f_ds_add" method="GET" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/add_ds.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="admin/ds/manage.html">
+<input type="hidden" name="ds_ip" value="">
+<if dst>
+<input type="hidden" name="dst_id" value="${dst.id}">
+</if>
+<call draw_table_header("2", lang.admin.ds.add_new_ds)>
+<if dst>
+    <tr><td colspan="2"><call draw_label(dst.name)></td><tr>
+</if>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_name)></td><td><input name="ds_name" value="${f_ds_name}"  check="vStringReq"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.os_name)></td><td><if dst><call draw_label(dst.os)><else><input type="text" name="ds_os" value="${f_ds_os}"  check="vStringReq"></if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.cpu)></td><td><if dst><call draw_label(dst.cpu)><else><input type="text" name="ds_cpu" value="${f_ds_cpu}"  check="vStringReq"></if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ram)></td><td><if dst><call draw_label(dst.ram)><else><input type="text" name="ds_ram" value="${f_ds_ram}"  check="vStringReq"></if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.storage)></td><td><if dst><call draw_label(dst.storage)><else><input type="text" name="ds_storage" value="${f_ds_storage}"  check="vStringReq"></if></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ds_ip)></td>
+  <td><input type="text" name="main_ip" size="15" maxlength="15" check="vIPAddr"></td>
+</tr>
+<assign netswitches = ds_manager.netSwitchList()>
+<tr>
+<td><call draw_label(lang.admin.ds.netswitch_interface)></td>
+<if netswitches && (netswitches.size != "0")>
+<td><call draw_label(lang.admin.ds.netswitch_device)>
+<nobr>
+<select name="ns_id" onChange="checkForm(this.form)">
+  <if !v_ns_id><assign vselected="SELECTED"><else><assign vselected=""></if>
+  <option value="" ${vselected}>${lang.admin.ds.choose_netswitch}</option>
+  <list netswitches as ns>
+    <if ns.reseller_id == reseller_id>
+      <if v_ns_id == ns.id><assign vselected="SELECTED"><else><assign vselected=""></if>
+      <option value="${ns.id}" ${vselected}>${ns.description} (${ns.device})</option>
+    </if>
+  </list>
+</select>
+</nobr>
+<nobr>
+&nbsp;<call draw_label(lang.admin.ds.netswitch_port)>
+&nbsp;<input type="text" name="ns_port" value="${v_ns_port}" check="vNetswitchPortOpt(ns_id, this)" size="3">
+</nobr>
+</td>
+<else>
+<td><call draw_important_label(lang.admin.ds.ns_notconfigured)></td>
+</if>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_r_reboot_url)></td><td><input type="text" name="ds_reboot_url" value="${f_ds_reboot_url}" check="vHT_URL"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_internal_id)></td><td><input type="text" name="ds_internal_id" value="${f_ds_internal_id}" check="vStringReq"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_su_login)></td><td><input type="text" name="ds_su_login" value="${f_ds_su_login}" check="vStringReq"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_su_passwd)></td><td><input type="text" name="ds_su_passwd" value="${f_ds_su_passwd}" check="vStringReq"></td>
+</tr>
+<if !dst>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_price_setup)></td><td><input type="text" name="ds_setup" value="${f_ds_setup}" check="vPriceReq"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ds_price_recurrent)></td><td><input type="text" name="ds_recurrent" value="${f_ds_recurrent}" check="vPriceReq"></td>
+</tr>
+</if>
+<tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+<call draw_table_footer()>
+</form>
+</if>
+</if>
+<!-- END ./admin/ds/add_ds.html  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./ftp/enable_anonymous.sbm  -->
+<assign rid = account.getResource(request.rid)>
+<assign result=rid.addChild("ftp_vhost_anonymous", "")>
+<if result.status == "OK" >
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_created, lang.label.anonym_ftp, ""))> 
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_create, lang.label.anonym_ftp, ""))>
+  <assign res = session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./ftp/enable_anonymous.sbm  -->

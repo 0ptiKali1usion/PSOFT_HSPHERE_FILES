@@ -1,0 +1,427 @@
+<!-- BEGIN ./domain/edit_included.html  -->
+<compress><function showContactInfo(cinfo)>
+<call draw_label(toolbox.html_encode(cinfo.first_name)+" "+toolbox.html_encode(cinfo.last_name))><br>
+<call draw_label(toolbox.html_encode(lang.bci.company_mes(cinfo.org_name)))><br>
+<call draw_label(toolbox.html_encode(lang.bci.addr_mes(cinfo.address1)))><br>
+<if cinfo.address2><call draw_label(toolbox.html_encode(cinfo.address2))><br></if>
+<if cinfo.address3><call draw_label(toolbox.html_encode(cinfo.address3))><br></if>
+<call draw_label(toolbox.html_encode(cinfo.city)+", "+toolbox.html_encode(cinfo.state)+" "+toolbox.html_encode(cinfo.postal_code))><br>
+<call draw_label(toolbox.html_encode(lang.bci.country_mes(cinfo.country)))><br>
+<call draw_label(toolbox.html_encode(lang.bci.phone_mes(cinfo.phone)))><br>
+<if cinfo.fax><call draw_label(toolbox.html_encode(lang.bci.fax_mes(cinfo.fax)))><br></if>
+<call draw_label(toolbox.html_encode(lang.bci.email_mes(cinfo.email)))><br>
+</function>
+
+<function draw_renew(osrs)>
+<!-- osrs.isAutoRenew = ${osrs.isAutoRenew}-->
+<if osrs.isAutoRenew>
+<call draw_label(toolbox.compose(lang.label.opensrs.auto_renew_description,osrs.renew,osrs.AutoRenewDate))>
+<else>
+<call draw_label(lang.label.opensrs.manual_renew)>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/renew.html"+"&oid="+osrs+"&rid="+domain ,lang.label.osrs.renew)>
+</if>
+&nbsp;<call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/edit_domain_renew.html"+"&rid="+domain+"&oid="+osrs+"&stemplate="+template, lang.label.osrs.autorenew)>
+</function>
+<if (!account.plan.isResourceAvailable("unixuser")) && (account.plan.isResourceAvailable("mail_service"))><assign isMailOnly = "1"></if>
+
+<assign unixuser = account.getChild("unixuser")>
+<if unixuser>
+  <assign domainManager = unixuser>
+  <assign platform = unixuser.host.platform_type>
+<else>
+  <assign domainManager = account>
+  <assign platform = "unix">
+</if>
+
+<if platform == "unix">
+  <assign edit_template="domain/edit.html">
+<else>
+  <assign edit_template="windomain/edit.html">
+</if>
+<assign hosting=domain.getChild("hosting")>
+<switch hosting.server>
+<case "apache"><assign web_template="domain/webservice.html"><break>
+<case "IIS"><assign web_template="windomain/webservice.html"><break>
+<case "zeus"><assign web_template="zeus/webservice.html"><break>
+</switch>
+</compress>
+
+<function draw_zone(zone)>
+<tr>
+  <td width="1%" nowrap><call draw_tt_help(zone,"user-ds_domaininfo-nameservers","")></td>
+  <td><call draw_label(lang.domain.editincluded.header)></td>
+  <td nowrap><call draw_label(zone.master.name+" -> "+toolbox.int2ext(zone.master.ip))><if zone.slave1><br><call draw_label(zone.slave1.name+" -> "+toolbox.int2ext(zone.slave1.ip))></if><if zone.slave2><br><call draw_label(zone.slave2.name+" -> "+toolbox.int2ext(zone.slave2.ip))></if></td>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+
+
+<if domain.type=="domain_alias">
+  <assign header_text = lang.domain.editincluded.editalias>
+  <assign help_id="user-ds_domaininfo-alias">
+<else>
+  <assign header_text = lang.domain.editincluded.editdomain>
+  <assign help_id="user-ds_domaininfo-domainname">
+</if>
+<call draw_table_header("3", header_text)>
+
+<tr>
+        <td width="1%" nowrap><call draw_tt_help(domain,help_id,"")></td>
+        <td width="29%" nowrap><if domain.type=="domain_alias"><call draw_label(lang.domain.editincluded.domainaliasname)><else><call draw_label(lang.label.dname)></if></td>
+        <td width="70%" nowrap><call draw_label(domain.name)>
+<if (hosting.server=="IIS") || (hosting.server=="zeus")>
+<call disableNWJump(domain.parent, domain, "domain/list.html")>
+<else>
+<assign hosting=domain.getChild("hosting")>
+  <if hosting>
+
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+domain.parent+"&did="+domain+"&stemplate=domain/list.html"+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&next_template=domain/del_content_request.html&hosting="+hosting+"&res_to_del=domain", "del",lang.functions.action_remove)>
+  <else>
+    <call disableNWJump(domain.parent, domain, "domain/list.html")>
+  </if>
+</if>
+<if !isMailOnly><call draw_preview("http://"+domain.name, lang.domain.editincluded.opensite)></if></td>
+</tr>
+
+<if (domain.type!="3ldomain_alias") && (domain.type!="nodomain") && (domain.type!="domain_alias") && (domain.type!="parked_domain") && (account.plan.type!="msexchange")>
+<tr><assign tmp=domain.getChildren("subdomain")>
+        <td width="1%" nowrap><if !tmp><call draw_tt_help(domain,"user-ds_domaininfo-subdomain","")><else><list tmp as subdomain><call draw_tt_help(subdomain,"user-ds_domaininfo-subdomain","")><br></list></if></td>
+        <td nowrap valign="middle"><call draw_label(lang.domain.editincluded.domainsub)></td>
+        <td nowrap>
+        <list tmp as subdomain><call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+subdomain,subdomain.name)>
+
+<assign sub3hosting = subdomain.getChild("hosting")>
+<if (hosting.server=="IIS") || (hosting.server=="zeus")>
+  <call disableNew(domain,subdomain)>
+<else>
+  <if sub3hosting>
+    <call draw_palink(config.CLIENT_CP_URL+"?rid="+domain+"&did="+subdomain+"&stemplate=domain/list.html"+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&next_template=domain/del_content_request.html&hosting="+sub3hosting+"&res_to_del=domain", "del",lang.functions.action_remove)>
+  <else>
+    <call disableNew(domain,subdomain)>
+  </if>
+</if>
+<call draw_edit(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+subdomain, lang.domain.editincluded.editsettings)><if !isMailOnly><call draw_preview("http://"+subdomain.name, lang.domain.editincluded.opensite)></if><br></list><call addNewWizard(domain,"subdomain","domain/new_subdomain.html", lang.domain.editincluded.create)></td>
+</tr>
+</if>
+<if (domain.type!="domain_alias") && (domain.type!="3ldomain_alias") && (domain.type!="parked_domain") && (account.plan.isResourceAvailable("ip"))>
+<assign ip = domain.getChild("ip")>
+<if ip>
+<tr>
+<td width="1%" nowrap><call draw_tt_help(ip,"user-ds_domaininfo-ipaddress","")></td>
+<td><call draw_label(lang.domain.editincluded.ipaddress)></td>
+<td nowrap>
+<if ip.status=="OK">
+   <call draw_label(toolbox.int2ext(ip.ip))> 
+   <assign priceIP = account.getPrices("ip")>
+   <if ip.shared == "1">
+      <if domain.type=="nodomain">
+         <assign type_ip="dedic_no_a">
+      <else>
+         <assign type_ip="dedicated">
+      </if>
+      <assign rtype=account.plan.getResourceType("ip")>
+      <call draw_label("("+lang.msg.shared_ip+") ")><if (rtype && (rtype.mods[type_ip].disabled != "1")) && ((priceIP.max && (priceIP.max != "0") && (toolbox.gt(priceIP.max, priceIP.amount) == "1")) || !priceIP.max)><if account.plan.isDemoPlan()><call draw_link_demo(lang.domain.editincluded.change +" "+ lang.msg.dedicated_ip)><else><call draw_link(config.CLIENT_CP_URL+"?next_template=submit/domain/change_ip_check.sbm"+"&template_name=domain/change_ip_confirm.html"+"&type=ip"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template+"&ip_type="+type_ip+"&did="+ip, lang.domain.editincluded.change+" "+ lang.msg.dedicated_ip)></if></if>
+   <else>
+      <if domain.type=="nodomain">
+         <assign type_ip="shard_no_a">
+      <else>
+         <assign type_ip="shared">
+      </if>
+      <call draw_label("("+lang.msg.dedicated_ip+") ")><if account.plan.isDemoPlan()><call draw_link_demo(lang.domain.editincluded.change +lang.msg.shared_ip)><else><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/change_ip_confirm.html"+"&rid="+domain+"&next_template=submit/domain/change_ip_check.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ip_type="+type_ip+"&did="+ip, lang.domain.editincluded.change+" "+lang.msg.shared_ip)></if>
+   </if>
+
+    <if (domain.type=="domain_alias") || (domain.type=="3ldomain_alias")>
+        <assign a_records=domain.dns_zone.getChildren("domain_alias_a_record")>
+    <else>
+        <assign a_records=ip.getChildren("a_record")>
+    </if>
+    <assign vhIP=ip.ip>
+    <assign dns_equals_vhIP="1">
+    <list a_records as a_record>
+      <if dns_equals_vhIP!="0">
+       <if vhIP==a_record.data>
+            <assign dns_equals_vhIP = "1">
+       <else>
+            <assign dns_equals_vhIP = "0">
+       </if>
+      </if>
+    </list>
+   <if dns_equals_vhIP=="0">
+        <br><call draw_important_label(lang.domain.change_ip_warn.dns_not_equal_vhIP)>
+        <br><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/dns_not_equal_vhIP.html"+"&rid="+domain+"&next_template=submit/domain/change_ip_submit.sbm"+"&stemplate="+template+"&ip_type=shared&dns_not_equal_vhIP=dns",lang.domain.change_ip_warn.resolve)>
+   </if>
+
+<else>
+   <font color="red">${lang.domain.editincluded.error} ${ip.msg}</font>
+</if>
+</td>
+</tr>
+<else>
+<tr>
+<td width="1%" nowrap><call draw_tt_help(domain,"","")></td>
+<td><call draw_label(lang.domain.editincluded.ipaddress)></td>
+<td nowrap>
+<if domain.type=="nodomain">
+<assign type_ip="shard_no_a">
+<else>
+<assign type_ip="shared">
+</if>
+<call draw_important_label(lang.domain.editincluded.ip_not_found)><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/domain/repair_ip_submit.sbm"+"&rid="+domain+"&stemplate="+template+"&ip_type="+type_ip, lang.domain.editincluded.repair)>
+</td>
+</tr>
+</if>
+</if>
+
+<assign zone = domain.getChild("dns_zone")>
+<if zone>
+<call draw_zone(zone)>
+</if>
+<assign zone = domain.getChild("3l_dns_zone")>
+<if zone>
+<call draw_zone(zone)>
+</if>
+<assign zone = domain.getChild("service_dns_zone")>
+<if zone>
+<call draw_zone(zone)>
+</if>
+<if domain.dns_zone>
+<if ((domain.type=="domain") && (account.plan.isResourceAvailable("unixuser") || domain.getChild("dns_zone"))) || (domain.type=="3ldomain") || (domain.type=="3ldomain_alias") || (domain.type=="domain_alias") || (domain.type=="parked_domain") || (domain.type=="service_domain")>
+<tr>
+<td><call draw_tt_help(domain,"user-ds_domaininfo-dnsconfig","")></td>
+<td nowrap><call draw_label(lang.domain.editincluded.dns)></td>
+<td nowrap><call draw_edit(config.CLIENT_CP_URL+"?template_name=/dns/list.html"+"&rid="+domain, lang.domain.editincluded.editdns)></td>
+</tr>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("mail_service") && (domain.type!="nodomain") && ((domain.type != "domain_alias") || domain.getChild("dns_zone"))>
+<if !domain.getChild("mail_domain_alias")>
+<tr>
+<td width="1%" nowrap><assign tmp=domain.getChild("mail_service")><if tmp><call draw_tt_help(tmp,"user-ds_domaininfo-mailservice","")><else><call draw_tt_help(domain,"user-ds_domaininfo-mailservice","")></if></td>
+<td><call draw_label(lang.domain.editincluded.mail)></td>
+<td>
+<assign mail_service=domain.getChild("mail_service")>
+<if mail_service><call disableWarn(domain, mail_service)>
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=email/list2.html&md_id="+mail_service.getChild("mail_domain")+"&domain="+domain, lang.domain.editincluded.editservices)><else><!--${domain.type}--><if domain.type!="service_domain"><call enable(domain,"mail_service")>
+<else>
+<call enable_mod(domain,"mail_service","service")>
+</if>
+</td>
+</if>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("mail_domain_alias") && (domain.type=="domain_alias") && account.plan.type != "mailonly">
+<if domain.parent.mail_service && !domain.getChild("mail_service")>
+<tr>
+<td width="1%" nowrap>
+<assign mail_domain_alias=domain.getChild("mail_domain_alias")>
+<if mail_domain_alias><call draw_tt_help(tmp,"user-ds_domaininfo-maildomainalias","")>
+<else><call draw_tt_help(domain,"user-ds_domaininfo-maildomainalias","")>
+</if>
+</td>
+<td><call draw_label(lang.domain.addmaildomainalias.alias)></td>
+<td>
+<if mail_domain_alias>
+<call disableWarn(domain, mail_domain_alias)>
+<else>
+<if domain.dns_zone>
+<call enable_mod(domain, "mail_domain_alias", "with_dns")>
+<else>
+<call enable_mod(domain, "mail_domain_alias", "")>
+</if>
+</if>
+</td>
+</tr>
+
+<if mail_domain_alias>
+<assign spf=mail_domain_alias.findChild("spf")>
+<if !config.IRIS_USER && (account.plan.areResourcesAvailable("spf") || spf)>
+<tr>
+<td width="1%" nowrap>
+<if spf>
+  <call draw_tt_help(spf,"user-mailinfo-spf","")>
+<else>
+  <call draw_tt_help(mail_domain,"user-mailinfo-spf","")>
+</if>
+</td>
+<td><call draw_label(lang.label.spf)></td>
+<td>
+<if spf>
+  <call draw_state_on(config.CLIENT_CP_URL+"?rid="+domain+"&mda="+mail_domain_alias+"&template_name=submit/misc/delete_check.sbm&hid="+mail_domain+"&did="+spf+"&stemplate="+template+"&ftemplate="+template)>
+  <call draw_edit(config.CLIENT_CP_URL+"?uid="+spf+"&rid="+domain+"&mid="+mail_domain_alias+"&processing="+spf.processing+"&name="+spf.getName()+"&rid_type=mail_domain_alias&md_id="+mail_domain+"&for_da=1&template_name=email/update_spf.html&stemplate="+template+"&ftemplate="+template, lang.email.spf.edit)>
+<else>
+  <call draw_state_off(config.CLIENT_CP_URL+"?rid="+domain+"&aid="+mail_domain_alias+"&mid="+mail_domain_alias+"&type=spf&domain_type="+domain.type+"&template_name=submit/misc/add_check.sbm&next_template=email/update_spf.html&stemplate="+template+"&ftemplate="+template)>
+</if>
+</td>
+</tr>
+</if>
+</if>
+
+</if>
+</if>
+
+<if (domain.type!="domain_alias") && (domain.type!="3ldomain_alias") && (domain.type!="parked_domain")>
+<if account.plan.isResourceAvailable("hosting")>
+<tr>
+<td width="1%" nowrap><assign tmp=domain.getChild("hosting")><if tmp><call draw_tt_help(tmp,"user-ds_domaininfo-webservice","")><else><call draw_tt_help(domain,"","")></if></td>
+<td><call draw_label(lang.domain.editincluded.webservice)></td>
+<td>
+<assign hosting=domain.getChild("hosting")><if hosting><if (hosting.server=="IIS") || (hosting.server=="zeus")><call disableWarn(domain, hosting)><else><call draw_palink(config.CLIENT_CP_URL+"?rid="+domain+"&did="+hosting+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&next_template=domain/del_content_request.html&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&hosting="+hosting+"&res_to_del=hosting", "on", lang.functions.action_disable)></if><call draw_edit(config.CLIENT_CP_URL+"?template_name="+web_template+"&rid="+hosting, lang.domain.editincluded.editservices)><else><call enable(domain,"hosting")></if></td>
+</tr>
+<if hosting>
+<if account.plan.isResourceAvailable("http_traffic")>
+<assign http_traffic = domain.getChild("http_traffic")>
+<if http_traffic>
+<assign res=http_traffic.reload>
+</if>
+<tr>
+<td width="1%" nowrap><if http_traffic><call draw_tt_help(http_traffic,"user-ds_domaininfo-httptraffic","")><else><call draw_tt_help(domain,"","")></if></td>
+<td><call draw_label(lang.domain.editincluded.transferhttp)></td>
+<td nowrap><call draw_label(toolbox.compose(lang.label.traffic.used, http_traffic.text_traffic))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, http_traffic.start_date))></td>
+</tr>
+</if>
+
+<if SESSION_PLATFORM != "win2k">
+<tr>
+<td><call draw_tt_help("","user-ds_domaininfo-htmldirname","")></td>
+<td><call draw_label(lang.domain.editincluded.htmldir)></td>
+<td nowrap><call draw_label(hosting.path)></td>
+</tr>
+</if>
+
+</if>
+</if>
+</if>
+
+
+<if (domain.type!="domain_alias") && (domain.type!="3ldomain_alias") && (domain.type!="parked_domain")>
+
+<if platform == "unix">
+<!--  Unix FTP  -->
+<if account.plan.isResourceAvailable("ftp_vhost")>
+<if ip.shared!="1"><assign ftp_vhost_available="1"><assign ftp_vhost=domain.getChild("ftp_vhost")></if>
+<tr>
+<td><if ftp_vhost><assign tt_rid=ftp_vhost><else><assign tt_rid=domain></if><call draw_tt_help(tt_rid,"user-ds_domaininfo-ftp","")></td>
+<td><call draw_label(lang.domain.editincluded.ftp)></td>
+<td>
+<if ftp_vhost_available><if ftp_vhost><call disable(domain, ftp_vhost)><call draw_edit(config.CLIENT_CP_URL+"?template_name=ftp/ftp_vhost.html&rid="+ftp_vhost+"&dtemplate="+template, lang.domain.editincluded.edit)><else><call enableWizard(domain,"ftp_vhost","ftp/ftp_vhost_add_form.html")></if><else><call draw_label(lang.domain.editincluded.ftppsw)><b><call draw_label(" ftp."+domain.name)></b></if></td>
+</tr>
+</if>
+
+<else>
+<!--  Win2k FTP  -->
+<if account.plan.isResourceAvailable("ftp_vhost_anonymous") && (ip.shared!="1")>
+<tr><assign ftp_vhost=domain.getChild("ftp_vhost_anonymous")><if ftp_vhost><assign tmp=ftp_vhost><else><assign tmp=domain></if>
+        <td   valign="top" class="control_align_center" width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+        <td><call draw_label(lang.label.ftp_anonymous)></td>
+        <td     nowrap><if ftp_vhost><call disable(domain, ftp_vhost)><call draw_edit(config.CLIENT_CP_URL+"?template_name=winftp/ftp_vhost.html&rid="+ftp_vhost+"&stemplate="+template+"&ftemplate="+template+"&dtemplate="+template, lang.domain.editincluded.edit)><else><call enableWizard(domain,"ftp_vhost_anonymous","winftp/ftp_vhost_add_form.html")></if></td>
+</tr>
+</if>
+<!-- End of platform dependent FTP block -->
+</if>
+</if>
+
+<if domain.getChild("contact_info")>
+<tr><assign ci_rid=domain.getChild("contact_info")>
+<td   valign="top" class="control_align_center" width="1%" nowrap><call draw_tt_help(ci_rid,"","")></td>
+<td   valign="middle"   ><call draw_label(lang.label.ci)></td>
+<td     nowrap>
+<call showContactInfo(ci_rid)><call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/contact_info_update.html"+"&rid="+domain+"&type=contact_info"+"&stemplate="+template, lang.domain.editincluded.editci)></td>
+</tr>    
+</if>
+
+<if domain.getChild("billing_info")>
+<tr><assign bi_rid=domain.getChild("billing_info")>
+<td   valign="top" class="control_align_center" width="1%" nowrap><call draw_tt_help(bi_rid,"","")></td>
+<td   valign="middle"   ><call draw_label(lang.label.bi)></td>
+<td     nowrap><call showContactInfo(bi_rid)><call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/contact_info_update.html"+"&rid="+domain+"&type=billing_info"+"&stemplate="+template, lang.domain.editincluded.editbi)></td>
+</tr>
+</if>
+<assign osrs = domain.getChild("opensrs")>
+<if osrs>
+<td valign="top" class="control_align_center" width="1%" nowrap><call draw_tt_help(osrs,"","")></td>
+<td valign="middle"><call draw_label(lang.label.osrs.renew_mode)></td>
+<td valign="middle">
+  <if osrs.isExpired>
+    <call draw_important_label(lang.domain.editincluded.expired)>
+  <else>
+    <call draw_renew(osrs)>
+  </if>
+</td>
+</if>
+
+<assign domain_transfer = domain.getChild("domain_transfer")>
+<if domain_transfer>
+<!-- here must be checking of expiration -->
+<td valign="top" class="control_align_center" width="1%" nowrap><call draw_tt_help(osrs,"","")></td>
+<td valign="middle"><call draw_label(lang.label.osrs.renew_mode)></td>
+<td valign="middle">
+  <if domain_transfer.isExpired>
+    <call draw_important_label(lang.domain.editincluded.expired)>
+  <else>
+    <switch domain_transfer.transfer_state>
+      <case "1">
+        <call draw_label(lang.domain.editincluded.transfer_progress)>
+        <break>
+      <case "2">
+        <call draw_renew(domain_transfer)>
+        <break>
+    </switch>
+  </if>
+</td>
+</if>
+
+<if (domain.type!="domain_alias") && (domain.type!="3ldomain_alias") && (domain.type!="parked_domain")>
+<if account.plan.isResourceAvailable("domain_alias")>
+  <tr>
+    <assign tmp=domain.getChildren("domain_alias")>
+    <td   valign="top" nowrap>
+      <if !tmp>
+        <call draw_tt_help(domain,"user-ds_domaininfo-alias","")>
+      <else>
+        <list tmp as domain_alias>
+          <call draw_tt_help(domain_alias,"user-ds_domaininfo-alias","")><br>
+        </list>
+      </if>
+    </td>
+    <td valign="middle">
+      <call draw_label(lang.domain.editincluded.aliases)>
+    </td>
+    <td>
+      <list tmp as domain_alias>
+        <if domain_alias>
+          <call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias,domain_alias.alias)><call draw_edit(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias, lang.label.click_edit)><else><call draw_label(domain_alias.alias)>
+        </if>
+          <call draw_delete(config.CLIENT_CP_URL+"?rid="+domain+"&did="+domain_alias+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&next_template=submit/domain/del_domain_alias.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.delete)><br>
+      </list>
+      <if hosting || (account.plan.type == "mailonly") || (account.plan.type == "vps")>
+        <call addNewResourceWizard(lang.domain.editincluded.addalias ,domain,domain, "domain_alias","",template, template,"domain/add_domain_alias.html")>
+      </if>
+    </td>
+  </tr>
+</if>
+</if>
+<assign tmp=domain.getChildren("3ldomain_alias")>
+<if tmp>
+<tr  >
+<td   valign="top" nowrap><if !tmp><call draw_tt_help(domain,"user-ds_domaininfo-alias","")><else><list tmp as domain_alias><call draw_tt_help(domain_alias,"user-ds_domaininfo-alias","")><br></list></if></td>
+<td valign="middle"><call draw_label(lang.domain.editincluded.thirdaliases)></td>
+<td>
+<list tmp as domain_alias>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias, domain_alias.alias)><call draw_edit(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias, lang.label.click_edit)><call draw_delete(config.CLIENT_CP_URL+"?rid="+domain+"&did="+domain_alias+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&next_template=submit/domain/del_domain_alias.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.delete)><br>
+</list>
+</td>
+</tr>
+</if>
+<if domain.type!="domain_alias">
+<tr  >
+  <td>&nbsp;</td>
+  <td   nowrap><call draw_label_bold(lang.label.adddomain)></td>
+<td><call draw_add(config.CLIENT_CP_URL+"?template_name=domain/registration.html&stemplate=domain/list.html&ftemplate="+template, lang.label.adddomain)></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./domain/edit_included.html  -->

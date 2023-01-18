@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/windomain/update_errordoc_submit.sbm  -->
+<assign result=yafv.common.s_windomain.vWinURLPath(lang.label.message_url, request.msg, request.mtype)>
+<if result.status == "OK">
+  <assign doc = account.getResource(request.uid)>
+  <assign result=doc.update(request.msg, request.mtype)>
+  <if result.status=="OK">
+    <assign success="1">
+  <else>
+    <assign res = session.addMessage(result.msg)>
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>    
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vmsg = toolbox.html_encode(request.msg)>
+    <assign vmtype = toolbox.html_encode(request.mtype)>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/windomain/update_errordoc_submit.sbm  -->

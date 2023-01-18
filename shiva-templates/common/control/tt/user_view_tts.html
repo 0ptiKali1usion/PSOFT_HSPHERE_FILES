@@ -1,0 +1,33 @@
+<!-- BEGIN ./control/tt/user_tickets.html  -->
+<include "control/tt/ttfunctions.fn">
+<call draw_tooltip()>
+<call draw_table_header("7", "")>    
+<td class="control_header_align_center"><call draw_header(lang.tt.id)></td>
+<td class="control_header_align_center"><call draw_header(lang.label.title)></td>
+<td class="control_header_align_center"><call draw_header(lang.tt.admin.created)></td>
+<td class="control_header_align_center"><call draw_header(lang.tt.admin.lastmod)></td>
+<td class="control_header_align_center"><call draw_header(lang.tt.type)></td>
+<td class="control_header_align_center"><call draw_header(lang.tt.state)></td>
+<td class="control_header_align_center"><call draw_header(lang.tt.admin.close)></td>
+</tr>
+		
+<assign size = "0">
+<assign count = "5">
+<assign tt = account.getChild("tt")>
+<!--${tt} -->
+<list tt.AccountTickets() as ttid> 
+<assign tick=tt.getTicket(ttid)>
+<if tick.type != "1">
+<tr>
+<td><call draw_label(tick.id)></td>
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=tt/user_view.html&inPanel=0&stemplate="+template+"&ttid="+tick.id, tick.title)></td>
+<td><call draw_label(tick.created)></td>
+<td><call draw_label(tick.lastmod)></td>
+<td><call draw_label(tick.rDesc)></td>
+<td><call show_ticket_state(tick.state)></td>
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/user_close.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+tick.id, lang.tt.admin.close)></td>
+</tr>
+</if>
+</list>
+<call draw_table_footer()>
+<!-- END ./control/tt/user_tickets.html  -->

@@ -1,0 +1,99 @@
+<!-- BEGIN ./commont/control/admin/merchant/WorldPay.html -->
+<call draw_tooltip()>
+<yafv s_admin>
+<assign mm=account.getChild("merchant_manager")>
+
+<if mm>
+<call draw_table_header("2", lang.admin.worldpay.header)>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/AddIP.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="gateway" value="WorldPay">
+
+<tr >
+  <td><call draw_label(lang.admin.worldpay.ips)></td>
+  <td>
+  <assign ips = mm.getAllowedIPsList("WorldPay")>
+  <list ips as ip>
+  <call draw_label(ip)>
+  <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/RemIP.sbm&ip="+ip+"&gateway=WorldPay&stemplate="+template+"&ftemplate="+template, lang.admin.plans.del)>
+  <br>
+  </list>
+  <input type="text" name="newip" value="" check="vAllowedIpAddr">
+  <input type="submit" value="${lang.button.add}">
+  </td>
+</tr>
+</form>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/WorldPay.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+<tr >
+  <td><call draw_label(lang.admin.worldpay.instid)></td>
+  <td><input type="text" name="installationId" value = "${settings.WorldPay_INSTALLATION_ID}"></td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.admin.worldpay.accid)></td>
+  <td><input type="text" name="accountId" value = "${settings.WorldPay_ACCOUNT_ID}"></td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.admin.worldpay.currency)></td>
+  <td>
+    <select name="currencyCode">
+      <call buildCurrencies(settings.WorldPay_CURRENCY)>
+    </select>
+  </td>
+</tr>
+
+<tr >
+  <td>
+    <call draw_label(lang.admin.worldpay.usecustom)>
+  </td>
+  <td>
+    <if settings.WorldPay_USE_CUSTOM_PAGE=="1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+    <input type="checkbox" name="useCustomResultPage" ${vchecked}>
+  </td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.admin.worldpay.pagename)><br>
+<call draw_important_label(lang.admin.worldpay.warn)>
+</td>
+  <td><input type="text" name="pageName" value = "${settings.WorldPay_CUSTOM_PAGE_NAME}"></td>
+</tr>
+
+<tr >
+  <td>
+    <call draw_label(lang.admin.worldpay.test)><br>
+    <call draw_important_label(lang.admin.worldpay.test_text)>
+  </td>
+  <if settings.WorldPay_TEST_MODE == "0"><assign val_0 = "SELECTED"></if>
+  <if settings.WorldPay_TEST_MODE == "100"><assign val_100 = "SELECTED"></if>
+  <if settings.WorldPay_TEST_MODE == "101"><assign val_101 = "SELECTED"></if>
+  <td>
+    <select name="test_mode">
+        <option value="0" ${val_0}>0</option>
+        <option value="100" ${val_100}>100</option>
+        <option value="101" ${val_101}>101</option>
+    </select>
+  </td>
+</tr>
+
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit"></td></tr>
+</form>
+
+<call draw_table_footer()>
+
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/WorldPay.html -->

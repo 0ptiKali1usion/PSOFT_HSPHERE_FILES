@@ -1,0 +1,28 @@
+<!-- BEGIN ./ftp/add_vuser_submit.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_ftp.vUsername(lang.label.username, request.login),
+    yafv.common.s_ftp.vPassword1(lang.label.password, request.password, request.login),
+    yafv.common.s_ftp.vPassword2(lang.label.password2, request.password, request.password2)
+    )>
+<if result.status=="OK">
+    <assign ftp = account.getResource(request.rid)>
+    <assign result=ftp.addChild("ftp_vhost_user","",request.login,request.password)>
+    <if result.status=="OK">
+  	<assign success="1">
+        <assign res=session.addMessage(toolbox.compose(
+        	lang.msg.name_res_added, lang.label.user, request.login))>
+    <else>
+       <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg>
+	<assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vlogin=toolbox.html_encode(request.login)>
+    <include request.ftemplate>
+</if>
+<!--  END ./ftp/add_vuser_submit.sbm  -->

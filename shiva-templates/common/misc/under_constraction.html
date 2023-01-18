@@ -1,0 +1,11 @@
+<!-- BEGIN ./design/under_constraction.html  -->
+<assign template="misc/under_constraction.html">
+<include "functions">
+<if request.item!="">
+<call draw_menu(request.item)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/misc/under_constraction.html">
+<call bottom()>
+<!--  END .misc/under_constraction.html  -->

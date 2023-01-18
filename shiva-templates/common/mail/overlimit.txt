@@ -1,0 +1,12 @@
+${lang.massmail.overlimit_header(account.ci.first_name, account.ci.last_name)}
+
+<if suspend>${lang.massmail.overlimit_inf_susp}<else>${lang.massmail.overlimit_inf_appr}</if>
+${lang.massmail.overlimit_login(account.login)}
+${lang.massmail.overlimit_account(account.id.id)}
+${lang.massmail.overlimit_plan(account.plan.description)}
+
+<if suspend>${lang.massmail.overlimit_res_susp}<else>${lang.massmail.overlimit_res_appr}</if>
+<list over_limit_res as res>${res.info}
+</list>
+${lang.massmail.overlimit_support}
+${settings.support}

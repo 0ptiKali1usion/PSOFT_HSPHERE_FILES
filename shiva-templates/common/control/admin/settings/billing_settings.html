@@ -1,0 +1,71 @@
+<!-- BEGIN ./control/admin/settings/billing_settings.html  -->
+<call draw_tooltip()>
+
+<assign admin=account.getChild("admin")>
+<if admin>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/billing_settings.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("2", lang.admin.settings.billing)>
+
+<assign vbilling_mode=settings.billing_mode>
+<if !vbilling_mode || vbilling_mode=="credit_limit">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td><call draw_label(lang.admin.settings.billing.credit_limit)></td>
+<td><input type="radio" name="billing_mode" value="credit_limit" ${vchecked}></td>
+</tr>
+<if vbilling_mode=="anniversary">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td><call draw_label(lang.admin.settings.billing.anniversary)></td>
+<td><input type="radio" name="billing_mode" value="anniversary" ${vchecked}></td>
+</tr>
+
+<tr>
+  <td colspan="2" class="control_header"><call draw_header(lang.admin.settings.billing.no_charge_header)></td>
+</tr>
+<assign vsend_no_charge=settings.send_no_charge>
+<if vsend_no_charge=="billing_period">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td><call draw_label(lang.admin.settings.billing.no_charge_bp)></td>
+<td><input type="radio" name="send_no_charge" value="billing_period" ${vchecked}></td>
+</tr>
+<if vsend_no_charge=="month">
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td><call draw_label(lang.admin.settings.billing.no_charge_month)></td>
+<td><input type="radio" name="send_no_charge" value="month" ${vchecked}></td>
+</tr>
+<if !vsend_no_charge>
+  <assign vchecked="CHECKED">
+<else>
+  <assign vchecked="">
+</if>
+<tr>
+<td><call draw_label(lang.admin.settings.billing.no_charge_not)></td>
+<td><input type="radio" name="send_no_charge" value="" ${vchecked}></td>
+</tr>
+<tr>
+<td class="control_align_center" colspan="2"><input type="submit" name="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</if>
+
+<!--  END ./control/admin/settings/billing_settings.html  -->

@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/unixuser/add_antispams.sbm  -->
+
+<assign result=account.addAntiSpamResources(request.range)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_created, lang.label.antispams, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_create, lang.label.antispams, ""))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/unixuser/add_antispams.sbm  -->

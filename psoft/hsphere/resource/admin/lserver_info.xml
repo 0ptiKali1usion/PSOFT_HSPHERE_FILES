@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<lserver_info_types>
+    <lserver_info_type id="1" class="psoft.hsphere.resource.admin.lservers.WebServerInfo"/>
+    <lserver_info_type id="2" class="psoft.hsphere.resource.admin.lservers.NameServerInfo"/>
+    <lserver_info_type id="3" class="psoft.hsphere.resource.admin.lservers.MailServerInfo"/>
+    <lserver_info_type id="4" class="psoft.hsphere.resource.admin.lservers.MysqlServerInfo"/>
+    <lserver_info_type id="5" class="psoft.hsphere.resource.admin.lservers.WinServerInfo"/>
+    <lserver_info_type id="6" class="psoft.hsphere.resource.admin.lservers.RealServerInfo"/>
+    <lserver_info_type id="7" class="psoft.hsphere.resource.admin.lservers.WinRealServerInfo"/>
+    <lserver_info_type id="10" class="psoft.hsphere.resource.admin.lservers.CPServerInfo"/>
+    <lserver_info_type id="12" class="psoft.hsphere.resource.admin.lservers.VPSServerInfo"/>
+    <lserver_info_type id="15" class="psoft.hsphere.resource.admin.lservers.MSSQLServerInfo"/>
+    <lserver_info_type id="18" class="psoft.hsphere.resource.admin.lservers.PGSQLServerInfo"/>
+    <lserver_info_type id="25" class="psoft.hsphere.resource.admin.lservers.MrtgLServerInfo"/>
+</lserver_info_types>
+

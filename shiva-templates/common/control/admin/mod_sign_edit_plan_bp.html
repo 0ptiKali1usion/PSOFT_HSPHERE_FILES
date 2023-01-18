@@ -1,0 +1,68 @@
+<!-- BEGIN ./admin/mod_sign_edit_ci.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<if admin>
+<assign new_plan = request.plan>
+
+<list signup.getFakeRequest(request.rid) as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+<if pair.name=="seller_id"><assign sellerId = pair.value></if>
+</list>
+
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign tmpOther = tmpAcc.other>
+<assign bi = tmpAcc.bi>
+<assign ci = tmpAcc.ci>
+
+<call draw_tooltip()>
+
+
+<assign pSize = tmpAcc.plan.values["_PERIOD_SIZE_"+bpId]>
+<assign pType = tmpAcc.plan.values["_PERIOD_TYPE_"+bpId]>
+
+<form action="${config.CLIENT_CP_URL}" name="f_plan_view" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_plan.sbm">
+<input type="hidden" name="stemplate" value="admin/mod_sign_view.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="new_plan" value="${new_plan}">
+<input type="hidden" name="login" value="${request.login}">
+
+
+
+
+
+<call draw_table_header("2", lang.search.userinfo.header(account.ci.first_name+" "+ci.last_name, account.getPlan(request.plan).description))>
+
+<tr>
+  <td    nowrap><call draw_label(lang.label.new_plan)></td>
+  <td    nowrap>
+	<assign tmp_plan = account.getPlan(request.plan)>
+	<call draw_label(tmp_plan.description)>
+  </td>
+</tr>
+
+<tr>
+  <td    nowrap><call draw_label(lang.label.period)></td>
+  <td     nowrap>
+    <select name="new_bp">
+    <list signup.getPlanBPList(new_plan) as pair1>
+      <if (pair1.p_name == pType) && (pair1.p_size == pSize)>
+        <option value="${pair1.p_count}" SELECTED>${pair1.p_size}&nbsp;${pair1.p_name}</option>
+      <else>
+        <option value="${pair1.p_count}">${pair1.p_size}&nbsp;${pair1.p_name}</option>
+      </if>
+    </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td  class="control_align_center" colspan="2" nowrap>
+    <input type="submit" value="${lang.button.save}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>

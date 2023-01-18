@@ -1,0 +1,10 @@
+<!-- BEGIN ./submit/mnogosearch/remove_url.sbm  -->
+<assign mnogosearch=account.getResource(request.uid)>
+<assign result=mnogosearch.removeURL(request.url)>
+<if result.status=="OK">
+   <include request.stemplate>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./submit/mnogosearch/remove_url.sbm  -->

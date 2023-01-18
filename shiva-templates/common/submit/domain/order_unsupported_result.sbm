@@ -1,0 +1,29 @@
+<!-- BEGIN ./domain/order_unsupported_result.html  -->
+<assign result=yafv.common.s_domain.vTransferDomainName(lang.label.domain,request.domain)>
+<if result.status=="OK">
+ <assign domainManager = account.getChild("unixuser")>
+ <if domainManager>
+  <assign domain = domainManager.addChild("domain", "", request.domain)>
+ <else>
+  <assign domain = account.addChild("domain", "", request.domain)>
+ </if>
+ <if domain.status == "OK">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added, lang.label.domain, request.domain))>
+    <assign res=domain.sendNotification()>
+    <assign success="1">
+ <else>
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add, lang.label.domain, request.domain))>
+    <assign res=session.addMessage(domain.msg)>
+ </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign name = request.domain>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/order_unsupported_result.html  -->

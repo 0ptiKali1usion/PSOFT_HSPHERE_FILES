@@ -1,0 +1,102 @@
+<!-- BEGIN ./quick/quick_view.html  -->
+<include "control/quick/quick.fn">
+<assign res_su=account.getChild("reseller_su")>
+
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.statistics)>
+
+<tr>
+<td width="40%" height="7">
+  <if settings.cp_agent><assign cp_d = settings.cp_agent><else><assign cp_d = "H-SPHERE"></if>
+  <span title="${versionNumber}"><call draw_label(lang.admin.sysinfo.hsversion_comb(cp_d, version))></span>
+</td>
+<td rowspan="2">
+<if admin>
+  <if res_su>
+    <assign used_accounts = res_su.system_info.total_accounts>
+    <assign licensed_accounts = license["ACCOUNTS"]>
+    <if !licensed_accounts>
+      <assign licensed_accounts = "--">
+      <assign accounts_left = toolbox.sub("0", used_accounts)>
+    <else>
+      <assign accounts_left = toolbox.sub(licensed_accounts, used_accounts)>
+    </if>
+    <assign license_type = license["LICENSE"]>
+  <else>
+    <assign used_accounts = admin.system_info.accounts>
+  </if>
+  <table class="inner_control">
+  <if res_su>
+  <tr>
+    <td width="80%"><call draw_label_bold(lang.admin.quick.lic_accts)></td>
+    <td><call draw_label(licensed_accounts)></td>
+  </tr>
+  </if>
+  <tr>
+    <td width="80%"><call draw_label_bold(lang.admin.quick.used_accts)></td>
+    <td><call draw_label(used_accounts)></td>
+  </tr>
+  <tr>
+    <td width="80%"><call draw_label_bold(lang.admin.sysinfo.moderated)></td>
+    <td><call draw_label(admin.system_info.moderated_users)></td>
+  </tr>
+  <if res_su>
+  <if toolbox.lt(accounts_left, "0") == "1" && (licensed_accounts != "UNLIMITED")>
+    <tr>
+      <td width="80%"><call draw_label_bold(lang.admin.quick.beyond_accts)></td>
+      <td><call draw_important_label(toolbox.sub("0",accounts_left))></td>
+    </tr>
+  <else>
+    <tr>
+      <td width="80%"><call draw_label_bold(lang.admin.quick.left_accts)></td>
+      <td><if licensed_accounts == "UNLIMITED"><call draw_label(licensed_accounts)><else><call draw_label(accounts_left)></if></td>
+    </tr>
+  </if>
+
+  <if toolbox.gt(licensed_accounts, "0") == "1">
+    <assign tmp = toolbox.div(toolbox.mul(used_accounts, "100"), licensed_accounts)>
+    <if (toolbox.gt(tmp,"90")=="1") && (toolbox.le(used_accounts, licensed_accounts)=="1")>
+      <tr><td colspan="2"><call draw_important_label(lang.admin.quick.warn)></td></tr>
+    </if>
+  </if>
+
+  <if license.valid == "0">
+    <tr>
+      <td colspan="3"><call draw_important_label(lang.admin.quick.sw_buy_license)></td>
+    </tr>
+  <else><if (licensed_accounts != "UNLIMITED") && (toolbox.gt(used_accounts, licensed_accounts)=="1")>
+    <tr>
+      <td colspan="3"><call draw_important_label(lang.admin.quick.serious_warn)></td>
+    </tr>
+  </if></if>
+  </if>
+  </table>
+<else>
+  &nbsp;
+</if>
+</td>
+</tr>
+<tr>
+<td valign="top">
+  <call draw_label_bold(lang.label.plan)>&nbsp;<call draw_label(account.plan.description)><call draw_help("user-ai_quick-plan","")><br>
+  <call draw_label_bold(lang.quick.quickview.user)>&nbsp;<call draw_label(user.login)><call draw_help("user-ai_quick-username","")>
+</td>
+</tr>
+
+
+<call draw_table_footer()>
+<br>
+<br>
+<call draw_table_header("", lang.label.qa)>
+
+<tr>
+  <td width="100%" style="padding:5">
+    <call draw_icon_table()>
+  </td>
+</tr>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/quick_view.html  -->

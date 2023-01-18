@@ -1,0 +1,4 @@
+<compress><assign viewer=account.getChild("reportviewer")><if request.arid><assign report = viewer.getAdvReportById(request.arid)></if></compress>Id,Title,Created,"Last Mod",Type,Assigned
+<assign entries = report.all()><list entries as entry>${entry.id},${toolbox.csv_escape(entry.title)},${toolbox.csv_escape(entry.created)},${toolbox.csv_escape(entry.modified)},<if entry.type == "0">P<else>I</if>,${toolbox.csv_escape(entry.assigned)}
+</list>
+

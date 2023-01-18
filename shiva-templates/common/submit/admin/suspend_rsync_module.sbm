@@ -1,0 +1,21 @@
+<!-- BEGIN ./common/submit/admin/suspend_rsync_module.sbm -->
+<assign reseller_su=account.getChild("reseller_su")>
+<assign module = reseller_su.getContentMoveItem(request.cmi_id)>
+<if module.status == "OK"> 
+    <assign result=module.suspendMove()>
+    <if result.status != "OK">
+	<assign failure="1">
+	<assign res=session.addMessage(lang.msg.contentmove.failed_suspend_module)>
+    <else>
+        <assign res=session.addMessage(lang.msg.contentmove.module_suspended)>
+    </if>
+<else>
+    <assign failure="1">
+    <assign res=session.addMessage(lang.msg.contentmove.failed_load_module)>
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./common/submit/admin/suspend_rsync_module.sbm -->

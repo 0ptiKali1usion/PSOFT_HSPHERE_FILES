@@ -1,0 +1,12 @@
+<!-- BEGIN ./ftp/del_vdir_perm_submit.sbm  -->
+<assign vdir = account.getResource(request.uid)>
+<assign result = vdir.delUser(request.user_rid)>
+<if result.status=="OK">
+  <assign res=session.addMessage(lang.msg.ftp_permissions_deleted)>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(lang.msg.ftp_permissions_failed_delete)>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./ftp/del_vdir_perm_submit.sbm  -->

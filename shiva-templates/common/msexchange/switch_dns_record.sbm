@@ -1,0 +1,17 @@
+<!-- BEGIN: ./msexchange/switch_dns_record.sbm -->
+<assign domain=account.getResource(request.rid)>
+<assign result = domain.switchDNSRecords(request.state)>
+<if result.status=="OK">
+	<if request.state=="ON">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added,lang.dns.mx_record,""))>
+	<else>
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_deleted,lang.dns.mx_record,""))>
+	</if>
+            <assign success="1">
+<else>
+            <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/switch_dns_record.sbm -->

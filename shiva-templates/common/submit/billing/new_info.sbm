@@ -1,0 +1,101 @@
+<!-- BEGIN ./billing/new_info.sbm  -->
+<assign check=yafv.checkall(
+    yafv.common.s_billing.vSinglename(lang.label.first_name,request["_bi_first_name"]),
+    yafv.common.s_billing.vSinglename(lang.label.last_name,request["_bi_last_name"]),
+    yafv.common.s_billing.vOrganization(lang.label.company,request["_bi_company"]),
+    yafv.common.s_billing.vAddress(lang.label.address,request["_bi_address1"]),
+    yafv.common.s_billing.vCity(lang.label.city,request["_bi_city"]),
+    yafv.common.s_billing.vState(lang.label.state,request["_bi_state"]),
+    yafv.common.s_billing.vStateOther(lang.label.state_other,request["_bi_state2"]),
+    yafv.common.s_billing.vPostal_Code(lang.label.postal_code,request["_bi_postal_code"]),
+    yafv.common.s_billing.vCountry(lang.label.country,request["_bi_country"]),
+    yafv.common.s_billing.vPhone(lang.label.phone,request["_bi_phone"]),
+    yafv.common.s_billing.vEmail(lang.label.email,request["_bi_email"]),
+    yafv.common.s_billing.vExemptionCode(lang.bci.exemption_code, request["_bi_exemption_code"])
+)>
+<if check.status!="OK">
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign fail="1">
+</if>
+
+<if request["bi_type"]=="CC">
+  <if request["_bi_cc_type"]=="">
+    <assign fail="1">
+    <assign res=session.addMessage(lang.signup.payinfo.paytype_warn)>
+  </if>
+</if>
+
+<if (request.type=="CC") && (fail=="")>
+  <if toolbox.SignupGuardParams("CVV_VALIDATION")>
+  <assign check=yafv.checkall(
+    yafv.common.s_billing.vcc_name(lang.cc.name,request["_bi_cc_name"]),
+    yafv.common.s_billing.vCCNumber(lang.cc.number, request["_bi_cc_number"],request["_bi_cc_type"]),
+    yafv.common.s_billing.vcc_month(lang.cc.month,request["_bi_cc_exp_month"]),
+    yafv.common.s_billing.vcc_year(lang.cc.year,request["_bi_cc_exp_year"]),
+    yafv.common.s_billing.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"]),
+    yafv.common.s_billing.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"]),
+    yafv.common.s_billing.vCardCvvNum(lang.signup.card_cvv, request["_bi_cc_cvv"], request["_bi_cc_type"])
+  )>
+  <else>
+  <assign check=yafv.checkall(
+    yafv.common.s_billing.vcc_name(lang.cc.name,request["_bi_cc_name"]),
+    yafv.common.s_billing.vCCNumber(lang.cc.number, request["_bi_cc_number"],request["_bi_cc_type"]),
+    yafv.common.s_billing.vcc_month(lang.cc.month,request["_bi_cc_exp_month"]),
+    yafv.common.s_billing.vcc_year(lang.cc.year,request["_bi_cc_exp_year"]),
+    yafv.common.s_billing.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"]),
+    yafv.common.s_billing.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"])
+  )>
+  </if>
+  <if check.status!="OK">
+    <assign fail="1">
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if !fail>
+    <assign result=account.changeBI()>
+    <if result.status=="OK">
+      <if request["_bi_exemption_code"]>
+        <assign result = account.updateExemptionCode(request["_bi_exemption_code"], request.suspend)>
+        <if result.status != "OK">
+          <assign res = session.addMessage(result.msg)>
+          <assign fail = "1">
+        </if>
+      </if>
+    <else>
+      <assign res=session.addMessage(result.msg)>	
+      <assign fail="1">
+    </if>
+</if>
+
+<if !fail>
+  <if account.suspended>
+    <include "suspended/suspended.html">
+  <else>
+    <include request.stemplate>
+  </if>
+<else>
+    <assign first_name	   = toolbox.html_encode(request["_bi_first_name"])>
+    <assign last_name	   = toolbox.html_encode(request["_bi_last_name"])>
+    <assign company	   = toolbox.html_encode(request["_bi_company"])>
+    <assign address1	   = toolbox.html_encode(request["_bi_address1"])>
+    <assign address2	   = toolbox.html_encode(request["_bi_address2"])>
+    <assign city	   = toolbox.html_encode(request["_bi_city"])>
+    <assign state	   = request["_bi_state"]>
+    <assign state2         = request["_bi_state2"]>
+    <assign postal_code    = toolbox.html_encode(request["_bi_postal_code"])>
+    <assign country	   = request["_bi_country"]>
+    <assign phone	   = toolbox.html_encode(request["_bi_phone"])>
+    <assign email	   = toolbox.html_encode(request["_bi_email"])>
+    <assign exemption_code = toolbox.html_encode(request["_bi_exemption_code"])>
+    <assign bi_cc_type	   = toolbox.html_encode(request["_bi_cc_type"])>
+    <assign bi_cc_name	   = toolbox.html_encode(request["_bi_cc_name"])>
+    <assign bi_cc_number   = toolbox.html_encode(request["_bi_cc_number"])>
+    <assign bi_cc_exp_month= toolbox.html_encode(request["_bi_cc_exp_month"])>
+    <assign bi_cc_exp_year = toolbox.html_encode(request["_bi_cc_exp_year"])>
+    <assign vbi_cc_issue_no = toolbox.html_encode(request["_bi_cc_issue_no"])>
+    <assign vbi_cc_start_month = toolbox.html_encode(request["_bi_cc_start_month"])>
+    <assign vbi_cc_start_year = toolbox.html_encode(request["_bi_cc_start_year"])>
+    <include request.ftemplate>
+</if>
+<!--  END ./billing/new_info.sbm  -->

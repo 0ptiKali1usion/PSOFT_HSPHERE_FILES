@@ -1,0 +1,53 @@
+<!-- BEGIN ./adnsmanager/cp_ssl_edit_submit.sbm  -->
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign eeman = account.getChild("eeman")>
+  <assign alias_name = eeman.cp_host()>
+<else>
+  <assign eeman = account.getChild("reseller_eeman")>
+  <assign aliases = eeman.aliases>
+  <list aliases as alias>
+    <if alias.l_server.type=="10">
+      <assign alias_name = alias.name>
+    </if>
+  </list>
+</if>
+
+<assign res_ssl = eeman.getResellerSSL(eeman.isSSLEnabled)>
+
+<assign success="0">
+<assign failed="0">
+<switch request.type>
+<case "key"><assign result = res_ssl.installCertificate(request.file, request.key)><break>
+<case "cert"><assign result = res_ssl.installCertFile(request.file)><break>
+<case "ca_cert"><assign result = res_ssl.installCertFile(request.file)><break>
+
+<!--new options -->
+<case "cert_only"><assign result=res_ssl.installCertificateOnly(request.file)><break>
+<case "rev"><assign result=res_ssl.installRevFile(request.file)><break>
+<case "u_rev"><assign result=res_ssl.removeRevFile()><break>
+<case "u_cert"><assign result=res_ssl.removeCertFile()><break>
+<case "chain"><assign result=res_ssl.installChainFile(request.file)><break>
+<case "u_chain"><assign result=res_ssl.removeChainFile()><break>
+<!--end of new options -->
+</switch>
+<if result.status == "OK">
+  <assign success="1">
+<else>
+  <assign failed="1">
+  <assign res = session.addMessage(result.msg)>
+</if>
+
+<if success=="1">
+    <if failed=="0">
+        <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.ssl_support, ""))>
+    <else>
+        <assign res=session.addMessage(lang.msg.ssl_added_incompletely)>
+    </if>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/cp_ssl_edit_submit.sbm  -->

@@ -1,0 +1,54 @@
+<!-- BEGIN ./quick/control/choice_mysql.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign platform_type = unixuser.host.platform_type>
+
+<assign mysql=account.getChild("MySQL")>
+<call draw_tooltip()>
+
+<if mysql>
+<call draw_table_header("2", lang.quick.quickview.mysql)>
+
+<assign host=mysql.host>
+<tr>
+<td><call draw_label(lang.label.hostname)></td>
+<td><call draw_label(host.name+" ("+toolbox.int2ext(mysql.host.ip)+")")></td>
+</tr>
+<tr>
+<td><call draw_label(lang.mysql.dbs.port)></td>
+<td><call draw_label(lang.mysql.dbs.portnum)></td>
+</tr>
+<call draw_table_footer()>
+</if>
+&nbsp;
+<call draw_table_header("4", lang.mysql.dbs.header)>
+<assign databases=mysql.getChildren("MySQLDatabase")>
+<tr>
+    <td width="1%" class="control_header_align_center">&nbsp;</td>
+    <td  class="control_header"><call draw_header(lang.mysql.dbname)></td>
+    <td  class="control_header"><call draw_header(lang.mysql.dbs.dbdescr)></td>
+    <td   width="1%" class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<list databases as database>
+<tr>
+    <td  class="control_align_center" ><call draw_tt_link(database,"")></td>
+    <td><call draw_link(config.CLIENT_CP_URL+"?template_name=MySQL/adm_database2.html"+"&db_id="+database,database.db_name)></td>
+    <td><call draw_label(database.db_description)></td>
+    <td  NOWRAP>
+    <call draw_edit(config.CLIENT_CP_URL+"?template_name=MySQL/adm_database2.html"+"&db_id="+database+"&dtemplate="+dtemplate, lang.mysql.dbs.edit)>
+    <if database.locked_by == "">
+<call disableNewWarn(mysql,database)>
+    <else>
+        <call draw_label("("+lang.mysql.already_locked_by+" "+toolbox.getResourceDescription(database.locked_by.type_id)+")")>
+    </if>
+</td>
+</tr>
+</list>
+
+<tr >
+<td colspan="4" class="control_align_center"><call draw_label_bold(lang.label.adddb)><call draw_add(config.CLIENT_CP_URL+"?template_name=MySQL/mysql-db-wiz-step1.html&stemplate="+template+"&ftemplate="+template+"&dtemplate="+dtemplate, lang.label.adddb)></td>
+</tr>
+<call draw_table_footer()>
+
+<!-- END ./quick/control/choice_mysql.html  -->

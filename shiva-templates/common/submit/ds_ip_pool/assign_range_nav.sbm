@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/ds_pool/assign_range_nav.sbm-->
+<if !request.ds_id>
+   <assign missconfig="1">
+   <assign next_template="ds_ip_pool/ar_pick_ds.html">
+</if>
+<if !missconfig && !request.subnet_id>
+   <assign missconfig="1">
+   <assign next_template="ds_ip_pool/ar_pick_subnet.html">
+</if>
+<if !missconfig && !request.range_id>
+   <assign missconfig="1">
+   <assign next_template="ds_ip_pool/ar_pick_range.html">
+</if>
+<if !missconfig && !request.ipr_usageinfo>
+   <assign missconfig="1">
+   <assign next_template="ds_ip_pool/ar_range_usageinfo.html">
+</if>
+<if missconfig>
+   <include next_template>
+<else>
+   <include "submit/ds_ip_pool/assign_range.sbm">
+</if>
+<!-- END ./submit/ds_ip_pool/assign_range_nav.sbm  -->

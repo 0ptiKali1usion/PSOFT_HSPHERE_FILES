@@ -1,0 +1,28 @@
+<!-- BEGIN ./control/ds_ip_pool/split_range.html -->
+<call draw_tooltip()>
+<yafv s_admin>
+<assign ips = obj.subnet_manager.getSubnet(request.subnet_id)>
+<assign range = ips.getRange(request.range_id)>
+<call draw_table_header("3", lang.ds.pool.range.split.header)>
+<form action="${config.CLIENT_CP_URL}" name="f_add_ip" method="POST" check! accept-charset="UTF-8">
+  <input type="hidden" name="template_name" value="submit/ds_ip_pool/split_range.sbm">
+  <input type="hidden" name="subnet_id" value="${request.subnet_id}">
+  <input type="hidden" name="range_id" value="${request.range_id}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="ds_ip_pool/edit_subnet.html">
+ <td><call draw_label(lang.ds.pool.start_ip)></td>
+ <td><call draw_label(lang.ds.pool.range.split.right_limit)>
+ <td><call draw_label(lang.ds.pool.end_ip)></td>
+</tr>
+
+<tr>
+ <td><call draw_label(range.start_ip)></td>
+ <td><input type="text" name="limit" size="15" maxlength="15" check="vIPAddr"></td>
+ <td><call draw_label(range.end_ip)></td>
+</tr>
+<tr>
+ <td colspan="3" class="control_align_right"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+<!-- END ./control/ds_ip_pool/edit_subnet.html -->

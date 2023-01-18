@@ -1,0 +1,51 @@
+<!-- BEGIN ./common/tags -->
+<function ltag_domain(domain)><if domain.type=="domain_alias"><call draw_label(lang.domain.editincluded.domainaliasname)><else><call draw_label(lang.label.dname)></if></function>
+
+<function tag_domain(domain)><call draw_label(domain.name)><call disableNWJump(domain.parent, domain,"domain/list.html")><if !isMailOnly><call draw_preview("http://"+domain.name, lang.domain.editincluded.opensite)></if></function>
+
+<function tag_subdomains_tt_help(tmp)><if !tmp><call draw_tt_help(domain,"user-ds_domaininfo-subdomain","")><else><list tmp as subdomain><call draw_tt_help(subdomain,"user-ds_domaininfo-subdomain","")><br></list></if></functon>
+</function>
+
+<function tag_subdomains(tmp)>
+<list tmp as subdomain><call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+subdomain,subdomain.name)><call disableNew(domain,subdomain)><call draw_edit(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+subdomain, lang.domain.editincluded.editsettings)><if !isMailOnly><call draw_preview("http://"+subdomain.name, lang.domain.editincluded.opensite)></if><br></list><call addNewWizard(domain,"subdomain","domain/new_subdomain.html", lang.domain.editincluded.create)>
+</function>
+
+<function tag_domain_aliases(tmp)>
+<list tmp as domain_alias>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias, domain_alias.alias)><call draw_edit(config.CLIENT_CP_URL+"?template_name="+edit_template+"&rid="+domain_alias, lang.label.click_edit)><call draw_delete(config.CLIENT_CP_URL+"?rid="+domain+"&did="+domain_alias+"&stemplate="+template+"&ftemplate="+ftemplate+"&template_name=submit/misc/delete_check.sbm&next_template=submit/domain/del_domain_alias.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.delete)><br>
+</list>
+</function>
+
+<function bodyHeader(str, span)>
+<table width="70%" border="0" cellspacing="0" cellpadding="0" align="CENTER" bgcolor="${design.color("border_color")}">
+<tr><td>
+<table width="100%" border="0" cellspacing="1" cellpadding="3" align="CENTER">
+<tr>
+<td colspan="${span}" class="control_header"><call draw_header(str)></td></tr>
+</function>
+
+<function bodyTail()></table></td></tr></table></function>
+
+<function setFormTCustValues(tn, ft, st)>
+<input type="hidden" name="template_name" value="${tn}">
+<input type="hidden" name="ftemplate" value="${ft}">
+<input type="hidden" name="stemplate" value="${st}">
+</function>
+
+<function setFormTValues(tn)><call setFormTCustValues(tn, template, template)></function>
+
+<function startRow()><tr><td bgcolor="${LIGHT_STRIP}"></function>
+<function endRow()></td></tr></function>
+<function nextCell()></td><td bgcolor="${LIGHT_STRIP}"></function>
+<function startRowC(span, align)><tr><td bgcolor="${LIGHT_STRIP}" colspan="${span}" align="${align}"></function>
+
+<function dateField(form, field)><nowrap><input type="text" name="${field}" size="10" value="">&nbsp;<call draw_calendar(form, field, "")></function>
+
+<function transmit_params(p__prefix)><compress>
+<list params as t__param>
+ <if t__param.name && (toolbox.startsWith(t__param.name, p__prefix) == "1")>
+   <input type="hidden" name="${t__param["name"]}" value="${t__param["value"]}">
+ </if>
+</list>
+</compress></function>
+<!-- END ./common/tags -->

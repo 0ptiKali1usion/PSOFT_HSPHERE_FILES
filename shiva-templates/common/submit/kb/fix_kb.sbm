@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/fix_kb.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.reindex(request.id)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success re-indexing KnowledgeBase"+result.name>
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/fix_kb.sbm -->

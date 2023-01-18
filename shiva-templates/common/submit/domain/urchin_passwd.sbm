@@ -1,0 +1,24 @@
+<!-- BEGIN ./domain/urchin_passwd.html  -->
+<assign result=yafv.checkall(
+    yafv.common.s_unixuser.vPassword(lang.label.password, request.password1),
+    yafv.common.s_unixuser.vPassword2(lang.label.password2,
+			request.password1, request.password2) )>
+<if result.status == "OK">
+   <assign hosting = account.getResource(request.rid)>
+   <assign urchin4 = hosting.findChild("urchin4")>
+   <assign result=urchin4.changePassword(request.password1)>
+   <if result.status=="OK">
+      <assign success="1">
+      <assign res=session.addMessage(lang.label.urchin_passwd.changed)>
+   <else>
+      <assign res=session.addMessage(result.msg)>
+   </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+<!--  END ./urchin/urchin_passwd.html  -->

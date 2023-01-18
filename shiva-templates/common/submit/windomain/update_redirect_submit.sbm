@@ -1,0 +1,40 @@
+<!-- BEGIN ./windomain/update_redirect_submit.html  -->
+<assign result=yafv.checkall(
+  yafv.common.s_windomain.vOldURL(lang.domain.addredirect.from,request.url_path),
+  yafv.common.s_windomain.vNewURL(lang.domain.addredirect.to,request.url,request.belowval) )>
+
+<if request.exacturl=="exact_on"><assign vexacturl="exact_on"><else><assign vexacturl="exact_off"></if>
+<if request.belowval=="below_on"><assign vbelowdir="below_on"><else><assign vbelowdir="below_off"></if>
+<if request.permanent=="perm_on"><assign vpermanent="perm_on"><else><assign vpermanent="perm_off"></if>
+
+<if result.status=="OK">
+
+    <assign hosting = account.getResource( request.rid )>
+    <assign redirect=account.getResource(request.uid)>
+    
+    <if request.url_path>
+	<assign result=redirect.update(vexacturl,vbelowdir,vpermanent,request.url_path,request.url, request.protocol)>
+    <else>
+	<assign result=redirect.update(vexacturl,vbelowdir,vpermanent,"",request.url,request.protocol)>
+    </if>
+    
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.redirect_changed, request.redirect_status, request.url_path, request.url))>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vurl_path=toolbox.html_encode(request.url_path)>
+    <assign vurl=toolbox.html_encode(request.url)>
+    <assign vprotocol = request.protocol>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/update_redirect_submit.html  -->

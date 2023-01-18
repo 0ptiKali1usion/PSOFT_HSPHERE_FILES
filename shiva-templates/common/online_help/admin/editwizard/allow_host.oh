@@ -1,0 +1,9 @@
+<center> Allow Hosting </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Use this option to enable/disable hosting platforms for resellers under this plan.
+<br>Checking/unchecking either of the platforms will also include/exclude all relevant server groups to be available at signup.
+<br>
+<i>Important:</i> If you disallow either of the platforms, new customers of resellers won't be able to sign up for disabled hosting, 
+but existing customers won't be affected.
+

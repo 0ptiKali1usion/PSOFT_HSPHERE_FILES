@@ -1,0 +1,13 @@
+<!-- BEGIN: ./submit/admin/comodossl_save.sbm -->
+<assign cm=obj.comodo_manager>
+<if cm>
+<assign result=cm.setLoginPassword(request.cm_login, request.cm_password)>
+<if result.status=="ERROR">
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+<else>
+<assign res=session.addMessage("OK")>
+<include request.stemplate>
+</if>
+</if>
+<!-- END: ./submit/admin/comodossl_save.sbm -->

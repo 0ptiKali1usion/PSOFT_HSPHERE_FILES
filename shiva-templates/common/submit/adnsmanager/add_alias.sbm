@@ -1,0 +1,27 @@
+<!-- BEGIN ./adnsmanager/add_alias.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<assign result=yafv.checkall(
+    yafv.common.s_adnsmanager.vPrefix(lang.dns.prefix,request.prefix),
+    yafv.common.s_adnsmanager.vSharedIPTag(lang.label.shared_ip_tag,request.tag)
+)>
+<if result.status=="OK">
+<assign result=adnsmanager.addAlias(request.zone_id,request.prefix,request.tag)>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.label.instant_alias,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vtag=request.tag>
+    <assign vprefix=request.prefix>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./adnsmanager/add_alias.sbm  -->

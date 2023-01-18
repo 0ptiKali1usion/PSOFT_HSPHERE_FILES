@@ -1,0 +1,41 @@
+<!--  BEGIN ./admin/promo_add.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="template_name" value="submit/admin/promo_edit.sbm">
+<input type="hidden" name="stemplate" value="admin/promo_edit.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="promo_action" value="promo_enable">
+
+
+
+
+
+<call draw_table_header("2", lang.admin.promo_add_header)>
+
+
+<tr >
+  <td><call draw_label(lang.admin.promo_add_type)></td>
+  <td>
+    <select name="promo_type">
+      <option value="2">${lang.admin.promo_add_promo}
+      <option value="1">${lang.admin.promo_add_spons}
+    </select>
+  </td>
+</tr>
+<tr >
+  <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./admin/promo_add.html  -->

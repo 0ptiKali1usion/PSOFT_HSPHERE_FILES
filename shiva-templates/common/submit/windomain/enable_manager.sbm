@@ -1,0 +1,33 @@
+<!-- BEGIN ./submit/windomain/enable_manager.sbm -->
+<!-- here must be switching on for resources ASP and ASPNet with common estimation for al resources-->
+<assign hosting=account.getResource(request.rid)>
+<assign mssqlmanager = hosting.getChild("mssqlmanager")>
+
+<assign success = "true">
+
+<if request.state=="on">
+  <if !mssqlmanager>
+    <assign res = hosting.addChild("mssqlmanager", "")>
+    <if res.status!="OK">
+      <assign result = session.addMessage(res.msg)>
+      <assign success="false">
+    </if>
+  <else>
+    <assign result=session.addMessage(toolbox.compose(lang.msg.name_res_exists, lang.mssql.databases.mssqlmanager, ""))>
+    <assign success="false">
+  </if>
+<else>
+  <assign res = mssqlmanager.delete()>
+  <if res.status!="OK">
+    <assign result = session.addMessage(res.msg)>
+    <assign success="FALSE">
+  </if>
+</if>
+
+
+<if success == "true">
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!-- END ./submit/windomain/enable_manager.sbm -->

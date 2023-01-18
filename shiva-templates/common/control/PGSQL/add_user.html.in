@@ -1,0 +1,62 @@
+<call draw_tooltip()>
+<yafv s_pgsql>
+
+
+<assign pgsql = account.getChild("pgsql")>
+<if !pgsql>
+ <assign pgsql=account.addChild("pgsql", "")>
+</if>
+<if pgsql.status!="OK">
+  <assign res=session.addMessage(pgsql.msg)>
+</if>
+<if pgsql.status=="OK">
+<assign suffix=pgsql.prefix>
+
+
+
+<call prepare_table_header("2", lang.pgsql.adduser.header)>
+<call add_table_header_help("user-pgsql-nousers_h","")>
+<call draw_table_header_prepared()>
+
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+    <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_new_user" check! accept-charset="UTF-8">
+
+    <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+    <input type="hidden" name="next_template" value="submit/PGSQL/add_new_user.sbm">
+
+    <if request.dtemplate>
+      <assign final_template=request.dtemplate>
+      <input type="hidden" name="dtemplate" value="${final_template}">
+    <else>
+      <assign final_template="PGSQL/users.html">
+    </if>
+    <input type="hidden" name="stemplate" value="${final_template}">
+
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="pgsqluser">
+    <input type="hidden" name="rid" value="${pgsql}">
+    <input type="hidden" name="mod" value="">
+    <input type="hidden" name="suffix" value="${suffix}">
+    <call draw_label_bold(suffix)><input type="text" name="user_name" size="15" check="vPSQLCombLogin(this, suffix)">
+   </tr>
+   <tr >
+    <td><call draw_label(lang.label.password)></td>
+    <td><input type="password" name="user_password" size="15" check="vPassword1(this, user_name)" label="${lang.label.password}"></td>
+   </tr>
+   <tr >
+    <td><call draw_label(lang.label.password2)></td>
+    <td><input type="password" name="user_password1" size="15" check="vPassword2(user_password,this)" label="${lang.label.password2}"></td> 
+   </tr>
+
+  <tr>
+   <td   class="control_align_center" colspan="2">
+     <input type="submit" value="${lang.button.add}">
+   </td>
+   </tr>
+</form>
+
+
+<call draw_table_footer()>
+</if>

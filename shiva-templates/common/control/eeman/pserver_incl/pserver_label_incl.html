@@ -1,0 +1,10 @@
+<!--  Begin ./control/eeman/pserver_label_incl.html  -->
+<tr>
+<td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>
+<input type="hidden" name="${param.param_name}" value="${param.param_value}">
+<call draw_label(param.param_value)><br>
+<include "control/eeman/pserver_incl/pserver_param_description_incl.html">
+</td></tr>
+<!--  END ./control/eeman/pserver_label_incl.html  -->

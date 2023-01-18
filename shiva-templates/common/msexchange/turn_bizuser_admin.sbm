@@ -1,0 +1,18 @@
+<!-- BEGIN: ./msexchange/turn_bizuser_admin.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<if request.state=="on">
+<assign result=bizuser.setAdmin("on")>
+<else>
+<assign result=bizuser.setAdmin("off")>
+</if>
+
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_updated,lang.label.isadmin,lang.label.msexchange.property))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_update,lang.label.isadmin,lang.label.msexchange.property))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/turn_bizuser_admin.sbm -->

@@ -1,0 +1,44 @@
+<!-- BEGIN ./control/admin/ds/add_ds_template.html  -->
+<yafv s_ds>
+<assign admin = account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager","")>
+</if>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.admin.ds.add_ds_template_h)>
+
+<if admin && ds_manager && (!admin.isReseller() || !admin.isResourceDisabled("allow_own_ds"))>
+
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<tr>
+    <td><call draw_label(lang.admin.ds.template_name)></td><td><input type="text" name="name" value="${f_name}" check="vStringReq"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.os_name)></td><td><input type="text" name="os" value="${f_os}" check="vStringReq"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.cpu)></td><td><input type="text" name="cpu" value="${f_cpu}" check="vStringReq"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.ram)></td><td><input type="text" name="ram" value="${f_name}" check="vStringReq"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.ds.storage)></td><td><input type="text" name="storage" value="${f_storage}" check="vStringReq"></td>
+</tr>
+<tr>
+<td class="control_align_center" colspan="2">
+  <input type="hidden" name="template_name" value="submit/admin/ds/add_ds_template.sbm">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="admin/ds/manage_ds_templates.html">
+  <input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+</form>
+
+<else>
+<tr><td colspan="2"><call draw_label(lang.msg.admin_no_permissions)></td></tr>
+</if>
+
+<call draw_table_footer()>
+<!-- END ./control/admin/ds/add_ds_template.html  -->

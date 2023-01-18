@@ -1,0 +1,1 @@
+regexp vHours= "\d+", fail=yafv.vHours.fail;

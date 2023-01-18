@@ -1,0 +1,114 @@
+<!-- BEGIN ./admin/registrar/Custom.sbm -->
+<if account.getChild("reseller_su")>
+
+    <assign lookup=request.lookup_script>
+    <if lookup=="">
+        <assign failed="1">
+        <assign res=session.addMessage(lang.registrar.lookup_must_def)>
+    <else>
+        <if request.tlditem>
+            <list request.tlditem as tld_item>
+                <assign some_tld=tld_item>
+                <if some_tld=="">
+                    <if failed!="1">
+                        <assign failed="1">
+                        <assign res=session.addMessage(lang.admin.registrar.tld_empty)>
+                    </if>
+                </if>
+            </list>
+        </if>
+        <if some_tld=="" && failed!="1">
+            <assign failed="1">
+            <assign res=session.addMessage(lang.admin.registrar.tld_must_def)>
+        </if>
+    </if>
+
+    <if request.tts!="1" && request.email_checked!="1">
+        <assign failed="1">
+        <assign res=session.addMessage(lang.registrar.undefined_mailto)>
+    </if>
+    <if request.email_checked=="1">
+        <assign res=yafv.checkall(
+            yafv.common.s_signup.vEmail(lang.label.email, request.email))>
+        <if res.status != "OK">
+            <assign failed="1">
+            <list res.msgs as msg><assign res=session.addMessage(msg)></list>
+        </if>
+        <if request.cc>
+            <list request.cc as cc_item>
+                <assign some_tld=tld_item>
+                <assign res=yafv.checkall(yafv.common.s_signup.vEmail(lang.label.email, cc_item))>
+                <if res.status != "OK">
+                    <assign failed="1">
+                    <list res.msgs as msg><assign res=session.addMessage(msg)></list>
+                </if>
+            </list>
+        </if>
+    </if>
+
+    <if failed!="1">
+    <assign mm=account.getChild("registrar_manager")>
+    <if request.rid>
+        <assign updater=mm.update>
+        <assign res=updater("ID", request.rid, "DESCRIPTION", request.description,
+        	"CLASS_NAME", "psoft.hsphere.resource.registrar.custom_registrar.CustomRegistrar",
+        	"TEMPLATE", "admin/registrar/Custom.html","lookup_script", request.lookup_script,
+        	"email_days",request.email_days,"renew_days",request.renew_days,
+	        "renew_mode", request.renew_mode)>
+        <if request.tlditem>
+            <list request.tlditem as tld_item>
+                <assign res=updater("tlds", tld_item)>
+            </list>
+        </if>
+        <if request.tts=="1">
+            <assign res=updater("mailto","tts")>
+        </if>
+        <if request.email_checked=="1">
+            <assign res=updater("mailto", request.email)>
+            <list request.cc as ccs>
+                <assign res=updater("cc", ccs)>
+            </list>
+        </if>
+        <assign result=updater()>
+    <else>
+        <assign updater=mm.new>
+        <assign res=updater("DESCRIPTION", request.description,
+        	"CLASS_NAME", "psoft.hsphere.resource.registrar.custom_registrar.CustomRegistrar",
+	        "TEMPLATE", "admin/registrar/Custom.html","lookup_script", request.lookup_script,
+	        "email_days", request.email_days,"renew_days",request.renew_days,
+	        "renew_mode", request.renew_mode)>
+        <if request.tlditem>
+            <list request.tlditem as tld_item>
+                <assign res=updater("tlds", tld_item)>
+            </list>
+        </if>
+        <if request.tts=="1">
+            <assign res=updater("mailto","tts")>
+        </if>
+        <if request.email_checked=="1">
+            <assign res=updater("mailto", request.email)>
+            <list request.cc as ccs>
+                <assign res=updater("cc", ccs)>
+            </list>
+        </if>
+        <assign result=updater()>
+    </if>
+    </if>
+
+    <assign admin = account.getChild("admin")>
+    <assign result1 = admin.setSettingsValue("registrar_text", request.registrar_text)>
+
+</if>
+
+<if result1.status!="OK">
+    <assign res = session.addMessage(result1.msg)>
+    <include request.ftemplate>
+<else>
+    <if failed>
+        <include request.ftemplate>
+    <else>
+        <include request.stemplate>
+    </if>
+</if>
+
+<!-- END ./admin/registrar/Custom.sbm -->

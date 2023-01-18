@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/misc/downgrade_res.sbm -->
+<if toolbox.le(toolbox.mul("-1",account.bill.balance), account.bill.credit) == "1">
+<assign plan_id=request.plan_id>
+<list request.dec_res as res>
+     <!--${res}-->
+    <switch res>
+    <case "traffic">
+	<include "submit/misc/downgrade_traffic.sbm">
+	<break>
+    <case "reseller_traffic">
+	<include "submit/misc/downgrade_reseller_traffic.sbm">
+	<break>
+    <case "quota">
+	<include "submit/misc/downgrade_quota.sbm">
+	<break>
+    <case "mail_quota">
+	<include "submit/misc/downgrade_mail_quota.sbm">
+	<break>
+    <case "mysqldb_quota">
+	<include "submit/misc/downgrade_mysqldb_quota.sbm">
+	<break>
+    <case "MSSQLQuota">
+	<include "submit/misc/downgrade_mssql_quota.sbm">
+	<break>
+    <case "pgsqldb_quota">
+	<include "submit/misc/downgrade_pgsqldb_quota.sbm">
+	<break>
+    </switch>
+</list>
+    <assign downgraded="1">
+<else>
+    <assign downgraded="1">
+    <assign res=session.addMessage(lang.misc.changeplan.over)>
+</if>
+<include "misc/resources_downgraded.html">
+<!-- END ./submit/misc/downgrade_res.sbm -->

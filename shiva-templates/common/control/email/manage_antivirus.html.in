@@ -1,0 +1,52 @@
+<!-- BEGIN ./control/email/manage_antivirus.html.in  -->
+
+<call draw_tooltip()>
+<assign mdomain=account.getResource(request.md_id)>
+<assign mobject=account.getResource(request.mid)>
+<yafv s_email>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_manage_viruscheck" check! accept-charset="UTF-8">
+
+  <call draw_table_header("",lang.email.antivirus.edit_prefs+" "+request.email)>
+
+  <input type="hidden" name="template_name" value="submit/email/manage_antivirus.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="md_id" value="${request.md_id}">
+  <input type="hidden" name="mid" value="${request.mid}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="sc_page" value="${request.sc_page}">
+  <input type="hidden" name="type" value="${request.type}">
+
+<assign virus_processing_val=mobject.virusProcessing>
+<if toolbox.consists(virus_processing_val,"@")=="1">
+  <assign move_to_val=virus_processing_val>
+</if>
+<if mdomain!=mobject && mobject.useMdomainPrefs!="1">
+<tr>
+<td>
+  <call draw_label(lang.email.antivirus.set_mdomain_prefs)>&nbsp;<input type="submit" name="set_mdomain_prefs" value="${lang.button.set}">
+</td>
+</tr>
+</if>
+<tr>
+<td>
+<call draw_label_bold(lang.email.antivirus.processing)>&nbsp;
+<input type="radio" name="virus_processing" value="mark" onClick="checkForm(this.form)" <if virus_processing_val=="mark">CHECKED</if>><call draw_label(lang.email.antivirus.mark)>&nbsp;&nbsp;
+<input type="radio" name="virus_processing" value="remove" onClick="checkForm(this.form)" <if virus_processing_val=="remove">CHECKED</if>><call draw_label(lang.label.remove)>&nbsp;&nbsp;
+<input type="radio" name="virus_processing" value="move" onClick="checkForm(this.form)" <if move_to_val>CHECKED</if>><call draw_label(lang.label.move_to)>
+<input type="text" name="move_to" value="${move_to_val}" check="vMailProcessing(move_to,virus_processing)">
+</td>
+</tr>
+
+<if request.type=="mbox" && mobject.useMdomainPrefs=="1">
+<tr>
+  <td><call draw_colored_note(lang.email.antivirus.note,"red")></td>
+</tr>
+</if>
+
+<tr>
+  <td class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/email/manage_antispam.html.in  -->

@@ -1,0 +1,49 @@
+<!-- BEGIN ./control/billing/change_confirm.html  -->
+<form name="change_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<compress>
+  <list params as param>
+    <if param.name!="template_name" && param.name!="next_template">
+      <input type="hidden" name="${param.name}" value="${toolbox.html_encode(param.value)}">
+    <else>
+       <if param.name=="next_template">
+	  <input type="hidden" name="template_name" value="${toolbox.html_encode(param.value)}">
+       </if> 
+    </if>
+  </list>
+</compress>
+
+<assign sRT=account.plan.getResourceType(request.type)>
+<if sRT.status!="ERROR">
+    <assign stype = sRT.description>
+<else>
+    <assign stype = billing.unknown_type>
+</if>
+<assign add_message=toolbox.compose(lang.billing.add_msg1,stype)>
+<if add_price.setup && add_price.setup!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(add_price.setup))>
+</if>
+<if add_price.recurrent && add_price.recurrent!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg3,toolbox.currency(add_price.recurrent))>
+</if>
+<if add_price.recurrentAll && add_price.recurrentAll!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg4,toolbox.currency(add_price.recurrentAll))>
+</if>
+<if add_price.refund && add_price.refund!="0">
+  <assign message=add_message+toolbox.compose(lang.billing.edit_msg1,toolbox.currency(add_price.refund))>
+</if>
+
+<if del_price && del_price.free=="0">
+  <assign stype = account.plan.getResourceType(account.getResource(request.did).type).description>
+  <assign del_message = toolbox.compose(lang.billing.del_msg1, stype)>
+  <if del_price.refund!="0">
+    <assign del_message = del_message + toolbox.compose(lang.billing.del_msg2, toolbox.currency(del_price.refund))>
+  </if>
+  <assign del_message = del_message + lang.billing.del_msg3>
+  <if del_price.setup!="0">
+    <assign del_message = del_message + toolbox.compose(lang.billing.del_msg4, stype, toolbox.currency(del_price.setup))>
+  </if>
+</if>
+
+<call draw_warn_invoice_with_charge_info(add_message,add_price,del_message,del_price,"change_confirm")>
+</form>
+<!--  END ./control/billing/change_confirm.html  -->

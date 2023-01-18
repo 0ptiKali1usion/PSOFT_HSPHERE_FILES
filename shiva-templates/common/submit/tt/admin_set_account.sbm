@@ -1,0 +1,11 @@
+<!-- BEGIN ./tt/admin_set_account.html  -->
+<assign template="tt/admin_set_account.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign result=ttadmin.assignToAccount(request.ttid,request.assign_to_account)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./tt/admin_set_account.html  -->

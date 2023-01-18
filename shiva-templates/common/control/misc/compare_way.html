@@ -1,0 +1,94 @@
+<!-- BEGIN ./common/control/misc/compare_way.html -->
+
+<call draw_tooltip()>
+
+<call draw_table_header("", lang.misc.compareway.header)>
+
+<tr>
+  <td class="control_header"><call draw_header(lang.misc.compareway.grouped_plans)></td>
+</tr>
+
+<list planlist as group>
+<tr>
+<if group.id != "0">
+  <assign grname = lang.misc.compareway.group(group.name)>
+<else>
+  <assign grname = lang.misc.compareway.ungrouped>
+</if>
+  <td><call draw_link(config.CLIENT_CP_URL+"?action=plan_compare&compare_way=group&template_name=submit/misc/compare_plans.sbm&gr_id="+group.id,grname)></td>
+</tr>
+</list>
+
+<assign reseller_plans = "">
+
+<form name="f_compare_ord_plans" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<tr>
+  <td class="control_header">
+    <call draw_header(lang.misc.compareway.custom)>
+    <input type="hidden" name="action" value="plan_compare">
+    <input type="hidden" name="compare_way" value="custom">
+  </td>
+</tr>
+<list planlist as group>
+<if group.id!="0">
+  <assign grp_name = group.name>
+<else>
+  <assign grp_name = "">
+</if>
+<list group.plans as mp>
+<if mp.values["_CREATED_BY_"] != "6">
+<tr>
+  <td>
+    <input type="checkbox" name="plan_id" value="${mp.id}">&nbsp;
+    <if grp_name>
+      <call draw_label(lang.misc.compareway.plan_with_group(mp.description, grp_name))>
+    <else>
+      <call draw_label(mp.description)>
+    </if>
+  </td>
+</tr>
+<else>
+ <assign reseller_plans = "1">
+</if>
+</list>
+</list>
+<tr>
+  <td class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<if reseller_plans>
+<form name="f_compare_resel_plans" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<tr>
+  <td class="control_header">
+    <call draw_header(lang.misc.compareway.custom_resellers)>
+    <input type="hidden" name="action" value="plan_compare">
+    <input type="hidden" name="compare_way" value="custom">
+  </td>
+</tr>
+<list planlist as group>
+<if group.id!="0"><assign grp_name = group.name><else><assign grp_name = ""></if>
+<list group.plans as mp>
+<if mp.values["_CREATED_BY_"] == "6">
+<tr>
+  <td>
+    <input type="checkbox" name="plan_id" value="${mp.id}">&nbsp;
+    <if grp_name>
+      <call draw_label(lang.misc.compareway.plan_with_group(mp.description, grp_name))>
+    <else>
+      <call draw_label(mp.description)>
+    </if>
+  </td>
+</tr>
+</if>
+</list>
+</list>
+<tr>
+  <td class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+</if>
+
+<call draw_table_footer()>
+
+<!-- END ./common/control/misc/compare_way.html -->

@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/ds_pool/add_subnet.sbm-->
+<assign ips = obj.subnet_manager.getSubnet(request.ips_id)>
+<if ips.status == "OK">
+   <if ips.gateway != request.gateway>
+     <assign result = ips.setGateway(request.gateway)>
+     result.status = ${result.status}
+     <if result.status != "OK">
+       <assign failure = "1">
+       <assign res=session.addMessage(lang.msg.ds_ip_pool.unable_to_set_gateway)>
+     </if>
+   </if>
+   <if ips.broadcast != request.broadcast>
+     <assign result = ips.setBroadcast(request.broadcast)>
+     <if result.status != "OK">
+       <assign failure="1">
+       <assign res=session.addMessage(lang.msg.ds_ip_pool.unable_to_set_gateway)>
+     </if>
+   </if>
+</if>
+<if !failure>
+   <assign result = obj.subnet_manager.saveNewSubnet(ips.id)>
+   <if result.status != "OK">
+      <assign failure="1">
+   </if>
+</if>
+
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/calculate_subnet.sbm  -->

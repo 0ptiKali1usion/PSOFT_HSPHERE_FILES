@@ -1,0 +1,12 @@
+<!-- BEGIN ./commont/submit/account_preview/notes.sbm -->
+<assign result=account.getChild("ttadmin").addAccountNote(request.account_id, request.note)>
+    <if result.status!="OK">
+        <assign success="">
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/account_preview/notes.sbm -->

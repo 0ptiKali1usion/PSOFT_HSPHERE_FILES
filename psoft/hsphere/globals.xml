@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!DOCTYPE globals [
+  <!ELEMENT globals (section+)>
+  <!ELEMENT section ((object | set)*)>
+  <!ELEMENT object (check_config?)>
+  <!ELEMENT set (check_config?)>
+  <!ELEMENT check_config (property+ | variant+)>
+  <!ELEMENT variant (property+)>
+  <!ELEMENT property EMPTY>
+
+  <!ATTLIST section id CDATA #REQUIRED>
+  <!ATTLIST section label CDATA #IMPLIED>
+  <!ATTLIST section description CDATA #IMPLIED>
+  <!ATTLIST section show (globals | plans | custom) "*">
+  <!ATTLIST section store (settings | plans | custom) "*">
+  <!ATTLIST section online_help CDATA #IMPLIED>
+  <!ATTLIST object name CDATA #REQUIRED>
+  <!ATTLIST object label CDATA #IMPLIED>
+  <!ATTLIST object label_enabled CDATA #IMPLIED>
+  <!ATTLIST object label_disabled CDATA #IMPLIED>
+  <!ATTLIST object default (enabled | disabled) "enabled">
+  <!ATTLIST set name CDATA #REQUIRED>
+  <!ATTLIST set label CDATA #REQUIRED>
+  <!ATTLIST set default (enabled | disabled) "enabled">
+  <!ATTLIST set class CDATA #REQUIRED>
+  <!ATTLIST set managed (globally | reseller) "globally">
+  <!ATTLIST property key CDATA #REQUIRED>
+  <!ATTLIST property value CDATA "*">
+]>
+
+<globals>
+    <section id="resources" label="admin.gl_resources_h" description="admin.gl_resources_desc" online_help="admin-editwizard-global_res">
+	<object name="empresa"/>
+	<object name="miva"/>
+	<object name="oscommerce"/>
+	<object name="urchin"/>
+	<object name="urchin4"/>
+	<object name="MySQL"/>
+	<object name="MSSQL"/>
+	<object name="pgsql"/>
+	<object name="realserver_user"/>
+	<object name="cf"/>
+	<object name="summary_quota"/>
+	<object name="sshmanager"/>
+	<object name="sitetoolboxmanager"/>
+	<object name="sitestudio"/>
+	<object name="kanoodle"/>
+	<object name="sharedssl_enable" label="global_values.shared_ssl_enable"/>
+	<object name="antispam"/>
+	<object name="antivirus"/>
+	<object name="mail_relay"/>
+	<object name="vps"/>
+    </section>
+
+    <section id="platforms" label="admin.host_platforms_h" online_help="admin-editwizard-allow_host">
+	<object name="unix_platform" label="planwizard.resel.allow_unix_platform"/>
+	<object name="windows_platform" label="planwizard.resel.allow_windows_platform"/>
+	<object name="msexchange_platform" label="planwizard.resel.allow_msexchange_platform" default="disabled"/>
+    </section>
+
+    <section id="server_group" label="admin.l_server_groups_h" show="plans" store="plans" online_help="admin-editwizard-allow_server">
+	<set name="server_groups" label="name" default="enabled" class="psoft.hsphere.global.LogicalServerGroups"/>
+    </section>
+
+    <section id="dedicated_servers" label="admin.gl_ds_h">
+	<object name="ds_enable" label="global_values.ds_enable" default="disabled"/>
+	<object name="ds_custom_build" label="global_values.ds_custom_build" default="disabled"/>
+	<object name="ds_reboot_enable" label="global_values.ds_reboot_enable" default="enabled"/>
+	<object name="ds_backup_enable" label="global_values.ds_backup_enable" default="enabled"/>
+	<object name="allow_ds_resell" label="planwizard.resel.allow_ds_resell" default="disabled"/>
+	<object name="allow_own_ds" label="planwizard.resel.allow_own_ds" default="disabled"/>
+    </section>
+
+    <section id="ds_template" label="admin.gl_ds_templates_h" description="admin.gl_ds_templates_desc" show="custom" store="plans">
+	<set name="ds_templates" label="admin.gl_ds_templates_h" default="disabled" managed="reseller" class="psoft.hsphere.global.DedicatedServerTemplates"/>
+    </section>
+
+    <section id="reseller_cp_ssl" label="admin.global_cp_ssl_h" online_help="admin-editwizard-res_cp_ssl">
+	<object name="cp_ssl_ip_based" label="planwizard.resel.cp_ssl_ip_based" default="disabled">
+	    <check_config>
+		<property key="RESELLER_SSL_INSEC_PORT"/>
+		<property key="RESELLER_SSL_SEC_PORT"/>
+	    </check_config>
+	</object>
+	<object name="cp_ssl_port_based" label="planwizard.resel.cp_ssl_port_based" default="disabled">
+	    <check_config>
+		<property key="RESELLER_SSL_PORT_RANGE"/>
+	    </check_config>
+	</object>
+    </section>
+
+    <section id="reseller_dns_ips" label="admin.reseller_dns_ips_h" online_help="admin-editwizard-res_dns_ips">
+	<object name="reseller_dns_ips" label="admin.reseller_dns_ips_h"
+	    label_enabled="admin.reseller_dns_ips_enable"
+	    label_disabled="admin.reseller_service_dns_ip_use"
+	    default="disabled"/>
+    </section>
+
+    <section id="design" label="admin.gl_designs_h" description="admin.gl_designs_desc">
+	<set name="designs" label="admin.gl_designs" default="enabled" class="psoft.hsphere.global.Designs"/>
+    </section>
+</globals>
+

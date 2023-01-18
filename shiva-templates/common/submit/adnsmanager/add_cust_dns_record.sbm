@@ -1,0 +1,16 @@
+<!-- BEGIN ./adnsmanager/add_cust_dns_record.sbm  -->
+<switch request.rec_type>
+<case "A">
+  <include "adnsmanager/add_a_record.html">
+  <break>
+<case "MX">
+  <include "adnsmanager/add_mx_record.html">
+  <break>
+<case "CNAME">
+  <include "adnsmanager/add_cname_record.html">
+  <break>
+<case "TXT">
+  <include "adnsmanager/add_txt_record.html">
+  <break>
+</switch>
+<!--  END ./adnsmanager/add_cust_dns_record.sbm  -->

@@ -1,0 +1,8 @@
+<!-- BEGIN ./windomain/edit.html  -->
+<include "functions">
+<call draw_menu("domain-list")>
+<assign template = "windomain/edit.html">
+<assign domain = account.getResource(request.rid)>
+<include "control/domain/edit_included.html">
+<call bottom()>
+<!--  END ./windomain/edit.html  -->

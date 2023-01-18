@@ -1,0 +1,33 @@
+<!-- BEGIN ./domain/add_alias_submit.html  -->
+<assign result=yafv.checkall(
+  yafv.common.s_domain.vOldURL(lang.domain.addredirect.from,request.url_path), 
+  yafv.common.s_domain.vNewURL(lang.domain.addredirect.to,request.url,request.redirect_status) )>
+
+<if result.status=="OK">
+
+    <assign hosting = account.getResource( request.rid )>
+    <assign result=hosting.addChild("redirect_url","",request.redirect_status,request.url_path,request.url,request.protocol)>
+    
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.redirect_added, request.redirect_status, request.url_path, request.url))>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vstatus=request.redirect_status>
+    <assign vurl_path=toolbox.html_encode(request.url_path)>
+    <assign vurl=toolbox.html_encode(request.url)>
+    <assign vprotocol=request.protocol>
+    <include request.ftemplate>
+</if>
+
+
+<!--  END ./domain/add_alias_submit.html  -->

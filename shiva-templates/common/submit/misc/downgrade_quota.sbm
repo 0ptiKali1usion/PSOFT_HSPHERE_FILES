@@ -1,0 +1,16 @@
+<if account.plan.isResourceAvailable("quota")>
+<assign rtype = plans[plan_id].getResourceType("quota")>
+<assign free_new=rtype.values["_FREE_UNITS_"+periodId]>
+<if free_new=="">
+    <assign free_new=rtype.values["_FREE_UNITS_"]>
+</if>
+<assign quota=account.findChild("quota")>
+<assign size=toolbox.max(toolbox.ceil(quota.usedMb),free_new)>
+    <!--${free_new} ${size} ${quota.limitMb} ${quota.usedMb} ${toolbox.gt(quota.limitMb,size)}-->
+<if toolbox.eq(quota.limitMb,size)!="1">
+    <assign silent="1">
+    <assign rid=account.getChild("unixuser")>
+    <!--${rid} ${size} ${quota.limitMb} ${quota.usedMb}-->
+    <include "submit/unixuser/change_quota_submit.sbm">
+</if>
+</if>

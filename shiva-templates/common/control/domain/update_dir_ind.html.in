@@ -1,0 +1,42 @@
+<!-- BEGIN ./domain/update_dir_ind.html  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<if request.uid>
+<assign direct_ind=account.getResource(request.uid).indexes>
+<else>
+<assign direct_ind="">
+</if>
+<form name="f_update_dir_ind" action="${config.CLIENT_CP_URL}" method="post" check!" accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/update_dir_ind.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+
+
+
+
+<call draw_table_header("", lang.domain.updatedirind.header)>
+
+
+<tr>
+<td>
+<textarea rows="5" cols="50" name="indexes">${direct_ind}</textarea> 
+</td>
+</tr>
+<tr>
+<td  class="control_align_center">
+<call draw_label(lang.domain.updatedirind.note)>
+</td>
+</tr>
+<tr>
+<td  class="control_align_center">
+<input type="submit" name="submit" value="${lang.button.update}">
+</td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/update_dir_ind.html  -->

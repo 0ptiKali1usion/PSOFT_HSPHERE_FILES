@@ -1,0 +1,38 @@
+<!-- BEGIN ./MySQL/add_database.sbm  -->
+<assign check=yafv.common.s_mysql.vMySQLCombDbName(lang.label.database_name,request.db_name,request.suffix)>
+<if check.status=="OK">
+  <assign mysql = account.getChild("MySQL")>
+  <if !mysql><assign mysql = account.addChild("MySQL", "")>
+    <if mysql.status!="OK">
+	<assign res = session.addMessage(mysql.msg)>
+    </if>
+  </if>
+
+  <if mysql.status=="OK">
+  <assign exist = mysql.isDatabaseExist(request.db_name)>
+    <if exist=="1">
+      <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_exists, lang.label.database, request.suffix + request.db_name))>
+    <else>	
+      <assign result = mysql.addChild("MySQLDatabase","",request.db_name,request.db_description)>
+      <if result.status=="OK">
+	<assign res = session.addMessage(toolbox.compose(
+	  lang.msg.name_res_created, lang.label.database, request.suffix + request.db_name))>
+	<assign success="1">
+      <else>
+	<assign res = session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_create, lang.label.database, request.suffix + request.db_name))>
+      </if>
+    </if>
+  </if>
+<else>
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+  <assign db_id=result>	
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./MySQL/add_database.sbm  -->

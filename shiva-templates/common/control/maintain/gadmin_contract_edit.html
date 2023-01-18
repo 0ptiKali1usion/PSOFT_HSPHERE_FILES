@@ -1,0 +1,176 @@
+<assign gmainAdmin=account.getChild("generalMaintainAdmin")>
+<assign contract=gmainAdmin.getContractOverId(request.contract_id)>
+<H2>Contract # ${contract.contract_id}</H2>
+<if request.page=="INFO">
+<font = +1 ><b>Contract info</b></font>
+<table  class="formlight" >
+<tr>
+<td class="control_align_right" >
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=ASSIGN_ADMIN"><b>[Assign admins]</b></a>
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=ASSIGN_MAINTAINERS"><b>[Assign maintainers]</b></a></td>
+</td>
+</tr>
+<tr><td>
+<table>
+<tr><td align=right><b>Contract ID</b></td><td align = left>${contract.contract_id}</td></tr>
+<tr><td class="control_align_right"><b>Company</b></td><td>${contract.company}</td></tr>
+<tr><td class="control_align_right"><b>Description</b></td><td class="control_align_right">${contract.description}</td></tr>
+<tr><td colspan=2 rder=2 bordercolor="${design.color("border_color")}" bgcolor="#D8E2EB" cellspacing=0>
+    <table bg>
+    <td><b>User name</b></td>
+    <td><b>User email</b></td>
+    <td><b>Created</b></td>
+    <td><b>Admin name</b></td>
+    <td><b>Admin email</b></td>
+    <td><b>Accepted</b></td>
+    <td><b>Hours</b></td>
+    <td><b>Max hours</b></td>
+    <td><b>Closed</b></td>
+    <list contract.tasks as task>
+    <tr>
+    <td>${task.account_info.user_name}</td>
+    <td>${task.account_info.ci.email}</td>
+    <td>${task.created}</td>
+    <td>${task.admin_info.user_name}</td>
+    <td>${task.admin_info.ci.email}</td>
+    <td>${task.accepted}</td>
+    <td>${task.hours}</td>
+    <td>${task.max_hours}</td>
+    <td>${task.closed}</td>
+    </tr>
+    </list>
+    </table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+
+</if>
+<if request.page=="ASSIGN_ADMIN">
+<font = +1 ><b>Assign/Unassign admins</b></font>
+<table  class="formlight" >
+<tr>
+<td colspan="2" class="control_align_right">
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=INFO"><b>[Info]</b></a>
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=ASSIGN_MAINTAINERS"><b>[Assign maintainers]</b></a></td>
+</td>
+</tr>
+        <form name="setResetAdmin" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+        <input type="hidden" name="template_name" value="submit/maintain/change_state_admins.sbm">    
+        <input type="hidden" name="template" value="${template}">   
+        <input type="hidden" name="page" value="ASSIGN_ADMIN">   
+        <input type="hidden" name="contract_id" value="${request.contract_id}">   
+   <tr>
+      <td class="control_align_right"><b>Assigneg admins</b></td>
+      <td><b>Unassigneg admins</b></td>
+   </tr>
+   <tr>
+   <td valign class="control_align_right">
+      <table border=2 bordercolor="${design.color("border_color")}"  cellspacing=0>
+	<tr>
+	   <td>Name</td>
+	   <td>Email</td>
+	   <td>Description</td>
+           <td>Remove admin</td>
+	</tr>
+
+        <list contract.admins as admin>
+	   <tr>
+	   <td>${admin.account_info.ci.name}&nbsp;</td>
+	   <td>${admin.email}&nbsp;</td>
+	   <td>${admin.description}&nbsp;</td>
+           <td><input TYPE="checkbox" VALUE="${admin.account_id}" NAME="check_admin"></td>
+	</tr>
+      </list>
+      </table>
+   </td>
+   <td valign align=left>
+      <table border=2 bordercolor="${design.color("border_color")}"  cellspacing=0 >
+	<tr>
+	   <td>Name</td>
+	   <td>Email</td>
+	   <td>Description</td>
+           <td>Assign admin</td>
+	</tr>
+      <list contract.unused_admins as unused_admin>
+	<tr>
+	<td>${unused_admin.account_info.ci.name}&nbsp;</td>
+	<td>${unused_admin.email}&nbsp;</td>
+	<td>${unused_admin.description}&nbsp;</td>
+        <td><input TYPE="checkbox" VALUE="${unused_admin.account_id}" NAME="uncheck_admin"></td>
+       
+	</tr>
+      </list>
+      </table>
+   </td>
+</tr>
+      <tr>
+         <td colspan=3 align=center><input type=submit value="Change state admins"></td>
+      </tr>
+      </form>
+</table>
+</if>
+<if request.page=="ASSIGN_MAINTAINERS">
+<font = +1 ><b>Assign/Unassign maintainers</b></font>
+<table  class="formlight" >
+<tr>
+<td colspan=2 align=right>
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=INFO"><b>[Info]</b></a>
+   <a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=ASSIGN_ADMIN"><b>[Assign admins]</b></a>
+</td>
+</tr>
+        <form name="setResetMaintainer" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8"> 
+        <input type="hidden" name="template_name" value="submit/maintain/change_state_admins.sbm">    
+        <input type="hidden" name="template" value="${template}">   
+        <input type="hidden" name="page" value="ASSIGN_MAINTAINERS">   
+        <input type="hidden" name="contract_id" value="${request.contract_id}">   
+   <tr>
+      <td><b>Assigneg maintainers</b></td>
+      <td><b>Unassigneg maintainers</b></td>
+   </tr>
+   <tr>
+   <td valign align=right>
+      <table border=2 bordercolor="${design.color("border_color")}"  cellspacing=0>
+	<tr>
+	   <td>Name</td>
+	   <td>Email</td>
+	   <td>Description</td>
+           <td>Remove maintainer</td>
+	</tr>
+
+        <list contract.maintainers as maintainer>
+	   <tr>
+	   <td>${maintainer.account_info.ci.name}&nbsp;</td>
+	   <td>${maintainer.email}&nbsp;</td>
+	   <td>${maintainer.description}&nbsp;</td>
+           <td><input TYPE="checkbox" VALUE="${maintainer.account_id}" NAME="check_maintainer"></td>
+	</tr>
+      </list>
+      </table>
+   </td>
+   <td valign align=left>
+      <table border=2 bordercolor="${design.color("border_color")}"  cellspacing=0 >
+	<tr>
+	   <td>Name</td>
+	   <td>Email</td>
+	   <td>Description</td>
+           <td>Assign maintainer</td>
+	</tr>
+      <list contract.unused_maintainers as unused_maintainer>
+	<tr>
+	<td>${unused_maintainer.account_info.ci.name}&nbsp;</td>
+	<td>${unused_maintainer.email}&nbsp;</td>
+	<td>${unused_maintainer.description}&nbsp;</td>
+        <td><input TYPE="checkbox" VALUE="${unused_maintainer.account_id}" NAME="uncheck_maintainer"></td>
+       
+	</tr>
+      </list>
+      </table>
+   </td>
+</tr>
+      <tr>
+         <td colspan=3 align=center><input type=submit value="Change state maintainers"></td>
+      </tr>
+      </form>
+</table>
+</if>

@@ -1,0 +1,40 @@
+<!-- BEGIN ./vps/change_quota.html.in  -->
+<yafv s_vps>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.vps.changequota.header)>
+
+
+<tr>
+    <td><call draw_label(lang.vps.changequota.newquota)></td>
+<td>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_quota" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="template_name" value="submit/vps/change_quota_check.sbm">
+<input type="hidden" name="next_template" value="submit/vps/change_quota.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="quota">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<if ! vsize>
+<assign vps=account.getChild("vps")>
+<assign quota = vps.getChild("quota")>
+<assign vsize=quota.limit>
+</if>
+<input type="text" name="size"  label="${lang.label.quota}" check="vQuota" size="5" value="${vsize}">&nbsp;<call draw_label(lang.vps.unixuser.changequota.mb)></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>
+    <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./vps/change_quota.html.in  -->

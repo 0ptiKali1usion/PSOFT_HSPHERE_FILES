@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/admin/promo/set_promo_state.sbm -->
+
+<assign billman = account.getChild("billman")>
+
+<if billman>
+  <assign promo = billman.getPromo(request.promo_id)>
+  <assign result = promo.setState(request.promo_enabled)>
+  <if result.status != "OK">
+     <assign failure="1">
+  </if>
+</if>
+
+<if !failure>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/promo/set_promo_state.sbm -->
+

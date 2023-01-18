@@ -1,0 +1,12 @@
+<!-- BEGIN ./suspended/view.html  -->
+<assign template="suspended/view.html">
+<include "functions">
+<if account.suspended=="1">
+<call draw_blank_menu()>
+<else>
+<call draw_menu("billing-bi")>
+</if>
+<assign new_billing="suspended/new_billing.html">
+<include "control/billing/view.html">
+<call bottom()>
+<!--  END ./suspended/view.html  -->

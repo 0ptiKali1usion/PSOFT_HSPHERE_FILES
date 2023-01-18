@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/AuthorizeNetSIM.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "LOGIN", request.login, "KEY", request.transkey, "CLASS_NAME", "psoft.epayment.AuthorizeNetSIM","MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/AuthorizeNetSIM.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "LOGIN", request.login, "KEY", request.transkey, "CLASS_NAME", "psoft.epayment.AuthorizeNetSIM", "MODE", request.mode, "REFERER", request.referer, "TEMPLATE", "admin/merchant/AuthorizeNetSIM.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/AuthorizeNetSIM.sbm -->

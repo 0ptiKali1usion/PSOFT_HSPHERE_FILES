@@ -1,0 +1,30 @@
+<!-- BEGIN ./control/admin/settings/edit_ccbrand.html -->
+<call draw_tooltip()>
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_edit_ccbrand" accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="submit/admin/settings/edit_ccbrand.sbm">
+<input type="hidden" name="stemplate" value="${request.template}">
+<input type="hidden" name="ftemplate" value="${request.template}">
+<input type="hidden" name="id" value="${request.id}">
+
+
+
+
+<call draw_table_header("2", lang.admin.edit_ccbrand.header)>
+
+
+<tr>
+    <td><call draw_label(lang.label.name)></td>
+    <td><input type="text" name="name" label=lang.label.name value="${request.name}"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.sh_name)></td>
+    <td><input type="text" name="name_sh" label=lang.label.sh_name value="${request.name_sh}" maxlength="8"></td>
+</tr>
+<tr>
+    <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/settings/edit_ccbrand.html  -->

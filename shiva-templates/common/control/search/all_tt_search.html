@@ -1,0 +1,106 @@
+<!-- BEGIN ./control/search/all_tt_search.html  -->
+<assign ttadmin=account.getChild("ttadmin")>
+<if account.getChild("reseller_su")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+
+<if request.arid><assign report = viewer.getAdvReportById(request.arid)>
+<call advReportInit(report)>
+<assign report_ok="1">
+<else>
+<assign report = viewer.getAdvReport("all_ttreport")>
+<if request.search_step!=""><assign step=request.search_step><else><assign step="10"></if>
+<assign result = report(request.sc_reseller,
+			request.sc_created_before,
+                        request.sc_created_after,
+                        request.sc_closed_before,
+                        request.sc_closed_after,
+                        request.sc_not_closed,
+                        request.sc_assigned_to,
+                        request.sc_title,
+                        request.sc_type,
+                        request.sc_answered_before,
+                        request.sc_answered_after,
+                        request.sc_not_answered,
+                        request.sc_modified_before,
+                        request.sc_modified_after,
+                        request.sc_contains,
+                        request.sc_match_case,
+                        request.sc_id,
+                        request.sc_email,
+			request.sc_queue,
+			request.sc_state)>
+<if result.status != "OK"><assign report_ok="0">${session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))}<else><assign report_ok="1"><assign res = report.setStep(step)></if>
+</if>
+
+<!--${step} ${page}-->
+<assign sc_params="&sc_reseller="+toolbox.url_escape(request.sc_reseller)+
+ "&sc_created_before="+toolbox.url_escape(request.sc_created_before)+
+ "&sc_created_after="+toolbox.url_escape(request.sc_created_after)+
+ "&sc_closed_before="+toolbox.url_escape(request.sc_closed_before)+
+ "&sc_closed_after="+toolbox.url_escape(request.sc_closed_after)+
+ "&sc_not_closed="+toolbox.url_escape(request.sc_not_closed)+
+ "&sc_assigned_to="+toolbox.url_escape(request.sc_assigned_to)+
+ "&sc_title="+toolbox.url_escape(request.sc_title)+
+ "&sc_type="+toolbox.url_escape(request.sc_type)+
+ "&sc_answered_before="+toolbox.url_escape(request.sc_answered_before)+
+ "&sc_answered_after="+toolbox.url_escape(request.sc_answered_after)+
+ "&sc_not_answered="+toolbox.url_escape(request.sc_not_answered)+
+ "&sc_modified_before="+toolbox.url_escape(request.sc_modified_before)+
+ "&sc_modified_after="+toolbox.url_escape(request.sc_modified_after)+
+ "&sc_contains="+toolbox.url_escape(request.sc_contains)+
+ "&sc_id="+toolbox.url_escape(request.sc_id)+
+ "&sc_email="+toolbox.url_escape(request.sc_email)+
+ "&search_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="6">
+<call draw_table_header(colspan, lang.tt.search.result)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.search.ttsearch.id, "id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.title, "title")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.lastmod, "modified")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.type, "type")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.ttsearch.state, "type")></td>
+</tr>
+
+<include "control/tt/ttfunctions.fn">
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+<assign ticket = ttadmin.getTicket(entry.id)>
+<assign answered = ticket.isAnswered>
+<td class="control_align_center"><if !answered><call draw_label_bold(entry.id)><else><call draw_label(entry.id)></if></td>
+<td class="control_align_center"><if !answered><call display_ticket_link_bold_params(entry, sc_params)><else><call display_ticket_link_params(entry, sc_params)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(entry.created)><else><call draw_label(entry.created)></if></td>
+<td class="control_align_center"><if !answered><call draw_label_bold(entry.modified)><else><call draw_label(entry.modified)></if></td>
+<td class="control_align_center"><if entry.type == "0"><assign type="P"><else><assign type="I"></if>
+                                   <if !answered><call draw_label_bold(type)><else><call draw_label(type)></if></td>
+<td class="control_align_center"><if !answered><call show_ticket_state_bold(entry.state)><else><call show_ticket_state(entry.state)></if>&nbsp;</td>
+</tr>
+</list>
+<tr><td colspan="6">
+<call advReportNav(report)>&nbsp;<call draw_link(config.CLIENT_CP_URL+"/report.csv?template_name=control/search/tt_search.csv&arid="+report.id+"&_content_type=csv", lang.search.export)>
+<if request.stemplate><assign stemplate=request.stemplate><else><assign stemplate="tt/tt_search.html"></if>
+<if request.ftemplate><assign ftemplate=request.ftemplate><else><assign ftemplate="tt/tt_search.html"></if>
+&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/tt_mass_action.html&arid="+report.id+"&stemplate="+stemplate+"&ftemplate="+ftemplate, lang.search.massaction)>
+</td></tr>
+</if>
+
+<call draw_table_footer()>
+<else>
+    &nbsp;
+</if>
+
+
+<!--  END ./control/search/all_tt_search.html  -->
+

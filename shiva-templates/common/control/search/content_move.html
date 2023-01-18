@@ -1,0 +1,131 @@
+<!-- BEGIN ./control/content_move.html  -->
+<assign su=account.getChild("su")>
+<assign reseller_su=account.getChild("reseller_su")>
+<assign eeman = account.getChild("eeman")>
+<if !su>
+    <if account.plan.isResourceAvailable("su")>
+	<assign su=account.addChild("su","")>
+	<if su.status!="OK">
+	    <assign su="">
+	</if>
+    </if>
+</if>
+<assign billman=account.getChild("billman")>
+<assign admin=account.getChild("admin")>
+<if !reseller_su || !eeman>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("content_move")>
+  <assign result = report(request.sc_username,
+			request.sc_account_id,
+			request.sc_slserver,
+			request.sc_tlserver,
+			request.sc_uncompleted_only)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.account_id)+
+ "&sc_slserver="+toolbox.url_escape(request.sc_slserver)+
+ "&sc_tlserver="+toolbox.url_escape(request.sc_tlserver)+
+ "&sc_uncompleted_only="+toolbox.url_escape(request.sc_uncompleted_only)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="8">
+<call draw_table_header(colspan, lang.admin.search_cm_header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.src_server, "src")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.target_server, "target")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.started, "started")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.finished, "finished")></td>
+  <td class="control_header"><call draw_header(lang.contentmove.status.header)></td>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<assign module = reseller_su.getContentMoveItem(entry.id)>
+<tr >
+  <td><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accId,"USER_INFO",entry.username)></td>
+<td class="control_align_right"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accId, "PREVIEW", entry.accId)></td>
+  <if module.srcServer>
+     <assign slserver = eeman.getLserver(entry.src)>
+  </if>
+  <if module.targetServer>
+     <assign tlserver = eeman.getLserver(entry.target)>
+  </if>
+  <if slserver>
+     <assign spserver = eeman.getPserver(slserver.pserver)>
+  </if>
+  <if tlserver>
+     <assign tpserver = eeman.getPserver(tlserver.pserver)>
+  </if>
+<td class="control_align_center"><if slserver && spserver><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+slserver.id,slserver.name)><br><call draw_label("(")><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html&rid="+spserver.id,spserver.name)><call draw_label(")")><else>&nbsp;</if></td>
+  <td class="control_align_center"><if tlserver && tpserver><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+tlserver.id,tlserver.name)><br><call draw_label("(")><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html&rid="+tpserver.id,tpserver.name)><call draw_label(")")><else>&nbsp;</if></td>
+
+  <td class="control_align_center"><call draw_label(module.started)></td>
+  <td class="control_align_center"><call draw_label(module.finished)></td>
+  <td class="control_align_center"><call draw_label(module.module_status)></td>
+  <td nowrap>
+<if su><call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/admin/login.sbm&login="+toolbox.url_escape(entry.username)+"&account_id="+toolbox.url_escape(entry.accId), lang.search.changelogin)></if>
+<if slserver && spserver && tlserver && tpserver>
+<call draw_palink(config.CLIENT_CP_URL+"?cmi_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=admin/process_rsync_module.html"+sc_params, "llaunch", lang.admin.rsync.launch)>
+</if>
+
+<call draw_palink(config.CLIENT_CP_URL+"?cmi_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=admin/view_module_details.html"+sc_params, "custom_billing", lang.admin.rsync.view_postponed)>
+
+<if module.isSuspended>
+<call draw_palink(config.CLIENT_CP_URL+"?cmi_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/admin/resume_rsync_module.sbm"+sc_params, "resume", lang.admin.rsync.resume)>
+<else>
+<call draw_palink(config.CLIENT_CP_URL+"?cmi_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/admin/suspend_rsync_module.sbm"+sc_params, "suspend", lang.admin.rsync.suspend)>
+</if>
+<call draw_palink(config.CLIENT_CP_URL+"?cmi_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=admin/delete_rsync_module.html"+sc_params, "delete", lang.admin.rsync.delete)>
+
+  </td>
+</tr>
+</list>
+<tr><td  colspan="8">
+<call advReportNav(report)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/content_move.html  -->

@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/domain/ssl_edit_submit.sbm  -->
+<assign ssl=account.getResource(request.uid)>
+<switch request.type>
+<case "cert_only"><assign result=ssl.installCertificateOnly(request.file)><break>
+<case "key"><assign result=ssl.installCertificate(request.file, request.key)><break>
+<case "rev"><assign result=ssl.installRevFile(request.rev)><break>
+<case "u_rev"><assign result=ssl.removeRevFile()><break>
+<case "cert"><assign result=ssl.installCertFile(request.cert)><break>
+<case "u_cert"><assign result=ssl.removeCertFile()><break>
+<case "chain"><assign result=ssl.installChainFile(request.chain)><break>
+<case "u_chain"><assign result=ssl.removeChainFile()><break>
+</switch>
+<if result.status=="OK">
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_updated,lang.label.ssl_config,""))>
+  <assign hosting = ssl.parent>
+  <if !hosting.state><assign res = hosting.updateConfig()></if>
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_update,lang.label.ssl_config,""))>
+  <assign res = session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if> 
+<!--  END ./submit/domain/ssl_edit_submit.sbm  -->

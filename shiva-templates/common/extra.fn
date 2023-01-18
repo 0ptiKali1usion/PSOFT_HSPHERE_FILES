@@ -1,0 +1,86 @@
+<!--BEGIN ./common/extra.fn -->
+<function draw_hs_header()>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="14" HEIGHT="10" BGCOLOR=${design.color("menu_color2")}>
+      <call draw_spacer("14", "10")></TD>
+    <TD WIDTH="1" HEIGHT="10">
+      <call draw_spacer("1", "10")></TD>
+    <TD WIDTH="135" HEIGHT="10" BGCOLOR=${design.color("menu_color3")}>
+      <call draw_spacer("135", "10")></TD>
+    <TD WIDTH="1" HEIGHT="10">
+      <call draw_spacer("1", "10")></TD>
+    <TD WIDTH="${main_col_width}" HEIGHT="10" BGCOLOR=${design.color("header_color")}>
+      <call draw_spacer("1", "10")></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+      <call draw_spacer("151", "1")></TD>
+    <TD WIDTH="100%" HEIGHT="1">
+      <call draw_spacer("1", "1")></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="14" HEIGHT="60" BGCOLOR=${design.color("menu_color1")}>
+      <call draw_spacer("14", "59")></TD>
+    <TD WIDTH="1" HEIGHT="60">
+      <call draw_spacer("1", "59")></TD>
+    <compress>
+<if settings.logo_url>
+   <if settings.logo_image_width>
+      <assign logo_image_width="WIDTH=\""+settings.logo_image_width+"\"">
+   </if>
+   <if settings.logo_image_height>
+      <assign logo_image_height="HEIGHT=\""+settings.logo_image_height+"\"">
+   </if>
+   <TD WIDTH="${logo_cell_width}" BGCOLOR=${design.color("logo_bgcolor")} align="center" valign="middle"><IMG SRC="${settings.logo_url}" ${logo_image_width} ${logo_image_height} BORDER="0"></TD>
+<else>
+   <TD WIDTH="${logo_cell_width}" BGCOLOR=${design.color("logo_bgcolor")} align="center" valign="middle"><call draw_image("logo")></TD>
+</if>
+</compress>  <TD WIDTH="1" HEIGHT="60" BGCOLOR="${design.color("border_color")}">
+      <call draw_spacer("1", "59")></TD>
+    <TD WIDTH="100%" HEIGHT="60" BGCOLOR=${design.color("menu_color1")} align="center" valign="middle"><if settings.banner>${settings.banner}<else><call draw_image("banner")></if></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+      <call draw_spacer("151", "1")></TD>
+    <TD WIDTH="100%" HEIGHT="1">
+      <call draw_spacer("1", "1")></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="14" HEIGHT="11" BGCOLOR="${design.color("logo_bgcolor")}">
+      <call draw_spacer("14", "11")></TD>
+    <TD WIDTH="1" HEIGHT="11">
+      <call draw_spacer("1", "11")></TD>
+    <TD WIDTH="135" HEIGHT="11" BGCOLOR=${design.color("menu_color3")}>
+      <call draw_spacer("135", "11")></TD>
+    <TD WIDTH="1" HEIGHT="11">
+      <call draw_spacer("1", "11")></TD>
+    <TD WIDTH="100%" HEIGHT="11" BGCOLOR=${design.color("menu_color4")}>
+      <call draw_spacer("1", "11")></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+      <call draw_spacer("151", "1")></TD>
+    <TD WIDTH="100%" HEIGHT="1">
+      <call draw_spacer("1", "1")></TD>
+  </TR>
+</function>
+
+<function draw_copyright()>
+<if settings.copyright_view_disabled!="1">
+  <TR>
+    <TD WIDTH="150" HEIGHT="12" COLSPAN="3" BGCOLOR=${design.color("menu_color1")} align="center" valign="bottom">
+      <call draw_image("copyright")></TD>
+    <TD WIDTH="1" HEIGHT="12" BGCOLOR=${design.color("border_color")}>
+      <call draw_spacer("1", "12")></TD>
+    <TD WIDTH="${main_col_width}" HEIGHT="12" BGCOLOR=${design.color("menu_color1")}>
+      <call draw_spacer("1", "12")></TD>
+  </TR>
+  <TR bgcolor=${design.color("border_color")}>
+    <TD WIDTH="151" HEIGHT="1" COLSPAN="4">
+      <call draw_spacer("151", "1")></TD>
+    <TD WIDTH="100%" HEIGHT="1">
+      <call draw_spacer("1", "1")></TD>
+  </TR>
+</if>
+</function>
+<!--END ./common/extra.fn -->

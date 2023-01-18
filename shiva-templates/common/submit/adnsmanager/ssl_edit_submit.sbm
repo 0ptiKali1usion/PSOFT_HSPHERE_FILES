@@ -1,0 +1,70 @@
+<!-- BEGIN ./adnsmanager/ssl_edit_submit.sbm  -->
+<assign manager = account.getChild("adnsmanager")>
+<assign zone = manager.getZone(request.zone_id)>
+<assign success="0">
+<assign failed="0">
+<switch request.type>
+<case "key">
+    <list manager.getWebServers() as server>
+    <assign result = zone.installCertificate(server.id, request.file, request.key, zone.sslIpTag)>
+    <if result.status == "OK">
+	<assign success="1">
+    <else>
+	<assign failed="1">
+	<assign res = session.addMessage(toolbox.compose(
+          lang.msg.ssl_failed_server_install,server.name))>
+	<assign res = session.addMessage(result.msg)>
+    </if>
+    </list>
+    <break>
+<case "cert">
+    <list zone.installedServers() as server>
+    <assign result = zone.installCertificateOnly(server.id, request.file)>
+    <if result.status == "OK">
+	<assign success="1">
+    <else>
+	<assign failed="1">
+	<assign res = session.addMessage(toolbox.compose(
+          lang.msg.ssl_failed_server_install,server.name))>
+	<assign res = session.addMessage(result.msg)>
+    </if>
+    </list>
+    <break>
+<case "u_cert">
+    <list zone.installedServers() as server>
+    <assign result = zone.removeCertFile(server.id)>
+    <if result.status == "OK">
+	<assign success="1">
+    <else>
+	<assign failed="1">
+	<assign res = session.addMessage(result.msg)>
+    </if>
+    </list>
+    <break>
+<case "ca_cert">
+    <list zone.installedServers() as server>
+    <assign result = zone.installCertFile(server.id, request.file)>
+    <if result.status == "OK">
+	<assign success="1">
+    <else>
+	<assign failed="1">
+	<assign res = session.addMessage(toolbox.compose(
+          lang.msg.ssl_failed_server_install,server.name))>
+	<assign res = session.addMessage(result.msg)>
+    </if>
+    </list>
+    <break>
+</switch>
+<if success=="1">
+    <if failed=="0">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.ssl_support, ""))>
+    <else>
+	<assign res=session.addMessage(lang.msg.ssl_added_incompletely)>
+    </if>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/ssl_edit_submit.sbm  -->

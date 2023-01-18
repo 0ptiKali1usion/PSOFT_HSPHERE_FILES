@@ -1,0 +1,44 @@
+<!-- BEGIN ./email/add_responder.html.in  -->
+<assign mail_domain = account.getResource( request.rid )>
+<call draw_tooltip()>
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" name="f_responders" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/email/create_responder.sbm">
+<input type="hidden" name="rid" value="${mail_domain}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="md_id" value="${request.rid}">
+<input type="hidden" name="sc_page" value="${request.sc_page}">
+
+<call draw_table_header("3", lang.email.addresponder.header)>
+
+<tr>
+  <td width="5%" class="control_align_center">&nbsp;</td>
+  <td><call draw_label(lang.email.local_adr)></td>
+  <td><input type="text" name="local"  label="${lang.email.local_adr}" value="${vlocal}" check="vLocalEmail"><call draw_label("@"+mail_domain.name)></td>
+</tr>
+<if ! config.IRIS_USER>
+  <tr>
+    <td width="5%"  class="control_align_center"><call draw_tt_link(mail_domain,"")></td>
+    <td><call draw_label(lang.email.addresponder.send)></td>
+    <td><input type="text" name="foreign" value="${vforeign}" label="${lang.email.addresponder.send}" check="vEmailOpt"></td>
+  </tr>
+</if>
+<tr>
+  <td width="5%"  class="control_align_center">&nbsp;</td>
+  <td><call draw_label(lang.email.addresponder.subj)></td>
+  <td><input type="text" name="subject" value="${vsubject}" label="${lang.email.addresponder.subj}" check="vString"></td>
+</tr>
+<tr>
+  <td colspan="3"><call draw_label(lang.email.addresponder.msg)></td>
+</tr>
+<tr>
+  <td colspan="3"><textarea rows=10 cols=68 name="message">${vmessage}</textarea></td>
+</tr>
+<tr>
+    <td class="control_align_center" colspan="3"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/add_responder.html.in  -->

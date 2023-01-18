@@ -1,0 +1,11 @@
+<!-- BEGIN ./billing/add_antiviruses.html  -->
+<assign template="billing/add_antiviruses.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/billing/add_antiviruses.html">
+<call bottom()>
+<!--  END ./billing/add_antiviruses.html  -->

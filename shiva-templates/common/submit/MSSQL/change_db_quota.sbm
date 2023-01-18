@@ -1,0 +1,77 @@
+<!-- BEGIN submit/MSSQL/change_db_quota.sbm  -->
+<if ! database><assign database=account.getResource(request.database)></if>
+<if ! quota_size><assign quota_size = request.quota_size></if>
+<assign result = yafv.common.s_mssql.vQuota(lang.label.db_quota, quota_size)>
+<if result.status == "OK">
+    <assign oldquota = database.getChild("MSSQLQuota")>
+    <if oldquota>
+
+	<assign perc = request.perc>
+	<assign oldperc = database.get("quota_perc")>
+
+	<!-- New quota db and tl values -->
+	<assign tmp1 = toolbox.mul(quota_size, perc)>
+	<assign db_size = toolbox.div(tmp1, "100")>
+	<assign tl_size = toolbox.sub(quota_size, db_size)>
+
+	<!--Old quota db and tl values -->
+	<assign old_db_size = oldquota.usedDB>
+	<assign old_tl_size = oldquota.usedTL>
+
+	<if (toolbox.gt(oldquota.usedMb,quota_size) == "1") || (toolbox.gt(old_db_size, db_size) == "1") || (toolbox.gt(old_tl_size, tl_size) == "1")>
+	    <if toolbox.gt(oldquota.usedMb,quota_size) == "1">
+	        <assign res = session.addMessage(toolbox.compose(
+		    lang.msg.failed_set_smallquota, quota_size, oldquota.usedMb))>
+	    </if>
+	    <if toolbox.gt(old_db_size, db_size) == "1">
+                <assign res = session.addMessage(toolbox.compose(
+                    lang.msg.failed_set_smalldbquota, db_size, old_db_size))>
+            </if>
+	    <if toolbox.gt(old_tl_size, tl_size) == "1">
+                <assign res = session.addMessage(toolbox.compose(
+                    lang.msg.failed_set_smalltlquota, tl_size, old_tl_size))>
+            </if>
+	<else>
+          <assign res=toolbox.setBillingNote(lang.billingnote.change_mssql_quota(oldquota.limitMb, quota_size))>
+	  <if silent=="1">
+	    <assign res=account.setNoRefund("1")>
+	  </if>
+           <if (perc != oldperc) && (perc != "")>
+               <assign database = database.changeQuotaPerc(perc)>
+           </if>
+           <assign newquota = oldquota.change(quota_size)>
+	   <if newquota.status!="OK">
+	     <assign res=session.addMessage(newquota.msg)>
+	  <else>
+	      <assign success = "1">
+          </if>
+	</if>
+    <else>
+        <assign perc = request.perc>
+        <assign oldperc = database.get("quota_perc")>
+        <if (perc != oldperc) && (perc != "")>
+          <assign database = database.changeQuotaPerc(perc)>
+        </if>
+	<assign newquota = database.addChild("MSSQLQuota","",quota_size)>
+	<if !newquota>
+	    <assign res = session.addMessage(newquota.msg)>
+	    <assign res = session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_change,lang.label.db_quota,""))>
+	<else>
+	    <assign success = "1">
+	    <assign res = session.addMessage(toolbox.compose(
+		lang.msg.name_res_changed,lang.label.db_quota,""))>
+	</if>
+    </if>
+<else>
+    <list result.msgs as msg><assign res = session.addMessage(msg)></list>
+</if>
+<if silent == "">
+    <if success == "1">
+    	<assign res = session.addMessage(newquota.msg)>
+    	<include request.stemplate>
+    <else>
+    	<include request.ftemplate>
+    </if>
+</if>
+<!--  END submit/MSSQL/change_db_quota.sbm  -->

@@ -1,0 +1,41 @@
+<!-- BEGIN ./eeman/groups_incl.html  -->
+<if eeman>
+<if !has_header>
+<tr><td colspan="4" class="control_header"><call draw_header(lang.eeman.groupsincl.header)></td></tr>
+</if>
+<list eeman.groups as group>
+<tr>
+  <td colspan="3">
+    <call draw_label("["+group.id+"] "+group.name)>
+    <if !group.internal>
+      <call draw_label("("+eeman.groupMap[group.type]+")")>
+    </if>
+  </td>
+  <td width="1" nowrap class="control_align_center">
+    <if !group.internal>
+      <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/delete_group.sbm&stemplate="+template+"&ftemplate="+template+"&id="+group.id, lang.eeman.groupsincl.del)>
+    <else>&nbsp;</if>
+  </td>
+</tr>
+</list>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+  <td valign="middle" colspan="4"><call draw_label(lang.eeman.groupsincl.add)>
+   <input type="hidden" name="template_name" value="submit/eeman/add_group.sbm">
+   <input type="hidden" name="stemplate" value="${template}">
+   <input type="hidden" name="ftemplate" value="${template}">
+   <input type="text" name="group">
+   <select name="type">
+	<list eeman.groups as group>
+		<if group.internal && group.id!="2">
+			<option value="${group.id}">${group.name}
+		</if>
+        </list>
+   </select>
+   <input type="submit" value="${lang.button.add}">
+  </td>
+</tr>
+</form>
+<else>&nbsp;
+</if>
+<!--  END ./eeman/groups_incl.html  -->

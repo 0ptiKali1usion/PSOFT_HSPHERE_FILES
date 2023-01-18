@@ -1,0 +1,191 @@
+<!-- BEGIN ./admin/mod_sign_view.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<if admin>
+
+<list signup.getFakeRequest(request.rid) as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+</list>
+
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign tmpOther = tmpAcc.other>
+<assign tmpbi = tmpAcc.bi>
+<assign tmpci = tmpAcc.ci>
+<call draw_tooltip()>
+
+<assign ci=tmpAcc.ci>
+<assign bi=tmpAcc.bi>
+
+<yafv s_signup>
+<if !first_name_b >  <assign first_name_b = bi.first_name>  </if>
+<if !last_name_b >   <assign last_name_b  = bi.last_name>   </if>
+<if !company_b >     <assign company_b    = bi.company>     </if>
+<if !address1_b >    <assign address1_b   = bi.address1>    </if>
+<if !address2_b >    <assign address2_b   = bi.address2>    </if>
+<if !city_b >        <assign city_b       = bi.city>        </if>
+<if !state_b>        <assign state_b      = bi.state>       </if>
+<if !state2_b>       <assign state2_b     = bi.state2>      </if>
+<if !postal_code_b > <assign postal_code_b= bi.postal_code> </if>
+<if !country_b>      <assign country_b    = bi.country>     </if>
+<if !phone_b >       <assign phone_b      = bi.phone>       </if>
+<if !email_b >       <assign email_b      = bi.email>       </if>
+
+<form action="${config.CLIENT_CP_URL}" name="f_binfo_view" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_bi.sbm">
+<input type="hidden" name="stemplate" value="admin/mod_sign_view.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="planid" value="${planId}">
+<input type="hidden" name="paytype" value="${bi.type}">
+<input type="hidden" name="login" value="${request.login}">
+
+
+
+<call draw_table_header("2", lang.search.userinfo.bi(bi.first_name+" "+bi.last_name, tmpAcc.plan.description))>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.fname)></td>
+        <td     nowrap>
+                <input type="text" name="first_name_b" label="${lang.bci.fname}" check="vSinglename" value="${first_name_b}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.lname)></td>
+        <td     nowrap>
+                <input type="text" name="last_name_b" label="${lang.bci.lname}" check="vSinglename" value="${last_name_b}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.company)></td>
+        <td     nowrap>
+                <input type="text" name="company_b" label="${lang.bci.company}" check="vOrganization" value="${company_b}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.adr1)></td>
+        <td     nowrap>
+                <input type="text" name="address1_b" label="${lang.bci.adr1}" check="vAddress" value="${address1_b}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.adr2)></td>
+        <td      nowrap>
+                <input type="text" name="address2_b" value="${address2_b}" size="30"></td>
+</tr>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.city)></td>
+        <td     nowrap>
+                <input type="text" name="city_b" label="${lang.bci.city}" check="vCity" value="${city_b}"></td>
+</tr>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.state)></td>
+    <td     nowrap>
+    <select name="state_b" size="1">
+        <call buildStates(state_b)>
+    </select>
+    </td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.label.state_other)></td>
+  <td><input type="text" name="state2_b" value="${state2_b}" check="vStateOther" label="${lang.label.state_other}"></td></tr>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.pcode)></td>
+        <td     nowrap>
+                <input type="text" name="postal_code_b"  label="${lang.bci.pcode}" check="vPostal_Code" value="${postal_code_b}"></td>
+</tr>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.country)></td>
+        <td     nowrap>
+           <select name="country_b" size="1">
+              <if country_b=="US">
+                  <option value="US" SELECTED>United States
+              <else>
+                  <option value="US">United States
+              </if>
+           <list toolbox.countries as curcountry>
+              <if (curcountry.code!="US") && (country_b==curcountry.code)>
+                   <option value="${curcountry.code}" SELECTED>${lang[curcountry.name]}
+              <else>
+                   <option value="${curcountry.code}">${lang[curcountry.name]}
+              </if>
+           </list>
+           </select>
+        </td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.phone)></td>
+        <td    nowrap>
+                <input type="text" name="phone_b" label="${lang.bci.phone}" check="vPhone" value="${phone_b}"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.email)></td>
+        <td     nowrap>
+                <input type="text" name="email_b" label="${lang.bci.email}" check="vEmail" value="${email_b}"></td>
+</tr>
+
+<assign pi=bi.pi>
+<switch bi.type>
+    <case "CC">
+
+
+<tr>
+  <td><call draw_label(lang.cc.name)></td>
+  <td>
+     <input type="text" name="bi_cc_name" value="${pi.name}" label="${lang.cc.name}" check="vcc_name">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.cc.number)></td>
+  <td>
+    <input type="text" name="bi_cc_number" value="${pi.number}" label="${lang.cc.number}" check="vCCNumber(this,bi_cc_type)">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.cc.exp)></td>
+  <td>
+    <input type="text" name="bi_cc_exp_month" value="${pi.exp_month}" label="lang.cc.month" maxlength="2" size="2" check="vcc_month">/<input type="text" name="bi_cc_exp_year" value="${pi.exp_year}" label="cc.year" maxlength="4"  size="4" check="vcc_year"></td>
+</tr>
+<assign existingSoloOrSwitch = "">
+<tr>
+  <td><call draw_label(lang.cc.type)></td>
+  <td>
+    <select name="bi_cc_type" size="1" onChange="checkForm(this.form,false)"><if pi.type><assign vselected=""><else><assign vselected="SELECTED"></if>
+        <list toolbox.getActiveCCbrands() as ccb><compress><assign ccb_name_sh = ccb.name_sh>
+            <if ccb_name_sh == "SOLO" || ccb_name_sh == "SWITCH"><assign existingSoloOrSwitch="1"></if>
+            <if ccb_name_sh == pi.type><assign vselected = "SELECTED"></if></compress>
+            <option value="${ccb_name_sh}" ${vselected}>${ccb.name}</option><assign vselected = "">
+        </list>
+   </select>
+   </td>
+</tr>
+<if existingSoloOrSwitch>
+<tr>
+   <td><call draw_label(lang.signup.card_issue_num)></td>
+   <td><input type="input" name="bi_cc_issue_no" label="${lang.signup.card_issue_num}" check="vCardIssueNum(this, bi_cc_type)" size="3" value="${pi.issue_no}"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.signup.card_start_date)></td>
+   <td><call draw_label(lang.signup.card_start_mm_yy)><input type="input" name="bi_cc_start_month" size="3" value="${pi.start_month}"><call draw_label_bold("/")><input type="input" name="bi_cc_start_year" label="${lang.signup.card_start_date}" check="vCardDateMMYY(bi_cc_start_month,this,bi_cc_type)" size="3" value="${pi.start_year}"></td>
+</tr>
+<tr>
+   <td    colspan="2"><call draw_label(lang.signup.card_ss_remark)></td>
+</tr>
+</if>
+    <break>
+    <case "Check">
+<include "control/search/pi."+bi.type>
+    <break>
+</switch>
+
+<tr>
+    <td  class="control_align_center" colspan="2"  nowrap>
+        <input type="submit" value="${lang.button.save}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+
+<!--  END ./admin/mod_sign_view.html  -->

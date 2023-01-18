@@ -1,0 +1,56 @@
+<!-- BEGIN ./submit/ftp/change_traffic_check.sbm  -->
+<assign result= yafv.common.s_ftp.vTrafficLimit(lang.label.traffic_limit, request.size)>
+<if result.status=="OK">
+  <assign success="1">
+  <if request.traffic_type>
+   <if request.traffic_type!="-1">
+    	<assign u=account.getResource(request.rid_parent)>
+   <else>
+    	<assign u=account>
+   </if>
+   <assign traffic=u.getChild(request.traffic)>
+
+  <else>
+    <assign u=account>
+    <assign traffic=u.getChild("traffic")>
+  </if>
+
+  <if request.traffic_type>
+      <assign rtype = account.plan.getResourceType(request.traffic)>
+  <else>
+      <assign rtype = account.plan.getResourceType("traffic")>
+  </if>
+
+
+  <if traffic>
+  	<!-- ESTIMATE CHANGE -->
+  	<assign price=traffic.estimateChange(request.size)>
+	 <if price.status!="ERROR">
+	    <assign success = "1">
+         <else>
+  	    <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  	    <assign res = session.addMessage(price.msg)>
+  	    <include request.ftemplate>
+	 </if>
+  <else>
+  	<if request.traffic_type>
+      	    <assign price = u.estimateCreate(request.traffic,"",request.size,request.traffic_type)>
+     	<else>
+      	    <assign price = u.estimateCreate("traffic","",request.size)>
+    	</if>
+  </if>
+</if>
+
+
+
+<if success>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign vsize=toolbox.html_encode(request.size)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/ftp/change_traffic_check.sbm  -->

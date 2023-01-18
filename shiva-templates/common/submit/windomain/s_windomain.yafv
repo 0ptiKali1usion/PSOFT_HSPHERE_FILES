@@ -1,0 +1,23 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vSinglename, vName, vOrganization, vAddress, vAddress2, vCity, vState, vPostal_Code, vCountry, vPhone, vFax, vEmail, vSingleDir, vCustomDomain, vTransferDomainName, vNewDomainName, vSubDomain, vAlias, vfileExt, vmimeType, vApacheCode, vJSZone, vLocality, vOrganReq, vOrganUnit, vIntegerRequired, vOldURL;
+
+include common.s_hsphere.yafv: vSize(integer), vBiName(string, boolean), vBiAddress(string, boolean), vBiCity(string, boolean), vBiState(string, boolean), vBiOrganization(string, boolean), vBiPostal_Code(string, boolean), vBiCountry(string, boolean), vBiPhone(string, boolean), vBiFax(string, boolean), vBiEmail(string, boolean), vPassword1(string, string);
+
+regexp vWinPath= "([\w\s\-]+(\.*[\w\s\-]+)*\\)*[\w\s\-]+(\.*[\w\s\-]+)*";
+regexp vWinURL= "\/([\w\s\-]+(\.*[\w\s\-]+)*\/)*[\w\s\-]+(\.*[\w\s\-]+)*(\?([\w]+(=[^\&]*)?\&)*[\w]+(=[^\&\/]*)?)?";
+regexp vOsrs_Domain_Name= "[a-zA-Z0-9][a-zA-Z0-9\-]+[a-zA-Z0-9]\.(com|net|org|co\.uk|org\.uk|ca|tv)", maxlength="79", fail=yafv.vOsrs_Domain_Name.fail;
+
+regexp vnURL=	"((([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])|((([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])))(:\d+)?(\/~?[\w\.\-]+)*\/?(\?([\w]+(=[^\&]*)?\&)*[\w]+(=[^\&\/]*)?)?", fail=yafv.vnURL.fail;
+
+regexp vWinErrorPageCode= "\d{3}(.\d+)?",        fail=yafv.vApacheCode.fail;
+
+constrain vNewURL,  fail=yafv.vNewURL.fail (string newurl,string below) {
+    return (((below=="below_on") && vSingleDir(newurl)) || ((below=="below_off") && vnURL(newurl)));
+}
+
+constrain vWinURLPath,  fail=yafv.vWinURLPath.fail (string url_path, string mtype) {
+    if (mtype == "URL") {
+	return vWinURL(url_path);
+    } else {
+	return vWinPath(url_path);
+    }
+}

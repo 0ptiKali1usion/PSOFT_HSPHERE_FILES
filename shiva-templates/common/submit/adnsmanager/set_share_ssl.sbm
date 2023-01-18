@@ -1,0 +1,19 @@
+<!-- BEGIN ./adnsmanager/set_share_ssl.sbm  -->
+<assign resellerSu = account.getChild("reseller_su")>
+<assign manager = account.getChild("adnsmanager")>
+<assign zone = manager.getZone(request.zone_id)>
+
+<if resellerSu>
+   <assign result = zone.setShareSSL(request.share)>
+   <if result.status != "OK">
+        <assign failed="1">
+	<assign res = session.addMessage(toolbox.compose(lang.msg.adnsmanager.set_share_ssl.failed, zone.name))>
+   </if>   
+</if>
+
+<if failed>
+<include request.ftemplate>
+<else>
+<include request.stemplate>
+</if>
+<!--  END ./adnsmanager/set_share_ssl.sbm  -->

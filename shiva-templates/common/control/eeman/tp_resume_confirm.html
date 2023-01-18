@@ -1,0 +1,31 @@
+<!-- BEGIN ./control/search/tp_resume_confirm.html  -->
+<call draw_tooltip()>
+
+<form name="tp_resume_confirm" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/tp_resume.sbm">
+<input type="hidden" name="tp_id" value="${request.tp_id}">
+<input type="hidden" name="force" value="1">
+<input type="hidden" name="stemplate" value="eeman/transfers.html">
+<input type="hidden" name="ftemplate" value="eeman/transfers.html">
+<input type="hidden" name="arid" value="${request.arid}">
+<input type="hidden" name="sc_step" value="${request.sc_step}">
+
+
+
+<call draw_table_header("", lang.eeman.tp.resume_confirm.title)>
+
+
+<tr>
+  <td  class="control_align_center"><call draw_label(lang.eeman.tp.resume_confirm.text)></td>
+</tr>
+
+<tr>
+<td  class="control_align_center">
+  <call draw_link("javascript:document.tp_resume_confirm.submit()", lang.eeman.tp.resume_confirm.yes)><br>
+  <call draw_link("javascript:history.go(-1)", lang.eeman.tp.resume_confirm.no)>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/search/tp_resume_confirm.html  -->

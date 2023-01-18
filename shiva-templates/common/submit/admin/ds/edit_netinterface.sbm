@@ -1,0 +1,33 @@
+<!-- BEGIN ./submit/admin/ds/edit_netswitch.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+
+<assign result=yafv.common.s_ds.vStringOptional(lang.admin.ds.ni_description, request.ni_description)>
+<if result.status=="OK">
+  <assign res=ds_manager.updateNetInterface(request.ni_id, request.ni_description)>
+  <if res.status!="OK">
+    <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+    <assign failure="1">
+  </if>
+<else>
+  <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+    <assign v_ns_id = toolbox.html_encode(request.ns_id)>
+    <assign v_ns_port = toolbox.html_encode(request.ns_port)>
+    <assign v_ni_description = toolbox.html_encode(request.ni_description)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+
+<if res.status!="OK">
+  <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/edit_netswitch.sbm  -->

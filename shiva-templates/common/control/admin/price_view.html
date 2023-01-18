@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/admin/price_view.html  -->
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<if periods><assign counter=toolbox.counter("0", periods)><else><assign counter=toolbox.counter("0", "0")></if>
+<assign onc=toolbox.counter()>
+
+<tr>
+  <td class="control_header"><call draw_header(lang.admin.priceedit.interval)></td>
+  <td class="control_header"><call draw_header(lang.admin.size)></td>
+  <td class="control_header"><call draw_header(lang.label.free_units)></td>
+  <td class="control_header"><call draw_header(lang.label.setup_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.usage_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.recurr_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.refund_perc)></td>
+</tr>
+<tr>
+  <td nowrap  colspan="2"><call draw_label(lang.admin.priceedit.default)></td>
+  <td nowrap  class="control_align_center"><call draw_label(toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"],"false"))></td>
+  <td nowrap  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_SETUP_PRICE_"]))></td>
+  <td nowrap  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_USAGE_PRICE_"]))></td>
+  <td nowrap  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_UNIT_PRICE_"]))></td>
+  <td nowrap  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_REFUND_PRICE_"]))></td>
+</tr>
+
+<list onc as c><if counter==periods>${c.stop}<else>
+<tr>
+  <td  class="control_align_center"><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+counter],"false"))></td>
+  <td  class="control_align_center"><call draw_label(plan.values["_PERIOD_TYPE_"+counter])></td>
+  <td  class="control_align_center"><call draw_label(toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"+counter],"false"))></td>
+  <td  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_SETUP_PRICE_"+counter]))></td>
+  <td  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_USAGE_PRICE_"+counter]))></td>
+  <td  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_UNIT_PRICE_"+counter]))></td>
+  <td  class="control_align_center"><call draw_label(toolbox.currency(rtype.values["_REFUND_PRICE_"+counter]))></td>
+</tr>
+${counter.next}
+</if></list>
+<!--  END ./control/admin/price_view.html  -->

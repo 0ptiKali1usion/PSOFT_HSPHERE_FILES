@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/admin/merchant/WebProcessor_disable.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.action=="disable">
+<call save_v(request.name+"_enabled", "FALSE")>
+<else><if request.action=="enable">
+<call save_v(request.name+"_enabled", "TRUE")>
+</if>
+</if>
+
+<if res.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(res.msg)>
+ <include request.ftemplate>
+</if>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/merchant/WebProcessor_disable.sbm -->

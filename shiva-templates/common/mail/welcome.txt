@@ -1,0 +1,51 @@
+${hstoolbox.compose(lang.massmail.welcome_header, account.ci.first_name, account.ci.last_name)}
+<compress>
+<assign u=account.getChild("unixuser")>
+<assign domain=u.getChild("domain")>
+<if domain>
+    <assign opensrs=domain.getChild("opensrs")>
+</if>
+</compress>
+
+${hstoolbox.compose(lang.massmail.welcome_thanks, settings.name)}
+<compress>
+<assign domain=account.findChild("domain")>
+<if !domain>
+    <assign domain=account.findChild("service_domain")>
+</if>
+<if !domain>
+    <assign domain=account.findChild("3ldomain")>
+</if>
+<if !domain>
+    <assign domain=account.findChild("nodomain")>
+</if>
+</compress><if domain && (account.findChild("hosting"))>
+<assign idomain=domain.findChild("idomain_alias")>
+    ${lang.massmail.welcome_access}
+<if
+domain.ip.shared=="1">http://${idomain.alias}/login.html<else>http://${toolbox.int2ext(domain.ip.ip)}/login.html</if>
+
+${lang.massmail.welcome_dns}
+http://${domain.name}/login.html.
+</if>
+
+${lang.massmail.welcome_logCP}
+${hstoolbox.compose(lang.massmail.welcome_login, user.login)}
+${hstoolbox.compose(lang.massmail.welcome_psw, user.password)}
+
+<if u>${lang.massmail.welcome_useFTP}
+${hstoolbox.compose(lang.massmail.welcome_host, u.host.name)}
+${hstoolbox.compose(lang.massmail.welcome_ftplogin, u.login)}
+${hstoolbox.compose(lang.massmail.welcome_ftppsw, u.password)}
+</if>
+${lang.massmail.welcome_access_account}
+${user.CP_URL}
+
+<if settings.support>
+${lang.massmail.welcome_support}
+${settings.support}
+</if>
+
+<if settings.website>
+${hstoolbox.compose(lang.massmail.welcome_visit, settings.website)}
+</if>

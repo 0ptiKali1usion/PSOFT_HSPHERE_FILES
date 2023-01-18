@@ -1,0 +1,12 @@
+<!-- BEGIN ./email/mlist_del_allsubscriber.sbm  -->
+<assign mlist = account.getResource(request.uid)>
+<assign result = mlist.unsubscribeAll()>
+<if result.status == "OK">
+    <assign res=session.addMessage(lang.msg.mail_subscribers_removed)>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(lang.msg.mail_subscribers_failed_remove)>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if> 
+<!--  END ./email/mlist_del_allsubscriber.sbm  -->

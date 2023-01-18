@@ -1,0 +1,112 @@
+<!-- BEGIN ./adnsmanager/generate_cp_ssl_cert.html  -->
+<if reseller_su>
+  <assign eeman = account.getChild("eeman")>
+  <assign vsite = config.CP_HOST>
+<else>
+  <assign eeman = account.getChild("reseller_eeman")>
+  <assign aliases = eeman.aliases>
+  <list aliases as alias>
+    <if alias.l_server.type=="10">
+      <assign vsite = alias.name>
+    </if>
+  </list>
+</if>
+
+<if eeman>
+
+<if !vemail><assign vemail=settings.email></if>
+<if !vorganization><assign vorganization=settings.name></if>
+<if !vorgan_unit><assign vorgan_unit="Not specified"></if>
+<if !vlocality><assign vlocality=settings.city></if>
+<if !vstate><assign vstate=settings.state></if>
+<if !vstate2><assign vstate2=settings.state2></if>
+<if !vcountry><assign vcountry=settings.country></if>
+<call draw_tooltip()>
+<yafv s_domain>
+<form name="f_generate_ssl" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/generate_cp_ssl.sbm">
+
+<call draw_table_header("2", lang.domain.generatenewsslcert.header)>
+
+<tr>
+<td>
+     <call draw_label(lang.domain.generatenewsslcert.site)>
+  </td>
+  <td>
+     <call draw_label(vsite)>
+     <input name="site" type="hidden" value="${vsite}">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.email)>
+  </td>
+  <td>
+     <input name="email" label="${lang.bci.email}" value="${vemail}" check="vEmail">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.company)>
+  </td>
+  <td>
+     <input name="organization" label="${lang.bci.company}" value="${vorganization}" check="vOrganReq">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.domain.generatenewsslcert.unit)>
+  </td>
+  <td>
+     <input name="organ_unit" label="${lang.domain.generatenewsslcert.unit}" value="${vorgan_unit}" check="vOrganUnit">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.domain.generatenewsslcert.local)>
+  </td>
+  <td>
+     <input name="locality" label="${lang.domain.generatenewsslcert.local}" value="${vlocality}" check="vLocality">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.state)>
+  </td>
+  <td>
+    <select name="state" size="1">
+	<call buildStates(vstate)>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.label.state_other)>
+  </td>
+  <td>
+        <input type="text" label="${lang.bci.state}" name="state2" value="${vstate2}" check="vStateOther">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.country)>
+  </td>
+  <td>
+    <SELECT NAME="country">
+	<call buildCountries(vcountry)>
+    </SELECT>
+  </td>
+</tr>
+<tr>
+  <td  class="control_align_center" colspan="2">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/generate_cp_ssl_cert.html  -->

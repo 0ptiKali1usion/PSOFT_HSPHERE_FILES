@@ -1,0 +1,44 @@
+<!-- BEGIN ./control/billing/mssqlmanager_add_confirm.html  -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_mssqlmanager" accept-charset="UTF-8">
+
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="submit/MSSQL/add_mssqlmanager.sbm">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+<assign stype=account.plan.getResourceType(type).description>
+<assign total="0">
+<if asp_price && asp_price.free=="0">
+  <assign stype=stype+" and "+account.plan.getResourceType("asp").description>
+  <list asp_price.entries as entry>
+    <assign res=manager_price.entries.addHash("type",entry.type,"description",entry.description,"amount",entry.amount)>
+    <assign total=toolbox.add(total,entry.amount)>
+  </list>
+</if>
+<if asp_net_price && asp_net_price.free=="0">
+  <assign stype=stype+" and "+account.plan.getResourceType("asp_net").description>
+  <list asp_net_price.entries as entry>
+    <assign res=manager_price.entries.addHash("type",entry.type,"description",entry.description,"amount",entry.amount)>
+    <assign total=toolbox.add(total,entry.amount)>
+  </list>
+</if>
+<if (asp_price.free=="0" || asp_net_price=="0") && manager_price.free=="1">
+  <assign res=manager_price.put("free","0")>
+</if>
+<assign res=toolbox.add(manager_price.total,total)>
+<assign res=manager_price.put("total",res)>
+
+<assign message=toolbox.compose(lang.billing.add_msg1,stype)>
+<if setup!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg2a,toolbox.currency(setup))>
+</if>
+<if recurrent!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg3,toolbox.currency(recurrent))>
+</if>
+<if recurrentAll!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg4,toolbox.currency(recurrentAll))>
+</if>
+<call draw_warn_invoice_with_charge_info(message,manager_price,"","","f_add_mssqlmanager")>
+</form>
+<!--  END ./control/billing/mssqlmanager_add_confirm.html  -->

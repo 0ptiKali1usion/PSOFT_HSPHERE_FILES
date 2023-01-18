@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/admin/debit.html  -->
+<call draw_tooltip()>
+
+<assign billman = account.getChild("billman")>
+
+<if billman>
+
+<if request.aid!="">
+<assign amount_old=billman.getCredit(request.aid)>
+</if>
+<if amount==""><assign amount=amount_old></if>
+<if aid==""><assign aid=request.aid></if>
+<yafv s_admin>
+<form name="f_debit" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/enlarge_credit.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="aid" value="${aid}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.admin.enlargecredit.header)>
+<tr>
+<td><call draw_label(lang.label.amount)></td>
+<td>
+	    <input type="text" name="amount" value="${toolbox.numberToCurLocale(amount, true)}" label="${lang.label.amount}" check="vAmount">
+	</td>
+</tr>
+<tr>
+<td  colspan="2" class="control_align_center">
+		<input type="submit" value="${lang.admin.enlargecredit.submit}">
+	</td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/debit.html  -->

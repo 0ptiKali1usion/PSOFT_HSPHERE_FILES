@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/eeman/delete_server_alias.sbm-->
+<assign eeman_res=account.getChild("reseller_eeman")>
+<assign result=eeman_res.delAlias(request.zone_id,request.rec_id)>
+<if result.status!="OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign failure="1">
+</if>
+<assign result=eeman_res.reloadHosts()>
+<if result.status!="OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign failure="1">
+</if>
+<if !failure>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/eeman/delete_server_alias.sbm  -->

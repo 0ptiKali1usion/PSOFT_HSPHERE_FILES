@@ -1,0 +1,45 @@
+<!-- BEGIN ./submit/miva/add_empresa_check.sbm  -->
+<assign notfree="0">
+<assign type="empresa">
+<assign hosting=account.getResource(request.rid)>
+<assign cgidir=hosting.getChild("cgidir")>
+<assign empresa_price = hosting.estimateCreate("empresa", "")>
+<if empresa_price.status!="ERROR">
+  <if empresa_price.free=="0">
+    <assign notfree="1">
+    <assign setup=empresa_price.setup>
+    <assign recurrent=empresa_price.recurrent>
+    <assign recurrentAll=empresa_price.recurrentAll>
+  </if>
+  <if !cgidir>
+    <assign cgidir_price = account.getResource(request.rid).estimateCreate("cgidir", "")>
+    <if cgidir_price.status!="ERROR">
+      <if cgidir_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup,cgidir_price.setup)>
+         <assign recurrent=toolbox.add(recurrent,cgidir_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll,cgidir_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.cgi_dir,""))>
+      <assign res = session.addMessage(cgidir_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.empresa,""))>
+  <assign res = session.addMessage(empresa_price.msg)>
+  <assign failure="1">
+</if>
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/empresa_add_confirm.html">
+  <else>
+    <include "submit/miva/empresa_add.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/miva/add_empresa_check.sbm  -->

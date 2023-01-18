@@ -1,0 +1,26 @@
+<!-- BEGIN ./commont/submit/tt/mass_action_gr.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+</if>
+
+<assign rows="0">
+  <list ttadmin.tickets as ttid>
+     <switch request.maction>
+     <case "close">
+        <assign result=ttadmin.getTicket(ttid).close()>
+	<assign result=ttadmin.getTicket(ttid).setstate("9")>
+	<break>
+     <case "delete">
+        <assign result=ttadmin.getTicket(ttid).delete()>
+	<break>
+     <case "assign">
+        <assign result=ttadmin.getTicket(ttid).assign(request.admin_id)>
+	<break>
+     </switch>
+     <if result.status=="OK"><assign rows = toolbox.add(rows, "1")></if>
+  </list>
+  <assign res = session.addMessage(toolbox.compose(lang.tt.adminmass.success, rows))>
+  <include request.stemplate>
+  
+<!--  END ./common/submit/tt/mass_action_gr.sbm  -->

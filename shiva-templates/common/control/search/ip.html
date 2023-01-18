@@ -1,0 +1,119 @@
+<!-- BEGIN ./control/search/ip.html  -->
+<assign admin=account.getChild("admin")>
+<!-- check permissions -->
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("ipreport")>
+  <assign result = report(request.sc_ip_from, 
+                          request.sc_ip_to, 
+			  request.sc_lserver, 
+			  request.sc_pserver,
+			  request.sc_group,
+			  request.sc_type)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_ip_from="+toolbox.url_escape(request.sc_ip_from)+
+  "&sc_to="+toolbox.url_escape(request.sc_ip_to)+
+  "&sc_step="+toolbox.url_escape(step)+
+  "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="5">
+<call draw_table_header(colspan, lang.admin.search_ip_header)>
+
+<if report_ok=="1">
+<tr>
+  <td width="3%" class="control_header"><call advReportLabel(report, lang.adnsmanager.id, "id")></td>
+  <td width="15%" class="control_header"><call advReportLabel(report, lang.eeman.lserveredit.header, "name")></td>
+  <td width="15%" class="control_header"><call advReportLabel(report, lang.label.hostip, "ip_num")></td>
+  <td width="17%" class="control_header"><call advReportLabel(report, lang.label.type, "flag")></td>
+  <td class="control_header"><call advReportLabel(report, lang.domain.contactinfoupdate.info, "")></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td><call draw_label(entry.id)></td>
+  <td><call draw_label(entry.name)></td>
+  <td><call draw_label(entry.ip)></td>
+  <td>
+  <switch entry.flag>
+    <case "-1"><call draw_important_label(lang.eeman.lserveredit.invdedip)><break>
+    <case "0"><call draw_label(lang.eeman.lserveredit.freededip)><break>
+    <case "1"><call draw_label(lang.eeman.lserveredit.busydedip)><break>
+    <case "2"><call draw_label(lang.eeman.lserveredit.defship)><break>
+    <case "3"><call draw_label(lang.eeman.lserveredit.sysmip)><break>
+    <case "4"><call draw_label(lang.eeman.lserveredit.servip)><break>
+    <case "5"><call draw_label(lang.eeman.lserveredit.freednsip)><break>
+    <case "6"><call draw_label(lang.eeman.lserveredit.busydnsip)><break>
+    <case "7"><call draw_label(lang.eeman.lserveredit.sslip)><break>
+    <case "8"><call draw_label(lang.eeman.lserveredit.tsslip)><break>
+    <case "1000"><call draw_label(lang.eeman.lserveredit.vpsip)><break>
+    <case "1001"><call draw_label(lang.eeman.lserveredit.tvpsip)><break>
+    <default><call draw_label(lang.eeman.lserveredit.shared+entry.flag+")")><break>
+  </switch>
+  </td>
+  <td>
+    <if entry.domain>
+      <call draw_label(entry.domain)> (<call draw_label(entry.type)>)
+    </if>
+    <if (entry.flag=="-1") && !entry.domain>
+	<!--here must be picture "fix domain" -->
+	<call draw_fix(config.CLIENT_CP_URL+"?template_name=submit/misc/ip_fix.sbm"+"&stemplate="+template+"&ftemplate="+template+"&flag="+entry.flag+"&ip="+entry.ip+"&l_server_id="+entry.id+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Fix IP")>
+    </if>
+    <if entry.flag == "6" && entry.dns_record>
+      <call draw_label(entry.dns_record)> (<call draw_label(entry.reseller)>)
+    </if>
+    <if entry.flag =="1001">
+        <if entry.vps_name>
+	    <call draw_label(entry.vps_name)>
+        <else>
+            <call draw_fix(config.CLIENT_CP_URL+"?template_name=submit/misc/ip_fix.sbm"+"&stemplate="+template+"&ftemplate="+template+"&flag="+entry.flag+"&ip="+entry.ip+"&l_server_id="+entry.id+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Fix IP")>
+        </if>
+    </if>
+    &nbsp;
+  </td>
+</tr>
+</list>
+<tr><td  colspan="5">
+<call advReportNav(report)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/search/ip.html  -->

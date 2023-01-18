@@ -1,0 +1,23 @@
+<!-- BEGIN ./domain/add_alias.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+<form name="f_add_alias"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.domain.addalias.header)>
+<tr>
+   <td><call draw_label(lang.domain.addalias.header)></td>
+   <td><input type="text" name="alias" size="10" value="${valias}" check="vAlias"><b>.${account.getResource(request.rid).parent.name}</b></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >
+     <input type="hidden" name="rid" value="${request.rid}">
+     <input type="hidden" name="stemplate" value="${request.stemplate}">
+     <input type="hidden" name="ftemplate" value="${template}">
+     <input type="hidden" name="template_name" value="submit/domain/add_alias_submit.sbm">
+     <input type="submit" value="${lang.button.submit}">
+   </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_alias.html.in  -->

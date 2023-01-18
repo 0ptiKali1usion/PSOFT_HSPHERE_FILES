@@ -1,0 +1,44 @@
+<!-- BEGIN ./submit/domain/add_modlogan_check.sbm  -->
+<assign notfree="0">
+<assign type="modlogan">
+<assign hosting=account.getResource(request.rid)>
+<assign transferlog=hosting.getChild("transferlog")>
+<assign modlogan_price = hosting.estimateCreate("modlogan", "")>
+<if modlogan_price.status!="ERROR">
+  <if modlogan_price.free=="0">
+  <assign notfree="1">
+  <assign setup=modlogan_price.setup>
+  <assign recurrent=modlogan_price.recurrent>
+  <assign recurrentAll=modlogan_price.recurrentAll>
+  </if>
+  <if !transferlog>
+    <assign transferlog_price = account.getResource(request.rid).estimateCreate("transferlog", "simple")>
+    <if transferlog_price.status!="ERROR">
+      <if transferlog_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup,transferlog_price.setup)>
+         <assign recurrent=toolbox.add(recurrent,transferlog_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll,transferlog_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.transferlog,""))>
+      <assign failure="1">
+    </if>
+  </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.mod_logan,""))>
+  <assign failure="1">
+</if>
+
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/modlogan_add_confirm.html">
+  <else>
+    <include "submit/domain/add_modlogan_submit.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/domain/add_modlogan_check.sbm  -->

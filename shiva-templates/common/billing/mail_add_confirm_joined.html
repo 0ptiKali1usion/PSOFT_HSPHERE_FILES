@@ -1,0 +1,11 @@
+<!-- BEGIN ./billing/mail_add_confirm_joined.html  -->
+<assign template="billing/mail_add_confirm_joined.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/billing/mail_add_confirm_joined.html">
+<call bottom()>
+<!--  END ./billing/mail_add_confirm_joined.html  -->

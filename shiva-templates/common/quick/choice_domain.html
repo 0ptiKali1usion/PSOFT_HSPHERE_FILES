@@ -1,0 +1,25 @@
+<!-- BEGIN ./quick/choice_domain.html  -->
+<assign template="quick/choice_domain.html">
+<assign count=account.findAllChildren("domain").size>
+<!-- ${count}-->
+<assign count=toolbox.add(account.findAllChildren("3ldomain").size,count)>
+<!-- ${count}-->
+<assign count=toolbox.add(account.findAllChildren("nodomain").size,count)>
+<!-- ${count}-->
+<assign count=toolbox.add(account.findAllChildren("service_domain").size,count)>
+<!-- ${count}-->
+<assign unixuser=account.getChild("unixuser")>
+<if count!="1">
+<include "functions">
+<call draw_menu("acct-pref")>
+
+<include "control/quick/choice_domain.html">
+
+<call bottom()>
+<else>
+<if unixuser.host.platform_type=="win2k">
+<include "windomain/list.html"><else>
+<include "domain/list.html"></if>
+</if>
+
+<!--  END ./quick/choice_domain.html  -->

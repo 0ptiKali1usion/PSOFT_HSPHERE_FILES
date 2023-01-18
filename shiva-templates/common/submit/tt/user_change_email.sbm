@@ -1,0 +1,23 @@
+<!-- BEGIN ./common/user_change_email.sbm -->
+<assign result=yafv.common.s_tt.vTTMail(lang.label.email,request.email,request.flags)>
+<if result.status=="OK">
+   <assign tt=account.getChild("tt")>
+   <assign ticket=tt.getTicket(request.ttid)>
+
+   <assign result=ticket.setEmail(request.email, request.flags)>
+   <if result.status=="OK">
+      <assign success="1"> 
+   <else>
+      <assign res=session.addMessage(result.msg)>
+   </if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+ 
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vemail=toolbox.html_encode(request.email)>
+    <include request.ftemplate>
+</if>
+<!-- END ./common/user_change_email.sbm -->

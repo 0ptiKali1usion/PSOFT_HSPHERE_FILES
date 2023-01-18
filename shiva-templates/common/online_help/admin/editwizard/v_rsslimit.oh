@@ -1,0 +1,11 @@
+<center>VPS context RSS limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Context RSS Limit is maximum resident/virtual memory usage for for processes running and libraries loaded on a VPS server.<br>
+<br>
+<i>Context RSS Limit</i> depends on virtual memory available on the host server (physical machine), on tasks running on a VPS,
+and on total memory limit. When VPS virtual memory usage exceeds RSS limit, VPS starts to use the host server's SWAP.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* VPS context RSS limit cannot exceed VPS memory limit value </i>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Recommended value for Context RSS Limit = 1/3 * Memory Limit.</i>

@@ -1,0 +1,224 @@
+<!--BEGIN design/login.html -->
+<include "functions">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr}</TITLE>
+<yafv>
+<call define_css()>
+</HEAD>
+<BODY TEXT="${design.color("text_color")}" BGCOLOR="${design.color("bgcolor")}" MARGINHEIGHT="0" MARGINWIDTH="0" LEFTMARGIN="0" TOPMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0">
+<TABLE WIDTH="100%" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+  <call draw_copyright()>
+  <call draw_hs_header()>
+	<TR>
+	<TD WIDTH="14" HEIGHT="100%" BGCOLOR="${design.color("menu_color3")}">
+			<call draw_spacer("14", "11")></TD>
+	<TD WIDTH="1" HEIGHT="100%" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("1", "11")></TD>
+	<TD WIDTH="150" HEIGHT="100%" VALIGN="top" BGCOLOR="${design.color("menu_color3")}">
+<!-- FOR MENU --->
+	<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+	<TR>
+        	<TD WIDTH="135" HEIGHT="23" BGCOLOR="${design.color("menu_color2")}" align="center">
+		    <font face="Verdana" size="2" color="${design.color("menu_text_color")}">
+			<call draw_label_bold(lang.design.login.memberLogin)>
+		    </font>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	<TR>
+		<td width="135" align="center" bgcolor="${design.color("table_light_strip")}">
+		    <font face="Verdana" size="2" color="${design.color("menu_text_color")}">
+			<call draw_label_bold(lang.design.login.login)>
+		    </font>
+		</td>
+	</TR>
+	<TR>
+ 	<yafv s_login>
+        <FORM action="${config.CP_URI}" name="f_login" method="POST" check! accept-charset="UTF-8">
+            <input type="hidden" name="action" value="login">
+		<input type="hidden" name="ftemplate" value="design/login.html">
+		<input type="hidden" name="requestURL" value="${loginURL}">
+		<td width="135" align="center"  bgcolor="${design.color("table_light_strip")}" nowrap>&nbsp;&nbsp;<input type="text" name="login" size="11" maxlength="64" value="" check="vUsername(this)"></td>
+	</TR>
+	<TR>
+        	<td width="135" align="center" bgcolor="${design.color("table_light_strip")}" nowrap>
+		    <font face="Verdana" size="2" color="${design.color("menu_text_color")}">
+			    <call draw_label_bold(lang.design.login.password)>
+		    </font>
+		</td>
+	</TR>
+
+	<TR>
+                <td width="135" align="center" bgcolor="${design.color("table_light_strip")}" nowrap>&nbsp;&nbsp;<input type="password" name="password" size="11" check="vPassword(this)"></td>
+	</TR>
+	<TR>
+                <td width="135" height="32" align="center" valign="bottom" bgcolor="${design.color("table_light_strip")}">	
+		    <call draw_submit("password", "go")>&nbsp;
+		</td>
+	</FORM>						
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="45" ALIGN="CENTER" BGCOLOR="${design.color("menu_color1")}">
+		    <!--here must be implementation of multilanguage labels!!!-->
+		    <call draw_link(config.CP_URI+"?action=forgetPassw&ftemplate=design/login.html", lang.design.login.forgetpsw)>
+		</TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+
+<!-- Language settings-->
+	
+	<TR>
+                <TD WIDTH="135" HEIGHT="11" BGCOLOR="${design.color("menu_color3")}">
+			<call draw_spacer("135", "10")></TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="23" BGCOLOR="${design.color("menu_color2")}" align="center">
+		    <font face="Verdana" size="2" color="${design.color("menu_text_color")}">
+			<call draw_label_bold(lang.misc.langs.language)>
+		    </font>
+		</TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="11" BGCOLOR="${design.color("table_light_strip")}">
+			<call draw_spacer("135", "10")></TD>
+	</TR>
+                <td width="135" align="center"  bgcolor="${design.color("table_light_strip")}" nowrap>
+		<FORM action="${config.CP_URI}" name="f_lang" method="POST" accept-charset="UTF-8">
+        	<TABLE WIDTH="100%" align="center" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+			<TR>
+			<TD align="center">
+<select name="_language_">
+  <list toolbox.lang_list as the_lang>
+    <assign lang_code = the_lang.code>
+    <assign lang_desc = the_lang.desc>
+    <if toolbox.consists(lang_code, locale) == "1"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+    <option ${v_sel} value="${lang_code}">${lang[lang_desc]}</option>
+  </list>
+</select>
+			</TD>
+			</TR>
+		</TABLE>	
+</td>
+        </TR>
+        <TR>
+                <td width="135" height="40" align="center" bgcolor="${design.color("table_light_strip")}">
+                    <input type="hidden" name="action" value="lang">
+                    <input type="hidden" name="ftemplate" value="design/login.html">
+                    <input type="hidden" name="stemplate" value="design/login.html">
+                    <call draw_submit("lang", "change_lan")>&nbsp;
+                </td>
+        </FORM>
+	<TR>
+		<TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	<TR>
+                <TD WIDTH="135" HEIGHT="11" BGCOLOR="${design.color("menu_color1")}">
+			<call draw_spacer("135", "10")></TD>
+	</TR>
+        </TR>
+	<TR>
+        	<TD WIDTH="135" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+			<call draw_spacer("135", "1")></TD>
+	</TR>
+	
+
+<!-- End of language settings-->
+
+	</TABLE>
+<!-- END OF MENU --->
+	</TD>
+
+	<TD WIDTH="1" HEIGHT="100%" BGCOLOR="${design.color("border_color")}"><call draw_spacer("1", "1")></TD>
+
+	<TD WIDTH="${main_col_width}" HEIGHT="100%" VALIGN="top" >
+		<TABLE WIDTH="100%" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+		<TR>
+		<TD BGCOLOR="${design.color("hint_color")}" WIDTH="100%" HEIGHT="31" valign="middle">
+	<if message>
+		&nbsp;&nbsp;<i><if settings.error_color><font color="${design.color("error_color")}"><else><font color="#FF0000"></if>${message}</font></i><br>
+        <else>
+	  <if settings.welcome_message>
+		&nbsp;&nbsp;${settings.welcome_message}
+	  <else>
+		&nbsp;&nbsp;${lang[html_help["welcome_message"]["tip"]]}
+	  </if>
+	</if>
+		</TD>
+		<TR>
+		<TD WIDTH="100%" HEIGHT="1" BGCOLOR="${design.color("border_color")}">
+		<call draw_spacer("1", "1")></TD>
+		</TR>
+		<TR>
+		<td width="100%" height="100%" valign="top" bgcolor="${design.color("bgcolor")}" >	
+		<table width="100%" border="0" cellspacing="4" cellpadding="4">
+		<TR>
+		<td colspan="2">
+		<div align="justify">
+		<if settings.welcome_text>
+			${settings.welcome_text}
+		<else>
+			${lang[html_help["welcome_text"]["tip"]]}
+		</if>
+		</div>
+		</td>
+		</tr>
+		<tr>
+		<td width="100%" valign="top">
+		<if settings.welcome_services>
+		 <assign welcome_services_text=settings.welcome_services>
+		<else>
+		 <assign welcome_services_text=lang[html_help["welcome_services"]["tip"]]>
+		</if>
+		<div align="justify">
+		 ${welcome_services_text}
+		 <br>
+		<!--Here must be multilanguge support-->
+		<call draw_link(config.CP_URI+"?action=plan_list&template_name=misc/choose_plan.html", lang.design.login.signup)>
+		 <br>&nbsp;<br>
+		<!--Here must be multilanguage support-->
+		<call draw_link(config.CP_URI+"?action=plan_compare&template_name=misc/compare_way.html", lang.design.login.compare)>
+		</div></td>
+		<if !settings.login_image_url>
+		 <td><call draw_image("sphera_log")></td>
+		<else>
+		 <if (settings.login_image_width) && (settings.login_image_height)>
+		  <td><IMG SRC="${settings.login_image_url}" border="0" WIDTH="${settings.login_image_width}" HEIGHT="${settings.login_image_height}"></td>
+		 <else>
+		  <td><IMG SRC="${settings.login_image_url}" border="0"></td>
+		 </if>
+		</if>
+		</tr>
+		</table>				    
+		</td>
+		</TR>
+		</TABLE>
+	</TD>
+
+	</TR>
+</TABLE>
+
+</BODY>
+</HTML>
+<!--END design/login.html -->

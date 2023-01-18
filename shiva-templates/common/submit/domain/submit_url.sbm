@@ -1,0 +1,10 @@
+<!-- BEGIN ./domain/submit/submit_url.sbm-->
+<assign result = yafv.checkall( yafv.common.s_domain.vTransferDomainName("Domain name", request["domain"]), yafv.common.s_domain.vEmail("Email", request["email"]))>
+<if result.status!="OK">
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <include request.ftemplate>
+<else>
+  <assign submitedengines = toolbox.submitURL("www."+request["domain"], request["email"], request["time_out"], request["keywords"], request["description"], request["sites_to_submit"])>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/domain/submit_url.sbm  -->

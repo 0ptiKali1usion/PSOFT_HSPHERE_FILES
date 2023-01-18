@@ -1,0 +1,46 @@
+<!-- BEGIN ./submit/domain/add_urchin4_check_unix.sbm  -->
+<assign notfree="0">
+<assign type="urchin4">
+<assign hosting=account.getResource(request.rid)>
+<assign transferlog=hosting.getChild("transferlog")>
+<assign urchin4_price = hosting.estimateCreate("urchin4", "")>
+<if urhin4_price.status!="ERROR">
+  <if urchin4_price.free=="0">
+    <assign notfree="1">
+    <assign setup=urchin4_price.setup>
+    <assign recurrent=urchin4_price.recurrent>
+    <assign recurrentAll=urchin4_price.recurrentAll>
+  </if>
+  <if !transferlog>
+    <assign transferlog_price = account.getResource(request.rid).estimateCreate("transferlog", "simple")>
+    <if transferlog_price.status!="ERROR">
+      <if transferlog_price.free=="0">
+        <assign notfree="1">
+        <assign setup=toolbox.add(setup,transferlog_price.setup)>
+        <assign recurrent=toolbox.add(recurrent,transferlog_price.recurrent)>
+        <assign recurrentAll=toolbox.add(recurrentAll,transferlog_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_add,lang.label.transferlog,""))>
+      <assign res = session.addMessage(transferlog_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.urchin4,""))>
+  <assign res = session.addMessage(urchin4_price.msg)>
+  <assign failure="1">
+</if>
+
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/urchin4_add_confirm.html">
+  <else>
+    <include "submit/domain/add_urchin4_submit_unix.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/domain/add_urchin4_check_unix.sbm  -->

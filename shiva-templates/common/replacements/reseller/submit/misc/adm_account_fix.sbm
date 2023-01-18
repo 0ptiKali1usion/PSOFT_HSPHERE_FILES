@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/misc/adm_account_fix.sbm  -->
+<assign reseller = account.getChild("reseller")>
+<assign res = reseller.repairAdminAccount()>
+<if res.status!="OK">
+   <assign failure="1">
+   <assign err=session.addMessage(res.msg)>
+<else>
+   <assign err=session.addMessage(lang.msg.reseller.adminfix.success)>
+</if>
+<if !failure>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!-- END ./submit/misc/adm_account_fix.sbm  -->

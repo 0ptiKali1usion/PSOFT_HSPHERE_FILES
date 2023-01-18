@@ -1,0 +1,7 @@
+<center> quitasap </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables (1) or disables (0) quitting SMTP session immediately if one of the above rules works. 
+<br>Default: 0 (no quitting).
+<br>
+

@@ -1,0 +1,14 @@
+<!-- BEGIN ./app/confirm.html -->
+
+<assign template="app/"+request.app_type+"-confirm.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<if !stype><assign stype=request.stype></if>
+<include "control/app/"+stype+"-confirm.html">
+<call bottom()>
+
+<!-- END ./app/confirm.html -->

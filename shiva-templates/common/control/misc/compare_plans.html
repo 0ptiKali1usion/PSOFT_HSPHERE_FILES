@@ -1,0 +1,357 @@
+<!-- BEGIN ./common/control/misc/compare_plans.html -->
+
+<assign fcol_percentage = "20">
+<assign percentage = toolbox.div("80", plan_ids.size)>
+<assign columns = toolbox.add(plan_ids.size, "1")>
+<call draw_tooltip()>
+
+<call draw_table_header(columns, "")>
+
+<call draw_compare_header()>
+
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.features)></td>
+</tr>
+
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan = plans[plan_id]>
+<if !plan.is_reseller_plan>
+  <assign rtype=plan.getResourceType("quota")>
+<else>
+  <assign rtype=plan.getResourceType("summary_quota")>
+</if>
+<if rtype>
+  <call showSkippedCols(lang.misc.compareplans.space)>
+  <td nowrap align="left" valign="middle">
+  <if !rtype.values["_FREE_UNITS_"]><call draw_label(lang.misc.compareplans.incl0)><else><call draw_label(toolbox.compose(lang.misc.compareplans.incl, rtype.values["_FREE_UNITS_"]))><br></if>
+  </td>
+<else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if !plan.is_reseller_plan>
+  <assign rtype=plan.getResourceType("traffic")>
+<else>
+  <assign rtype=plan.getResourceType("reseller_traffic")>
+</if>
+<if rtype>
+  <call showSkippedCols(lang.misc.compareplans.monthly)>
+  <td nowrap align="left" valign="middle">
+  <if !rtype.values["_FREE_UNITS_"]><call draw_label(lang.misc.compareplans.incl0)><else><call draw_label(toolbox.compose(lang.misc.compareplans.inclgb, rtype.values["_FREE_UNITS_"]))><br></if>
+  </td>
+<else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if plan.is_reseller_plan>
+  <assign rtype=plan.getResourceType("reseller")>
+  <assign resource = "account">
+  <if rtype>
+    <call showSkippedCols(lang.misc.compareplans.cust_accounts)>
+    <if rtype.values["_UNIT_PRICE_" + resource + "_"] || rtype.values["_SETUP_PRICE_" + resource + "_"]>
+      <assign free_units = rtype.values["_FREE_UNITS_" + resource + "_"]>
+      <if free_units>
+        <td nowrap valign="middle"><call draw_label(toolbox.compose(lang.misc.compareplans.incl1, free_units, ""))></td>
+      <else>
+        <call addColAsSkipped("-")>
+      </if>
+    <else>
+      <assign vmax = rtype.values["_MAX_" + resource + "_"]>
+      <if vmax>
+        <td nowrap valign="middle"><call draw_label(toolbox.compose(lang.misc.compareplans.max, vmax))></td>
+      <else>
+        <td nowrap valign="middle"><call draw_label(lang.misc.compareplans.unlimited)></td>
+      </if>
+    </if>
+  <else>
+    <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+  </if>
+<else>
+  <call addColAsSkipped("-")>
+</if>
+</list>
+<call complete_tr()>
+
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.websrv)></td>
+</tr>
+<call service("asp")>
+<call service("asp_net")>
+<call service("cgi")>
+<call service("cgidir")>
+<call service("frontpage")>
+<call service("php3")>
+<call service("ssi")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.mailsrv)></td>
+</tr>
+<call service("mailbox")>
+<call service("mailing_list")>
+<call service("mailbox_alias")>
+<call service("mail_forward")>
+<call service("responder")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.ecomopts)></td>
+</tr>
+<call service("miva")>
+<call service("oscommerce")>
+<call service("ssl")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.types)></td>
+</tr>
+<if "1" == "0">REM: For future releases.<call service("opensrs")></if>
+<call service("domain")>
+<call service("subdomain")>
+<call service("3ldomain")>
+<call service("nodomain")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.label.statistics)></td>
+</tr>
+<call service("transferlog")>
+<call service("referrerlog")>
+<call service("agentlog")>
+<call service("errorlog")>
+<call service("webalizer")>
+<call service("modlogan")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.other)></td>
+</tr>
+<call service("MySQLDatabase")>
+<call service("MySQLUser")>
+
+<call service("MSSQLDatabase")>
+<call service("MSSQLUser")>
+
+<call service("pgsqldatabase")>
+<call service("pgsqluser")>
+
+<call service("ip")>
+<call service("ftp_vhost")>
+<call service("ftp_vhost_anonymous")>
+<call service("odbc")>
+<call service("real_user")>
+<call service("sitestudio")>
+<tr>
+<td class="control_header_align_center" colspan="${columns}"><call draw_header(lang.misc.compareplans.quotas)></td>
+</tr>
+<call quota(lang.misc.compareplans.nettraffic,"traffic","GB","1")>
+<call quota(lang.misc.compareplans.diskquota,"quota","MB","")>
+<call quota(lang.misc.compareplans.mailquota,"mail_quota","MB","")>
+<call quota(lang.misc.compareplans.mysqlquota,"mysqldb_quota","MB","1")>
+<call quota(lang.misc.compareplans.mssqldbquota,"MSSQLQuota","MB","")>
+<call quota(lang.misc.compareplans.pgsqldbquota,"pgsqldb_quota","MB","1")>
+<call sign__up()>
+
+<call draw_table_footer()>
+
+<function draw_compare_header()>
+<tr>
+<td width="${fcol_percentage}%" class="control_header_align_center"><call draw_header(lang.misc.compareplans.r_description)></td>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<td width="${percentage}%" class="control_header_align_center"><if !plan.is_reseller_plan><call draw_header(plan.description)><else><call draw_header(lang.misc.compareplans.reseller_plan(plan.description))></if></td>
+</list>
+</tr>
+<call draw_fee(lang.label.setup_fee,"_SETUP_PRICE_","account")>
+<call draw_fee(lang.misc.compareplans.monthlyfee,"_UNIT_PRICE_","account")>
+
+<tr >
+<td><call draw_label(lang.misc.compareplans.climit)></td>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<assign credit_limit=plan.values["_HARD_CREDIT"]>
+<if credit_limit><td class="control_align_right"><call draw_label(toolbox.currency(credit_limit))>&nbsp;</td><else><td class="control_align_right"><call draw_label(toolbox.currency("0"))>&nbsp;</td></if>
+</list>
+</tr>
+
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if plan.b_info == "2">
+  <call showSkippedCols(lang.misc.compareplans.trialreg)>
+  <if plan.values["_TRIAL_PERIOD"]>
+    <assign days=plan.values["_TRIAL_PERIOD"]>
+  <else>
+    <assign days="0">
+  </if>
+  <if plan.values["_TRIAL_CREDIT"]>
+    <assign trial_credit=plan.values["_TRIAL_CREDIT"]>
+  <else>
+    <assign trial_credit="0">
+  </if>
+  <td><call draw_label(toolbox.compose(lang.misc.compareplans.avperiod, days, toolbox.currency(trial_credit)))></td>
+<else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if plan.values["MONEY_BACK_CALC"]>
+  <call showSkippedCols(lang.misc.compareplans.moneyback)>
+  <assign days=plan.values["MONEY_BACK_DAYS"]>
+  <td><call draw_label(toolbox.compose(lang.misc.compareplans.valid,days))></td>
+  <else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+</function>
+
+<function draw_fee(title,fee_type,resource)>
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<assign rtype=plan.getResourceType(resource)>
+<assign price=rtype.values[fee_type]>
+<if price>
+  <call showSkippedCols(title)>
+  <td class="control_align_right"><call draw_label(toolbox.currency(price))>&nbsp;</td>
+<else>
+  <call addColAsSkipped("-")>
+</if>
+</list>
+<call complete_tr()>
+</function>
+
+<function service(resource)>
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if !plan.is_reseller_plan>
+  <assign rtype=plan.getResourceType(resource)>
+  <assign addResPrice = "">
+  <assign addResUnit = "">
+  <assign addResMax = "">
+<else>
+  <assign rtype=plan.getResourceType("reseller")>
+  <assign addResPrice = resource + "_">
+  <assign addResUnit = resource + "_">
+  <assign addResMax = "_" + resource + "_">
+</if>
+<if rtype && !plan.isResourceDisabled(resource)>
+  <call showSkippedCols(toolbox.getResourceDescription(toolbox.getTypeId(resource)))>
+  <td nowrap valign="middle">
+  <if !rtype.values["_SETUP_PRICE_" + addResPrice]><assign setup="0"><else><assign setup=rtype.values["_SETUP_PRICE_" + addResPrice]></if>
+  <if !rtype.values["_UNIT_PRICE_" + addResPrice]><assign monthly="0"><else><assign monthly=rtype.values["_UNIT_PRICE_" + addResPrice]></if>
+  <if rtype.values["_FREE_UNITS_" + addResUnit]><call draw_label(toolbox.compose(lang.misc.compareplans.free1, rtype.values["_FREE_UNITS_" + addResUnit]))><br></if>
+  <if setup=="0" && monthly=="0">
+    <call draw_label(lang.misc.compareplans.freesmall)>
+  <else>
+    <call draw_label(toolbox.compose(lang.misc.compareplans.setupmoney, toolbox.currency(setup)))>
+    <br><call draw_label(toolbox.compose(lang.misc.compareplans.monthmoney, toolbox.currency(monthly)))>
+  </if>
+  <if rtype.values["_MAX" + addResMax]>
+    <br><call draw_label(toolbox.compose(lang.misc.compareplans.maxmoney, rtype.values["_MAX" + addResMax]))>
+  </if>
+  </td>
+<else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+</function>
+
+<function quota(title,resource,unit,draw_extra)>
+<call resetSkippedCols()>
+<list plan_ids as plan_id>
+<assign plan=plans[plan_id]>
+<if !plan.is_reseller_plan>
+  <assign rtype=plan.getResourceType(resource)>
+  <assign addResPrice = "">
+  <assign addResUnit = "">
+  <assign addResMax = "">
+<else>
+  <assign rtype=plan.getResourceType("reseller")>
+  <assign addResPrice = resource + "_">
+  <assign addResUnit = resource + "_">
+  <assign addResMax = "_" + resource + "_">
+</if>
+<if rtype && !plan.isResourceDisabled(resource)>
+  <if !rtype.values["_UNIT_PRICE_" + addResPrice]><assign monthly="0"><else><assign monthly=rtype.values["_UNIT_PRICE_" + addResPrice]></if>
+  <if !rtype.values["_USAGE_PRICE_" + addResPrice]><assign usage="0"><else><assign usage=rtype.values["_USAGE_PRICE_" + addResPrice]></if>
+  <assign free_units = rtype.values["_FREE_UNITS_" + addResUnit]>
+  <if (toolbox.eq(monthly, "0") == "1") && (toolbox.eq(usage, "0") == "1")>
+    <if !plan.is_reseller_plan>
+      <call showSkippedCols(title)>
+      <td nowrap valign="middle">
+      <if free_units><call draw_label(toolbox.compose(lang.misc.compareplans.incl1, free_units, unit))><br></if>
+      <if rtype.values["_MAX" + addResMax]>
+	<call draw_label(toolbox.compose(lang.misc.compareplans.maxmoney, rtype.values["_MAX" + addResMax]))>
+      <else>
+	<call draw_label(lang.misc.compareplans.unlimited)>
+      </if>
+      </td>
+    <else>
+      <call addColAsSkipped("-")>
+    </if>
+  <else>
+    <call showSkippedCols(title)>
+    <td nowrap valign="middle">
+    <if free_units><call draw_label(toolbox.compose(lang.misc.compareplans.incl1, free_units, unit))><br></if>
+    <call draw_label(toolbox.compose(lang.misc.compareplans.month1, toolbox.currency(monthly), unit))>
+    <if draw_extra=="1">
+      <br><call draw_label(toolbox.compose(lang.misc.compareplans.extra, toolbox.currency(usage), unit))>
+    </if>
+    </td>
+  </if>
+<else>
+  <call addColAsSkipped(lang.misc.compareplans.unavailable)>
+</if>
+</list>
+<call complete_tr()>
+</function>
+
+<function sign__up()>
+<tr bgcolor="${DARK_STRIP}">
+<td><call draw_label_bold(lang.label.select)></td>
+<list plan_ids as plan_id>
+<assign mp=plans[plan_id]>
+<if mp.disabled != "1" && mp.accessCheck("")>
+  <td class="control_align_center" valign="middle">
+    <call draw_select_signup_compare(mp)>
+  </td>
+</if>
+</list>
+</tr>
+</function>
+
+<function resetSkippedCols()>
+  <assign skipCols = "1">
+  <assign skippedLabels = toolbox.new_list>
+</function>
+
+<function showSkippedCols(row_label)>
+  <if skipCols>
+    <tr>
+    <td nowrap valign="middle"><call draw_label(row_label)></td>
+    <list skippedLabels as col_label>
+      <td nowrap class="control_align_center" valign="middle"><call draw_label(col_label)></td>
+    </list>
+    <assign skipCols = "">
+  </if>
+</function>
+
+<function addColAsSkipped(col_label)>
+  <if skipCols>
+    <assign res = skippedLabels.add(col_label)>
+  <else>
+    <td nowrap class="control_align_center" valign="middle"><call draw_label(col_label)></td>
+  </if>
+</function>
+
+<function complete_tr()><if !skipCols></tr></if></function>
+<!-- END ./common/control/misc/compare_plans.html -->

@@ -1,0 +1,52 @@
+<!-- BEGIN ./control/admin/delete_rsync_module.html  -->
+<call draw_tooltip()>
+<assign reseller_su= account.getChild("reseller_su")>
+
+<if reseller_su>
+
+<assign module = reseller_su.getContentMoveItem(request.cmi_id)>
+
+
+
+<call draw_table_header("", lang.contentmove.delmodule.header)>
+
+
+<tr>
+<td class="control_align_center">
+<if module.isStarted && !module.isFinished>
+  <call draw_label(toolbox.compose(lang.contentmove.delmodule.warn, lang.contentmove.delmodule.warn.unfinished, module.content_type))>
+</if>
+<if !module.isStarted>
+  <call draw_label(toolbox.compose(lang.contentmove.delmodule.warn, lang.contentmove.delmodule.warn.notstarted, module.content_type))>
+</if>
+<if module.isStarted && module.isFinished>
+  <call draw_label(toolbox.compose(lang.contentmove.delmodule.warn, lang.contentmove.delmodule.warn.finished, module.content_type))>
+</if>
+</td>
+</tr>
+<tr>
+<td>
+<form name="plan_delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/delete_rsync_module.sbm">
+<input type="hidden" name="cmi_id" value="${request.cmi_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<compress>
+  <list params as sc_param>
+     <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+        <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+     </if>
+  </list>
+</compress>
+<center>
+<call draw_link("javascript:document.plan_delete_confirm.submit()", lang.contentmove.delmodule.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.contentmove.delmodule.no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/delete_rsync_module.html  -->

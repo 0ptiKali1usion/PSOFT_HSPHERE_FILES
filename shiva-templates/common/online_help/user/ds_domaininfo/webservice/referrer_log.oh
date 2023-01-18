@@ -1,0 +1,6 @@
+<center>  Referrer Log</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;It&nbsp; 
+logs URLs from which visitors are referred to user's site.<br>
+ Enable writing referrer logs.<br>
+  All logs are stored in user's log directory. You can view them using telnet. 

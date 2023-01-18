@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/admin/ds/del_netswitch.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign res=ds_manager.delNetInterface(request.ni_id)>
+<if res.status!="OK">
+  <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/del_netswitch.sbm  -->

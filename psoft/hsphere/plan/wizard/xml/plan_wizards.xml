@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<wizards>
+<wizard name="unix" description="admin.planwizs.unixwiz"/>
+<wizard name="windows" description="admin.planwizs.winwiz"/>
+<wizard name="mysql" description="admin.planwizs.mysqlwiz"/>
+<wizard name="mailonly" description="admin.planwizs.email_only"/>
+<wizard name="unixreal" description="admin.planwizs.realwiz"/>
+<wizard name="windowsreal" description="admin.planwizs.winrealwiz"/>
+<wizard name="admin" description="admin.planwizs.adminwiz"/>
+<wizard name="vps" description="admin.planwizs.vps_wiz"/>
+<wizard name="dedicated_server" description="admin.planwizs.ds_wiz"/>
+<wizard name="msexchange" description="admin.planwizs.msexchange"/>
+</wizards>
+
+

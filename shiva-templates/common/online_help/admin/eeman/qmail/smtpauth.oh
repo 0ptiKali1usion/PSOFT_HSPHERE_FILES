@@ -1,0 +1,7 @@
+<center> smtpauth </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables SMTP AUTH authentication. Allows simultaneous POP-BEFORE-SMTP and SMTP AUTH authentication and uses the one that was established first.
+<br>Default: 0 (AUTH LOGIN/PLAIN SMTP extension is disabled).
+<br>
+

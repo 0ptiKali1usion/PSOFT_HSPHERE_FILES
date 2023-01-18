@@ -1,0 +1,5 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+ 
+${lang.massmail.ds_autocancellation_text(ds.name, ds.id, cancellation("MEDIUM"))}
+
+${settings.support}

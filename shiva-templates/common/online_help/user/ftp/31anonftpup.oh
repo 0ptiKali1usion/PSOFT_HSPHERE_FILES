@@ -1,0 +1,5 @@
+<center>Anonymous FTP Upload Facilities</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Switch on the <i>Anonymous FTP Upload Facilities</i> button to create a special folder within the FTP directory for your anonymous FTP visitors to upload the files. After the upload, these files will be accessible only for you. Be aware that this directory can be created only when Anonymous FTP access is activated.
+

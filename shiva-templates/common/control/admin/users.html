@@ -1,0 +1,179 @@
+<!-- BEGIN ./control/admin/users.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+
+<form name="search_users" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_users_header)>
+
+<tr>
+<td nowrap><call draw_label(lang.label.group)></td>
+<td>
+    <select name="sc_group" size="1" onChange="javascript:printListPservers(this.options[this.options.selectedIndex].value)">
+	  <option value="">${lang.label.any}
+      <list eeman.groups as group>
+        <if group.name><option value="${group.id}">${group.name}</option></if>
+        <assign selected="">
+      </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td    nowrap><call draw_label(lang.eeman.pserver)></td>
+  <td>
+    <select name="sc_pserver" size="1">
+	<option value="">${lang.label.any}
+    <list eeman.getPserverList() as pserver>
+      <option value="${pserver.id}">${pserver.name}</option>
+      <assign selected="">
+    </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td    nowrap><call draw_label(lang.eeman.lserveredit.header)></td>
+  <td>
+    <select name="sc_lserver" size="1" onChange="javascript:lserverChange(this.options[this.options.selectedIndex].value)">
+	<option value="">${lang.label.any}
+    <list eeman.getLserverList() as lserver>
+      <option value="${lserver.id}">${lserver.name}</option>
+      <assign selected="">
+    </list>
+    </select>
+  </td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/users.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="stemp" value="${template}">  
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+<script language="javascript"><!--
+	group = new Array();
+	pname = new Array();
+	gname = new Array();
+	<list eeman.groups as group>
+	gname[${group.id}] = "${group.name}";
+	</list>
+	<list eeman.getPserverList() as pserver>
+	pname[${pserver.id}] = "${pserver.name}";
+	</list>
+	<list eeman.getGroupsList() as group>
+	<compress>
+	<assign res="null">
+	<list eeman.getPserversForGroup(group) as pserver>
+	<assign res=res+","+pserver.id>
+	</list>
+	</compress>
+	group[${group}] = new Array(${res});
+	</list>
+	lserverChange("");
+	window.document.search_users.sc_lserver.options[0].selected = true;
+	function printListPservers(groupId) {
+		str = "";
+		for (i = window.document.search_users.sc_pserver.options.length-1; i >= 0; i--) {
+			window.document.search_users.sc_pserver.options[i] = null;
+		}
+		nop = new Option();
+		nop.text = "DISABLED";
+		nop.value = -1;
+		window.document.search_users.sc_pserver.options[0] = nop;
+		window.document.search_users.sc_pserver.disabled = true;
+		if (group[groupId]) {
+			for (i = 1; i < group[groupId].length; i++) {
+				nop = new Option();
+				pid = group[groupId][i];
+				if (pid != null) {
+					nop.text = pname[pid];
+					nop.value = pid;
+					window.document.search_users.sc_pserver.options[i-1] = nop;
+				}
+			}
+		} else if (groupId == "") {
+			nop = new Option();
+			nop.text = "${lang.label.any}";
+			nop.value = "";
+			window.document.search_users.sc_pserver.options[0] = nop;
+			j = 1;
+			for (i = 1; i < pname.length; i++) {
+				if (pname[i] != null) {
+					nop = new Option();
+					nop.text = pname[i];
+					nop.value = i;
+					window.document.search_users.sc_pserver.options[j] = nop;
+					j++;
+				}
+			}
+		}
+		if (window.document.search_users.sc_pserver.options.length > 1 ) {
+			window.document.search_users.sc_pserver.options[0].selected = true;
+			window.document.search_users.sc_pserver.disabled = false;
+    	}
+	}
+
+	function lserverChange(lserverId) {
+		if (lserverId == "") {
+			nop = new Option();
+			nop.text = "${lang.label.any}";
+			nop.value = "";
+			window.document.search_users.sc_pserver.options[0] = nop;
+			j = 1;
+			for (i = 1; i < pname.length; i++) {
+				if (pname[i] != null) {
+					nop = new Option();
+					nop.text = pname[i];
+					nop.value = i;
+					window.document.search_users.sc_pserver.options[j] = nop;
+					j++;
+				}
+			}
+			nop = new Option();
+			nop.text = "${lang.label.any}";
+			nop.value = "";
+			window.document.search_users.sc_group.options[0] = nop;
+			j = 1;
+			for (i = 1; i < gname.length; i++) {
+				if (gname[i] != null) {
+					nop = new Option();
+					nop.text = gname[i];
+					nop.value = i;
+					window.document.search_users.sc_group.options[j] = nop;
+					j++;
+				}
+			}
+			window.document.search_users.sc_group.disabled = false;
+			window.document.search_users.sc_pserver.disabled = false;
+		} else {
+			for (i = window.document.search_users.sc_group.options.length-1; i>=0; i--) {
+				window.document.search_users.sc_group.options[i]=null;
+			}
+			nop = new Option();
+			nop.text = "DISABLED";
+			nop.value = -1;
+			window.document.search_users.sc_group.options[0] = nop;
+			for (i = window.document.search_users.sc_pserver.options.length-1; i>=0; i--) {
+				window.document.search_users.sc_pserver.options[i]=null;
+			}
+			nop = new Option();
+			nop.text = "DISABLED";
+			nop.value = -1;
+			window.document.search_users.sc_pserver.options[0] = nop;
+			window.document.search_users.sc_group.disabled = true;
+			window.document.search_users.sc_pserver.disabled = true;
+		}
+	}
+//-->
+</script>
+
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/users.html  -->

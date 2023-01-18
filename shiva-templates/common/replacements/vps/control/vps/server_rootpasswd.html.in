@@ -1,0 +1,27 @@
+<!-- BEGIN ./control/vps/server_rootpasswd.html.in  -->
+<call draw_tooltip()>
+<assign vps = account.getChild("vps")>
+<yafv s_quick>
+<form action="${config.CLIENT_CP_URL}" name="f_rootpasswd" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/vps/change_root_passwd.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="login" value="root">
+
+<call draw_table_header("2", toolbox.compose(lang.vps.rootpasswd.title, vps.name))>
+
+<tr>
+        <td><call draw_label(lang.vps.rootpasswd.label)></td>
+        <td><input type="password" name="new_password" value="" label="${lang.vps.rootpasswd.label}" check="vPassword1(this, login)"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.vps.rootpasswd_confirm.label)></td>
+<td><input type="password" name="new_password1" value="" label="${lang.label.confirm_psw}" check="vPassword2(new_password,this)"></td>
+</tr>
+<tr>
+        <td  colspan="2" align="center"><input type="submit" value="${lang.button.change}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/vps/server_rootpasswd.html.in  --> 

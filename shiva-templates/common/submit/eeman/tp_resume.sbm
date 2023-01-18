@@ -1,0 +1,24 @@
+<!-- BEGIN ./eeman/tp_resume.sbm  -->
+<assign goTo = request.stemplate>
+<assign eeman = account.getChild("eeman")>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<if tp>
+    <if tp.errorsDetected && request.force != "1">
+      <assign goTo = "eeman/tp_resume_confirm.html">
+    <else>
+      <assign result = tp.resume()>
+      <if result.status != "OK">
+	<assign failure="1">
+      </if>
+    </if>
+<else>
+  <assign failure="1">
+</if>
+
+<if !failure>
+     <include goTo>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./eeman/tp_resume.sbm  -->

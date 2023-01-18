@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/admin/settings/delete_ccbrand.sbm  -->
+<assign mm = account.getChild("merchant_manager")>
+<assign result = mm.deleteCCbrand(request.id)>
+<if result.status=="OK">
+  <include request.template>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete, lang.label.cc_brand, ""))>
+  <assign res = session.addMessage(result.msg)>
+  <include request.template>
+</if>
+<!--  END ./submit/admin/settings/delete_ccbrand.sbm  -->

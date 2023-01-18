@@ -1,0 +1,19 @@
+<center>Domain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;This is the domain whose web services you are viewing or configuring.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<i> Domain Name</i> is one of the essentials for account 
+  creation. It is a human type name address (as opposed to IP address) at which 
+  your site is accessible from the Internet.<br> <br>Domains of differnt types may or may not<br>
+- have IP address (shared or dedicated);<br>
+- have Web and Mail services;<br>
+- have DNS zones;<br>
+- be accessed through FTP;<br>
+- have subdomains;<br>
+- have aliases.<br>
+<br>
+
+ 
+Click the<i> hypertext domain name</i> to get at the domain info page.<br>
+Click the <i>View</i> icon to go to your site as a visitor.<br>
+<br>
+For more information see <i>Domain Management </i>and <i>Registering Domain Names</i>, 
+User Guide. 

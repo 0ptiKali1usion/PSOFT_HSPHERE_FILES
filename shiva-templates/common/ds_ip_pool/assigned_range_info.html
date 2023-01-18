@@ -1,0 +1,38 @@
+<!-- BEGIN ./ds_ip_pool/assigned_range_info.html  -->
+<include "functions">
+<HTML>
+<HEAD>
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${lang.onlinehelp.help_wrapper.title}</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<call define_css()>
+</HEAD>
+
+<BODY>
+
+<call define_css()>
+<assign range_info = obj.subnet_manager.getAssignedRangeInfo(request.range_id)>
+<assign template="ds_ip_pool/assigned_range_info.html">
+<call draw_table_header("2", lang.admin.ds.ip_pool.assignee_info)>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.assignee_reseller)></td>
+  <td><call draw_label(range_info.reseller)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.assignee_account)></td>
+  <td><call draw_label(range_info.account_id)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.assignee_ds_name)></td>
+  <td><call draw_label(range_info.ds_name)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.ipr_usageinfo)></td>
+  <td><call draw_label(range_info.usage_info)></td>
+</tr>
+<call draw_table_footer()>
+</table>
+</BODY>
+</HTML>
+
+<!--  END ./ds_ip_pool/assigned_range_info.html  -->

@@ -1,0 +1,13 @@
+<!-- BEGIN ./misc/show_demo.html  -->
+<call draw_tooltip()>
+<if !header>
+    <assign header = request.header>
+</if>
+<if !image>
+    <assign image= request.image>
+</if>
+<call draw_table_header("", header)>
+<tr ><td><call draw_label(toolbox.compose(lang.misc.unable_in_demo_mode,header))></td></tr>
+<tr ><td><call draw_image(image)></td></tr>
+<call draw_table_footer()>
+<!--  END ./misc/show_demo.html  -->

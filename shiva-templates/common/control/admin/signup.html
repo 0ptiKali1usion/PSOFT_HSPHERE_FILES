@@ -1,0 +1,31 @@
+<!-- BEGIN ./control/admin/signup.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+
+
+
+<call draw_table_header("2", lang.admin.signup.header)>
+
+  
+<list account.plan.getAccessiblePlanList(account.plan.id) as group>
+<tr>
+   <td  class="control_align_center" width="70%" colspan="2">
+        <if group.id!="0"><call draw_label_bold(group.name)><else><call draw_label_bold(lang.admin.signup.ungrouped)></if>
+</td>
+</tr>
+ 
+<list group.plans as plan>
+<tr>
+<td     nowrap><call draw_label(plan.description)></td>
+<td width="10%"  class="control_align_center" nowrap>
+  <call draw_select_adminsignup(plan.id)>
+</td>
+</tr>
+</list>
+</list>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/admin/signup.html  -->

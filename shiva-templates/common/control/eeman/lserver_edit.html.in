@@ -1,0 +1,265 @@
+<!-- BEGIN ./control/eeman/lserver_edit.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+<assign admin = account.getChild("admin")>
+
+<if eeman>
+<if request.rid>
+	<assign lserver=eeman.getLserver(request.rid)>
+	<assign pserver=eeman.getPserver(lserver.pserver)>
+</if>
+
+<call draw_table_header("2", lang.eeman.lserveredit.header)>
+<tr>
+  <td><call draw_label(lang.eeman.id)></td>
+  <td><call draw_label(lserver.id)></td></tr>
+<tr>
+  <td><call draw_label(lang.eeman.name)></td>
+  <td><call draw_label(lserver.name)></td></tr>
+<tr>
+  <td><call draw_label(lang.label.group)></td>
+  <td><call draw_label(eeman.groupMap[lserver.group])></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.stype)></td>
+  <td><call draw_label(eeman.typeMap[lserver.type_id])></td>
+</tr>
+<if toolbox.gt(eeman.isLBServer(pserver.id), 0) == "1" >
+<tr>
+  <td><call draw_label(lang.eeman.fserver)></td>
+  <td>
+  <call draw_label(lserver.fileServer)><call draw_edit(config.CLIENT_CP_URL+"?template_name=eeman/filer_edit.html&stemplate="+template+"&rid="+request.rid, lang.eeman.filer)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.fpath)></td>
+  <td>
+  <call draw_label(lserver.path)><call draw_edit(config.CLIENT_CP_URL+"?template_name=eeman/path_edit.html&stemplate="+template+"&rid="+request.rid, lang.eeman.fpath)></td>
+</tr>
+</if>
+<tr>
+  <td><call draw_label(lang.label.descr)></td>
+  <td><call draw_label(lserver.desc)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.pserver)></td>
+  <td>
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html"+"&rid="+pserver.id, pserver.name)>
+  <assign si = pserver.server_info>
+  <if si>
+    <call draw_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "lupa", "")>
+  <else>
+    <call draw_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "attention", "")>
+  </if>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.signup)></td>
+  <td><call draw_state(lserver.signup=="1", config.CLIENT_CP_URL+"?template_name=submit/eeman/disable_signup.sbm&rid="+lserver.id+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/eeman/enable_signup.sbm&rid="+lserver.id+"&stemplate="+template+"&ftemplate="+template)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.status)></td>
+  <td><call draw_label(lserver.lstatus)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.generate_lserver_recs)></td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" name="f_gen_cust_recs" method="POST"  accept-charset="UTF-8">
+        <input type="hidden" name="template_name" value="submit/eeman/generate_cust_recs.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="rid" value="${lserver.id}">
+        &nbsp;<input type="submit" name="gen_cust_recs" value="${lang.eeman.lserveredit.generate}">
+        </td>
+        </tr>
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+<call draw_label(lang.eeman.lserveredit.usage)>
+<switch lserver.infos.used>
+<case "1">
+</td>
+  <td>
+  <table class="inner_control">
+<list lserver.infos.params as param_name>
+<tr>
+  <td><call draw_label(lang.label.eeman[param_name.name])></td>
+  <td><call draw_label(" - "+param_name.value)>
+  <if lserver.infos.fixed == 1>
+    <call draw_fix(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_unused_service.sbm"+"&stemplate="+template+"&ftemplate="+template+"&rid="+lserver.id, lang.eeman.del_services)>
+  </if>
+  </td>
+</tr>
+</list>
+  </table>
+</td>
+<break>
+<case "0">
+</td>
+  <td>
+<call draw_label(lang.eeman.lserveredit.unused)>&nbsp;
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_lserver.sbm&rid="+lserver.id+"&stemplate=eeman/list.html"+"&ftemplate="+template, lang.eeman.lserveredit.remove)>
+</td>
+<break>
+<case "-1">
+</td>
+  <td>
+<call draw_label(lang.eeman.lserveredit.noinf)>
+</td>
+<break>
+<default>
+</td>
+ <td>
+<call draw_label(lang.eeman.lserveredit.noinf)>
+<break>
+</switch>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.ips)></td>
+  <td  nowrap>
+<list lserver.getAllIP() as iplist>
+<if iplist.isSingle><call draw_label(iplist.first.ip)><else>
+<call draw_label(iplist.first.ip+" - "+iplist.last.ip)></if>
+<call draw_label(" ["+iplist.first.mask+"]")>
+<switch iplist.first.flag>
+<case "-1"><call draw_important_label(lang.eeman.lserveredit.invdedip)><break>
+<case "0"><call draw_label(lang.eeman.lserveredit.freededip)><break>
+<case "1"><call draw_label(lang.eeman.lserveredit.busydedip)><break>
+<case "2"><call draw_label(lang.eeman.lserveredit.defship)><break>
+<case "3"><call draw_label(lang.eeman.lserveredit.sysmip)><break>
+<case "4"><call draw_label(lang.eeman.lserveredit.servip)><break>
+<case "5"><call draw_label(lang.eeman.lserveredit.freednsip)><break>
+<case "6"><call draw_label(lang.eeman.lserveredit.busydnsip)><break>
+<case "7"><call draw_label(lang.eeman.lserveredit.sslip)><break>
+<case "8"><call draw_label(lang.eeman.lserveredit.tsslip)><break>
+<case "1000"><call draw_label(lang.eeman.lserveredit.vpsip)><break>
+<case "1001"><call draw_label(lang.eeman.lserveredit.tvpsip)><break>
+<default><call draw_label(lang.eeman.lserveredit.shared+iplist.first.flag+")")><break>
+</switch>
+<if (iplist.first.flag=="-1")>
+  <call draw_fix(config.CLIENT_CP_URL+"?template_name=submit/misc/ip_fix.sbm"+"&stemplate="+template+"&ftemplate="+template+"&flag="+iplist.first.flag+"&ip="+iplist.first.ip+"&l_server_id="+lserver.id+"&rid="+lserver.id, lang.eeman.fix_ip)>
+</if>
+
+<if iplist.first.shared_ip_used && toolbox.gt(iplist.first.shared_ip_used, "0")>
+  <call draw_label(lang.eeman.domains_used(iplist.first.shared_ip_used))>
+</if>
+<if iplist.first.flag == "4" && toolbox.gt(iplist.first.service_ip_used, "0")>
+  <call draw_label(lang.eeman.aliases_used(iplist.first.service_ip_used))>
+</if>
+
+<if !iplist.first.busy>
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_ip_lserver_submit.sbm&stemplate="+template+"&ftemplate="+template+"&rid="+lserver.id+"&from="+iplist.first.ip+"&to="+iplist.last.ip+"&flag="+iplist.first.flag, lang.label.del)>
+</if>
+<br>
+</list>
+&nbsp;
+  </td>
+</tr>
+<tr>
+  <td class="control_header" colspan="2"><call draw_header(lang.eeman.lserveredit.addiprange)></td>
+</tr>
+
+<yafv s_eeman>
+
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_edit" method="POST" check! accept-charset="UTF-8">
+<tr>
+  <td><call draw_label(lang.label.from)></td>
+  <td>
+    <input type="hidden" name="template_name" value="submit/eeman/add_ip_lserver_submit.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserver.id}">
+    <input type="text" name="from" value="${vfrom}" label="From" check="vIPAddr">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.to)></td>
+  <td><input type="text" name="to" value="${vto}" label="${lang.label.to}" check="vIPAddrOpt"><call draw_label(lang.eeman.lserveredit.reqdedip)></td>
+</tr>
+<if lserver.type != "12">
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.mask)></td>
+  <td><input type="text" name="mask" value="${vmask}" label="${lang.eeman.lserveredit.mask}" check="vIPMask"></td>
+</tr>
+<else>
+  <input type="hidden" name="mask" value="255.255.255.255">
+</if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.type)></td>
+<assign stype = lserver.type>
+  <td>
+    <select name="flag">
+<list lserver.infos.iptypes as iptype>
+<switch iptype>
+<case "0">
+      <option value="0"<if vflag=="0"> SELECTED</if>>${lang.eeman.lserveredit.dedip}
+<break>
+<case "2">
+      <option value="2"<if vflag=="2"> SELECTED</if>>${lang.eeman.lserveredit.ship}
+<break>
+<case "4">
+      <option value="4"<if vflag=="4"> SELECTED</if>>${lang.eeman.lserveredit.sip}
+<break>
+<case "7">
+     <option value="7"<if vflag=="7"> SELECTED</if>>${lang.eeman.lserveredit.rsslip}
+<break>
+<case "5">
+      <option value="5"<if vflag=="5"> SELECTED</if>>${lang.eeman.lserveredit.dnsip}
+<break>
+<case "1000">
+      <option value="1000"<if vflag=="1000"> SELECTED</if>>${lang.eeman.lserveredit.vpsip}
+<break>
+<case "_never_">
+<!--  <option value="3"<if vflag=="3"> SELECTED</if>>${lang.eeman.lserveredit.smip} -->
+</switch>
+</list>
+</select>
+  </td>
+</tr>
+
+<if stype != "12">
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.siptag)></td>
+  <td>
+    <input type="text" name="tag" value="${vtag}" size="3" label="${lang.eeman.lserveredit.siptag}" check="vIPTagOpt"> 
+    <call draw_label(lang.eeman.lserveredit.sitagtext)>
+  </td>
+</tr>
+</if>
+
+<tr>
+  <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<assign lserverId = lserver.id>
+<assign useXML = "false">
+<!--${lserver.type} -->
+<!--OPTIONS-->
+<!--${obj.lserveroptions.getStatus()}-->
+<assign optionsDrawn = "">
+<assign xmlroot=obj.lserveroptions.getConfig()>
+<list xmlroot.group as grp>
+<!--${grp("name")} ${lserver.groupname}-->
+	<if grp("name") == lserver.grouptype>
+	    <list grp.option as opt>
+	    	<!--${opt}-->
+	    	<if !optionsDrawn>
+<tr>
+  <td class="control_header" colspan="2"><call draw_header(lang.eeman.lserveredit.additional_options)></td>
+</tr>
+		<assign optionsDrawn="1">
+
+	    	</if>
+	    	<assign lsOptionName=opt("name")><!--OPTIONNAME:${lsOptionName}-->
+	    	<include opt>
+		<!--${opt.node_name}-->
+            </list>
+        </if>
+ </list>
+ <!--OPTIONS-->
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/lserver_edit.html  -->

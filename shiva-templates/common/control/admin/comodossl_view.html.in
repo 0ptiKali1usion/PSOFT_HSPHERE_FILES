@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/admin/comodossl_view.html  -->
+<assign c_emails = account.getChild("admin").email_manager>
+<call draw_tooltip()>
+<yafv s_hsphere>
+<assign cm=obj.comodo_manager>
+<if cm>
+<call draw_table_header("2", lang.comodo_manager_lp)>
+<assign login=cm.login>
+<form name="comodo_manager_form" action="${config.CLIENT_CP_URL}" method="POST" accpet-charset="UTF-8" check!>
+<input type="hidden" name="template_name" value="submit/admin/comodossl_save.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<tr><td colspan="2"><call draw_tlink("http://www.instantssl.com/ssl-certificate-affiliates/webhosts.html","_blank", lang.comodossl.signup_reseller_account)></td></tr>
+<tr><td><call draw_label(lang.label.login)></td><td><input type="text" name="cm_login" value="${login}" check="vStringReq"></td></tr>
+<tr><td><call draw_label(lang.label.password)></td><td><input type="password" name="cm_password" check="vStringPassword">
+<tr><td colspan="2" class="control_align_center"><input type="submit">
+<input type="reset" value="${lang.button.reset}"></td></tr>
+</form>
+<call draw_table_footer()>
+
+<if login>
+<assign prices=cm.getPrices()>
+
+<call draw_table_header("3", lang.admin.registrar.prices)>
+<form name="comodo_manager_prices" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8" check!>
+<input type="hidden" name="template_name" value="submit/admin/comodossl_prices.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<tr><td class="control_header"><call draw_header(lang.label.name)></td>
+<td class="control_header"><call draw_header(lang.admin.registrar.duration)></td>
+<td class="control_header"><call draw_header(lang.admin.registrar.price)></td>
+</tr>
+
+<call draw_3yr("24")>
+<call draw_3yr("34")>
+<call draw_3yr("7")>
+<call draw_3yr("62")>
+<call draw_3yr("63")>
+<call draw_3yr("64")>
+<tr><td colspan="3" class="control_align_center"><input type="submit">
+<input type="reset" value="${lang.button.reset}"></td></tr>
+</form>
+<call draw_table_footer()>
+</if>
+
+<function draw_product(id, term)>
+<assign label = lang.comodossl["product_" + id]>
+<tr><td><call draw_label(label)></td>
+<td><call draw_label(term)></td>
+<td><input type="text" size="6" label="${label} (${term})" name="product_${id}_${term}" value="${prices[id+"_"+term]}" check="vPriceOpt"></td>
+</tr>
+</function>
+
+<function draw_3yr(id)>
+<call draw_product(id, "1")>
+<call draw_product(id, "2")>
+<call draw_product(id, "3")>
+</function>
+
+</if>
+<!-- END ./control/admin/comodossl_view.html  -->

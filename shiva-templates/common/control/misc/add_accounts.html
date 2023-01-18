@@ -1,0 +1,30 @@
+<!-- BEGIN .control/misc/add_accounts.html  -->
+<assign reseller_su=account.getChild("reseller_su")>
+<call draw_tooltip()>
+
+
+<call prepare_table_header("2", lang.misc.addaccounts.header)>
+<call add_table_header_help("user-ai_add-add","")>
+<call draw_table_header_prepared()>
+
+<list user.getAccessiblePlanList() as group>
+<tr>
+   <td  class="control_align_center" width="70%" colspan="2">
+        <if group.id!="0"><call draw_label_bold(group.name)><else><call draw_label_bold(lang.misc.addaccounts.ungrouped)></if>
+</td>
+</tr>
+ 
+<list group.plans as mp>
+<if reseller_su || mp.values["_CREATED_BY_"]!="6">
+    <tr>
+        <td width="70%" nowrap><call draw_label(mp.description)></td>
+        <td width="10%" class="control_align_center" nowrap>
+            <call draw_select_signup(mp.id)>
+        </td>
+    </tr>
+</if>
+</list>
+</list>
+
+<call draw_table_footer()>
+<!--  END .control/misc/add_accounts.html  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./windomain/set_ssi_exec_state.sbm  -->
+  <assign ssi=account.getResource(request.aid)>
+  <assign result=ssi.setExecEnabled(request.exec_state)>
+  <if result.status=="OK">
+    <assign success="1">
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/set_ssi_exec_state.sbm  -->

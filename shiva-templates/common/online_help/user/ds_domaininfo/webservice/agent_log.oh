@@ -1,0 +1,9 @@
+<center>Agent Log</center>
+<hr>
+ 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+It stores data about agents used to enter the site such as browsers or any other Internet-based software, and all related data. 
+ <br>
+  Enable agent log to view  details.
+<br>
+  All logs are stored in user's log directory. You can view them using telnet.

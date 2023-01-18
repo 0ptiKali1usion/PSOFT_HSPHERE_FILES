@@ -1,0 +1,358 @@
+<!-- BEGIN ./control/misc/kanoodle_signup.html -->
+<call draw_tooltip()>
+<assign ci = account.ci>
+<assign bi = account.bi>
+<yafv s_misc>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_kanoodle_signup" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/kanoodle_signup.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+
+
+
+
+<call draw_table_header("2", lang.misc.kanoodle.register)>
+
+  
+<tr>
+<td   colspan="2"><call draw_label(lang.misc.kanoodle_user_signup)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.kanoodle.login)></td>
+<if request.login><assign vlogin=toolbox.html_encode(request.login)></if>
+<td><input type="text" name="login" value="${vlogin}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.password)></td>
+<td>
+<input type="password" name="p1" value="" label="${lang.label.password}" check="vPassword1(this, login)">
+</td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.label.confirm_psw)></td>
+<td>
+<input type="password" name="p2" value="" label="${lang.label.confirm_psw}" check="vPassword2(p1,p2)">
+</td>
+</tr>
+
+<input type="hidden" name="spam" value="1">
+
+<if request.url><assign vurl=toolbox.html_encode(request.url)></if>
+<if request.protocol><assign vprotocol=toolbox.html_encode(request.protocol)></if>
+<tr >
+<td><call draw_label(lang.admin.kanoodle.url)></td>
+<if vprotocol=="https">
+ <assign https_sel = "SELECTED">
+<else>
+ <assign http_sel = "SELECTED">
+</if>
+<td>
+<select name="protocol">
+<option value="http" ${http_sel}>http://</option>
+<option value="https" ${https_sel}>https://</option>
+</select>
+<input type="text" name="url" value="${vurl}" check="vnURL"></td>
+</tr>
+
+
+<tr>
+    <td colspan="2" class="control_header"><call draw_header(lang.label.ci)></td>
+</tr>
+
+<if request.firstName>
+<assign vfirstName=toolbox.html_encode(request.firstName)>
+<else>
+<assign vfirstName=toolbox.html_encode(ci.first_name)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.fname)></td>
+<td><input type="text" name="firstName" value="${vfirstName}"></td>
+</tr>
+
+<if request.lastName>
+<assign vlastName=toolbox.html_encode(request.lastName)>
+<else>
+<assign vlastName=toolbox.html_encode(ci.last_name)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.lname)></td>
+<td><input type="text" name="lastName" value="${vlastName}"></td>
+</tr>
+
+<if request.companyName>
+<assign vcompanyName=toolbox.html_encode(request.companyName)>
+<else>
+<assign vcompanyName=toolbox.html_encode(ci.company)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.company)></td>
+<td><input type="text" name="companyName" value="${vcompanyName}"></td>
+</tr>
+
+<if request.addr1>
+<assign vaddr1=toolbox.html_encode(request.addr1)>
+<else>
+<assign vaddr1=toolbox.html_encode(ci.address1)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.adr1)></td>
+<td><input type="text" name="addr1" value="${vaddr1}"></td>
+</tr>
+
+<if request.addr2>
+<assign vaddr2=toolbox.html_encode(request.addr2)>
+<else>
+<assign vaddr2=toolbox.html_encode(ci.address2)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.adr2)></td>
+<td><input type="text" name="addr2" value="${vaddr2}"></td>
+</tr>
+
+<if request.city>
+<assign vcity=toolbox.html_encode(request.city)>
+<else>
+<assign vcity=toolbox.html_encode(ci.city)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.city)></td>
+<td><input type="text" name="city" value="${vcity}"></td>
+</tr>
+
+<tr ><td><call draw_label(lang.bci.state)></td>
+ <td>
+  <select name="state">
+        <call buildStates(ci.state)>
+  </select>
+ </td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.label.state_other)></td>
+<if request.state2>
+<assign vstate2 = toolbox.html_encode(request.state2)>
+<else>
+<assign vstate2 = toolbox.html_encode(ci.state2)>
+</if>
+  <td><input type="text" label="${lang.label.state_other}" name="state2" value="${vstate2}" check="vStateOther"></td>
+</tr>
+
+<if request.pZCode>
+<assign vpZCode=toolbox.html_encode(request.pZCode)>
+<else>
+<assign vpZCode=toolbox.html_encode(ci.postal_code)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.pcode)></td>
+<td><input type="text" name="pZCode" value="${vpZCode}"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.bci.country)></td>
+<td>
+<select name="country">
+<call buildCountries(ci.country)>
+</select>
+</td>
+</tr>
+
+<if request.email>
+<assign vemail=toolbox.html_encode(request.email)>
+<else>
+<assign vemail=toolbox.html_encode(ci.email)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.email)></td>
+<td><input type="text" name="email" value="${vemail}" check="vEmail"></td>
+</tr>
+
+<if request.phoneNo>
+<assign vphoneNo=toolbox.html_encode(request.phoneNo)>
+<else>
+<assign vphoneNo=toolbox.html_encode(ci.phone)>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.phone)></td>
+<td><input type="text" name="phoneNo" value="${vphoneNo}"></td>
+</tr>
+
+<tr>
+    <td colspan="2" class="control_header"><call draw_header(lang.label.bi)></td>
+</tr>
+
+<if request.billFirstName>
+<assign vbillfirstName=toolbox.html_encode(request.billfirstName)>
+<else>
+<if bi>
+<assign vbillfirstName=toolbox.html_encode(bi.first_name)>
+<else>
+<assign vbillfirstName=toolbox.html_encode(ci.first_name)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.fname)></td>
+<td><input type="text" name="billfirstName" value="${vbillfirstName}"></td>
+</tr>
+
+<if request.billlastName>
+<assign vbilllastName=toolbox.html_encode(request.billlastName)>
+<else>
+<if bi>
+<assign vbilllastName=toolbox.html_encode(bi.last_name)>
+<else>
+<assign vbilllastName=toolbox.html_encode(ci.last_name)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.lname)></td>
+<td><input type="text" name="billlastName" value="${vbilllastName}"></td>
+</tr>
+
+<if request.billcompanyName>
+<assign vbillcompanyName=toolbox.html_encode(request.billcompanyName)>
+<else>
+<if bi>
+<assign vbillcompanyName=toolbox.html_encode(bi.company)>
+<else>
+<assign vbillcompanyName=toolbox.html_encode(ci.company)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.company)></td>
+<td><input type="text" name="billcompanyName" value="${vbillcompanyName}"></td>
+</tr>
+
+<if request.billaddr1>
+<assign vbilladdr1=toolbox.html_encode(request.billaddr1)>
+<else>
+<if bi>
+<assign vbilladdr1=toolbox.html_encode(bi.address1)>
+<else>
+<assign vbilladdr1=toolbox.html_encode(ci.address1)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.adr1)></td>
+<td><input type="text" name="billaddr1" value="${vbilladdr1}"></td>
+</tr>
+
+<if request.billaddr2>
+<assign vbilladdr2=toolbox.html_encode(request.billaddr2)>
+<else>
+<if bi>
+<assign vbilladdr2=toolbox.html_encode(bi.address2)>
+<else>
+<assign vbilladdr2=toolbox.html_encode(ci.address2)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.adr2)></td>
+<td><input type="text" name="billaddr2" value="${vbilladdr2}"></td>
+</td>
+
+<if request.billcity>
+<assign vbillcity=toolbox.html_encode(request.billcity)>
+<else>
+<if bi>
+<assign vbillcity=toolbox.html_encode(bi.city)>
+<else>
+<assign vbillcity=toolbox.html_encode(ci.city)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.city)></td>
+<td><input type="text" name="billcity" value="${vbillcity}"></td>
+</tr>
+
+<tr ><td><call draw_label(lang.bci.state)></td>
+ <td>
+  <select name="billstate">
+        <call buildStates(bi.state)>
+  </select>
+ </td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.label.state_other)></td>
+<if request.billstate2>
+<assign vbillstate2 = toolbox.html_encode(request.billstate2)>
+<else>
+<if bi>
+<assign vbillstate2=toolbox.html_encode(bi.state2)>
+<else>
+<assign vbillstate2=toolbox.html_encode(ci.state2)>
+</if>
+</if>
+
+<td>
+<input type="text" label="${lang.label.state_other}" name="billstate2" value="${vbillstate2}" check="vStateOther"></td>
+</tr>
+
+<if request.billpZCode>
+<assign vbillpZCode=toolbox.html_encode(request.billpZCode)>
+<else>
+<if bi>
+<assign vbillpZCode=toolbox.html_encode(bi.postal_code)>
+<else>
+<assign vbillpZCode=toolbox.html_encode(ci.postal_code)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.pcode)></td>
+<td><input type="text" name="billpZCode" value="${vbillpZCode}"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.bci.country)></td>
+<td>
+<select name="bcountry">
+<call buildCountries(bi.country)>
+</select>
+</td>
+</tr>
+
+<if request.billphoneNo>
+<assign vbillphoneNo=toolbox.html_encode(request.billphoneNo)>
+<else>
+<if bi>
+<assign vbillphoneNo=toolbox.html_encode(bi.phone)>
+<else>
+<assign vbillphoneNo=toolbox.html_encode(ci.phone)>
+</if>
+</if>
+
+<tr >
+<td><call draw_label(lang.bci.phone)></td>
+<td><input type="text" name="billphoneNo" value="${vbillphoneNo}"></td>
+</tr>
+
+
+
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+
+<call draw_table_footer()>
+</form>
+
+<!-- END ./control/admin/kanoodle_signup.html -->

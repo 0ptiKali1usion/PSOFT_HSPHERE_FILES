@@ -1,0 +1,73 @@
+<!-- BEGIN ./submit/domain/comodossl_purchase.sbm  -->
+<assign result=yafv.checkall(
+  yafv.common.s_domain.vCustomDomain(lang.label.site_name,request.site),
+  yafv.common.s_domain.vEmail(lang.label.email,request.email),
+  yafv.common.s_domain.vOrganReq(lang.label.organization,request.organization),
+  yafv.common.s_domain.vOrganUnit(lang.label.org_unit,request.organ_unit),
+  yafv.common.s_domain.vLocality(lang.label.locality,request.locality),
+  yafv.common.s_domain.vStateOther(lang.label.state_other, request.state2),
+  yafv.common.s_domain.vAddress(lang.bci.adr1, request.address1),
+  yafv.common.s_domain.vAddress2(lang.bci.adr2, request.address2),
+  yafv.common.s_domain.vAddress2(lang.bci.adr3, request.address3),
+  yafv.common.s_domain.vPostal_Code(lang.bci.pcode, request.postalCode)
+   )>
+
+<if result.status=="OK">
+  <assign state_name="">
+  <if request.state2><assign state_name=request.state2></if>
+  <if !state_name && (request.state=="NA")><assign state_name=request.state></if>
+  <if !state_name><assign state_name=toolbox.statesCanada[request.state]></if>
+  <if !state_name><assign state_name=toolbox.states[request.state]></if>
+  <assign hosting=account.getResource(request.rid)>
+  <assign temp_ssl_cert = toolbox.generateSSL(request.country, state_name, request.locality, request.organization, request.organ_unit, request.site, request.email)>
+   
+  <if temp_ssl_cert>
+    <assign ssl_resource = hosting.getChild("ssl")>
+    <if ssl_resource.status != "OK">
+      <if hosting.server == "apache">
+         <assign result=hosting.addChild("ssl", "", temp_ssl_cert.key, temp_ssl_cert.file, request.site)>
+      <else>
+         <assign result=hosting.addChild("ssl", "", "0", "0", temp_ssl_cert.key, temp_ssl_cert.file, request.site)>
+      </if>
+    </if>
+    <assign result2=hosting.addChild("comodossl", "", request.product, request.site,
+      temp_ssl_cert.key, temp_ssl_cert.req,
+      request.address1, request.address2, request.address3,
+      request.postalCode, request.dunsNumber, request.companyNumber, request.email)>
+    <if result.status!="OK">
+       <assign res=session.addMessage(result.msg)>
+       <assign failure="1">
+    </if>
+    <if result2.status!="OK">
+       <assign res=session.addMessage(result2.msg)>
+       <assign failure="1">
+       <assign x=result.delete>
+    </if>
+    <else>
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.name_res_failed_generate,lang.label.ssl_certificate,""))>
+       <assign failure="1">
+    </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+
+<if failure>
+  <assign vemail=toolbox.html_encode(request.email)>
+  <assign vorganization=toolbox.html_encode(request.organization)>
+  <assign vorgan_unit=toolbox.html_encode(request.organ_unit)>
+  <assign vlocality=toolbox.html_encode(request.locality)>
+  <assign vcountry=request.country>
+  <assign vstate=request.state>
+  <assign vstate2=request.state2>
+  <assign vsite=request.site>
+  <assign vaddress1=request.address1>
+  <assign vaddress2=request.address2>
+  <assign vaddress3=request.address3>
+  <assign vpostalCode=request.postalCode>
+  <include request.ftemplate>
+<else>
+ <include "domain/comodossl_purchase_req.html">
+</if>
+<!--  END ./submit/domain/comodossl_purchase.sbm  -->

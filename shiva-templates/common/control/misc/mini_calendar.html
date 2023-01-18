@@ -1,0 +1,182 @@
+<if !CALENDAR_INCLUDED>
+<comment><!-- BE CAREFUL, do not include this template before the line <call draw_tooltip()> in controls. It may cause troubles in MSIE ! --></comment>
+<!-- Mini Calendar definitions -->
+<assign CALENDAR_INCLUDED="1">
+
+<if browser.complies("MSIE | Netscape | Opera_5.0- | Konqueror_3.2-")>
+<assign isValidCalBrowser = "1">
+
+<style type="text/css"><!--
+a.cal-DayLink {
+    font-family: Verdana,  Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: none;
+    color: ${design.color("text_color")};
+    background-color: ${design.color("table_light_strip")};
+}
+a.cal-DayLink:hover {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: ${design.color("table_light_strip")};
+    color: ${design.color("link_color")};
+}
+a.cal-DayLink:active {
+    font-family: Verdana,  Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: none;
+    background-color: ${design.color("table_light_strip")};
+    color: ${design.color("important_color")};
+}
+.cal-TextBox{
+    color: ${design.color("header_text_color")};
+    font-family: Verdana,  Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    background-color: ${design.color("header_color")};
+}
+a.cal-TodayLink {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: none;
+    color: ${design.color("important_color")};
+    background-color: ${design.color("table_light_strip")};
+}
+a.cal-TodayLink:hover {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: ${design.color("table_light_strip")};
+    color: ${design.color("link_color")};
+}
+a.cal-TodayLink:active {
+    font-family: Verdana,  Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: ${design.color("table_light_strip")};
+    color: ${design.color("important_color")};
+}
+.cal-GreyDate {
+    font-family: Verdana,  Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: none;
+    background-color: ${design.color("table_light_strip")};
+    color: #999999;
+}
+.cal-GreyInvalidDate {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: line-through;
+    background-color: ${design.color("table_light_strip")};
+    color: #999999;
+}
+.cal-DayCell {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    font-weight: normal;
+    background-color: ${design.color("table_light_strip")};
+}
+.cal-Table {
+    border: medium;
+    border-style: outset;
+}
+.popupcalendar {
+    width: 185px;
+    height: 130px;
+    left: 0px;
+    top: 0px;
+    background-color: ${design.color("bgcolor")};
+    position: absolute;
+    visibility: hidden;
+}
+-->
+</style>
+
+<div id="popupcalendar" class="popupcalendar">&nbsp;</div>
+
+<call include_browser_detection()>
+<call draw_js("/common/JS/mini_calendar.js")>
+
+<script language="javascript"><!--
+  var m_names = new makeArray0(${lang.misc.calendar_months});
+  var days  = new makeArray0(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+  var dow   = new makeArray0(${lang.misc.calendar_days});
+  <call get_img_attributes("cal_control")>
+  var img_calendar_src = '${toolbox.strlit_encode(s__CurImgAtt)}';
+  <call get_img_attributes("cal_arrow_left")>
+  var img_prev_src = '${toolbox.strlit_encode(s__CurImgAtt)}';
+  <call get_img_attributes("cal_arrow_right")>
+  var img_next_src = '${toolbox.strlit_encode(s__CurImgAtt)}';
+  <call get_img_attributes("cal_close")>
+  var img_close_src = '${toolbox.strlit_encode(s__CurImgAtt)}';
+  <call get_img_attributes("cal_arrow_left")>
+  var str_img_prev = '<IMG ${toolbox.strlit_encode(s__CurImgAtt)} NAME="prev" BORDER="0">';
+  <call get_img_attributes("cal_arrow_right")>
+  var str_img_next = '<IMG ${toolbox.strlit_encode(s__CurImgAtt)} NAME="next" BORDER="0">';
+  <call get_img_attributes("cal_close")>
+  var str_img_close = '<IMG ${toolbox.strlit_encode(s__CurImgAtt)} NAME="close" BORDER="0">';
+  var day_cell_bg = '${design.color("table_light_strip")}';
+  var cell_border = '${design.color("table_dark_strip")}';
+  var header_bg = '${design.color("header_color")}';
+  var header_text = '${design.color("header_text_color")}';
+  var grey_date_style =
+  	'font-family:Verdana,Arial,sans-serif; font-size:8pt; color:#999999;';
+  var base_link_style = 'font-family:Verdana,Arial,sans-serif; font-size:8pt;'
+  	+ 'text-decoration:none; color:${design.color("text_color")};';
+  var important_link_style =
+  	'font-family:Verdana,Arial,sans-serif; font-size:8pt;'
+  	+ ' text-decoration:none; color:${design.color("important_color")};';
+  var header_style = 'font-family:Verdana,Arial,sans-serif; font-size:8pt;'
+          + ' font-weight:bold; color:' + header_text;
+  var select_style = ' color: ${design.color("text_color")};'
+  	+ ' font-family: Verdana,  Arial, sans-serif;'
+  	+ ' font-size: 8pt;'
+  	+ ' font-weight: normal;'
+  	+ ' background-color: ${design.color("bgcolor")};';
+  var cal_bg_color = "${design.color("table_light_strip")}";
+//--></script>
+
+<else><comment><!-- The current browser is not supported --></comment>
+  <assign isValidCalBrowser = "">
+</if>
+
+<compress>
+
+<function draw_calendar(form_name,input_field,l_image_name)><if isValidCalBrowser>
+    <if !l_image_name><assign l_image_name = input_field+"_i"></if>
+    <call get_img_attributes("cal_control")>
+    <a href="javascript:calClick();" onclick="showCalendar('${form_name}','${input_field}','${l_image_name}',0,0,4); return false;">
+	<IMG ${s__CurImgAtt} NAME="${l_image_name}" BORDER="0" ALIGN="absmiddle"></a>
+</if></function>
+
+<function draw_calendar_checkForm(form_name,input_field,l_image_name)><if isValidCalBrowser>
+    <if !l_image_name><assign l_image_name = input_field+"_i"></if>
+    <call get_img_attributes("cal_control")>
+    <a href="javascript:calClick();" onclick="showCalendar('${form_name}','${input_field}','${l_image_name}',0,0,4,'checkForm(document.forms[\'${form_name}\'])'); return false;">
+	<IMG ${s__CurImgAtt} NAME="${l_image_name}" BORDER="0" ALIGN="absmiddle"></a>
+</if></function>
+
+<function draw_vspace(vspace)>
+ <call draw_spacer("1", vspace)>
+</function>
+
+<function draw_hspace(hspace)>
+ <call draw_spacer(hspace, "1")>
+</function>
+
+<function draw_l_image(l_image_name, imageURL, imageWidth, imageHeight)>
+<if !imageURL><assign imageURL = SPACER_IMAGE><assign imageWidth = "1"><assign imageHeight = "1"></if>
+<img src="${imageURL}" name="${l_image_name}" border="0" width="${imageWidth}" height="${imageHeight}">
+</function>
+
+</compress>
+<!-- End of Mini Calendar definitions -->
+</if>

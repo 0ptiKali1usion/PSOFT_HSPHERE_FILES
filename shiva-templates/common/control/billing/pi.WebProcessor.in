@@ -1,0 +1,23 @@
+<!-- BEGIN ./control/billing/pi.WebProcessor.in  -->
+<yafv s_billing>
+<assign resellerurl=user.reseller_context_url>
+<tr>
+<td>&nbsp;</td>
+<td colspan="2"  class="control_align_center">
+<call draw_label(toolbox.compose(lang.billing.webprocessor.text, bildescription))><br>
+<assign tmp_action= resellerurl+"psoft.hsphere.payment."+servletname>
+<if toolbox.lt("0", account.bill.balance)>
+  <assign in_value=toolbox.sub("0", account.bill.balance)>
+</if>
+
+<form name="login" action="${tmp_action}" method="POST" target="new" check!>
+    <input type="text" name="amount" value="${in_value}" check="vPayPalAmount">
+    <input type="hidden" name="trans_id" value="acc-${account.id}">
+    <input type="hidden" name="cp_url" value="${resellerurl}">
+    <input type="hidden" name="action" value="redirect">
+    <input type="hidden" name="description" value="${account.description}">
+    <input type="submit">
+</form>
+</td>
+</tr>
+<!--  END ./control/billing/pi.WebProcessor.in  -->

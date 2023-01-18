@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/ClearLink.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "CONFIG_FILE", request.conffile, "KEY_FILE", request.keyfile, "HOST", request.host, "PORT", request.port, "AVS", request.avs, "MODE", request.mode, "CLASS_NAME", "psoft.epayment.ClearLink","TEMPLATE", "admin/merchant/ClearLink.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "CONFIG_FILE", request.conffile, "KEY_FILE", request.keyfile, "HOST", request.host, "PORT", request.port, "AVS", request.avs, "MODE", request.mode, "CLASS_NAME", "psoft.epayment.ClearLink", "TEMPLATE", "admin/merchant/ClearLink.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/ClearLink.sbm -->

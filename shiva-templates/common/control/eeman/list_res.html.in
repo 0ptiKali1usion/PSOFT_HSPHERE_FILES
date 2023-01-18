@@ -1,0 +1,139 @@
+<!-- BEGIN ./control/eeman/list_res.html.in  -->
+<call draw_tooltip()>
+
+<compress>
+<assign eeman_res=account.getChild("reseller_eeman")>
+<if !eeman_res>
+    <if account.plan.isResourceAvailable("reseller_eeman")>
+	<assign eeman_res=account.addChild("reseller_eeman", "")>
+    </if>
+</if>
+
+<assign inputfields="">
+
+<function draw_freelserver(lserver)>
+   <td>
+     <assign pref="">
+     <list toolbox.tokenizer(lserver.name,".") as tokName>
+        <if pref=="">
+           <assign pref=tokName>
+        </if>
+     </list>
+     <input type="hidden" name="lservers" value="${lserver.id}">
+     <input type="text" name="prefix_${lserver.id}" size="5" value="${pref}" check="vAlias"><call draw_label(".")>
+     <select name="zone_id_${lserver.id}" size="1">
+	<assign selected="SELECTED">
+	<list eeman_res.zones as zone>
+	    <option ${selected} value="${zone.id}">${zone.name}
+      	    <assign selected="">
+	</list>
+     </select>
+     </td>
+     <td   colspan="2">
+     <call draw_label(lserver.name+" ("+lserver.desc+")")>
+     </td>
+     <assign inputfields="1">
+</function>
+
+<function draw_salias(salias)>
+   <td>
+    <call draw_label(salias.name)>
+   </td>
+   <td>
+    <call draw_label(salias.l_server.name+" ("+salias.l_server.desc+")")>
+    <if salias.l_server.type=="2">
+	<assign ext_data = toolbox.int2ext(salias.data)>
+	<if ext_data != salias.data>
+	  <br>
+	  <call draw_label(lang.reseeman.int_ip)>&nbsp;<call draw_label(salias.data)>&nbsp;(<call draw_label(lang.reseeman.ext_ip)>&nbsp;<call draw_label(toolbox.int2ext(salias.data))>)
+	<else>
+     	  <call draw_label(salias.data)>
+	</if>
+    </if>
+   </td>
+  <td  width="5"NOWRAP class="control_align_center"><if (eeman_res.isSSLEnabled != "0") && (salias.l_server.type == "10")>&nbsp;<else><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/delete_server_alias.sbm&ftemplate="+template+"&stemplate="+template+"&rec_id="+salias.id+"&zone_id="+salias.zone_id, lang.label.del)></if>
+  </td>
+</function>
+
+</compress>
+
+<if eeman_res>
+
+<assign res=eeman_res.reload>
+<yafv s_eeman>
+
+
+
+
+
+
+
+<call draw_table_header("3", lang.reseeman.header.lserversdns)>
+
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="l_server_res" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/add_lserver_aliases.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<if eeman_res.free_lserverDNS>
+<list eeman_res.free_lserverDNS as free_lserver>
+<tr>
+  <call draw_freelserver(free_lserver)>
+</tr>
+</list>
+</if>
+<if eeman_res.aliasesDNS>
+<list eeman_res.aliasesDNS as alias>
+<tr>
+  <call draw_salias(alias)>
+</tr>
+</list>
+</if>
+<if inputfields>
+    <tr><td colspan="3" class="control_align_center">
+    <input type="submit" value="${lang.button.submit}"></td>
+    </tr>
+</if>
+</form>
+<assign inputfields="">
+<tr bgcolor=${HEADER_COLOR}>
+  <td colspan="3"><call draw_header(lang.reseeman.header.lservers)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="l_server_res" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/add_lserver_aliases.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<if eeman_res.free_lserver>
+<list eeman_res.free_lserver as free_lserver>
+<tr>
+  <call draw_freelserver(free_lserver)>
+</tr>
+</list>
+</if>
+<if eeman_res.aliases>
+<list eeman_res.aliases as alias>
+<tr>
+  <call draw_salias(alias)>
+</tr>
+</list>
+</if>
+<if inputfields>
+    <tr><td colspan="3" class="control_align_center">
+    <input type="submit" value="${lang.button.submit}"></td>
+    </tr>
+</if>
+</form>
+<else>
+<tr bgcolor=${HEADER_COLOR}>
+  <td colspan="2"><call draw_header(lang.reseeman.header)></td>
+</tr>
+<tr><td  colspan="2">
+<call draw_label(lang.reseeman.nopermissions)>
+</td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/eeman/list_res.html.in  -->

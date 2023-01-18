@@ -1,0 +1,30 @@
+<!-- BEGIN ./eeman/pserver_edit_submit.html  -->
+<assign result=yafv.checkall(
+  yafv.common.s_eeman.vIPAddr(lang.eeman.ip1,request.ip1),
+  yafv.common.s_eeman.vIPMask(lang.eeman.mask1,request.mask1),
+  yafv.common.s_eeman.vIPAddrOpt(lang.eeman.ip2,request.ip2),
+  yafv.common.s_eeman.vIPMaskOpt(lang.eeman.mask2,request.mask2),
+)>
+<if result.status=="OK">
+<assign eeman = account.getChild("eeman")>
+<assign pserver=eeman.getPserver(request.rid)>
+<assign result = pserver.update( request.ip1, request.mask1, request.ip2, request.mask2, request.login, request.password)>
+    <if result.status!="OK">
+	<assign res=session.addMessage(result.msg)>	
+	<assign failure="1">
+    </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+  <assign vip1=toolbox.html_encode(request.ip1)>
+  <assign vmask1=toolbox.html_encode(request.mask1)>
+  <assign vip2=toolbox.html_encode(request.ip2)>
+  <assign vmask2=toolbox.html_encode(request.mask2)>
+  <assign vlogin=toolbox.html_encode(request.login)>
+  <include request.ftemplate>
+<else>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/pserver_edit_submit.html  -->

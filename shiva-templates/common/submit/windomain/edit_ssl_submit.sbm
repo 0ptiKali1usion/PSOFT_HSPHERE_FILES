@@ -1,0 +1,21 @@
+<!-- BEGIN ./windomain/edit_ssl_submit.html  -->
+<if request.forced=="">
+    <assign forced="0">
+<else>
+    <assign forced="1">
+</if>
+<if request.need128=="">
+    <assign need128="0">
+<else>
+    <assign need128="1">
+</if>
+<assign ssl=account.getResource(request.uid)>
+<assign result=ssl.updateSettings(forced,need128)>
+<if result.status=="OK">
+    <assign res=session.addMessage(lang.msg.settings_updated)>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/edit_ssl_submit.html  -->

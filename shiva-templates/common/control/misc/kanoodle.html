@@ -1,0 +1,62 @@
+<!-- BEGIN ./control/misc/kanoodle.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign kanoodle = account.getChild("kanoodle")>
+<assign acc = account.id>
+<call draw_tooltip()>
+<if kanoodle>
+<assign vuserid = kanoodle.userId>
+<assign vpartner = kanoodle.partnerId>
+</if>
+
+
+
+
+<call draw_table_header("2", lang.misc.kanoodle)>
+
+<tr >
+<td   colspan="2"><call draw_label(lang.misc.kanoodle_user)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.misc.kanoodle)></td>
+<td>
+<call onoff(acc, "kanoodle")>
+<if vuserid>
+<call draw_preview(kanoodle.kanoodleurl,lang.misc.kanoodle_login)>
+</if>
+</td>
+</tr>
+
+<if kanoodle>
+<form  name="set_kanoodle_params" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/kanoodle_params.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${kanoodle}">
+
+<!--
+<tr >
+<td><call draw_label(lang.misc.kanoodle.partnerId)></td>
+<td><call draw_label(vpartner)></td>
+</tr>
+-->
+<tr >
+<td><call draw_label(lang.admin.kanoodle.userid)></td>
+<td><input type = "text" name="userid" value=${vuserid}></td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<tr >
+<td colspan ="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=misc/kanoodle_signup.html&rid="+kanoodle+"&stemplate="+template+"&ftemplate="+template, lang.misc.kanoodle.register)>
+</td>
+</tr>
+</if>
+
+
+
+<call draw_table_footer()>
+
+<!-- END ./control/misc/kanoodle.html  -->

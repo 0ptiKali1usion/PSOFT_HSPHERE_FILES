@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/domain/dns_not_equal_vhIP.html  -->
+<assign rid = account.getResource(request.rid)>
+<if request.dns_not_equal_vhIP>
+    <assign dns_not_equal_vhIP=request.dns_not_equal_vhIP>
+</if>
+
+<if dns_not_equal_vhIP=="web">
+    <assign domain = u.parent>
+<else>
+    <assign domain = rid>
+</if>
+<call draw_tooltip()>
+
+<form name="change_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<call draw_table_header("", lang.domain.change_ip_warn.header(domain.name))>
+
+<tr>
+<td><call draw_label(lang.domain.change_ip_warn.dns_not_equal_vhIP)<br>
+<call draw_label(lang.domain.change_ip_warn.message)><br>
+<center>
+<call draw_link("javascript:document.change_confirm.submit()", lang.billing.del_yes + " " + lang.domain.change_ip_warn.recommend)><br>
+<if dns_not_equal_vhIP=="web">
+    <call draw_link(config.CLIENT_CP_URL+"?rid="+rid+"&template_name=submit/domain/webservice_restart.sbm"+"&stemplate="+stemplate, lang.domain.webservice.justrestart)><br>
+</if>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no, stype))>
+</center>
+
+<input type="hidden" name="stemplate" value="${stemplate}">
+<input type="hidden" name="ip_type" value="shared">
+<input type="hidden" name="template_name" value="submit/domain/change_ip_submit.sbm">
+<if dns_not_equal_vhIP>
+    <input type="hidden" name="dns_not_equal_vhIP" value="${dns_not_equal_vhIP}">
+</if>
+<input type="hidden" name="type" value="ip">
+<input type="hidden" name="rid" value=${rid}>
+<if dns_not_equal_vhIP=="web">
+    <input type="hidden" name="domain" value=${domain}>
+</if>
+
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!-- END ./control/domain/dns_not_equal_vhIP.html  -->

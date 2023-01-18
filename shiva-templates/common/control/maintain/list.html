@@ -1,0 +1,101 @@
+<assign maintainary=account.getChild("maintainary")>
+<assign result=maintainary.reload()>
+<H2>Maintain task</H2>
+<a href="${config.CLIENT_CP_URL}?template_name=maintain/add_job.html">Add Maintain job</a>
+<table>
+<tr>
+<td><b>Contract ID</b></td>
+<td><b>Company</b></td>
+<td><b>Description</b></td>
+</tr>
+<list maintainary.contracts as contract>
+<assign result=maintainary.getTasksForContract(contract.contract_id)>
+<tr>
+<td>${contract.contract_id}</td>
+<td>${contract.contract_info.company}</td>
+<td>${contract.contract_info.description}</td>
+</tr>
+<tr>
+<td colspan=3>
+<table BORDER bordercolor="#D8E2EB" CELLPADDING=2 >
+	<tr><td colspan=6><b>Task description<b></td></tr>
+	<tr>
+	    <td><b>State</b></td>
+	    <td><b>Max hours</b></td>
+	    <td><b>Hours</b></td>
+	    <td><b>Last mod</b></td>
+	    <td><b>Created</b></td>
+	    <td><b>End of work</b></td>
+	</tr>
+	<tr>
+	    <td><b>Accepted</b></td>
+	    <td><b>Admin name</b></td>
+	    <td><b>Admin email</b></td>
+	    <td><b>Task closed</b></td>
+	    <td colspan="2"><b>Action</b></td>
+	</tr>
+<tr><td  COLSPAN=7><font size=+1><b> Supplied task</b></font></td></tr>
+<list maintainary.supplied_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td bgcolor="#FFFFFF" colspan=6><pre>${supplied.task_description}</pre></td>
+	</tr>
+	<tr>
+	<td bgcolor="#FFFFFF">${supplied.state}</td> 
+	<td bgcolor="#FFFFFF">${supplied.max_hours}</td>  
+	<td bgcolor="#FFFFFF">${supplied.hours}  </td>
+	<td bgcolor="#FFFFFF">${supplied.lastmod}</td>
+	<td bgcolor="#FFFFFF">${supplied.created}</td>
+	<td bgcolor="#FFFFFF">${supplied.where_end}</td>
+	</tr>
+        <tr>
+	<td colspan=7 class="control_align_right"><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+<tr><td  COLSPAN=7><font size=+1><b> In work task </b></font></td></tr>
+<list maintainary.inwork_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td bgcolor="#FFFFFF" colspan=6><pre>${supplied.task_description}</pre></td>
+	</tr>
+	<tr>
+	<td bgcolor="#FFFFFF">${supplied.state}</td> 
+	<td bgcolor="#FFFFFF">${supplied.max_hours}</td>  
+	<td bgcolor="#FFFFFF">${supplied.hours}  </td>
+	<td bgcolor="#FFFFFF">${supplied.lastmod}</td>
+	<td bgcolor="#FFFFFF">${supplied.created}</td>
+	<td bgcolor="#FFFFFF">${supplied.where_end}</td>
+	</tr>
+	<tr>
+	<td bgcolor="#FFFFFF">${supplied.accepted}</td>
+	<td bgcolor="#FFFFFF">${supplied.admin_name}</td>
+	<td bgcolor="#FFFFFF">${supplied.admin_email}</td>
+	<td colspan ="3" class="control_align_right"><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+<tr><td  COLSPAN=7><font size=+1><b> Other task </b></font></td></tr>
+<list maintainary.other_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td bgcolor="#FFFFFF" colspan=6><pre>${supplied.task_description}</pre></td>
+	</tr>
+	<tr>
+	<td bgcolor="#FFFFFF">${supplied.state}</td> 
+	<td bgcolor="#FFFFFF">${supplied.max_hours}</td>  
+	<td bgcolor="#FFFFFF">${supplied.hours}  </td>
+	<td bgcolor="#FFFFFF">${supplied.lastmod}</td>
+	<td bgcolor="#FFFFFF">${supplied.created}</td>
+	<td bgcolor="#FFFFFF">${supplied.where_end}</td>
+	<tr>
+	<td bgcolor="#FFFFFF">${supplied.accepted}</td>
+	<td bgcolor="#FFFFFF">${supplied.admin_name}</td>
+	<td bgcolor="#FFFFFF">${supplied.admin_email}</td>
+	<td bgcolor="#FFFFFF">${supplied.closed}</td>
+	<td colspan=2 class="control_align_right"><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+</td>
+</tr>
+</table>
+</list>
+</table>

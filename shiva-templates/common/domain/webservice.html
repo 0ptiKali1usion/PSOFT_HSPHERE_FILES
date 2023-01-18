@@ -1,0 +1,10 @@
+<!-- BEGIN ./domain/webservice.html  -->
+<assign template="domain/webservice.html">
+<include "functions">
+<call draw_menu("domain-list")>
+<if !hosting>
+<assign hosting = account.getResource(request.rid)>
+</if>
+<include "control/domain/webservice.html">
+<call bottom()>
+<!--  END ./domain/webservice.html  -->

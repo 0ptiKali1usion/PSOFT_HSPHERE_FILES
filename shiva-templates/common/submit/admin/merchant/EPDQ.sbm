@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/EPDQ.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "IP_ADDRESS", request.ip, "USERNAME", request.login, "CLIENT_ID", request.client_id, "PASSWORD", request.password, "CURRENCY", request.currency, "MODE", request.mode, "PIPELINE", request.pipeline, "CLASS_NAME", "psoft.epayment.EPDQ", "TEMPLATE", "admin/merchant/EPDQ.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "IP_ADDRESS", request.ip, "USERNAME", request.login, "CLIENT_ID", request.client_id, "PASSWORD", request.password, "CURRENCY", request.currency, "MODE", request.mode, "PIPELINE", request.pipeline, "CLASS_NAME", "psoft.epayment.EPDQ", "TEMPLATE", "admin/merchant/EPDQ.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/EPDQ.sbm -->

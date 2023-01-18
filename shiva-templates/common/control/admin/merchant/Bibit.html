@@ -1,0 +1,55 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/Bibit.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.bibit)>
+
+
+
+<if merchant>
+<assign title = merchant.TITLE>
+<assign server = merchant.SERVER>
+<assign path = merchant.PATH>
+<assign port = merchant.PORT>
+<assign merchcode = merchant.MERCH_CODE>
+<assign username = merchant.USERNAME>
+<assign curr_code = merchant.CURRCODE>
+<else>
+<assign title = lang.admin.epayment.bibit>
+<assign server = "secure.bibit.com">
+<assign path = "/jsp/merchant/xml/paymentService.jsp">
+<assign port = "443">
+<assign merchcode = "">
+<assign username = "">
+<assign curr_code = "USD">
+</if>
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="${title}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="${server}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="path" value="${path}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="${port}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.bibit.merchcode)></td><td><input type="text" name="merchcode" value="${merchcode}"></td></tr>
+
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="username" value="${username}"></td></tr>
+
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value=""></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td><td><select name="curr_code"><list toolbox.getCurrencies() as curr>
+<option value="${curr.short}" <if curr.short==curr_code>SELECTED</if>>${curr.name}
+</list></select></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+
+<call draw_table_footer()>
+</form>

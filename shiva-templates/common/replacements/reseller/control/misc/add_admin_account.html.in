@@ -1,0 +1,40 @@
+<!-- BEGIN ./misc/add_admin_account.html.in  -->
+<yafv s_misc>
+<call draw_tooltip()>
+
+<assign reseller = account.getChild("reseller")>
+<form name="f_add_cgi"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+ 
+<input type="hidden" name="admin_signup" value="yes">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/misc/add_admin_account.sbm">
+
+<call draw_table_header("2", lang.reseller.addadmacc.header)>
+<tr>
+<td><call draw_label(lang.reseller.addadmacc.login)></td>
+<td><input type="text" name="login" value="" check="vUsername" label="${lang.reseller.addadmacc.login}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.reseller.addadmacc.psw)></td>
+<td><input type="password" name="password" value="" check="vPassword1(this, login)" label="${lang.reseller.addadmacc.psw}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.confirm_psw)></td>
+<td><input type="password" name="password2" value="" check="vPassword2(this,password)" label="${lang.label.confirm_psw}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.descr)></td>
+<td><input type="text" name="description" value=""></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.email)></td>
+<td><input type="text" name="email" value="" check="vEmail" label="${lang.label.email}"></td>
+</tr>
+<tr>
+<td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./misc/add_admin_account.html.in  -->

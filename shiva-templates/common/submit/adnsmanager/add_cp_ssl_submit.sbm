@@ -1,0 +1,13 @@
+<!-- BEGIN ./adnsmanager/add_cp_ssl_submit.sbm  -->
+<assign manager = account.getChild("reseller_su")>
+
+${session.addMessage("Under construction")}
+
+<assign result = manager.installCertificate(request.file, request.key)>
+<if result.status == "OK">
+    <include request.stemplate>
+<else>
+    <assign res = session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_cp_ssl_submit.sbm  -->

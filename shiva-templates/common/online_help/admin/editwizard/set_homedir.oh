@@ -1,0 +1,9 @@
+<center>Home Directory </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	This is a  directory on the server with home folders of the registered accounts. It is not recommended to change it. If you still want to put all accounts under this plan in a separate directory, create this directory first and set permissions based on your security policy. New accounts under this plan will be stored in the defined directory. <br>
+<br>
+<b>* Important:</b> For Unix-based plans this directory MUST be 3-level, for example: /hsphere/local/unixgold. Otherwise, the traffic will fail to be calculated.
+
+
+

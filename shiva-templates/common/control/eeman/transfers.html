@@ -1,0 +1,189 @@
+<!-- BEGIN ./control/eeman/transfers.html  -->
+<assign eeman = account.getChild("eeman")>
+<assign su=account.getChild("su")>
+<assign viewer=account.getChild("reportviewer")>
+
+<if eeman>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step>
+        <assign step = request.search_step>
+    <else>
+        <assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<if !report_ok>
+  <assign report=eeman.getTransferReport()>
+  <assign result = report(request.sc_account,
+        request.sc_username,
+        request.sc_startedafter,
+        request.sc_startedbefore,
+        request.sc_finishedafter,
+        request.sc_finishedbefore,
+        request.sc_source,
+        request.sc_target)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<!--${step} ${page}-->
+<assign sc_params="&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account="+toolbox.url_escape(request.sc_account)+
+ "&sc_startedafter="+toolbox.url_escape(request.sc_startedafter)+
+ "&sc_startedbefore="+toolbox.url_escape(request.sc_startedbefore)+
+ "&sc_finishedafter="+toolbox.url_escape(request.sc_finishedafter)+
+ "&sc_finishedbefore="+toolbox.url_escape(request.sc_finishedbefore)+
+ "&sc_source="+toolbox.url_escape(request.sc_source)+
+ "&sc_target="+toolbox.url_escape(request.sc_target)>
+
+<call draw_tooltip()>
+
+
+<call draw_table_header("7", lang.label.quicksearch)>
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_params" accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.label.accid)></td>
+<td><input type="text" name="sc_account"></td>
+
+<td><call draw_label(lang.label.username)></td>
+<td><input type="text" name="sc_username"></td>
+
+<td><call draw_label(lang.label.entries)></td>
+<td>
+    <call searchStepBox(step)>
+</td>
+<td>
+  <input type="hidden" name="template_name" value="eeman/transfers.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td>
+</tr>
+<tr>
+<td colspan="7" class="control_align_right">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/transfers_filter.html"+sc_params, lang.label.advsearch)>
+</td>
+</tr>
+</form>
+<call draw_table_footer()>
+&nbsp;<br>
+<call draw_table_header("8", lang.label.eeman.transfer_header)>
+
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.src_server, "src")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.target_server, "target")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.started, "started")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.finished, "finished")></td>
+  <td class="control_header"><call draw_header(lang.contentmove.status.header)></td>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+
+
+<assign entries = report.page()>
+
+<list entries as entry>
+<if eeman.existsLServer(entry.srcServerId) == "true">
+	<assign src_lserver = eeman.getLserver(entry.srcServerId)>
+<else>
+	<assign src_lserver = "" >
+</if>
+<if src_lserver>
+    	<assign src_pserver = eeman.getPserver(src_lserver.pserver)>
+<else>
+	<assign src_pserver = "" >
+</if>
+
+<if eeman.existsLServer(entry.targetServerId) == "true">
+	<assign target_lserver = eeman.getLserver(entry.targetServerId)>
+<else>
+	<assign target_lserver = "" >
+</if>
+<if target_lserver>
+    	<assign target_pserver = eeman.getPserver(target_lserver.pserver)>
+<else>
+	<assign target_pserver = "" >
+</if>
+<assign tp = eeman.getTransferProcess(entry.id)>
+  <if tp>
+   <tr>
+      <td class="control_align_center" ><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)></td>
+      <td class="control_align_center" ><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)></td>
+      <td class="control_align_center"  nowrap >
+      	<if src_lserver>
+      	    <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+src_lserver.id,src_lserver.name)>
+      	    <if src_pserver>
+      	      <br><call draw_label("(")>
+      	      <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html&rid="+src_pserver.id,src_pserver.name)>
+      	      <call draw_label(")")>
+      	    </if>
+      	<else>
+	    <call draw_label(lang.tt.unknown)>
+      	</if>
+      </td>
+      <td class="control_align_center"  nowrap >
+        <if target_lserver>
+            <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+target_lserver.id,target_lserver.name)>
+            <if target_pserver>
+              <br><call draw_label("(")>
+              <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html&rid="+target_pserver.id,target_pserver.name)>
+              <call draw_label(")")>
+            </if>
+        <else>
+	    <call draw_label(lang.tt.unknown)>
+      	</if>
+      </td>
+      <td class="control_align_center" ><call draw_label(entry.started)></td>
+      <td class="control_align_center" ><call draw_label(entry.finished)></td>
+      <td class="control_align_center" ><call draw_label(tp.stage_description)><if tp.errorsDetected><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/tp_errors.html&tp_id="+tp.id+"&stemplate="+template+"&ftemplate="+template+"&arid="+report.id ,lang.eeman.tp.stage.suspend_reasons)></if></td>
+      <td class="control_align_center"  nowrap>
+             <if su><call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/admin/login.sbm&login="+toolbox.url_escape(entry.username)+"&account_id="+toolbox.url_escape(entry.accId), lang.search.changelogin)></if>
+             <if src_lserver && src_pserver && target_lserver && target_pserver && !tp.errorsDetected>
+              <if tp.stage == "3" || tp.stage == "6">
+                <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=eeman/tp_launch.html"+"&arid="+report.id+sc_params, "llaunch", lang.admin.rsync.launch)>
+              <else>
+                <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/tp_process.sbm"+"&arid="+report.id, "llaunch", lang.admin.rsync.launch)>
+              </if>
+             </if>
+             <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=eeman/tp_details.html"+"&arid="+report.id, "custom_billing", lang.admin.rsync.view_postponed)>
+             <if tp.isSuspended>
+                <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/tp_resume.sbm"+"&arid="+report.id+sc_params, "resume", lang.admin.rsync.resume)>
+             <else>
+                <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/tp_suspend.sbm"+"&arid="+report.id+sc_params, "suspend", lang.admin.rsync.suspend)>
+             </if>
+             <call draw_palink(config.CLIENT_CP_URL+"?tp_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/tp_delete.sbm", "delete", lang.admin.rsync.delete)></td>
+   </tr>
+  </if>
+</list>
+
+<tr><td  colspan="8">
+<call advReportNav(report)>
+</td></tr>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/transfers.html  -->

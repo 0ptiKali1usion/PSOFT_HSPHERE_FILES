@@ -1,0 +1,6 @@
+<center> satimeout </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Timeout in seconds for communications to spamd.
+<br>Default: 600.
+<br>

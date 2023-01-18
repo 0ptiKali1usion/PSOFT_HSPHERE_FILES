@@ -1,0 +1,31 @@
+<!-- BEGIN ./domain/add_php_entry.html.in  -->
+<call draw_tooltip()>
+<yafv s_domain>
+<form name="f_add_php_entry"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_php_entry.sbm">
+
+
+
+
+<call draw_table_header("2", lang.domain.addphpentry.header)>
+
+
+<tr>
+	<td><call draw_label(lang.label.file_ext)></td>
+	<td><input type="text" name="ext" value="${vext}" label="${lang.label.file_ext}" check="vfileExt"></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.domain.addphpentry.mime_type)></td>
+	<td><select name="mime"><option value="application/x-httpd-php">Executable</option><option value="application/x-httpd-php-source">application/x-httpd-php-source</option></select></td>
+</tr>
+<tr>
+	<td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./domain/add_php_entry.html.in  -->

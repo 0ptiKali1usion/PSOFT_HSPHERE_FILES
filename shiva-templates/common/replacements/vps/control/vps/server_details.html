@@ -1,0 +1,141 @@
+<!-- BEGIN ./control/vps/server_details.html  -->
+<assign vps = account.getChild("vps")>
+<assign server_details = vps.getChild("vps_server_details")>
+<assign sd = server_details.details>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("2", lang.vps.server_details)>
+
+<if !account.plan.isResourceAvailable("vps_server_details")>
+    <tr>
+	<td colspan="2"><call draw_label(lang.vps.serverdetails.notset)></td>
+    </tr>
+<else>
+    <tr>
+    <td><call draw_label(lang.icon.vps_serverdetails.label)></td>
+    <td><call onoff(vps, "vps_server_details")></td>
+    </tr>
+</if>
+
+<call draw_table_footer()>
+
+<if server_details>
+    <br>
+    <call draw_table_header("7", lang.servmon.header1)>
+    <if !sd>
+        <tr>
+            <td colspan="7"><call draw_label(lang.servmon.failed)></td>
+        </tr>
+    <else>
+        <td colspan="7" class="control_header"><call draw_header(lang.servmon.general)></td>
+        <tr>
+        <td><call draw_label_bold(lang.vps.label.hostname)></td>
+        <td colspan="2"><call draw_label(server_details.vpshostname)></td>
+        <td><call draw_label_bold(lang.label.hostip)></td>
+        <td colspan="3"><call draw_label(sd.ip)></td>
+        </tr>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.os.name)></td>
+        <td colspan="2"><call draw_label(sd.os("name"))></td>
+        <td><call draw_label_bold(lang.servmon.os.machine)></td>
+        <td colspan="3"><call draw_label(sd.os("machine"))></td>
+        </tr>
+        <tr>
+        <td><call draw_label_bold(lang.servmon.os.kernel)></td>
+        <td colspan="6"><call draw_label(sd.os("kernel"))></td>
+        </tr>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.os.release)></td>
+        <td colspan="6"><call draw_label(sd.os("release"))></td>
+        </tr>
+
+        <assign cpu=sd.cpu>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.cpu.model)></td>
+        <td colspan="6"><call draw_label(cpu("model"))></td>
+        </tr>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.cpu.proc)></td>
+        <td colspan="2"><call draw_label(sd.processors("count"))></td>
+        <td><call draw_label_bold(lang.servmon.cpu.speed)></td>
+        <td colspan="3"><call draw_label(cpu("speed"))></td>
+        </tr>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.cpu.cache)></td>
+        <td colspan="2"><call draw_label(cpu("cache"))></td>
+        <td><call draw_label_bold(lang.servmon.cpu.bogomips)></td>
+        <td colspan="3"><call draw_label(cpu("bogomips"))></td>
+        </tr>
+        <tr>
+        <td><call draw_label_bold(lang.servmon.load)></td>
+        <td nowrap colspan="2"><call draw_label(sd.load)></td>
+        <td><call draw_label_bold(lang.servmon.uptime)></td>
+        <td colspan="3"><call draw_label(sd.uptime)></td>
+        </tr>
+
+        <tr>
+        <td><call draw_label_bold(lang.servmon.users)></td>
+        <td colspan="2"><call draw_label(sd.users("count"))>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=vps/logged_users.html", lang.servmon.users.view)></td>
+        <td><call draw_label_bold(lang.label.date)></td>
+        <td colspan="3"><call draw_label(sd.date)></td>
+        </tr>
+        <tr>
+        <td colspan="7" class="control_header"><call draw_header(lang.servmon.header2)></td>
+        </tr>
+        <tr>
+        <td colspan="3"><call draw_label_bold(lang.servmon.mem.type)></td>
+        <td><call draw_label_bold(lang.servmon.perc)></td>
+        <td><call draw_label_bold(lang.servmon.free)></td>
+        <td><call draw_label_bold(lang.servmon.used)></td>
+        <td><call draw_label_bold(lang.servmon.size)></td>
+        </tr>
+        <assign memory=sd.memory>
+        <tr>
+        <td colspan="3"><call draw_label_bold(lang.servmon.mem.phys)></td>
+        <td><call draw_label(toolbox.percent(memory("used"), memory("total"))+"%")></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(memory("free")))></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(memory("used")))></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(memory("total")))></td>
+        </tr>
+        <assign swap=sd.swap>
+        <tr>
+        <td colspan="3"><call draw_label_bold(lang.servmon.mem.swap)></td>
+        <td><call draw_label(toolbox.percent(swap("used"), swap("total"))+"%")></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(swap("free")))></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(swap("used")))></td>
+        <td nowrap><call draw_label(toolbox.smartTraffic(swap("total")))></td>
+        </tr>
+        <tr>
+        <td colspan="7" class="control_header"><call draw_header(lang.servmon.header3)></td>
+        </tr>
+        <tr>
+        <td><call draw_label_bold(lang.servmon.disk.mount)></td>
+        <td><call draw_label_bold(lang.servmon.disk.type)></td>
+        <td><call draw_label_bold(lang.servmon.disk.partition)></td>
+        <td nowrap><call draw_label_bold(lang.servmon.perc)></td>
+        <td><call draw_label_bold(lang.servmon.free)></td>
+        <td><call draw_label_bold(lang.servmon.used)></td>
+        <td><call draw_label_bold(lang.servmon.size)></td>
+        </tr>
+        <list sd.filesystem as fs>
+        <tr>
+        <td><call draw_label(fs("mount"))></td>
+        <td><call draw_label(fs("type"))></td>
+        <td><call draw_label(fs("partition"))></td>
+        <td><call draw_label(fs("use"))></td>
+        <td><call draw_label(toolbox.smartTraffic(fs("available")))></td>
+        <td><call draw_label(toolbox.smartTraffic(fs("used")))></td>
+        <td><call draw_label(toolbox.smartTraffic(fs("total")))></td>
+        </tr>
+        </list>
+    </if>
+    <call draw_table_footer()>
+</if>
+<!--  END ./control/vps/server_details.html  -->

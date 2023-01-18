@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/admin/mod_sign_set_plan.sbm  -->
+
+    <assign signup = account.getChild("signupadm")>
+    <assign admin=account.getChild("admin")>
+    <assign tmpAcc = signup.createTempAccount(request.rid)>
+
+    <assign result=signup.setNewPlanAndBP(request.rid, request.new_plan, request.new_bp)>
+    <if result.status=="OK">
+         <assign success = "1">
+    <else>
+         <assign res=session.addMessage(result.msg)>
+    </if>
+
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_set_plan.sbm  -->
+

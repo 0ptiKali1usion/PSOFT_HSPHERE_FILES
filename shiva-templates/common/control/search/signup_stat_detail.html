@@ -1,0 +1,93 @@
+<!-- BEGIN ./control/search/signup_stat_detail.html  -->
+<assign admin=account.getChild("admin")>
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer = account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("signup_stat_detail")>
+  <assign result = report(request.sc_sell_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<assign sc_params="&sc_sell_id="+request.sc_sell_id+
+"&sc_step="+stepSize+
+"&sc_page="+report.currentPage>
+
+<call draw_tooltip()>
+
+<assign colspan="10">
+<call draw_table_header(colspan, lang.admin.signup_stats)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "acc_id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.signupstatdetail.accdescr, "description")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.ptype, "ptype")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.bp, "period")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.credit, "credit")></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr >
+<td><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.acc_id,"USER_INFO",entry.username)></td>
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.acc_id,entry.acc_id)></td>
+<td><call draw_label(entry.description)></td>
+<td><call draw_label(entry.created)></td>
+<td><call draw_label(entry.plan)></td>
+<td><call draw_link("mailto:"+entry.email,entry.email)></td>
+<td>
+<switch entry.ptype>
+<case "CC"><call draw_label(lang.label.cc)><break>
+<case "Check"><call draw_label(lang.label.check)><break>
+<case "None"><call draw_label(lang.label.none)><break>
+<case "Trial"><call draw_label(lang.label.trial)><break>
+<default>&nbsp;
+</switch>
+</td>
+<td nowrap><call draw_label(entry.period)></td>
+<td><call draw_label(toolbox.currency(entry.balance))></td>
+<td><call draw_label(toolbox.currency(entry.credit))></td>
+</tr>
+</list>
+
+<tr >
+<td colspan="10">
+<call advReportNav(report)><a href="${config.CLIENT_CP_URL}/report.csv?template_name=control/search/signup_stat_detail.csv&arid=${report.id}&_content_type=csv">${lang.search.export}</a>
+</td>
+</tr>
+</if>
+<call draw_table_footer()>
+
+<!--  END ./control/search/signup_stat_detail.html  -->

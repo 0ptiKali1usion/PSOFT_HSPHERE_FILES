@@ -1,0 +1,14 @@
+<!-- BEGIN ./quick/choice_phpmyadmin.html  -->
+<assign template="quick/choice_phpmyadmin.html">
+<include "functions">
+<assign mysql=account.getChild("MySQL")>
+<assign databases=mysql.getChildren("MySQLDatabase")>
+<if databases>
+  <call draw_menu("acct-pref")>
+  <include "control/quick/choice_phpmyadmin.html">
+<else>
+  <include "MySQL/mysql-db-wiz-step1.html">
+</if>
+
+<call bottom()>
+<!--  END ./quick/choice_phpmyadmin.html  -->

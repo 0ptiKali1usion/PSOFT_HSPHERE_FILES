@@ -1,0 +1,28 @@
+<!-- BEGIN ./control/domain/phpbb_install.html -->
+<call draw_tooltip()>
+
+<form name="setup_phpbb" action="${config.CLIENT_CP_URL}" method="post" target="blank" accept-charset="UTF-8">
+
+
+
+<call draw_table_header("", lang.phpbb_install.header)>
+<tr>
+<td class="control_align_center"><call draw_label(lang.phpbb_install.text)></td>
+</tr>
+<tr>
+<td>
+<input type="hidden" name="template_name" value="submit/domain/phpbb_install.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.setup_phpbb.submit()", lang.eshops.update_config.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.eshops.update_config.no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/domain/phpbb_install.html -->

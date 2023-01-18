@@ -1,0 +1,174 @@
+<!-- BEGIN ./control/admin/registar/view.html  -->
+
+<call draw_tooltip()>
+<assign reseller_su = account.getChild("reseller_su")>
+
+<if reseller_su>
+
+<assign mm = account.getChild("registrar_manager")>
+<if !mm><assign mm = account.addChild("registrar_manager", "")></if>
+
+<script language="JavaScript">
+var regTlds = {};
+<assign mlist=mm.list()>
+<list mlist as reg_code>
+  <assign registrar = mm.get(reg_code)>
+  <assign t = mm.getRegistrarTlds(reg_code)>
+  <assign isFE = "1">
+  regTlds["${registrar.id}"] = new Array(<list t as tldval><if isFE == "1"><assign isFE = ""><else>,</if>"${tldval}"</list>);
+</list>
+
+function exchange() {
+    var boxLength = document.activate_form.rid.length;
+    var index;
+    var val;
+    var tld_array;
+    var tld_array_length;
+    var i;
+    if (boxLength>0) {
+        index = document.activate_form.rid.selectedIndex;
+        val = document.activate_form.rid.options[index].value;
+        tld_array = regTlds[val];
+        tld_array_length = tld_array.length;
+        //clean
+        boxLength = document.activate_form.tld.length;
+        for (i=boxLength; i>=0; i--) {
+            document.activate_form.tld.options[i] = null;
+        }
+        //update
+        boxLength = document.activate_form.tld.length;
+        for (i=0; i<tld_array_length; i++) {
+            newoption = new Option(tld_array[i], tld_array[i], false, false);
+            document.activate_form.tld.options[boxLength] = newoption;
+            boxLength = document.activate_form.tld.length;
+        }
+    }
+}
+</script>
+
+
+
+<call draw_table_header("2", lang.admin.registrar.header)>
+
+
+
+<tr ><td><call draw_label(lang.admin.registrar.new)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="template_name">
+    <list toolbox.getRegistrars().registrar as r>
+    <option value="${r("template")}">${lang[r("description")]}</list>
+    </select>
+    <input type="submit" value="${lang.button.add}">
+    </td>
+</form>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.view.active)></td>
+    <td>
+    <assign mms = mm.listActiveKeys()>
+    <list mms as tld>
+    <assign registrar=mm.getRegistrar(tld)>
+    <call draw_label(tld)>&nbsp;<call draw_link(config.CLIENT_CP_URL+"?rid="+registrar.id+"&template_name=admin/registrar/edit.html&stemplate="+template,registrar.description)>
+    <call draw_link(config.CLIENT_CP_URL+"?rid="+registrar.id+"&tld="+tld+"&template_name=admin/registrar/prices.html&stemplate="+template, lang.admin.registrar.prices)>
+    <call draw_link(config.CLIENT_CP_URL+"?tld="+tld+"&rid="+registrar.id+"&template_name=submit/admin/registrar/deactivate.sbm&stemplate="+template+"&ftemplate="+template, lang.admin.view.deact)><br>
+    </list>
+    <if !mms>&nbsp;</if>
+    </td>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.view.setact)></td>
+
+<assign mlist=mm.list()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8" name="activate_form">
+    <td nowrap>
+    <input type="hidden" name="template_name" value="submit/admin/registrar/activate.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="rid" size="1" onchange="javascript:exchange()">
+    <assign vselected = "SELECTED">
+    <list mlist as reg_code>
+      <assign registrar = mm.get(reg_code)>
+      <option value="${registrar.id}" ${vselected}>${registrar.description}
+      <if vselected><assign vselected = ""></if>
+    </list>
+    </select>
+    <call draw_label(lang.admin.registrar.tld)>&nbsp;
+
+    <select name="tld" size="1">
+    </select>
+
+<!--
+    <input type="text" name="tld" rows="1" cols="3">
+
+    <select name="tld" size="1">
+        <assign vselected = "SELECTED">
+	<list mm.getTLDs() as tld>
+	    <option ${vselected}>${tld}
+	    <if vselected><assign vselected = ""></if>
+	</list>
+    </select>
+-->
+    <if mlist>
+    <input type="submit" value="${lang.admin.view.submact}">
+    </if>
+    </td>
+</form>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.registrar.edit)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="template_name" value="admin/registrar/edit.html">
+    <input type="hidden" name="stemplate" value="${template}">
+    <select name="rid" size="1">
+    <assign vselected = "SELECTED">
+    <list mlist as reg_code>
+      <assign registrar = mm.get(reg_code)>
+      <option value="${registrar.id}" ${vselected}>${registrar.description}
+      <if vselected><assign vselected = ""></if>
+    </list>
+    </select>
+    <if mlist>
+    <input type="submit" value="${lang.admin.view.submedit}">
+    </if>
+    </td>
+</form>
+</tr>
+
+<tr >
+    <td><call draw_label(lang.admin.registrar.delete)></td>
+<form action="${config.CLIENT_CP_URL}" method="POST" onSubmit="return confirm('${lang.admin.registrar.ondelete}');" accept-charset="UTF-8">
+    <td>
+    <input type="hidden" name="template_name" value="submit/admin/registrar/delete.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <select name="rid" size="1">
+    <assign vselected = "SELECTED">
+    <list mlist as reg_code>
+      <assign registrar = mm.get(reg_code)>
+      <option value="${registrar.id}" ${vselected}>${registrar.description}
+      <if vselected><assign vselected = ""></if>
+    </list>
+    </select>
+    <if mlist>
+    <input type="submit" value="${lang.button.delete}">
+    </if>
+    </td>
+</form>
+</tr>
+
+<script language="JavaScript">
+  exchange();
+</script>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/registrar/view.html  -->

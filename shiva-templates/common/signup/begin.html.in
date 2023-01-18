@@ -1,0 +1,77 @@
+<!-- BEGIN ./signup/begin.html.in -->
+<include "functions">
+<assign template="signup/begin.html">
+  <include "control/signup/signup_function.html">
+<if new_user.his_plan_accessible>
+  <if settings.welcome_message>
+    <assign title=settings["welcome_message"]>
+  <else>
+    <assign title=lang[html_help["welcome_message"]["tip"]]>
+  </if>
+  <include "signup/signup_top.html">
+  <yafv s_signup>
+  <assign plan=plans[request.plan_id]>
+  <function showR(resource, label)>
+    <if plan.getResourceType(resource) && plan.getResourceType(resource).disabled=="0"><call draw_label(label)></if>
+  </function>
+  <table>
+  <tr>
+    <td colspan="2">
+    <p  ><font face="arial, verdana, sans-serif, helvetica;" size="2" color="${design.color("text_color")}"><br><call draw_label(toolbox.compose(lang.common_signup_begin_subscribe, plan.description))>
+    <br><call draw_label(lang.common_signup_begin_include)><!-- After you complete the subscription procedure, you will have: -->
+    <br>
+
+    <assign domain_resources=plan.getShowableDomainResources()>
+    <list domain_resources as resources>
+        <call draw_label(resources.description)>
+    </list>
+    <br>
+
+    <assign mail_resources=plan.getShowableMailServiceResources()>
+    <list mail_resources as resources>
+        <call draw_label(resources.description)>
+    </list>
+    <br>
+
+    <assign hosting_resources=plan.getShowableHostingResources()>
+    <list hosting_resources as resources>
+        <call draw_label(resources.description)>
+    </list>
+
+    <assign remain_resources=plan.getShowableRemainResources()>
+    <list remain_resources as resources>
+        <call draw_label(resources.description)>
+    </list>
+
+  <assign resource=plan.getResourceType("account")>
+  	<br>
+  <if resource.values["_SETUP_PRICE_"]><call draw_label(lang.common_signup_begin_setup)>
+	<call draw_label(toolbox.currency(resource.values["_SETUP_PRICE_"]))></if>
+  <if resource.values["_UNIT_PRICE_"]><call draw_label(lang.common_signup_begin_monthly)>
+	<call draw_label(toolbox.currency(resource.values["_UNIT_PRICE_"]))></if>
+  <br></font></p>
+  
+  </td>
+  </tr>
+  <form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+      <input type="hidden" name="template_name" value="submit/signup/begin.sbm">
+      <assign excludeFields=excludeFields+"template_name;"> 
+      <if (user) && (request.admin_signup!="")>
+          <input type="hidden" name="seller_id" value="${account.id.id}">
+          <assign excludeFields=excludeFields+"template_name;"> 
+      </if>
+      <assign disable_back="1">
+  <call genHiddenField(excludeFields)>
+  </form>
+  </table>
+<else>
+ <assign title = toolbox.compose(lang.signup.plan_is_unaccessible,new_user.plan.description)>
+ <assign res = session.addMessage(title)>
+ <assign title = "<font color=\""+settings.important_color+"\">"+title+"</font>">
+ <assign error_disabled = "1">
+ <include "signup/signup_top.html">
+ <assign disable_next = "1">
+ <assign disable_back = "1">
+</if>
+<include "signup/signup_bottom.html">
+<!-- END ./signup/begin.html.in -->

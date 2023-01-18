@@ -1,0 +1,40 @@
+<!-- BEGIN ./tt/change_prop.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket = ttadmin.getTicket(request.ttid)>
+<assign result2 = yafv.checkall(
+    yafv.common.s_admin.vPercentReq(lang.label.priority, request.priority))>
+<if result2.status == "OK">    
+  <list ttadmin.admin_list as adm>
+    <if adm.id == ttadmin.id>
+      <assign str_assign_from = adm.name>
+    </if>
+    <if adm.id == request.assign_to>
+      <assign str_assign_to = adm.name>
+    </if>
+  </list>
+  <if !str_assign_from><assign str_assign_from = lang.label.unknown_admin></if> 
+  <if !str_assign_to><assign str_assign_to = lang.label.unknown_admin></if>
+  <if ticket.assigned.id != request.assign_to>
+    <if str_assign_from != str_assign_to>
+      <assign system_note = lang.tt.admin_reassigned(str_assign_from, str_assign_to)>
+    <else>
+      <assign system_note = lang.tt.admin_picked_by(str_assign_to)>
+    </if>
+  </if>
+  <if ticket.state != request.state> <assign result = ticket.setstate(request.state)>
+    <if result.status!="OK"><assign res=session.addMessage(result.msg)></if></if>
+  <if ticket.sticky != request.sticky> <assign result = ticket.setSticky(request.sticky)>
+    <if result.status!="OK"><assign res=session.addMessage(result.msg)></if></if>
+  <if ticket.qid != request.qid> <assign result = ticket.setQueueId(request.qid)>
+    <if result.status!="OK"><assign res=session.addMessage(result.msg)></if></if>
+  <if request.note><assign system_note = system_note + request.note></if>
+    <if (ticket.assigned.id != request.assign_to) || request.note> <assign result = ticket.addReply("", system_note, "")> </if>
+  <if ticket.assigned.id != request.assign_to><assign result = ticket.assign(request.assign_to)>
+    <if result.status!="OK"><assign res=session.addMessage(result.msg)></if></if> 
+  <if ticket.priority != request.priority> <assign result = ticket.setPriority(request.priority)>
+    <if result.status!="OK"><assign res=session.addMessage(result.msg)></if></if>
+<else>
+  <list result2.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<include request.ftemplate>
+<!--  END ./tt/change_prop.sbm  -->

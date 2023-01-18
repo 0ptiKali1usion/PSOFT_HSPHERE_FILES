@@ -1,0 +1,28 @@
+<!-- BEGIN ./domain/add_s_map.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+<form name="f_add_is_map"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_is_map.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.domain.add_is_map.header)>
+
+
+<tr>
+   <td><call draw_label(lang.label.file_ext)></td>
+   <td><input type="text" name="ext" value="${vext}" label="${lang.label.file_ext}" check="vfileExt"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_is_map.html.in  -->

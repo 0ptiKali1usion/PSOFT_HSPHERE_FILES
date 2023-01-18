@@ -1,0 +1,49 @@
+<!-- BEGIN ./domain/add_mail_domain_alias.html  -->
+<call draw_tooltip()>
+<assign domain = account.getResource(request.rid)>
+<form name="f_add_alias"  action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="type" value="mail_domain_alias">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="template_name" value="domain/check_mail_domain_alias.html">
+<input type="hidden" name="cur_menuid" value="mail-list">
+
+
+
+
+<call draw_table_header("2", lang.domain.addmaildomainalias.header)>
+
+
+<assign aliases = domain.getChildren("domain_alias")>
+<tr>
+   <td><call draw_label(lang.label.domain.alias)></td>
+   <td>
+     <select name="domain_alias">
+     <list aliases as domain_alias>
+       <if domain_alias>
+         <assign mail_domain_alias = domain_alias.getChild("mail_domain_alias")>
+	 <assign mail_service = domain_alias.getChild("mail_service")>
+         <if !mail_domain_alias  && !mail_service>
+           <option value="${domain_alias}">${domain_alias.name}
+           <assign flag="true">
+         </if>
+       </if>
+     </list>
+     </select>
+   </td>
+   <if !flag>
+     <tr>
+       <td    colspan="2"><call draw_label(lang.domain.no_domain_aliases)></td>
+     </tr>
+   </if>
+</tr>
+<if flag>
+<tr>
+   <td colspan="2"  class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_mail_domain_alias.html  -->

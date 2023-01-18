@@ -1,0 +1,32 @@
+<!-- BEGIN: ./msexchange/estimate_change_plan.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+
+<assign plan=bizuser.findChild(bizuser.planType)>
+
+<assign del_price=plan.estimateDelete()>
+
+<if del_price.status=="ERROR">
+    <assign res=session.addMessage(lang.msg.misc_res_failed_delete)>
+    <assign res=session.addMessage(del_price.msg)>
+    <assign failure="1">
+</if>
+
+<if !failure>
+<assign add_price=bizuser.estimateCreate(request.i_bizuser_plan, "")>
+  <if add_price.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+      <assign res=session.addMessage(add_price.msg)>
+  </if>
+</if>
+
+<if !failure>
+  <if (del_price.free=="0") || (add_price.free=="0")>
+    <include "msexchange/change_plan_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END: ./msexchange/estimate_change_plan.sbm -->

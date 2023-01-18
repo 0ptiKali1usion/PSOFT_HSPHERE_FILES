@@ -1,0 +1,64 @@
+<!-- BEGIN ./control/plan_editor/reseller_domain_transfer.html.in -->
+
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign billman = account.getChild("billman")>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<call draw_tooltip()>
+
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_unix_srs" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/plan_editor/reseller_domain_transfer.sbm">
+<input type="hidden" name="stemplate" value="plan_editor/reseller2.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_name" value="${toolbox.html_encode(plan.description)}">
+<input type="hidden" name="current_special" value="${template}">
+
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate" && param.name != "period_id" && param.name != "current_special">
+       <input type="hidden" name="${param["name"]}" value="${param["value"]}">
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+
+<assign tlds = toolbox.getActiveTLDs()>
+<assign rtype=plan.getResourceType("reseller")>
+<assign colspan="3">
+<call draw_table_header(colspan, lang.planwizard.domain_transfer_prices_header)>
+
+<tr>
+  <td><call draw_label(lang.admin.registrar.tld)></td>
+  <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+  <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+</tr>
+
+<list tlds as tld>
+<assign transfer_price = billman.getDefaultTransferPrice(tld)>
+<if failure>
+  <assign price  = toolbox.html_encode(oldValues["_SETUP_PRICE_TRANSFER_"+tld+"_"])>
+<else>
+  <assign price  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TRANSFER_"+tld+"_"],"false")>
+</if>
+
+<tr><td><call draw_label("."+tld)></td>
+<td><if transfer_price><call draw_label(toolbox.currency(transfer_price))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+<td><input type="text" size="5" label="${lang.price}" check="vPriceOpt" name="_SETUP_PRICE_TRANSFER_${tld}_" value="${price}"></td></tr>
+</list>
+
+<tr>
+  <td colspan="${colspan}" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<function mem(name)><if request[name]><input type="hidden" name="${name}" value="${request[name]}"></if></function>
+
+<!-- END ./control/plan_editor/reseller_domain_transfer.html.in -->
+
+

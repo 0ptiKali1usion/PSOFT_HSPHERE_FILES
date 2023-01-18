@@ -1,0 +1,203 @@
+<!-- BEGIN ./control/search/ds_user_search.html  -->
+<assign admin=account.getChild("admin")>
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign billman=account.getChild("billman")>
+<assign su=account.getChild("su")>
+<assign recreation_tool=account.plan.areResourcesAvailable("recreation_manager")>
+
+<if !recreation_tool>
+    <if account.plan.isResourceAvailable("recreation_manager")>
+        <assign recreation_tool=account.addChild("recreation_manager","")>
+	<if recreation_tool.status!="OK">
+             <assign recreation_tool="">
+        </if>
+    </if>
+</if>
+
+<if !su>
+    <if account.plan.isResourceAvailable("su")>
+	<assign su=account.addChild("su","")>
+	<if su.status!="OK">
+	    <assign su="">
+	</if>
+    </if>
+</if>
+
+<assign report_ok="">
+
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<if !report_ok>
+  <assign report = viewer.getAdvReport("ds_user_search")>
+  <assign result = report(request.sc_status,
+			request.sc_template,
+			request.sc_os,
+			request.sc_cpu,
+			request.sc_ip,
+			request.sc_int_id,
+			request.sc_r_from,
+			request.sc_r_to,
+			request.sc_u_from,
+			request.sc_u_to,
+			request.sc_username,
+			request.sc_account_id,
+			request.sc_plan_id,
+			request.sc_reseller_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_status="+toolbox.url_escape(request.sc_status)+
+ "&sc_template="+toolbox.url_escape(request.sc_template)+
+ "&sc_os="+toolbox.url_escape(request.sc_os)+
+ "&sc_cpu="+toolbox.url_escape(request.sc_cpu)+
+ "&sc_ip="+toolbox.url_escape(request.sc_ip)+
+ "&sc_int_id="+toolbox.url_escape(request.sc_int_id)+
+ "&sc_r_from="+toolbox.url_escape(request.sc_r_from)+
+ "&sc_r_to="+toolbox.url_escape(request.sc_r_to)+
+ "&sc_u_from="+toolbox.url_escape(request.sc_u_from)+
+ "&sc_u_to="+toolbox.url_escape(request.sc_u_to)+
+ "&sc_reseller_id="+toolbox.url_escape(request.sc_reseller_id)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.sc_account_id)+
+ "&sc_plan_id="+toolbox.url_escape(request.sc_plan_id)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<if billman>
+  <assign colspan="13">
+<else>
+  <assign colspan="10">
+</if>
+
+<call draw_table_header(colspan, lang.admin.search_by_ds_header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_server, "ds_name")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_id, "ds_id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_ip, "ds_ip")></td>
+  <td class="control_header"><call draw_header(lang.admin.search_ds_status)></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_taken, "ds_taken")></td>
+
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <if billman>
+    <td class="control_header"><call advReportLabel(report, lang.label.ptype, "billingType")></td>
+    <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+    <td class="control_header"><call advReportLabel(report, lang.search.credit, "credit")></td>
+  </if>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+<if entry.ds_name>
+  <td><call draw_label(entry.ds_name)></td>
+<else>
+  <call drawEmptyTd()>
+</if>
+<if !entry.ds_state>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+<else>
+  <td><call draw_label(entry.ds_id)></td>
+  <td><call draw_label(entry.ds_ip)></td>
+  <td><call draw_label(lang.admin.ds.status[entry.ds_state])></td>
+  <td><call draw_label(entry.ds_taken("SHORT"))></td>
+</if>
+
+<td>
+  <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.account_id,"USER_INFO",entry.username)>
+  <if entry.suspended !=""><br><call draw_label_bold("suspended "+entry.suspended)></if>
+</td>
+<td>
+  <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.account_id, "PREVIEW", entry.account_id)>
+</td>
+<td><call draw_label(entry.ci_email)></td>
+<td><call draw_label(entry.plan_description)></td>
+
+<if billman>
+  <assign billtype = "none">
+  <switch entry.b_type>
+    <case "CC"><assign billtype = lang.label.cc><break>
+    <case "Check"><assign billtype = lang.label.check><break>
+    <case "none"><assign billtype = lang.label.none><break>
+    <case "Trial"><assign billtype =  lang.label.trial><break>
+    <default><assign billtype = entry.b_type>
+  </switch>
+  <td>
+    <if entry.without_bill>
+      <call draw_label(billtype + entry.without_bill)>
+    <else>
+      <call draw_label(billtype)>
+    </if>
+  </td>
+
+  <if (entry.b_type != "none") && (entry.b_type != "Trial")>
+    <td nowrap><call draw_label(toolbox.displayBalance(entry.balance))><call admBillView(entry.account_id)></td>
+    <td><call draw_link(config.CLIENT_CP_URL+"?aid="+entry.account_id+"&template_name=admin/enlarge_credit.html&stemplate="+template+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), toolbox.currency(entry.credit))></td>
+  <else>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </if>
+</if>
+
+<td>
+  <if su><call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/admin/login.sbm&login="+toolbox.url_escape(entry.username)+"&account_id="+toolbox.url_escape(entry.account_id), lang.search.changelogin)></if>
+  <call draw_edit(config.CLIENT_CP_URL+"?template_name=search/accounts.html&ftemplate="+template+"&stemplate="+template+"&sc_account_id="+entry.account_id, lang.label.details)>
+</td>
+
+</tr>
+</list>
+
+<tr><td colspan="${colspan}">
+<call advReportNav(report)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+cur_menu+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+
+<function drawEmptyTd()>
+  <td class="control_align_center"><call draw_label("-")></td>
+</function>
+<!--  END ./control/search/ds_user_search.html  -->

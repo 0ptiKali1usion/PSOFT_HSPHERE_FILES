@@ -1,0 +1,11 @@
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<if request.key><assign mod=rtype.mods[request.key]><else><assign mod=rtype.modDefault></if>
+<assign result = mod.changeInitValue(request.count, request.label, request.value, request.iv_type)>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>

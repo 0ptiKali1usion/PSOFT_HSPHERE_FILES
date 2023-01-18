@@ -1,0 +1,25 @@
+<!-- BEGIN ./control/mnogosearch/set_new_url.html -->
+<yafv s_hsphere>
+<call draw_tooltip()>
+<form name="f_set_url"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="${request.next_template}">
+
+
+
+<call draw_table_header("2", lang.mnogosearch.setnewurl.header)>
+<tr>
+   <td><call draw_label(lang.mnogosearch.setnewurl)></td>
+   <td><input type="text" name="url" value="${vUrl}" label="${lang.mnogosearch.setnewurl}" check="vMnogoURL"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/mnogosearch/set_new_url.html -->

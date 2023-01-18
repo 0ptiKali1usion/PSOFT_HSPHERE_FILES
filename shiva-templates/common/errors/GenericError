@@ -1,0 +1,4 @@
+<!-- BEGIN ./errors/GenericError  -->
+    <h1><font color="red"><center>Generic Error</center></font></h1>
+    ${message}
+<!--  END ./errors/GenericError  -->

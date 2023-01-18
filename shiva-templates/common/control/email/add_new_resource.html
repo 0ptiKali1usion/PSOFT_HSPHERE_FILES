@@ -1,0 +1,35 @@
+<!-- BEGIN ./email/control/add_new_resource.html  -->
+<assign mail_domain = account.getResource( request.rid )>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_forwards" accept-charset="UTF-8">
+
+<call prepare_table_header("2", lang.email.addnewresource.header)>
+<call add_table_header_help("user-mailinfo-add_mail_resource","")>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td colspan="2" class="control_align_center"><call draw_label(lang.email.addnewresource.select)></td>
+</tr>
+<tr>
+  <td colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/email/create_confirm.sbm">
+    <input type="hidden" name="rid" value="${mail_domain}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+    <select name=rtype>
+      <if account.plan.isResourceAvailable("mailbox")><option value="1">${lang.email.addnewresource.mbox}</option></if>
+      <if account.plan.isResourceAvailable("mail_forward")><option value="2">${lang.email.addnewresource.mforward}</option></if>
+      <if account.plan.isResourceAvailable("mailbox_alias")><option value="3">${lang.email.addnewresource.malias}</option></if>
+      <if account.plan.isResourceAvailable("mailing_list")><option value="4">${lang.email.addnewresource.mlist}</option></if>
+      <if account.plan.isResourceAvailable("responder")><option value="5">${lang.email.addnewresource.responder}</option></if>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td colspan="2"  class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/control/add_new_resource.html  -->

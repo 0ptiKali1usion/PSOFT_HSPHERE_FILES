@@ -1,0 +1,12 @@
+<!-- BEGIN ./tt/user_edit_save.html  -->
+<assign tt=account.getChild("tt")>
+<assign ticket=tt.getTicket(request.ttid)>
+
+<assign result=ticket.addMessage(request.message)>
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+<include request.ftemplate>
+</if>
+<!--  END ./tt/user_edit_save.html  -->

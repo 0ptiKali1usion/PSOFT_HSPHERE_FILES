@@ -1,0 +1,78 @@
+<!-- BEGIN ./mssql/manager.html  -->
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("3", lang.mssql.databases.mssqlmanager)>
+
+
+<assign hostings = account.findAllChildren("hosting")>
+<assign count = "0">
+
+<!-- quick access-->
+<assign isQuick = "false">
+<list hostings as hosting>
+  <assign mssqlmanager=hosting.getChild("mssqlmanager")>
+  <if isQuick == "false">
+    <if mssqlmanager>
+      <tr >
+        <td colspan="3" class="control_align_center">
+          <call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/choice_login.html&rid="+hosting, lang.mssql.databases.quick_access(hosting.parent.name))>
+        </td>
+      </tr>
+      <assign isQuick = "true">
+    </if>
+  </if>
+</list>
+  <!--isQuick = ${isQuick} -->
+<if isQuick == "false">
+      <tr >
+        <td colspan="3"><call draw_label(lang.mssql.databases.no_access)></td>
+      </tr>
+</if>
+<!--end of quick access -->
+
+<tr>
+  <td width="1%" class="control_header"><call draw_TT_header()></td>
+  <td class="control_header"><call draw_header(lang.label.domain)></td>
+  <td width="10%" class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+
+<list hostings as hosting>
+    <assign mssqlmanager=hosting.getChild("mssqlmanager")>
+    <if (account.plan.areResourcesAvailable("mssqlmanager") && account.plan.areResourcesAvailable("asp") && account.plan.areResourcesAvailable("asp_net")) || mssqlmanager>
+      <tr >
+        <td  WIDTH="1">
+          <if mssqlmanager>
+            <call draw_tt_help(mssqlmanager,"user-ds_domaininfo-mssqlmanager","")>
+          <else>
+            <call draw_tt_help(hosting,"user-ds_domaininfo-mssqlmanager","")>
+          </if>
+        </td>
+        <td><call draw_label(hosting.parent.name)></td>
+        <td>
+          <if mssqlmanager>
+            <call disableWarn(hosting, mssqlmanager)>
+            <call draw_palink(config.CLIENT_CP_URL+"?template_name=windomain/choice_login.html&rid="+hosting, "lupa", lang.mssql.databases.mssqlmanager)>
+          <else>
+            <call draw_state_off(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=submit/MSSQL/add_mssqlmanager_check.sbm&stemplate="+template+"&ftemplate="+template)>
+          </if>
+        </td>
+      </tr>
+      <assign count = toolbox.add(count, "1")>
+    </if>
+</list>
+<!--count=${count} -->
+<if count == "0">
+    <tr >
+      <td colspan="3"><call draw_label(lang.mssql.manager.text)></td>
+    </tr>
+</if>
+
+
+
+<call draw_table_footer()>
+
+
+<!--  END ./mssql/manager.html  -->

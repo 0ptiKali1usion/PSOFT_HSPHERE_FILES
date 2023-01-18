@@ -1,0 +1,62 @@
+<!-- BEGIN ./domain/add_errordoc.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+
+<if !vtype>
+    <assign vtype="MESS">
+</if>
+<!-- create list of allowed HTTP codes -->
+<assign errors=toolbox.new_list>
+<assign res=errors.addHash("code", "400", "name", "Bad Request")>
+<assign res=errors.addHash("code", "401", "name", "Authorization Required")>
+<assign res=errors.addHash("code", "403", "name", "Forbidden")>
+<assign res=errors.addHash("code", "404", "name", "Not Found")>
+<assign res=errors.addHash("code", "405", "name", "Method Not Allowed")>
+<assign res=errors.addHash("code", "500", "name", "Internal Server Error")>
+<assign res=errors.addHash("code", "501", "name", "Method Not Implemented")>
+
+<form name="f_add_error"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_errordoc_submit.sbm">
+
+<call draw_table_header("2", lang.domain.adderrordoc.header)>
+
+<tr>
+   <td><call draw_label(lang.domain.adderrordoc.doc_code)></td>
+<td>
+      <select name="code" label="Code" onChange="checkForm(this.form)">
+	<list errors as error>
+	    <if error.code == vcode><assign vselected="SELECTED"><else><assign vselected=""></if>
+	    <option value="${error.code}" ${vselected}>${error.code}|${error.name}
+	</list>
+      </select>
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.domain.adderrordoc.message_url)></td>
+   <td nowrap><input type="text" name="msg" size="48" value="${vmsg}" label="${lang.domain.adderrordoc.message_url}" check="vHttpURLMessage(this, type, code)"></td>
+</tr>
+
+<if vtype=="URL">
+    <assign vchecked_url="CHECKED">
+<else>
+    <assign vchecked_mess="CHECKED">
+</if>
+
+<tr>
+   <td><call draw_label(lang.domain.adderrordoc.type)></td>
+   <td>
+   <input type="radio" name="type" value="URL" ${vchecked_url} onClick="checkForm(this.form)"><call draw_label(lang.domain.adderrordoc.redirect)>
+   <input type="radio" name="type" value="MESS" ${vchecked_mess} onClick="checkForm(this.form)"><call draw_label(lang.domain.adderrordoc.message)>
+   </td>
+</tr>
+<tr>
+   <td  colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_errordoc.html.in  -->

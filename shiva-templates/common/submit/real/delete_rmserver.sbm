@@ -1,0 +1,9 @@
+<assign rmserver=account.getChild("realserver_user")>
+<if rmserver>
+    <assign result=rmserver.delete>
+    <if result.status!="OK"><assign res = session.addMessage(result.msg)></if>
+    <include request.stemplate>
+<else>
+    <assign res = session.addMessage(lang.msg.real.nonexisting_user)>
+    <include request.ftemplate>
+</if>

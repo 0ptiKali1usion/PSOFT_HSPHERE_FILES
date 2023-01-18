@@ -1,0 +1,133 @@
+<!-- BEGIN ./control/admin/spamassassin_manager.html  -->
+<call draw_tooltip()>
+
+<yafv s_admin>
+
+<assign sa_man=account.getChild("spamassassin_manager")>
+<if sa_man>
+   <call prepare_table_header("2", lang.admin.spamassassin.config_manager)>
+   <call draw_table_header_prepared()>
+
+  <assign ms_list=sa_man.mail_servers()>
+  <if request.ms_id>
+    <assign ms_id=request.ms_id>
+  <else>
+    <list ms_list as mail_server>
+      <if !ms_id><assign ms_id=mail_server.id></if>
+    </list>
+  </if>
+  <tr>
+    <td colspan="2">
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+      <table class="inner_control_grid">
+      <tr>
+      <td><call draw_label(lang.label.mail_server)></td>
+      <td class="inner_control_grid_align_center">
+      <input type="hidden" name="template_name" value="admin/spamassassin_manager.html">
+      <select name="ms_id">
+      <list ms_list as mail_server>
+	<option value="${mail_server.id}" <if mail_server.id==ms_id>SELECTED</if>>${mail_server.name}</option>
+      </list>
+      </select>
+      <input type="submit" value="${lang.button.go}">
+      </td>
+      </tr>
+      </table>
+    </form>
+    </td>
+  </tr>
+  <if ms_id>
+    <tr>
+    <td><call draw_label(lang.admin.spamassassin.rules_du_jour)><call draw_help("admin-spamassassin-rules","")></td>
+    <td>
+    <if sa_man.getRulesCronParam(ms_id,"status")=="1">
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/admin/spamassassin_rules_del.sbm&ms_id="+ms_id+"&ftemplate="+template+"&stemplate="+template)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/spamassassin_rules.html&ms_id="+ms_id+"&state=edit&ftemplate="+template+"&stemplate="+template, "settings", lang.admin.spamassassin.rules_du_jour.config)>
+     <else>
+       <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_service+"&sa_man="+sa_man+"&ms_id="+ms_id+"&state=add&template_name=admin/spamassassin_rules.html&stemplate="+template+"&ftemplate="+template)>
+     </if>
+     </td>
+     </tr>
+
+    <assign prefs=sa_man.getPrefs(ms_id)>
+    <form action="${config.CLIENT_CP_URL}" method="post" name="f_spamassassin_manager" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/admin/spamassassin_config_set.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="ms_id" value="${ms_id}">
+    <if prefs.file_size>
+      <assign fvalue=prefs.file_size>
+    <else>
+      <assign fvalue="250">
+    </if>
+    <tr>
+    <td><call draw_label(lang.admin.spamassassin.config_file_size)></td>
+    <td><input type="text" name="f_file_size" size="20" check="vIntegerOrNumber" value="${fvalue}"></td>
+    </tr>
+
+    <tr>
+    <td colspan="2"><call draw_label_bold(lang.admin.spamassassin.config_params)><call draw_help("admin-spamassassin-manager","")>
+</td>
+    </tr>
+    <tr>
+    <td><call draw_label("required_score")></td>
+    <td><input type="text" name="f_required_score" size="20" check="vIntegerOrNumber" value="${prefs.required_score}"></td>
+    </tr>
+    <tr>
+    <td><call draw_label("rewrite_header Subject")></td>
+    <td><input type="text" name="f_rewrite_header_subject" size="20" value="${prefs.rewrite_header_subject}"></td>
+    </tr>
+    <tr>
+    <td><call draw_label("report_safe")></td>
+    <td><select name="f_report_safe">
+	<option value="0" <if prefs.report_safe=="0">SELECTED</if>>0</option>
+        <option value="1" <if prefs.report_safe=="1">SELECTED</if>>1</option>
+	<option value="2" <if prefs.report_safe=="2">SELECTED</if>>2</option>
+        </select>
+    </td>
+    </tr>
+    <if prefs.clear_headers=="1">
+      <assign vchecked="CHECKED">
+    <else>
+      <assign vchecked="">
+    </if>
+    <tr>
+    <td><call draw_label("clear_headers")></td>
+    <td><input type="checkbox" name="f_clear_headers" ${vchecked} value="1"></td>
+    </tr>
+    <if prefs.use_bayes=="1">
+      <assign vchecked="CHECKED">
+    <else>
+      <assign vchecked="">
+    </if>
+    <tr>
+    <td><call draw_label("use_bayes")></td>
+    <td><input type="checkbox" name="f_use_bayes" ${vchecked} value="1"></td>
+    </tr>
+    <if prefs.use_auto_whitelist=="1">
+      <assign vchecked="CHECKED">
+    <else>
+      <assign vchecked="">
+    </if>
+    <tr>
+    <td><call draw_label("use_auto_whitelist")></td>
+    <td><input type="checkbox" name="f_use_auto_whitelist" ${vchecked} value="1"></td>
+    </tr>
+    <tr>
+    <td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.set}"></td>
+    </tr>
+    <call draw_table_footer()>
+    </form>
+  </if>
+<else>
+ <call draw_table_header("2", lang.admin.spamassassin.config_manager)>
+ <tr>
+ <td><call draw_label(lang.admin.spamassassin.config_manager)></td>
+ <td>
+ <call enable(account.id, "spamassassin_manager")>
+ </td>
+ </tr>
+ <call draw_table_footer()>
+</if>
+
+

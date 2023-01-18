@@ -1,0 +1,19 @@
+<!-- BEGIN: ./msexchange/add_dl.sbm -->
+<assign bizorg = account.getChild("bizorg")>
+<assign result = bizorg.addChild("distribution_list", "",
+        request.managedBy, request.name)>
+<if result.status=="OK">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added,lang.msexchange_dl,request.name))>
+            <assign success="1">
+<else>
+            <assign res=session.addMessage(result.msg)>
+</if>
+<if success == "1">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+
+
+<!-- END: ./msexchange/add_dl.sbm -->

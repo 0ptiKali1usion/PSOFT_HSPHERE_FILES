@@ -1,0 +1,32 @@
+
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/Surepay.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.surepay)>
+
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.surepay}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.merchant_id)></td><td><input type="text" name="merchantid" value="<if merchant>${merchant.MERCHANTID}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="urlhost" value="<if merchant>${merchant.URLHOST}<else>xml.surepay.com</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="urlport" value="<if merchant>${merchant.URLPORT}<else>443</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.urlfile)></td><td><input type="text" name="urlfile" value="<if merchant>${merchant.URLFILE}<else>/</if>"></td></tr>
+<if merchant><assign currency = merchant.CURRENCY><else><assign currency = "840"></if>
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td><td><select name="currency"><list toolbox.getCurrencies() as curr>
+<option value="${curr.code}" <if curr.code==currency>SELECTED</if>>${curr.name}
+</list></select></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="<if merchant>${merchant.PASSWORD}</if>"></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset"></td></tr>
+</form>
+
+<call draw_table_footer()>
+

@@ -1,0 +1,24 @@
+<!-- BEGIN ./control/eeman/list.html  -->
+<call draw_tooltip()>
+<include "control/misc/popup_note.html">
+<assign eeman = account.getChild("eeman")>
+<if !eeman && account.plan.areResourcesAvailable("eeman")>
+<assign eeman = account.addChild("eeman", "")>
+</if>
+
+<if eeman>
+<assign lservers = eeman.getLserverList()>
+<assign pservers = eeman.getPserverList()>
+
+<call draw_table_header("4", lang.eeman.list.header)>
+
+<include "control/eeman/lservers_incl.html">
+
+<include "control/eeman/pservers_incl.html">
+
+<include "control/eeman/groups_incl.html">
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/list.html  -->

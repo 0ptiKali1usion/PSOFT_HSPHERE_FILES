@@ -1,0 +1,83 @@
+<!-- BEGIN ./winftp/ftp_vhost.html  -->
+<yafv s_winftp>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_winftp_vhost" check! accept-charset="UTF-8">
+ <input type="hidden" name="template_name" value="submit/winftp/ftp_vhost_update.sbm">
+ <input type="hidden" name="rid" value="${ftp_vhost}">
+ <input type="hidden" name="stemplate" value="${template}">
+ <input type="hidden" name="ftemplate" value="${template}">
+
+
+
+
+<call draw_table_header("4", lang.winftp.ftpvhost.hftp)>
+
+
+
+<if !final_template && request.dtemplate>
+  <assign final_template=request.dtemplate>
+</if>
+<if !final_template> <assign final_template="ftp/ftp.html"></if>
+
+<tr>
+   <td><call draw_tt_help("","user-ftp-existservername","")></td>
+   <td><call draw_label(lang.winftp.ftpvhost.ftpserver)></td>
+   <td colspan=2    ><call draw_label(ftp_vhost.name)><call disableNWJump("", ftp_vhost, final_template)></td>
+</tr>
+<tr>
+   <td><call draw_tt_help("","user-ftp-vftpsip","")></td>
+   <td><call draw_label(lang.winftp.ftpvhost.ftpserverip)></td>
+   <td colspan=2    ><call draw_label(toolbox.int2ext(ftp_vhost.ip))></td>
+</tr>
+<tr>
+   <td  class="control_align_center" width="1%" nowrap><call draw_tt_help(ftp_vhost,"","")></td>
+   <td><call draw_label(lang.winftp.ftpvhost.initstat)></td>
+
+<if (vftp_status == "0") || (!ftp_status && (ftp_vhost.ftp_status=="0"))>
+    <assign vchecked1="">
+    <assign vchecked2="CHECKED">
+<else>
+   <assign vchecked1="CHECKED">
+   <assign vchecked2="">
+</if>
+
+   <td><input type="radio" name="ftp_status" value="1" ${vchecked1}><call draw_label("Running")></td>
+   <td><input type="radio" name="ftp_status" value="0" ${vchecked2}><call draw_label("Stopped")></td>
+</tr>
+<tr>
+   <td  class="control_align_center" width="1%" nowrap><call draw_tt_help(ftp_vhost,"","")></td>
+   <td><call draw_label(lang.winftp.ftpvhost.uploaddir)></td>
+ 
+<if (vftp_upload == "0") || (!ftp_upload && (ftp_vhost.ftp_upload=="0"))>
+    <assign vchecked1="">
+    <assign vchecked2="CHECKED">
+<else>
+   <assign vchecked1="CHECKED">
+   <assign vchecked2="">
+</if>
+   <td><input type="radio" name="ftp_upload" value="1" ${vchecked1} ><call draw_label("Enabled")></td>
+   <td><input type="radio" name="ftp_upload" value="0" ${vchecked2}><call draw_label("Disabled")></td>
+</tr>
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.winftp.ftpvhost.ftpservername)></td>
+   <if !failure><assign vftp_name = ftp_vhost.ftp_name><else><assign vftp_name = request.ftp_name></if>
+   <td colspan=2    ><input type="text" name="ftp_name" value="${vftp_name}" label="${winftp.ftpvhost.ftpservername}" check="vServerName"></td>
+</tr>
+<assign ip = account.findChild("ip")>
+<if ip.shared != "1" && account.plan.isResourceAvailable("ftp_traffic")>
+<assign ftp_traffic = ip.getChild("ftp_traffic")>
+<assign res=ftp_traffic.reload>
+<tr>
+        <td  class="control_align_center" width="1%" nowrap><call draw_tt_help(ftp_vhost,"","")></td>
+        <td><call draw_label(lang.winftp.ftpvhost.transferanonymftp)></td>
+        <td     colspan="2"><call draw_label("<b>"+ftp_traffic.text_traffic+"</b> used out of ")><call draw_link(config.CLIENT_CP_URL+"?template_name=ftp/change_traffic.html"+"&rid="+ftp_vhost+"&rid_parent="+ip+"&traffic_type=3"+"&stemplate="+template+"&ftemplate="+template,ftp_traffic.size+"GB")><call draw_label(" limit")><call draw_change(config.CLIENT_CP_URL+"?template_name=ftp/change_traffic.html"+"&rid="+ftp_vhost+"&rid_parent="+ip+"&traffic_type=3"+"&stemplate="+template+"&ftemplate="+template,"Change limit")></td>
+</tr>
+</if>
+<tr>
+   <td colspan="4"  class="control_align_center" ><input type="submit"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./winftp/ftp_vhost.html  -->

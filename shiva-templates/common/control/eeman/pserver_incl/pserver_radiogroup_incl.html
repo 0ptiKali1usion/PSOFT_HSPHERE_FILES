@@ -1,0 +1,19 @@
+<!--  Begin ./control/eeman/pserver_radiogroup_incl.html -->
+<assign params = param.param_list> 
+<assign groupname = param.group_name>
+<list params as param>      
+<tr><td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>
+<input type="radio" name="${groupname}" value="${param.param_name}" ${param.checked}>
+<if param.onoff><call draw_label(lang.eeman.params.on_off)>
+<else>
+  <if param.yesno><call draw_label(lang.eeman.params.yes_no)>
+    <else>
+        <if param.digit><call draw_label(lang.eeman.params.boolean_digit)>
+	</if>
+  </if>
+</if><br>
+<br><include "control/eeman/pserver_incl/pserver_param_description_incl.html">
+</td></tr></list>
+<!--  END ./control/eeman/pserver_radiogroup_incl.html  -->

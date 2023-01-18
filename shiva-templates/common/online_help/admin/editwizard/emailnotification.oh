@@ -1,0 +1,9 @@
+<center> E-mail Order Confirmation </center>
+<hr>
+<blockquote>
+	- set the system to send e-mail copies of order confirmations to users registered under the plan.<br>
+	- order confirmations are sent to the e-mail address in the user billing info, or, if this address isn't specified, to the email address in the user contact info<br>
+	- the default can be overridden by individual user settings<br>
+	- toggling the option through the plan wizard doesn't affect existing users
+</blockquote>
+

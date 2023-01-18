@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/domain/del_domain_alias.sbm -->
+<assign result=account.getResource(request.did).delete>
+<if result.status=="OK">
+  <assign hosting = account.getResource(request.rid).getChild("hosting")>
+  <if hosting>
+     <assign res = hosting.updateConfig()>
+  </if>
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/domain/del_domain_alias.sbm  -->

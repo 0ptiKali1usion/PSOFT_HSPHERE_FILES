@@ -1,0 +1,85 @@
+<!-- BEGIN ./common/submit/signup/ci_info.sbm -->
+
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(toolbox.compose(
+ lang.label.field_name_ci,lang.label.first_name),request["_ci_first_name"]),
+yafv.common.s_signup.vSinglename(toolbox.compose(
+ lang.label.field_name_ci,lang.label.last_name),request["_ci_last_name"]),
+yafv.common.s_signup.vOrganization(toolbox.compose(
+ lang.label.field_name_ci,lang.label.company),request["_ci_company"]),
+yafv.common.s_signup.vAddress(toolbox.compose(
+ lang.label.field_name_ci,lang.label.address),request["_ci_address1"]),
+yafv.common.s_signup.vCity(toolbox.compose(
+ lang.label.field_name_ci,lang.label.city),request["_ci_city"]),
+yafv.common.s_signup.vState(toolbox.compose(
+ lang.label.field_name_ci,lang.label.state),request["_ci_state"]),
+yafv.common.s_signup.vStateOther(toolbox.compose(
+ lang.label.field_name_ci,lang.label.state_other),request["_ci_state2"]),
+yafv.common.s_signup.vPostal_Code(toolbox.compose(
+ lang.label.field_name_ci,lang.label.postal_code),request["_ci_postal_code"]),
+yafv.common.s_signup.vCountry(toolbox.compose(
+ lang.label.field_name_ci,lang.label.country),request["_ci_country"]),
+yafv.common.s_signup.vPhone(toolbox.compose(
+ lang.label.field_name_ci,lang.label.phone),request["_ci_phone"]),
+yafv.common.s_signup.vEmail(toolbox.compose(
+ lang.label.field_name_ci,lang.label.email),request["_ci_email"])
+)> 
+
+<if result.status=="OK" && new_user.plan.values["ENABLE_PROMO"]=="1">
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(toolbox.compose(
+ lang.label.field_name_ci,lang.label.promo_code),request["_ci_promo_code"]))>
+</if>
+
+<if result.status!="OK">
+  <assign failure="1">
+  <list result.msgs as msg>
+    <assign res=session.addMessage(msg)>
+  </list>
+<else>
+  <if new_user.plan.values["ENABLE_PROMO"]=="1">
+    <if new_user.plan.values["PROMO_"+request["_ci_promo_code"]]=="">
+      <assign res=session.addMessage(lang.msg.signup_invalid_promo_code)>
+      <assign failure="1">
+    </if> 
+  </if>
+</if>
+<if (failure!="") || (request.back!="")>
+  <assign ci_first_name=toolbox.html_encode(request["_ci_first_name"])>
+  <assign ci_last_name=toolbox.html_encode(request["_ci_last_name"])>
+  <assign ci_company=toolbox.html_encode(request["_ci_company"])>
+  <assign ci_address1=toolbox.html_encode(request["_ci_address1"])>
+  <assign ci_address2=toolbox.html_encode(request["_ci_address2"])>
+  <assign ci_city=toolbox.html_encode(request["_ci_city"])>
+  <assign ci_state=toolbox.html_encode(request["_ci_state"])>
+  <assign ci_state2=toolbox.html_encode(request["_ci_state2"])>
+  <assign ci_postal_code=toolbox.html_encode(request["_ci_postal_code"])>
+  <assign ci_country=toolbox.html_encode(request["_ci_country"])>
+  <assign ci_phone=toolbox.html_encode(request["_ci_phone"])>
+  <assign ci_email=toolbox.html_encode(request["_ci_email"])>
+  <assign ci_promo_code=toolbox.html_encode(request["_ci_promo_code"])>
+  <include "signup/ci_info.html">
+<else>
+  <if request["_ci_company"]=="">
+    <assign tmp_company = request["_ci_first_name"]+" "+request["_ci_last_name"]>
+    <!--tmp_company = ${tmp_company} -->
+    <assign res=params.addHash("name","_ci_company","value",tmp_company)>
+  </if>
+
+  
+  <assign isBilling = new_user.plan.b_info>
+  <if isBilling == "0">
+    <assign ftemplate="signup/ci_info.html">
+    <if (user) && (!request.admin_signup)>
+      <assign domainaction="begin">
+      <include "signup/domains.html">
+    <else>
+      <include "signup/login.html">
+    </if>
+  <else>
+    <include "signup/pay_info.html">
+  </if>
+  
+</if>
+
+<!-- END ./common/submit/signup/ci_info.sbm -->

@@ -1,0 +1,14 @@
+<!-- BEGIN: ./submit/admin/wizards/create_store_special.sbm -->
+ <list params as param>
+  <if toolbox.startsWith(param.name, "_TLD_") == "1">
+    <input type="hidden" name="${param.name}" value="${param.value}">
+  </if>
+  <if toolbox.startsWith(param.name, "_PSSL_") == "1">
+    <input type="hidden" name="${param.name}" value="${param.value}">
+  </if>
+  <if toolbox.startsWith(param.name, "DST_") == "1" || toolbox.startsWith(param.name, "_DST_") == "1">
+    <input type="hidden" name="${param.name}" value="${param.value}">
+  </if>
+</list>
+
+<!-- END:  ./submit/admin/wizards/create_store_special.sbm -->

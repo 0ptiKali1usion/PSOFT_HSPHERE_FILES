@@ -1,0 +1,104 @@
+<!-- BEGIN ./control/search/charge_log.html  -->
+<assign billman=account.getChild("billman")>
+<if !billman>
+  <assign res=session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("charge_log")>
+  <assign result = report(request.sc_account, request.sc_username, request.sc_plan, request.sc_created_before, request.sc_created_after, request.sc_only_live, request.sc_type)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<assign sc_params="&sc_account="+toolbox.url_escape(request.sc_account)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_created_before="+toolbox.url_escape(request.sc_created_before)+
+ "&sc_created_after="+toolbox.url_escape(request.sc_created_after)+
+ "&sc_only_live="+toolbox.url_escape(request.sc_only_live)+
+ "&sc_type="+toolbox.url_escape(request.type)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="10">
+<call draw_table_header(colspan, lang.admin.chargelog.header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.period, "period")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.performed, "created")></td>
+  <td class="control_header"><call draw_header(lang.search.chargelog.amount)></td>
+  <td class="control_header"><call draw_header(lang.search.chargelog.trtype)></td>
+  <td class="control_header"><call draw_header(lang.search.chargelog.details)></td>
+  <td class="control_header"><call draw_header(lang.search.chargelog.result)></td>
+</tr>  
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr >
+<if entry.username><assign username=entry.username><else><assign username=lang.search.delusr></if>
+<td><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)></td>
+<td class="control_align_right"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)></td>
+<td><call draw_label(entry.plan)></td>
+<td><call draw_label(entry.period)></td>
+<td><call draw_link("mailto:"+entry.email,entry.email)></td>
+<td><call draw_label(entry.created)></td>
+<td><call draw_label(entry.amount)></td>
+<td><call draw_label(entry.trtype)></td>
+<td>
+<assign mm=account.getChild("merchant_manager")>
+<if entry.mgid!="">
+<assign merchant=mm.get(entry.mgid)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=search/trans_details.html&reqid="+entry.reqid+"&mgid="+entry.mgid, merchant.TITLE)>
+<else>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=search/trans_details.html&reqid="+entry.reqid, lang.search.chargelog.details)>
+</if>
+</td>
+<td>
+<call draw_label(entry.result)> 
+<if entry.error_message>
+<br><call draw_label(entry.error_message)>
+</if>
+</td>
+</tr>
+</list>
+<tr ><td colspan="10">
+<call advReportNav(report)><a href="${config.CLIENT_CP_URL}/charge_log.csv?template_name=control/search/charge_log.csv&arid=${report.id}&_content_type=csv">${lang.search.export}</a>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<!--  END ./control/search/charge_log.html  -->

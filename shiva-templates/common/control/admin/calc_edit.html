@@ -1,0 +1,22 @@
+<!-- BEGIN ./control/admin/calc_edit.html  -->
+<tr>
+  <td nowrap  colspan="3"><call draw_label(lang.admin.calcedit.header)></td>
+  <td nowrap  colspan="4">
+	<select name="_SETUP_CALC">
+	<option value="psoft.hsphere.calc.StandardSetupCalc">${lang.admin.calcedit.standard}</option>
+	<option value="psoft.hsphere.calc.OpenSRSSetupCalc" <if rtype.values["_SETUP_CALC"]=="psoft.hsphere.calc.OpenSRSSetupCalc">SELECTED</if>>${lang.admin.calcedit.srs}</option>
+	</select>
+	<if rtype.values["_SETUP_CALC"]!="psoft.hsphere.calc.StandardSetupCalc"><call draw_link(config.CLIENT_CP_URL+"?plan_id="+plan_id+"&r_id="+r_id+"&calc="+rtype.values["_SETUP_CALC"]+"&template_name=admin/calc_edit_val.html", lang.admin.calcedit.config)></if>
+  </td>
+<!--  <td nowrap  class="control_align_center"><input type="text" label="Refund Percentage" name="_REFUND_PRICE_" value="${rtype.values["_REFUND_PRICE_"]}" size="6" check="vPercent"></td> -->
+</tr>
+<tr>
+  <td nowrap  colspan="3"><call draw_label(lang.admin.calcedit.usage)></td>
+  <td nowrap  colspan="4">
+	<select name="_SETUP_CALC">
+	<option value="psoft.hsphere.calc.StandardSetupCalc">${lang.admin.calcedit.standard}</option>
+	</select>
+	<if rtype.values["_SETUP_CALC"]!="psoft.hsphere.calc.StandardSetupCalc"><call draw_link(config.CLIENT_CP_URL+"?plan_id="+plan_id+"&r_id="+r_id+"&calc="+rtype.values["_SETUP_CALC"]+"&template_name=admin/calc_edit_val.html", lang.admin.calcedit.config)></if>
+  </td>
+</tr>
+<!--  END ./control/admin/calc_edit.html  -->

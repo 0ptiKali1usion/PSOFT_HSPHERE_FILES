@@ -1,0 +1,75 @@
+<if user>
+    <assign result=yafv.checkall(
+        yafv.common.s_signup.vUsername(lang.label.username, request.login),
+        yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login)
+    )>
+<else>
+    <assign result=yafv.checkall(
+      yafv.common.s_signup.vUsername(lang.label.username, request.login),
+      yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login),
+      yafv.common.s_signup.vPassword2(lang.label.password2, request.password,request.password2)
+    )>
+</if>
+<if result.status!="OK">
+    <list result.msgs as msg>
+	<assign res=session.addMessage(msg)>
+    </list>
+    <if session.msg.size=="0">
+	<assign res=session.addMessage(lang.msg.admin_validation_failed)>
+    </if>
+    <assign unsuccess="1">
+</if>
+<if !request.plan_id>
+    <assign unsuccess="1">
+    <assign res=session.addMessage(lang.msg.signup_invalid_value_list)>
+</if>
+<if new_user.plan.b_info!="0">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(lang.msg.admin_signup_needed_disable_bi)>
+</if>
+<if new_user.plan.c_info!="0">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(lang.msg.admin_signup_needed_disable_ci)>
+</if>
+<if (unsuccess!="") || (request.back!="")>
+    <include "signup/end.html">
+<else>
+    <if (user) && (request.admin_signup!="")>
+	<assign signup = account.getChild("signupadm")>
+	<assign result=signup.createUser(request.login, request.password, request.referal_id, request.referal_group,"New Account "+request.plan_id, request.plan_id, request["_mod"], new_user.plan.reseller_id)>
+    <else>
+	<assign result=new_user.signup>
+    </if>
+    <if result.status!="OK">
+	<if result.code=="DUP">
+            <assign submit_template="end.sbm">
+	    <assign login=request.login>
+            <include "signup/dup_login.html">
+	<else>
+	    <assign res=session.addMessage(toolbox.compose(
+              lang.msg.name_res_failed_create, lang.label.account, ""))>
+	    <assign res=session.addMessage(result.msg)>
+	    <include "signup/end.html">
+	</if>
+    <else>
+	<if (user) && (request.admin_signup!="")>
+	   <include "signup/signup_ok.html">
+        <else> 
+	<HTML>
+            <SCRIPT>
+                window.opener.location.href="${config.CP_URI}/${request.login}/";
+                window.close();
+            </SCRIPT>
+	<BODY>
+	  <a TARGET="javascript:window.opener.name" href="${config.CP_URI}/${request.login}/">
+	       <draw colored_label(lang.msg.signup_login_account_link,settings.link_color)>
+	  </a>
+	</BODY>
+
+        </HTML>
+	</if>
+    </if>
+</if>
+
+
+

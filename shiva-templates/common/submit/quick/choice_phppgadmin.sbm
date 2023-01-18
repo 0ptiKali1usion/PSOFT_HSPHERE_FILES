@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/quick/choice_phppgadmin.sbm -->
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+<assign pguser=account.getResource(request.db_user)>
+<assign pgsql=account.getChild("pgsql")>
+
+<if pgsql.phppgadminhost>
+<form name="phpadmin" action="http://${pgsql.phppgadminhost}/phpPgAdmin/index.php" method="post" accept-charset="UTF-8">
+<input type="hidden" name="formServer" value="${toolbox.getHost(pguser.host_id).ip}">
+<input type="hidden" name="formUsername" value="${pguser.name}">
+<input type="hidden" name="formPassword" value="${pguser.password}">
+<input type="hidden" name="formLanguage" value="english">
+<input type="hidden" name="set_username" value="${pguser.name}">
+<input type="hidden" name="set_password" value="${pguser.password}">
+</form>
+<script language="javascript">
+document.phpadmin.submit();
+</script>
+</if>
+</body>
+</html>
+<!-- END ./submit/quick/choice_phppgadmin.sbm -->
+

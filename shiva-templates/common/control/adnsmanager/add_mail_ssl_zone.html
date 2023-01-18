@@ -1,0 +1,35 @@
+<!-- BEGIN ./adnsmanager/add_mail_ssl_zone.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+
+<if mail_manager>
+<assign dnsmanager=account.getChild("adnsmanager")>
+<if !dnsmanager><assign dnsmanager=account.addChild("adnsmanager","")></if>
+
+<form name="ext" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="adnsmanager/add_mail_ssl.html">
+
+<call draw_table_header("2", lang.adnsmanager.new_mail_ssl_header)>
+<tr><td>
+<call draw_label(lang.adnsmanager.mail_ssl_dns_zone)>
+</td><td>
+<select name="zone_id">
+<list dnsmanager.dns_zones as dns_zone>
+<option value="${dns_zone.id}">${dns_zone.name}
+</list>
+</select>
+</td></tr>
+
+<tr>
+  <td  class="control_align_center" colspan="2">
+  <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/add_mail_ssl_zone.html  -->

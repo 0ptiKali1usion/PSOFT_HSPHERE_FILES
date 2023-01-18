@@ -1,0 +1,46 @@
+<!-- BEGIN ./email/manage_antivirus.sbm  -->
+<assign result = yafv.checkall(
+  yafv.common.s_email.vMailProcessing(lang.email.antivirus.processing,request.move_to,request.virus_processing)
+)>
+<if result.status=="OK">
+  <if request.virus_processing=="move">
+    <assign virus_processing=request.move_to>
+  <else>
+    <assign virus_processing=request.virus_processing>
+  </if> 
+  <if request.type=="mdomain">
+    <assign mdomain=account.getResource(request.md_id)>
+    <assign mname=mdomain.name>
+    <assign result=mdomain.setAntiVirusPreferences(virus_processing)>
+  <else>
+    <assign antivirus=account.getResource(request.mid)>
+    <assign mname=antivirus.email>
+    <if request["set_mdomain_prefs"]!="">
+      <assign result=antivirus.onMailDomainPreferences()>
+    <else>
+      <assign result=antivirus.setAntiVirusPreferences(0,virus_processing)>
+    </if>
+  </if>
+  <if result.status=="OK">
+    <assign success="1">
+      <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_changed,lang.label.antivirus_pref,mname))>
+    
+  <else>
+    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_change,lang.label.antivirus_pref,mname))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(result.msg)>
+    </list>
+  </if>
+<else>
+  <list result.msgs as msg>
+    <assign res=session.addMessage(msg)>
+  </list>
+</if>
+<if success>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./email/manage_antivirus.sbm  -->

@@ -1,0 +1,4 @@
+<center>DNS Configuration</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Typically DNS in the system is managed without user participation, but in some rare cases you need to add custom records to your DNS zone. An example would be when a user wants all email to be processed by an external mail server rather than by the built-in mail system, or when it is necessary to add more A, MX or CNAME records. However, such user intervention requires knowledge of DNS configuration and clear understanding of what is to be done.

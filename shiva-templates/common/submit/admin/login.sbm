@@ -1,0 +1,20 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="${design.color("bgcolor")}">
+<assign su=account.getChild("su")>
+<assign reseller_su=account.getChild("reseller_su")>
+<if reseller_su><assign cp = reseller_su.getUsersCpURL(request.login)>
+<else><assign cp = config.CLIENT_CP_URL></if>
+<FORM name="login" action="${cp}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="action" value="login">
+<input type="hidden" name="login" value="${request.login}">
+<input type="hidden" name="account_id" value="${request.account_id}">
+<input type="hidden" name="password" value="${su.getPassword(request.login)}">
+</FORM>
+
+<SCRIPT language="javascript">
+ window.document.forms['login'].submit();
+</SCRIPT>
+</BODY>
+</HTML>

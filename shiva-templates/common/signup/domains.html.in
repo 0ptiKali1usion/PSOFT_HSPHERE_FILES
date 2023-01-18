@@ -1,0 +1,101 @@
+<!-- BEGIN ./common/signup/domain.html.in -->
+<assign rtype = new_user.plan.getResourceType("account")>
+<if    !new_user.plan.isResourceAvailable("opensrs")
+    && !new_user.plan.isResourceAvailable("domain_transfer")
+    && !new_user.plan.isResourceAvailable("domain")
+    && !(new_user.plan.isResourceAvailable("3ldomain") && new_user.hosted_zones)
+    && !(new_user.plan.isResourceAvailable("service_domain") && new_user.free_zones)
+    && !new_user.plan.isResourceAvailable("nodomain") >
+  <if request.use_bi_id!="">
+    <assign ftemplate="submit/signup/pay_info.sbm">
+  <else>
+    <if user && (request.admin_signup=="")>
+       <assign ftemplate="submit/signup/bi_info_cc.sbm">
+    <else>
+       <assign ftemplate="submit/signup/login.sbm">
+    </if>
+  </if>
+  <assign mod="empty">
+  <assign res=params.addHash("name","_mod","value","empty")>
+  <assign res=params.addHash("name","type_domain","value","empty_domain")>
+  <include "signup/end.html">
+<else>
+  <assign template="signup/domains.html">
+  <include "functions">
+  <include "control/signup/signup_function.html">
+  <switch domainaction>
+      <case "begin">
+  	<assign title=lang.common_signup_domains_domaintitle>
+      <break>
+      <case "new_domain">
+  	<assign title=lang.common_signup_domains_domaintitle>
+      <break>
+      <case "new_osrs_domain">
+  	<assign title=lang.common_signup_domains_srstitle>
+      <break>
+      <case "domain_transfer">
+        <assign title=lang.common_signup_domains_transfer_title>
+      <break>
+      <case "3ldomain">
+  	<assign title=lang.common_signup_domains_thirdltitle>
+      <break>
+      <case "service_domain">
+  	<assign title=lang.common_signup_domains_servicetitle>
+      <break>
+      <case "parked_domain"><!--
+  	<assign title="Information on Domain Parking"> -->
+      <break>
+      <case "no_zone_domain"><!--
+  	<assign title="Domain Without DNS Zone"> -->
+      <break>
+  </switch>
+  
+  <include "signup/signup_top.html">
+  <yafv s_signup>
+  <table border="0">
+  <tr>
+  <td colspan="2">
+  <switch domainaction>
+      <case "begin"> 
+  
+  <break>
+  
+  <case "new_domain">
+  <p>
+  <call draw_label(lang.common_signup_domains_fullname)>
+  </p>
+  <break>
+  
+  <case "no_zone_domain"><!--
+  <p>You have chosen <i>Domain Without DNS Zone</i>. It allows you to benefit from our e-mail hosting features using your own mail server(s). On your server, you need to create a real DNS zone for the registered domain the full name of which you should enter below (e.g. my-mail-domain.co.uk.)</p> -->
+  <break>
+  
+  <case "new_osrs_domain">
+  <case "domain_transfer">
+  <p>
+  <call draw_label(lang.common_signup_domains_name)>
+  </p>
+  <break>
+  
+  <case "3ldomain">
+  <p>
+  <call draw_label(lang.common_signup_domains_namethird)>
+  </p>
+  <break>
+  <case "service_domain">
+  <p>
+  <call draw_label(lang.common_signup_domains_choosename)>
+  </p>
+  <break>
+  <case "parked_domain"><!--
+  <p> You chose the Domain Parking feature that allows to use H-Sphere DNS server for designating IPs to domain  names serviced and hosted on other servers (not those of H-Sphere).</p><p>A DNS zone is created with a custom DNS A record for the domain  name and its IP entered in the form below:</p>
+  <break> -->
+  </switch>
+  
+  </td>
+  </tr>
+  <include "control/signup/domains.html">
+  </table>
+  <include "signup/signup_bottom.html">
+</if>
+<!-- END ./common/signup/domain.html.in -->

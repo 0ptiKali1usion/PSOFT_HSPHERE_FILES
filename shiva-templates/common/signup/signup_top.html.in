@@ -1,0 +1,187 @@
+<!-- BEGIN ./signup/signup_top.html.in -->
+
+<assign disable_back="">
+<assign disable_next="">
+<assign v__checkMethod = "checkForm(document.forms['login'],true)">
+<HTML>
+<HEAD>
+<if settings.cp_agent>
+    <assign title=toolbox.compose(lang.common_signup_signup_top_title_with_agent, settings.cp_agent, new_user.plan.description)>
+<else>
+    <assign title=toolbox.compose(lang.common_signup_signup_top_title, new_user.plan.description)>
+</if>
+<TITLE>${title}</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<call define_css()>
+<yafv>
+</HEAD>
+<BODY class="signup_body">
+
+<TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; height: 100%;">
+<TR>
+<TD ROWSPAN="2"  style="width:215px; height: 100%; vertical-align:top; background-color: ${MENU_COLOR3};">
+  <TABLE style="vertical-align: top; border-collapse: collapse; padding: 0; spacing: 0; width: 100%; height: 100%;">
+        <if settings.copyright_view_disabled!="1">
+	<TR>
+      <TD COLSPAN="3" style="border: 0px; padding: 0; spacing: 0; width: 150px; height: 16px; background-color: ${MENU_COLOR1};"><call draw_image("copyright")></TD>
+	</TR>
+	<TR>
+      <TD COLSPAN="3" style="border: 0px; padding: 0; spacing: 0; width: 100%; height: 1px; background-color: ${BORDER_COLOR}"><call draw_spacer("215", "1")></TD>
+	</TR>
+	</if>
+	<TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 14px; height: 10px; background-color: ${MENU_COLOR2};"><call draw_spacer("14", "10")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 1px; height: 10px; background-color: ${BORDER_COLOR}"><call draw_spacer("1", "10")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 200px; height: 10px; background-color: ${MENU_COLOR3};"><call draw_spacer("200", "10")></TD>
+	</TR>
+	<TR>
+      <TD COLSPAN="3" style="border: 0px; padding: 0; spacing: 0; width: 100%; height: 1px; background-color: ${BORDER_COLOR}"><call draw_spacer("215", "1")></TD>
+	</TR>
+	<TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 14px; height: 59px; background-color: ${MENU_COLOR1};"><call draw_spacer("14", "59")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 1px; height: 59px; background-color: ${BORDER_COLOR}"><call draw_spacer("1", "59")></TD>
+<compress>
+<if settings.signup_image_url>
+   <if !settings.signup_image_width || (toolbox.gt(settings.signup_image_width,"200") == "1")>
+      <assign vsignup_image_width="200">
+   <else>
+      <assign vsignup_image_width=settings.signup_image_width>
+   </if>
+   <if !settings.signup_image_height || (toolbox.gt(settings.signup_image_height,"200") == "1")>
+      <assign vsignup_image_height="200">
+   <else>
+      <assign vsignup_image_height=settings.signup_image_height>
+   </if>
+   <assign vsignup_image_url=settings.signup_image_url>
+</if>
+      </compress>
+      <TD ALIGN="CENTER" style="border: 0px; padding: 0; spacing: 0; width: 200px; height: 200px; background-color: ${LIGHT_STRIP}; vertical-align: middle;"><if vsignup_image_url><IMG SRC="${vsignup_image_url}" WIDTH="${vsignup_image_width}" HEIGHT="${vsignup_image_height}"><else><call draw_image("sphera")></if></TD>
+	</TR>
+	<TR>
+      <TD COLSPAN="3" style="border: 0px; padding: 0; spacing: 0; width: 100%; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("215", "1")></TD>
+	</TR>
+	<TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 14px; height: 11px; background-color: ${LIGHT_STRIP};"><call draw_spacer("14", "11")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 1px; height: 11px; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "11")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 200px; height: 11px; background-color: ${MENU_COLOR3};"><call draw_spacer("200", "11")></TD>
+	</TR>
+	<TR>
+      <TD COLSPAN="3" style="border: 0px; padding: 0; spacing: 0; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("215", "1")></TD>
+	</TR>
+	<if (html_help[template]) || (session.msg)>
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 14px; height: 11px; background-color: ${MENU_COLOR3};"><call draw_spacer("14", "11")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; width: 1px; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></TD>
+      <TD style="border: 0px; padding: 0; spacing: 0; background-color: ${LIGHT_STRIP}; vertical-align: top;">
+		<if (!session.msg)> 
+        <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; background-color: ${LIGHT_STRIP};">
+			<tr>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; vertical-align: top;">&nbsp;</td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: center;"><br><call draw_label_bold(lang[html_help[template]["title"]])></td>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; vertical-align: top;">&nbsp;</td>
+			</tr>
+			<tr>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; height: 1px; vertical-align: top;"><call draw_spacer("1", "1")></td>
+            <td style="border: 0px; padding: 0; spacing: 0; height: 1px; vertical-align: top; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></td>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; height: 1px; vertical-align: top;"><call draw_spacer("1", "1")></td>
+			</tr>
+			<tr>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: center;">&nbsp;</td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: justify;">
+              <if settings[template]>
+                <call draw_label(settings[template])>
+              <else>
+                <call draw_label(lang[html_help[template]["tip"]])>
+              </if>
+			<br>&nbsp;
+			</td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: center;">&nbsp;</td>
+			</tr>
+		        </TABLE>
+                <else>
+        <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; background-color: ${HINT_COLOR};">
+                        <tr>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; vertical-align: top;">&nbsp;</td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: center;"><br><call error_message(lang.common_signup_signup_top_error)></td>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; vertical-align: top;">&nbsp;</td>
+                        </tr>
+                        <tr>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; height: 1px; vertical-align: top;"><call draw_spacer("1", "1")></td>
+            <td style="border: 0px; padding: 0; spacing: 0; height: 1px; vertical-align: top; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></td>
+            <td style="border: 0px; padding: 0; spacing: 0; width: 10px; height: 1px; vertical-align: top;"><call draw_spacer("1", "1")></td>
+                        </tr>
+                        <tr>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: justify;">&nbsp;</td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: justify;">
+			<if !error_disabled>
+				<call error()><br>&nbsp;
+			<else>
+				<if settings.support>
+					<call error_message(settings.support)>
+                <else>
+                  <if settings.email>
+					<call error_message(lang.common_signup_signup_top_mailto)>
+					<a href="mailto:${settings.email}"><call error_message(settings.email)></a>
+                  </if>
+                </if>
+			</if>
+                        <br>&nbsp;
+                        </td>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; text-align: justify;">&nbsp;</td>
+			</tr>
+                        </TABLE>
+		</if>
+                </TD>
+	 </TR>
+    <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; background-color: ${BORDER_COLOR}; vertical-align: top; width:100%; height: 1px;" colspan="3"><call draw_spacer("1", "1")></TD>
+    </TR>
+    <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; background-color: ${MENU_COLOR3}; vertical-align: top; width:100%; height: 100%;" colspan="3">&nbsp;</TD>
+    </TR>
+    <else>
+    <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; background-color: ${MENU_COLOR3}; vertical-align: top; width:100%; height: 100%;" colspan="3">&nbsp;</TD>
+	 </TR>
+	</if>
+	</TABLE>
+	</TD>
+<TD style="border: 0px; padding: 0; spacing: 0; width: 1px; height: 100%; background-color: ${BORDER_COLOR}" ROWSPAN="2" ><call draw_spacer("1", "1")></TD>
+<TD style="border: 0px; padding: 0; spacing: 0; width: ${main_col_width}; background-color: ${LIGHT_STRIP}; vertical-align: top;">
+  <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; height: 100%;">
+	 <if settings.copyright_view_disabled!="1">
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 16px; background-color: ${MENU_COLOR1};"><call draw_spacer("1", "16")></TD>
+	 </TR>
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></TD>
+	 </TR>
+	 </if>
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 10px; background-color: ${HEADER_COLOR};"><call draw_spacer("1", "10")></TD>
+	 </TR>
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></TD>
+	 </TR>
+<!-- Header -->
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 27px; background-color: ${HINT_COLOR}">
+        <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; height: 100%;">
+                    <tr>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; padding: 10;"><call draw_colored_label_bold(title,settings.hint_text_color)></td>
+		    </tr>
+		</table>
+		</TD>
+	 </TR>
+<!-- End of Header -->
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 1px; background-color: ${BORDER_COLOR};"><call draw_spacer("1", "1")></TD>
+	 </TR>
+<!-- Text -->
+	 <TR>
+      <TD style="border: 0px; padding: 0; spacing: 0; height: 90%; background-color: ${LIGHT_STRIP}; width: 100%;">
+        <TABLE style="border-collapse: collapse; padding: 0; spacing: 0; width: 100%; height: 100%;">
+                    <tr>
+            <td style="border: 0px; padding: 0; spacing: 0; vertical-align: top; padding: 10;">
+
+<!-- END ./signup/signup_top.html.in -->

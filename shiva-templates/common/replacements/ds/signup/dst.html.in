@@ -1,0 +1,48 @@
+<!-- BEGIN ./common/replacemets/ds/signup/dst.html.in -->
+<include "functions">
+<assign template="signup/dst.html">
+<assign title=lang.ds.signup.title>
+<include "control/signup/signup_function.html">
+  
+  <include "signup/signup_top.html">
+  <yafv s_signup>
+
+  <assign dstemplates=toolbox.availableDSTemplates(new_user.plan.id)>
+  <list dstemplates as dst>
+    <if dst.has_available_servers>
+      <assign ds_servers_available="true">
+    </if>
+  </list>
+  <call draw_label(lang.ds.signup.pick_dst.text)><br><call draw_spacer("2", "25")>
+
+  <call draw_table_header("2", lang.ds.signup.pick_dst)>
+
+  <form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/dst.sbm">
+    <assign ftemplate="submit/signup/login.sbm">
+    <assign excludeFields=excludeFields+"template_name;dst_id;_mod;">
+    <if ds_servers_available>
+      <list dstemplates as dst>
+        <if dst.has_available_servers>
+          <tr>
+          <td><input type="radio" name="dst_id" value="${dst.id}"></td>
+          <td><call draw_label(dst.name)></td>
+          </tr>
+        </if>
+      </list>
+      <tr><td align="center" class="control_align_center" colspan="2"><a href="#" onClick="c=window.open('${config.CLIENT_CP_URL}?action=dst_compare&plan_id=${new_user.plan.id}','${lang.ds.signup.dst_comparision}','scrollbars=no,resizable=no,status=no,width=800,height=480'); if(c != null) c.focus;"><call draw_label(lang.ds.comparision.link)></a></td></tr>
+
+    </if>
+    <tr><td colspan="2"><call draw_spacer("2", "20")></td></tr>
+    <tr>
+      <td><input type="radio" name="dst_id" value="NONE"></td>
+      <td><call draw_label(lang.ds.signup.register_wo_ds)></td>
+    </tr>
+    <if (user) && (request.admin_signup!="")>
+        <input type="hidden" name="seller_id" value="${account.id.id}">
+    </if>
+    <call genHiddenField(excludeFields)>
+  </form>
+<call draw_table_footer()>
+<include "signup/signup_bottom.html">
+<!-- END ./common/replacemets/ds/signup/dst.html.in -->

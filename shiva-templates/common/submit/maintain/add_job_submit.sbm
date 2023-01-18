@@ -1,0 +1,8 @@
+<assign maintainary=account.getChild("maintainary")>
+<assign result = maintainary.createTask(request.contract_id,request.description,request.where_end)>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(lang.msg.maintain_task_failed_add)>
+ <include request.ftemplate>
+</if> 

@@ -1,0 +1,156 @@
+<!-- BEGIN ./control/eeman/mservers.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+
+<if ! config.IRIS_USER> 
+  <assign mservers = eeman.getMailServersList()>
+  <assign mrelays = eeman.getMailRelays()>
+<else>
+  <assign mrelays = eeman.getIMailRelays()>
+</if>
+
+<yafv s_eeman>
+
+<if config.IRIS_USER>
+ <call draw_table_header("3", lang.eeman.mservers.relays)>
+ <tr>
+  <td class="control_header_align_center"><call draw_header(lang.eeman.allowrelay)></td>
+  <td class="control_header_align_center"><call draw_header(lang.label.notes)></td>
+  <td class="control_header_align_center"><call draw_header(lang.label.action)></td>
+ </tr>
+ <list mrelays as mrelay>
+  <tr>
+   <td><call draw_label(mrelay.ip)></td>
+   <td width="70%"><call draw_label(mrelay.notes)></td>
+   <td class="control_align_center">
+    <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_mailrelay.sbm&ip="+mrelay.ip+"&stemplate="+template+"&ftemplate="+template, lang.eeman.mserverallow.remove)>
+   </td>
+  </tr>
+ </list>
+ <call draw_table_footer()>
+<else>
+ <assign foundconfig = eeman.foundConfig()>
+ <if foundconfig><assign cols="2"><else><assign cols=""></if>
+ <call draw_table_header(cols,lang.eeman.mservers.settings)>
+ <tr>
+  <td class="control_header_align_center"><call draw_header(lang.eeman.mserver)></td>
+  <if foundconfig>
+   <td class="control_header_align_center"><call draw_header(lang.label.action)></td>
+  </if>
+ </tr>
+ <list mservers as mserver>
+  <tr>
+  <td class="control_align_center"><call draw_label(mserver.name)></td>
+   <if foundconfig>
+    <td class="control_align_center">
+    <assign notempty = eeman.notEmptyMailConfig(mserver.id)>
+    <if notempty>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=eeman/mserver_params.html&rid="+mserver.id, "ps_params", "")>
+    <else>&nbsp;
+    </if>
+    </td>
+   </if>
+ </list>
+ <call draw_table_footer()>
+ &nbsp;
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+<assign mail_manager = eeman.mail_manager>
+<assign mail_ssl = mail_manager.mail_ssl>
+ <call draw_table_header("2", lang.adnsmanager.mail_ssl_header)>
+ <tr>
+ <td><call draw_label(lang.adnsmanager.mail_ssl)></td>
+ <td width="20%">
+ <if mail_ssl>
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/del_mail_ssl.sbm"+"&ftemplate="+template+"&stemplate="+template)>
+      <call draw_edit(config.CLIENT_CP_URL+"?template_name=adnsmanager/mail_ssl_edit.html"+"&ftemplate="+template+"&stemplate="+template, lang.adnsmanager.mail_ssl_edit_header)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/mail_ssl_repost.sbm"+"&ftemplate="+template+"&stemplate="+template, "repost", lang.adnsmanager.mail_ssl_repost)>
+ <else>
+      <call draw_state_off(config.CLIENT_CP_URL+"?template_name=adnsmanager/add_mail_ssl_zone.html&ftemplate="+template+"&stemplate="+template)>
+ </if>
+ </td></tr>
+ <call draw_table_footer()>
+ &nbsp;
+ <assign mail_srs = mail_manager.mail_srs>
+ <call draw_table_header("2", lang.label.mail_srs)>
+ <tr>
+ <td><call draw_label(lang.eeman.mail_srs.support)><call draw_help("admin-eeman-mserver-srs","")>&nbsp;<call draw_label(mail_srs.srs_status)></td>
+ <td width="20%">
+ <if mail_srs.enabled=="1">
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/eeman/delete_mail_srs.sbm&ftemplate="+template+"&stemplate="+template)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=eeman/mail_srs_edit.html"+"&srs_age="+mail_srs.srs_age+"&ftemplate="+template+"&stemplate="+template, "settings", lang.eeman.mail_srs.settings)>
+ <else>
+      <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/eeman/add_mail_srs.sbm&ftemplate="+template+"&stemplate="+template)>
+ </if>
+ </td></tr>
+ <call draw_table_footer()>
+ </if>
+ &nbsp;
+ <call draw_table_header("5", lang.eeman.mservers.relays)>
+ <tr>
+  <td width="25%" class="control_header_align_center"><call draw_header(lang.eeman.mserver)></td>
+  <td width="10%" class="control_header_align_center"><call draw_header(lang.eeman.allow_deny)></td>
+  <td width="15%" class="control_header_align_center"><call draw_header(lang.eeman.allowrelay)></td>
+  <td class="control_header_align_center"><call draw_header(lang.label.notes)></td>
+  <td width="5%" class="control_header_align_center"><call draw_header(lang.label.action)></td>
+ </tr>
+ <list mrelays as mrelay>
+ <tr >
+  <td><call draw_label(mrelay.name)></td>
+  <td class="control_align_center"><call draw_label(mrelay.action)></td>
+  <td><call draw_label(mrelay.ip)></td>
+  <td><call draw_label(mrelay.note)></td>
+  <td class="control_align_center"><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_mailrelay.sbm&id="+mrelay.id+"&ip="+mrelay.ip+"&action="+mrelay.action+"&stemplate="+template+"&ftemplate="+template, lang.eeman.mserverallow.remove)></td>
+ </list>
+ <call draw_table_footer()>&nbsp;
+</if>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_add_relay" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/add_mailrelay.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("4", lang.eeman.addallowrelay)>
+
+<if !config.IRIS_USER>
+ <tr>
+ <td><call draw_label(lang.eeman.mserver)></td>
+ <td>
+ <select name="f_mserver_id" size="1">
+  <list mservers as ms>
+   <option value="${ms.id}"> ${ms.name}</option>
+  </list>
+ </select>
+ </td>
+ <td width="15%">
+   <select name="f_action" size="1">
+    <option value="allow"> ${lang.eeman.allowrelay}</option>
+    <option value="deny"> ${lang.eeman.denyrelay}</option>
+   </select>
+ </td>
+ <td><input type="text" name="f_relay" label="relay" check="vIPPart"></td>
+ </tr>
+ <tr>
+   <td><call draw_label(lang.label.notes)></td>
+   <td colspan="3"><input type="text" name="f_notes" label="${lang.label.notes}" size="73"></td>
+ </tr>
+<else>
+ <tr>
+ <td><call draw_label(lang.eeman.allowrelay)></td>
+ <td><input type="text" name="f_ip" label="${lang.label.ip_address}" check="vIPPart"></td>
+ <td><call draw_label(lang.label.notes)></td>
+ <td><input type="text" name="f_notes" label="${lang.label.notes}" check="vDescription"></td>
+ </tr>
+</if>
+<tr>
+<td  class="control_align_center" colspan="4"><input type="submit" value="${lang.button.add}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/mservers.html  -->

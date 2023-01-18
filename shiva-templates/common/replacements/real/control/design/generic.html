@@ -1,0 +1,86 @@
+<!-- BEGIN control/unixuser/generic.html  -->
+<assign rmserver=account.getChild("realserver_user")>
+<assign rmuser=rmserver.getChild("real_user")>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("3", "")>
+
+<tr>
+ <td width="5%" class="control_header"><call draw_TT_header()></td>
+ <td width="25%" class="control_header"><call draw_header(lang.label.parameter)></td>
+ <td class="control_header"><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template,lang.label.changeplan)></td></tr>
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.acc_manager_login)></td>
+   <td><call draw_label(user.login)></td>
+</tr>
+
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.ftplogin)></td>
+   <td><call draw_label(rmserver.login)></td>
+</tr>
+<tr>
+   <td><call draw_tt_link(rmserver,"")></td>
+   <td><call draw_label(lang.label.ftppsw)></td>
+   <td><call draw_change(config.CLIENT_CP_URL+"?stemplate="+template+"&template_name=unixuser/change.html"+"&rid="+rmserver, lang.label.changepassword)></td>
+</tr>
+<assign quota = rmserver.getChild("winquota")>
+<tr>
+   <td><call draw_tt_link(quota,"")></td>
+   <td><call draw_label(lang.label.quota)></td>
+   <td>
+<if quota.limitFiles != "unlimited">
+<call draw_label(toolbox.compose(lang.real.generic.used_quota_lim, quota.usedMb, quota.limitMb, quota.usedFiles, quota.limitFiles))>
+<else>
+<call draw_label(toolbox.compose(lang.real.generic.used_quota_unlim, quota.usedMb, quota.limitMb, quota.usedFiles))>
+</if>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=real/change_quota.html"+"&rid="+rmserver+"&stemplate="+template+"&qouta_rid="+quota, lang.label.changequota)></td>
+</tr> 
+<if account.plan.isResourceAvailable("traffic")>
+<assign traffic = account.getChild("traffic")>
+<assign res=traffic.reload>
+<tr>
+        <td><call draw_tt_link(traffic,"")></td>
+        <td><call draw_label(lang.label.sumtraffic)></td>
+        <td>
+<call draw_label(toolbox.compose(lang.unixuser.traffic, traffic.text_traffic, traffic.size))><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+rmserver+"&ftemplate="+template+"&stemplate="+template, lang.label.changetraffic)></td>
+</tr>
+</if> 
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.group)></td>
+   <td><call draw_label(rmserver.group)></td>
+</tr>
+<if SESSION_PLATFORM != "win2k">
+<tr>
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td><call draw_label(rmserver.dir)></td>
+</tr>
+</if>
+<tr>
+
+   <td>&nbsp;</td>
+   <td><call draw_label(lang.label.hostname)></td>
+   <td><call draw_label(rmserver.host.name)></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><call draw_label(lang.label.tooltips_state)></td>
+<td>
+
+<call draw_state(account.tooltips, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=off"+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template)>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END control/unixuser/generic.html  -->

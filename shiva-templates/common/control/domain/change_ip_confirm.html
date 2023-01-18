@@ -1,0 +1,28 @@
+<!-- BEGIN ./control/domain/change_ip_confirm.html  -->
+<assign domain = account.getResource(request.rid)>
+<call draw_tooltip()>
+
+<form name="change_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<call draw_table_header("", lang.domain.change_ip_warn.header(domain.name))>
+
+<tr>
+<td><call draw_label(lang.domain.change_ip_warn.message)><br>
+<center>
+<call draw_link("javascript:document.change_confirm.submit()", lang.billing.del_yes)><br>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no, stype))>
+</center>
+<compress>
+<list params as param>
+  <if param.name != "template_name" && param.name != "next_template">
+    <input type="hidden" name="${param.name}" value="${param.value}">
+  </if>
+</list>
+</compress>
+<input type="hidden" name="template_name" value="submit/domain/change_ip_check.sbm">
+<input type="hidden" name="next_template" value="submit/domain/change_ip_submit.sbm">
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/domain/change_ip_confirm.html  -->

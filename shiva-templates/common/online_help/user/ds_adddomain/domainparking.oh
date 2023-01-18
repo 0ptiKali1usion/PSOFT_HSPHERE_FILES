@@ -1,0 +1,5 @@
+<center> Domain Parking</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	You can use your providers DNS server to map IPs to domains that are serviced and hosted on other servers (not those of your provider). In this case, a DNS zone is created with a custom DNS A record for the domain name and its IP.
+

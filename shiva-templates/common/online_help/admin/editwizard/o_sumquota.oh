@@ -1,0 +1,7 @@
+<center>Summary Disk Usage</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+Summary disk usage is used in billing as an option to Disk Quota.  Summary disk usage includes disk space used on web, mail, and database servers.<br>
+<br>
+To avoid double billing, don't set prices for both Summary Disk Usage and Disk Quota in the same plan.

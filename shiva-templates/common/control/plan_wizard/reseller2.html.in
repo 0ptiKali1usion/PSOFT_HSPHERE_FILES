@@ -1,0 +1,90 @@
+<!-- BEGIN ./control/plan_wizard/reseller2.html -->
+<assign admin = account.getChild("admin")>
+<assign reseller_su = account.getChild("reseller_su")>
+
+<call draw_tooltip()>
+<yafv s_wizard>
+
+<form name="f_unix2" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/plan_wizard/reseller2.sbm">
+<input type="hidden" name="stemplate" value="admin/plans.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate">
+      <input type="hidden" name="${param["name"]}" value="${param["value"]}">
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+
+<call draw_table_header("7", toolbox.compose(lang.planwizard.header, lang.planeditor.res_reseller, lang.planwizard.step2))>
+<tr >
+ <td colspan="7">
+   <call draw_label(lang.planeditor.reseller2.text)>
+ </td>
+</tr>
+
+<tr>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.resource)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.free)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.setup)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.recurr)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.usage)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.refund)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.max)></td>
+</tr>
+<list reseller_su.priced_types as priced_type>
+  <call resource_price(priced_type)>
+</list>
+<tr ><td colspan="7" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+
+
+<function resource_price(rTypeId)>
+<assign priceType = toolbox.getResellerResourcePriceType(rTypeId)>
+<assign typeName = toolbox.getTypeName(rTypeId)>
+<if priceType && (!admin.isResourceDisabledByReq(typeName)) && (typeName != "traffic" || !request.i_reseller_traffic) && typeName != "reseller_backup">
+<tr >
+<td nowrap>
+  <call draw_label(toolbox.getResourceDescription(rTypeId))>
+  <if (typeName =="quota") || (typeName =="winquota") || (typeName =="summary_quota") || (typeName =="mysqldb_quota") || (typeName =="pgsqldb_quota") || (typeName =="MSSQLQuota") || (typeName =="mail_quota")>
+    <call draw_important_label(lang.planwizard.reswarn)>
+  </if>&nbsp;<call draw_existing_help("r__" + typeName , "")>
+</td>
+<if failure>
+<assign v_free=toolbox.html_encode(oldValues["_FREE_UNITS_"+typeName+"_"])>
+<assign v_setup=toolbox.html_encode(oldValues["_SETUP_PRICE_"+typeName+"_"])>
+<assign v_recurr=toolbox.html_encode(oldValues["_UNIT_PRICE_"+typeName+"_"])>
+<assign v_usage=toolbox.html_encode(oldValues["_USAGE_PRICE_"+typeName+"_"])>
+<assign v_refund=toolbox.html_encode(oldValues["_REFUND_PRICE_"+typeName+"_"])>
+<assign v_max=toolbox.html_encode(oldValues["_MAX_"+typeName+"_"])>
+</if>
+ 
+<td nowrap><if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+<if toolbox.consists(priceType,"F")=="1">
+<input type="text" name="_FREE_UNITS_${typeName}_" value="${v_free}" size="5" check="vPriceOpt" label="${typeName} Free Units">
+<else>
+<input type="text" name="_FREE_UNITS_${typeName}_" value="${v_free}" size="5" check="vPriceReq" label="${typeName} Free Units">
+</if>
+<else>&nbsp;</if></td>
+ 
+ 
+<td nowrap><if toolbox.consists(priceType,"S")=="1"><input type="text" name="_SETUP_PRICE_${typeName}_" value="${v_setup}" size="5" check="vPriceOpt" label="${typeName} Setup Fee"><else>&nbsp;</if></td>
+ 
+<td nowrap><if toolbox.consists(priceType,"R")=="1"><input type="text" name="_UNIT_PRICE_${typeName}_" size="5" value="${v_recurr}" check="vPriceOpt" label="${typeName} Recurrent Fee"><else>&nbsp;</if></td>
+ 
+<td nowrap><if toolbox.consists(priceType,"U")=="1"><input type="text" name="_USAGE_PRICE_${typeName}_" value="${v_usage}" size="5" check="vPriceOpt" label="${typeName} Usage Fee"><else>&nbsp;</if></td>
+ 
+ 
+<td nowrap><input type="text" name="_REFUND_PRICE_${typeName}_" value="${v_refund}" size="3" check="vPercentOpt" label="${typeName} Refund percentage"></td>
+ 
+<td nowrap><input type="text" name="_MAX_${typeName}_" value="${v_max}" size="5" value="${v_max}" check="vPriceOpt" label="${typeName} Max Units"></td>
+ 
+</tr>
+</if>
+</function>
+<!-- END ./control/plan_wizard/reseller2.html -->

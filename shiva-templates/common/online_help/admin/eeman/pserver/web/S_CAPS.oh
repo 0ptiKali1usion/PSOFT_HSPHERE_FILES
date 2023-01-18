@@ -1,0 +1,7 @@
+<center> S_CAPS </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>You can set various capabilities. 
+<br>By default, the vserver are run with a limited set, so you can let root run in a vserver and not worry about it. He can't take over the machine. In some cases you can to give a little more capabilities (such as CAP_NET_RAW)
+<br>
+

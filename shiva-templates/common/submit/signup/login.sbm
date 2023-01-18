@@ -1,0 +1,24 @@
+<!-- BEGIN ./common/submit/signup/login.sbm -->
+
+<assign result=yafv.checkall(
+    yafv.common.s_signup.vUsername(lang.label.username, request.login),
+    yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login),
+    yafv.common.s_signup.vPassword2(lang.label.password2, request.password, 
+  								request.password2)
+    )>
+<if (result.status!="OK") || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign login=toolbox.html_encode(request.login)>
+    <include "signup/login.html">
+<else>
+  <assign isBilling = new_user.plan.b_info>
+  <if isBilling == "0">
+    <assign ftemplate="signup/ci_info.html">
+  </if>
+  <assign domainaction="begin">
+  <include "signup/domains.html">
+</if>
+
+<!-- END ./common/submit/signup/login.sbm -->

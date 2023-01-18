@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/admin/merchant/AddIP.sbm -->
+<assign admin = account.getChild("admin")>
+<assign mm=account.getChild("merchant_manager")>
+<assign result=yafv.common.s_admin.vAllowedIpAddr(lang.label.ip_address, request.newip)>
+
+<if result.status=="OK">
+    <assign result = mm.addNewIP(request.gateway, request.newip)>
+    <if result.status=="OK">
+        <assign success = "1">
+    <else>
+        <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success=="1">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+ <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/merchant/AddIP.sbm -->
+

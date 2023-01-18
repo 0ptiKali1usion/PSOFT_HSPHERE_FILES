@@ -1,0 +1,187 @@
+<!-- BEGIN ./control/mailman/massmail.html -->
+
+<assign user_login="${user.login\}">
+<assign user_ci_fname="${account.ci.first_name}">
+<assign user_ci_lname="${account.ci.last_name}">
+<assign user_ci_company="${account.ci.company}">
+<assign user_ci_adr1="${account.ci.address1}">
+<assign user_ci_adr2="${account.ci.address2}">
+<assign user_ci_city="${account.ci.city}">
+<assign user_ci_state="${account.ci.state}">
+<assign user_ci_pcode="${account.ci.postal_code}">
+<assign user_ci_country="${account.ci.country}">
+<assign user_ci_phon="${account.ci.phone}">
+<assign user_ci_email="${account.ci.email}">
+
+<script language="javascript">
+  function draw_firm_tag() {
+    var index = document.form1.select2.selectedIndex;
+    var str = document.form1.select2.options[index].value;
+    if (document.form1.subj_msg[0].checked) {
+      document.form1.subject.value += str;
+    } else {
+      document.form1.message.value += str;
+    }
+  }
+
+  function draw_user_tag() {
+    var index = document.form1.select3.selectedIndex;
+    var str = document.form1.select3.options[index].value;
+    if (document.form1.subj_msg[0].checked) {
+      document.form1.subject.value += str;
+    } else {
+      document.form1.message.value += str;
+    }
+  }
+
+  function draw_template_tag() {
+    if (document.form1.useTemplates.checked) {
+        document.form1.message.value = "${lang.mailman.massmail.warn}";
+    } else {
+        document.form1.message.value = "";
+    }
+  }
+
+  function draw_msg_firm_tag() {
+    var index = document.form1.select3.selectedIndex;
+    var str = document.form1.select3.options[index].value;
+    document.form1.message.value += str;
+  }
+
+  function draw_msg_user_tag() {
+    var index = document.form1.select4.selectedIndex;
+    var str = document.form1.select4.options[index].value;
+    document.form1.message.value += str;
+  }
+</script>
+<call draw_tooltip()>
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="form1" accept-charset="UTF-8" check!>
+<input type="hidden" name="arid" value="${request.arid}">
+<input type="hidden" name="template_name" value="submit/mailman/massmail.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<input type="hidden" name="curr_menu_id" value="${cur_menu}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.mailman.massmail.header)>
+
+<tr>
+<if !from><assign from = ""></if>
+<td><call draw_label(lang.mailman.massmail.from)></td><td><input type="text" name="from" size="20" check="vEmail(this)" label="${lang.bci.email}" value="${from}"></td></tr>
+
+<tr >
+<td><call draw_label(lang.mailman.massmail.mailcharset)></td><td><input type="checkbox" name="useSettingsCharset"></td></tr>
+
+<tr >
+<td valign="center"><call draw_label(lang.mailman.massmail.autoinserts)></td>
+<td>
+<table class="inner_control">
+<tr>
+<td colspan="3" nowrap>
+<input type="checkbox" name="useTemplates" onChange="draw_template_tag()"><call draw_label(lang.mailman.massmail.usetmpls)>
+<assign c_emails = account.getChild("admin").email_manager>
+<assign massmail_templates = c_emails.massmail_templates>
+
+<select name="select1">
+  <list massmail_templates as massmail_template>
+    <assign tag = massmail_template.tag>
+    <option value="${tag}">${lang.ce[tag].title}</option>
+  </list>
+</select>
+</td>
+</tr>
+<tr >
+<td nowrap>
+<input type="radio" name="subj_msg" value="1" checked><call draw_label(lang.mailman.massmail.subject)><br>
+<input type="radio" name="subj_msg" value="0"><call draw_label(lang.mailman.massmail.msg)>
+</td>
+<td valign="center" nowrap>
+<call draw_label(lang.mailman.massmail.company)>
+<select name="select2">
+  <option value="${settings.name}">${lang.mailman.massmail.firm_name}</option>
+  <option value="${settings.address}">${lang.mailman.massmail.firm_address}</option>
+  <option value="${settings.city}">${lang.mailman.massmail.firm_city}</option>
+  <option value="${settings.state}">${lang.mailman.massmail.firm_state}</option>
+  <option value="${settings.country}">${lang.mailman.massmail.firm_country}</option>
+  <option value="${settings.zip}">${lang.mailman.massmail.firm_zip}</option>
+  <option value="${settings.phone}">${lang.mailman.massmail.firm_phone}</option>
+  <option value="${settings.fax}">${lang.mailman.massmail.firm_fax}</option>
+  <option value="${settings.email}">${lang.mailman.massmail.firm_email}</option>
+  <option value="${settings.website}">${lang.mailman.massmail.firm_website}</option>
+</select>
+<input type="button" name="btFirm" value="${lang.button.insert}" onClick="draw_firm_tag()">
+</td>
+<td nowrap>
+<call draw_label(lang.mailman.massmail.user)>
+<select name="select3">
+  <option value="${user_ci_fname}">${lang.mailman.massmail.user_fname}</option>
+  <option value="${user_ci_lname}">${lang.mailman.massmail.user_lname}</option>
+  <option value="${user_ci_company}">${lang.mailman.massmail.user_company}</option>
+  <option value="${user_ci_adr1}">${lang.mailman.massmail.user_adr1}</option>
+  <option value="${user_ci_adr2}">${lang.mailman.massmail.user_adr2}</option>
+  <option value="${user_ci_city}">${lang.mailman.massmail.user_city}</option>
+  <option value="${user_ci_state}">${lang.mailman.massmail.user_state}</option>
+  <option value="${user_ci_country}">${lang.mailman.massmail.user_country}</option>
+  <option value="${user_ci_pcode}">${lang.mailman.massmail.user_zip}</option>
+  <option value="${user_ci_phon}">${lang.mailman.massmail.user_phone}</option>
+  <option value="${user_ci_email}">${lang.mailman.massmail.user_email}</option>
+</select>
+<input type="button" name="btUser" value="${lang.button.insert}" onClick="draw_user_tag()">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr >
+<td><call draw_label(lang.mailman.massmail.subject)></td>
+<if !subject><assign subject = ""></if>
+<td>
+<input type="text" name="subject" size="40" value="${subject}">
+</td></tr>
+<tr >
+<td valign="top"><p>&nbsp;</p><call draw_label(lang.mailman.massmail.msg)></td>
+<if !message><assign message = ""></if>
+<td>
+<textarea name="message" rows="10" cols="45">${message}</textarea><br>
+<call spellcheck("form1", "message")><br>
+<call draw_label(lang.mailman.massmail.choose_cont_type)>&nbsp;
+<select name="content_type">
+  <option value="text/plain">${lang.mailman.massmail.ct_text_plain}
+  <option value="text/html">${lang.mailman.massmail.ct_text_html}
+</select><br>
+<call draw_label(lang.mailman.massmail.text)>
+<input type="radio" name="oepa" value="1" checked><call draw_label(lang.mailman.massmail.yes)>
+<input type="radio" name="oepa" value="0"><call draw_label(lang.mailman.massmail.no)>
+
+</td></tr>
+<tr ><td colspan="2" class="control_align_right"><input type="submit" value="${lang.mailman.massmail.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+
+<function draw_msg_tag(tag_param, image, alter)>
+<a href="#" onClick="draw_message_tag('${tag_param}')"><draw_image_align_alt(image, "absmiddle", alter)></a>
+</function>
+
+<function draw_sbj_tag(tag_param, image, alter)>
+<a href="#" onClick="draw_subject_tag('${tag_param}')"><draw_image_align_alt(image, "absmiddle", alter)></a>
+</function>
+
+<call spellCheckInit()>
+
+<script language="javascript">
+function fillInAnswer(answer) {
+document.forms['form1'].elements['message'].value=answer;
+}
+</script>
+<!-- END ./control/mailman/massmail.html -->

@@ -1,0 +1,75 @@
+<assign maintainary=account.getChild("maintainary")>
+<assign result=maintainary.reload()>
+<H2>Maintain task</H2>
+<a href="${config.CLIENT_CP_URL}?template_name=maintain/add_job.html">Add Maintain job</a>
+<table BORDER CELLPADDING=2 >
+	<tr><td colspan=6>Task description</td></tr>
+	<tr>
+	    <td>State</td>
+	    <td>Max hours</td>
+	    <td>Hours</td>
+	    <td>Last mod</td>
+	    <td>Created</td>
+	    <td>End of work</td>
+	</tr>
+	<tr><td COLSPAN=6 ALIGN=CENTER>Question</td></tr>
+<tr><td  COLSPAN=6><h1> Supplied task </h1></td></tr>
+<list maintainary.supplied_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td colspan=6>${supplied.task_description}  </td>
+	</tr>
+	<tr>
+	<td>${supplied.state}</td> 
+	<td>${supplied.max_hours}</td>  
+	<td>${supplied.hours}  </td>
+	<td>${supplied.lastmod}</td>
+	<td>${supplied.created}</td>
+	<td>${supplied.where_end}</td>
+	</tr>
+	<tr>
+	   <td  COLSPAN=5>
+	<textarea name="description" cols=50 rows=3 readonly>${supplied.question}</textarea>
+</td>
+	<td><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+<tr><td  COLSPAN=6><h1> In work task </h1></td></tr>
+<list maintainary.inwork_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td colspan=5>${supplied.task_description}  </td>
+	</tr>
+	<tr>
+	<td>${supplied.state}</td> 
+	<td>${supplied.max_hours}</td>  
+	<td>${supplied.hours}  </td>
+	<td>${supplied.lastmod}</td>
+	<td>${supplied.created}</td>
+	<td>${supplied.where_end}</td>
+	</tr>
+	<tr>
+	<td colspan=5><textarea name="description" cols=50 rows=3 readonly>${supplied.question}</textarea></td>
+	   <td><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+<tr><td  COLSPAN=6><h1> Other task </h1></td></tr>
+<list maintainary.other_task as supplied>
+	<tr>
+	<td><b>Task:</b></td>
+	<td colspan=5>${supplied.task_description}  </td>
+	</tr>
+	<tr>
+	<td>${supplied.state}</td> 
+	<td>${supplied.max_hours}</td>  
+	<td>${supplied.hours}  </td>
+	<td>${supplied.lastmod}</td>
+	<td>${supplied.created}</td>
+	<td>${supplied.where_end}</td>
+	</tr>
+	<tr>
+	<td colspan=5><textarea name="description" cols=50 rows=3 readonly>${supplied.question}</textarea></td>
+	   <td><a href="${config.CLIENT_CP_URL}?task_id=${supplied.id}&template_name=maintain/task_edit.html&stemplate=${template}&ftemplate=${template}">[EDIT]</a></td>
+	</tr>
+</list>
+</table>

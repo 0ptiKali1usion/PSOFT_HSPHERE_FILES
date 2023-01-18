@@ -1,0 +1,6 @@
+<center>FTP Sub-account Relative Home Dir</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+This is the name of your home dir subdirectory the FTP user will be restricted to.<br><br>
+The subdirectory can have more than one level, for example <tt>website1.com/images</tt> for Unix-hosted accounts or <tt>website1.com\images</tt> for Windows-hosted accounts.<br>
+If no subdirectory is specified, the FTP user will have access to the entire home directory, just like the main user. If the subdirectory doesn't exist, it will be created.

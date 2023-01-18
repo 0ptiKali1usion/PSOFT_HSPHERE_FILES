@@ -1,0 +1,36 @@
+<!-- BEGIN ./ds/change_res_bandwidth.html.in  -->
+<call draw_tooltip()>
+
+<yafv s_ds>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_bandwidth" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="next_template" value="submit/ds/change_res_bandwidth.sbm">
+<input type="hidden" name="template_name" value="submit/ds/change_res_bandwidth_check.sbm">
+<input type="hidden" name="type" value="r_ds_bandwidth">
+
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+<call draw_table_header("2", lang.ds.changebandwidth.header)>
+
+<assign bandwidth = account.getChild("r_ds_bandwidth")>
+<if bandwidth>
+  <if !vsize><assign vsize = bandwidth.size></if>
+  <assign bandwidth_billing_type = bandwidth.billing_type>
+<else>
+  <assign bandwidth_billing_type = account.plan.getResourceType("r_ds_bandwidth").getValue("_R_DS_BANDWIDTH_TYPE_")>
+</if>
+<tr>
+  <td width="40%"><call draw_label(lang.ds.changebandwidth.limit)></td>
+  <td>
+    <input type="text" name="size" size="5" value="${vsize}" label="${lang.ds.changebandwidth.limit}" check="vTrafficLimit">
+    <call draw_label(lang.dsbandwidth_unit[bandwidth_billing_type])>
+  </td>
+</tr>
+<tr>
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ds/change_res_bandwidth.html.in  -->

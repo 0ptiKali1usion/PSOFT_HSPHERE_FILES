@@ -1,0 +1,37 @@
+<!-- BEGIN ./domain/registration_park.sbm -->
+<assign result=yafv.checkall(
+	yafv.common.s_domain.vTransferDomainName(lang.label.domain,request.domain_name),
+	yafv.common.s_domain.vIPAddr(lang.label.ip_address,request.domain_ip))>
+<if result.status=="OK">
+ <assign result=toolbox.DBlookup(request.domain_name)>
+ <if result=="0">
+    <assign domainManager = account.getChild("unixuser")>
+    <if domainManager>
+       <assign domain = domainManager.addChild("parked_domain", "parked")>
+    <else>
+       <assign domain = account.addChild("parked_domain", "parked")>
+    </if>
+    <if domain.status == "OK">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.domain_parked, request.domain_name))>
+       <assign success="1">
+    <else>
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.domain_failed_park, request.domain_name))>
+       <assign res=session.addMessage(domain.msg)>
+    </if>
+ <else>
+   <assign res=session.addMessage(toolbox.compose(
+     lang.msg.domain_name_taken, request.domain_name))>
+ </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdomain_name = request.domain_name>
+    <assign vdomain_ip = request.domain_ip>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/registration_park.sbm  -->

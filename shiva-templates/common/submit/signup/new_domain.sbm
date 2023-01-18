@@ -1,0 +1,25 @@
+<!-- BEGIN ./common/submit/signup/new_domain.sbm -->
+
+<assign result= yafv.common.s_signup.vDomain_Name(lang.label.domain.name, request.domain_name)>
+<if result.status!="OK" || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign domainaction="new_domain">
+    <include "signup/domains.html">
+<else>
+    <if new_user.plan.values["_CREATED_BY_"] != "msexchange">
+      <assign exists=toolbox.DBlookup(request.domain_name)>
+    <else>
+      <assign exists="0">
+    </if>
+    <if toolbox.gt(exists, "0")=="1">
+	<assign res=session.addMessage(toolbox.compose(lang.msg.name_res_exists, lang.label.domain, request.domain_name))>
+	<assign domainaction="new_domain">
+	<include "signup/domains.html">
+    <else>							
+	<include "signup/end.html">
+    </if>	
+</if>
+
+<!-- END ./common/submit/signup/new_domain.sbm -->

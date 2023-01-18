@@ -1,0 +1,26 @@
+<!-- BEGIN ./eeman/add_net_gateway.sbm  -->
+<assign result=yafv.checkall(
+yafv.common.s_eeman.vIPSubnet(lang.label.domain.name, request.addr),
+yafv.common.s_eeman.vIPAddr(lang.label.domain.name, request.gateway),
+yafv.common.s_eeman.vIPMask(lang.eeman.mask1, request.mask)
+)>
+<if result.status=="OK">
+  <assign eeman = account.getChild("eeman")>
+  <assign result = eeman.addNetworkGateway(request.addr, request.gateway, request.mask)>
+  <if result.status!="OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign failure="1">
+  </if>
+  <assign res=session.addMessage(lang.eeman.net_gateway.change)>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+  <assign vmask=toolbox.html_encode(request.mask)>
+  <assign vgateway=toolbox.html_encode(request.name)>
+  <include request.ftemplate>
+<else>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/add_net_gateway.sbm  -->

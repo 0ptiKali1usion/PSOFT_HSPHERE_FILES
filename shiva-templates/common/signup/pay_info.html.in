@@ -1,0 +1,45 @@
+<!-- BEGIN ./common/signup/pay_info.html.in -->
+<assign template="signup/pay_info.html">
+<include "functions">
+<include "control/signup/signup_function.html">
+<assign title=lang.common_signup_pay_info_title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+    <td colspan="2">
+    <call draw_label(lang.common_signup_pay_info_cc)> 
+    </td>
+</tr>
+<if new_user.plan.b_info=="2">
+<tr>
+<td colspan="2">
+<br>
+<call draw_label(lang.common_signup_pay_info_trial)>
+</td>
+</tr>
+</if>
+
+<if  (user) && (request.admin_signup=="")>
+<td colspan="2">
+<br>
+<call draw_label(lang.common_signup_pay_info_text)>
+</td>
+</if>
+<tr>
+    <td colspan="2" ><call draw_spacer("2", "50")>
+    </td>
+</tr> 
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/pay_info.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <assign ftemplate="submit/signup/ci_info.sbm">
+    <include "control/signup/pay_info.html">
+    <if new_user.plan.isPromocodeApplicable>
+        <include "control/signup/promo_info.html">
+    </if>
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./common/signup/pay_info.html.in -->

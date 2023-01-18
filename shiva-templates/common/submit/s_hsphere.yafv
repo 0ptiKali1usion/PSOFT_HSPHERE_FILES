@@ -1,0 +1,576 @@
+regexp v3LDomainName=	"[a-zA-Z0-9][a-zA-Z0-9\-]{3,}[a-zA-Z0-9]", maxlength="63", fail=yafv.v3LDomainName.fail;
+regexp vAddress=	"\S.*", maxlength="60",	fail=yafv.vAddress.fail;
+regexp vAddress2=	".*", maxlength="60",	fail=yafv.vAddress2.fail;
+regexp vAlias=		"[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?",	fail=yafv.vAlias.fail;
+regexp vAmount=		"((\d{1,3}([,.]?\d{3}){0,2})|(\d{1,9}))([,.]\d{1,3})?",	fail=yafv.vAmount.admin.fail;
+regexp vBalanceAmount=	"(-?(\d{1,3}([,.]?\d{3}){0,2})|(\d{1,9}))([,.]\d{1,3})?",	fail=yafv.vBalanceAmount.admin.fail;
+regexp vApacheCode=	"\d{3}",	fail=yafv.vApacheCode.fail;
+regexp vcc_month=	"(0[1-9])|(1[0-2])",	fail=yafv.vcc_month.fail;
+regexp vcc_name=	"\S.*",		fail=yafv.vcc_name.fail;
+regexp vcc_number=	"\d{13,20}",	fail=yafv.vcc_number.fail;
+regexp vcc_year=	"2\d{3}",	fail=yafv.vcc_year.fail;
+regexp vCheckboxOptional= "()|(0|1)",	fail=yafv.vCheckboxOptional.fail;
+regexp vCheckboxRequired= "(0|1)",	fail=yafv.vCheckboxRequired.fail;
+regexp vCity=		"\S.*", maxlength="60",	fail=yafv.vCity.fail;
+regexp vConnection=	"\d+",	fail=yafv.vConnection.fail;
+regexp vCountry=	"\S.*",	fail=yafv.vCountry.fail;
+regexp vCronField=	"(([\d\-\/\*]+|\w+),?)+",	fail=yafv.vCronField.fail;
+
+regexp vCustomAName=	"(((\*)|([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?))(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*)|()",	fail=yafv.vCustomAName.fail;
+regexp vCustomDomain=	"[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])+", maxlength="255", fail=yafv.vCustomDomain.fail;
+regexp vCustomMXName=	"([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*)|()",	fail=yafv.vCustomMXName.fail;
+regexp vCustomCName=	"[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*",	fail=yafv.vCustomCName.fail;
+regexp vCustomTXTName=    "(((\*)|([a-zA-Z0-9_]([a-zA-Z0-9\-_]*[a-zA-Z0-9_])?))(\.[a-zA-Z0-9_]([a-zA-Z0-9\-_]*[a-zA-Z0-9_])?)*)|()",    fail=yafv.vCustomTXTName.fail;
+regexp vDate=		"\d{1,4}[\.\-\/]\d{1,2}[\.\-\/]\d{1,4}",	fail=yafv.vDate.fail;
+regexp vMDYDate=	"\d{2}[\/]\d{2}[\/]\d{2,4}",	fail=yafv.vDate.fail;
+regexp vDateYY=		"\d{2}";
+regexp vDayPeriod=	"\d*",	fail=yafv.vDayPeriod.fail;
+regexp vDayHour=	"[0-1]?\d|2[0-4]",	fail=yafv.vDayHour.fail;
+
+regexp vDescription=	".+",	fail=yafv.vDescription.fail;
+regexp vDNSEmail=	"[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]{2,})+",		fail=yafv.vDNSEmail.fail;
+regexp vDNSTXTRecord=	"[^\`\|\&\"\']+",   fail=yafv.vDNSTXTRecord.fail;
+regexp vDomain_Name=	"([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="255",	fail=yafv.vDomain_Name.fail;
+regexp vDomainDescription= ".*", maxlength="98", fail=yafv.vDomainDescription.fail;
+
+regexp vEmailOpt=	"([\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+\@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*)|()", maxlength="128", fail=yafv.vEmailOpt.fail;
+regexp vEmails=		"[\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+\@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*(([;,\s]|\n)[\w.\-]+\@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*)*", fail=yafv.vEmails.fail;
+regexp vEmailsMask=	"(((([\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+)\@([a-zA-Z0-9\-\?\*]+))|\*)\.[a-zA-Z0-9\-\?\*](\.?[a-zA-Z0-9\-\?\*]+)*(([;,\s]|\n)((([\w\-\?\.\*]+)\@([a-zA-Z0-9\-\?\*]+))|\*)\.[a-zA-Z0-9\-\?\*](\.?[a-zA-Z0-9\-\?\*]+)*)*\n?)|()", fail=yafv.vEmails.fail;
+regexp vEmailsOpt=	"([\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+\@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*(([;,\s]|\n)[\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+\@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*)*)|()", maxlength="128", fail=yafv.vEmails.fail; 
+regexp vEmail=		"[\w\!\#\$\'\*\+\-\/\=\?\^\`\{\|\}\~\.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-](\.?[a-zA-Z0-9\-]+)*", maxlength="128", fail=yafv.vEmail.fail;
+regexp vExemptionCode=	"[\w][\w\-\. ]*|()", maxlength="60",	fail=yafv.vExemptionCode.fail;
+regexp vExemptionCodeReq= "[\w][\w\-\. ]*", maxlength="60",	fail=yafv.vExemptionCodeReq.fail;
+
+regexp vFax=		"(\+*(\(\d+\)|\d+\.?)\s*)?\d*([\-\s\.]?\d+)*", maxlength="20", fail=yafv.vFax.fail;
+
+regexp vfileExt=	"\.[^\.\s\*\?\/\\]*",	fail=yafv.vfileExt.fail;
+regexp vHomeDir =       "[a-zA-Z0-9][\.\w\-]*",	fail=yafv.vHomeDir.fail;
+regexp vHostName=	"[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])+",	fail=yafv.vHostName.fail;
+regexp vHours=		"\d+",			fail=yafv.vHours.fail;
+regexp vHourMin=	"[0-5]?\d",		fail=yafv.vHourMin.fail;
+regexp vHT_URL=		"(http|HTTP)(s|S)?:\/\/.+",	fail=yafv.vHT_URL.fail;
+regexp vHttpResURL=	"((https?|HTTPS?):\/\/[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])+(:\d+)?)?(\/~?[\w\.\-]+)*\/?(\?([\w]+(=[^\&]*)?\&)*[\w]+(=[^\&\/]*)?)?",	fail=yafv.vHttpResURL.fail;
+regexp vInstantDomain=	"(\.[\w]+)+",	fail=yafv.vInstantDomain.fail;
+regexp vIntegerOptional=	"\d*",	fail=yafv.vIntegerOptional.fail;
+regexp vIntegerRequired=	"\d+",	fail=yafv.vIntegerRequired.fail;
+regexp vIntegerOrNumber=      "\d+([,.]\d+)?",    fail=yafv.vIntegerOrNumber.fail;
+regexp vFiler=		"()|(([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([1-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5]):\/[a-zA-Z0-9\.\-]+(\/[a-zA-Z0-9\.\-]+)*",	fail=yafv.vFiler.fail;
+regexp vFilePath=	"()|\/[a-zA-Z0-9\.\-]+(\/[a-zA-Z0-9\.\-]+)*",	fail=yafv.vFilePath.fail;
+regexp vFilePathReq=	"\/[a-zA-Z0-9\.\-]+(\/[a-zA-Z0-9\.\-]+)*",	fail=yafv.vFilePathReq.fail;
+regexp vWinFileRelativePath=	"((\.*[\w\+\-][\w.\+\-]*|\.{3,})\\)*(\.*[\w\+\-][\w.\+\-]*|\.{3,})", fail=yafv.vWinFileRelativePath.fail;
+regexp vIPAddr=		"(([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([1-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])",	fail=yafv.vIPAddr.fail;
+regexp vIPAddrOpt=	"((([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([1-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5]))|()",	fail=yafv.vIPAddrOpt.fail;
+regexp vIPSubnet=	"(([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])",	fail=yafv.vIPSubnet.fail;
+regexp vIPMask=		"255\.(([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){2}([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])",	fail=yafv.vIPMask.fail;
+regexp vIPSubnetSlashOpt=  "[0-9]?{2}", fail=yafv.vIPSubnetSlash.fail;
+regexp vIPMaskOpt=	"255\.(([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){2}([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])|()",	fail=yafv.vIPMaskOpt.fail;
+regexp vIPPart=		"([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9]{1,3}\.){1,3}",	fail=yafv.vIPPart.fail;
+regexp vIPTag=		"(2|([1-9]\d)|100)",	fail=yafv.vIPTag.fail;
+regexp vIPTagOpt=	"((2|([1-9]\d)|100))|()",	fail=yafv.vIPTagOpt.fail;
+regexp vIssueNum=	"(\d{1,2})|()";
+regexp vCvvNum=         "\d{1,4}";
+regexp vJSZone=		"\w+", maxlength="20",	fail=yafv.vJSZone.fail;
+regexp vListFlag=	"[abdf-jl-no-uABDF-JL-NO-U]+", maxlength="18",	fail=yafv.vListFlag.fail;
+
+regexp vLocalDir=	"(\/((\.{3,})|(\.*[\w\+\-][\w.\+\-]*)))+",	fail=yafv.vLocalDir.domain.fail;
+regexp vLocalDirOpt=	"(((\.{3,})|(\.*[\w\+\-][\w.\+\-]*))\/)+|()",	fail=yafv.vLocalDirOpt.admin.fail;
+regexp vLocalDoc=	"(\/((\.{3,})|(\.*[\w\+\-][\w.\+\-]*)))+",	fail=yafv.vLocalDoc.fail;
+
+regexp vLocalEmail=	"[a-zA-Z0-9_.\-]+",				fail=yafv.vLocalEmail.fail;
+regexp vLocalEmailsOpt=    "([a-zA-Z0-9_.\-]+([\s,;][a-zA-Z0-9_.\-]+)*)[\s,;]?|()",     fail=yafv.vLocalEmails.fail;
+regexp vLocalFileName=	"([\w\+\-]*\.?[\w\+\-]*\/)*[\w\+\-\.]+",	fail=yafv.vLocalFileName.fail;
+
+regexp vLocality=	".+",	fail=yafv.vLocality.fail;
+regexp vLogin_Name=	"[a-zA-Z][\w]{4,}", maxlength="20",	fail=yafv.vLogin_Name.fail;
+
+regexp vMax=		"(\d+([,.]\d{3})*([,.]\d+)?)|()",	fail=yafv.vMax.admin.fail;
+regexp vMBoxName=	"\w+[\w\!\#\$\*\+\-\=\?\^\~]*(\.[\w\!\#\$\*\+\-\=\?\~]+)*", maxlength="128", fail=yafv.vMBoxName.fail;
+regexp vMessage=	"[\w\/:,.\s'\-]+",	fail=yafv.vMessage.fail;
+regexp vmimeType=	"[a-zA-Z0-9_\-]*\/[a-zA-Z0-9_\-]+([\.\+][a-zA-Z0-9_\-]+)*", fail=yafv.vmimeType.fail;
+regexp vMysqlUserName=	"[a-zA-Z][a-zA-Z0-9\-]{2,}", maxlength="16",	fail=yafv.vMysqlUserName.fail;
+
+regexp vNACountry=      "US|CA|MX|UM|us|ca|mx|um";
+
+regexp vName=		"\S.*", maxlength="60",				fail=yafv.vName.fail;
+regexp vNewDomainName=	"[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="63", fail=yafv.vNewDomainName.fail;
+regexp vNetswitchComName=	".+",	maxlength="64",	fail=yafv.vNetswitchComName.fail;
+regexp vNetworkDevice=	"[a-z][a-z0-9]+",  fail=yafv.vNetworkDevice.fail;
+regexp vNonegativeIntOpt=	"\d*",	fail=yafv.vNonegativeIntOpt.fail;
+regexp vNonegativeIntReq=	"\d+",	fail=yafv.vNonegativeIntReq.fail;
+regexp vNumber=		"(\d{1,7})",	fail=yafv.vNumber.fail;
+regexp vNumberReq=	"\d+([,.]\d{3})*([,.]\d+)?",	fail=yafv.vNumberReq.fail;
+regexp vnURL=	"((([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])|((([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])))(:\d+)?(\/\~?[\w\.\+\-]+)*\/?(\?(\w+(=[^\&]*)?\&)*\w+(=[^\&]*)?)?", maxlength="255", fail=yafv.vnURL.fail;
+regexp vOldURL=	        "[\w\+\-]+([\.\/][\w\+\-]{2,})*|()", maxlength="255", fail=yafv.vOldURL.fail;
+regexp vOrganization=	"\S.*", maxlength="60",	fail=yafv.vOrganization.fail;
+regexp vOrganReq=	"\S.*",			fail=yafv.vOrganReq.fail;
+regexp vOrganUnit=	"\S.*",			fail=yafv.vOrganUnit.fail;
+regexp vOsrsDomainName=	"([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="79", fail=yafv.vOsrsDomainName.fail;
+regexp vPasswordOptional=	".*",	fail=yafv.vStringPassword.fail;
+
+regexp vPayPalAmount=	"\d+(\.\d{1,2})?",	fail=yafv.vAmount.billing.fail;
+regexp vPercentOpt=	"(\d{1,2}([,.]\d+)?)|(100)|()",	fail=yafv.vPercentOpt.fail;
+regexp vPercentReq=	"(\d{1,2}([,.]\d+)?)|(100)",	fail=yafv.vPercent.fail;
+
+regexp vPeriod=		"[1-9]\d{0,2}",	fail=yafv.vPeriod.fail;
+regexp vPhone=		"(\+*(\(\d+\)|\d+\.?)\s*)?\d+([\-\s\.]?\d+)*", maxlength="20", fail=yafv.vPhone.fail;
+regexp vPhoneExt=	"\+\d{1,3}\.\d{3,12}([x\.\/]\d{1,4})?", maxlength="20";
+regexp vPhoneExtNA=	"[2-9]\d{2}-[2-9]\d{2}-\d{4}([x\.\/]\d{1,4})?", maxlength="20";
+regexp vPlanName =      ".+",			fail=yafv.vPlanName.fail;
+regexp vPort=		"\d*",			fail=yafv.vPort.fail;
+regexp vPositiveIntOpt=	"([1-9]\d*)|()",	fail=yafv.vPositiveIntOpt.fail;
+regexp vPositiveIntReq=	"[1-9]\d*",		fail=yafv.vPositiveIntReq.fail;
+regexp vPostal_Code=	"[a-zA-Z0-9]{2}[\w\s_.\-]*", maxlength="16",	fail=yafv.vPostal_Code.fail;
+regexp vPrefix=		"[a-zA-Z0-9\-]+", maxlength="10",	fail=yafv.vPrefix.fail;
+regexp vPrice=		"(\d+([ ,.]\d{3})*([ ,.]\d+)?)|()",	fail=yafv.vPrice.fail;
+regexp vPriceOpt=	"(\d+([ ,.]\d{3})*([ ,.]\d+)?)|()",	fail=yafv.vPriceOpt.fail;
+regexp vPriceReq=       "\d+([ ,.]\d{3})*([ ,.]\d+)?",	fail=yafv.vPriceReq.fail;
+regexp vPromoDesc=      "\S.*", maxlength="254",	fail=yafv.vPromoDesc.fail;
+regexp vPromokode=	"[a-zA-Z][a-zA-Z0-9\-]+", maxlength="20",	fail=yafv.vPromokode.fail;
+regexp vProtocol=	"https?://",		fail=yafv.vProtocol.fail;
+regexp vQuota=		"\d+([,\.]?\d{3})*",	fail=yafv.vQuota.fail;
+regexp vReferal_ID=	"\d+",			fail=yafv.vReferal_ID.fail;
+regexp vServer_Name=	".+",			fail=yafv.vServer_Name.fail;
+regexp vServerName=	".+", valid="",		fail=yafv.vServerName.fail ;
+regexp vSingleDir=	"[\w]+",		fail=yafv.vSingleDir.fail;
+regexp vSinglename=	"\S.*", maxlength="60",	fail=yafv.vSinglename.fail;
+regexp vSinglenameOpt = "\S*",			fail=yafv.vSinglenameOpt.fail;
+regexp vSS_number=	"\d{16,20}";
+regexp vStateOther=	".*", maxlength="20",	fail=yafv.vStringOptional.fail;
+regexp vState=		"\S.+", maxlength="20",	fail=yafv.vState.fail;
+
+regexp vString=		".+",	fail=yafv.vString.fail;
+regexp vStringOptional=	".*",	fail=yafv.vStringOptional.fail;
+regexp vStringSafe=     "[^`|&\"\']+",   fail=yafv.vStringSafe.fail;
+regexp vStringSafeOptional=     "[^`|&\"\']+|()",   fail=yafv.vStringSafeOptional.fail;
+regexp vStringPassword=	".+",	fail=yafv.vStringPassword.fail;
+regexp vStringReq=	".+",	fail=yafv.vStringReq.fail;
+regexp vStringEmpty=	"()";
+
+regexp vSubDomain=	"[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="63",	fail=yafv.vSubDomain.fail;
+regexp vTrafficLimit=	"\d+(\.\d+)?",	fail=yafv.vTrafficLimit.fail;
+regexp vTransferDomainName=	"([a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="255", fail=yafv.vTransferDomainName.fail;
+regexp vTTL=		"\d{1,5}",	fail=yafv.vTTL.fail;
+regexp vUnits=		"(\d+([,.]\d{3})*([,.]\d+)?)|()",	fail=yafv.vUnits.fail;
+regexp vAllowedPass=	"[\w=!,\.]{5,}", maxlength="12";
+regexp vUndesiredPass=	"qwerty|12345[6-9]*|1+|2+|3+|4+|5+|6+|7+|8+|9+|0+|a+|q+|(12)+|(23)+|(90)+", maxlength="12";
+regexp vUnixLogin=	"[a-zA-Z][a-zA-Z0-9\-]{4,}", maxlength="8",	fail=yafv.vUnixLogin.fail;
+regexp vUsername=	"[a-zA-Z][a-zA-Z0-9\-]{4,}", maxlength="20",	fail=yafv.vUsername.fail;
+regexp vWildCardDomain=	"\*\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9](\.[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])+", maxlength="255", fail=yafv.vWildCardDomain.fail;
+regexp vWinHomeDir=	"[a-zA-Z]:\\([\w\+\-_]*\.?[\w\+\-_]*\\)*[\w\+\-_\.]*",	fail=yafv.vWinHomeDir.fail;
+
+regexp vMnogoURL=	"[a-zA-Z0-9\.\-]+(\/[a-zA-Z0-9\.\-]+)*",	fail=yafv.vMnogoURL.fail;
+
+/*  There are some peculiarities how "constrains" should be written.
+ 1. Client-Side (JavaScript) validation uses 3 level logic: ACCEPTED (true), REJECTED (false), INCOMPLETE.
+ 2. Each boolean expression returns one of the above 3 states. There are new rules how to calculate results of the boolean "AND", "OR" operators.
+ 3. Boolean expression:  a == b  returns the INCOMPLETE state if  a != b  and  a contains b or b contains a. So, you should never define one of the parameters as the empty string (""). Such an expression would always return INCOMPLETE. Instead, use the vStringEmpty regexp.
+ 4. Do not simplify boolean expressions with d'Morgan rules as they do not work properly with the 3 level logic.
+ 5. Comparison operators "<", ">", "<=", ">=" use the 3 level logic also.
+*/
+
+constrain vMailPassword, fail=yafv.vPassword.fail (string pass) {
+    if (!vUndesiredPass(pass)) {
+	return vAllowedPass(pass);
+    } else {
+	return vAllowedPass("");
+    }
+}
+
+constrain vPassword, fail=yafv.vPassword.fail (string pass) {
+    if (!vUndesiredPass(pass)) {
+	return vAllowedPass(pass);
+    } else {
+	return vAllowedPass("");
+    }
+}
+
+constrain vPassword1, fail=yafv.vPassword1.fail (string pass,string login) {
+    if (!vUndesiredPass(pass) && (pass != login)) {
+	return vAllowedPass(pass);
+    } else {
+	return vAllowedPass("");
+    }
+}
+
+constrain vPassword2, fail=yafv.vPassword2.fail (string pass1,string pass2) {
+    if (!vUndesiredPass(pass2)) {
+	return vAllowedPass(pass2) && (pass1 == pass2);
+    } else {
+	return vAllowedPass("");
+    }
+
+}
+
+constrain vPassword2Dep, fail=yafv.vPassword2.fail (string pass1,string pass2,boolean i_mailbox) {
+    if (i_mailbox) {
+	if (!vUndesiredPass(pass2)) {
+	    return vAllowedPass(pass2) && (pass1 == pass2);
+	} else {
+	    return vAllowedPass("");
+	}
+    } else {
+	return true;
+    }
+}
+
+constrain vPassword2DepOpt, fail=yafv.vPassword2.fail (string pass1,string pass2,boolean i_mailbox) {
+    if (i_mailbox && !(vStringEmpty(pass1) && vStringEmpty(pass2))) {
+        if (!vUndesiredPass(pass2)) {
+            return vAllowedPass(pass2) && (pass1 == pass2);
+        } else {
+            return vAllowedPass("");
+        }
+    } else {
+        return true;
+    }
+}
+constrain vPasswordDep, fail=yafv.vPassword.fail (string pass,boolean i_mailbox) {
+    if (i_mailbox) {
+	return vPassword(pass);
+    } else {
+        return true;
+    }
+}
+
+constrain vPasswordDepOpt, fail=yafv.vPassword.fail (string pass,boolean mailbox,boolean i_mailbox) {
+    if ((mailbox && i_mailbox && !vStringEmpty(pass)) ||(i_mailbox && !mailbox)) {
+        return vPassword(pass);
+    } else {
+        return true;
+    }
+}
+
+
+constrain vSubscribersDep, fail=yafv.vEmails.fail(string subscribers,boolean i_forward) {
+    if (i_forward) {
+        return vEmails(subscribers);
+    } else {
+        return true;
+    }
+}
+
+constrain vSubscribersDepOpt, fail=yafv.vEmails.fail (string subscribers,boolean i_forward) {
+    if (i_forward) {
+        return vEmailsOpt(subscribers);
+    } else {
+        return true;
+    }
+}
+
+constrain vAliasedBy, fail=yafv.vLocalEmails.fail(string aliased_by,boolean i_mailbox) {
+    if (i_mailbox) {
+        return vLocalEmailsOpt(aliased_by);
+    } else {
+        return true;
+    }
+}
+
+
+constrain vSelectCheck, fail=yafv.vSelectCheck.fail (string select_value,boolean i_include) {
+    if (i_include) {
+	return select_value != "_NO_CHOSEN_";
+    } else {
+        return true;
+    }
+}
+
+
+constrain vNumberReqParent, fail=yafv.vNumberReqParent.fail (string existingvalue, string fieldvalue) {
+ return (vStringEmpty(existingvalue) || (vNumberReq(fieldvalue)));
+}
+
+constrain vDuration, fail=yafv.vDuration.fail (string fieldvalue,boolean checkbox) {
+    return (vNumberReq(fieldvalue) || checkbox);
+}
+
+constrain vPriority, fail=yafv.vPriority.fail (integer value) {
+ return (value > 0) && (value <= 99);
+}
+
+constrain vDomainOrIP, fail=yafv.vDomainOrIP.fail (string value) {
+ return (vDomain_Name(value)) || (vIPAddr(value));
+}
+
+constrain vSharedIPTag, fail=yafv.vSharedIPTag.fail (int fieldvalue) {
+    return (fieldvalue > 1) && (fieldvalue < 101);
+}
+
+constrain vSSCards (string cardType) {
+    return ((cardType == "SOLO") || (cardType == "SWITCH"));
+}
+
+constrain vCVVCards (string cardType) {
+    return ((cardType == "VISA") || (cardType == "MC") || (cardType == "AX") || (cardType == "DISC"));
+}
+
+constrain vCardIssueNum, fail=yafv.vCardIssueNum.fail (string fieldvalue,string bi_id) {
+    return (  (  (vIssueNum(fieldvalue) || vStringEmpty(fieldvalue) ) && vSSCards(bi_id)) || vStringEmpty(fieldvalue));
+}
+
+constrain vCardCvvNum(string fieldvalue, string bi_id) {
+    return (vCvvNum(fieldvalue) || (!vCVVCards(bi_id)));
+}
+
+constrain vCardDateMMYY, fail=yafv.vCardDateMMYY.fail (string mm_fvalue,string yy_fvalue,string bi_id) {
+    return ( (vStringEmpty(mm_fvalue) && vStringEmpty(yy_fvalue) ) || (  (vcc_month(mm_fvalue) && vDateYY(yy_fvalue) && vSSCards(bi_id))));
+}
+
+constrain vCCNumber, fail=yafv.vCCNumber.fail (string fieldvalue, string bi_id) {
+    if (!vSSCards(bi_id)) {
+        return vcc_number(fieldvalue);
+    } else {
+        return vSS_number(fieldvalue);
+    }
+}
+
+constrain vSize,  fail=yafv.vSize.fail (integer fieldvalue) {
+    return (fieldvalue > 0);
+}
+
+constrain vBiName, fail=yafv.vBiName.fail (string fieldvalue,boolean checkbox) {
+    return (vName(fieldvalue) || checkbox);
+}
+
+constrain vBiSinglename, fail=yafv.vBiSinglename.fail (string fieldvalue,boolean checkbox) {
+    return (vSinglename(fieldvalue) || checkbox);
+}
+
+constrain vBiAddress, fail=yafv.vBiAddress.fail (string fieldvalue,boolean checkbox) {
+    return (vAddress(fieldvalue) || checkbox);
+}
+
+constrain vBiCity, fail=yafv.vBiCity.fail (string fieldvalue,boolean checkbox) {
+    return (vCity(fieldvalue) || checkbox);
+}
+
+constrain vBiState, fail=yafv.vBiState.fail (string fieldvalue,boolean checkbox) {
+    return (vState(fieldvalue) || checkbox);
+}
+
+constrain vBiOrganization, fail=yafv.vBiOrganization.fail (string fieldvalue,boolean checkbox) {
+    return (vOrganization(fieldvalue) || checkbox);
+}
+
+constrain vBiPostal_Code, fail=yafv.vBiPostal_Code.fail (string fieldvalue,boolean checkbox) {
+    return (vPostal_Code(fieldvalue) || checkbox);
+}
+
+constrain vBiCountry, fail=yafv.vBiCountry.fail (string fieldvalue,boolean checkbox) {
+    return (vCountry(fieldvalue) || checkbox);
+}
+
+constrain vBiPhone, fail=yafv.vBiPhone.fail (string fieldvalue,boolean checkbox) {
+    return (vPhone(fieldvalue) || checkbox);
+}
+
+constrain vBiFax, fail=yafv.vBiFax.fail (string fieldvalue,boolean checkbox) {
+    return (vFax(fieldvalue) || checkbox);
+}
+
+constrain vBiEmail, fail=yafv.vBiEmail.fail (string fieldvalue,boolean checkbox) {
+    return (vEmail(fieldvalue) || checkbox);
+}
+
+constrain vApacheMU, fail=yafv.vApacheMU.fail (string fieldvalue, string errorcode, string messageType) {
+    boolean ch = ((errorcode == "401") && (messageType == "0"));
+    return ((ch && vLocalDoc(fieldvalue)) || (!ch && vMessage(fieldvalue)));
+}
+
+constrain vRenew, fail=yafv.vRenew.fail (string fieldvalue, string isAuto) {
+    return (((isAuto=="auto") && vNumber(fieldvalue)) || (isAuto=="manual"));
+}
+
+constrain vRegistrationPeriod,  fail=yafv.vRegistrationPeriod.fail (integer fieldvalue) {
+    return ((fieldvalue > 0) && (fieldvalue <= 10));
+}
+
+constrain vMoneyBack, fail=yafv.vMoneyBack.fail (string fieldvalue, boolean checkbox) {
+    return (vPositiveIntReq(fieldvalue) || ((!checkbox)&&(vPositiveIntOpt(fieldvalue))) );
+}
+
+constrain vPeriodDependent, fail=yafv.vPeriodDependent.fail (string fieldvalue, boolean checkbox) {
+    if (checkbox) {
+	return vPositiveIntReq(fieldvalue);
+    } else {
+	return vPositiveIntOpt(fieldvalue);
+    }
+}
+
+
+constrain vDurationRel, fail=yafv.vDurationRel.fail (string fieldvalue, string billType) {
+    return (vPositiveIntReq(fieldvalue) || ((billType != "2") && (vPositiveIntOpt(fieldvalue))));
+}
+
+constrain vPriceRel, fail=yafv.vPriceRel.fail (string fieldvalue, string billType) {
+    return (vPriceReq(fieldvalue) || ((billType != "2")&&(vPriceOpt(fieldvalue))));
+}
+
+constrain vTrial, fail=yafv.vTrial.fail  (string fieldvalue1, string fieldvalue2, boolean checkbox) {
+    return (vPositiveIntReq(fieldvalue1)&&vPositiveIntReq(fieldvalue2) || ((!checkbox)&&(vPositiveIntOpt(fieldvalue1))&&(vPositiveIntOpt(fieldvalue2))));
+}
+
+constrain vCiSinglename, fail=yafv.vCiSinglename.fail (string fieldvalue,boolean checkbox) {
+    return (vSinglename(fieldvalue) || checkbox);
+}
+
+constrain vCiName, fail=yafv.vCiName.fail (string fieldvalue,boolean checkbox) {
+    return (vName(fieldvalue) || checkbox);
+}
+
+constrain vCiAddress, fail=yafv.vCiAddress.fail (string fieldvalue,boolean checkbox) {
+    return (vAddress(fieldvalue) || checkbox);
+}
+
+constrain vCiCity, fail=yafv.vCiCity.fail (string fieldvalue,boolean checkbox) {
+    return (vCity(fieldvalue) || checkbox);
+}
+
+constrain vCiState, fail=yafv.vCiState.fail (string fieldvalue,boolean checkbox) {
+    return (vState(fieldvalue) || checkbox);
+}
+
+constrain vCiOrganization, fail=yafv.vCiOrganization.fail (string fieldvalue,boolean checkbox) {
+    return (vOrganization(fieldvalue) || checkbox);
+}
+
+constrain vCiPostal_Code, fail=yafv.vCiPostal_Code.fail (string fieldvalue,boolean checkbox) {
+    return (vPostal_Code(fieldvalue) || checkbox);
+}
+
+constrain vCiCountry, fail=yafv.vCiCountry.fail (string fieldvalue,boolean checkbox) {
+    return (vCountry(fieldvalue) || checkbox);
+}
+
+constrain vCiPhone, fail=yafv.vCiPhone.fail (string fieldvalue,boolean checkbox) {
+    return (vPhone(fieldvalue) || checkbox);
+}
+
+constrain vCiFax, fail=yafv.vCiFax.fail (string fieldvalue,boolean checkbox) {
+    return (vFax(fieldvalue) || checkbox);
+}
+
+constrain vCiEmail, fail=yafv.vCiEmail.fail (string fieldvalue,boolean checkbox) {
+    return (vEmail(fieldvalue) || checkbox);
+}
+
+constrain vTTMail, fail=yafv.vTTMail.fail (string fieldvalue,boolean checkbox) {
+    return (vEmail(fieldvalue) || (checkbox && vStringEmpty(fieldvalue)));
+}
+
+constrain vCronFieldOpt, fail=yafv.vCronFieldOpt.fail (string opt1,string command) {
+    return (vCronField(opt1) && vStringReq(command)) || vStringEmpty(command);
+}
+
+constrain vTaxState, fail=yafv.vTaxState.fail (string state, string state2) {
+    return ( vStringReq(state2) && (state =="NA") ) || (vStringEmpty(state2) && (state != "NA") || (state=="ANY"));
+}
+
+/* The Phone/Fax functons below are defined to accept several input parameters. As for now,
+   only one of these parameters is really needed. This stuff was left here in order to
+   simplify modification of these functions when Domain Registrars change their requirements
+   regarding Phone/Fax data fields.
+*/
+
+constrain vPhoneCountry, fail=yafv.vPhoneCountry.fail (string phone, string country) {
+    return vPhoneExt(phone) || (vPhoneExtNA(phone) && vNACountry(country));
+}
+
+constrain vFaxCountry, fail=yafv.vFaxCountry.fail (string fax, string country) {
+   return vStringEmpty(fax) || vPhoneCountry(fax, country);
+}
+
+constrain vFaxCountryReq, fail=yafv.vFaxCountryReq.fail (string fax, string country) {
+   return vPhoneCountry(fax, country);
+}
+
+constrain vPhoneOSRS, fail=yafv.vPhoneOSRS.fail (string phone, string country, string tld) {
+    return vPhoneCountry(phone, country);
+}
+
+constrain vFaxOSRS, fail=yafv.vFaxOSRS.fail (string fax, string country, string tld) {
+   return vStringEmpty(fax) || vPhoneOSRS(fax, country, tld);
+}
+
+constrain vFaxOSRSReq, fail=yafv.vFaxOSRSReq.fail (string fax, string country, string tld) {
+   return vPhoneOSRS(fax, country, tld);
+}
+
+constrain vBiPhoneOSRS, fail=yafv.vPhoneOSRS.fail (string phone, string country, string tld, boolean use_osrs_ci) {
+    return (vPhoneOSRS(phone, country, tld) || use_osrs_ci);
+}
+
+constrain vBiFaxOSRS, fail=yafv.vFaxOSRS.fail (string fax, string country, string tld, boolean use_osrs_ci) {
+    return (vFaxOSRS(fax, country, tld) || use_osrs_ci);
+}
+
+constrain vBiFaxOSRSReq, fail=yafv.vFaxOSRSReq.fail (string fax, string country, string tld, boolean use_osrs_ci) {
+    return (vFaxOSRSReq(fax, country, tld) || use_osrs_ci);
+}
+
+constrain vComboPromocode, fail=yafv.vComboPromocode.fail (string promoCode,boolean checkbox) {
+    if (checkbox) {
+        return vStringEmpty(promoCode);
+    } else {
+        return vPromokode(promoCode);
+    }
+}
+
+constrain vSignupPromocode, fail=yafv.vPromokode.fail (string promoCode) {
+	return (vPromokode(promoCode) || vStringEmpty(promoCode));
+}
+
+constrain vRegInfoEmail, fail=yafv.vRegInfoEmail.fail (string fieldvalue, boolean checkbox) {
+    if (checkbox) {
+        return vEmail(fieldvalue);
+    } else {
+        return vStringEmpty(fieldvalue);
+    }
+}
+
+constrain vMailProcessing, fail=yafv.vMailProcessing.fail (string move_to_email, string processing_type) {
+    if (processing_type == "move") {
+        return vEmail(move_to_email);
+    } else {
+        return vStringEmpty(move_to_email);
+    }
+}
+
+constrain vNetswitchPortRange(int sw_port) {
+    return (sw_port > -1) && (sw_port < 32768);
+}
+
+constrain vNetswitchPortOpt, fail=yafv.vNetswitchPortOpt.fail (string sw_id, string sw_port) {
+    if (vStringEmpty(sw_id)) {
+	return vStringEmpty(sw_port);
+    } else {
+	return vNetswitchPortRange((int)sw_port);
+    }
+}
+
+constrain vNetswitchPortReq, fail=yafv.vNetswitchPortReq.fail (string sw_id, string sw_port) {
+    return vStringReq(sw_id) && vNetswitchPortRange((int)sw_port);
+}
+
+/* The methods below validates the 'hour' and 'mins' fields only when
+   the 'period_const' parameter equals the current 'period_value'.
+   Otherwise the methods return "ACCEPTED" regardless the values 'hours' or 'mins'.
+*/
+constrain vCheckPeriodHours, fail=yafv.vDayHour.fail (string period_const, string period_value, string hour) {
+    return (period_const != period_value) || vDayHour(hour);
+}
+
+constrain vCheckPeriodMins, fail=yafv.vHourMin.fail (string period_const, string period_value, string mins) {
+    return (period_const != period_value) || vHourMin(mins);
+}
+
+constrain vMailQuota, fail=yafv.vMailQuota.fail (integer quota_val) {
+    return (quota_val >= 0) && (quota_val < 2048);
+}
+
+constrain vMailQuotaOpt, fail=yafv.vMailQuotaOpt.fail (String quota_val) {
+    if (vStringEmpty(quota_val)) {
+	return true;
+    } else {
+	return ((int)quota_val >= 0) && ((int)quota_val < 2048);
+    }
+}

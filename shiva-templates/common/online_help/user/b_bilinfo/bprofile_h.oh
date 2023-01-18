@@ -1,0 +1,24 @@
+<center>Billing Profile</center>
+<hr>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+This is your active Billing Profile, a collection of your billing (your postal address, e-mail address, etc. [for checks]) and/or credit card info (the number of your credit card and its expiry date).<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+H-Sphere 2.x supports multiple billing profiles. This feature gives you an opportunity to use several credit cards or addresses for receiving checks in turn, activating the one you would like to be charged. To activate one of your billing profiles, select it from the drop-down box in the <i>Change the Billing Profile</i> field and click the <i>Activate</i> button.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+Also, you can share Billing Profile between your accounts. This means you can pay with one card / check for all your accounts. Settings are configured individually for each billing profile. You cannot modify billing or credit card info in any billing profile, you can only create a new profile.
+To create a new billing profile in the <i>New Billing Profile</i> field select its type of payment and click the <i>Create</i> button.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+You cannot delete your billing profiles.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+Toggle the <i>Receive the invoice by e-mail</i> button to receive/unsubscribe  invoice e-mails that inform you of:<br>
+1. how much was accrued/charged for a) each paid operation b) as recurrent and usage fee at the beginnig of a new payment interval;<br>
+2. your current balance status.

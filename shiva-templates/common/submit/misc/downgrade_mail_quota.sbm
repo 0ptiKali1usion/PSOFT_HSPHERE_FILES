@@ -1,0 +1,17 @@
+<if account.plan.isResourceAvailable("mail_quota")>
+<assign rtype = plans[plan_id].getResourceType("mail_quota")>
+<assign free_new=rtype.values["_FREE_UNITS_"+periodId]>
+<if free_new=="">    
+     <assign free_new=rtype.values["_FREE_UNITS_"]>
+</if>
+<assign mailboxes=account.findAllChildren("mailbox")>
+<list mailboxes as mid>
+    <assign old_quota=mid.getChild("mail_quota")>
+    <assign r_quota=toolbox.max(toolbox.ceil(old_quota.usedMb),free_new)>
+    <if toolbox.eq(old_quota.limitMb,r_quota)!="1">
+    	<assign silent="1">
+	<!--${mid} ${silent} ${r_quota}-->
+    	<include "submit/email/update_quota_save.sbm">
+    </if>
+</list>
+</if>

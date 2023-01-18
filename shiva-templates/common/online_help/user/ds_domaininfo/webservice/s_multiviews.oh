@@ -1,0 +1,5 @@
+<center>MultiViews</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Enable or disable the MultiViews feature, which make the server redirect the request to the file that is for any reason unavailable, 
+to other files with the same name, but a different extension.  This is exceptionally useful in handling files with similar extensions, such as .htm, .html, .shtm, etc.

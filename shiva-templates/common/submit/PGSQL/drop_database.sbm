@@ -1,0 +1,13 @@
+<!-- BEGIN ./PGSQL/drop_database.sbm  -->
+<assign database=account.getResource(request.db_id)>
+<assign result=database.delete>
+<if result.status=="OK">
+<assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_deleted, lang.label.database, ""))>
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_delete, lang.label.database, ""))>
+<include request.ftemplate>
+</if>
+<!--  END ./PGSQL/drop_database.sbm  -->

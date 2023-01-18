@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/admin/settings/signup_texts.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<form name="f_signup_texts" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/signup_texts.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.signuptxt.header)>
+
+
+<list html_help.KEYS as item_id>
+<if toolbox.startsWith(item_id,"signup/") == "1">
+ <tr >
+ <td colspan="2"><call draw_label(toolbox.compose(lang.admin.signuptxt.text, lang[html_help[item_id]["title"]]))><br>
+ <textarea name="${item_id}" rows="5" cols="60"><if settings[item_id]>${toolbox.html_encode(settings[item_id])}<else>${toolbox.html_encode(lang[html_help[item_id]["tip"]])}</if></textarea>
+ </td>
+ </tr>
+</if>
+</list>
+<tr >
+<td colspan="2"><call draw_label(lang.admin.signuptxt.lic)><br>
+<textarea name="eula" rows="5" cols="60">${toolbox.html_encode(settings.eula)}</textarea>
+</td>
+</tr>
+<tr ><td colspan="2" class="control_align_right"><input type="reset" value="${lang.button.reset}">&nbsp;<input type="submit" value="${lang.button.save}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/signup_texts.html -->
+

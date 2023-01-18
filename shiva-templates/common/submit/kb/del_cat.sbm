@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/del_cat.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).delCategory(request.cat_id)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.stemplate>
+<else>
+        <assign res="Success creating Category"+request.name>
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/del_cat.sbm -->

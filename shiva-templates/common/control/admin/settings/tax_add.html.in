@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/admin/settings/tax_add.html -->
+<call draw_tooltip()>
+<yafv s_admin>
+<form name="f_percents" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+
+
+
+
+<call draw_table_header("2", lang.admin.taxes.add.header)>
+
+
+<tr>
+<td class="control_align_right"><call draw_label(lang.admin.taxes.description)></td>
+<td>
+  <input type="hidden" name="template_name" value="submit/admin/settings/tax_add.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="ftemplate" value="${template}">
+<input type="text" name="descr" value="${descr}" check="vStringReq">
+</td>
+<tr >
+<td class="control_align_right"><call draw_label(lang.bci.country)></td>
+<td>
+<select name="outsideCountry" size="1">
+<option value="0" SELECTED>${lang.label.inside}
+<option value="1">${lang.label.outside}
+</select>
+<select name="country" size="1">
+<option value="" SELECTED>${lang.label.any}</option>
+<list toolbox.countries as curcountry>
+<option value="${curcountry.code}">${lang[curcountry.name]}
+</list>
+</select>
+</td>
+<tr >
+<td class="control_align_right"><call draw_label(lang.bci.state)></td>
+<td>
+<select name="outsideState" size="1">
+<option value="0" SELECTED>${lang.label.inside}
+<option value="1">${lang.label.outside}
+</select>
+<select name="state" size="1" onChange="checkForm(this.form)">
+	<option value="ANY" SELECTED>${lang.label.any}</option>
+        <call buildStates("")>
+</select>
+<br><call draw_label(lang.label.state_other)>&nbsp;<input type="text" name="state2" check="vTaxState(state, this)">
+</td>
+</tr>
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.taxes.percent)></td>
+<td>
+<input type="text" name="percent" value="${percent}" check="vPercentReq" size="5">
+<call draw_label("%")>
+</td>
+</tr>
+<tr >
+<td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/settings/tax_add.html -->

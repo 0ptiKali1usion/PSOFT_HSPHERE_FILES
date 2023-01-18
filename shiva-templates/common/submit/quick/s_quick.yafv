@@ -1,0 +1,2 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vSinglename, vName, vOrganization, vAddress, vAddress2, vCity, vState, vPostal_Code, vCountry, vPhone, vFax, vEmail, vPeriod, vPassword1(string, string), vPassword2(string, string);
+

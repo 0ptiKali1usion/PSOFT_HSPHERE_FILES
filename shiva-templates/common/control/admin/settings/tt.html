@@ -1,0 +1,87 @@
+<!-- BEGIN ./control/admin/settings/tt.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<form name="f_tt" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/tt.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.tt.header)>
+
+<tr >
+<td><call draw_label(lang.admin.tt.email)></td>
+<td><input type="text" name="TT_EMAIL" value="${settings.TT_EMAIL}"></td></tr>
+<tr >
+<td><call draw_label(lang.admin.tt.host)></td>
+<td><input type="text" name="TT_POP3_HOST" value="${settings.TT_POP3_HOST}"></td></tr>
+<tr >
+<td><call draw_label(lang.admin.tt.user)></td>
+<td><input type="text" name="TT_POP3_USER" value="${settings.TT_POP3_USER}"></td></tr>
+<tr ><td><call draw_label(lang.admin.tt.psw)></td>
+<td><input type="password" name="TT_POP3_PASSWORD" value="${settings.TT_POP3_PASSWORD}"></td></tr>
+<tr ><td><call draw_label(lang.tt.admin.autoclose)></td>
+<td><input type="text" name="TT_AUTOCLOSE" value="<if settings.TT_AUTOCLOSE>${settings.TT_AUTOCLOSE}<else>30</if>" size="4"> <call draw_label(lang.tt.admin.autoclose_comment)></td></tr>
+
+<tr ><td><call draw_label(lang.tt.admin.freshest)></td>
+<td><input type="radio" name="TT_FRESHEST_TYPE" value="user" checked><call draw_label(lang.tt.admin.showbyuser)><br>
+<input type="radio" name="TT_FRESHEST_TYPE" value="email" <if settings.TT_FRESHEST_TYPE == "email"> checked </if> ><call draw_label(lang.tt.admin.showbyemail)></td>
+</tr>
+
+<tr ><td><call draw_label(lang.tt.admin.maxtickets)></td>
+<td><input type="text" name="TT_USERTICKETS_MAX"   value="<if settings.TT_USERTICKETS_MAX>${settings.TT_USERTICKETS_MAX}<else>5</if>" size="4">
+<call draw_label_small(lang.tt.maxtickets.tip)></td></tr>
+
+<tr ><td><call draw_label(lang.tt.admin.tt_kb)></td><td><select name="TT_KB" size="1">
+<option value=""<if !settings.TT_KB> SELECTED</if>>N/A
+<list account.getChild("ttadmin").kb_manager.listReadOnlyKB() as kb>
+<option value="${kb.name}"<if kb.name==settings.TT_KB> SELECTED</if>>${kb.value}
+</list>
+</select>
+</td>
+</tr>
+
+<tr ><td><call draw_label(lang.tt.admin.tt_support_kb)></td><td><select name="TT_SUPPORT_KB" size="1">
+<option value=""<if !settings.TT_SUPPORT_KB> SELECTED</if>>N/A
+<list account.getChild("ttadmin").kb_manager.listReadOnlyKB() as kb>
+<option value="${kb.name}"<if kb.name==settings.TT_SUPPORT_KB> SELECTED</if>>${kb.value}
+</list>
+</select>
+</td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.kb.max_sug)></td>
+<td><input type="text" name="KB_MAX_SUG" value="<if settings.KB_MAX_SUG>${settings.KB_MAX_SUG}<else>5</if>" size="2">
+<call draw_label_small(lang.kb.max_sug.tip)></td></tr>
+
+<tr ><td><call draw_label(lang.tt.admin.tt_dont_send_confirmation)></td><td><input type="checkbox" name="TT_DONT_SEND_CONFIRMATION" value="1"<if settings.TT_DONT_SEND_CONFIRMATION> CHECKED</if>></td></tr>
+
+<tr >
+	<td><call draw_label(lang.tt.admin.tt_dont_check_email)></td>
+	<td><input type="checkbox" name="TT_DONT_CHECK_EMAIL" value="1"<if settings.TT_DONT_CHECK_EMAIL> CHECKED</if>></td>
+</tr>
+
+<tr ><td><call draw_label(lang.tt.admin_highlight_email)></td><td><textarea name="TT_HIGHLIGHT" rows=5 cols=30>${settings.TT_HIGHLIGHT}</textarea></td></tr>
+
+
+<tr ><td><call draw_label("Spam addresses")></td><td>
+<textarea name="TT_SPAMLIST" rows=5 cols=30>${settings.TT_SPAMLIST}</textarea></td></tr>
+
+<tr ><td><call draw_label("PGP private key:")></td><td>
+<textarea name="TT_PGPPRIVATEKEY" rows=5 cols=30>${settings.TT_PGPPRIVATEKEY}</textarea></td></tr>
+
+<tr ><td><call draw_label("PGP code phrase:")></td><td>
+<textarea name="TT_PGPPRIVATEPHRASE" rows=2 cols=30>${settings.TT_PGPPRIVATEPHRASE}</textarea></td></tr>
+
+<tr ><td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.save}"></td></tr>
+
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/tt.html -->

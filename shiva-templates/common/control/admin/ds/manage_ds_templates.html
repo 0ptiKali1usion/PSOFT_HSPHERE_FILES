@@ -1,0 +1,108 @@
+<!-- BEGIN ./control/admin/ds/manage_ds_templates.html  -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager", "", "")>
+</if>
+
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/manage_ds_templates.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+<call draw_table_header("3", lang.admin.gl_ds_templates_h)>
+
+<assign set = admin.getGlobalSet("ds_templates")>
+<if set && (set.size != "0")>
+  <assign own_templates = set.ownTemplateIds()>
+  <if own_templates.size == "0"><assign own_templates = ""></if>
+  <assign upstream_templates = set.upstreamTemplateIds()>
+  <if upstream_templates.size == "0"><assign upstream_templates = ""></if>
+<else>
+  <assign own_templates = "">
+  <assign upstream_templates = "">
+</if>
+
+<if own_templates || upstream_templates>
+
+  <tr><td colspan="3"><call draw_label(lang.admin.gl_ds_templates_desc)></td></tr>
+
+  <if own_templates>
+    <if upstream_templates><tr><td class="control_header" colspan="3"><call draw_header(lang.admin.ds.own_templates)></td></tr></if>
+    <list own_templates as key>
+      <assign dis_status = set.isKeyDisabled(key)>
+      <assign label = set.getKeyDescription(key)>
+      <assign name = set.prefix + key >
+      <assign dst = ds_manager.getDSTemplate(key)>
+      <if dis_status == "3">
+        <tr>
+        <td width="3%"><if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED><else>&nbsp;</if></td>
+        <td colspan="2"><call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)></td>
+        </tr>
+      <else>
+        <if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+        <tr>
+        <td width="3%"><input type="checkbox" name="${name}" value="1" ${vchecked}></td>
+        <td><call draw_label(label)></td>
+        <td width="8%" nowrap>
+          <if dst>
+	    <if dst.ro><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/view_ds_template.html&stemplate=" + template + "&dst_id="+dst.id, "show", lang.admin.ds.view_dst_clk)>
+	    <else><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/edit_ds_template.html&stemplate=" + template + "&dst_id="+dst.id, "edit", lang.label.edit)>
+	    </if>
+	    <if dst.can_be_deleted>
+		&nbsp;<call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/delete_dst_conf.html&stemplate="+template+"&ftemplate="+template+"&dst_id="+dst.id, "del", lang.label.delete)>
+	    </if>
+	  <else>&nbsp;
+	  </if>
+        </td>
+        </tr>
+      </if>
+    </list>
+  </if>
+
+  <if upstream_templates>
+    <td class="control_header" colspan="3"><call draw_header(lang.admin.ds.upstream_templates)></td>
+    <list upstream_templates as key>
+      <assign dis_status = set.isKeyDisabled(key)>
+      <assign label = set.getKeyDescription(key)>
+      <assign name = set.prefix + key >
+      <if dis_status == "3">
+        <tr>
+        <td width="3%"><if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED><else>&nbsp;</if></td>
+        <td colspan="2"><call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)></td>
+        </tr>
+      <else>
+        <if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+        <tr>
+        <td width="3%"><input type="checkbox" name="${name}" value="1" ${vchecked}></td>
+        <td colspan="2"><call draw_label(label)></td>
+        </tr>
+      </if>
+    </list>
+  </if>
+
+<else>
+  <tr><td colspan="3"><call draw_label(lang.admin.gl_no_section_items)></td></tr>
+</if>
+
+<if !admin.isReseller() || !admin.isResourceDisabled("allow_own_ds")>
+  <tr>
+  <td class="control_align_right" colspan="3"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/add_ds_template.html&stemplate=" + template + "&ftemplate=" + template, lang.admin.ds.add_ds_template)></td>
+  </tr>
+</if>
+
+<if own_templates || upstream_templates>
+  <tr>
+  <td class="control_align_center" colspan="3"><input type="submit" name="${lang.button.submit}"></td>
+  </tr>
+</if>
+
+<call draw_table_footer()>
+</if>
+<!--  END ./control/admin/ds/manage_ds_templates.html  -->

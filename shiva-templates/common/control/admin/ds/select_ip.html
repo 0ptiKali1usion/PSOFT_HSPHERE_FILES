@@ -1,0 +1,92 @@
+<!-- BEGIN ./admin/ds/select_ip.html  -->
+<call draw_tooltip()>
+
+<assign step = "10">
+<if request.sc_ip_type>
+  <assign f_ip_type=request.sc_ip_type>
+  <if request.sc_ip_type == "1002">
+    <assign vfree="SELECTED">
+  </if>
+  <if request.sc_ip_type == "1003">
+    <assign vtaken="SELECTED">
+  </if>
+</if>
+
+<assign viewer=account.getChild("reportviewer")>
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <assign report_ok="1">
+   </if>
+</if>
+
+<if !report_ok>
+   <assign report = viewer.getAdvReport("ippool")>
+   <assign result = report(f_ip,f_mask,f_gw,f_ip_type)>
+   <if result.status != "OK">
+     <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+   <else>
+     <assign res = report.setStep(step)>
+     <if request.sc_page>
+       <assign page = request.sc_page>
+     <else>
+       <assign page = "1">
+     </if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+   </if>
+</if>
+
+<assign sc_params="&sc_ip="+toolbox.url_escape(f_ip)+
+ "&sc_mask="+toolbox.url_escape(f_mask)+
+ "&sc_gw="+toolbox.url_escape(f_gw)+
+ "&sc_ip_type="+toolbox.url_escape(f_ip_type)+
+ "&sc_step="+toolbox.url_escape(step)>
+<if request.ds_id>
+  <assign sc_params=sc_params+"&ds_id="+request.ds_id>
+</if>
+<call draw_table_header("5", lang.admin.ds.ip_pool.title)>
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.ip.label, "ip")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.mask.label, "mask")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.gw.label, "gw")></td>
+  <td class="control_header"><call draw_header(lang.admin.ds.ip_pool.status.label)></td>
+  <td class="control_header"><call draw_header(lang.admin.ds.ip_pool.controls.label)></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td class="control_align_center"><call draw_label(entry.ip)></td>
+  <td class="control_align_center"><call draw_label(entry.mask)></td>
+  <td class="control_align_center"><call draw_label(entry.gw)></td>
+  <td class="control_align_center"><call draw_label(entry.status)></td>
+  <td class="control_align_center">
+    <if entry.free == "1">
+      <if request.next_template><call draw_onclick_palink("assign","add_extra_ip('" + entry.ip + "','submit/admin/ds/add_extra_dsip.sbm')",lang.admin.ds.ip.assign.label)><else><call draw_onclick_palink("assign", "pass_ip('" + entry.ip + "')", lang.admin.ds.ip.assign.label)></if><else><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/ds/assign_ip.sbm&ip="+entry.ip+"&mask="+entry.mask+"&gw="+entry.gw+"&stemplate="+template+"&ftemplate="+template+sc_params,"assign",lang.admin.ds.ip.assign.label)>
+    </if>
+  </td>
+</tr>
+</list>
+<tr>
+  <td colspan="5"><call advReportNav(report)></td>
+</tr>
+<call draw_table_footer()>
+<SCRIPT language="Javascript"><!--
+    <if request.target_form><assign target_form = request.target_form><else><assign target_form = "f_ds_add"></if>
+    <if request.file_field><assign file_field = request.file_field><else><assign file_field = "ds_ip"></if>
+    function pass_ip(ip) {
+	ss = '<font color="#000000" class="label_font">' + ip + '</font>';
+	opener.document.getElementById("ip_label").innerHTML = ss;
+	opener.document.forms["${target_form}"].elements["${file_field}"].value=ip;
+	window.close();
+    }
+
+    function add_extra_ip(ip, next_template) {
+	window.close()
+	opener.document.location = '${config.CLIENT_CP_URL}' + '?template_name=' + next_template + '&ds_id=${request.ds_id}' + '&ip=' + ip + '&stemplate=${request.stemplate}' + '&ftemplate=${request.ftemplate}';
+    }
+//--></SCRIPT>
+<!-- END ./admin/ds/select_ip.html  -->

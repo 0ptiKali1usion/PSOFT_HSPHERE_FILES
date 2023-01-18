@@ -1,0 +1,21 @@
+<!-- BEGIN ./domain/mod_frontpage.sbm  -->
+<assign result=yafv.checkall(
+  yafv.common.s_domain.vEmail(lang.domain.addfrontpage.sender, request.MailSender), 
+  yafv.common.s_domain.vEmail(lang.domain.addfrontpage.replyto ,request.MailReplyTo) )>
+<if result.status=="OK">
+    <assign frontpage=account.getResource(request.uid)>
+    <assign result=frontpage.setProperties("MailSender", request.MailSender, "MailReplyTo", request.MailReplyTo)>
+    <if result.status=="OK">
+        <assign success="1">
+    <else>
+        <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/mod_frontpage.sub  -->

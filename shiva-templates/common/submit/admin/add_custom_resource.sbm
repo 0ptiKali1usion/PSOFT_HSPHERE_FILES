@@ -1,0 +1,55 @@
+<assign result=yafv.checkall(
+  yafv.common.s_admin.vStringReq(lang.admin.custom_billing.description,request.description),
+  yafv.common.s_admin.vAmount(lang.label.price,request["price"+request.type]) )>
+<if result.status!="OK"> 
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign unsuccess="1">
+</if>
+<assign price=request["price"+request.type]>
+<if request.type=="2">
+    <assign result=yafv.checkall(
+		yafv.common.s_admin.vNumberReq(lang.admin.custom_billing.frequency,request.frequency),
+		yafv.common.s_admin.vDuration(lang.admin.custom_billing.duration,request.duration,request.infinite))>
+    <if result.status!="OK"> 
+    	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    	<assign unsuccess="1">
+    </if>
+</if>
+<if !unsuccess>
+   <assign billman=account.getChild("billman")>
+   
+   <switch request.type>
+	<case "1">
+   	    <assign result=billman.addDebit(toolbox.numberToUSLocale(price), request.description, request.note, request.admin_note, request.aid, request.send_invoice, request.taxes)>
+	<break>
+	<case "2">
+	    <if request.infinite><assign duration="0"><else><assign duration=request.duration></if>
+	    <if !request.frequency><assign frequency="1"><else><assign frequency=request.frequency></if>
+	    <assign result=billman.addService(request.aid, request.start_on, frequency, duration, request.description, request.note, request.admin_note, toolbox.numberToUSLocale(price), request.send_invoice)>
+	<break>
+	<case "3">
+   	    <assign result=billman.addCustomResource(request.aid, request.description, request.note, request.admin_note, toolbox.numberToUSLocale(price))>
+	<break>
+
+   	<default>
+	    <assign res=session.addMessage("You should set type")>
+  	<break>
+   </switch>
+    <if result.status!="OK">   
+      <assign res=session.addMessage(result.msg)>
+      <assign unsuccess="1">
+    </if>
+</if>
+<if unsuccess>
+    <assign s_price=toolbox.html_encode(price)>
+    <assign s_description=toolbox.html_encode(request.description)>
+    <assign s_frequency =toolbox.html_encode(request.frequency)>
+    <assign s_duration=toolbox.html_encode(request.duration)>
+    <assign s_infinite=toolbox.html_encode(request.infinite)>
+    <assign s_start_on=toolbox.html_encode(request.start_on)>
+    <assign s_note=toolbox.html_encode(request.note)>
+    <assign s_admin_note=toolbox.html_encode(request.admin_note)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

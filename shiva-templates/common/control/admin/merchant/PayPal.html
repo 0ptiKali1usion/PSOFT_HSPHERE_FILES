@@ -1,0 +1,31 @@
+<!-- BEGIN ./commont/control/admin/merchant/PayPal.html -->
+<call draw_tooltip()>
+<assign mm=account.getChild("merchant_manager")>
+
+<if mm>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/PayPal.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<call draw_table_header("2", lang.label.paypal)>
+
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="paypal_server" value="${settings.PayPal_SERVER}"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="paypal_port" value="${settings.PayPal_PORT}"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="paypal_path" value="${settings.PayPal_PATH}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.paypal.id)></td><td><input type="text" name="paypal_id" value="${settings.PayPal_ID}"></td></tr>
+<tr ><td><call draw_label(lang.admin.paypal.custom)></td><td><input type="text" name="paypal_custom" value="${settings.PayPal_CUSTOM}"></td></tr>
+<tr ><td><call draw_label(lang.admin.paypal.image_url)></td><td><input type="text" name="image_url" value="${settings.PayPal_image_url}"></td></tr>
+
+<!-- <input type="image" src="http://images.paypal.com/images/x-click-butcc.gif" name="submit"> -->
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/PayPal.html -->

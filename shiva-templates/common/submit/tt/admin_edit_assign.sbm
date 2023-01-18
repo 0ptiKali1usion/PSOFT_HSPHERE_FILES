@@ -1,0 +1,28 @@
+<!-- BEGIN ./tt/admin_edit_assign.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+<list ttadmin.admin_list as adm>
+  <if adm.id == ttadmin.id>
+    <assign str_assign_from = adm.name>
+  </if>
+  <if adm.id == request.assign_to>
+    <assign str_assign_to = adm.name>
+  </if>
+</list>
+<if !str_assign_from><assign str_assign_from = lang.label.unknown_admin></if>
+<if !str_assign_to><assign str_assign_to = lang.label.unknown_admin></if>
+<if str_assign_from != str_assign_to>
+  <assign system_note = lang.tt.admin_reassigned(str_assign_from, str_assign_to)>
+<else>
+  <assign system_note = lang.tt.admin_picked_by(str_assign_to)>
+</if>
+<if request.note><assign system_note = system_note + request.note></if>
+<assign result = ticket.addReply("", system_note, "")>
+<assign result = ticket.assign(request.assign_to)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./tt/admin_edit_assign.sbm  -->

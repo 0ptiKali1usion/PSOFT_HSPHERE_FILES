@@ -1,0 +1,18 @@
+<center>Start</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Define the time when the user is debited:<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>On The First Day Of The Month, Prorated</b> - The user is charged on the 1st day of each debit cycle, except for the first time. If you set this debit in the middle of the month - the charge is pro-rated. The first debit charge is prorated to the time left to the end of the debit cycle.<br><br>
+E.g.: enabled - 20 April; frequency - 2 months; price - $6.<br>
+  On 20th of April the first debit charge will be applied. Account will be charged $4 ($3 for May + $1 for ten days of April). The next debit charge ($6) will be applied on 1 June.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<b>On The First Day Of The Month</b> - The user is charged on the 1st day of each debit cycle. If the user signs up for the service in the middle of the month - the charge is 
+not prorated. <br><br>
+<p> E.g.: enabled - 20 April; frequency - 2 months; price - $6.<br>
+  On 20 April the first debit charge will be applied. Account will be charged 
+  $6. Next $6 charge will occur on 1 June.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Start Right Now</b> - The user is charged on the day the debit was set each debit cycle.<br>
+<br>
+E.g.: enabled - 20 April; frequency - 2 months; price - $6.<br>
+On 20 April the account will be debited $6. Next $6 charge will occur on 20 June, then on 20 August, and so on.

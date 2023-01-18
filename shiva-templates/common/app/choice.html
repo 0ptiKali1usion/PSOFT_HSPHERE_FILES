@@ -1,0 +1,12 @@
+<!-- BEGIN ./app/choice.html-->
+<assign template="app/choice.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<if !stype><assign stype=request.stype></if>
+<include "control/quick/choice_app.html">
+<call bottom()>
+<!-- END ./app/choice.html-->

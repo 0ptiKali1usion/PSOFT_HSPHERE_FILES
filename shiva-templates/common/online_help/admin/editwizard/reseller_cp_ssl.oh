@@ -1,0 +1,12 @@
+<center> Reseller CP SSL</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+Secure all Reseller control panels with SSL under this plan. You can enable one of CP SSL per one plan by selecting:<br>
+- <b>Port-based CP SSL</b> that allocates open ports to the control panel server;<br>
+- <b>IP-based CP SSL</b> that allocates spare IPs to the control panel server.<br>
+Selecting <b>Disabled</b> will turn off all Reseller CP SSL for all resellers under this specific reseller plan.
+ <br>To confirm changes in reseller plans, go through Plan Edit Wizards and submit the changes without changing the prices.<br>
+ <br><i>Note</i>: If either Reseller CP SSL is entirely disabled and can't be selected in Plan Wizard, it means that it has been
+  unchecked in <i>Global Resources</i> in the <i>INFO</i> menu.
+

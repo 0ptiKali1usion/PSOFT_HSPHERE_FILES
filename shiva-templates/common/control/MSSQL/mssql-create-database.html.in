@@ -1,0 +1,70 @@
+<!-- BEGIN ./control/MSSQL/mssql-create-database.html.in -->
+<assign mssql=account.getChild("MSSQL")>
+<if !mssql>
+  <assign mssql=account.addChild("MSSQL", "")>
+</if>
+<if mssql.status!="OK">
+  <assign res=session.addMessage(mssql.msg)>
+</if>
+<call draw_tooltip()>
+<yafv s_mssql>
+<assign suffix=mssql.prefix>
+
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_databases" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="next_template" value="submit/MSSQL/add_database.sbm">
+
+<if request.dtemplate>
+  <assign final_template=request.dtemplate>
+  <input type="hidden" name="dtemplate" value="${final_template}">
+<else>
+  <assign final_template="MSSQL/databases.html">
+</if>
+<input type="hidden" name="stemplate" value="${final_template}">
+<input type="hidden" name="ftemplate" value="MSSQL/mssql-create-database.html">
+<input type="hidden" name="type" value="MSSQLDatabase">
+<input type="hidden" name="mod" value="">
+<input type="hidden" name="rid" value="${account.id}">
+<input type="hidden" name="suffix" value="${suffix}">
+
+
+
+<call draw_table_header("3", lang.mssql.adddb.header)>
+
+
+<tr>
+    <td  width="1%">&nbsp;</td>
+    <td><call draw_label(lang.mssql.dbname)></td>
+    <td>
+        <call draw_label_bold(suffix)><input type="text" name="db_name" label="${lang.mssql.dbname}" check="vMSSQLCombDbName(this, suffix)">
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.label.login)></td>
+    <td>
+	<assign mssql = account.getChild("MSSQL")>
+	<assign logins = mssql.getChildren("MSSQLLogin")>
+	<select name="login">
+	   <list logins as login>
+		<option value=${login}><call draw_label(login.name)></option>
+	   </list>
+	</select>
+    </td>
+</tr>
+<tr>
+    <td  class="control_align_center" >
+	<assign res=account.getChild("MSSQL")>
+	<if res>
+		<call draw_tt_link(res,"")>
+	<else>
+		<call draw_tt_link(account.id,"")>
+	</if>
+    </td>
+    <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./control/MSSQL/mssql-create-database.html  -->

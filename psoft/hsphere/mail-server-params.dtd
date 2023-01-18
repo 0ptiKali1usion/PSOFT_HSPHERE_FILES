@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT params (param+, radiogroup*)>
+<!ELEMENT param (#PCDATA)>
+<!ELEMENT radiogroup (param+)>
+
+<!ATTLIST param name CDATA #REQUIRED>
+<!ATTLIST param type CDATA #REQUIRED>
+<!ATTLIST param delim CDATA #IMPLIED>
+<!ATTLIST param pattern CDATA #IMPLIED>
+<!ATTLIST param defaultvalue  CDATA  #REQUIRED>
+<!ATTLIST param description  CDATA  #REQUIRED>
+<!ATTLIST param help CDATA  #IMPLIED>
+<!ATTLIST param min CDATA  #IMPLIED>
+<!ATTLIST param max CDATA  #IMPLIED>
+<!ATTLIST radiogroup name CDATA  #REQUIRED>

@@ -1,0 +1,27 @@
+<!-- BEGIN ./email/set_catch_all.sbm  -->
+<assign result=yafv.common.s_email.vLocalEmail(lang.label.email,request.name)>
+<if result.status == "OK">
+   <assign rid = account.getResource(request.rid)>
+   <assign result=rid.setCatchAll(request.name)>
+   <if result.status == "OK" >
+      <assign success="1">
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_set, lang.label.mail_catch_all, ""))>
+   <else>
+      <list result.msgs as msg><assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_set, lang.label.mail_catch_all, ""))>
+	<assign res = session.addMessage(result.msg)>
+      </list>
+   </if>
+<else>
+      <list result.msgs as msg><assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_set, lang.label.mail_catch_all, ""))>
+	<assign res = session.addMessage(result.msg)>
+      </list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if> 
+<!--  END ./email/set_catch_all.sbm  -->

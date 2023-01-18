@@ -1,0 +1,11 @@
+${lang.massmail.balance_header(account.ci.first_name, account.ci.last_name)}
+${lang.massmail.balance_login} ${account.login},
+${lang.massmail.balance_accid}#${account.id.id},
+${lang.massmail.balance_plan} ${account.plan.description}
+
+${lang.massmail.balance_balance} ${toolbox.displayBalance(bill.balance)}
+
+${lang.massmail.balance_regards}
+${settings.name}
+${lang.massmail.balance_mail} ${settings.email}
+${lang.massmail.balance_visit} ${settings.website}

@@ -1,0 +1,7 @@
+<center> tarpitcount </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>The number of recepients after which qmail switches on delay before sending the message to the next portion of recipients.
+<br>Default: 0 (no tarpitting).
+<br>
+

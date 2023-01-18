@@ -1,0 +1,72 @@
+<!-- BEGIN ./admin/mod_sign_edit_psw.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<if admin>
+
+<list signup.getFakeRequest(request.rid) as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+</list>
+
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign tmpOther = tmpAcc.other>
+<assign tmpbi = tmpAcc.bi>
+<assign tmpci = tmpAcc.ci>
+<call draw_tooltip()>
+
+<assign ci=tmpAcc.ci>
+<assign bi=tmpAcc.bi>
+
+<yafv s_signup>
+<form action="${config.CLIENT_CP_URL}" name="f_psw_edit" method="POST" check! accept-charset="UTF-8">
+
+<list tmpOther.params_list as params>
+<if params.name=="password"><assign password = params.value></if>
+<if params.name=="login"><assign usr_login = params.value></if>
+</list>
+
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_psw.sbm">
+<input type="hidden" name="stemplate" value="admin/mod_sign_view.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="planId" value="${planId}">
+<input type="hidden" name="mod" value="${mod}">
+<if usr_login>
+ <input type="hidden" name="login" value="${usr_login}">
+<else>
+<input type="hidden" name="login" value="${request.login}">
+</if>
+
+
+
+
+
+<call draw_table_header("2", lang.search.userinfo.other(account.ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<tr>
+   <td><call draw_label(lang.label.username)></td>
+   <td><call draw_label(usr_login)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.oldpsw)></td>
+   <td><call draw_label(password)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.password)></td>
+   <td><input type="password" name="password1" check="vPassword1(this, login)"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.confirm_psw)></td>
+   <td><input type="password" name="password2" check="vPassword2(password1,this)"></td>
+</tr>
+
+<tr>
+    <td  class="control_align_center" colspan="2"  nowrap>
+        <input type="submit" value="${lang.button.save}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./admin/mod_sign_edit_psw.html  -->
+

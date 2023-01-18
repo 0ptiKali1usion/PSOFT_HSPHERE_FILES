@@ -1,0 +1,118 @@
+<!-- BEGIN ./control/admin/add_custom_billing.html -->
+<assign billman=account.getChild("billman")>
+<if aid==""><assign aid=request.aid></if>
+<if s_description==""><assign s_description=request.description></if>
+<if s_price==""><assign s_price=request.price></if>
+<if billman>
+
+
+	<switch type>
+	    <case "1">
+  <call draw_table_header("2", lang.admin.custom_billing.one_time)>
+	    <break>
+	    <case "2">
+  <call prepare_table_header("2", lang.admin.custom_billing.monthly)>
+  <call add_table_header_help("admin-serviceplus-monthbased_debit", "")>
+  <call draw_table_header_prepared()>
+	    <break>
+	    <case "3">
+  <call prepare_table_header("2", lang.admin.custom_billing.billing_cycle)>
+  <call add_table_header_help("admin-serviceplus-billing_period_debit", "")>
+  <call draw_table_header_prepared()>
+	    <break>
+	</switch>
+
+<form name="f_custom_resource_${type}" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<tr >
+<td class="control_align_right">
+  <input type="hidden" name="template_name" value="submit/admin/add_custom_resource.sbm">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="aid" value="${aid}">
+  <input type="hidden" name="cur_menu" value="${cur_menu}">
+  <input type="hidden" name="search_step" value="${request.search_step}">
+  <input type="hidden" name="start" value="${request.start}">
+  <input type="hidden" name="type" value="${type}">
+  <compress>
+  <list params as sc_param>
+    <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+      <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+    </if>
+  </list>
+  </compress>
+  <call draw_label(lang.admin.custom_billing.description)>&nbsp;<call draw_help("admin-serviceplus-description2", "")>
+</td>
+<td><input size="50" name="description" value="${s_description}" label=${lang.admin.custom_billing.description}" check="vStringReq"></td>
+</tr>
+
+
+
+<if type=="2">
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.duration)>&nbsp;<call draw_help("admin-serviceplus-duration", "")></td>
+  <if s_infinite!=""><assign infinite="CHECKED"></if>
+<td nowrap  ><input size="10" name="duration" value="${s_duration}" check="vDuration(this,infinite)"><call draw_label(lang.admin.custom_billing.duration_period)>&nbsp;<call draw_label(lang.label.or+" "+lang.admin.custom_billing.infinite)><input type="checkbox" name="infinite" value="1" onClick="checkForm(this.form,false)" ${infinite}></td>
+</tr>
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.frequency)>&nbsp;<call draw_help("admin-serviceplus-frequency", "")></td>
+  <if s_frequency==""><assign frequency="1"><else><assign frequency=s_frequency></if>
+<td nowrap  ><call draw_label(lang.admin.custom_billing.frequency_period)><input size="10" name="frequency" value="${frequency}" check="vNumberReq"><call draw_label(lang.admin.custom_billing.duration_period)></td>
+</tr>
+
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.start)>&nbsp;<call draw_help("admin-serviceplus-start", "")></td>
+<td nowrap  >
+  <if (s_start_on=="1") || (s_start_on=="")><assign start_on="CHECKED"><else><assign start_on=""></if>
+  <input size="10" type="radio" name="start_on" value="1" ${start_on}><call draw_label(lang.admin.custom_billing.start_on_the_first_day_prorated)><br><if s_start_on=="2"><assign start_on="CHECKED"><else><assign start_on=""></if>
+  <input size="10" type="radio" name="start_on" value="2" ${start_on}><call draw_label(lang.admin.custom_billing.start_on_the_first_day)>
+  <br><if s_start_on=="3"><assign start_on="CHECKED"><else><assign start_on=""></if>
+  <input size="10" type="radio" name="start_on" value="3" ${start_on}><call draw_label(lang.admin.custom_billing.start_right_now)>
+</td>
+</tr>
+</if>
+
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.note)>&nbsp;<call draw_help("admin-serviceplus-note", "")></td>
+<td nowrap  ><input size="60" name="note" value="${s_note}" label=${lang.admin.custom_billing.note}"></td>
+</tr>
+<if type!="1">
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.admin_note)>&nbsp;<call draw_help("admin-serviceplus-adminnote", "")></td>
+<td nowrap  ><input size="60" name="admin_note" value="${s_admin_note}" label=${lang.admin.custom_billing.admin_note}"></td>
+</tr>
+</if>
+
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.price)>&nbsp;<switch type><case "1"><call draw_help("admin-serviceplus-price_onetime", "")><break><case "2"><call draw_help("admin-serviceplus-price_month", "")><break><case "3"><call draw_help("admin-serviceplus-price_billingperiod", "")></switch></td>
+<td nowrap  ><input size="15" name="price${type}" value="${s_price}" label=${lang.admin.custom_billing.price} check="vAmount"></td>
+</tr>
+
+<if type != "3">
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.other.title.receive_invoice)></td>
+<td nowrap  ><input type="checkbox" name="send_invoice" checked value="true"></td>
+</tr>
+</if>
+
+<if type=="1">
+<tr >
+<td class="control_align_right"><call draw_label(lang.admin.custom_billing.include_taxes)></td>
+<td><input type="checkbox" name="taxes" checked value="true"></td>
+</tr>
+</if>
+
+
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" name="submit" value="${lang.button.add}"></td>
+</tr>
+
+</form>
+
+<call draw_table_footer()>
+
+<else>
+<call draw_table_header("", lang.admin.permission)>
+<call draw_table_footer()>
+</if>
+<!--  END ./control/admin/add_custom_billing.html -->

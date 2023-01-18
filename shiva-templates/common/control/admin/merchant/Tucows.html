@@ -1,0 +1,64 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/Tucows.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.tucows)>
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.tucows}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.username)></td><td><input type="text" name="login" value="<if merchant>${merchant.LOGIN}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="<if merchant>${merchant.PASSWD}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.voidnotificationemail)></td><td><input type="text" name="email" value="<if merchant>${merchant.NOTIFICATIONEMAIL}</if>"></td></tr>
+<if merchant><assign currency = merchant.CURRENCY><else><assign currency = "840"></if>
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td><td>
+<select name="currency">
+<list toolbox.getCurrencies() as curr>
+<option value="${curr.code}" <if curr.code==currency>SELECTED</if>>${curr.name}
+</list>
+</select>
+</td></tr>
+
+<if merchant>
+<assign avslevel=merchant.AVSLEVEL>
+<if avslevel>
+<if toolbox.consists(avslevel, "X") == "1"><assign v_avs_x="CHECKED"></if>
+<if toolbox.consists(avslevel, "Y") == "1"><assign v_avs_y="CHECKED"></if>
+<if toolbox.consists(avslevel, "A") == "1"><assign v_avs_a="CHECKED"></if>
+<if toolbox.consists(avslevel, "W") == "1"><assign v_avs_w="CHECKED"></if>
+<if toolbox.consists(avslevel, "Z") == "1"><assign v_avs_z="CHECKED"></if>
+<if toolbox.consists(avslevel, "N") == "1"><assign v_avs_n="CHECKED"></if>
+<if toolbox.consists(avslevel, "U") == "1"><assign v_avs_u="CHECKED"></if>
+<if toolbox.consists(avslevel, "R") == "1"><assign v_avs_r="CHECKED"></if>
+<if toolbox.consists(avslevel, "E") == "1"><assign v_avs_e="CHECKED"></if>
+<if toolbox.consists(avslevel, "S") == "1"><assign v_avs_s="CHECKED"></if>
+<if toolbox.consists(avslevel, "G") == "1"><assign v_avs_g="CHECKED"></if>
+</if>
+</if>
+
+<tr ><td><call draw_label(lang.admin.epayment.avs)></td>
+<td>
+<call draw_label(lang.admin.epayment.avs_note)><br>
+<input TYPE="checkbox" VALUE="X" NAME="avs_x" ${v_avs_x}><call draw_label(lang.admin.epayment.avs_x)><br>
+<input TYPE="checkbox" VALUE="Y" NAME="avs_y" ${v_avs_y}><call draw_label(lang.admin.epayment.avs_y)><br>
+<input TYPE="checkbox" VALUE="A" NAME="avs_a" ${v_avs_a}><call draw_label(lang.admin.epayment.avs_a)><br>
+<input TYPE="checkbox" VALUE="W" NAME="avs_w" ${v_avs_w}><call draw_label(lang.admin.epayment.avs_w)><br>
+<input TYPE="checkbox" VALUE="Z" NAME="avs_z" ${v_avs_z}><call draw_label(lang.admin.epayment.avs_z)><br>
+<input TYPE="checkbox" VALUE="N" NAME="avs_n" ${v_avs_n}><call draw_label(lang.admin.epayment.avs_n)><br>
+<input TYPE="checkbox" VALUE="U" NAME="avs_u" ${v_avs_u}><call draw_label(lang.admin.epayment.avs_u)><br>
+<input TYPE="checkbox" VALUE="R" NAME="avs_r" ${v_avs_r}><call draw_label(lang.admin.epayment.avs_r)><br>
+<input TYPE="checkbox" VALUE="E" NAME="avs_e" ${v_avs_e}><call draw_label(lang.admin.epayment.avs_e)><br>
+<input TYPE="checkbox" VALUE="S" NAME="avs_s" ${v_avs_s}><call draw_label(lang.admin.epayment.avs_s)><br>
+<input TYPE="checkbox" VALUE="G" NAME="avs_g" ${v_avs_g}><call draw_label(lang.admin.epayment.avs_g)><br>
+
+</tr>
+
+<if merchant && merchant.MODE=="TRUE"><assign vtestmode="CHECKED"><else><assign vtestmode=""></if>
+<tr ><td colspan="2"><input type=checkbox name="testmode" ${vtestmode}><call draw_label(lang.admin.epayment.test)></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>

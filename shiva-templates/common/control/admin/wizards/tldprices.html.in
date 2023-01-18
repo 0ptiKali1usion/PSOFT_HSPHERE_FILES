@@ -1,0 +1,22 @@
+<!-- BEGIN ./control/admin/wizards/tldprices.html.in -->
+<include "control/admin/plan_function.html">
+
+<assign billman = account.getChild("billman")>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<call draw_tooltip()>
+
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_wizard" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.template_name}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="old_special" value="${specialName}">
+<!-- VARS FROM PREV STEP -->
+<include "submit/admin/wizards/create_store_form.html">
+<!-- VARS FROM PREV STEP -->
+
+<call draw_wizard_osrs_prices()>
+
+</form>
+<!-- END ./control/admin/wizards/tldprices.html.in -->

@@ -1,0 +1,25 @@
+<!-- BEGIN ./eeman/add_mailrelay.sbm  -->
+
+<if !config.IRIS_USER>
+  <assign result=yafv.common.s_hsphere.vIPPart(lang.label.ip_address,request.f_relay)>
+<else>
+  <assign result=yafv.checkall(
+	yafv.common.s_hsphere.vIPPart(lang.label.ip_address,request.f_ip),
+	yafv.common.s_hsphere.vDescription(lang.label.notes,request.f_notes))>
+</if> 
+<if result.status=="OK">
+  <assign eeman=account.getChild("eeman")>
+  <if !config.IRIS_USER>
+    <assign result=eeman.addMailRelay(request.f_mserver_id,request.f_action,request.f_relay,request.f_notes)>
+  <else>
+    <assign result=eeman.addIMailRelay(request.f_ip,request.f_notes)>
+  </if>
+</if>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,lang.label.license,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./eeman/add_mailrelay.sbm  -->

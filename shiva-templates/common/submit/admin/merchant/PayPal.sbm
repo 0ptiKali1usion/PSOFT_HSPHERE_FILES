@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/merchant/PayPal.sbm -->
+<assign admin = account.getChild("admin")>
+<assign mm=account.getChild("merchant_manager")>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<if admin>
+  <assign checkRes = toolbox.checkPayPalCustom(request.paypal_custom)>
+<!--checkRes = ${checkRes} -->
+  <if checkRes == "-1">
+    <assign res=session.addMessage("Please fill your Pass-Through Value")>
+  <else>
+    <if checkRes == "1">
+      <assign res=session.addMessage("Duplicated Pass-Through Value")>
+    <else>
+      <if checkRes == "0">
+        <assign res = mm.webprocessorparams("PayPal","SERVER", request.paypal_server, "PORT", request.paypal_port, "PATH", request.paypal_path,"ID",request.paypal_id, "image_url", request.image_url,"CUSTOM", request.paypal_custom, "enabled", enabled)>
+      </if>
+    </if>
+  </if>
+<!--res.status = ${res.status} -->
+  <if res.status=="OK">
+    <include request.stemplate>
+  <else>
+    <assign res=session.addMessage(res.msg)>
+    <include request.ftemplate>
+  </if>
+</if>
+<!-- END ./submit/admin/merchant/PayPal.sbm -->

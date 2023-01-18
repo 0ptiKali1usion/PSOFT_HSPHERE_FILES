@@ -1,0 +1,72 @@
+<!-- BEGIN ./billing/referral_view.html.in  -->
+<yafv>
+<yafv s_billing>
+
+<assign sum = user.getReferalFee()>
+<assign bills=user.getUserBills("3")>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("3", lang.billing.referralview.header)>
+
+
+<tr>
+<td  colspan="2"><call draw_label(lang.billing.referralview.id)></td>
+<td><call draw_label(user.id)></td>
+</tr>
+<if user.referal_id !="0">
+<tr>
+<td  colspan="2"><call draw_label(lang.billing.referralview.refered)></td>
+<td><call draw_label(user.referal_id)></td>
+</tr>
+</if>
+<tr>
+<td  colspan="2"><call draw_label(lang.billing.referralview.amountsum)></td>
+<td><call draw_label(sum)></td>
+</tr>
+<tr>
+	<td colspan="3" class="control_header"><call draw_header(lang.billing.referralview.uncharged)></td>
+</tr>
+<tr>
+	<td   width="33%"><call draw_label(lang.billing.referralview.billid)></td>
+	<td   width="33%"><call draw_label(lang.billing.referralview.billdescr)></td>
+	<td   width="33%"><call draw_label(lang.label.amount)></td>
+</tr>
+<list bills as bill>
+<tr>
+	<td   width="33%"><call draw_label(bill.bill.id)></td>
+	<td   width="33%"><call draw_label(bill.bill.description)></td>
+	<td   width="33%"><call draw_label(bill.bill.amount)></td>
+</tr>
+</list>
+<tr>
+	<td colspan="3" class="control_header"><call draw_header(lang.billing.referralview.pays)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.billing.referralview.select)></td>
+<td   colspan="2">
+
+<form action="${config.CLIENT_CP_URL}" name="f_referral_view" check! method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/billing/credit_bill.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<select name="bill_to_credit">
+<list bills as bill>
+<option value="${bill.bill.id}"<if bill_to_credit==bill.bill.id> SELECTED</if>> ${bill.bill.id} ${bill.bill.description} ${bill.bill.amount}
+</list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.billing.referralview.enteramount)></td>
+<td   colspan="2"><input type="text" name="amount" label="${lang.billing.referralview.enteramount}" value="${amount}" check="vAmount"></td>
+</tr>
+<tr>
+	<td   colspan="3" class="control_align_center"><input type="submit" value="${lang.billing.referralview.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./billing/referral_view.html.in  -->

@@ -1,0 +1,10 @@
+<!-- BEGIN ./control/signup/pi.Check  -->
+<tr>
+   <td colspan="2" align="center"><call draw_label(lang.signup.pi.check)>
+<address>
+<pre>
+${settings.check}
+</pre>
+</address></td>
+</tr>
+<!--  END ./control/signup/pi.Check  -->

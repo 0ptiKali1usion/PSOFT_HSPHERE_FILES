@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/eeman/del_unused_service.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign lserver=eeman.getLserver(request.rid)>
+<assign result=lserver.delUnusedService()>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/eeman/del_unused_service.sbm  -->

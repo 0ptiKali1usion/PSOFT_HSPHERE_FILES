@@ -1,0 +1,6 @@
+login ar
+setLoginPassword ar
+getPrices ar
+setPrices ar
+isEnabled u
+listProducts u

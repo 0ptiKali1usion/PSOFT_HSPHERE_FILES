@@ -1,0 +1,96 @@
+<!-- BEGIN ./signup/cinfo.html.in  -->
+<if ci>
+    <assign ci_first_name = ci.first_name>
+    <assign ci_last_name = ci.last_name>
+    <assign ci_company = ci.company>
+    <assign ci_address1 = ci.address1>
+    <assign ci_address2 = ci.address2>
+    <assign ci_city = ci.city>
+    <assign ci_state = ci.state>
+    <assign ci_state2 = ci.state2>
+    <assign ci_postal_code = ci.postal_code>
+    <assign ci_country = ci.country>
+    <assign ci_phone = ci.phone>
+    <assign ci_email = ci.email>
+    <assign ci_promo_code = ci.promo_code>
+</if>
+<tr>
+   <td ><call draw_label(lang.bci.fname)></td>
+   <td >
+   <input type="text" name="_ci_first_name" value="${ci_first_name}" check="vSinglename(this)" label="${lang.bci.fname}">
+   <assign excludeFields=excludeFields+"_ci_first_name;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.lname)></td>
+   <td >
+   <input type="text" name="_ci_last_name" value="${ci_last_name}" check="vSinglename(this)" label="${lang.bci.lname}">
+   <assign excludeFields=excludeFields+"_ci_last_name;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.company)></td>
+   <td >
+   <input type="text" name="_ci_company" value="${ci_company}" check="vOrganization(this)" label="${lang.bci.company}">
+   <assign excludeFields=excludeFields+"_ci_company;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr1)></td>
+   <td ><input type="text" name="_ci_address1" value="${ci_address1}" check="vAddress(this)" label="${lang.bci.adr1}"></td>
+   <assign excludeFields=excludeFields+"_ci_address1;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr2)></td>
+   <td ><input type="text" name="_ci_address2" value="${ci_address2}"></td>
+   <assign excludeFields=excludeFields+"_ci_address2;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.city)></td>
+   <td ><input type="text" name="_ci_city" value="${ci_city}" check="vCity(this)" label="${lang.bci.city}"></td>
+   <assign excludeFields=excludeFields+"_ci_city;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.state)></td>
+   <td >
+   <select name="_ci_state" size="1">
+	<call buildStates(ci_state)>
+   </select>
+   <assign excludeFields=excludeFields+"_ci_state;">
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.state_other)></td>
+  <td><input type="text" name="_ci_state2" value="${ci_state2}" check="vStateOther" label="${lang.label.state_other}"><assign excludeFields=excludeFields+"_ci_state2;"></td>
+</tr>
+
+<tr>
+   <td ><call draw_label(lang.bci.pcode)></td>
+   <td >
+   <input type="text" name="_ci_postal_code" value="${ci_postal_code}" check="vPostal_Code(this)" label="${lang.bci.pcode}"><call draw_label(lang.bci.postalwarn)></td>
+   <assign excludeFields=excludeFields+"_ci_postal_code;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.country)></td>
+   <td >
+   <select name="_ci_country" size="1">
+	<call buildCountries(ci_country)>
+   </select>
+   <assign excludeFields=excludeFields+"_ci_country;">
+</td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.phone)></td>
+   <td ><input type="text" name="_ci_phone"  value="${ci_phone}" check="vPhone(this)" label="${lang.bci.phone}"></td>
+   <assign excludeFields=excludeFields+"_ci_phone;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.email)></td>
+   <td ><input type="text" name="_ci_email" value="${ci_email}" check="vEmail(this)" label="${lang.bci.email}"></td>
+   <assign excludeFields=excludeFields+"_ci_email;">
+
+</tr>
+
+<tr><td colspan="2"><call draw_label(lang.bci.email_rem)></td></tr>
+
+<!--  END ./signup/cinfo.html.in  -->

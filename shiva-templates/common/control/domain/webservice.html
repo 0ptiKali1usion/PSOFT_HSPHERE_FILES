@@ -1,0 +1,432 @@
+<!-- BEGIN ./domain/webservice.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unix_user = account.getChild("unixuser")>
+<assign ip=hosting.parent.getChild("ip")>
+<assign platform_type = hosting.server>
+<assign errorlog = hosting.getChild("errorlog")>
+<assign trans = hosting.getChild("transferlog")>
+<assign refer = hosting.getChild("referrerlog")>
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("3", lang.domain.webservice.header)>
+
+
+<tr>
+    <td  width="3%"  nowrap><call draw_tt_help("","user-ds_domaininfo-ws-domain","")></td>
+    <td  width="37%"  nowrap><call draw_label(lang.label.dname)></td>
+    <td  width="60%"  nowrap><call draw_link(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=domain/edit.html",hosting.parent.name)><call draw_preview("http://"+hosting.parent.name, lang.domain.webservice.opensite)></td>
+</tr>
+<tr>
+    <td  width="3%" nowrap><if !hosting.state><call draw_tt_help(hosting,"user-ds_domaininfo-ws-serverconfig","")><else>&nbsp;</if></td>
+    <td  nowrap ><call draw_label(lang.domain.webservice.serverconf)></td>
+    <td   nowrap><if !hosting.state><call draw_important_label(lang.domain.webservice.serverimportant)> <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=submit/domain/webservice_restart_check.sbm&stemplate="+template, lang.label.apply)><else><call draw_label(lang.domain.webservice.ok)></if></td>
+</tr>
+<tr>
+   <td  nowrap><if ip><assign tt_rid=ip><else><assign tt_rid=hosting></if><call draw_tt_help(tt_rid,"user-ds_domaininfo-ipaddress","")></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.ipaddress)></td>
+   <td   nowrap><if ip><if ip.shared != "1"><call draw_tlink("http://"+toolbox.int2ext(ip.ip),"_blank",toolbox.int2ext(ip.ip))><else><call draw_label(toolbox.int2ext(ip.ip)+" (shared)")></if><else><call draw_label(lang.domain.webservice.virt)></if></td>
+</tr>
+
+<if  account.plan.isResourceAvailable("sitestudio")>
+<assign sitestudio = hosting.getChild("sitestudio")>
+<tr>
+<td  nowrap><call draw_tt_help(hosting,"","")></td>
+<td   valign="middle"><call draw_label(lang.domain.webservice.sitestudio)></td>
+<td   nowrap><call onoff(hosting, "sitestudio")>&nbsp;
+<if sitestudio>
+<if account.isDemo>
+<form method="POST" action="${config.CLIENT_CP_URL}" target="_blank" accept-charset="UTF-8">
+<input type=hidden name="template_name" value="misc/show_demo.html">
+<input type=hidden name="header" value="${quick.quickview.altsitestudio}">
+<input type=hidden name="image" value="ss_demo">
+<input type="submit" value="login">
+</td>
+</tr>
+</form>
+<else>
+<form method="POST" action="${config.PATH_SITE_STUDIO}" target="_blank" accept-charset="UTF-8">
+<input type="submit" value="login"><if ip><if ip.shared == "1"><assign instant_alias = hosting.getChild("idomain_alias")><if instant_alias><assign tmp_url=instant_alias.alias><else><assign tmp_url=hosting.parent.name></if><else><assign tmp_url=toolbox.int2ext(ip.ip)></if><else><assign tmp_url="no-ip-address"></if>
+<input type=hidden name="action" value="useraction">
+<input type=hidden name="useraction" value="login">
+<input type=hidden name="requestURL" value="${config.SITE_STUDIO_CLASS}">
+<input type=hidden name="login" value="${hosting.parent.id}">
+<input type=hidden name="password" value="${unix_user.password}">
+<input name="email" type="hidden" value="webmaster@${hosting.parent.name}">
+<input name="url" type="hidden" value="http://${tmp_url}/">
+<input name="real_login" type="hidden" value="${unix_user.login}">
+<input name="dir" type="hidden" value="/${hosting.local_dir}/">
+<input name="server" type="hidden" value="${unix_user.host.name}">
+<input name="port" type="hidden" value="21"></if>
+</td>
+</tr>
+</form>
+</if>
+</if>
+
+<if account.plan.areResourcesAvailable("SITETOOLBOX")>
+<tr  >
+<td  nowrap><call draw_tt_help(hosting,"","")></td>
+<assign ref_id = settings.toolbox_referralid>
+
+<td colspan="2">
+<if ref_id>
+<call draw_label(lang.admin.sitetoolbox)><call draw_preview("http://"+settings.toolbox_url+"?LNKID="+settings.toolbox_referralid, lang.admin.sitetoolbox)>
+<else>
+<call draw_label(lang.admin.sitetoolbox)><call draw_preview("http://"+settings.toolbox_url, lang.admin.sitetoolbox)>
+</if>
+</td>
+
+
+</tr>
+</if>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+<td colspan="3" class="control_align_center">
+<table class="inner_control_grid">
+<input type="hidden" name="rid" value="${hosting}">
+<input type="hidden" name="template_name" value="submit/domain/update_webservice.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<if !hosting.getChild("ssi")><input type="hidden" name="ssi" value="${hosting.ssi}"></if>
+<tr>
+  <td colspan="5" class="inner_control_grid_header">
+    <call draw_header(lang.domain.webservice.settings)>
+  </td>
+</tr>
+<tr>
+   <td   width="3%" nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_indexes","")></td>
+   <td   nowrap><call draw_label(lang.domain.webservice.indexes)></td>
+   <td   width="20%" nowrap><input type="radio" name="index" value="1" <if hosting.index=="1">CHECKED</if>><call draw_label(lang.label.enabled)></td>
+   <td   width="20%" nowrap><input type="radio" name="index" value="0" <if hosting.index=="0">CHECKED</if>><call draw_label(lang.label.disabled)></td>
+   <td   nowrap><input type="radio" name="index" value="2" <if hosting.index=="2">CHECKED</if>><call draw_label(lang.domain.webservice.fancy)></td>
+</tr>
+<tr>
+   <td   nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_symboliclinks","")></td>
+   <td   nowrap><call draw_label(lang.domain.webservice.symlinks)></td>
+   <td   nowrap><input type="radio" name="symlink" value="1" <if hosting.symlink=="1">CHECKED</if>><call draw_label(lang.label.enabled)></td>
+   <td   nowrap><input type="radio" name="symlink" value="0" <if hosting.symlink=="0">CHECKED</if>><call draw_label(lang.label.disabled)></td>
+   <td   nowrap><input type="radio" name="symlink" value="2" <if hosting.symlink=="2">CHECKED</if>><call draw_label(lang.domain.webservice.owners)></td>
+</tr>
+<if hosting.getChild("ssi")>
+<tr>
+   <td   nowrap><assign tmp=hosting.getChild("ssi")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   nowrap><call draw_label(lang.domain.webservice.ssiexec)></td>
+   <td   nowrap><input type="radio" name="ssi" value="1" <if hosting.ssi=="1">CHECKED</if>><call draw_label(lang.label.enabled)></td>
+   <td   nowrap><input type="radio" name="ssi" value="0" <if hosting.ssi=="0">CHECKED</if>><call draw_label(lang.label.disabled)></td>
+   <td   nowrap>&nbsp;</td>
+</tr>
+</if>
+<tr>
+   <td   nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_multiviews","")></td>
+   <td   nowrap><call draw_label(lang.domain.webservice.multiviews)></td>
+   <td   nowrap><input type="radio" name="multiview" value="1" <if hosting.multiview=="1">CHECKED</if>><call draw_label(lang.label.enabled)></td>
+   <td   nowrap><input type="radio" name="multiview" value="0" <if hosting.multiview=="0">CHECKED</if>><call draw_label(lang.label.disabled)></td>
+   <td   nowrap>&nbsp;</td>
+</tr>
+
+<tr><td colspan="5" class="inner_control_grid_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+</table>
+</td>
+</tr>
+</form>
+
+<if account.plan.isResourceAvailable("ssl")>
+<tr>
+   <td   nowrap><assign ssl=hosting.getChild("ssl")><if ssl><call draw_tt_help(ssl,"user-ds_domaininfo-ws-s_sslsupport","")><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_sslsupport","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.ssl)></td>
+   <td   nowrap><call draw_ssl(hosting,platform_type,template,ip)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("sharedssl")>
+<tr>
+   <td   nowrap><assign sharedssl=hosting.getChild("sharedssl")><if sharedssl><call draw_tt_help(sharedssl,"user-ds_domaininfo-ws-s_sharedssl","")><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_sharedssl","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.sharedssl)></td>
+   <td   nowrap><call draw_sharedssl(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("frontpage")>
+<tr>
+   <td   nowrap ><assign frontpage=hosting.getChild("frontpage")><if frontpage><call draw_tt_help(frontpage,"user-ds_domaininfo-ws-s_frontpageexten","")><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_frontpageexten","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.frontpage)></td>
+   <td   nowrap ><call draw_frontpage(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("cgi")>
+<tr>
+   <td valign="top"   valign="top" nowrap ><assign tmp=hosting.getChildren("cgi")><if tmp><list tmp as cgi><call draw_tt_help(cgi,"user-ds_domaininfo-ws-s_cgi","")><br></list><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_cgi","")></if></td>
+   <td  valign="middle"  ><call draw_label(lang.domain.webservice.cgi)></td>
+   <td   nowrap><call draw_cgi(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("cgidir")>
+<tr>
+  <td   valign="top" nowrap><assign tmp=hosting.getChildren("cgidir")><if tmp><list tmp as cgidir><call draw_tt_help(cgidir,"user-ds_domaininfo-ws-s_cgidir","")><br></list><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-s_cgidir","")></if></td>
+  <td   valign="middle"><call draw_label(lang.domain.webservice.cgidir)></td>
+  <td   nowrap><call draw_cgidir(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("ismap")>
+<tr>
+   <td valign="top"   valign="top" nowrap ><assign tmp=hosting.getChildren("ismap")><if tmp><list tmp as is_map><call draw_tt_help(is_map,"user-ds_domaininfo-ws-map","")><br></list><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-map","")></if></td>
+   <td  valign="middle"  ><call draw_label(lang.domain.webservice.is_map)></td>
+   <td   nowrap ><list tmp as is_map><call draw_label(is_map.ext)>&nbsp;<call disableNew(hosting, is_map)><br></list>
+<call addNewWizard(hosting, "ismap", "domain/add_is_map.html", lang.domain.webservice.addis_map)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("servlet")>
+<tr>
+    <td valign="top"   nowrap ><assign tmp=hosting.getChild("servlet")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+    <td   valign="middle"><call draw_label(lang.domain.webservice.jserv)></td>
+    <td   nowrap ><call onoff(hosting, "servlet")><br><if tmp><call draw_link(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=/submit/domain/jserv_restart.sbm", lang.domain.webservice.restart)></if></br></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("servlet") && hosting.getChild("servlet")>
+<tr>
+    <td valign="top"   nowrap ><assign tmp=hosting.getChild("servlet")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+    <td valign="top"   valign="middle"><call draw_label(lang.domain.webservice.jservmount)></td>
+    <td valign="top"   nowrap ><call draw_label(tmp.mount)><br><call draw_link(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=/domain/edit_mount.html&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.editsmall)></br></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("mimetype")>
+<tr>
+   <td   valign="top" nowrap><assign tmp=hosting.getChildren("mimetype")><if tmp><list tmp as mime><call draw_tt_help(mime,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.mimetype)></td>
+   <td   nowrap><call draw_mime(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("php3")>
+<assign php3=hosting.getChild("php3")><if php3><assign tt_rid=php3><else><assign tt_rid=hosting></if>
+<tr><assign tmp=php3.getChildren("php3entry")>
+<td   valign="top" nowrap>
+<call draw_tt_help(tt_rid,"","")><list tmp as php3entry><br><call draw_tt_help(php3entry,"","")></list></td>
+<td   valign="middle"><call draw_label(lang.domain.webservice.php3)></td>
+<td><call draw_php(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("ssi")>
+<tr>
+   <td   valign="top" nowrap><assign tmp=hosting.getChildren("ssi")><if tmp><list tmp as ssi><call draw_tt_help(ssi,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.ssi)></td>
+   <td   nowrap><call draw_ssi(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("empresa")>
+<assign miva = hosting.getChild("empresa")>
+<tr>
+ <td   nowrap><assign tmp=hosting.getChild("empresa")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+ <td   valign="middle"><call draw_label(lang.domain.webservice.empresa)></td>
+ <td   nowrap><call draw_empresa(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("miva")>
+<assign miva = hosting.getChild("miva")>
+<tr>
+ <td   nowrap><assign tmp=hosting.getChild("miva")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+ <td   valign="middle"><call draw_label(lang.domain.webservice.miva)></td>
+ <td   nowrap><call draw_miva(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("oscommerce")>
+<tr>
+   <td   nowrap ><assign oscommerce=hosting.getChild("oscommerce")><if oscommerce><call draw_tt_help(oscommerce,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.oscommerce)></td>
+   <td   nowrap><call draw_os_commerce(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("errordoc")>
+<tr>
+   <td  valign="top"  nowrap><assign tmp=hosting.getChildren("errordoc")><if tmp><list tmp as edoc><call draw_tt_help(edoc,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   nowrap valign="middle"><call draw_label(lang.domain.webservice.error)></td>
+   <td><call draw_errordoc(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("errorlog")>
+<tr>
+   <td   nowrap><assign tmp=hosting.getChild("errorlog")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.errorlog)></td>
+   <td   nowrap><call onoff(hosting, "errorlog")>&nbsp;
+   <if hosting.getChild("errorlog")>
+   <call draw_view(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=control/domain/show_loglist.html&type="+errorlog.logtype, lang.domain.webservice.errorlog)></td>
+   </if>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("transferlog")>
+<tr>
+   <td   nowrap><assign tmp=hosting.getChild("transferlog")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td   valign="middle"><call draw_label(lang.domain.webservice.transflog)></td>
+   <td   nowrap><call onoff_mod(hosting, "transferlog", "simple")>
+   <if hosting.getChild("transferlog")>
+     &nbsp;<call draw_view(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=control/domain/show_loglist.html&type="+trans.logtype, lang.domain.webservice.transflog)>
+   </if>
+   </td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("webalizer")>
+<if trans>
+<tr>
+ <td   nowrap><assign tmp=trans.getChild("webalizer")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(trans,"","")></if></td>
+ <td   valign="middle"><call draw_label(lang.domain.webservice.webalizer)></td>
+ <td   nowrap><call draw_webalizer_trans(hosting, platform_type, template)></td>
+</tr>
+<else>
+<tr>
+ <td   nowrap><call draw_tt_help(hosting,"","")></td>
+ <td   valign="middle"><call draw_label(lang.domain.webservice.webalizer)></td>
+ <td   nowrap><call draw_webalizer(hosting, platform_type, template)></td>
+</tr>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("modlogan")>
+<assign modlogan=hosting.getChild("modlogan")>
+<if trans>
+  <tr>
+  <td nowrap><assign tmp=trans.getChild("modlogan")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(trans,"","")></if></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.modlogan)></td>
+  <td nowrap><call draw_modlogan_trans(hosting, platform_type, template)></td>
+  </tr>
+<else>
+  <tr>
+  <td   nowrap><call draw_tt_help(hosting,"","")></td>
+  <td   valign="middle"><call draw_label(lang.domain.webservice.modlogan)></td>
+  <td   nowrap><call draw_modlogan(hosting, platform_type, template)></td>
+  </tr>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("referrerlog")>
+  <assign tmp=hosting.getChild("referrerlog")>
+  <tr>
+   <td nowrap><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td valign="middle"><call draw_label(lang.domain.webservice.reflog)></td>
+   <td nowrap><call onoff(hosting, "referrerlog")>&nbsp;
+   <if tmp>
+     <call draw_view(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=control/domain/show_loglist.html&type="+refer.logtype, lang.domain.webservice.reflog)></td>
+   </if>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("agentlog")>
+<tr>
+   <td nowrap><assign tmp=hosting.getChild("agentlog")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td valign="middle"><call draw_label(lang.domain.webservice.aglog)></td>
+   <td nowrap><call onoff(hosting, "agentlog")></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("vhost_alias")>
+<tr>
+   <td valign="top" valign="top" nowrap><assign tmp=hosting.getChildren("vhost_alias")><if tmp><list tmp as alias><call draw_tt_help(alias,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+   <td valign="middle"><call draw_label(lang.domain.webservice.servalias)></td>
+   <td nowrap><call draw_vhost_alias(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("redirect_url")>
+  <tr>
+  <td valign="top"   nowrap><assign tmp=hosting.getChildren("redirect_url")><if tmp><list tmp as redirect><call draw_tt_help(redirect,"user-ds_domaininfo-ws-redirect","")><br></list><else><call draw_tt_help(hosting,"user-ds_domaininfo-ws-redirect","")></if></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.redirect)></td>
+  <td nowrap><call draw_redirect(hosting, platform_type, template)></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("directory_ind")>
+  <assign directory_ind = hosting.getChild("directory_ind")>
+  <tr>
+  <td valign="top" nowrap><call draw_tt_help(directory_ind,"user-ds_domaininfo-ws-directoryindex","")></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.directoryind)></td>
+  <td valign="middle"><call draw_directory_ind(hosting, platform_type, template)></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("throttle")>
+  <assign throttle=hosting.getChild("throttle")>
+  <tr>
+  <td valign="top" nowrap><call draw_tt_help(throttle,"user-ds_domaininfo-ws-throttle","")></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.throttle)></td>
+  <td valign="middle"><call draw_throttle(hosting, platform_type, template)></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("mnogosearch")>
+  <tr>
+  <td nowrap><assign mnogosearch=hosting.getChild("mnogosearch")><if mnogosearch><call draw_tt_help(mnogosearch ,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.mnogosearch)></td>
+  <td nowrap><call draw_mnogosearch(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("phpbb")>
+  <tr>
+  <td nowrap><assign phpbb=hosting.getChild("phpbb")><if phpbb><call draw_tt_help(phpbb ,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+  <td valign="middle"><call draw_label(lang.label.phpbb)></td>
+  <td nowrap><call draw_phpbb(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("urchin")>
+  <tr>
+  <td valign="top" nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-urchin","")></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.urchin)></td>
+  <td valign="middle"><call draw_urchin(hosting, platform_type, template)></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("urchin4")>
+  <tr>
+  <td valign="top"   nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-urchin","")></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.urchin4)></td>
+  <td valign="middle"><call draw_urchin4(hosting, platform_type, template)></td>
+  </tr>
+</if>
+
+<if account.plan.isResourceAvailable("awstats")>
+  <tr>
+  <td valign="top"   nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-awstats","")></td>
+  <td valign="middle"><call draw_label(lang.domain.webservice.awstats)></td>
+  <td valign="middle"><call draw_awstats(hosting, platform_type, template)></td>
+  </tr>
+</if>
+<if account.plan.isResourceAvailable("idomain_alias")>
+   <assign ip=hosting.parent.getChild("ip")>
+   <if ip.shared=="1">
+   <assign ialias=hosting.getChild("idomain_alias")>
+   <tr>
+      <td valign="top"   nowrap><call draw_tt_help(ialias, "user-ds_domaininfo-ws-idomain_alias", "")></td>
+      <td   valign="middle"><call draw_label(lang.domain.ialias)></td>
+      <td   valign="middle"><call onoff(hosting, "idomain_alias")>&nbsp;<if ialias><call draw_label(ialias.alias)><call draw_preview("http://"+ialias.alias, lang.domain.webservice.opensite)></if></td>
+   </tr>
+   </if>
+</if>
+<form  method="POST" accept-charset="UTF-8">
+<tr><td colspan="3" class="control_align_center" >
+&nbsp;<br>
+<textarea rows="20" cols="60">${toolbox.html_encode(hosting.config)}</textarea><br>&nbsp;
+</td></tr>
+</form>
+<call draw_table_footer()>
+
+<!--  END ./domain/webservice.html  -->

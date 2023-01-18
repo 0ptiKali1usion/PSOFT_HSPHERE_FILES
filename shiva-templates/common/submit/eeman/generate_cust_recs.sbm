@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/eeman/generate_cust_recs.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign adnsmanager = account.getChild("adnsmanager")>
+
+<switch request.action>
+    <case "all">
+        <assign result = adnsmanager.regenAllSysCustomRecords()>
+        <break>
+    <case "pserver">
+        <assign result = adnsmanager.regenSysCustomRecordsForPs(request.rid)>
+        <break>
+    <default>
+        <assign lserver= eeman.getLserver(request.rid)>
+        <assign result = lserver.addSysCustomRecords()>
+        <break>
+</switch>
+
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/eeman/generate_cust_recs.sbm  -->

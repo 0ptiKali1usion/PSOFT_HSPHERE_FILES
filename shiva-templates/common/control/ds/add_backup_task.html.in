@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/ds/add_backup_task.html.in -->
+<call draw_tooltip()>
+<yafv s_hsphere>
+<assign ds = account.getResource(request.ds_id)>
+<assign backup = account.getResource(request.backup_id)>
+<form name="f_add_backup_task" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+  <input type="hidden" name="template_name" value="submit/ds/add_backup_task.sbm">
+  <input type="hidden" name="backup_id" value="${request.backup_id}">
+  <input type="hidden" name="ds_id" value="${request.ds_id}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="performer_id" value="${ds.reseller_id}">
+
+  <if failure>
+     <assign f_backup_date=request.backup_date>
+     <assign f_backup_hour=request.backup_hour>
+     <assign f_backup_min=request.backup_min>
+  </if>
+  <call draw_table_header("2", toolbox.compose(lang.ds.backup_service.add_custom_task.header))>
+  <tr><td colspan="2"><call draw_label(toolbox.compose(lang.ds.backup_service.add_custom_task.description,ds.name))></td></tr>
+  <tr>
+    <td><call draw_label(lang.ds.backup_service.add_custom_task.date)></td>
+    <td><input type="text" size="10"maxlength="10" name="backup_date" value="${f_backup_date}" check="vMDYDate"></td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.ds.backup_service.add_custom_task.time)></td>
+    <td>
+      <input type="text" size="2" maxlength="2" name="backup_hour" value="${f_backup_hour}" check="vDayHour">&nbsp;<call draw_label(lang.ds.backup_service.add_custom_task.hour)>&nbsp;
+      <input type="text" size="2" maxlength="2" name="backup_min" value="${f_backup_min}" check="vHourMin">&nbsp;<call draw_label(lang.ds.backup_service.add_custom_task.min)>
+    </td>
+  </tr>
+  <tr><td colspan="2" class="control_align_right"><input type="submit"></td></tr>
+  <call draw_table_footer()>
+</form>
+<!-- END ./control/ds/add_backup_task.html.in -->

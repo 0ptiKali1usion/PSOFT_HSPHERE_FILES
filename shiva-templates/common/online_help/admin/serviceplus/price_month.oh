@@ -1,0 +1,6 @@
+<center>Price</center>
+<hr>
+<br>&nbsp;&nbsp;&nbsp;&nbsp; <br>
+Debit amount:  the price of  the service that the user is charged for.<br>
+<br>
+* This is the amount you debit the user each debit cycle set in the <i>Frequency</i> field.

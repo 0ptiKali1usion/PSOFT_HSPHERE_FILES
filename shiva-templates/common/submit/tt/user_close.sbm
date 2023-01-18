@@ -1,0 +1,9 @@
+<assign tt=account.getChild("tt")>
+<assign ticket=tt.getTicket(request.ttid)>
+<assign result=ticket.setstate("9")>
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>

@@ -1,0 +1,49 @@
+<!-- BEGIN ./control/adnsmanager/list.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign dnsmanager=account.getChild("adnsmanager")>
+<if !dnsmanager><assign dnsmanager=account.addChild("adnsmanager", "")></if>
+
+
+
+
+
+<call draw_table_header("4", lang.adnsmanager.list.header)>
+
+
+<tr>
+<td  class="control_align_center"><call draw_label_bold(lang.dns.name)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.adnsmanager.list.email)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.adnsmanager.list.allow)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.label.action)></td>
+
+
+</tr>
+<list dnsmanager.dns_zones as dns_zone>
+<tr>
+<td><call draw_label(dns_zone.name)></td>
+<td><call draw_label(dns_zone.email)></td>
+<td  class="control_align_center">
+<if dns_zone.allow_hosting=="1">
+     <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_hosting_state.sbm"+"&zone_id="+dns_zone.id+"&state=0"+"&ftemplate="+template+"&stemplate="+template)>
+   <else>
+     <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_hosting_state.sbm"+"&zone_id="+dns_zone.id+"&state=1"+"&ftemplate="+template+"&stemplate="+template)>
+</if>
+</td>
+<td  class="control_align_center"><call draw_edit(config.CLIENT_CP_URL+"?template_name=/adnsmanager/aliases.html"+"&zone_id="+dns_zone.id, lang.adnsmanager.list.view)>
+<if !dns_zone.locked><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/delete_zone.sbm"+"&id="+dns_zone.id+"&stemplate="+template+"&ftemplate="+template, lang.label.delete)><else>&nbsp;</if>
+</td>
+</tr>
+</list>
+<tr>
+<td  class="control_align_center" colspan="4"><call draw_link(config.CLIENT_CP_URL+"?template_name=/adnsmanager/add_zone.html"+"&stemplate="+template+"&ftemplate="+template, lang.adnsmanager.list.add)></td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/adnsmanager/list.html  -->

@@ -1,0 +1,51 @@
+<!-- BEGIN ./admin/ds/add_ds_netinterface.html  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager")>
+</if>
+<call draw_tooltip()>
+
+<if ds_manager>
+
+<form name="f_ds_add" method="GET" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/add_ds_netinterface.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.ftemplate}">
+<input type="hidden" name="ds_id" value="${request.ds_id}">
+<assign netswitches = ds_manager.netSwitchList()>
+<call draw_table_header("2", lang.admin.ds.add_netswitch_interface_h)>
+<if netswitches && (netswitches.size != "0")>
+  <tr>
+  <td width="40%"><call draw_label(lang.admin.ds.netswitch_device)></td>
+  <td>
+  <select name="ns_id" onChange="checkForm(this.form)">
+    <if !v_ns_id><assign vselected="SELECTED"><else><assign vselected=""></if>
+    <option value="" ${vselected}>${lang.admin.ds.choose_netswitch}</option>
+    <list netswitches as ns>
+      <if ns.reseller_id == reseller_id>
+        <if v_ns_id == ns.id><assign vselected="SELECTED"><else><assign vselected=""></if>
+        <option value="${ns.id}" ${vselected}>${ns.description} (${ns.device})</option>
+      </if>
+    </list>
+  </select>
+  </td>
+  </tr>
+  <tr>
+  <td><call draw_label(lang.admin.ds.netswitch_port)></td>
+  <td><input type="text" name="ns_port" value="${v_ns_port}" check="vNetswitchPortReq(ns_id, this)" size="3"></td>
+  </tr>
+  <tr>
+  <td valign="top"><call draw_label(lang.admin.ds.netinterface_description)><br><call draw_label(lang.admin.ds.netinterface_description_note)></td>
+  <td valign="top"><input type="text" name="ni_description" value="${v_ni_description}" check="vStringOptional"></td>
+  </tr>
+  <tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+<else>
+  <tr>
+  <td colspan="2"><call draw_important_label(lang.admin.ds.ns_notconfigured)></td>
+  </tr>
+</if>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./admin/ds/add_ds_netinterface.html  -->

@@ -1,0 +1,5 @@
+<center>CGI dir</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	To run any CGI scripts, you should let the system 'know' which files it should treat as CGI executables. Otherwise, the scripts will fail to execute. Here you can map any existing directory in your home directory as a CGI directory which means that all the files placed in this directory will be treated and executed as CGI scripts.
+Click the <i> Add</i> icon and in the form that appears, enter the path to this directory relative to the site root.

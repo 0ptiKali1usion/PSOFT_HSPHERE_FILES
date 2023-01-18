@@ -1,0 +1,85 @@
+<!-- BEGIN ./control/vps/server_limits.html -->
+<call draw_tooltip()>
+<assign vps = account.getChild("vps")>
+<assign quota = vps.getChild("quota")>
+<assign memlimit = vps.getChild("vps_mem_limit")>
+<assign proclimit = vps.getChild("vps_proc_limit")>
+<assign rsslimit = vps.getChild("vps_rss_limit")>
+<assign filelimit = vps.getChild("vps_file_limit")>
+<assign tcplimit = vps.getChild("vps_tcp_limit")>
+<assign hardcpulimit = vps.getChild("vps_hardcpu_limit")>
+
+
+<call draw_table_header("4", "")>
+
+<tr>
+<td class="control_header" width="5%"><call draw_TT_header()></td>
+<td colspan="2" class="control_header"><call draw_header(lang.vps.server_limits.header)></td>
+<td class="control_header"><call draw_header(lang.label.action)></td>
+</tr>
+
+<if quota>
+<tr>
+	<td  align="center"><call draw_tt_help(quota.id,"user-vps_quota","")></td>
+        <td><call draw_label(lang.vps.disk_quota.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_quota_lim, quota.used, quota.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_quota.html&rid="+vps, "change", lang.vps.change_quota.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<if memlimit>
+<tr>
+	<td  align="center"><call draw_tt_help(memlimit.id,"user-vps_memlimit","")></td>
+        <td><call draw_label(lang.vps.mem_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_quota_lim, memlimit.used, memlimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_memlimit.html&rid="+vps, "change", lang.vps.changememlimit.label)><else>&nbsp;</if></td>
+
+</tr>
+</if>
+<if proclimit>
+<tr>
+	<td  align="center"><call draw_tt_help(proclimit.id,"user-vps_proclimit","")></td>
+        <td><call draw_label(lang.vps.proc_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_proc_lim, proclimit.used, proclimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_proclimit.html&rid="+vps, "change", lang.vps.changeproclimit.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<if rsslimit>
+<tr>
+	<td  align="center"><call draw_tt_help(rsslimit.id,"user-vps_rsslimit","")></td>
+        <td><call draw_label(lang.vps.rss_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_rss_lim, rsslimit.used, rsslimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_rsslimit.html&rid="+vps, "change", lang.vps.changersslimit.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<if filelimit>
+<tr>
+	<td  align="center"><call draw_tt_help(filelimit.id,"user-vps_filelimit","")></td>
+        <td><call draw_label(lang.vps.file_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_file_lim, filelimit.used, filelimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_filelimit.html&rid="+vps, "change", lang.vps.changefilelimit.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<if tcplimit>
+<tr>
+	<td  align="center"><call draw_tt_help(tcplimit.id,"user-vps_tcplimit","")></td>
+        <td><call draw_label(lang.vps.tcp_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_tcp_lim, tcplimit.used, tcplimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_tcplimit.html&rid="+vps, "change", lang.vps.changetcplimit.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<if hardcpulimit>
+<tr>
+	<td  align="center"><call draw_tt_help(hardcpulimit.id,"user-vps_hardcpulimit","")></td>
+        <td><call draw_label(lang.vps.hardcpu_limit.label)></td>
+        <td><call draw_label(toolbox.compose(lang.vps.generic.used_hardcpu_lim, hardcpulimit.used, hardcpulimit.limit))></td>
+	<td  align="center"><if vps.isVPSInitialized()><call draw_palink(config.CLIENT_CP_URL+"?stemplate="+template+"&ftemplate="+template+"&template_name=vps/change_hardcpulimit.html&rid="+vps, "change", lang.vps.changehardcpulimit.label)><else>&nbsp;</if></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!-- END ./control/vps/server_limits.html --> 

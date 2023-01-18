@@ -1,0 +1,68 @@
+<!-- BEGIN ./admin/ds/change_ds_status.html -->
+<call draw_tooltip()>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager")>
+</if>
+
+<if ds_manager>
+<assign dedicated_server_id = request.dedicated_server_id>
+<assign ds = ds_manager.getDServer(dedicated_server_id)>
+
+<if ds>
+<form name="f_ds_status" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/change_ds_status.sbm">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="dedicated_server_id" value="${ds.id}">
+<compress>
+<list params as sc_param>
+  <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+    <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+  </if>
+</list>
+</compress>
+<if request.account_id>
+<input type="hidden" name="account_id" value="${request.account_id}">
+</if>
+
+<call draw_table_header("2", lang.admin.ds.changing_status_h)>
+<tr>
+<td colspan="2"><call draw_label(lang.admin.ds.changing_status_tip)></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.ds.ds_name)></td>
+<td><call draw_label(ds.name)></td>
+</tr>
+
+<tr>
+<td width="40%"><call draw_label(lang.admin.ds.current_status)></td>
+<td><call draw_label(lang.admin.ds.status[ds.state])></td>
+</tr>
+
+<assign available_states = ds.available_states>
+<if available_states>
+<tr>
+<td><call draw_label(lang.admin.ds.new_status)></td>
+<td>
+  <select name="state_id">
+  <list available_states as st>
+    <option value="${st}">${lang.admin.ds.status[st]}</option>
+  </list>
+  </select>
+</td>
+</tr>
+
+<tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+<else>
+<tr><td class="control_align_center" colspan="2"><call draw_label(lang.admin.ds.no_available_state_change)></td></tr>
+</if>
+
+<call draw_table_footer()>
+
+</form>
+</if>
+
+</if>
+<!-- END ./admin/ds/change_ds_status.html  -->

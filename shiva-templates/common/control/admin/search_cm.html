@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/admin/search_cm.html  -->
+<assign reseller_su=account.getChild("reseller_su")>
+<assign eeman = account.getChild("eeman")>
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if reseller_su>
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_cm_header)>
+
+<tr>
+ <td><call draw_label(lang.label.username)></td>
+ <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+<tr>
+  <td    nowrap><call draw_label(lang.search.src_server)></td>
+  <td>
+    <select name="sc_slserver" size="1">
+        <option value="">${lang.label.any}
+    <list eeman.getLserverList() as lserver>
+      <option value="${lserver.id}">${lserver.name}</option>
+      <assign selected="">
+    </list>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td    nowrap><call draw_label(lang.search.target_server)></td>
+  <td>
+    <select name="sc_tlserver" size="1">
+        <option value="">${lang.label.any}
+    <list eeman.getLserverList() as lserver>
+      <option value="${lserver.id}">${lserver.name}</option>
+      <assign selected="">
+    </list>
+    </select>
+  </td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.search.only_uncompleted)></td>
+  <td><input type="checkbox" name="sc_uncompleted_only" value="1"></td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/content_move.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+
+</if>
+<!-- END ./control/admin/search_cm.html  -->

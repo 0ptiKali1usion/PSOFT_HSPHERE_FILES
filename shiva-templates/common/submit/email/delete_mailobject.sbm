@@ -1,0 +1,144 @@
+<!-- BEGIN ./email/delete_mailobject.sbm  -->
+<assign mail_domain=account.getResource(request.md_id)>
+<assign email=request.name+"@"+mail_domain.name>
+
+<if request.antispam>
+  <assign antispam=account.getResource(request.antispam)>
+  <assign result=antispam.delete>
+  <if result.status=="OK">
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_deleted,lang.label.antispam,email))>
+  <else>
+    <assign failure="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_delete,lang.label.antispam,email))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list>
+  </if>
+</if>
+<if !failure && request.antivirus>
+  <assign antivirus=account.getResource(request.antivirus)>
+  <assign result=antivirus.delete>
+  <if result.status=="OK">
+      <assign res=res+session.addMessage(toolbox.compose(
+        lang.msg.name_res_deleted,lang.label.antivirus,email))>
+  <else>
+    <assign failure="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_delete,lang.label.antivirus,email))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list>
+  </if>
+</if>
+
+
+<if !failure && request.mailbox>
+  <assign mailbox=account.getResource(request.mailbox)>
+
+  <assign del_aliased=toolbox.new_list>
+  <list mailbox.list_aliased_by as d_aliased>
+    <assign res=del_aliased.add(d_aliased)>
+  </list>
+
+  <list del_aliased as d_aliased>
+    <assign rid=mail_domain.getMailAliasByName(d_aliased)>
+    <if rid>
+      <assign aliased=account.getResource(rid)>
+      <if aliased.subs_cnt=="1">
+        <assign result=aliased.delete>
+        <if result.status=="OK">
+          <assign del="1">
+          <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_deleted,lang.label.mail_alias,d_aliased+"@"+mail_domain.name))>
+        <else>
+          <assign failure="1">
+          <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_delete,lang.label.mail_alias,d_aliased+"@"+mail_domain.name))>
+          <assign res=session.addMessage(result.msg)>
+        </if>
+      <else>
+        <assign result=aliased.changeOneForeign("del",request.name)>
+        <if result.status=="OK">
+          <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_changed,lang.label.mail_alias,d_aliased+"@"+mail_domain.name))>
+        <else>
+          <assign failure="1">
+          <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_changed,lang.label.mail_alias,d_aliased+"@"+mail_domain.name))>
+          <assign res=session.addMessage(result.msg)>
+        </if>
+      </if>
+    </if>
+  </list>
+  <if !failure>
+    <if !failure>
+      <assign result=mailbox.delete>
+      <if result.status!="OK">
+	<assign failure="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_failed_delete,lang.label.mail_box,email))>
+	<list result.msgs as msg>
+	  <assign res=session.addMessage(msg)>
+	</list>
+      <else>
+	<assign res=res+session.addMessage(toolbox.compose(
+	    lang.msg.name_res_deleted,lang.label.mail_box,email))>
+      </if>
+    </if>
+  </if>
+</if>
+<if !failure && request.forward>
+  <assign forward=account.getResource(request.forward)>
+  <assign result=forward.delete>
+  <if result.status=="OK">
+    <assign res=res+session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted,lang.label.mail_forward,email))>
+  <else>
+    <assign failure="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete,lang.label.mail_forward,email))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list>
+  </if>
+</if>
+<if !failure && request.alias>
+  <assign alias=account.getResource(request.alias)>
+  <assign result=alias.delete>
+  <if result.status=="OK">
+    <assign res=res+session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted,lang.label.mail_alias,email))>
+  <else>
+    <assign failure="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete,lang.label.mail_alias,email))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list>
+  </if>
+</if>
+
+<if !failure && request.responder>
+  <assign responder=account.getResource(request.responder)>
+  <assign result=responder.delete>
+  <if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted,lang.label.mail_autoresponder,email))>
+  <else>
+    <assign failure="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete,lang.label.mail_autoresponder,email))>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list>
+  </if>
+</if>
+
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--  END ./email/delete_mailobject.sbm  -->

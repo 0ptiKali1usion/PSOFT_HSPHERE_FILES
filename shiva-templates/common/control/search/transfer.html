@@ -1,0 +1,98 @@
+<!-- BEGIN ./control/search/accounts.html  -->
+<assign admin=account.getChild("admin")>
+<!-- check permissions -->
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("transfer_report")>
+  <assign result = report(request.sc_account_id,
+                        request.sc_plan,
+                        request.sc_email,
+                        request.sc_username,
+                        request.sc_r_from,
+                        request.sc_r_to,
+                        request.sc_ttype)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_email="+toolbox.url_escape(request.sc_email)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.sc_account_id)+
+ "&sc_r_from="+toolbox.url_escape(request.sc_r_from)+
+ "&sc_r_to="+toolbox.url_escape(request.sc_r_to)+
+ "&sc_ttype="+toolbox.url_escape(request.sc_ttype)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="6">
+<call draw_table_header(colspan, lang.admin.search_transfer_header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.traffic, "xfer")></td>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td>
+<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId, "USER_INFO",entry.username)><if entry.suspended !=""><br><call draw_label_bold("suspended "+entry.suspended)></if></td>
+  <td  class="control_align_right">
+	<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)>
+  </td>
+  <td><call draw_label(entry.plan.description)></td>
+  <td><call draw_label(entry.email)></td>
+  </td>
+  <td  class="control_align_right"><call draw_label(toolbox.smartTraffic(entry.xfer))></td>
+  <td  nowrap>
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=search/accounts.html&ftemplate="+template+"&stemplate="+template+"&sc_account_id="+entry.accountId, lang.search.detail)>
+ </td>
+</tr>
+</list>
+<tr><td  colspan="<if billman>10<else>6</if>">
+<call advReportNav(report)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/search/accounts.html  -->

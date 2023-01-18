@@ -1,0 +1,16 @@
+<!-- BEGIN ./ftp/update_vdir_submit.sbm  -->
+<if request.read!=""><assign read="1"><else><assign read="0"></if>
+<if request.write!=""><assign write="1"><else><assign write="0"></if>
+<if request.list!=""><assign list="1"><else><assign list="0"></if>
+<if request.forall!=""><assign forall="1"><else><assign forall="0"></if>
+<assign result=account.getResource(request.uid).update(read,write,list,forall)>
+<if result.status!="OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./ftp/update_vdir_submit.sbm  -->

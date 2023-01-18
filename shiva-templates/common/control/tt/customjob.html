@@ -1,0 +1,111 @@
+<!-- BEGIN ./control/tt/customjob.html  -->
+<call draw_tooltip()>
+<assign jobs=account.customjobs>
+<assign job = jobs.getJob(request.job_id)>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<call draw_table_header("2", lang.accprev.cj.header(request.job_id))>
+
+<tr>
+<td><call draw_label(lang.accprev.cj.subj)></td>
+<td><call draw_label(job.subject)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.accprev.cj.entered)></td>
+<td><call draw_label(job.entered_by)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.accprev.cj.start)></td>
+<td><call draw_label(job.start_date("TS_MEDIUM"))></td>
+</tr>
+<tr>
+<td><call draw_label(lang.accprev.cj.end)></td>
+<td><if job.end_date><call draw_label(job.end_date("TS_MEDIUM"))><else><call draw_label("-")></if></td>
+</tr>
+<tr >
+<td><call draw_label(lang.accprev.cj.status)></td>
+<td>
+<switch job.status>
+<case "0"><call draw_label(lang.accprev.cj.status_label_new)><break>
+<case "1"><call draw_label(lang.accprev.cj.status_label_progress)><break>
+<case "2"><call draw_label(lang.accprev.cj.status_label_finished)><break>
+<case "3"><call draw_label(lang.accprev.cj.status_label_canceled)><break>
+<case "4"><call draw_label(lang.accprev.cj.status_label_aborted)><break>
+<case "5"><call draw_label(lang.accprev.cj.status_label_onhold)><break>
+</switch>
+</td>
+</tr>
+<tr >
+<td><call draw_label(lang.accprev.cj.time)></td>
+<td><call draw_label(job.total_time)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.accprev.cj.amount)></td>
+<td><call draw_label(job.total_amount)></td>
+</tr>
+<tr >
+<td><call draw_label(lang.accprev.cj.descr)></td>
+<td><call draw_label(job.description)></td>
+</tr>
+<!-- tasks -->
+        <tr>
+          <td colspan="2" class="control_header"><call draw_header("Tasks")></td>
+        </tr>
+        <list job.tasks as task>
+        <tr >
+          <td><call draw_label(lang.accprev.cj.t_descr)></td>
+          <td><call draw_label(task.description)></td>
+        </tr>
+        <tr >
+          <td><call draw_label("Entered by")></td>
+          <td><call draw_label(task.entered_by+" ("+task.entered_date("TS_MEDIUM")+")")></td>
+        </tr>
+        <tr >
+          <td><call draw_label(lang.accprev.cj.t_rate)></td>
+          <td><call draw_label(lang.accprev.cj.r_value(task.rate, cursym))></td>
+        </tr>
+        <tr >
+          <td><call draw_label(lang.accprev.cj.t_time)></td>
+          <td><call draw_label(task.total_time)></td>
+        </tr>
+        <tr >
+          <td><call draw_label(lang.accprev.cj.t_total)></td>
+          <td><call draw_label(task.total)></td>
+        </tr>
+        <tr >
+          <td><call draw_label(lang.accprev.cj.t_note)></td>
+          <td><call draw_label(toolbox.formatForHTML(task.note))></td>
+        </tr>
+        <tr ><td colspan="2">&nbsp;</td></tr>
+        </list>
+<!-- notes -->
+        <tr>
+          <td colspan="2" class="control_header"><call draw_header(lang.accprev.cj.notes)></td>
+        </tr>
+        <list job.notes as note>
+        <tr >
+          <td><call draw_label(note.entered_by+"("+note.entered_date("TS_MEDIUM")+")")></td>
+          <td><call draw_label(toolbox.formatForHTML(note.note))></td>
+        </tr>
+        </list>
+<call draw_table_footer()>
+&nbsp;
+<!-- new note -->
+<call draw_table_header("2", lang.accprev.cj.add_note)>
+      <form action="config.CLIENT_CP_URL" method="POST" accept-charset="UTF-8">
+        <input type="hidden" name="template_name" value="submit/tt/customjob_addnote.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="job_id" value="${request.job_id}">
+<tr>
+            <td><call draw_label(lang.accprev.cj.n_note)></td>
+            <td><textarea name="note" rows="5" cols="60"></textarea></td>
+          </tr>
+<tr>
+  <td colspan="2" class="control_align_center"><input type="submit" value="${lang.accprev.cj.add_note}"></td>
+          </tr>
+      </form>
+
+<call draw_table_footer()>
+
+<!--  END ./control/tt/customjob.html  -->

@@ -1,0 +1,2 @@
+<td><call draw_label(Name)></td>
+<td  class="control_align_right" NOWRAP><input type="text" name="${Name}" label="${Name}" value="${Value}" check="vIntegerRequired"></td><td><call draw_label(Description)></td>

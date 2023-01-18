@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/admin/settings/signup_texts.sbm -->
+<assign admin = account.getChild("admin")>
+<call savel("eula")>
+<list html_help.KEYS as item_id>
+<if toolbox.startsWith(item_id,"signup/") == "1">
+ <call savel(item_id)>
+</if>
+</list>
+<include request.stemplate>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/signup_texts.sbm -->

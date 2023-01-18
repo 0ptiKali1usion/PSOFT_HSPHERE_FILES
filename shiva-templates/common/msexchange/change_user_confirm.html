@@ -1,0 +1,185 @@
+<!-- BEGIN ./control/msexchange/change_user_confirm.html  -->
+<include "functions">
+<call START_PAGE("msexchange/change_user_confirm", "he-users")>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_change_bizuser_confirm" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="bizuser" value="${request.rid}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="i_bizuser_pop3" value="${request.i_bizuser_pop3}">
+<input type="hidden" name="bizuser_pop3" value="${request.bizuser_pop3}">
+<input type="hidden" name="i_bizuser_imap" value="${request.i_bizuser_imap}">
+<input type="hidden" name="bizuser_imap" value="${request.bizuser_imap}">
+<input type="hidden" name="i_bizuser_mapi" value="${request.i_bizuser_mapi}">
+<input type="hidden" name="bizuser_mapi" value="${request.bizuser_mapi}">
+<input type="hidden" name="i_bizuser_outlook_web" value="${request.i_bizuser_outlook_web}">
+<input type="hidden" name="bizuser_outlook_web" value="${request.bizuser_outlook_web}">
+<input type="hidden" name="i_bizuser_outlook_mobile" value="${request.i_bizuser_outlook_mobile}">
+<input type="hidden" name="bizuser_outlook_mobile" value="${request.bizuser_outlook_mobile}">
+<input type="hidden" name="i_bizuser_init_synch" value="${request.i_bizuser_init_synch}">
+<input type="hidden" name="bizuser_init_synch" value="${request.bizuser_init_synch}">
+<input type="hidden" name="i_bizuser_uptodate_notification" value="${request.i_bizuser_uptodate_notification}">
+<input type="hidden" name="bizuser_uptodate_notification" value="${request.bizuser_uptodate_notification}">
+<input type="hidden" name="i_bizuser_admin" value="${request.i_bizuser_admin}">
+<input type="hidden" name="bizuser_admin" value="${request.bizuser_admin}">
+
+<input type="hidden" name="description" value="${request.description}">
+<input type="hidden" name="displayName" value="${request.displayName}">
+<input type="hidden" name="givenName" value="${request.givenName}">
+<input type="hidden" name="middleName" value="${request.middleName}">
+<input type="hidden" name="sn" value="${request.sn}">
+<input type="hidden" name="initials" value="${request.initials}">
+<input type="hidden" name="quota" value="${request.quota}">
+<input type="hidden" name="principalName" value="${request.principalName}">
+<input type="hidden" name="password" value="${request.password}">
+<input type="hidden" name="physicalDeliveryOfficeName" value="${request.physicalDeliveryOfficeName}">
+<input type="hidden" name="telephoneNumber" value="${request.telephoneNumber}">
+<input type="hidden" name="street" value="${request.street}">
+<input type="hidden" name="postOfficeBox" value="${request.postOfficeBox}">
+<input type="hidden" name="city" value="${request.city}">
+<input type="hidden" name="state" value="${request.state}">
+<input type="hidden" name="country" value="${request.country}">
+
+<assign stype="">
+<if add_bizuser_pop3>
+    <assign stype=account.plan.getResourceType("bizuser_pop3").description>
+</if>
+<if add_bizuser_imap>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_imap").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_imap").description>
+  </if>
+</if>
+
+<if add_bizuser_mapi>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_mapi").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_mapi").description>
+  </if>
+</if>
+<if add_bizuser_outlook_web>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_outlooki_web").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_outlook_web").description>
+  </if>
+</if>
+<if add_bizuser_outlook_mobile>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_outlook_mobile").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_outlook_mobile").description>
+  </if>
+</if>
+
+<if add_bizuser_init_synch>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_init_synch").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_init_synch").description>
+  </if>
+</if>
+<if add_bizuser_uptodate_notification>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_uptodate_notification").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_uptodate_notification").description>
+  </if>
+</if>
+
+<if add_bizuser_admin>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("bizuser_shared_admin").description>
+  <else>
+    <assign stype=account.plan.getResourceType("bizuser_shared_admin").description>
+  </if>
+</if>
+
+<assign add_message=toolbox.compose(lang.billing.add_msg1, stype)>
+<if add_price.setup!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(add_price.setup))>
+</if>
+<if add_price.recurrent!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg3,toolbox.currency(add_price.recurrent))>
+</if>
+<if add_price.recurrentAll!="0">
+  <assign add_message=add_message+toolbox.compose(lang.billing.add_msg4,toolbox.currency(add_price.recurrentAll))>
+</if>
+
+<assign del_stype="">
+<if del_bizuser_pop3>
+  <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_pop3).type).description>
+</if>
+<if del_bizuser_imap>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_imap).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_imap).type).description>
+  </if>
+</if>
+<if del_bizuser_mapi>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_mapi).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_mapi).type).description>
+  </if>
+</if>
+<if del_bizuser_outlook_web>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_outlook_web).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_outlook_web).type).description>
+  </if>
+</if>
+<if del_bizuser_outlook_mobile>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_outlook_mobile).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_outlook_mobile).type).description>
+  </if>
+</if>
+<if del_bizuser_init_synch>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_init_synch).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_init_synch).type).description>
+  </if>
+</if>
+<if del_bizuser_uptodate_notification>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_uptodate_notification).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_uptodate_notification).type).description>
+  </if>
+</if>
+<if del_bizuser_admin>
+  <if del_stype>
+    <assign del_stype=del_stype+","+account.plan.getResourceType(account.getResource(request.bizuser_admin).type).description>
+  <else>
+    <assign del_stype=account.plan.getResourceType(account.getResource(request.bizuser_admin).type).description>
+  </if>
+</if>
+
+
+<if del_stype>
+  <assign del_message=del_message+toolbox.compose(lang.billing.del_msg1,del_stype)>
+</if>
+<if del_price && del_price.refund!="0">
+  <assign del_message=del_message+toolbox.compose(lang.billing.del_msg2,toolbox.currency(del_price.refund))>
+</if>
+<if del_stype>
+  <assign del_message=del_message+lang.billing.del_msg3>
+</if>
+<if del_price && del_price.setup!="0">
+  <assign del_message=del_message+toolbox.compose(lang.billing.del_msg4,del_stype,toolbox.currency(del_price.setup))>
+</if>
+
+
+<call draw_warn_invoice_with_charge_info(add_message,add_price,del_message,del_price,"f_change_bizuser_confirm")>
+</form>
+<call END_PAGE()>
+<!--  END ./control/msexchange/change_user_confirm.html  -->

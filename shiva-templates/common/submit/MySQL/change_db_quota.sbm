@@ -1,0 +1,44 @@
+<!-- BEGIN submit/MySQL/change_db_quota.sbm  -->
+<if db_id==""><assign db_id=request.db_id></if>
+<if r_quota==""><assign r_quota=request.quota></if>
+
+<assign result=yafv.common.s_mysql.vQuota(lang.label.db_quota, r_quota)>
+<if result.status == "OK">
+  <assign database=account.getResource(db_id)>
+  <assign quota=database.getChild("mysqldb_quota")>
+  <if quota>
+   <if toolbox.gt(quota.usedMb,r_quota)=="1">
+       <assign res=session.addMessage(toolbox.compose(lang.msg.failed_set_smallquota, r_quota, quota.usedMb))>
+       <assign failure="1">
+   <else>
+       <assign res=toolbox.setBillingNote(lang.billingnote.change_mysql_quota(quota.limitMb, r_quota))>
+       <if silent=="1">
+	    <assign res=account.setNoRefund("1")>
+ 	</if>
+       	<assign result=quota.change(r_quota)>
+      	<if result.status!="OK">
+          <assign failure="1">
+          <assign res=session.addMessage(result.msg)>
+       	</if>
+   </if>
+  <else>
+    <assign result=database.addChild("mysqldb_quota","",r_quota)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if silent=="">
+    <if failure>
+   	<assign vsize=request.size>
+	<include request.ftemplate>
+    <else>
+   	<assign res=session.addMessage(result.msg)>
+   	<include request.stemplate>
+    </if>
+</if>
+<!--  END submit/MySQL/change_db_quota.sbm  -->

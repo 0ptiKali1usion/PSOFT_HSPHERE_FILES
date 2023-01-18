@@ -1,0 +1,64 @@
+<!-- BEGIN ./domain/edit_domain_renew.html.in  -->
+<call draw_tooltip()>
+<yafv s_domain>
+<assign osrs = account.getResource(request.oid)>
+<assign domain = account.getResource(request.rid)>
+<form name="f_change_renew"  action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="oid" value="${request.oid}">
+<input type="hidden" name="type" value="opensrs">
+<input type="hidden" name="mod" value="">
+<input type="hidden" name="domain_name" value="${domain.name}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/renew_check.sbm">
+<input type="hidden" name="next_template" value="submit/domain/domain_renew.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.label.osrs.renew)>
+
+
+<tr>
+   <td><call draw_label(lang.label.osrs.regisrer_date)></td>
+   <td><call draw_label(osrs.last_paid)>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.osrs.regisrer_period)></td>
+   <td><call draw_label(osrs.period)>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.osrs.total_period)></td>
+   <td><call draw_label(osrs.total_period)>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.osrs.expire_date)></td>
+   <td><call draw_label(osrs.expire_date)>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.osrs.renew_adv_date)></td>
+   <td><if osrs.adv_renew_date><call draw_label(osrs.adv_renew_date)><else><call draw_label(lang.label.osrs.adv_renew_period_unavailable)></if>
+</tr>
+<tr>
+<td><call draw_label(lang.label.osrs.renew_period)></td>
+<td>
+<assign years = toolbox.getYearsByTLDAndPlan(osrs.tld, account.planId)>
+<if years.size == "0">
+    <call draw_label(lang.label.osrs.register_period_unavailable)>
+<else>
+  <select name="period" size="1">
+        <list years as year>
+            <if period==year><assign vsel = "SELECTED"><else><assign vsel = ""></if>
+            <option ${vsel}>${year}</option>
+        </list>
+  </select>
+</if>
+</td>
+</tr>
+<tr><td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/edit_domain_renew.html.in  -->

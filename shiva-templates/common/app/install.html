@@ -1,0 +1,12 @@
+<!-- BEGIN ./app/install.html-->
+<assign template="app/install.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<if !stype><assign stype=request.stype></if>
+<include "control/app/"+stype+"-install.html">
+<call bottom()>
+<!-- END ./app_install.html-->

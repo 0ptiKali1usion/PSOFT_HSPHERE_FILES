@@ -1,0 +1,14 @@
+<center>CGI</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	To run any CGI scripts, you should let the system 'know' 
+which files it should treat as CGI executables. Otherwise, the CGI scripts will 
+fail to execute on your sites.<br>
+<br>
+Here is the place to tell the system which files must be treated as CGI scripts. 
+Click the <i> Add</i> icon and in the form that appears, enter <i>file extension</i> 
+for the files you want to be regarded as scripts. For example, entering <i> .pl 
+</i>extensions will mark all *.pl files as executable scripts. The file extension 
+must begin with a dot. This configuration will not affect other users. <br>
+* Each new extension that you add to this list is charged setup and recurrent 
+fee as a separate resource.

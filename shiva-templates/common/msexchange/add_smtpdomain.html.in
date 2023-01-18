@@ -1,0 +1,27 @@
+<!--BEGIN: common/msexchange/add_smtpdomain.html -->
+<include "functions">
+<call START_PAGE("msexchange/add_smtpdomain.html", "he-domain")>
+<yafv s_domain>
+<call draw_tooltip()>
+<form name="f_adddomain" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/add_smtpdomain.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="aid" value="${request.aid}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+
+<call draw_table_header("2", lang.label.adddomain)>
+<tr>
+   <td><call draw_label(lang.label.domain)>
+</td>
+   <td><input type="text" name="domain" value="${domain}" label="${lang.label.domain}" check="vTransferDomainName"></td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/add_smtpdomain.html -->

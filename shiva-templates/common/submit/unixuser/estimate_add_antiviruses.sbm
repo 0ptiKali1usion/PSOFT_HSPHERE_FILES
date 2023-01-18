@@ -1,0 +1,30 @@
+<!-- BEGIN ./unixuser/estimate_add_antiviruses.sbm  -->
+<assign number=account.getPrepareNewAntiVirusesNumber(request.range)>
+<if number=="0">
+  <if request.range=="mailbox">
+    <assign add_range=lang.email.mailboxes>
+  <else>
+    <assign add_range=lang.email.mailresources>
+  </if>
+  <assign stype=account.plan.getResourceType("antivirus").description>
+  <assign res=session.addMessage(toolbox.compose(lang.email.decline_mass_create,add_range,stype))>
+  <include request.ftemplate>
+<else>
+  <if number=="1">
+    <assign price=account.estimateCreate("antivirus","")>
+  <else>
+    <assign price=account.estimateCreateCopies("antivirus",number,"")>
+  </if>
+  <if price.status!="ERROR">
+    <if price.free=="0">
+      <include "billing/add_antiviruses.html">
+    <else>
+      <include "submit/unixuser/add_antiviruses.sbm">
+    </if>
+  <else>
+    <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+    <assign res=session.addMessage(price.msg)>
+    <include request.ftemplate>
+  </if>
+</if>
+<!--  END ./unixuser/estimate_add_antiviruses.sbm  -->

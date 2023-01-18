@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/miva/remove_check.sbm  -->
+<assign price = account.getResource(request.did).estimateDelete()>
+<if price.status!="ERROR">
+ <if price.free=="0">
+   <include "billing/delete_confirm.html">
+ <else>
+   <include "submit/misc/delete.sbm">
+ </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete,lang.label.miva,""))>
+  <assign res = session.addMessage(price.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/miva/remove_check.sbm  -->

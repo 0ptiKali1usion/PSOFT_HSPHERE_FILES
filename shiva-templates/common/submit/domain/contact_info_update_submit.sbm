@@ -1,0 +1,67 @@
+<!-- BEGIN ./domain/contact_info_update_submit.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_domain.vSinglename(lang.label.first_name,request.first_name), 
+    yafv.common.s_domain.vSinglename(lang.label.last_name,request.last_name), 
+    yafv.common.s_domain.vOrganization(lang.label.organization,request.org_name), 
+    yafv.common.s_domain.vAddress(lang.label.address,request.address1), 
+    yafv.common.s_domain.vCity(lang.label.city,request.city), 
+    yafv.common.s_domain.vState(lang.label.state,request.state), 
+    yafv.common.s_domain.vCountry(lang.label.country,request.country), 
+    yafv.common.s_domain.vPostal_Code(lang.label.postal_code,request.postal_code), 
+    yafv.common.s_domain.vPhoneCountry(lang.label.phone, request.phone, request.country), 
+    yafv.common.s_domain.vFaxCountry(lang.label.fax, request.fax, request.country), 
+    yafv.common.s_domain.vEmail(lang.label.email,request.email) ) >
+
+<if result.status=="OK">
+    
+    <assign domain = account.getResource(request.rid)>
+    <assign cinfo = domain.getChild(request.type)>
+    <assign result= cinfo.update(request.first_name, request.last_name, request.org_name, request.address1, request.address2, request.address3, request.city, request.state, request.country, request.postal_code, request.phone, request.fax, request.email)>
+
+    <if result.status == "OK">
+	<if request.affect=="1">
+	    
+	    <if request.type=="billing_info">
+		<assign cinfo=domain.getChild("contact_info")>
+	    <else>
+		<assign cinfo=domain.getChild("billing_info")>
+	    </if>
+	
+	    <assign result= cinfo.update(request.first_name, request.last_name, request.org_name, request.address1, request.address2, request.address3, request.city, request.state, request.country, request.postal_code, request.phone, request.fax, request.email)>
+    	    
+	    <if result.status != "OK">
+		<assign failure="1">
+		<assign res=session.addMessage(result.msg)>	
+	    </if>
+	</if>
+    <else>
+	<assign failure="1">
+        <assign res=session.addMessage(result.msg)>
+    </if>     
+
+
+    <if !failure>
+	<assign result=domain.getChild("opensrs").update(request.type, request.affect)>
+        <if result.status == "OK">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_changed,lang.label.contact_info,""))>
+	<else>
+	    <assign failure="1">
+	    <assign res=session.addMessage(result.msg)>
+	    <if result.error>
+		<assign res=session.addMessage(result.error)>
+	    </if>
+	</if>
+    </if>
+
+<else>
+	<assign failure="1">  
+	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if !failure>
+	<include request.stemplate>
+<else>
+	<include request.ftemplate>
+</if>
+<!--  END ./domain/contact_info_update_submit.sbm  -->

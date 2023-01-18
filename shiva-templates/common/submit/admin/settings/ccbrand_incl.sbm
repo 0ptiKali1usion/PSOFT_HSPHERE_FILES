@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/admin/settings/ccbrand_incl.sbm  -->
+<assign result = yafv.checkall(
+yafv.common.s_admin.vStringReq(lang.label.name,request.name),
+yafv.common.s_admin.vStringReq(lang.label.sh_name,request.name_sh))>
+<if result.status=="OK">
+ <assign mm = account.getChild("merchant_manager")>
+ <assign result = mm.addCCbrand(request.name, request.name_sh)>
+ <if result.status=="OK">
+   <include request.stemplate>
+ <else>
+   <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,result.msg,""))> 
+   <include request.ftemplate>
+ </if>
+<else>
+  <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.cc_brand,""))>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/settings/ccbrand_incl.sbm  -->

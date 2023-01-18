@@ -1,0 +1,9 @@
+<center> badrcptpatterns </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>It allows qmail-smtpd to reject SPAM E-Mail including the signature 
+<br><center>*\[dd.dd.dd.dd\]*</center>
+<br>in the badrcptpatterns file, where dd.dd.dd is the IP address in brackets. 
+<br>Default: the badrcptpatterns file is absent (no recepient addresses are blocked);
+<br>
+

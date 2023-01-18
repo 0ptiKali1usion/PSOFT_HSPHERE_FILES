@@ -1,0 +1,12 @@
+<!-- BEGIN ./domain/edit.html  -->
+<if account.plan.values["_CREATED_BY_"] == "msexchange">
+<include "msexchange/smtpdomains.html">
+<else>
+<include "functions">
+<call draw_menu("domain-list")>
+<assign template = "domain/edit.html">
+<assign domain = account.getResource(request.rid)>
+<include "control/domain/edit_included.html">
+<call bottom()>
+</if>
+<!--  END ./domain/edit.html  -->

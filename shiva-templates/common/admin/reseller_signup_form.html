@@ -1,0 +1,168 @@
+<html>
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<title>H-SPHERE admin (Admin)</title>
+</head>
+<body>
+<table width="90%" border="0" cellspacing="0" cellpadding="0"  align="CENTER" bgcolor="#ffffff">
+<tr><td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="CENTER">
+<font color="#000000" face="Verdana" size="5">
+<tr bgcolor="#ffffff"><td colspan="3"><br><br><br>&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td align="center" colspan="2"><font color="#000000" face="Verdana" size="5">
+H-Sphere Reseller Sign Up Form<br>PLEASE FAX THIS FORM T0:<br> 310.399.3650
+</td>
+
+<td   bgcolor="#cccccc" width="30%">
+<font color="#000000" face="Verdana" size="2">
+For eBoz Use Only:<br>
+Reseller No:  __________<br>
+Date Received: _________<br>
+Date Completed: ________
+</font>
+</td>
+</tr>
+</font>
+
+<font color="#000000" face="Verdana" size="2">
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+
+<tr bgcolor="#ffffff">
+<td>Username: ${request.username} </td>
+<td>Password: ${request.password} </td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Name:  ${request.name}</td>
+<td>Company: ${request.company} </td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td   colspan="3"><br>Email: ${request.email} </td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Phone:  ${request.phone}</td>
+<td>Fax:  ${request.fax}</td>
+<td >&nbsp;</td>
+</tr>
+
+<if request.commission_type == "%">
+<assign commission2 = request.commission>
+<else>
+<assign commission1 = request.commission>
+</if>
+
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#cccccc">
+<td>Payable To:  ${request.payable}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#cccccc">
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#cccccc">
+<td>Tax Type:${request.taxtype} Tax ID:${request.taxid} Social Security No. ${request.socialseq}</td>
+<td>Reseller Commission: % ${commission2}</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#cccccc"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#cccccc">
+<td>Tax ID/SSN: ${request.taxid_ssn}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Reseller Mailing Address: ${request.mailaddr}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>City: ${request.city}</td>
+<if request.state1=="NA">
+<assign state_res = request.state2>
+<else>
+<assign state_res = request.state1>
+</if>
+<td>State/Province: ${state_res}</td>
+<td>Zip/Postal Code: ${request.zip}</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Country: ${request.country}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Email Reseller when sales occur: ${request.email_yes_no}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>ResellerWeb Site URL: ${request.website}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Reseller Web Site Title: ${request.websitetitle}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Comments: ${request.comments}</td>
+<td>&nbsp;</td>
+<td >&nbsp;</td>
+</tr>
+
+<tr bgcolor="#ffffff"><td colspan="3">&nbsp;</td></tr>
+<tr bgcolor="#ffffff">
+<td>Authorized h-sphere Signature:</td>
+<td>Date: ${toolbox.getCurrentDate()}</td>
+<td >&nbsp;</td>
+</tr>
+</font>
+<tr bgcolor="#ffffff"><td colspan="3"><hr></td></tr>
+<tr bgcolor="#ffffff"><td colspan="3">
+<font color="#000000" face="Verdana" size="1">
+This facsimile transmittal sheet contains information for eBoz, Inc., which is confidential and/or privileged.
+This information is intended to be for the sole use of eBoz, Inc.  If you are not the addressee, 
+note that any disclosure, photocopying, distribution or use of the contents of this information is prohibited.
+If you have received this facsimile in error, please notify us by telephone (collect) at 310.399.9061 immediately,
+so that we can arrange for the retrieval of the original documents at no cost to you.
+</font>
+</td></tr>
+</font>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<center> spfbehavior </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Use this to turn on SPF checking. The default value is 0 (off).
+<br>You can specify a value between 0 and 6:
+<br>* 0: Never do SPF lookups, don't create Received-SPF headers
+<br>* 1: Only create Received-SPF headers, never block
+<br>* 2: Use temporary errors when you have DNS lookup problems
+<br>* 3: Reject mails when SPF resolves to fail (deny)
+<br>* 4: Reject mails when SPF resolves to softfail
+<br>* 5: Reject mails when SPF resolves to neutral
+<br>* 6: Reject mails when SPF does not resolve to pass
+<br>Values bigger than 3 are strongly discouraged, you probably want to go with 2 or 3. Important: This setting can be overridden using the environment variable SPFBEHAVIOR, e.g. from tcpserver rules.
+<br>Note: If RELAYCLIENT is set, SPF checks won't run at all.(This also includes SMTP-AUTH and similar patches)
+<br>Default: 0 (Never do SPF lookups, don't create Received-SPF headers)
+<br>

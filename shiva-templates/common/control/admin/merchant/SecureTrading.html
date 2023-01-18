@@ -1,0 +1,34 @@
+<!-- BEGIN ./common/control/admin/merchant/SecureTrading.html  -->
+<assign mm=account.getChild("merchant_manager")>
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/SecureTrading.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.securetrading)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.securetrading}</if>"></td></tr>
+<if merchant>
+<tr >
+<td><call draw_label(lang.admin.payflow.certpath)></td>
+<td><call draw_label("psoft_config/securetrading/"+request.mid+"_cert.pem")></td></tr>
+</if>
+<if merchant><assign currency = merchant.CURRCODE><else><assign currency = "840"></if>
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td><td><select name="currency"><list toolbox.getCurrencies() as curr>
+<option value="${curr.code}" <if curr.code==currency>SELECTED</if>>${curr.name}
+</list></select></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.sitereference)></td><td><input type="text" name="sitereference" value="<if merchant>${merchant.SITEREFERENCE}</if>"> </td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.capture_void_notification)></td><td><input type="text" name="notificationemail" value="<if merchant>${merchant.NOTIFICATIONEMAIL}</if>"> </td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset"></td></tr>
+</form>
+
+<call draw_table_footer()>
+<!-- END ./common/control/admin/merchant/SecureTrading.html -->

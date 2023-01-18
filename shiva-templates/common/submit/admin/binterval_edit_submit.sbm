@@ -1,0 +1,69 @@
+<function putVal(name)>
+<assign result=plan.putValue(name+count, toolbox.numberToUSLocale(request[name]))>
+</function>
+
+<assign result=yafv.checkall(
+    yafv.common.s_admin.vPeriod(lang.admin.bintervaledit.size,request["_PERIOD_SIZE_"]),
+    yafv.common.s_admin.vPercent(lang.admin.bintervaledit.setup,request["_PERIOD_SETUP_DISC_"]),
+    yafv.common.s_admin.vPercent(lang.admin.bintervaledit.usage,request["_PERIOD_USAGE_DISC_"]),
+    yafv.common.s_admin.vPercent(lang.admin.bintervaledit.recurrent,request["_PERIOD_UNIT_DISC_"])
+ ) > 
+<if result.status=="OK">
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<if !request.count>
+    <assign count=plan.values["_PERIOD_TYPES"]>
+    <if !count><assign count="0"></if>
+    <assign periods=toolbox.add(count, "1")>
+    <assign result=plan.putValue("_PERIOD_TYPES", periods)>
+    <if result.status!="OK"> 
+      <assign unsuccess="1">
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_set,lang.admin.bintervaledit.num_intervals,""))>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+<else><assign count=request.count></if>
+<assign result=plan.putValue("_PERIOD_TYPE_"+count, request["_PERIOD_TYPE_"])>
+<if result.status!="OK"> 
+    <assign unsuccess="1">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_set,lang.admin.bintervaledit.interval,count))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<call putVal("_PERIOD_SIZE_")> 
+<if result.status!="OK"> 
+    <assign unsuccess="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_set,lang.admin.bintervaledit.size,count))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<call putVal("_PERIOD_SETUP_DISC_")> 
+<if result.status!="OK"> 
+    <assign unsuccess="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_set,lang.admin.bintervaledit.setup,count))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<call putVal("_PERIOD_USAGE_DISC_")> 
+<if result.status!="OK"> 
+    <assign unsuccess="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_set,lang.admin.bintervaledit.usage,count))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<call putVal("_PERIOD_UNIT_DISC_")>
+<if result.status!="OK"> 
+    <assign unsuccess="1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_set,lang.admin.bintervaledit.recurrent,count))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+    <assign unsuccess="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

@@ -1,0 +1,17 @@
+<!-- BEGIN ./ds/upgrade_request.html  -->
+<include "functions">
+<assign template="ds/upgrade_request.html">
+<call draw_menu("ds-view")>
+<if !request.ds_id>
+  <assign dsList = account.getChildren("ds")>
+  <if dsList.size == "1"><list dsList as ds><assign ds_id = ds></list></if>
+<else>
+  <assign ds_id = request.ds_id>
+</if>
+<if ds_id>
+  <include "control/ds/upgrade_request.html">
+<else>
+  <include "control/ds/choose_ds.html">
+</if>
+<call bottom()>
+<!--  END ./ds/upgrade_request.html  -->

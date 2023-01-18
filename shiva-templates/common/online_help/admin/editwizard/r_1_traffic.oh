@@ -1,0 +1,11 @@
+<center> Reseller Traffic </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Check the box to enable <b>traffic usage </b>billing scheme. With this scheme enabled you charge resellers for the traffic that their end users have run up during a month period (either from the beginning of the billing period or from the time when the traffic limit was changed).<br><br>
+<b>Free:</b> GBs of traffic that you allow your reseller to provide to his end customers for month. If traffic run up during the month keeps within this amount, you don't charge reseller anything. Free makes up intial traffic quota. <br>
+<b>Extra: </b>reseller payment per each GB that is run up over traffic quota*. 'Extra' is charged at the end of each month. <br>
+<b>Monthly: </b>fee that reseller pays per each GB bought to increase his 'free'. This way reseller increases his traffic quota. This is usual when reseller constantly overpays for exceeding the 'free' limit. Monthly is charged at the beginnig of each month.<br><br>
+<i>* traffic quota = free GBs + additional GBs </i>
+To enable <b>traffic allocation  </b>billing scheme, leave the box unchecked.<br><br>
+
+<i>More about reseller traffic billing schemes can be found in the documentation</i>

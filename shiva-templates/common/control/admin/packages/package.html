@@ -1,0 +1,128 @@
+<!-- BEGIN ./control/admin/packages/package.html  -->
+<call draw_tooltip()>
+<assign su = account.getChild("reseller_su")>
+<assign viewer = account.getChild("reportviewer")>
+
+<if su>
+<if !request.sc_pkg_name>
+  <assign sc_pkg_name=request.pkg_name>
+<else>
+  <assign sc_pkg_name=request.sc_pkg_name>
+</if>
+<assign package = su.getPackage(sc_pkg_name)>
+<if package>
+<call draw_table_header("6", lang.admin.packages.pkg_details(package.name))>
+<tr>
+  <td><call draw_label(lang.admin.pkg_description)></td>
+  <td colspan="5"><call draw_label(package.description)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.packages.pkg_version)></td>
+  <td colspan="5"><call draw_label(package.version)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.packages.pkg_vendor)></td>
+  <td colspan="5"><call draw_label(package.vendor)></td>
+</tr>
+<tr>
+  <td class="control_header" colspan="6"><call draw_header(lang.admin.packages.pkg_files)></td>
+</tr>
+
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+<else>
+  <assign report=package.files>
+  <call advReportInit(report)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport(package.files)>
+  <assign result = report(sc_pkg_name)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_pkg_name="+toolbox.url_escape(sc_pkg_name)+
+  "&sc_step="+toolbox.url_escape(step)+
+  "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_name, "name")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_type, "file_type")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_installed_by, "installed_by")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_used_by, "used_by")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_target_servers, "target_servers")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.packages.file_target_path, "target_path")></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td><call draw_label(entry.name)></td>
+  <td>
+    <switch entry.file_type>
+      <case "1"><call draw_label(lang.admin.packages.tmpl)><break>
+      <case "2">
+      <case "12">
+	<call draw_label(lang.admin.packages.jar)><break>
+      <case "3"><call draw_label(lang.admin.packages.lang_b)><break>
+      <case "4"><call draw_label(lang.admin.packages.unix)><break>
+      <case "5"><call draw_label(lang.admin.packages.win)><break>
+      <case "6"><call draw_label(lang.admin.packages.third)><break>
+      <case "7"><call draw_label(lang.admin.packages.properties)><break>
+      <case "8"><call draw_label(lang.admin.packages.pkg)><break>
+      <case "9"><call draw_label(lang.admin.packages.xml)><break>
+      <case "10"><call draw_label(lang.admin.packages.img)><break>
+      <case "11"><call draw_label(lang.admin.packages.tarball)><break>
+      <case "13">
+      <case "14">
+      <case "15"><call draw_label(lang.admin.packages.gen)<break>
+    </switch>
+  </td>
+  <td><call draw_label(entry.installed_by)></td>
+  <td><list entry.used_by as used><call draw_label(used)><br></list></td>
+  <td><list entry.target_servers as server><call draw_label(server)></list></td>
+  <td><call draw_label(entry.target_path)></td>
+</tr>
+
+</list>
+<tr>
+  <td colspan="6">
+<call advReportNav(report)>
+</td>
+</tr>
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/packages/package.html  -->

@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Surepay.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "MERCHANTID", request.merchantid ,"URLHOST", request.urlhost, "URLPORT", request.urlport, "URLFILE", request.urlfile, "CURRCODE", request.currency, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.SurePay", "TEMPLATE", "admin/merchant/Surepay.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "MERCHANTID", request.merchantid ,"URLHOST", request.urlhost, "URLPORT", request.urlport, "URLFILE", request.urlfile, "CURRCODE", request.currency, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.SurePay", "TEMPLATE", "admin/merchant/Surepay.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Surepay.sbm -->

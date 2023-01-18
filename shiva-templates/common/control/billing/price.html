@@ -1,0 +1,81 @@
+<!-- BEGIN ./billing/price.html  -->
+<assign template="billing/list.html">
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("8", lang.billing.price.header)>
+
+
+<tr>
+  <td class="control_align_center" rowspan="2"><call draw_label_bold(lang.label.resource)></td>
+  <td class="control_align_center" colspan="3"><call draw_label_bold(lang.billing.units)></td>
+  <td class="control_align_center" colspan="3"><call draw_label_bold(lang.billing.fees)></td>
+  <td class="control_align_center" rowspan="2" width="10%"><call draw_label_bold(lang.label.refund_perc)></td>
+</tr>
+<tr >
+  <td class="control_align_center"><call draw_label_bold(lang.billing.free)></b></td>
+  <td class="control_align_center"><call draw_label_bold(lang.billing.in_use)></b></td>
+  <td class="control_align_center"><call draw_label_bold(lang.label.max)></b></td>
+  <td class="control_align_center"><call draw_label_bold(lang.billing.setup)></td>
+  <td class="control_align_center"><call draw_label_bold(lang.billing.recurr)></td>
+  <td class="control_align_center"><call draw_label_bold(lang.billing.usage)></td>
+</tr>
+<list account.plan.resources as resource>
+<assign prices = account.getPrices(resource.type)>
+<if (prices.billable=="1") && (resource.type!="custom_billing")>
+<tr >
+  <td   nowrap><call draw_label(resource.description)></td>
+  <td class="control_align_right" nowrap><if prices.free><call draw_label(toolbox.numberToCurLocale(prices.free, "0"))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><if prices.amount><call draw_label(toolbox.numberToCurLocale(prices.amount, "0"))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><if prices.max><call draw_label(toolbox.numberToCurLocale(prices.max, "0"))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><if prices.setup><call draw_label(toolbox.currency(prices.setup))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><if prices.recurrent><call draw_label(toolbox.currency(prices.recurrent))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><if prices.usage><call draw_label(toolbox.currency(prices.usage))><else>&nbsp;</if></td>
+  <td class="control_align_right" nowrap><call draw_label(toolbox.numberToCurLocale(prices.refund, "0")+"%")></td>
+</tr>
+</if>
+</list>
+<assign custom_bill_resources = account.getChildren("custom_billing")>
+<assign prices = account.getPrices("custom_billing")>
+<list custom_bill_resources as custom_bill_resource>
+<tr >
+  <td   nowrap><call draw_label(custom_bill_resource.custom_desc)></td>
+  <td class="control_align_right" nowrap>&nbsp;</td>
+  <td class="control_align_right" nowrap><call draw_label(toolbox.numberToCurLocale("1", "0"))></td>
+  <td class="control_align_right" nowrap>&nbsp;</td>
+  <td class="control_align_right" nowrap>&nbsp;</td>
+  <td class="control_align_right" nowrap>
+	<call draw_label(toolbox.currency(custom_bill_resource.price))></td>
+  <td class="control_align_right" nowrap>&nbsp;</td>
+  <td class="control_align_right" nowrap><call draw_label(toolbox.numberToCurLocale("100", "0")+"%")></td>
+</tr>
+</list>
+
+<call draw_table_footer()>
+<if account.plan.isResourceAvailable("ds")>
+<assign dst_prices = account.getDSTPrices()>
+<br>
+<call draw_table_header("5", lang.admin.dsprices.header)>
+<tr>
+  <td class="control_align_center" width = "60%"><call draw_label_bold(lang.ds.price.dst_name)></b></td>
+  <td class="control_align_center"><call draw_label_bold(lang.ds.price.setup)></td>
+  <td class="control_align_center"><call draw_label_bold(lang.ds.price.recurrent)></td>
+  <td class="control_align_center"><call draw_label_bold(lang.ds.price.in_use)></b></td>
+  <td class="control_align_center"><call draw_label_bold(lang.ds.price.available)></td>
+</tr>
+<list dst_prices as price>
+<tr>
+<td class="control_align_left"><call draw_label(price.name)></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(price.setup))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(price.recurrent))></td>
+<td class="control_align_right"><call draw_label(price.in_use)></td>
+<td class="control_align_right"><call draw_label(price.avail)></td>
+</tr>
+</list>
+<call draw_table_footer()>
+
+</if>
+<!--  END ./billing/price.html  -->

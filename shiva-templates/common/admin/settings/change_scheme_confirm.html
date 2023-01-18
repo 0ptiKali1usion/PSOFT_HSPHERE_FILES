@@ -1,0 +1,17 @@
+<!-- BEGIN ./settings/delete_scheme_confirm.html  -->
+<assign next_template="submit/admin/settings/change_scheme.sbm">
+<assign settings_color_scheme = settings[design.get_design_prefix(request.design_id) + "color_scheme"]>
+<if settings_color_scheme && (settings_color_scheme != "custom")>
+ <include next_template>
+<else>
+ <if request.color_scheme != "custom">
+  <include "functions">
+  <call draw_menu("look_feel-colors")>
+  <include "control/admin/settings/change_scheme_confirm.html">
+  <call bottom()>
+ <else>
+  <assign res=session.addMessage("The custom color scheme has been already set !")>
+  <include request.ftemplate>
+ </if>
+</if>
+<!--  END ./settings/delete_scheme_confirm.html  -->

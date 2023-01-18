@@ -1,0 +1,32 @@
+Adding online help files to the 2nd step (prices) of the reseller wizard
+========================================================================
+
+To add online help files to other pages, you will also need to edit hsphere templates.
+
+
+Preparation:
+------------
+1) Make a share on the demo.psoft server by adding the following line to /etc/exports:
+/hsphere/local/home/cpanel/shiva        192.168.112.122/255.255.255.0(rw,all_squash,anonuid=500,anongid=500)
+Then restart nfs.
+2) Create a mount point on the local computer in /etc/fstab:
+192.168.116.242:/hsphere/local/home/cpanel/shiva        /mnt/demo_psoft         nfs     noauto,user  0 0
+create directory /mnt/demo_psoft
+mount /mnt/demo_psoft as a common user (not root)
+
+
+Adding Online Help Files
+------------------------
+1) Create an online help file.
+2) Add a correspondence in /shiva/psoft/hsphere/online_help.xml following this format:
+ <reference id="r__<RESOURCE_NAME>" file="<HELP_FILE>"/>
+where:
+  RESOURCE_NAME can be taken from the file /hsphere/psoft/hsphere/config.xml, attribute "name",
+  HELP_FILE is specified with the path but without the .oh extension.
+3) Copy the following files to the corresponding dirs in /mnt/demo_psoft/:
+ - online help files 
+ - /shiva/psoft/hsphere/online_help.xml
+4) Restart H-Sphere on Demo.psoft and check the changes
+5) Commit online help files and online_help.xml to CVS
+
+

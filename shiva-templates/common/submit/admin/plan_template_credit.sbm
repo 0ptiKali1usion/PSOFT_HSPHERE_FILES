@@ -1,0 +1,33 @@
+<assign result=yafv.checkall(
+    yafv.common.s_admin.vPrice(lang.label.credit,request["credit"]),
+    yafv.common.s_admin.vPrice(lang.label.trial_credit,request["trial_credit"])
+ ) >
+<if result.status=="OK"> 
+   <assign admin = account.getChild("admin")> 
+   <assign plan = admin.getPlan(request.plan_id)>
+   <assign result=plan.putValue("_HARD_CREDIT", toolbox.numberToUSLocale(request.credit))>
+   <if result.status=="OK"> 
+     <assign success="1">
+   <else>
+     <assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_change,lang.label.credit,""))>
+     <assign res=session.addMessage(result.msg)>
+   </if>
+   <assign result=plan.putValue("_TRIAL_CREDIT", toolbox.numberToUSLocale(request.trial_credit))>
+   <if result.status=="OK">
+     <assign success="1">
+   <else>
+     <assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_change,lang.label.trial_credit,""))>
+     <assign res=session.addMessage(result.msg)>
+   </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vcredit=toolbox.html_encode(request.credit)>
+    <assign vtrial_credit=toolbox.html_encode(request.trial_credit)> 
+    <include request.ftemplate>
+</if>

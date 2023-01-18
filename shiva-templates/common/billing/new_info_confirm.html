@@ -1,0 +1,25 @@
+<!-- BEGIN ./billing/new_info_confirm.html.html -->
+<if request["_bi_exemption_code"] && !account.suspended>
+  <if account.bi.exemption_code>
+    <assign message = lang.billing.ec_confirm_edit>
+  <else>
+    <assign message = lang.billing.ec_confirm_add>
+  </if>
+  <assign suspend = "1">
+<else><if account.bi.taxExemptionApproved()>
+  <assign message = lang.billing.ec_confirm_del>
+<else>
+  <assign message = "">
+</if></if>
+<if message>
+  <assign template="billing/new_info_confirm.html">
+  <include "functions">
+  <call draw_menu("billing-bi")>
+  <include "control/billing/new_info_confirm.html">
+  <call bottom()>
+<else><if request.next_template>
+  <include request.next_template>
+<else>
+  <include request.ftemplate>
+</if></if>
+<!--  END ./billing/new_info_confirm.html.html  -->

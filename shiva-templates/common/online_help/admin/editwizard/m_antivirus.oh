@@ -1,0 +1,8 @@
+<center> AntiVirus </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to create<i> AntiViruses </i>which are used to check incomming mail for viruses and if detects any, sends e-mail notification about it and deletes the virus mail. User can enable AntiVirus resource for all mail domains in his account, for specific maildoman and for mail resources of specific maildomain.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		Check the<i> Include </i>box to make this resource available under the plan. Later you can define the amount of AntiViruses a user can create for free, its setup and recurrent fee.<br>
+	

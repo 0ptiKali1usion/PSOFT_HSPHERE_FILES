@@ -1,0 +1,5 @@
+<!-- BEGIN ./common/submit/admin/blacklist.sbm -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.getSignupGuard().updateBlackList(request.list_type, request.blacklist)>
+<include request.stemplate>
+<!-- END ./common/submit/admin/blacklist.sbm -->

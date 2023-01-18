@@ -1,0 +1,14 @@
+<!-- BEGIN ./MSSQL/drop_database.sbm  -->
+<assign database=account.getResource(request.database)>
+<assign db_name=database.db_name>
+<assign result=database.delete>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted, lang.label.database, db_name))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_delete, lang.label.database, db_name))>
+  <include request.ftemplate>
+</if>
+<!--  END ./MSSQL/drop_database.sbm  -->

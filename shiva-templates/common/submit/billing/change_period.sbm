@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/billing/change_period.sbm  -->
+<assign result=account.changePaymentPeriod(request.period_id)>
+<if result.status=="OK">
+    <assign success = "1">
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/billing/change_period.sbm  -->

@@ -1,0 +1,84 @@
+<!-- BEGIN ./domain/update_redirect.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign redirect=account.getResource(request.uid)>
+<if !vstatus><assign vstatus=redirect.stat></if>
+<if !vurl_path><assign vurl_path=redirect.url_path></if>
+<if !vurl><assign vurl=redirect.url></if>
+<if !vprotocol><assign vprotocol=redirect.protocol></if>
+
+
+
+<form name="f_update_redirect"  action="${config.CLIENT_CP_URL}" method="post" check! onSubmit="changeMod();return checkForm(this,true);" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/update_redirect_submit.sbm">
+<input type="hidden" name="redirect_status" value="${vstatus}">
+
+
+
+
+
+
+<call draw_table_header("2", lang.domain.updateredirect.header)>
+
+
+
+<tr>
+   <td><call draw_label(lang.domain.updateredirect.from)></td>
+   <td    nowrap><call draw_label("http://www."+account.getResource(request.rid).parent.name+"/")><input type="text" name="url_path" size="10" value="${vurl_path}" label="${lang.domain.updateredirect.from}" check="vOldURL" onChange="changeMod();checkForm(this.form,false)"></td>
+</tr>
+
+<if vprotocol=="http"><assign http_sel = "SELECTED"></if>
+<if vprotocol=="ftp"><assign ftp_sel = "SELECTED"></if>
+<if vprotocol=="https"><assign https_sel = "SELECTED"></if>
+
+<tr>
+   <td><call draw_label(lang.domain.updateredirect.to)></td>
+   <td    nowrap>
+   <select name="protocol">
+   <option value="http" ${http_sel}>http://</option>
+   <option value="ftp" ${ftp_sel}>ftp://</option>
+   <option value="https" ${https_sel}>https://</option>
+   </select>
+<input type="text" name="url" size="40" value="${vurl}" label="${lang.domain.updateredirect.to}" check="vNewURL(this,redirect_status)" onChange="changeMod();checkForm(this.form,false)"></td>
+</tr>
+
+<if vstatus=="permanent"><assign permanent_ch="CHECKED"><else><assign permanent_ch=""></if>
+<if vstatus=="temp"><assign temp_ch="CHECKED"><else><assign temp_ch=""></if>
+<if vstatus=="seeother"><assign seeother_ch="CHECKED"><else><assign seeother_ch=""></if>
+<if vstatus=="gone"><assign gone_ch="CHECKED"><else><assign gone_ch=""></if>
+
+<tr>
+   <td><call draw_label(lang.domain.updateredirect.status)></td>
+   <td>
+   <input TYPE="radio" VALUE="permanent" NAME="redirect_stat" ${permanent_ch} onClick="changeMod();checkForm(this.form,false)"><call draw_label(lang.domain.updateredirect.perm)><br>
+   <input TYPE="radio" VALUE="temp" NAME="redirect_stat" ${temp_ch} onClick="changeMod();checkForm(this.form,false)"><call draw_label(lang.domain.updateredirect.temp)><br>
+   <input TYPE="radio" VALUE="seeother" NAME="redirect_stat" ${seeother_ch} onClick="changeMod();checkForm(this.form,false)"><call draw_label(lang.domain.updateredirect.other)><br>
+   <input TYPE="radio" VALUE="gone" NAME="redirect_stat" ${gone_ch} onClick="changeMod();checkForm(this.form,false)"><call draw_label(lang.domain.updateredirect.gone)><br>
+   <call draw_label(lang.domain.updateredirect.note)>
+   </td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<script language="javascript">
+function changeMod() {
+    
+    for (var i = 0; i < document.f_update_redirect.redirect_stat.length; i++) {
+	if(document.f_update_redirect.redirect_stat[i].checked) {
+		document.f_update_redirect.redirect_status.value=document.f_update_redirect.redirect_stat[i].value;
+		break;
+	}
+    }
+}
+</script>
+<!--  END ./domain/update_redirect.html.in  -->

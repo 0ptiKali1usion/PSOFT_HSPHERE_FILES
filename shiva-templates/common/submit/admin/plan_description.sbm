@@ -1,0 +1,19 @@
+<assign result=yafv.common.s_admin.vStringReq(lang.label.plan_description,request.description)>
+<if result.status=="OK">
+  <assign admin = account.getChild("admin")> 
+  <assign plan = admin.getPlan(request.plan_id)>
+  <assign result=plan.setDescription(request.description)>
+  <if result.status=="OK">
+    <assign success="1">  
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>    
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdescription=toolbox.html_encode(request.description)>
+    <include request.ftemplate>
+</if>  

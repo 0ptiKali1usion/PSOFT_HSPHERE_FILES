@@ -1,0 +1,64 @@
+<!-- BEGIN ./submit/tt/new_tt_save.sbm  -->
+<assign result=yafv.checkall(
+yafv.common.s_tt.vStringReq(lang.label.title, request.title),
+yafv.common.s_tt.vTTMail(lang.label.email,request.email,request.flags))>
+<if result.status=="OK">
+   <assign tt = account.getChild("tt")>
+   <if tt.status!="OK">
+	<assign res = session.addMessage(tt.msg)>
+   <else>
+	<assign rid = request.rid>
+   	<if rid>
+   	  <assign r_id = "">
+   	  <assign r_type = "">
+   	  <list toolbox.tokenizer(rid, "_") as token>
+   	    <if !r_id><assign r_id = token>
+   	    <else><if !r_type><assign r_type = token></if>
+   	    </if>
+   	  </list>
+   	<else>
+   	  <assign r_id = "0">
+   	  <assign r_type="0">
+   	</if>
+   	<if request.flags><assign flag = "1"><else><assign flag = "0"></if>
+	<assign atts="">
+	<list request.att_cid as att>
+	    <if att!="NA">
+	        <assign atts=atts+att+";">
+	    </if>
+	</list>
+   	<assign result = tt.create(request.title, request.priority, request.description, r_id, r_type, request.email, flag, "1", "0", "1", "0", "0", atts)>
+   	<if result.status=="OK">
+      	    <assign success="1">
+   	<else>
+      	    <assign res=session.addMessage(result.msg)>
+   	</if>
+   </if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+  <if account.getChild("ttadmin")>
+    <if request.inPanel != "0" >
+      <include "tt/new_tt_admin.html">
+    <else>
+      <assign res = session.addMessage(toolbox.compose(lang.tt.ticket.create, "1"))>
+      <include "tt/new_tt_form.html">
+    </if>
+  <else>
+     <if request.stemplate != null>
+       <include request.stemplate>
+     <else>
+       <include "tt/user_view_tts.html">
+     </if>
+  </if>
+<else>
+    <assign vemail=toolbox.html_encode(request.email)>
+    <assign vtitle=toolbox.html_encode(request.title)>
+    <assign vdescription=toolbox.html_encode(request.description)>
+    <assign vpriority=toolbox.html_encode(request.priority)>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./submit/tt/new_tt_save.sbm  -->

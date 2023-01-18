@@ -1,0 +1,26 @@
+<!-- BEGIN ./domain/register_nodomain.sbm  -->
+<assign nodomain=account.findChild("nodomain")>
+<if !nodomain>
+<assign domainManager = account.getChild("unixuser")>
+<if domainManager>
+  <assign domain = domainManager.addChild("nodomain", "")>
+<else>
+  <assign domain = account.addChild("nodomain", "")>
+</if>
+<if domain.status == "OK">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_added,lang.label.stopgap_domain,""))>
+    <assign success="1">
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_add,lang.label.stopgap_domain,""))>
+    <assign res=session.addMessage(domain.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign name = request.domain>
+    <include request.ftemplate>
+</if>
+</if>
+<!--  END ./domain/register_nodomain.html  -->

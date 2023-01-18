@@ -1,0 +1,5 @@
+Pri napisanii templates
+ispol`zovat` svleduushie freemarker funkcii
+Dlya vivoda metok draw_label(label)
+Dlya linkov draw_link(link,label)
+Dlya zagolovkov form/tablic draw_header(header)

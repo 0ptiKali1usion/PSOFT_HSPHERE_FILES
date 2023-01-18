@@ -1,0 +1,245 @@
+<!-- BEGIN ./email/estimate_manage.sbm  -->
+<assign result = yafv.checkall(
+  yafv.common.s_email.vPasswordDepOpt(lang.label.password,request.password,request.mailbox,request.i_mailbox),
+  yafv.common.s_email.vPassword2DepOpt(lang.label.password,request.password,request.password2,request.i_mailbox),
+  yafv.common.s_email.vSubscribersDepOpt(lang.label.suscribers,request.subscribers,request.i_forward),
+  yafv.common.s_email.vEmailOpt(lang.email.modresponderform.send,request.respForeign)
+)>
+<if result.status!="OK">
+  <assign failure="1">
+  <assign res=session.addMessage(result.msg)>
+<else>
+  <list toolbox.tokenizer(request.val_chosen," ") as val>
+    <assign aliasSubscribers=aliasSubscribers+val+";">
+  </list>
+  <if request.i_alias && !aliasSubscribers>
+    <assign failure="1">
+    <assign res=session.addMessage(lang.yafv.vChooseAlias.fail)>
+    <list result.msgs as msg>
+      <assign res=session.addMessage(msg)>
+    </list
+  </if>
+  <assign mail_domain=account.getResource(request.md_id)>
+  <if request.i_mailbox && request.aliased_by>
+    <list mail_domain.getAliasedByAsList(request.aliased_by) as aliased>
+      <if aliased==request.local>
+        <assign failure="1">
+        <assign res=session.addMessage(lang.msg.alias_by_same_as_mailbox)>
+      </if>
+      <list mail_domain.getChildren("mailbox_alias") as l_alias>
+        <if l_alias.local==aliased && l_alias.existSubscriber(request.local)=="1">
+	  <assign failure="1">
+          <assign res=session.addMessage(lang.msg.alias_by_already_exists)>
+        </if>
+      </list>
+    </list>
+  </if>
+</if>
+
+<if !failure>
+  <if request.mailbox && !request.i_mailbox>
+    <assign del_mailbox=request.mailbox>
+    <assign del_aliased_by="">
+    <assign mailbox=account.getResource(request.mailbox)>
+    <list mailbox.list_aliased_by as aliased_by>
+      <if del_aliased_by=="">	
+        <assign del_aliased_by=aliased_by>
+      <else>
+	<assign del_aliased_by=del_aliased_by+","+aliased_by>
+      </if>	
+    </list>
+    <assign f_del="1">
+  </if>
+
+  <if request.mailbox && request.i_mailbox>
+    <assign del_aliased_by="">
+    <assign list_del_aliased_by=toolbox.new_list>
+
+     <assign mailbox=account.getResource(request.mailbox)>
+     <list mailbox.list_aliased_by as aliased_by>
+      <if request["ab_"+aliased_by]>
+	<assign res=list_del_aliased_by.add(aliased_by)>
+	<if del_aliased_by=="">
+	  <assign del_aliased_by=aliased_by>
+	  <assign del_aliased_by_cnt="1">
+	<else>
+	  <assign del_aliased_by=del_aliased_by+","+aliased_by>
+	  <assign del_aliased_by_cnt=toolbox.add(del_aliased_by_cnt,"1")>
+	</if>
+      </if>
+    </list>
+    <if del_aliased_by!="">
+      <assign f_del="1">
+    </if>	
+  </if>	
+  <if request.alias && !request.i_alias>
+    <assign del_alias=request.alias>
+    <assign f_del="1">
+  </if>
+  <if request.i_responder>
+    <assign new_responder_atts="">
+    <list request.new_responder_atts as att>
+      <if att!="NA">
+	<if !new_responder_atts>
+	  <assign new_responder_atts=att>
+	<else>
+	  <assign new_responder_atts=new_responder_atts+"/"+att>
+	</if>
+      </if>
+    </list>
+  <else> 
+    <if request.responder>
+      <assign del_responder=request.responder>
+      <assign f_del="1">
+    </if>
+  </if>	
+  <if request.forward>
+    <if !request.i_forward>
+      <assign del_forward=request.forward>
+      <assign f_del="1">
+    <else>		
+      <if request.subscribers>
+	<assign f_nodel="1">
+      <else>
+	<assign forward=account.getResource(request.forward)>	
+	<list forward.subscribers as email>
+	  <if !request[email]>
+	    <assign f_nodel="1"> 
+	  </if>	 
+	</list>
+      </if>
+      <if !f_nodel>
+	<assign del_forward=request.forward>
+	<assign f_del="1">
+      </if>
+    </if>
+  </if>
+  <if del_aliased_by>
+    <list mail_domain.getAliasedByAsList(del_aliased_by) as d_aliased_by>
+      <assign alias_id=mail_domain.getMailAliasByName(d_aliased_by)>
+      <if alias_id>
+	<assign l_alias=account.getResource(alias_id)>
+	<if l_alias.subs_cnt=="1">
+	  <if drop_aliased_by=="">
+	    <assign drop_aliased_by=d_aliased_by>
+	  <else>
+	    <assign drop_aliased_by=drop_aliased_by+","+d_aliased_by>
+	  </if>
+	<else>
+	  <if change_del_aliased_by=="">
+	    <assign change_del_aliased_by=d_aliased_by>
+	  <else>
+	    <assign change_del_aliased_by=change_del_aliased_by+","+d_aliased_by>
+	  </if>
+	</if>
+      </if>
+    </list>
+  </if>
+  <if !request.i_mailbox && !request.i_alias && !request.i_responder && !request.i_forward>
+    <assign del_all="1">
+  </if>
+  <if request.antispam && (!request.i_antispam || del_all=="1")>
+    <assign del_antispam=request.antispam>
+    <assign f_del="1">
+  </if>
+  <if request.antivirus && (!request.i_antivirus || del_all=="1")>
+    <assign del_antivirus=request.antivirus>
+    <assign f_del="1">
+  </if>
+
+  <if f_del>
+    <assign del_price=mail_domain.estimateDeleteMailObjects(del_mailbox,del_forward,del_alias,del_responder,del_antispam,del_antivirus,drop_aliased_by)>
+    <if del_price.status=="ERROR">
+      <assign res=session.addMessage(lang.msg.misc_res_failed_delete)>
+      <assign res=session.addMessage(del_price.msg)>	
+      <assign failure="1">
+    </if>
+  </if>
+  <if !failure>
+    <if !request.mailbox && request.i_mailbox>
+      <assign add_mailbox="1">
+      <assign f_add="1">
+    </if>
+    <if !request.antispam && request.i_antispam>
+      <assign add_antispam="1">
+      <assign f_add="1">
+    </if>
+    <if !request.antivirus && request.i_antivirus>
+      <assign add_antivirus="1">
+      <assign f_add="1">
+    </if>     
+    <if !request.forward && request.i_forward>
+      <assign add_forward="1">
+      <assign f_add="1">
+    </if>
+    <if !request.alias && request.i_alias>
+      <assign add_alias="1">
+      <assign f_add="1">
+    </if>
+    <if !request.responder && request.i_responder>
+      <assign add_responder="1">
+      <assign f_add="1">
+    </if>
+    <if request.i_mailbox && request.aliased_by>
+	<assign new_aliased_by="">
+	<assign change_new_aliased_by="">
+	<list mail_domain.getAliasedByAsList(request.aliased_by) as aliased_by>
+	  <if mail_domain.existChildMailAlias(aliased_by)=="0">
+	    <if new_aliased_by=="">
+	      <assign new_aliased_by=aliased_by>
+	    <else>
+	      <assign new_aliased_by=new_aliased_by+","+aliased_by>
+	    </if>
+          <else>
+	    <if change_new_aliased_by=="">
+              <assign change_new_aliased_by=aliased_by>
+            <else>
+              <assign change_new_aliased_by=change_new_aliased_by+","+aliased_by>
+            </if>
+	  </if>
+	</list>
+      <assign add_aliased_by=request.aliased_by>
+      <if new_aliased_by!="">
+        <assign f_add="1">
+      </if>
+    </if>
+    <if f_add>
+      <assign add_price=mail_domain.estimateCreateMailObjects(add_mailbox,add_forward,add_alias,add_responder,add_antispam,add_antivirus,new_aliased_by)>
+      <if add_price.status=="ERROR">
+        <assign failure="1">
+        <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+        <assign res=session.addMessage(add_price.msg)>
+      </if>
+    </if>
+  </if>
+</if>
+
+<if !failure>
+  <if (f_del && del_price.free=="0") || (f_add && add_price.free=="0") || (request.warn=="1") || drop_aliased_by>
+    <include "billing/mail_confirm_joined.html">
+  <else>
+    <include request.dtemplate>
+  </if>
+<else>
+  <assign vvalues="1">
+  <assign vcatchall=toolbox.html_encode(request.catchall)>
+  <assign vlocal=toolbox.html_encode(request.local)>
+  <assign vi_mailbox=toolbox.html_encode(request.i_mailbox)>
+  <assign vdescription=toolbox.html_encode(request.description)>
+  <assign vpassword=toolbox.html_encode(request.password)>
+  <assign vpassword2=toolbox.html_encode(request.password2)>
+  <assign vdiscard=toolbox.html_encode(request.discard)>
+  <assign valiased_by=toolbox.html_encode(request.aliased_by)>
+  <assign vi_antispam=toolbox.html_encode(request.i_antispam)>
+  <assign vi_antivirus=toolbox.html_encode(request.i_antivirus)>
+  <assign vi_forward=toolbox.html_encode(request.i_forward)>
+  <assign vsubscribers=toolbox.html_encode(request.subscribers)>
+  <assign vi_alias=toolbox.html_encode(request.i_alias)>
+  <assign vi_responder=toolbox.html_encode(request.i_responder)>
+  <assign vrespForeign=toolbox.html_encode(request.respForeign)>
+  <assign vsubject=toolbox.html_encode(request.subject)>
+  <assign vmessage=toolbox.html_encode(request.message)>
+  <assign vinclude_incoming=toolbox.html_encode(request.include_incoming)>
+  <include request.ftemplate>
+</if>
+<!--  END ./email/estimate_manage.sbm  -->

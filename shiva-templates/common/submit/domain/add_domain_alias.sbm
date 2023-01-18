@@ -1,0 +1,44 @@
+<!-- BEGIN ./domain/add_domain_alias.sbm  -->
+<assign result=yafv.common.s_domain.vTransferDomainName(lang.label.domain.name,request.alias)>
+<if result.status=="OK">
+    <assign result=toolbox.DBlookup(request.alias)>
+    <if result=="0">
+        <assign domain=account.getResource(request.aid)>
+    	<if request.dns && !request.mail_domain_alias>
+            <assign result=domain.addChild("domain_alias", "with_dns", request.alias)>
+    	</if>
+    	<if !request.dns && request.mail_domain_alias>
+            <assign result=domain.addChild("domain_alias", "with_mda", request.alias)>
+    	</if>
+    	<if request.dns && request.mail_domain_alias>
+            <assign result=domain.addChild("domain_alias", "dns_n_mda", request.alias)>
+    	</if>
+    	<if !request.dns && !request.mail_domain_alias>
+            <assign result=domain.addChild("domain_alias", "", request.alias)>
+        </if>
+    	<if result.status=="OK">
+	    <assign hosting = domain.getChild("hosting")>
+	    <if hosting>
+               <assign res = hosting.updateConfig()>
+            </if>
+	    <assign success="1">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added,lang.label.domain.alias,request.alias))>
+    	<else>
+	    <assign res=session.addMessage(result.msg)>
+        </if>
+    <else>
+	<assign res=session.addMessage(toolbox.compose(
+	  lang.msg.domain_name_taken,request.alias))>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign alias=request.alias>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./domain/add_domain_alias.sbm  -->

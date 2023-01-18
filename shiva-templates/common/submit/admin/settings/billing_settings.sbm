@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/admin/settings/billing_settings.sbm -->
+<assign admin=account.getChild("admin")>
+<if request.billing_mode=="credit_limit" || request.billing_mode=="anniversary">
+  <assign result=admin.setSettingsValue("billing_mode", request.billing_mode)>
+  <if result.status!="OK">
+    <assign failure="1">
+  </if>
+  <if !failure>
+    <assign result=admin.setSettingsValue("send_no_charge", request.send_no_charge)>
+    <if result.status!="OK">
+      <assign failure="1">
+    </if>
+  </if>
+<else>
+  <assign failure="1"> 	
+</if>
+<if failure>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <assign res=session.addMessage(lang.msg.settings_updated)>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/admin/settings/billing_settings.sbm -->

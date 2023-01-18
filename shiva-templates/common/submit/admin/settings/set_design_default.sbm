@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/admin/settings/set_design_default.sbm -->
+<compress>
+<assign design_id = request.design_id>
+<assign design_default = request.value>
+<if design_id && design_default>
+  <assign admin = account.getChild("admin")>
+  <if design_default == "1">
+    <call save_v("default_design", design_id)>
+  <else>
+    <call save_v("default_design", "")>
+  </if>
+<else>
+  <assign failure = "1">
+</if>
+</compress>
+<if !failure>
+  <assign res = design.refreshCurrent()>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.design_failed_set_default, color_scheme))>
+  <include request.ftemplate>
+</if>
+<function save_v(name,value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/set_design_default.sbm -->

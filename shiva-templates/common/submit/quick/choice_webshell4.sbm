@@ -1,0 +1,31 @@
+<!-- BEGIN ./quick/choice_webshell4.sbm  -->
+<html>
+<head>
+</head>
+<body>
+
+<assign u=account.getChild("unixuser") >
+<if request.weblogin>
+    <assign user=request.weblogin>
+<else>
+    <assign user=u.login>
+</if>
+<if request.webpasswd>
+    <assign pass=request.webpasswd>
+<else>
+    <assign pass=u.password>
+</if>
+<form name=webshell4 action="http://${u.host.name}/webshell4/index2.php" method="post" accept-charset="UTF-8">
+  <input type="hidden" name="login" value="${toolbox.url_escape(user)}">
+  <input type="hidden" name="password" value="${toolbox.url_escape(pass)}">
+  <input type="hidden" name="host" value="${u.host.name}">
+  <input type="hidden" name="protocol" value="http">
+</form>
+
+<script language="javascript"><!--
+  document.webshell4.submit();
+//--></script>
+
+</body>
+</html>
+<!--  END ./quick/choice_webshell4.sbm  -->

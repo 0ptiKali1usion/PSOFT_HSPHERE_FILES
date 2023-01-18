@@ -1,0 +1,13 @@
+<!-- BEGIN ./MSSQL/logins.html.in  -->
+<assign template="MSSQL/logins.html">
+<include "functions">
+<assign mssql=account.getChild("MSSQL")>
+<assign logins=mssql.getChildren("MSSQLLogin")>
+<call draw_menu("mssql-logins")>
+<if logins>
+  <include "control/MSSQL/logins.html">
+<else>
+  <include "control/MSSQL/mssql-create-login.html">
+</if>
+<call bottom()>
+<!--  END ./MSSQL/logins.html.in  -->

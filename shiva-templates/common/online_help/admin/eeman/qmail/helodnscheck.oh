@@ -1,0 +1,6 @@
+<center> helodnscheck </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>The DNS check is enabled for the client MTA's HELO/EHLO greeting string
+<br>Default: 0 (disabled).
+<br>

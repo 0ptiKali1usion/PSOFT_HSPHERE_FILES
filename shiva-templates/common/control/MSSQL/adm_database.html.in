@@ -1,0 +1,78 @@
+<!-- BEGIN ./MSSQL/adm_database.html  -->
+<call draw_tooltip()>
+
+ <if !request.database>
+  <assign database = account.getResource(request.rid)>
+ <else>
+  <assign database = account.getResource(request.database)>
+ </if>
+
+<assign mssql=account.getChild("MSSQL")>
+
+
+
+<call draw_table_header("2", lang.mssql.admdb.header)>
+
+
+<tr>
+<td><call draw_label(lang.label.hostname)></td>
+<td><call draw_label(mssql.host.name)>&nbsp;</td>
+</tr>
+ 
+<tr>
+<td>
+<call draw_label(lang.mssql.dbname)>
+</td>
+<td>
+<call draw_label(database.db_name)>&nbsp;
+<if request.dtemplate>
+  <assign final_template=request.dtemplate>
+<else>
+  <assign final_template="MSSQL/databases.html">
+</if>
+<call disableNWJump(mssql, database, final_template)>
+</td>
+</tr>
+
+<tr>
+<td>
+<call draw_label(lang.mssql.dblogin)>
+</td>
+<td>
+<call draw_label(database.login_name)>
+</td>
+</tr>
+
+<tr>
+<td>
+<call draw_label(lang.mssql.admdb.quota)>
+</td>
+<td>
+<call draw_label(lang.mssql.admdb.perc)>&nbsp;<b><call draw_label(database.quota_perc)>&nbsp;<call draw_label("%")></b><br>
+
+<assign quota = database.getChild("MSSQLQuota")>
+
+<call draw_label(toolbox.compose(lang.mssql.admdb.useddbfile, quota.usedDB, quota.limitDB))><br>
+<call draw_label(toolbox.compose(lang.mssql.admdb.usedtl, quota.usedTL, quota.limitTL))><br>
+<call draw_label(toolbox.compose(lang.mssql.admdb.usedtotal, quota.usedMb, quota.limitMb))><br>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=MSSQL/change_db_quota.html"+"&quota="+quota+"&database="+database+"&stemplate="+template+"&ftemplate="+template, lang.mssql.admdb.changequota)>
+</td>
+</tr> 
+
+<assign users = database.getChildren("MSSQLUser")>
+<tr >
+<td valign="middle" ><call draw_label(lang.mssql.admdb.users)>&nbsp;</td>
+<td>
+<if users>
+<list users as user>
+<call draw_label(user.name)><call disableNewWarn(database,user)><br>
+</list>
+</if>
+<call draw_add(config.CLIENT_CP_URL+"?template_name=MSSQL/add_user.html&database="+database+"&stemplate="+template+"&ftemplate="+template, lang.mssql.admdb.adduser)>
+
+
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./MSSQL/adm_database.html  -->

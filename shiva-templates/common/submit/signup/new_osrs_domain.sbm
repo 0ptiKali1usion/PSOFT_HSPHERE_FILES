@@ -1,0 +1,38 @@
+<!-- BEGIN ./common/submit/signup/new_srs_domain.sbm -->
+
+<assign name = request.domain+request.ext>
+<!--checked name === ${name} -->
+<assign result=yafv.common.s_signup.vOsrsDomainName(lang.label.osrs_domain_name, name)>
+
+<if (result.status=="OK") && (request.back=="")>
+    <assign result=toolbox.lookup(name)>
+    <switch result>
+    <case "0">
+        <assign res=session.addMessage(toolbox.compose(
+                        lang.msg.domain_name_taken, name))>
+        <break>
+    <case "1">
+        <assign success="1">
+        <break>
+    <default>
+        <assign res=session.addMessage(result.msg)>
+    </switch>
+<else>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>   
+</if> 
+<if (success!="") && (request.back=="")>
+    <assign domain=toolbox.html_encode(request.domain)>
+    <assign ext=request.ext>
+    <assign domain_name=name>
+    <assign res=params.addHash("name","domain_name","value",name)>
+    <include "signup/order_info.html">
+<else>
+    <assign domainaction="new_osrs_domain">
+    <assign domain_name=toolbox.html_encode(request.domain_name)>
+    <assign ext=request.ext>
+    <include "signup/domains.html">
+</if>
+
+<!-- END ./common/submit/signup/new_srs_domain.sbm -->

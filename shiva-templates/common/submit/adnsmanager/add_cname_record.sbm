@@ -1,0 +1,30 @@
+<!-- BEGIN ./adnsmanager/add_a_record.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+
+<assign check=yafv.checkall(
+  yafv.common.s_adnsmanager.vCustomDomain(lang.dns.name,request.name),
+  yafv.common.s_adnsmanager.vTTL(lang.dns.ttl,request.ttl),
+  yafv.common.s_adnsmanager.vTransferDomainName(lang.dns.data,request.data) )>
+<if check.status=="OK">
+<assign result=adnsmanager.addCustomDNSRecord(request.zone_id,request.data,request.name,"CNAME",request.ttl,"")>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.dns.cname_record,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+
+    <assign vdata=request.data>
+    <assign vname=request.name>
+    <assign vttl=request.ttl>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./adnsmanager/add_a_record.sbm  -->

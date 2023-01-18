@@ -1,0 +1,25 @@
+<!-- BEGIN ./email/load_control.html  -->
+<switch request.rtype>
+<case "1">
+<assign stemplate="email/list2.html">
+<include "email/add_mailbox.html">
+<break>
+<case "2">
+<assign stemplate="email/list2.html">
+<include "email/add_forward.html">
+<break>
+<case "3">
+<assign stemplate="email/list2.html">
+<include "email/add_alias.html">
+<break>
+<case "4">
+<assign stemplate="email/list2.html">
+<include "email/add_mlist.html">
+<break>
+<case "5">
+<assign stemplate="email/list2.html">
+<include "email/add_responder.html">
+<break>
+
+</switch>
+<!--  END ./email/load_control.html  -->

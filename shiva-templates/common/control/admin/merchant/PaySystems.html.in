@@ -1,0 +1,54 @@
+<!-- BEGIN ./commont/control/admin/merchant/PaySystems.html -->
+<assign mm=account.getChild("merchant_manager")>
+<yafv s_admin>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.admin.paysystems.header)>
+
+
+
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/AddIP.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="gateway" value="PaySystems">
+
+<tr >
+  <td><call draw_label(lang.admin.paysystems.ips)></td>
+  <td>
+  <assign ips = mm.getAllowedIPsList("PaySystems")>
+  <list ips as ip>
+  <call draw_label(ip)>
+  <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/RemIP.sbm&ip="+ip+"&gateway=PaySystems&stemplate="+template+"&ftemplate="+template, lang.admin.plans.del)>
+  <br>
+  </list>
+  <input type="text" name="newip" value="" check="vAllowedIpAddr">
+  <input type="submit" value="${lang.button.add}">
+  </td>
+</tr>
+</form>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/PaySystems.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="admin/merchant/view.html">
+<tr >
+  <td><call draw_label(lang.admin.paysystems.id)></td>
+  <td><input type="text" name="accid" value = "${settings.PaySystems_ID}"></td>
+</tr>
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type="checkbox" name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+<tr >
+<td colspan="2" class="control_align_center">
+<input type="submit">
+</td></tr>
+</form>
+
+
+<call draw_table_footer()>
+<!-- END ./common/control/admin/merchant/PaySystems.html -->
+

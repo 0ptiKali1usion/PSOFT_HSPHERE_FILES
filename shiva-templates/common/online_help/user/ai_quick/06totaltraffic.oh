@@ -1,0 +1,22 @@
+<center>Total/Summary Transfer Traffic and Traffic Quota</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+     It shows the amount of overall traffic you've run up over the current month  in green. Regardless of the billing period length, your traffic is reset:<br>
+- every month starting from the beginning of the billing period;<br>
+- at the end of the billing period;<br>
+-  and each month from the time traffic limit was last changed.<br><br>
+<i>e.g.:<br>
+Billing period started on March 10. It will be reset to "0" on April 10.
+Two month billing period started on March 10. User changed his traffic limit on the 20 March. It will be reset to "0" on April 20, the next reset will occur on May 10 (at the end of the billing period).<br></i>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+     If your plan provides free traffic and its quota is insufficient for your needs, you can always purchase additional amount of traffic (click the Change icon) to increase your Free limit, which is shown in blue in the chart.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+     To see how much traffic has been run up by FTP, FTP users, via HTTP, and incoming and outgoing mail, select the View icon next to Traffic Details.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+     The plan you are hosted with may be configured to suspend your account if you exceed the traffic limit, however in that case as a rule you will be warned by e-mail when you approach traffic limit by certain percentage.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	If your set traffic quota is exceeded, it will be marked in red and you will be automatically charged for every gigabyte of the excess traffic usually at a higher price as a usage fee.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Select Online Price in Billing to learn if you have any free traffic along with the range of prices and the maximum value you can increase your traffic limit to.<br>
+<i>*Control Panel navigation is not included into any traffic. </i>

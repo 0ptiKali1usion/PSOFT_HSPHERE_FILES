@@ -1,0 +1,30 @@
+<!-- BEGIN ./submit/misc/add_admin_account.sbm  -->
+<assign result=yafv.checkall(
+        yafv.common.s_misc.vUsername(lang.label.username, request.login),
+        yafv.common.s_misc.vPassword1(lang.label.password, request.password, request.login),
+        yafv.common.s_misc.vPassword2(lang.label.password2, request.password, request.password2),
+        yafv.common.s_misc.vEmail(lang.label.email, request.email)
+    )>
+
+<if result.status=="OK">
+<assign reseller = account.getChild("reseller")>
+<assign res = reseller.createAdmin()>
+<if res.status!="OK">
+   <assign failure="1">
+   <assign err=session.addMessage(res.msg)>
+<else>
+   <assign err=session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.admin.account, ""))>
+</if>
+<else>
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if !failure>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!-- END ./submit/misc/add_admin_account.sbm  -->

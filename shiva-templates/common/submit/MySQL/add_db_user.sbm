@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/MySQL/add_db_user.sbm -->
+<if request.db_id!=""><assign db_id=request.db_id></if>
+<if request.user_id!=""><assign user_id=request.user_id></if>
+<if request.resource_name != "">
+<if (db_id=="NEW") || (db_id=="")>
+     <include "MySQL/add_mysqldb.html">    
+<else>
+    <if (user_id=="NEW") || (user_id=="")> 
+        <include "MySQL/add_mysqluser.html">    
+    <else>
+	    <assign mysql_user=account.getResource(user_id)>
+	    <assign mysql_db=account.getResource(db_id)>
+	    <assign user_pr=mysql_user.loadUserPrivilegesOn(mysql_db.db_name)>
+	    <assign result=user_pr.revokeAllDatabasePrivileges()>
+	    <assign privileges="all,grant">
+	    <assign res=user_pr.setDatabasePrivileges(privileges)>
+	<!-- ${db_id} ${user_id} -->
+	<include request.submit_template>	    
+    </if>
+</if>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END /submit/MySQL/add_db_user.sbm -->

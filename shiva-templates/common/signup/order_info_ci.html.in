@@ -1,0 +1,26 @@
+<!-- BEGIN ./signup/order_info_ci.html.in -->
+<include "functions">
+<include "control/signup/signup_function.html">
+<assign title=lang.common_signup_order_info_ci_title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+    <td colspan="2"><call draw_label(lang.common_signup_order_info_ci_text)></td>
+</tr>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/order_info_ci.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+
+    <if request.type_domain == "domain_transfer">
+      <assign ftemplate="submit/signup/order_domain_transfer.sbm">
+    <else>
+      <assign ftemplate="submit/signup/order_info.sbm">
+    </if>
+
+    <include "control/signup/order_info_ci.html">
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./signup/order_info_ci.html.in -->

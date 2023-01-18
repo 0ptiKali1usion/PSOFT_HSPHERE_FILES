@@ -1,0 +1,41 @@
+<!-- BEGIN ./domain/domain_transfer_lookup.html  -->
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="domain/domain_transfer_order.html">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<assign name = request.domain_name+"."+request.tld>
+<input type="hidden" name="tld" value="${request.tld}">
+<input type="hidden" name="domain_name" value="${name}">
+
+
+<call draw_table_header("", lang.domain.domainlookupopensrs.header(name))>
+
+<tr >
+<assign regrar = toolbox.getRegistrarInfo(request.tld)>
+<!--${regrar.description} -->
+<!--${regrar.signature} -->
+
+  <td><if regrar.signature != "Enom"><call draw_label(settings.registrar_text)><else><call draw_label(settings.enom_text)></if></td>
+</tr>
+
+    <tr>
+	<td>
+	    <call draw_label(toolbox.compose(lang.domain.domainlookupopensrs.order, name))>
+	    <select name="profile_domain" size="1">
+	        <option value="NEW">NEW
+		<list account.getChild("unixuser").getChildren("domain") as domain>
+	            <if domain.getChild("contact_info")>
+	                <option value="${domain}">from ${domain.name}
+		    </if>
+	        </list>
+	    </select>
+	</td>
+    </tr>
+    <tr>
+	<td   class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+    </tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/domain_transfer_lookup.html  -->

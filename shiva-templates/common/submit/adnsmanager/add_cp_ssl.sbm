@@ -1,0 +1,51 @@
+<!-- BEGIN ./adnsmanager/add_cp_ssl.sbm  -->
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign isReseller = "0">
+  <assign eeman = account.getChild("eeman")>
+  <assign alias_name = config.CP_HOST>
+<else>
+  <assign isReseller = "1">
+  <assign eeman = account.getChild("reseller_eeman")>
+  <assign aliases = eeman.aliases>
+  <list aliases as alias><if alias.l_server.type=="10"><assign alias_name = alias.name></if></list>
+</if>
+
+<assign admin = account.getChild("admin")>
+<if isReseller == "1">
+    <list eeman.aliases as alias>
+      <if alias.l_server.type == "10">
+        <assign zone_id = alias.zone_id>
+	<assign rec_id = alias.id>
+        <assign lserver = alias.l_server>
+	<assign pref="">
+        <list toolbox.tokenizer(alias.name,".") as tokName><if pref==""><assign pref=tokName></if></list>
+	<assign lserver_id = lserver.id>
+      </if>
+    </list>
+    <if admin.isCPSSLEnabled("ip_based") == "1">
+      <assign r1 = eeman.delAlias(zone_id, rec_id)>
+      <assign res_ssl = eeman.initResellerSSL(lserver_id, zone_id, pref)>
+      <if res_ssl.status == "OK">
+        <assign result = res_ssl.doImplement(alias_name, request.key, request.file)>
+      <else>
+	<assign r2 = eeman.addAlias(lserver_id, zone_id, pref, "false")>
+	<assign res = session.addMessage(res_ssl.msg)>
+      </if>
+    <else><if admin.isCPSSLEnabled("port_based") == "1">
+      <assign res_ssl = eeman.initResellerSSL(lserver_id, zone_id, pref, "2")>
+      <assign result = res_ssl.doImplement(alias_name, request.key, request.file)>
+    </if></if>
+<else>
+  <assign res_ssl = eeman.initResellerSSL()>
+  <assign result = res_ssl.doImplement(alias_name, request.key, request.file)>
+</if>
+
+<if result.status == "OK">
+    <assign res = session.addMessage(lang.adnsmanager.cp_ssl_add.msg)>
+    <include request.stemplate>
+<else>
+    <assign res = session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_cp_ssl.sbm  -->

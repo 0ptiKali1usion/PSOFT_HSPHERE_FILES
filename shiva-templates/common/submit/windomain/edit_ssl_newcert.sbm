@@ -1,0 +1,17 @@
+<!-- BEGIN ./windomain/edit_ssl_newcert.html  -->
+<assign ssl=account.getResource(request.uid)>
+<assign result=ssl.updateCert(request.file)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.ssl_certificate,""))>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vfile=toolbox.html_encode(request.file)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/edit_ssl_newcert.html  -->

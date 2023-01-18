@@ -1,0 +1,17 @@
+<!-- BEGIN ./easy_app/remove.html -->
+
+<assign template="easy_app/remove.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<if !stype><assign stype=request.stype></if>
+<if !typename><assign typename=request.typename></if>
+
+<include "control/easy_app/"+typename+"/remove-"+stype+".html">
+<call bottom()>
+
+
+<!-- END ./easy_app/remove.html -->

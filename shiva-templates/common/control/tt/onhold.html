@@ -1,0 +1,10 @@
+<!-- BEGIN ./control/tt/onhold.html  -->
+<call draw_tooltip()>
+<assign ttadmin = account.getChild("ttadmin")>
+<if !ttadmin><assign ttadmin=account.addChild("ttadmin","",account.login,account.description,account.ci.email)></if>
+
+
+<call draw_table_header("7", lang.tt.admin.onHold)>
+<include "control/tt/onhold_list.html">
+<call draw_table_footer()>
+<!--  END ./control/tt/onhold.html  -->

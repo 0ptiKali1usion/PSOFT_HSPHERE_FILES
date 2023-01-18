@@ -1,0 +1,40 @@
+<!-- BEGIN submit/MySQL/change_db_quota.sbm  -->
+<assign result=yafv.common.s_mysql.vQuota(lang.label.db_quota, request.quota)>
+<if result.status == "OK"><!-- OK -->  
+  <assign database=account.getResource(request.db_id)>
+  <assign quota=database.getChild("mysqldb_quota")>
+  <if quota><!-- quota -->
+   <if toolbox.gt(quota.usedMb,request.quota)=="1"><!-- 1 -->
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.failed_set_smallquota, request.quota, quota.usedMb))>
+       <assign failure="1">
+   <else>
+       <assign price=quota.estimateChange(request.quota)>
+       <if price.status=="ERROR">
+           <assign failure="1">
+          <assign res=session.addMessage(price.msg)>
+       </if>
+  </if><!-- 1 -->
+  <else>
+    <assign price=database.estimateCreate("mysqldb_quota","",request.quota)>
+    <if price.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(price.msg)>
+    </if>
+  </if><!-- quota -->
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if><!-- OK -->
+<if failure>
+    <assign vsize=request.size>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+<else>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+</if><!-- OK -->
+<!--  END submit/MySQL/change_db_quota.sbm  --> 

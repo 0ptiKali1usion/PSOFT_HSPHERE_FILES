@@ -1,0 +1,7 @@
+<center> rcptdnscheck </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br> Allows to check availability of recipient mail domains for non-local mail domains.
+<br>Default: 0
+<br>
+

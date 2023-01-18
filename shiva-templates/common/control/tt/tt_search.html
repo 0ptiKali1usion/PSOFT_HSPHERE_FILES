@@ -1,0 +1,85 @@
+<!-- BEGIN ./control/tt/tt_search.html  -->
+<call draw_tooltip()>
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin && account.plan.isResourceAvailable("ttadmin")><assign ttadmin=account.addChild("ttadmin","", account.login, account.description, account.ci.email)></if>
+
+<if ttadmin>
+<include "control/misc/mini_calendar.html">
+<include "control/tt/ttfunctions.fn">
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_search" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/tt_search.html">
+
+
+
+
+<call draw_table_header("2", lang.tt.search.header)>
+
+
+<tr>
+<td><call draw_label(lang.tt.id)></td><td><input type="text" name="sc_id" size="10"></td></tr>
+<tr>
+<td><call draw_label(lang.label.title)></td><td><input type="text" name="sc_title"></td></tr>
+<tr>
+<td><call draw_label(lang.tt.search.fromadr)></td><td><input type="text" name="sc_email"></td></tr>
+<tr>
+<td><call draw_label(lang.tt.search.body)></td><td><input type="text" name="sc_contains"><input type="checkbox" name="sc_match_case" value="1"><call draw_label(lang.tt.search.match)><call error_message(lang.tt.search.slow)></td></tr>
+<tr>
+<td><call draw_label(lang.tt.queue)></td>
+<td align="left">
+<select name="sc_queue" size="1">
+  <option value="" selected>Any</option>
+  <list ttadmin.queue_list as que_id>
+  <if ttadmin.isSubscribed(que_id, ttadmin.id) != "0">
+  <assign que=ttadmin.getQueue(que_id)>
+  <option value="${que.id}">${que.name}</option>
+  </if>
+  </list>
+</select>
+</td></tr>
+<tr>
+<td><call draw_label(lang.tt.search.assigned)></td><td>
+<select name="sc_assigned_to" size="1">
+  <option value="" SELECTED>${lang.tt.search.assigned.any}
+  <option value="-1">${lang.tt.search.assigned.noone}
+<list ttadmin.ttadmin_list as admid>
+<assign admname = ttadmin.NameById(admid)>
+<option value="${admid}">${admname}</list>
+</select>
+</td></tr>
+<tr>
+<td><call draw_label(lang.tt.state)></td><td>
+<select name="sc_state" size="1">
+  <call tt_states_options()>
+</select>
+</td></tr>
+<tr>
+  <td><call draw_label(lang.tt.search.created)></td>
+  <td nowrap><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_created_after" size="8"><call draw_calendar("f_search","sc_created_after","sc_created_ii")>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_created_before" size="8"><call draw_calendar("f_search","sc_created_before","sc_created_ii")><call draw_hspace("20")><call draw_l_image("sc_created_ii","","","")></td></tr>
+
+<tr>
+  <td><call draw_label(lang.tt.search.answered)></td>
+  <td nowrap><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_answered_after" size="8"><call draw_calendar("f_search","sc_answered_after","sc_answered_ii")>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_answered_before" size="8"><call draw_calendar("f_search","sc_answered_before","sc_answered_ii")>&nbsp;<input type="checkbox" name="sc_not_answered" value="1"><call draw_l_image("sc_answered_ii","","","")><call draw_label(lang.tt.search.unanswered)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.tt.search.modified)></td>
+  <td nowrap><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_modified_after" size="8"><call draw_calendar("f_search","sc_modified_after","sc_modified_ii")>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_modified_before" size="8"><call draw_calendar("f_search","sc_modified_before","sc_modified_ii")>&nbsp;<call draw_hspace("20")><call draw_l_image("sc_modified_ii","","","")></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.tt.search.closed)></td>
+  <td nowrap><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_closed_after" size="8"><call draw_calendar("f_search","sc_closed_after","sc_closed_ii")>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_closed_before" size="8"><call draw_calendar("f_search","sc_closed_before","sc_closed_ii")>&nbsp;<input type="checkbox" name="sc_not_closed" value="1"><call draw_l_image("sc_closed_ii","","","")><call draw_label(lang.tt.search.open)></td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)>
+</td><td><call searchStepBox("10")></td></tr>
+
+<tr><td colspan="2" class="control_align_center">
+<input type="hidden" name="inPanel" value="1">
+<input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!--  END ./control/tt/tt_history.html  -->

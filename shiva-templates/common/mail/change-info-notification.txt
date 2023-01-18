@@ -1,0 +1,18 @@
+This letter informs you that owner of the account with ID ${account.id.id} has changed his ${info_name}.
+
+New ${info_name} id: ${info.id}.
+
+New ${info_name} details:
+
+First Name: ${info.first_name}
+Last Name: ${info.last_name}
+Company: ${info.company}
+Address1:${info.address1}
+Address2:${info.address2}
+City: ${info.city}
+<compress><if info.state == "NA">State:${info.state2}<else>State2:${info.state}</if></compress>
+Postal code: ${info.postal_code}
+Country: ${info.country} 
+Phone: ${info.phone}
+E-mail: ${info.email}
+Payments type: <compress><if info_type == "billing">${info.type}</if></compress>

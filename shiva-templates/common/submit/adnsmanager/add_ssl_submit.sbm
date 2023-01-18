@@ -1,0 +1,37 @@
+<!-- BEGIN ./adnsmanager/add_ssl_submit.sbm  -->
+<assign manager = account.getChild("adnsmanager")>
+<assign zone = manager.getZone(request.zone_id)>
+<assign success="0">
+<assign failed="0">
+<assign result=yafv.checkall(yafv.common.s_adnsmanager.vIPTag(lang.eeman.ip_tag,request.tag))>
+
+<if result.status == "OK">
+<list manager.getWebServers() as server>
+    <assign result = zone.installCertificate(server.id, request.file, request.key, request.tag)>
+    <if result.status == "OK">
+	<assign success="1">
+    <else>
+	<assign failed="1">
+	<assign res = session.addMessage(toolbox.compose(
+	  lang.msg.ssl_failed_server_install,server.name))>
+	<assign res = session.addMessage(result.msg)>
+    </if>
+</list>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success=="1">
+    <if failed=="0">
+	<assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_added, lang.label.ssl_support, ""))>
+    <else>
+	<assign res=session.addMessage(lang.msg.ssl_added_incompletely)>
+    </if>
+    <assign res = zone.enableSSL(request.tag)>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <assign vtag = request.tag>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_ssl_submit.sbm  -->

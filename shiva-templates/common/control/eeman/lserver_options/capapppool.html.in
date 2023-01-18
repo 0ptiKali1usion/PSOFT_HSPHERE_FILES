@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/eeman/lserver_options/capapppool.html.in  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_sap" method="POST" check!  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="sap_cnt">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.sap_cnt)></td>
+  <td>
+    <assign sap_cnt=optManipulator.getOption(lserverId)>
+    <if !sap_cnt>
+        <assign sap_cnt=lserver.win_default_sap_cnt>
+    </if>
+    <input type="text" name="value" value="${sap_cnt}" label="${lang.eeman.lserveredit.options.sap_cnt}" check="vIntegerRequired">
+    &nbsp;<input type="submit" value="${lang.button.set}">
+  </td>
+</tr>
+</form>
+<!-- END ./control/eeman/lserver_options/capapppool.html.in  -->

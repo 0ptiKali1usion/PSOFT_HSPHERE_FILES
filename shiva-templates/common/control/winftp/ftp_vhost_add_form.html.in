@@ -1,0 +1,64 @@
+<!-- BEGIN ./winftp/ftp_vhost_add_form.html.in  -->
+<call draw_tooltip()>
+<yafv s_winftp> 
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_winftp_vhost_add" check! accept-charset="UTF-8">
+ <input type="hidden" name="template_name" value="submit/winftp/ftp_vhost_add_save.sbm">
+ <input type="hidden" name="rid" value="${request.rid}">
+ <input type="hidden" name="stemplate" value="${request.stemplate}">
+ <input type="hidden" name="ftemplate" value="${template}">
+<assign domain = account.getResource(request.rid)>
+
+
+
+
+<call draw_table_header("3", "New FTP virtual host")>
+
+
+<tr>
+  <td><call draw_label("FTP server")></td>
+  <td colspan=2    ><call draw_label("ftp."+domain.name)></td>
+</tr>
+<tr>
+  <td><call draw_label("FTP server IP")></td>
+  <td colspan=2    ><call draw_label(toolbox.int2ext(domain.getChild("ip").ip))></td>
+</tr>
+<tr>
+   <td><call draw_label("Initial status")></td>
+
+<if vftp_status == "0">
+    <assign vchecked1="">
+    <assign vchecked2="CHECKED">
+<else>
+   <assign vchecked1="CHECKED">
+   <assign vchecked2="">
+</if>
+
+   <td><input type="radio" name="ftp_status" value="1" ${vchecked1}><call draw_label("Running")></td>
+   <td><input type="radio" name="ftp_status" value="0" ${vchecked2}><call draw_label("Stopped")></td>
+</tr>
+<tr>
+   <td><call draw_label("Upload directory")></td>
+
+<if vftp_upload == "1">
+    <assign vchecked1="CHECKED">
+    <assign vchecked2="">
+<else>
+   <assign vchecked1="">
+   <assign vchecked2="CHECKED">
+</if>
+
+   <td><input type="radio" name="ftp_upload" value="1" ${vchecked1}><call draw_label("Enabled")></td>
+   <td><input type="radio" name="ftp_upload" value="0" ${vchecked2}><call draw_label("Disabled")></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.winftp.ftpvhost.ftpservername)></td>
+   <if !failure><assign vftp_name = "ftp."+domain.name><else><assign vftp_name = request.ftp_name></if>
+   <td colspan=2    ><input type="text" name="ftp_name"  label="${lang.winftp.ftpvhost.ftpservername}" check="vServerName" value="${vftp_name}"></td>
+</tr>
+<tr>
+  <td colspan="3"  class="control_align_center" ><input type="submit"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./winftp/ftp_vhost_add_form.html.in  -->

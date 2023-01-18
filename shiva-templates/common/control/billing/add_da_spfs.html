@@ -1,0 +1,20 @@
+<!-- BEGIN ./control/billing/add_da_spfs.html -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_spfs" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="end_template" value="${request.end_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="mail_service" value="${request.mail_service}">
+<input type="hidden" name="for_da" value="${request.for_da}">
+<input type="hidden" name="processing" value="${request.processing}">
+
+<assign stype=account.plan.getResourceType("spf").description>
+<assign add_range=lang.label.domain.aliases>
+<assign add_source=lang.label.mail_domain>
+<assign message=toolbox.compose(lang.billing.add_msg5,stype,amount,add_range,add_source)>
+
+<call draw_warn_invoice_with_charge_info(message,price,"","","f_add_spfs")>
+</form>
+<!--  END ./control/billing/add_da_spfs.html  -->

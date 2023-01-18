@@ -1,0 +1,45 @@
+<!-- BEGIN ./submit/ds/change_res_bandwidth.sbm  -->
+<if size==""><assign size=request.size></if>
+
+<assign result= yafv.common.s_ds.vTrafficLimit(lang.ds.changebandwidth.limit, request.size)>
+<if result.status=="OK">
+  <assign bandwidth_r = account.findChild("r_ds_bandwidth")>
+  <assign bandwidth_ls = account.findChildren("r_ds_bandwidth")>
+  <if bandwidth_ls>
+    <if silent == "1"><assign res = account.setNoRefund("1")></if>
+
+    <if toolbox.gt(bandwidth_ls.size,"1") != "0">
+      <list bandwidth_ls as bandwidth>
+	<if bandwidth.id != bandwidth_r.id>
+	  <assign result = bandwidth.delete>
+	</if>
+      </list>
+    </if>
+
+    <if silent == "1"><assign res = account.setNoRefund("0")></if>
+
+    <assign res = toolbox.setBillingNote(lang.billingnote.change_dsbandwidth(bandwidth_r.size, size))>
+    <assign result = bandwidth_r.change(size)>
+  <else>
+    <assign result = account.addChild("r_ds_bandwidth", "", size)>
+  </if>
+
+  <if result.status != "OK">
+    <assign failure = "1">
+    <assign res = session.addMessage(result.msg)>
+  </if>
+
+<else>
+  <assign failure = "1">
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if !silent>
+  <if !failure>
+    <include request.stemplate>
+  <else>
+    <assign vsize = toolbox.html_encode(request.size)>
+    <include request.ftemplate>
+  </if>
+</if>
+<!--  END ./submit/ds/change_res_bandwidth.sbm  -->

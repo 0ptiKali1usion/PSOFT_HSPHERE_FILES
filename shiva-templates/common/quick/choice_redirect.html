@@ -1,0 +1,9 @@
+<!-- BEGIN ./quick/choice_redirect.html  -->
+<assign template="quick/choice_redirect.html">
+<assign count=account.findAllChildren("hosting").size>
+<assign unixuser=account.getChild("unixuser")>
+<include "functions">
+<call draw_menu("acct-pref")>
+<include "control/quick/choice_redirect.html">
+<call bottom()>
+<!--  END ./quick/choice_redirect.html  -->

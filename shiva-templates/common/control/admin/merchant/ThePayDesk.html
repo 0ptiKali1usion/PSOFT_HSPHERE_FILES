@@ -1,0 +1,21 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/ThePayDesk.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.thepaydesk)>
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.thepaydesk}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>thepaydesk.com</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>443</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="path" value="<if merchant>${merchant.PATH}<else>/call.php</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.merchant_id)></td><td><input type="text" name="id" value="<if merchant>${merchant.ID}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.voidnotificationemail)></td><td><input type="text" name="email" value="<if merchant>${merchant.NOTIFICATIONEMAIL}</if>"></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>

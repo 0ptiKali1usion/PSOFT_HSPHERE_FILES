@@ -1,0 +1,30 @@
+<assign maintainer=account.getChild("maintainer")>
+<assign result=maintainAdmin.reload()>
+<H2>Maintain task</H2>
+<table  border="1"   CELLPADDING=2>
+	<tr>
+	   <td>User login</td>
+	   <td>User name</td>
+	   <td>Count task</td>
+	</tr>
+<tr>
+<td colspan=3> <h1>In work</h1></td>
+</tr>
+<list maintainAdmin.maintanary as maintain_account>
+	<tr>
+	<td><a href="${config.CLIENT_CP_URL}?account_id=${maintain_account.account_id}&ci_id=${maintain_account.ci_id}&template_name=maintain/admin_list_task.html&stemplate=${template}&ftemplate=${template}">${maintain_account.user_login}</a></td>
+	<td><a href="${config.CLIENT_CP_URL}?account_id=${maintain_account.account_id}&ci_id=${maintain_account.ci_id}&template_name=maintain/user_info.html&stemplate=${template}&ftemplate=${template}">${maintain_account.ci.name}</a></td>
+	<td>${maintain_account.count}</td>
+	</tr>
+</list>
+<tr>
+<td colspan=3> <h1>Supplied</h1></td>
+</tr>
+<list maintainAdmin.supplied_maintain as maintain_account>
+	<tr>
+	<td><a href="${config.CLIENT_CP_URL}?account_id=${maintain_account.account_id}&ci_id=${maintain_account.ci_id}&template_name=maintain/admin_list_task.html&stemplate=${template}&ftemplate=${template}">${maintain_account.user_login}</a></td>
+	<td><a href="${config.CLIENT_CP_URL}?account_id=${maintain_account.account_id}&ci_id=${maintain_account.ci_id}&template_name=maintain/user_info.html&stemplate=${template}&ftemplate=${template}">${maintain_account.ci.name}</a></td>
+	<td>${maintain_account.count}</td>
+	</tr>
+</list>
+</table>

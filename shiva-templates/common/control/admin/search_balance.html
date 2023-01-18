@@ -1,0 +1,72 @@
+<!-- BEGIN ./control/admin/bill_search.html  -->
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/balance_search.html">
+
+
+
+<call draw_table_header("2", lang.admin.searchbalance.header)>
+
+
+<tr>
+  <td><call draw_label(lang.label.plan)></td>
+  <td><select name="sc_plan" size="1">
+<option value="">${lang.label.any}
+<list admin.plans as plan>
+<!--${plan.b_info} -->
+<if !plan.deleted>
+<if plan.b_info=="1">
+<option value="${plan.id}">${plan.description}
+</if>
+</if>
+</list>
+</select>
+  </td>
+</tr>
+<tr >
+  <td><call draw_label(lang.label.ptype)></td>
+  <td>
+<assign processors = toolbox.getGateways().processors.processor>
+<select name="sc_type" size="1">
+<option value="" SELECTED>${lang.label.any}
+<option value="CC">${lang.label.cc}
+<option value="Check">${lang.label.check}
+<option value="Trial">${lang.label.trial}
+<list processors as processor>
+  <assign processorname=processor("name")>
+  <assign bildescription=lang[processor("description")]>
+  <option value=${processorname}>${bildescription}
+</list>
+</select>
+  </td>
+</tr>
+<tr >
+  <td><call draw_label(lang.admin.searchbalance.balance)></td>
+  <td><select name="sc_mult" size="1">
+<option value="-1" SELECTED>${lang.admin.searchbalance.balance1}
+<option value="1">${lang.admin.searchbalance.balance2}
+</select>
+&gt;<call draw_label(lang.admin.searchbalance.value)>&nbsp;<input type="text" name="sc_value" size="10" value="0">
+</td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.admin.searchbalance.days)></td>
+  <td><input type="text" name="sc_days" size="10"></td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.label.entries)></td>
+  <td><call searchStepBox("10")></td>
+</tr>
+
+<tr >
+  <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./control/admin/bill_search.html  -->

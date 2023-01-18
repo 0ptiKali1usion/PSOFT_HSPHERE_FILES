@@ -1,0 +1,21 @@
+<!-- BEGIN ./tt/new_tt_form.html  -->
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<HTML>
+<HEAD>
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${user.login} (${account.plan.description})</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+</HEAD>
+ 
+<BODY TEXT="${design.color("text_color")}" BGCOLOR="${design.color("bgcolor")}" MARGINHEIGHT="10" MARGINWIDTH="10">
+<TABLE width="100%" height="100%" align="center" valign="middle">
+<TR><TD align="center">
+<call draw_label_bold("Trouble Ticket has been created. Click the button below to close this window.")>
+<br>&nbsp;<br>
+<FORM><INPUT type="button" value=" Close " onClick="javascript:window.close()"></FORM>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>
+<!--  END ./tt/new_tt_form.html  -->

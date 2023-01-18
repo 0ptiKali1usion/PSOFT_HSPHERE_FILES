@@ -1,0 +1,47 @@
+<!-- BEGIN ./windomain/choice_login.html  -->
+<call draw_tooltip()>
+
+<assign mssql=account.getChild("MSSQL")>
+<assign logins=mssql.getChildren("MSSQLLogin")>
+
+<form name="f_choice_login"  action="${config.CLIENT_CP_URL}" method="post" target="new" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="template_name" value="submit/windomain/choice_login.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.mssql.databases.mssqlmanager)>
+
+
+<if logins>
+<tr>
+<td><call draw_label(lang.windomain.choice_login)></td>
+<td>
+<select name="mssql_login">
+<list logins as login><option value="${login}"><call draw_label(login.name)></option></list>
+</select>
+</td>
+</tr>
+<tr>
+<td  class="control_align_center" colspan="2">
+<call draw_important_label(lang.mssql.login_warn)><br>
+<input type="submit" name="login" value="login">
+</td>
+</tr>
+<else>
+<tr>
+<td  colspan="2">
+<call draw_label(lang.mssql.databases.no_logins)>
+</td>
+</tr>
+</if>
+
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./windomain/choice_login.html  --> 

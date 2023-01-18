@@ -1,0 +1,47 @@
+<!-- BEGIN control/unixuser/generic.html  -->
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("3", "")>
+
+<tr>
+ <td width="5%" class="control_header"><call draw_TT_header()></td>
+ <td width="30%" class="control_header"><call draw_header(lang.label.parameter)></td>
+ <td width="65%" class="control_header"><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+   <td><call draw_tt_help(account.id,"user-ai_quick-plan","Click to get help")></td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)></td></tr>
+
+<if account.plan.isResourceAvailable("reseller_traffic")>
+	<assign traffic = account.getChild("reseller_traffic")>
+	<if traffic><assign res=traffic.reload></if>
+<tr>
+        <td    nowrap><call draw_tt_help(traffic,"user-ai_pref-totaltraffic","")></td>
+        <td><call draw_label(lang.label.sumtraffic)></td>
+        <td><call draw_label(toolbox.compose(lang.unixuser.traffic, traffic.text_traffic, traffic.size))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, traffic.start_date))><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+account.id+"&ftemplate="+template+"&stemplate="+template+"&traffic_type=-1", lang.label.changetraffic)></td>
+</tr>
+</if> 
+<tr>
+<if account.plan.isResourceAvailable("reseller_backup")>
+  <assign res_backup = account.getChild("reseller_backup")>
+  <tr>
+    <td><call draw_tt_help(res_backup,"user-ai_pref-reseller_backup","")></td>
+    <td><call draw_label(lang.label.reseller_backup)></td>
+    <td><if res_backup><call draw_label(toolbox.compose(lang.reseller.backup_service.description,res_backup.used,res_backup.size))>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_backup_service.html&rid="+res_backup+"&ftemplate="+template+"&stemplate="+template, lang.label.reseller_backup.change)><else>nbsp;</if></td>
+  </tr>
+</if>
+
+<td><call draw_tt_help("","user-ai_pref-tooltips","")></td>
+<td><call draw_label(lang.unixuser.generic.tooltips)></td>
+<td>
+
+<call draw_state(account.tooltips, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=off"+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_tooltips.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template)>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END control/unixuser/generic.html  -->

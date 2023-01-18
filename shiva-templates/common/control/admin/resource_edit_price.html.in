@@ -1,0 +1,68 @@
+<!-- BEGIN ./control/admin/resource_edit_price.html.in  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")> 
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<if request.edit_done || plan.deleted><assign view_only="1"></if>
+<assign r_id = rtype.type>
+<if r_id == "opensrs">
+  <assign editFree = "1">
+  <assign editSetup = "">
+  <assign editUsage = "">
+  <assign editRecurrent = "">
+  <assign editRefund = "">
+<else>
+  <assign editFree = "1">
+  <assign editSetup = "1">
+  <assign editUsage = "1">
+  <assign editRecurrent = "1">
+  <assign editRefund = "1">
+</if>
+
+<yafv s_admin>
+<form name="f_resource_ep" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<if r_id == "opensrs">
+  <input type="hidden" name="template_name" value="submit/admin/opensrs_edit_price.sbm">
+<else>
+  <input type="hidden" name="template_name" value="submit/admin/resource_edit_price_submit.sbm">
+</if>
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="r_id" value="${r_id}">
+
+<call prepare_table_header("7", lang.admin.reseditprice.price(rtype.description))>
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit.html&stemplate=admin/plan_edit.html", lang.admin.reseditprice.edit)>
+<if SHOW_RES_ADV=="1">
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit_adv.html&stemplate=admin/plan_edit.html", lang.admin.resedit.adv)>
+</if>
+<call draw_table_header_prepared()>
+
+<if view_only>
+  <include "control/admin/price_view.html">
+<else>
+  <include "control/admin/price_edit.html">
+</if>
+
+<tr><td  colspan="7" class="control_align_center">
+<if view_only>
+  <if !plan.deleted>
+    <input type="submit" name="edit" value="${lang.button.edit}">
+  </if>
+  <input type="submit" name="done" value="${lang.button.done}">
+<else>
+  <input type="submit" name="edit_done" value="${lang.button.submit}">
+</if>
+</td></tr>
+<call draw_table_footer()>
+</form>
+<if account.plan.isResourceAvailable("reseller_su") && rtype.type=="reseller">
+<include "control/admin/reseller_prices.html">
+</if>
+
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/resource_edit_price.html.in  -->

@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/admin/ds/change_ds_status.sbm -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign dedicated_server_id = request.dedicated_server_id>
+<assign state_id = request.state_id>
+
+<if dedicated_server_id && state_id>
+    <assign ds = ds_manager.getDServer(dedicated_server_id)>
+    <if ds>
+        <if ds.requiresAssignment(state_id)>
+            <include "admin/ds/ds_assign_search.html">
+        <else>
+            <if ds.requiresUnassignment(state_id)>
+                <include "admin/ds/ds_unassign_confirm.html">
+            <else>
+                <assign res = ds.setState(state_id)>
+                <if res.status == "OK">
+                    <include request.stemplate>
+                <else>
+                    <assign r = session.addMessage(res.msg)>
+                    <include request.ftemplate>
+                </if>
+            </if>
+        </if>
+    <else>
+        <assign res = session.addMessage(lang.admin.ds.server_unavailable)>
+        <include request.ftemplate>
+    </if>
+<else>
+    <assign res = session.addMessage(lang.admin.ds.not_chosen_server_status)>
+    <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/ds/change_ds_status.sbm -->

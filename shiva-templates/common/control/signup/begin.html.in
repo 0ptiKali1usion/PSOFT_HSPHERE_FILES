@@ -1,0 +1,20 @@
+<!--BEGIN common/control/signup/begin.html -->
+
+<assign plan=new_user.plan>
+<if plan.b_info!="0">
+<tr>
+   <td><call draw_label(lang.label.ptype)></td>
+   <td><select name="_bi_type" size="1"><option value="CC">${lang.label.cc}<option value="Check">${lang.label.check}<if plan.b_info=="2"><option value="TRIAL">${lang.label.trial}</if></select>
+</tr>
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<assign excludeFields=excludeFields+"_bi_type;">
+<if periods>
+<tr>
+   <td><call draw_label(lang.label.bp)></td>
+   <td><select name="_bp" size="1"><assign counter=toolbox.counter("0", periods)><assign onc=toolbox.counter()><list onc as c><if counter==periods>${c.stop}<else><option value="${counter}">${plan.values["_PERIOD_SIZE_"+counter]} ${plan.values["_PERIOD_TYPE_"+counter]}${counter.next}</if></list></select></td>
+<assign excludeFields=excludeFields+"_bp;">
+</tr>
+</if>
+</if>
+
+<!--END common/control/signup/begin.html -->

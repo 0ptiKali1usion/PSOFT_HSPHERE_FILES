@@ -1,0 +1,27 @@
+<!-- BEGIN ./vps/control/vps/logged_users.html -->
+<assign vps = account.getChild("vps")>
+<assign server_details = vps.getChild("vps_server_details")>
+<assign sd = server_details.details>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.servmon.users.logged)>
+<if !sd>
+<tr>
+<td colspan="2"><call draw_label(lang.servmon.failed)></td>
+</tr>
+<else>
+<tr>
+<td width="25%"><call draw_label_bold(lang.servmon.hostname)></td>
+<td><call draw_label(sd.hostname)></td>
+</tr>
+<tr>
+<td colspan="2">
+<pre>
+<list sd.user as u>
+${u("info")}</list>
+</pre>
+</td>
+</tr>
+</if>
+<call draw_table_footer()>
+<!-- END ./vps/control/vps/logged_users.html -->

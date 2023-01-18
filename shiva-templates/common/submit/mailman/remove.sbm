@@ -1,0 +1,5 @@
+<!-- BEGIN ./submit/mailman/remove.sbm -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.deleteRecipient(request.type, request.email)>
+<include request.stemplate>
+<!-- END ./submit/mailman/remove.sbm -->

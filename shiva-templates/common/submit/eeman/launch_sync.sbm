@@ -1,0 +1,19 @@
+<!-- BEGIN ./eeman/launch_sync.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<if tp>
+  <assign result = tp.launchSync(request.rid)>
+  <if result.status != "OK">
+    <assign failure="1">
+  </if>
+<else>
+  <assign failure="1">
+</if>
+
+<if !failure>
+     <include request.stemplate>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./eeman/launch_sync.sbm  -->

@@ -1,0 +1,8 @@
+<!-- BEGIN ./domain/update_webservice.html  -->
+<assign result=account.getResource(request.rid).updateSettings(request.index, request.symlink, request.ssi, request.multiview)>
+<if result.status=="OK">
+ <assign success="1">
+<else>${session.addMessage(result.msg)}
+</if>
+<if success=="1"><include request.stemplate><else><include request.ftemplate></if>
+<!--  END ./domain/update_webservice.html  -->

@@ -1,0 +1,49 @@
+<!-- BEGIN ./vps/change_memlimit.sbm  -->
+<if size==""><assign size=request.size></if>
+<if rid==""><assign rid=request.rid></if>
+<assign result=yafv.common.s_vps.vQuota(lang.vps.memlimit.label, size)> 
+<if result.status == "OK">
+  <assign vps=account.getResource(rid)>
+  <assign memlimit=vps.getChild("vps_mem_limit")>
+  <assign memlimits=vps.findChildren("vps_mem_limit")>
+  <if memlimit>
+   <if toolbox.gt(memlimit.used,size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.vps.msg.failed_set_smallmemlimit, size, memlimit.used))>
+       <assign failure="1">
+   <else>
+          ${toolbox.setBillingNote(lang.vps.billingnote.change_memlimit(memlimit.limit, size))}
+	     <list memlimits as memlimit>
+	     	<assign result=memlimit.delete>
+       	     	<if result.status!="OK">
+		  <assign failure="1">
+		  <assign res=session.addMessage(result.msg)>
+	      	</if>
+	     </list>
+          <assign new_memlimit=vps.addChild("vps_mem_limit","",size)>
+          <if new_memlimit.status!="OK">
+	     <assign failure="1">
+	     <assign res=session.addMessage(result.msg)>
+          </if>
+	  
+   </if>
+  <else>
+    <assign result=vps.addChild("vps_mem_limit","",size)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if silent=="">
+    <if failure>
+    	<assign vsize=toolbox.html_encode(request.size)>
+    	<include request.ftemplate>
+    <else>
+    	<include request.stemplate>
+    </if>
+</if>
+<!--  END ./vps/change_memlimit.sbm  -->

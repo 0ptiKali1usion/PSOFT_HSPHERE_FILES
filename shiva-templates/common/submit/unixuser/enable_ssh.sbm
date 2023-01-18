@@ -1,0 +1,16 @@
+<!-- BEGIN ./submit/unixuser/enable_ssh.sbm  -->
+<assign sshresource = account.getChild("unixuser").findChild("sshresource")>
+<if !sshresource>
+<assign result = obj.user_requests.SSHRequest()>
+<if result.status=="OK">
+<assign res=session.addMessage(lang.msg.unixuser_enablessh_ok)>
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(lang.msg.unixuser_enablessh_err)>
+<include request.ftemplate>
+</if>
+<else>
+<assign res=session.addMessage(lang.msg.unixuser_enablessh_err1)>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/unixuser/enable_ssh.sbm  -->

@@ -1,0 +1,45 @@
+<!-- BEGIN ./control/eeman/tp_errors.html  -->
+<assign eeman=account.getChild("eeman")>
+<if eeman>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.eeman.tp.errors.title)>
+
+<tr>
+ <td><call draw_label(lang.eeman.tp.stage.label)></td>
+ <td><call draw_label(tp.stage_description)></td>
+</tr>
+
+<tr>
+ <td colspan="2" ><call draw_label(tp.stage_description_long)></td>
+</tr>
+
+<tr>
+<td colspan="2">
+<table class="inner_control_grid">
+<tr>
+<td class="inner_control_grid_header"><call draw_header(lang.eeman.tp.hdr.res_id)></td>
+<td class="inner_control_grid_header"><call draw_header(lang.eeman.tp.hdr.descr)></td>
+<td class="inner_control_grid_header"><call draw_header(lang.eeman.tp.errors.tt_id)></td>
+<td class="inner_control_grid_header"><call draw_header(lang.eeman.tp.errors.tt_title)></td>
+<td class="inner_control_grid_header"><call draw_header(lang.eeman.tp.content.control)></td>
+</tr>
+<list tp.resources as resource>
+<if resource.error_detected>
+<tr>
+ <td  class="inner_control_grid_align_right"><call draw_label(resource.id)></td>
+ <td><call draw_label(resource.description)></td>
+ <td class="inner_control_grid_align_right"><call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html&ttid="+resource.tt.id+"&stemplate="+template+"&ftemplate="+template,resource.tt.id)></td>
+ <td class="inner_control_grid_align_right"><call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html&ttid="+resource.tt.id+"&stemplate="+template+"&ftemplate="+template,resource.tt.title)></td>
+ <td class="inner_control_grid_align_right"><call draw_palink(config.CLIENT_CP_URL+"?tp_id="+tp.id+"&hdr_id="+resource.id+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/eeman/tp_problem_solved.sbm"+"&next_template="+request.stemplate, "deleted", lang.eeman.tp.errors.tt_solved.tip)></td>
+</tr>
+</if>
+</list>
+</table>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/eeman/tp_errors.html  -->

@@ -1,0 +1,258 @@
+<!-- BEGIN replacements/vps/control/dns/list.html  -->
+<assign vps=account.getChild("vps")>
+
+<function draw_domain(domain)>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html"+"&rid="+domain,domain.name)>
+    <call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/edit.html"+"&rid="+domain, lang.dns.list.edit)>
+</function>
+
+
+<call draw_tooltip()>
+
+
+<call draw_table_header("6", lang.dns.list.header)>
+
+
+<assign domain=account.getResource(request.rid)>
+<assign dns_zone = domain.dns_zone>
+<assign ip=domain.getChild("ip")>
+<if (domain.type=="domain_alias") || (domain.type=="3ldomain_alias")>
+  <assign a_records=domain.dns_zone.getChildren("domain_alias_a_record")>
+<else>
+  <assign a_records=domain.findChildren("a_record")>
+</if>
+<if (domain.name == vps.vpsHostName)>
+  <assign vps_ip=vps.getChild("vps_ip")>
+  <assign a_vpsip_records=vps_ip.getChildren("a_record")>
+</if>
+<assign mxs=domain.findChildren("mx")>
+<assign cname_records=domain.findChildren("cname_record")>
+<assign cust_dns_records = domain.findChildren("cust_dns_record")>
+<assign hosting = domain.getChild("hosting")>
+<assign txt_records=domain.findChildren("txt_record")>
+
+<tr>
+ <td colspan="6"  width="100%"   ><call draw_label(lang.dns.list.zone)><call draw_domain(domain)></td>
+</tr>
+
+<tr>
+ <td width="60%" class="control_header_align_center" ><call draw_header(lang.dns.name)></td>
+ <td width="10%" class="control_header_align_center" ><call draw_header(lang.dns.ttl)></td>
+ <td width="5%" class="control_header_align_center" ><call draw_header(lang.dns.class)></td>
+ <td width="5%" class="control_header_align_center" ><call draw_header(lang.dns.type)></td>
+ <td width="20%" class="control_header_align_center" colspan="2"><call draw_header(lang.dns.data)></td>
+</tr>
+<tr>
+ <td colspan="6"  width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.builda)></td>
+</tr>
+<list a_records as a_record>
+<tr>
+   <td  class="control_align_center"><call draw_label(a_record.name)></td>
+   <td  class="control_align_center"><call draw_label(a_record.ttl)></td>
+   <td  class="control_align_center"><call draw_label("IN")></td>
+   <td  class="control_align_center"><call draw_label("A")></td>
+   <td  class="control_align_center"><call draw_label(toolbox.int2ext(a_record.data))></td>
+   <td  class="control_align_center"><call disableNew(domain, a_record)></td>
+</tr>
+</list>
+
+<list a_vpsip_records as a_vpsip_record>
+<tr>
+   <td  class="control_align_center"><call draw_label(a_vpsip_record.name)></td>
+   <td  class="control_align_center"><call draw_label(a_vpsip_record.ttl)></td>
+   <td  class="control_align_center"><call draw_label("IN")></td>
+   <td  class="control_align_center"><call draw_label("A")></td>
+   <td  class="control_align_center"><call draw_label(toolbox.int2ext(a_vpsip_record.data))></td>
+   <td  class="control_align_center"><call disableNew(a_vpsip_record.parent, a_vpsip_record)></td>
+</tr>
+</list>
+
+<tr>
+   <td  colspan="6" width="100%" class="control_align_center">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=dns/restore_default_rec_confirm.html&next_template=submit/dns/restore_default_a_rec.sbm" +
+    "&type=a_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.restore_default_a_rec)>
+   </td>
+</tr>
+<if account.plan.isResourceAvailable("cust_dns_record")>
+<tr>
+ <td  colspan="6" width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.customa)></td>
+</tr>
+<list cust_dns_records as cust_dns_record>
+<if cust_dns_record.rec_type=="A"
+ 	&& (((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((cust_dns_record.parent.parent.type!="domain_alias") && (cust_dns_record.parent.parent.type!="3ldomain_alias") ))>
+<tr>
+<td  class="control_align_center" nowrap><call draw_label(cust_dns_record.name)></td>
+<td  class="control_align_center" nowrap><call draw_label(cust_dns_record.ttl)></td>
+<td  class="control_align_center" ><call draw_label("IN")></td>
+<td  class="control_align_center" ><call draw_label("A")></td>
+<td  class="control_align_center" nowrap><call draw_label(cust_dns_record.data)></td>
+<td  class="control_align_center"><call disableNew(domain, cust_dns_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+<td  class="control_align_center" colspan="6"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/add_check.sbm&next_template=/dns/add_cip.html&type=cust_dns_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.list.adda)></td>
+</tr>
+</if>
+
+<tr>
+ <td  colspan="6" width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.buildmx)></td>
+</tr>
+<list mxs as mx>
+  <if ((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((mx.parent.type!="mail_domain_alias") && (mx.parent.parent.type!="3ldomain_alias") && (mx.parent.parent.type!="domain_alias"))>
+     <tr>
+	<td  class="control_align_center" ><call draw_label(mx.name)></td>
+	<td  class="control_align_center" ><call draw_label(mx.ttl)></td>
+	<td  class="control_align_center" ><call draw_label("IN")></td>
+	<td  class="control_align_center" ><call draw_label("MX")></td>
+	<td  class="control_align_center" nowrap><call draw_label(mx.pref+" "+mx.data)></td>
+	<td  class="control_align_center" nowrap><call disableNew(domain, mx)></td>
+     </tr>
+     <list mx.mx_list as mx1>
+	<if ((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((mx.parent.type!="mail_domain_alias") && (mx.parent.parent.type!="3ldomain_alias") )>
+	  <tr>
+		<td  class="control_align_center" ><call draw_label(mx1.name)></td>
+		<td  class="control_align_center" ><call draw_label(mx1.ttl)></td>
+		<td  class="control_align_center" ><call draw_label("IN")></td>
+		<td  class="control_align_center" ><call draw_label("MX")></td>
+		<td  class="control_align_center" nowrap><call draw_label(mx1.pref+" "+mx1.data)></td>
+		<td  class="control_align_center" nowrap><call disableNew(domain, mx1)></td>
+	 </tr>
+	</if>
+     </list>
+   </if>
+</list>
+
+<tr>
+   <td  colspan="6" width="100%" class="control_align_center">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=dns/restore_default_rec_confirm.html&next_template=submit/dns/restore_default_mx_rec.sbm" +
+    "&type=mx&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.restore_default_mx_rec)>
+   </td>
+</tr>
+
+<if account.plan.isResourceAvailable("cust_dns_record")>
+<tr>
+ <td  colspan="6" width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.custommx)></td>
+</tr>
+
+<list cust_dns_records as cust_dns_record>
+<if cust_dns_record.rec_type=="MX"
+	&& (((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((cust_dns_record.parent.parent.type!="domain_alias") && (cust_dns_record.parent.parent.type!="3ldomain_alias") ))>
+<tr>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.name)></td>
+   <td  class="control_align_center" >&nbsp;</td>
+   <td  class="control_align_center" ><call draw_label("IN")></td>
+   <td  class="control_align_center" ><call draw_label("MX")></td>
+   <td  class="control_align_center" nowrap><call draw_label(cust_dns_record.pref+" "+cust_dns_record.data)></td>
+   <td  class="control_align_center" nowrap><call disableNew(domain,cust_dns_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+<td  class="control_align_center" colspan="6"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/add_check.sbm&next_template=/dns/add_cmail_service.html&type=cust_dns_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.list.addmx)></td>
+</tr>
+</if>
+
+<tr>
+ <td colspan="6"  width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.buildcname)></td>
+</tr>
+<list cname_records as cname_record>
+<if ((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((cname_record.parent.type!="mail_domain_alias") && (cname_record.parent.parent.type!="3ldomain_alias") &&
+	(cname_record.parent.parent.type!="domain_alias"))>
+<tr>
+   <td  class="control_align_center"><call draw_label(cname_record.name)></td>
+   <td  class="control_align_center"><call draw_label(cname_record.ttl)></td>
+   <td  class="control_align_center"><call draw_label("IN")></td>
+   <td  class="control_align_center"><call draw_label("CNAME")></td>
+   <td  class="control_align_center"><call draw_label(cname_record.data)></td>
+   <td  class="control_align_center" nowrap><call disableNew(domain, cname_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+   <td  colspan="6" width="100%" class="control_align_center">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=dns/restore_default_rec_confirm.html&next_template=submit/dns/restore_default_cname_rec.sbm" +
+    "&type=cname_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.restore_default_cname_rec)>
+   </td>
+</tr>
+
+<if account.plan.isResourceAvailable("cust_dns_record")>
+<tr>
+ <td  colspan="6" width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.customcname)></td>
+</tr>
+
+<list cust_dns_records as cust_dns_record>
+<if cust_dns_record.rec_type=="CNAME"
+	&& (((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((cust_dns_record.parent.parent.type!="domain_alias") && (cust_dns_record.parent.parent.type!="3ldomain_alias") ))>
+<tr>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.name)></td>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.ttl)></td>
+   <td  class="control_align_center" ><call draw_label("IN")></td>
+   <td  class="control_align_center" ><call draw_label("CNAME")></td>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.pref+" "+cust_dns_record.data)></td>
+   <td  class="control_align_center" nowrap><call disableNew(domain,cust_dns_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+<td  class="control_align_center" colspan="6"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/add_check.sbm&next_template=/dns/add_cname.html&type=cust_dns_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.list.addcname)></td>
+</tr>
+</if>
+
+<tr>
+  <td colspan="6"  width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.buildtxt)></td>
+</tr>
+<list txt_records as txt_record>
+<if ((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((txt_record.parent.parent.type!="mail_domain_alias") && (txt_record.parent.parent.parent.type!="3ldomain_alias")
+	&& (txt_record.parent.parent.parent.type!="domain_alias"))>
+<tr>
+   <td  class="control_align_center" ><call draw_label(txt_record.name)></td>
+   <td  class="control_align_center" ><call draw_label(txt_record.ttl)></td>
+   <td  class="control_align_center" ><call draw_label("IN")></td>
+   <td  class="control_align_center" ><call draw_label("TXT")></td>
+   <td  class="control_align_center" nowrap><call draw_label(txt_record.pref+" "+txt_record.data)></td>
+   <td  class="control_align_center" nowrap><call disableNew(domain,txt_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+   <td  colspan="6" width="100%" class="control_align_center">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=dns/restore_default_rec_confirm.html&next_template=submit/dns/restore_default_txt_rec.sbm" +
+    "&type=txt_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.restore_default_txt_rec)>
+   </td>
+</tr>
+
+
+<if account.plan.isResourceAvailable("cust_dns_record")>
+<tr>
+ <td  colspan="6" width="100%" class="control_align_center" ><call draw_label_bold(lang.dns.list.customtxt)>
+</td>
+</tr>
+<list cust_dns_records as cust_dns_record>
+<if cust_dns_record.rec_type=="TXT"
+	&& (((domain.type=="domain_alias") || (domain.type=="3ldomain_alias"))
+	|| ((cust_dns_record.parent.parent.type!="domain_alias") && (cust_dns_record.parent.parent.type!="3ldomain_alias")))>
+<tr>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.name)></td>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.ttl)></td>
+   <td  class="control_align_center" ><call draw_label("IN")></td>
+   <td  class="control_align_center" ><call draw_label("TXT")></td>
+   <td  class="control_align_center" ><call draw_label(cust_dns_record.pref+" "+cust_dns_record.data)></td>
+   <td  class="control_align_center" nowrap><call disableNew(domain,cust_dns_record)></td>
+</tr>
+</if>
+</list>
+<tr>
+<td  class="control_align_center" colspan="6"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/add_check.sbm&next_template=/dns/add_ctxt.html&type=cust_dns_record&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rid="+domain+"&stemplate="+template+"&ftemplate="+template, lang.dns.list.addtxt)></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END replacements/vps/control/dns/list.html  -->

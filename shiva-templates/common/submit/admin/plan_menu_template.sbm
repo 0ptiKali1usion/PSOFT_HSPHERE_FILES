@@ -1,0 +1,15 @@
+<assign result=yafv.common.s_admin.vLocalDirOpt(lang.label.menu_dir, request.template)>
+<if result.status=="OK">  
+   <assign admin = account.getChild("admin")>
+   <assign plan = admin.getPlan(request.plan_id)>
+   <assign result = plan.putValue("_MAIN_MENU", request.template)>
+    <if result.status=="OK">
+	<include request.stemplate>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+	<include request.ftemplate>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <include request.ftemplate>
+</if>  

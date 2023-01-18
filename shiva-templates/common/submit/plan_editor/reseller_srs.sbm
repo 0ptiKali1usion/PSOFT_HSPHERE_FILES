@@ -1,0 +1,21 @@
+<assign oldValues = toolbox.new_hash>
+
+<list params as param>
+  <if toolbox.startsWith(param.name, "_SETUP_PRICE_TLD_") == "1">
+    <assign res = yafv.common.s_wizard.vPriceOpt(
+        toolbox.compose(lang.msg.res_price_free,name),param.value)>
+    <assign r = oldValues.put(param.name,toolbox.html_encode(param.value))>
+    <if res.status != "OK">
+      <assign failure="1">
+      <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+    </if>
+  </if>
+</list>
+
+<if !failure>
+    <include "submit/plan_editor/reseller_navigate.sbm">
+    <include page_to_display>
+<else>
+  <include request.ftemplate>
+</if>
+

@@ -1,0 +1,10 @@
+<!-- BEGIN ./windomain/webservice.html  -->
+<assign template="windomain/webservice.html">
+<include "functions">
+<call draw_menu("domain-list")>
+<if !hosting>
+<assign hosting = account.getResource(request.rid)>
+</if>
+<include "control/windomain/webservice.html">
+<call bottom()>
+<!--  END ./windomain/webservice.html  -->

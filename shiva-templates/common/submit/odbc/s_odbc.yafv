@@ -1,0 +1,10 @@
+include common.s_hsphere.yafv: vWinFileRelativePath;
+
+regexp vStringRequired=   ".+",		fail=yafv.vStringRequired.fail;
+regexp vStringPassword=   ".+",		fail=yafv.vStringPassword.fail;
+regexp vStringOptional=   ".*",		fail=yafv.vStringOptional.fail;
+regexp vPasswordOptional= ".*",		fail=yafv.vStringPassword.fail;
+regexp vIntegerRequired=  "\d+",	fail=yafv.vIntegerRequired.fail;
+regexp vIntegerOptional=  "\d*",	fail=yafv.vIntegerOptional.fail;
+regexp vCheckboxRequired= "0|1",	fail=yafv.vCheckboxRequired.fail;
+regexp vCheckboxOptional= "()|0|1",	fail=yafv.vCheckboxOptional.fail;

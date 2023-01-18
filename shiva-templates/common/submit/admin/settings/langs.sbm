@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/misc/langs.sbm -->
+
+<assign admin = account.getChild("admin")>
+<assign old_lang_code = settings["lang"]>
+<if !old_lang_code><assign old_lang_code = "en_US_ISO8859_1|ISO-8859-1"></if>
+<call save("oldlang",old_lang_code)>
+<assign res1 = admin.setSettingsValue("lang",request["_language_"])>
+<if res1>
+<assign res = session.addMessage(lang.msg.success_lang_change)>
+<include request.next_template>
+<else>
+<assign res = session.addMessage(lang.msg.failed_lang_change)>
+<include request.ftemplate>
+</if>
+
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>                                              
+<!-- END ./submit/misc/langs.sbm -->                                                                                             

@@ -1,0 +1,63 @@
+<!-- BEGIN ./admin/binterval_edit.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")> 
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+
+<yafv s_admin>
+<form name="f_binterval_edit" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.bintervaledit.header)>
+
+<tr>
+  <td><call draw_label(lang.admin.bintervaledit.interval)></td>
+<td>
+<if !val><assign val=plan.values["_PERIOD_TYPE_"+request.count]></if>
+<select name="_PERIOD_TYPE_" size="1">
+
+<if val=="DAY"><assign vdaysel="SELECTED"><else><assign vdaysel=""></if>
+<if val=="WEEK"><assign vweeksel="SELECTED"><else><assign vweeksel=""></if>
+<if (!val) || (val=="MONTH")><assign vmonthsel="SELECTED"><else><assign vmonthsel=""></if>
+<if val=="YEAR"><assign vyearsel="SELECTED"><else><assign vyearsel=""></if>
+<option value="DAY" ${vdaysel}>${lang.admin.billing_day}
+<option value="WEEK" ${vweeksel}>${lang.admin.billing_week}
+<option value="MONTH" ${vmonthsel}>${lang.admin.billing_month}
+<option value="YEAR" ${vyearsel}>${lang.admin.billing_year}
+</select>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.size)></td>
+  <td><input type="text" name="_PERIOD_SIZE_" value="${toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+request.count],"false")}" size="4" label="${lang.admin.size}" check="vPeriod"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.bintervaledit.setup)></td>
+  <td><input type="text" name="_PERIOD_SETUP_DISC_" value="${toolbox.numberToCurLocale(plan.values["_PERIOD_SETUP_DISC_"+request.count],"false")}" size="4" label="${lang.admin.bintervaledit.setup}" check="vPercent">%</td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.bintervaledit.usage)></td>
+  <td><input type="text" name="_PERIOD_USAGE_DISC_" value="${toolbox.numberToCurLocale(plan.values["_PERIOD_USAGE_DISC_"+request.count],"false")}" size="4" label="${lang.admin.bintervaledit.usage}" check="vPercent">%</td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.bintervaledit.recurrent)></td>
+  <td><input type="text" name="_PERIOD_UNIT_DISC_" value="${toolbox.numberToCurLocale(plan.values["_PERIOD_UNIT_DISC_"+request.count],"false")}" size="4" label="${lang.admin.bintervaledit.recurrent}" check="vPercent">%</td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/admin/binterval_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="admin/binterval_edit.html">
+    <input type="hidden" name="plan_id" value="${plan.id}">
+    <input type="hidden" name="count" value="${request.count}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./admin/binterval_edit.html  -->

@@ -1,0 +1,132 @@
+<!-- BEGIN ./control/admin/ds/ds_user_search.html  -->
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<assign reseller_su=account.getChild("reseller_su")>
+
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_by_ds_header)>
+<assign availableStates = [ "IN_USE", "ON_HOLD" ]>
+<tr>
+<td><call draw_label(lang.admin.search_ds_status)></td>
+<td>
+<select name="sc_status" size="1">
+  <option value="">${lang.label.any}</option>
+  <list availableStates as state>
+  <option value="${state}">${lang.admin.ds.status[state]}</option>
+  </list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_template)></td>
+<td>
+<assign dstemplates=ds_manager.templates>
+<select name="sc_template" size="1">
+<option value="">${lang.label.any}
+<list dstemplates as dst>
+<option value="${dst.id}">${dst.name}</option>
+</list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_os)></td>
+<td><input type="text" name="sc_os"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_cpu)></td>
+<td><input type="text" name="sc_cpu"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_ip)></td>
+<td><input type="text" name="sc_ip"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_int_id)></td>
+<td><input type="text" name="sc_int_id"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_created)></td>
+<td>
+  <call draw_label(lang.label.from)>
+  <input type="text" name="sc_r_from" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_from","")>&nbsp;
+  <call draw_label(lang.label.to)>
+  <input type="text" name="sc_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_to","")>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_taken)></td>
+<td>
+  <call draw_label(lang.label.from)>
+  <input type="text" name="sc_u_from" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_u_from","")>&nbsp;
+  <call draw_label(lang.label.to)>
+  <input type="text" name="sc_u_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_u_to","")>
+</td>
+</tr>
+
+<if reseller_su>
+<tr>
+<td><call draw_label(lang.admin.search_ds_users_by_reseller)></td>
+<td>
+<select name="sc_reseller_id" size="1" onChange="lockResellerPlans(this, this.form.elements['sc_plan_id'])">
+  <list reseller_su.resellers as reseller>
+  <option value="${reseller.id}"<if reseller.id == "1"> SELECTED</if>>${reseller.name} (${reseller.url})</option>
+  </list>
+</select>
+ </td>
+</tr>
+
+<script language="javascript">
+  var plansLocked = 0;
+  function lockResellerPlans(thisSelect, planSelect) {
+    if (thisSelect.options[thisSelect.selectedIndex].value != "${reseller_id}") {
+      if (!plansLocked) {
+        planSelect.selectedIndex = 0;
+        planSelect.disabled = 1;
+        plansLocked = 1;
+      }
+    } else if (plansLocked) {
+        planSelect.disabled = 0;
+        plansLocked = 0;
+    }
+  }
+</script>
+</if>
+
+<tr>
+<td><call draw_label(lang.admin.search_ds_user)></td>
+<td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+
+<tr><td><call draw_label(lang.label.plan)></td>
+<td>
+  <select name="sc_plan_id" size="1">
+  <option value="">${lang.label.any}
+  <list admin.plans as plan>
+    <if !plan.deleted && (plan.values["_CREATED_BY_"] == "dedicated_server")><option value="${plan.id}">${plan.description}</option></if>
+  </list>
+  </select>
+</td>
+</tr>
+
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/ds_user_search.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/ds_user_search.html  -->

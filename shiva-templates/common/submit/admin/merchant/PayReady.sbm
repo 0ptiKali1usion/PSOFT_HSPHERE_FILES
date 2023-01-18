@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/PayReady.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "MERCHANT_ID", request.merchant_id, "CLASS_NAME", "psoft.epayment.PayReady", "TEMPLATE", "admin/merchant/PayReady.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "MERCHANT_ID", request.merchant_id, "CLASS_NAME", "psoft.epayment.PayReady", "TEMPLATE", "admin/merchant/PayReady.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/PayReady.sbm -->

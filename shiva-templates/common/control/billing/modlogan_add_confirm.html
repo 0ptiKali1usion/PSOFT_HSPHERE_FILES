@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/billing/modlogan_add_confirm.html  -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_modlogan" accept-charset="UTF-8">
+
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="submit/domain/add_modlogan_submit.sbm">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+<assign stype=account.plan.getResourceType(type).description>
+<if transferlog_price && modlogan_price.free=="0">
+  <assign stype=stype+" and "+account.plan.getResourceType("transferlog").description>
+  <assign total="0">
+  <list transferlog_price.entries as entry>
+    <assign res=modlogan_price.entries.addHash("type",entry.type,"description",entry.description,"amount",entry.amount)>
+    <assign total=toolbox.add(total,entry.amount)>
+  </list>
+</if>
+<if transferlog_price.free=="0" && modlogan_price.free=="1">
+  <assign res=modlogan_price.put("free","0")>
+</if>
+<assign res=toolbox.add(modlogan_price.total,total)>
+<assign res=modlogan_price.put("total",res)>
+<assign message=toolbox.compose(lang.billing.add_msg1, stype)>
+<if setup!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg2a,toolbox.currency(setup))>
+</if>
+<if recurrent!="0">
+  <assign message=message+ " "+toolbox.compose(lang.billing.add_msg3,toolbox.currency(recurrent))>
+</if>
+<if recurrentAll!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg4,toolbox.currency(recurrentAll))>
+</if>
+<call draw_warn_invoice_with_charge_info(message,modlogan_price,"","","f_add_modlogan")>
+</form>
+
+<!--  END ./control/billing/modlogan_add_confirm.html  -->

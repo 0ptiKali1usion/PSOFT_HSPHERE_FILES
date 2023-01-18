@@ -1,0 +1,20 @@
+<!-- BEGIN ./control/odbc/select_optional.html.in  -->
+<td><call draw_label(Name)></td>
+<td>&nbsp;
+    <select name="${Name}">
+	 <if Value=="">
+             <option value="" SELECTED> -optional- </option>
+	 <else>
+             <option value=""> -optional- </option>
+	 </if>
+         <list Select as opt>
+	     <if Value==opt>
+	         <option value="${opt}" SELECTED><call draw_label(opt)></option>
+	     <else>
+	         <option value="${opt}"><call draw_label(opt)></option>
+	     </if>
+         </list>
+    </select>
+</td>                                                                                                      
+<td><call draw_label(Description)></td>
+<!-- END ./control/odbc/select_optional.html.in  -->

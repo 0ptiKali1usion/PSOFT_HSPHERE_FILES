@@ -1,0 +1,694 @@
+<!-- BEGIN ./common/design.fn  -->
+<compress>
+<if settings.IMAGE_BASE>
+  <assign IMG_PREFIX = settings.IMAGE_BASE>
+<else>
+  <assign IMG_PREFIX = config.IMAGES>
+</if>
+
+<assign CSS_PREFIX = config.CSS>
+<assign CSS_DEFINED = "">
+
+<assign SPACER_IMAGE = IMG_PREFIX + design.image("spacer").file>
+
+<assign LIGHT_STRIP=design.color("table_light_strip")>
+<assign DARK_STRIP=design.color("table_dark_strip")>
+<assign BUTTON_SELECTED=design.color("button_selected_color")>
+<assign REPORT_COLOR=design.color("report_color")>
+<assign HEADER_COLOR=design.color("header_color")>
+<assign ERROR_COLOR = design.color("error_color")>
+<assign BG_COLOR = design.color("bgcolor")>
+<assign BORDER_COLOR = design.color("border_color")>
+<assign LINK_COLOR = design.color("link_color")>
+<assign MENU_COLOR1 = design.color("menu_color1")>
+<assign TEXT_COLOR = design.color("text_color")>
+<assign HEADER_TEXT_COLOR = design.color("header_text_color")>
+<assign HINT_TEXT_COLOR = design.color("hint_text_color")>
+<assign HINT_COLOR = design.color("hint_color")>
+<assign MENU_TEXT_COLOR = design.color("menu_text_color")>
+<assign MENU_COLOR2 = design.color("menu_color2")>
+<assign MENU_COLOR3 = design.color("menu_color3")>
+<assign MENU_COLOR4 = design.color("menu_color4")>
+<assign IMPORTANT_COLOR = design.color("important_color")>
+<assign LOGO_BG_COLOR = design.color("logo_bgcolor")>
+
+<assign logo_cell_width="135">
+<assign logo_cell_height="60">
+<assign main_col_width="10000">
+
+<assign tColspan = "">
+<assign tHeaderContent = "">
+<assign tHeaderLinks = "">
+<assign tHeaderTT = "">
+
+<function top()>
+<include "design/top.html">
+</function>
+
+<function left()>
+<include "design/left.html">
+</function>
+
+<function top_tt()>
+<include "design/top_tt.html">
+</function>
+
+<function bottom()>
+<include "design/bottom.html">
+</function>
+
+<function define_css()>
+<if ! CSS_DEFINED>
+  <style type="text/css">
+  <include "CSS/design.css">
+  </style>
+  <assign CSS_DEFINED = "1">
+</if>
+</function>
+
+<function draw_tooltip()>
+<!--Begin of tooltip-->
+<TR>
+<TD BGCOLOR=${design.color("hint_color")} WIDTH="100%" HEIGHT="31" valign="middle">
+<assign vps=account.getChild("vps")>
+<if vps && !vps.isVPSInitialized()>
+  <table width="100%" border="0" cellspacing="0" cellpadding="5" align="CENTER">
+    <tr><td><font color=${design.color("hint_text_color")} face="Verdana" size="1"><b>${lang.vps.uninitialized.title}</b></font></td></tr>
+    <tr><td align="center"><font color="${design.color("hint_text_color")}" face="Verdana" size="1">${lang.vps.uninitialized.text}</font></td></tr>
+  </table>
+</if>
+<if (account.tooltips) && (template)>
+  <assign title=html_help[template]["title"]>
+  <assign tip=html_help[template]["tip"]>
+  <if (title!="")&&(tip!="")>
+    <table width="100%" border="0" cellspacing="0" cellpadding="5" align="CENTER">
+    <tr><td><font color=${design.color("hint_text_color")} face="Verdana" size="1">${toolbox.compose(lang.functions.tooltip_title, lang[title])}</font></td></tr>
+    <tr><td align="center"><font color="${design.color("hint_text_color")}" face="Verdana" size="1">${lang[tip]}</font></td></tr>
+    <if html_help[template]["full"]>
+      <tr><td class="control_align_right"><a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=misc/full_help.html&topic_id=${template}','HELP','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false" ><font color="${design.color("link_color")}" face="Verdana" size="1">${lang.functions.know_more}</font></a></td></tr>
+    </if>
+    <assign tooltipWasDrawn = "1">
+    </table>
+  </if>
+</if>
+<if session.msg>
+  <table width="100%" border="0" cellspacing="0" cellpadding="5" align="CENTER">
+  <tr><td><call error()></td></tr>
+  </table>
+<else><if !tooltipWasDrawn>&nbsp;</if>
+</if>
+</TD>
+</TR>
+<TR>
+  <TD WIDTH="100%" HEIGHT="1" BGCOLOR=${design.color("border_color")}>
+     <call draw_spacer("1", "1")></TD>
+</TR>
+  <TR>
+     <TD WIDTH="100%" HEIGHT="100%" BGCOLOR=${design.color("bgcolor")} VALIGN="top"><br>
+<!--End of tooltip-->
+</function>
+
+<function error()>
+<if session.msg><list session.msg as message><i><call draw_colored_label(toolbox.formatForHTML(message), ERROR_COLOR)></i><br></list>
+<else>&nbsp;</if>
+</function>
+
+<function error_message(message)>
+<call draw_colored_label(message,ERROR_COLOR)>
+</function>
+
+<function show_image_src(image_id)><call get_img_attributes(image_id)>${s__CurImgFile}</function>
+
+<function show_img_attributes(image_id)><call get_img_attributes(image_id)>${s__CurImgAtt}</function>
+
+<function get_img_attributes(image_id)><compress>
+<assign s__CurImg = design.image(image_id)>
+  <assign s__CurImgWidth = s__CurImg.width>
+  <assign s__CurImgHeight = s__CurImg.height>
+  <if (RTL_DIRECTION == "1") && s__CurImg.rtl_file>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.rtl_file>
+  <else>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.file>
+  </if>
+  <assign s__CurImgAtt = "SRC=\"" + s__CurImgFile + "\" WIDTH=\"" + s__CurImgWidth + "\" HEIGHT=\"" + s__CurImg.height + "\"">
+</compress></function>
+
+  
+<function get_img_attributes_wh(image_id, forceWidth, forceHeight)><compress>
+  <assign s__CurImg = design.image(image_id)>
+  <if (RTL_DIRECTION == "1") && s__CurImg.rtl_file>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.rtl_file>
+  <else>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.file>
+  </if>
+  <if forceWidth><assign s__CurImgWidth = forceWidth><else><assign s__CurImgWidth = s__CurImg.width></if>
+  <if forceHeight><assign s__CurImgHeight = forceHeight><else><assign s__CurImgHeight = s__CurImg.height></if>
+  <assign s__CurImgAtt = "SRC=\"" + s__CurImgFile + "\" WIDTH=\"" + s__CurImgWidth + "\" HEIGHT=\"" + s__CurImg.height + "\"">
+</compress></function>
+
+<function get_icon_img_attributes(icon_id)>
+  <assign s__CurIcon = design.icon(icon_id)>
+  <assign s__CurImg = design.icon_image(icon_id)>
+  <if (RTL_DIRECTION == "1") && s__CurImg.rtl_file>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.rtl_file>
+  <else>
+    <assign s__CurImgFile = IMG_PREFIX + s__CurImg.file>
+  </if>
+  <assign s__CurImgWidth = s__CurImg.width>
+  <assign s__CurImgHeight = s__CurImg.height>
+  <assign s__CurImgAtt = "SRC=\"" + s__CurImgFile + "\" WIDTH=\"" + s__CurImgWidth + "\" HEIGHT=\"" + s__CurImg.height + "\"">
+</function>
+ 
+<function draw_image(image_id)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} BORDER="0">
+</compress></function>
+
+<function draw_image_width(image_id, image_width)><compress>
+<call get_img_attributes_wh(image_id, image_width, "")>
+<IMG ${s__CurImgAtt} BORDER="0">
+</compress></function>
+
+<function draw_image_alt(image_id, alt_msg)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} ALT="${alt_msg}" BORDER="0">
+</compress></function>
+
+<function draw_image_align(image_id, img_align)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} BORDER="0" ALIGN="${img_align}">
+</compress></function>
+
+<function draw_image_align_alt(image_id, img_align, alt_msg)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} ALT="${alt_msg}" BORDER="0" ALIGN="${img_align}">
+</compress></function>
+
+<function draw_image_name(image_id, image_name)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} NAME="${image_name}" BORDER="0">
+</compress></function>
+
+<function draw_image_name_align(image_id, image_name, img_align)><compress>
+<call get_img_attributes(image_id)>
+<IMG ${s__CurImgAtt} NAME="${image_name}" BORDER="0" ALIGN="${img_align}">
+</compress></function>
+
+<function draw_spacer(s__width,s__height)><compress>
+<IMG SRC="${SPACER_IMAGE}" WIDTH="${s__width}" HEIGHT="${s__height}" BORDER="0">
+</compress></function>
+
+<function draw_submit(field_name, image_id)><compress>
+<call get_img_attributes(image_id)>
+<if !field_name><assign field_name = image_id></if>
+</compress><INPUT TYPE="image" NAME="${field_name}" TITLE="${lang.functions.submit}" ALT="${lang.functions.submit}" ${s__CurImgAtt} BORDER="0"></function>
+
+<function get_help_link_content(helpID, alt_msg)><compress>
+<assign help_file = online_help[helpID]>
+<call get_img_attributes("help")>
+<if !help_file>
+  <assign helpLinkContent = "<IMG " + s__CurImgAtt + " TITLE=\"" + lang.functions.unavail_help + "\" BORDER=\"0\" ALIGN=\"absmiddle\">">
+<else>
+  <if !alt_msg><assign alt_msg=lang.functions.action_get_help></if>
+  <assign helpLinkContent = "<a href=\"#\" TITLE=\"" + alt_msg + "\" onClick=\"chw=window.open('"
+	+ config.CLIENT_CP_URL + "?template_name="+online_help["help_wrapper"]+"&help_file="
+	+ help_file + "','HELP','resizable=yes,scrollbars=yes,status=no,width=450,height=500');"
+	+ " if (chw != null) chw.focus(); return false\"><IMG " + s__CurImgAtt
+	+ " ALT=\"" + alt_msg + "\" BORDER=\"0\" ALIGN=\"absmiddle\"><\/a>">
+</if>
+</compress></function>
+
+<function draw_help(helpID, alt_msg)><compress>
+<call get_help_link_content(helpID, alt_msg)>
+${helpLinkContent}
+</compress></function>
+
+<function draw_existing_help(helpId, msg_alt)><compress>
+<call get_help_link_content(helpId, alt_msg)>
+<if help_file>${helpLinkContent}</if>
+</compress></function>
+
+<function draw_tt_help(rID, helpID, label)><compress>
+<assign help_file = online_help[helpID]>
+<if !help_file><call draw_tt_link(rID,label)>
+<else>
+ <if !label><assign label=lang.functions.action_get_help></if>
+ <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=${online_help["help_wrapper"]}&help_file=${help_file}&rid=${rID}','TroubleTicket','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false" ><call draw_image_align_alt("tt", "absmiddle", label)></a>
+</if>
+</compress></function>
+
+<function draw_tt_link(rid, label)><compress>
+<if account.plan.getResourceType("tt").disabled != "1">
+  <if !label><assign label=lang.functions.action_create_tt></if>
+  <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=tt/standalone_tt_form.html&rid=${rid}','TroubleTicket','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false" ><call draw_image_align_alt("tt", "absmiddle", label)></a>
+<else>
+  &nbsp;
+</if>
+</compress></function>
+
+<function draw_off()>
+<call draw_image_align_alt("off", "absmiddle", lang.functions.warn_required_res)>
+</function>
+
+<function draw_plan_disabled()>
+<call draw_image_align_alt("off", "absmiddle", lang.functions.warn_signup_status)>
+</function>
+
+<function draw_on_always()>
+<call draw_image_align_alt("on", "absmiddle", lang.functions.always_on)>
+</function>
+
+<function draw_on()>
+<call draw_image_align_alt("on", "absmiddle", lang.functions.warn_dependent_res)>
+</function>
+
+<function draw_add(addURL, label)>
+<call draw_palink(addURL,"add",label)>
+</function>
+
+<function draw_edit(editURL, label)>
+<call draw_palink(editURL,"edit",label)>
+</function>
+
+<function draw_edit_emu_check(editURL, label)>
+<if (account.plan.values["_EMULATION_MODE"] == "1") || (config.EMULATION_MODE == "TRUE")>
+<a href="#" onClick="alert('${lang.label.demo_restrictions}');return false"><call draw_image_align_alt("edit", "absmiddle", alter)></a> 
+<else>
+<call draw_palink(editURL,"edit",label)>
+</if>
+</function>
+
+<function draw_delete(deleteURL, label)>
+<call draw_palink(deleteURL,"del",label)>
+</function>
+
+<function draw_change(editURL, label)>
+<call draw_palink(editURL,"change",label)>
+</function>
+
+<function draw_select(selectURL, label)>
+<call draw_palink(selectURL,"select",label)>
+</function>
+
+<function draw_fix(selectURL, label)>
+<call draw_palink(selectURL,"fix",label)>
+</function>
+
+<function draw_setup(selectURL, label)>
+<call draw_palink(selectURL,"setup",label)>
+</function>
+
+
+<function draw_select_signup(plan)>
+<if settings.signup_fullscreen=="1">
+  <a href="${config.CLIENT_CP_URL}?action=signup&plan_id=${plan}&signup=yes&template_name=signup/begin.html"><call draw_image_align_alt("select", "absmiddle", lang.functions.choose_plan)></a>
+<else>
+  <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?action=signup&plan_id=${plan}&signup=yes&template_name=signup/begin.html','${plan}','resizable=no,scrollbars=yes,status=yes,width=750,height=550'); if (chw != null) chw.focus(); return false"><call draw_image_align_alt("select", "absmiddle", lang.functions.choose_plan)></a>
+</if>
+</function>
+
+<function draw_select_adminsignup(plan)>
+<if settings.signup_fullscreen=="1">
+  <a href="${config.CLIENT_CP_URL}?plan_id=${plan}&signup=yes&template_name=signup/begin.html&admin_signup=yes"><call draw_image_align_alt("select", "absmiddle", lang.functions.choose_plan)></a>
+<else>
+  <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?plan_id=${plan}&signup=yes&template_name=signup/begin.html&admin_signup=yes','${plan}','resizable=no,scrollbars=yes,status=yes,width=750,height=550'); if (chw != null) chw.focus(); return false"><call draw_image_align_alt("select", "absmiddle", lang.functions.choose_plan)></a>
+</if>
+</function>
+
+<function draw_preview_adminsignup(plan)>
+<if settings.signup_fullscreen=="1">
+  <a href="${config.CLIENT_CP_URL}?plan_id=${plan}&signup=yes&template_name=signup/begin.html&admin_signup=yes"><call draw_image_align_alt("lupa", "absmiddle", lang.functions.choose_plan)></a>
+<else>
+  <a href="${config.CLIENT_CP_URL}?plan_id=${plan}&signup=yes&template_name=signup/begin.html&admin_signup=yes" onClick="chw=window.open('${config.CLIENT_CP_URL}?plan_id=${plan}&signup=yes&template_name=signup/begin.html&admin_signup=yes','${plan}','resizable=no,scrollbars=yes,status=yes,width=750,height=550'); if (chw != null) chw.focus(); return false;"><call draw_image_align_alt("lupa", "absmiddle", lang.functions.choose_plan)></a>
+</if>
+</function>
+
+<function draw_select_signup_compare(plan)>
+<if settings.signup_fullscreen=="1">
+  <a href="${config.CLIENT_CP_URL}?action=signup&plan_id=${plan.id}&signup=yes&template_name=signup/begin.html"><call draw_colored_label(toolbox.compose(lang.misc.compareplans.signup,plan.description),settings.link_color)></a>
+<else>
+  <a href="#" onClick="window.open('${config.CLIENT_CP_URL}?action=signup&plan_id=${plan.id}&signup=yes&template_name=signup/begin.html','${plan.id}','scrollbars=yes,resizable=no,status=yes,width=750,height=550')"><call draw_colored_label(toolbox.compose(lang.misc.compareplans.signup,plan.description),settings.link_color)></a>
+</if>
+</function>
+
+<function draw_select_signup_choose(plan)>
+<if settings.signup_fullscreen=="1">
+  <a href="${config.CLIENT_CP_URL}?action=signup&plan_id=${plan.id}&signup=yes&template_name=signup/begin.html"><call draw_label(plan.description)></a>
+<else>
+   <a href="#" onClick="window.open('${config.CLIENT_CP_URL}?action=signup&plan_id=${plan.id}&signup=yes&template_name=signup/begin.html','${plan.id}','scrollbars=yes,resizable=no,status=yes,width=750,height=550')"><call draw_label(plan.description)></a>
+</if>
+</function>
+
+<function draw_state(state,toDisableURL,toEnableURL)>
+<if state>
+ <call draw_palink(toDisableURL,"on",lang.functions.action_disable)>
+<else>
+ <call draw_palink(toEnableURL,"off",lang.functions.action_enable)>
+</if>
+</function>
+
+<function draw_state_on(toDisableURL)>
+ <call draw_palink(toDisableURL,"on",lang.functions.action_disable)>
+</function>
+
+<function draw_state_off(toEnableURL)>
+ <call draw_palink(toEnableURL,"off",lang.functions.action_enable)>
+</function>
+
+<function draw_preview(previewURL, label)>
+<call draw_ptalink(previewURL,"preview","lupa",label)>
+</function>
+
+<function draw_preview_target(previewURL, target, label)>
+<call draw_ptalink(previewURL, target, "lupa", label)>
+</function>
+
+<function draw_preview_large(previewURL, label)>
+<call draw_ptalink(previewURL,"preview","llupa",label)>
+</function>
+
+<function draw_launch(launchURL, label)>
+<call draw_ptalink(launchURL,"_blank","launch",label)>
+</function>
+
+<function draw_launch_large(launchURL, label)>
+<call draw_ptalink(launchURL,"_blank","llaunch",label)>
+</function>
+
+<function draw_uninstall(launchURL, label)>
+<call draw_ptalink(launchURL,"_blank","unins",label)>
+</function>
+
+<function draw_view(selectURL, label)>
+<call draw_palink(selectURL,"view",label)>
+</function>
+
+<function draw_credit(jumpURL, label)>
+<call draw_palink(jumpURL,"credit",label)>
+</function>
+
+<function draw_debit(jumpURL, label)>
+<call draw_palink(jumpURL,"debit",label)>
+</function>
+
+<function draw_set_period_begin(jumpURL, label)>
+<call draw_palink(jumpURL, "date", label)>
+</function>
+
+<function draw_login_account(loginURL, label)>
+<call draw_ptalink(loginURL,"_blank","login",label)>
+</function>
+
+<function draw_suspend_account(toSuspendURL, label)>
+<call draw_palink(toSuspendURL,"suspend",label)>
+</function>
+
+<function draw_resume_account(toResumeURL, label)>
+<call draw_palink(toResumeURL,"resume",label)>
+</function>
+
+<function draw_delete_account(toDeleteURL, label)>
+<call draw_palink(toDeleteURL,"delete",label)>
+</function>
+
+<function draw_mail_type(editURL, image_id, label)>
+<if editURL>
+  <call draw_palink(editURL, image_id, label)>
+<else>
+  <call draw_image_align_alt(image_id, "absmiddle", "")>
+</if>
+</function>
+
+<function draw_mailbox_type(editURL)>
+<call draw_mail_type(editURL,"mail_box",lang.functions.edit_mbox)>
+</function>
+
+<function draw_mailforward_type(editURL)>
+<call draw_mail_type(editURL,"mail_forward",lang.functions.edit_mforward)>
+</function>
+
+<function draw_mailalias_type(editURL)>
+<call draw_mail_type(editURL,"mail_alias",lang.functions.edit_malias)>
+</function>
+
+<function draw_maillist_type(editURL)>
+<call draw_mail_type(editURL,"mail_list",lang.functions.edit_mlist)>
+</function>
+
+<function draw_responder_type(editURL)>
+<call draw_mail_type(editURL,"responder",lang.functions.edit_mresponder)>
+</function>
+
+<function draw_discard_type(editURL)>
+<call draw_mail_type(editURL,"discard",lang.functions.edit_discard)>
+</function>
+
+<function draw_catchall_type(editURL)>
+<call draw_mail_type(editURL,"catch_all",lang.functions.edit_catch_all)>
+</function>
+
+<function draw_antispam_type(editURL)>
+<call draw_mail_type(editURL,"antispam",lang.functions.edit_antispam_prefs)>
+</function>
+
+<function draw_antivirus_type(editURL)>
+<call draw_mail_type(editURL,"antivirus",lang.functions.edit_antivirus)>
+</function>
+
+<function draw_oscommerce(previewURL, label)>
+<call draw_ptalink(previewURL,"preview","os_commerce",label)>
+</function>
+
+<function draw_oscommerce_admin(previewURL, label)>
+<call draw_ptalink(previewURL,"preview","os_admin",label)>
+</function>
+
+<function draw_colored_note(llabel,lcolor)><if llabel><font size="1" color="${lcolor}" class="label_font"><br>&nbsp;&nbsp;<i>${llabel}</i></font></if></function>
+
+<function draw_custom_billing_note(description,note,admin_note)><call draw_label(description)><if note><br>&nbsp;&nbsp;<i><call draw_label(note)></i></if><if admin_note><br>&nbsp;&nbsp;<i><call draw_label("* "+lang.admin.custom_billing.admin_note+":")><call draw_label(admin_note)></i></if></function>
+
+<function draw_colored_label(llabel,lcolor)><if !llabel><assign llabel="&nbsp;"></if><font color="${lcolor}" class="label_font">${llabel}</font></function>
+
+<function draw_colored_label_bold(llabel,lcolor)><if !llabel><assign llabel="&nbsp;"></if><font color="${lcolor}" class="label_font"><b>${llabel}</b></font></function>
+
+<function draw_colored_label_small(llabel,lcolor)><if !llabel><assign llabel="&nbsp;"></if><font color="${lcolor}" class="label_font"><small>${llabel}</small></font></function>
+
+<function draw_label(label)><call draw_colored_label(label,design.color("text_color"))></function>
+
+<function draw_label_popup(label, text)>
+  <span title="${text}"><call draw_colored_label(label,design.color("text_color"))></span>
+</function>
+
+<function draw_label_bold(label)><call draw_colored_label_bold(label,design.color("text_color"))></function>
+
+<function draw_label_small(label)><call draw_colored_label_small(label,design.color("text_color"))></function>
+
+<function draw_header(header)><call draw_colored_label_bold(header,design.color("header_text_color"))></function>
+
+<function draw_important_label(label)><call draw_colored_label(label,design.color("important_color"))></function>
+
+<function draw_important_header(header)><call draw_colored_label_bold(header,design.color("important_color"))></function>
+
+<function draw_TT_header()><call draw_colored_label_bold(lang.functions.tt,design.color("header_text_color"))></function>
+
+<function draw_link(url,label)><a href="${url}"><call draw_colored_label(label,design.color("link_color"))></a></function>
+
+<function draw_link_bold(url,label)><a href="${url}"><call draw_colored_label_bold(label,design.color("link_color"))></a></function>
+
+<function draw_link_demo(label)><a href="#" onClick="alert('${lang.label.demo_restrictions}');return false"><call draw_colored_label(label,design.color("link_color"))></a></function>
+
+
+<function draw_tlink(url,target,label)><a href="${url}" target="${target}"><call draw_colored_label(label,design.color("link_color"))></a></function>
+
+<function draw_plink(url, image_id)>
+<a href="${url}"><call draw_image_align(image_id, "absmiddle")></a>
+</function>
+
+<function get_link_content(url, label)><compress>
+<if !label><assign label="&nbsp;"></if>
+<assign linkContent = "<a href=\"" + url + "\">" + label + "<\/a>">
+</compress></function>
+
+<function get_palink_content(url, image_id, alt_msg)><compress>
+<call get_img_attributes(image_id)>
+<assign linkContent = "<a href=\"" + url + "\" TITLE=\"" + alt_msg + "\"><IMG "
+	+ s__CurImgAtt + " ALT=\"" + alt_msg + "\" BORDER=\"0\" ALIGN=\"absmiddle\"><\/a>">
+</compress></function>
+
+<function draw_palink(url, image_id, alt_msg)><call get_palink_content(url, image_id, alt_msg)>${linkContent}</function>
+
+<function draw_ptlink(url, target, image_id)>
+<a href="${url}" target="${target}"><call draw_image_align(image_id, "absmiddle")></a>
+</function>
+
+<function get_ptalink_content(url, target, image_id, alt_msg)><compress>
+<call get_img_attributes(image_id)>
+<assign linkContent = "<a href=\"" + url + "\" TITLE=\"" + alt_msg + "\" target=\""
+	+ target + "\"><IMG " + s__CurImgAtt + " ALT=\"" + alt_msg 
+	+ "\" BORDER=\"0\" ALIGN=\"absmiddle\"><\/a>">
+</compress></function>
+
+<function draw_ptalink(url, target, image_id, alter)>
+<a href="${url}" target="${target}" title="${alter}"><call draw_image_align_alt(image_id, "absmiddle", alter)></a>
+</function>
+
+
+<function draw_onclick_palink(img, onClick, alt_mes)>
+<a href="javascript:${onClick}" TITLE="${alt_mes}"><call draw_image_align_alt(img, "absmiddle", alt_mes)></a>
+</function>
+
+<function draw_load_diagram(d_value, d_limit, d_app_percent, d_width)>
+  <if toolbox.ge(d_value, d_limit) == "1">
+    <assign bar1 = "100">
+    <assign bar2 = "0">
+    <assign color1 = "over">
+    <assign color2 = "over">
+  <else>
+    <assign bar1 = d_value>
+    <assign bar_whole = d_limit>
+    <assign app_limit = toolbox.div(toolbox.mul(d_limit, d_app_percent), "100")>
+    <if toolbox.lt(d_value, app_limit) == "1">
+      <assign color1 = "load">
+      <assign color2 = "free">
+    <else>
+      <assign color1 = "approach">
+      <assign color2 = "free">
+    </if>
+    <assign bar2 = toolbox.sub(bar_whole, bar1)>
+    <assign bar1=toolbox.div(bar1,bar_whole)>
+    <assign bar2=toolbox.div(bar2,bar_whole)>
+    <assign bar1=toolbox.mul(bar1,"100")>
+    <assign bar2=toolbox.mul(bar2,"100")>
+  </if>
+  <table width="${d_width}" class="diagram">
+    <tr>
+	<if bar1 != "0">
+	  <td><call draw_image("left-"+color1)></td>
+	  <td   width="${bar1}%"><call draw_image_width("middle-"+color1, "100%")></td>
+	<else>
+	  <td><call draw_image("left-"+color2)></td>
+	</if>
+	<if bar2 != "0">
+	  <td   width="${bar2}%"><call draw_image_width("middle-"+color2, "100%")></td>
+	  <td><call draw_image("right-"+color2)></td>
+	<else>
+	  <td><call draw_image("right-"+color1)></td>
+	</if>
+    </tr>
+  </table>
+</function>
+
+<function draw_diagram_legend()>
+<b><call draw_label(lang.quick.quickview.legend)></b>
+<call draw_image_alt("graph-load", lang.quick.quickview.altusedlegend)><call draw_label(lang.quick.quickview.usedlegend)>
+<call draw_image_alt("graph-free", lang.quick.quickview.altlimitlegend)><call draw_label(lang.quick.quickview.freelegend)>
+<call draw_image_alt("graph-approach", lang.quick.quickview.altapproachlimitlegend)><call draw_label(lang.quick.quickview.approachlimitlegend)> 
+<nobr><call draw_image_alt("graph-over", lang.quick.quickview.altoverlimitlegend)><call draw_label(lang.quick.quickview.overlimitlegend)></nobr>
+</function>
+
+<function display_ticket_link_params(ticket, add_params)>
+<if !ticket.title><assign tt_title=lang.search.ttsearch.nodescr><else><assign tt_title=ticket.title></if>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html"+"&stemplate="+template+"&ttid="+ticket.id+add_params, toolbox.html_encode(tt_title))><if ticket.email><if ticket.highlight><call draw_important_label("<br><b>"+toolbox.html_encode(" ("+ticket.email+")")+"</b>")><else><call draw_label("<br>"+toolbox.html_encode(" ("+ticket.email+")"))></if></if>
+</function>
+
+<function display_ticket_link_bold_params(ticket, add_params)>
+<if !ticket.title><assign tt_title=lang.search.ttsearch.nodescr><else><assign tt_title=ticket.title></if>
+<call draw_link_bold(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html"+"&stemplate="+template+"&ttid="+ticket.id+add_params, toolbox.html_encode(tt_title))><if ticket.email><if ticket.highlight><call draw_important_label("<br><b>"+toolbox.html_encode(" ("+ticket.email+")")+"</b>")><else><call draw_label("<br><b>"+toolbox.html_encode(" ("+ticket.email+")")+"</b>")></if></if>
+</function>
+
+<function display_ticket_link(ticket)>
+<call display_ticket_link_params(ticket, "")>
+</function>
+
+<function display_ticket_link_bold(ticket)>
+<call display_ticket_link_bold_params(ticket, "")>
+</function>
+
+<function prepare_table_header(colspan, label)>
+<assign tColspan = colspan>
+<assign tHeaderContent = label>
+<assign tHeaderLinks = "">
+</function>
+
+<function prepare_table_header_tt(colspan, label)>
+<assign tColspan = colspan>
+<assign tHeaderContent = label>
+<assign tHeaderLinks = "">
+<assign tHeaderTT = "1">
+</function>
+
+<function add_table_header_help(helpId, alt_msg)>
+<if tHeaderContent>
+  <call get_help_link_content(helpId, alt_msg)>
+  <assign tHeaderContent = tHeaderContent + "&nbsp;" + helpLinkContent>
+</if>
+</function>
+
+<function add_table_header_link(url, label)>
+<call get_link_content(url, label)>
+<assign tHeaderLinks = tHeaderLinks + "&nbsp;" + linkContent>
+</function>
+
+<function add_table_header_palink(url, image_id, alt_msg)>
+<call get_palink_content(url, image_id, alt_msg)>
+<assign tHeaderLinks = tHeaderLinks + "&nbsp;" + linkContent>
+</function>
+
+<function add_table_header_ptalink(url, target, image_id, alt_msg)>
+<call get_ptalink_content(url, target, image_id, alt_msg)>
+<assign tHeaderLinks = tHeaderLinks + "&nbsp;" + linkContent>
+</function>
+
+<function draw_table_header(colspan, label)>
+<assign tColspan = colspan>
+<assign tHeaderContent = label>
+<assign tHeaderLinks = "">
+<call draw_table_header_prepared()>
+</function>
+
+<function draw_table_header_prepared()>
+<TABLE align="center" width="90%" class="control">
+<tr>
+<if tColspan>
+  <td colspan="${tColspan}" class="control_header">
+<else>
+  <td class="control_header">
+</if>
+<if !tHeaderLinks>
+  <call draw_header(tHeaderContent)>
+<else>
+  <TABLE WIDTH="100%" class="inner_header">
+    <TR>
+      <TD><call draw_header(tHeaderContent)></TD>
+      <TD class="inner_links"><call draw_header(tHeaderLinks)></TD>
+    </TR>
+  </TABLE>
+</if>
+  </td>
+</tr>
+</function>
+
+<function draw_table_footer()>
+</table>
+</function>
+
+<function draw_info_table_header(label, table_width)>
+<table align="center" width="${table_width}" class="control">
+<tr>
+<td class="control_header"><call draw_header(label)></td>
+</tr>
+<tr>
+<td>
+</function>
+
+<function draw_info_table_footer()>
+</td>
+</tr>
+</table>
+</function>
+
+<function include_css(css_url)><link rel="stylesheet" type="text/css" href="${CSS_PREFIX}${css_url}"></function>
+
+</compress>
+<include "menu.fn">
+<!--  END ./common/design.fn  -->

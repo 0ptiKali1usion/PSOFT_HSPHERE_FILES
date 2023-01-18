@@ -1,0 +1,6 @@
+<center> Control Panel Alias </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Alias template (mask) is used for generating the URL at which reseller and his users will be able to log into the control panel until the reseller registers his own domain name.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<i>* In case the Control panel alias field is blank, check if you have created Control panel alias template in your DNS zone. (for instruction see H-Sphere documentation) </i>

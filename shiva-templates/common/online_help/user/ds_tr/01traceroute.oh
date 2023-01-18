@@ -1,0 +1,4 @@
+<center>Trace Route/Net Troubleshooter</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+This tool allows you to ping any internet host from your hosting server. Enter the host name or the IP address of the server to ping. If the tracing takes longer than the timeout period you specified, the process will be stopped and the tracing results will be displayed.

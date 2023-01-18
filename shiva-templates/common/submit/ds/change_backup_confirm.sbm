@@ -1,0 +1,26 @@
+<!-- BEGIN ./submit/ds/change_backup_confirm.sbm  -->
+<assign ds=account.getResource(request.rid)>
+<assign backup = ds.getChild("backup")>
+<switch request.period>
+  <case "1">
+    <assign price=backup.estimateChange(request.period,request.day_time_hour,request.day_time_min)>
+    <break>
+  <case "2">
+    <assign price=backup.estimateChange(request.period,request.week_time_hour,request.week_time_min,request.day_of_week)>
+    <break>
+  <case "3">
+    <assign price=backup.estimateChange(request.period,request.month_time_hour,request.month_time_min,request.day_of_month)>
+    <break>
+</switch>
+<if price.status!="ERROR">
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  <assign res = session.addMessage(price.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/ds/change_backup_confirm.sbm  -->

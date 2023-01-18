@@ -1,0 +1,44 @@
+<!-- BEGIN ./signup/common/control/PayPalRedirect.html -->
+<include "functions">
+<yafv s_billing>
+<assign ftemplate="submit/signup/end.sbm">
+<assign template="signup/control/WebProcessorRedirect.html">
+<include "control/signup/signup_function.html">
+<if !session.msg>
+  <assign title=toolbox.compose(lang.signup.pay_via_webprocessor, bildescription)>
+<else>
+  <assign title=lang.common_signup_end_fail>
+  <assign error_disabled="true">
+</if>
+<include "signup/signup_top.html">
+<onLoad="document.forms['login'].submit()">
+<table border="0">
+<tr>
+  <td class="control_align_center">
+<yafv s_signup>
+<p><call draw_label(toolbox.compose(lang.signup.pay_via_webprocessor_click, bildescription))></p>
+<if !full_amount>
+  <if !mod><assign mod=request["_mod"]></if>
+  <assign invoice = toolbox.getInvoice(mod)>
+  <assign new_invoice=toolbox.calculateTaxes(invoice.total)>
+  <assign full_amount=new_invoice.total>
+</if>
+
+<assign full_amount = toolbox.formatPayPalAmount(full_amount)>
+<assign tmp_action= new_user.reseller_context_url+"psoft.hsphere.payment."+servletname>
+
+<form name="login" action="${tmp_action}" method="POST" target="new" check!>
+    <call draw_label(lang.label.amount + ": " + toolbox.currency(full_amount))>
+    <input type="hidden" name="amount" value="${full_amount}">
+    <input type="hidden" name="trans_id" value="sig-${new_user.signup_id}">
+    <input type="hidden" name="cp_url" value="${new_user.reseller_context_url}">
+    <input type="hidden" name="action" value="redirect">
+    <input type="hidden" name="description" value="${plans[request.plan_id].description}">
+    <input type="submit">
+</form>
+</td>
+</tr>
+</table>
+<assign disable_next="1">
+<include "signup/signup_bottom.html">
+<!-- END ./signup/common/control/WebProcessorRedirect.html -->

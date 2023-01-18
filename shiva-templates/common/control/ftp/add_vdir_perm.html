@@ -1,0 +1,42 @@
+<!-- BEGIN ./ftp/add_vdir_perm.html.in  -->
+<call draw_tooltip()>
+
+<assign vdir=account.getResource(request.uid)>
+
+<function displayUser(user)>
+
+<assign exist="">
+<list vdir.userList() as vuser>
+<if user.vlogin==vuser.vlogin>
+    <assign exist="1">
+</if>
+</list>
+<if exist=="">
+    <option value="${user}">${user.vlogin}
+</if>
+</function>
+
+<form name="f_add_vuser"  action="${config.CLIENT_CP_URL}" method="post"  accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/ftp/add_vdir_perm_submit.sbm">
+
+
+
+
+<call draw_table_header("2", lang.ftp.addvdirperm.header)>
+
+
+<tr>
+   <td><call draw_label(lang.ftp.addvdirperm.users)></td>
+   <td><select name=user_rid><list account.getResource(request.rid).getChildren("ftp_vhost_user") as user><call displayUser(user)></list></select></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/add_vdir_perm.html.in  -->

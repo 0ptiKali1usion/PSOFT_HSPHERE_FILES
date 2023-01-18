@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE params [
+  <!ELEMENT params (group+)>
+  <!ELEMENT group ((param|radiogroup|select)*)>
+  <!ELEMENT param (#PCDATA)>
+  <!ELEMENT radiogroup (param+)>
+  <!ELEMENT select (param+)>
+
+  <!ATTLIST group name CDATA #REQUIRED>
+  <!ATTLIST param name CDATA #REQUIRED>
+  <!ATTLIST param type CDATA #REQUIRED>
+  <!ATTLIST param defaultvalue  CDATA  #REQUIRED>
+  <!ATTLIST param description  CDATA  #REQUIRED>
+  <!ATTLIST param help CDATA  #REQUIRED>
+  <!ATTLIST radiogroup name CDATA  #REQUIRED>
+  <!ATTLIST select name CDATA  #REQUIRED>
+  <!ATTLIST select help CDATA  #IMPLIED>
+]>
+
+<!--
+<!DOCTYPE params SYSTEM "http://www.psoft.net/HSdocumentation/sysadmin/physical-server-params.dtd"> -->
+
+<params>
+
+<group name="unix_hosting">
+        <select name="PHPVERSION" help="admin-eeman-pserver-web-PHPVERSION">
+		<param name="php4" type="check" defaultvalue="1" description="PHP4" help=""/>
+		<param name="php5" type="check" defaultvalue="0" description="PHP5" help=""/>
+        </select>
+        <!--radiogroup name="smtpauth_popbeforesmtp">
+		<param name="smtpauth" type="check" defaultvalue="1" description="eeman.qmail.params.smtpauth" help="admin-eeman-qmail-smtpauth"/>
+		<param name="popbeforesmtp" type="check" defaultvalue="0" description="eeman.qmail.params.popbeforesmtp" help="admin-eeman-qmail-popbeforesmtp"/>
+	</radiogroup-->
+</group>
+<!--
+<group name="mssql">
+
+<param name="readConfigOnFly" type="label" defaultvalue="" description="eeman.pserver.params.readConfigOnFly" help="admin-eeman-pserver-win-readConfigOnFly"/>
+<param name="addressMAC" type="edit" defaultvalue="" description="eeman.pserver.params.addressMAC" help="admin-eeman-pserver-win-addressMAC"/>
+<param name="provider" type="edit" defaultvalue="" description="eeman.pserver.params.provider" help="admin-eeman-pserver-win-provider"/>
+<param name="cpUrl" type="edit" defaultvalue="" description="eeman.pserver.params.cpUrl" help="admin-eeman-pserver-win-cpUrl"/>
+<param name="ssUrl" type="edit" defaultvalue="" description="eeman.pserver.params.ssUrl" help="admin-eeman-pserver-win-ssUrl"/>
+<param name="ssClass" type="label" defaultvalue="" description="eeman.pserver.params.ssClass" help="admin-eeman-pserver-win-ssClass"/>
+<param name="usersHome" type="winpathparam" defaultvalue="" description="eeman.pserver.params.usersHome" help="admin-eeman-pserver-win-usersHome"/>
+<param name="iusrAccount" type="label" defaultvalue="" description="eeman.pserver.params.iusrAccount" help="admin-eeman-pserver-win-iusrAccount"/>
+<param name="iwamAccount" type="label" defaultvalue="" description="eeman.pserver.params.iwamAccount" help="admin-eeman-pserver-win-iwamAccount"/>
+<param name="SMTP" type="ipparam" defaultvalue="" description="eeman.pserver.params.SMTP" help="admin-eeman-pserver-win-SMTP"/>
+<param name="ftpServer" type="label" defaultvalue="" description="eeman.pserver.params.ftpServer" help="admin-eeman-pserver-win-ftpServer"/>
+<param name="innerLogDir" type="label" defaultvalue="" description="eeman.pserver.params.innerLogDir" help="admin-eeman-pserver-win-innerLogDir"/>
+
+<param name="rotateBySize" type="label" defaultvalue="" description="eeman.pserver.params.rotateBySize" help="admin-eeman-pserver-win-rotateBySize"/>
+<param name="rotatePeriod" type="label" defaultvalue="" description="eeman.pserver.params.rotatePeriod" help="admin-eeman-pserver-win-rotatePeriod"/>
+<param name="rotateSize" type="label" defaultvalue="" description="eeman.pserver.params.rotateSize" help="admin-eeman-pserver-win-rotateSize"/>
+
+<param name="logPath" type="label" defaultvalue="" description="eeman.pserver.params.logPath" help="admin-eeman-pserver-win-logPath"/>
+<param name="webHolderDir" type="label" defaultvalue="" description="eeman.pserver.params.webHolderDir" help="admin-eeman-pserver-win-webHolderDir"/>
+<param name="aspScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.aspScriptsDir" help="admin-eeman-pserver-win-aspScriptsDir"/>
+<param name="phpScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.phpScriptsDir" help="admin-eeman-pserver-win-phpScriptsDir"/>
+<param name="perlScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.perlScriptsDir" help="admin-eeman-pserver-win-perlScriptsDir"/>
+
+<param name="defaultWebHost" type="label" defaultvalue="" description="eeman.pserver.params.defaultWebHost" help="admin-eeman-pserver-win-defaultWebHost"/>
+<param name="defaultFtpHost" type="label" defaultvalue="" description="eeman.pserver.params.defaultFtpHost" help="admin-eeman-pserver-win-defaultFtpHost"/>
+
+<param name="frontPagePath" type="winpathparam" defaultvalue="" description="eeman.pserver.params.frontPagePath" help="admin-eeman-pserver-win-frontPagePath"/>
+<param name="frontPageAdmUtil" type="edit" defaultvalue="" description="eeman.pserver.params.frontPageAdmUtil" help="admin-eeman-pserver-win-frontPageAdmUtil"/>
+
+<param name="inheritDefaultDocs" type="edit" defaultvalue="" description="eeman.pserver.params.inheritDefaultDocs" help="admin-eeman-pserver-win-inheritDefaultDocs"/>
+<param name="webAppIsolatedLevel" type="edit" defaultvalue="" description="eeman.pserver.params.webAppIsolatedLevel" help="admin-eeman-pserver-win-webAppIsolatedLevel"/>
+<param name="isRemoveWebContent" type="edit" defaultvalue="" description="eeman.pserver.params.isRemoveWebContent" help="admin-eeman-pserver-win-isRemoveWebContent"/>
+<param name="enableParentPath" type="edit" defaultvalue="" description="eeman.pserver.params.enableParentPath" help="admin-eeman-pserver-win-enableParentPath"/>
+<param name="defaultDocs" type="list" defaultvalue="" description="eeman.pserver.params.defaultDocs" help="admin-eeman-pserver-win-defaultDocs"/>
+<param name="logGetStats" type="label" defaultvalue="" description="eeman.pserver.params.logGetStats" help="admin-eeman-pserver-win-logGetStats"/>
+
+<param name="logWebPath" type="label" defaultvalue="" description="eeman.pserver.params.logWebPath" help="admin-eeman-pserver-win-logWebPath"/>
+<param name="logFtpPath" type="label" defaultvalue="" description="eeman.pserver.params.logFtpPath" help="admin-eeman-pserver-win-logFtpPath"/>
+<param name="logKeepPeriod" type="edit" defaultvalue="" description="eeman.pserver.params.logKeepPeriod" help="admin-eeman-pserver-win-logKeepPeriod"/>
+
+<param name="handlersName" type="slist" defaultvalue="" description="eeman.pserver.params.handlersName" help="admin-eeman-pserver-win-handlersName"/>
+<param name="handlersPath" type="slist" defaultvalue="" description="eeman.pserver.params.handlersPath" help="admin-eeman-pserver-win-handlersPath"/>
+<param name="handlersDscr" type="slist" defaultvalue="" description="eeman.pserver.params.handlersDscr" help="admin-eeman-pserver-win-handlersDscr"/>
+
+<param name="mivaDirectory" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaDirectory" help="admin-eeman-pserver-win-mivaDirectory"/>
+<param name="mivaMerchant" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaMerchant" help="admin-eeman-pserver-win-mivaMerchant"/>
+<param name="mivaRemoveContent" type="edit" defaultvalue="" description="eeman.pserver.params.mivaRemoveContent" help="admin-eeman-pserver-win-mivaRemoveContent"/>
+<param name="mivaSetupScript" type="edit" defaultvalue="" description="eeman.pserver.params.mivaSetupScript" help="admin-eeman-pserver-win-mivaSetupScript"/>
+<param name="mivaCommerceLibDir" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaCommerceLibDir" help="admin-eeman-pserver-win-mivaCommerceLibDir"/>
+<param name="mivaLibNames" type="list" defaultvalue="" description="eeman.pserver.params.mivaLibNames" help="admin-eeman-pserver-win-mivaLibNames"/>
+<param name="mivaLibMethods" type="slist" defaultvalue="" description="eeman.pserver.params.mivaLibMethods" help="admin-eeman-pserver-win-mivaLibMethods"/>
+
+<param name="waDirectory" type="edit" defaultvalue="" description="eeman.pserver.params.waDirectory" help="admin-eeman-pserver-win-waDirectory"/>
+<param name="phpHandlersName" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersName" help="admin-eeman-pserver-win-waDirectory"/>
+<param name="phpHandlersPath" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersPath" help="admin-eeman-pserver-win-phpHandlersPath"/>
+<param name="phpHandlersDscr" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersDscr" help="admin-eeman-pserver-win-phpHandlersDscr"/>
+<param name="ODBCIniFile" type="winpathparam" defaultvalue="" description="eeman.pserver.params.ODBCIniFile" help="admin-eeman-pserver-win-ODBCIniFile"/>
+<param name="cfDir" type="edit" defaultvalue="" description="eeman.pserver.params.cfDir" help="admin-eeman-pserver-win-cfDir"/>
+<param name="mssqlServer" type="ipparam" defaultvalue="" description="eeman.pserver.params.mssqlServer" help="admin-eeman-pserver-win-mssqlServer"/>
+<param name="mssqlHSLogin" type="edit" defaultvalue="" description="eeman.pserver.params.mssqlHSLogin" help="admin-eeman-pserver-win-mssqlHSLogin"/>
+<param name="mssqlHSPasswd" type="edit" defaultvalue="" description="eeman.pserver.params.mssqlHSPasswd" help="admin-eeman-pserver-win-mssqlHSPasswd"/>
+<param name="suspendSkeleton" type="winpathparam" defaultvalue="" description="eeman.pserver.params.suspendSkeleton" help="admin-eeman-pserver-win-suspendSkeleton"/>
+<param name="waSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.waSkeleton" help="admin-eeman-pserver-win-waSkeleton"/>
+<param name="urchinSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.urchinSkeleton" help="admin-eeman-pserver-win-urchinSkeleton"/>
+<param name="OSCommerceSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.OSCommerceSkeleton" help="admin-eeman-pserver-win-OSCommerceSkeleton"/>
+<param name="ASPSecuredSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.ASPSecuredSkeleton" help="admin-eeman-pserver-win-ASPSecuredSkeleton"/>
+<param name="PHPbbSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.PHPbbSkeleton" help="admin-eeman-pserver-win-PHPbbSkeleton"/>
+
+</group>
+
+<group name="windows_hosting">
+
+<param name="readConfigOnFly" type="label" defaultvalue="" description="eeman.pserver.params.readConfigOnFly" help="admin-eeman-pserver-win-admin-eeman-pserver-win-"/>
+<param name="addressMAC" type="edit" defaultvalue="" description="eeman.pserver.params.addressMAC" help="admin-eeman-pserver-win-addressMAC"/>
+<param name="provider" type="edit" defaultvalue="" description="eeman.pserver.params.provider" help="admin-eeman-pserver-win-provider"/>
+<param name="cpUrl" type="edit" defaultvalue="" description="eeman.pserver.params.cpUrl" help="admin-eeman-pserver-win-cpUrl"/>
+<param name="ssUrl" type="edit" defaultvalue="" description="eeman.pserver.params.ssUrl" help="admin-eeman-pserver-win-ssUrl"/>
+<param name="ssClass" type="label" defaultvalue="" description="eeman.pserver.params.ssClass" help="admin-eeman-pserver-win-ssClass"/>
+<param name="usersHome" type="winpathparam" defaultvalue="" description="eeman.pserver.params.usersHome" help="admin-eeman-pserver-win-usersHome"/>
+<param name="iusrAccount" type="label" defaultvalue="" description="eeman.pserver.params.iusrAccount" help="admin-eeman-pserver-win-iusrAccount"/>
+<param name="iwamAccount" type="label" defaultvalue="" description="eeman.pserver.params.iwamAccount" help="admin-eeman-pserver-win-iwamAccount"/>
+<param name="SMTP" type="ipparam" defaultvalue="" description="eeman.pserver.params.SMTP" help="admin-eeman-pserver-win-SMTP"/>
+<param name="ftpServer" type="label" defaultvalue="" description="eeman.pserver.params.ftpServer" help="admin-eeman-pserver-win-ftpServer"/>
+<param name="innerLogDir" type="label" defaultvalue="" description="eeman.pserver.params.innerLogDir" help="admin-eeman-pserver-win-innerLogDir"/>
+
+<param name="rotateBySize" type="label" defaultvalue="" description="eeman.pserver.params.rotateBySize" help="admin-eeman-pserver-win-rotateBySize"/>
+<param name="rotatePeriod" type="label" defaultvalue="" description="eeman.pserver.params.rotatePeriod" help="admin-eeman-pserver-win-rotatePeriod"/>
+<param name="rotateSize" type="label" defaultvalue="" description="eeman.pserver.params.rotateSize" help="admin-eeman-pserver-win-rotateSize"/>
+
+<param name="logPath" type="label" defaultvalue="" description="eeman.pserver.params.logPath" help="admin-eeman-pserver-win-logPath"/>
+<param name="webHolderDir" type="label" defaultvalue="" description="eeman.pserver.params.webHolderDir" help="admin-eeman-pserver-win-webHolderDir"/>
+<param name="aspScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.aspScriptsDir" help="admin-eeman-pserver-win-aspScriptsDir"/>
+<param name="phpScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.phpScriptsDir" help="admin-eeman-pserver-win-phpScriptsDir"/>
+<param name="perlScriptsDir" type="label" defaultvalue="" description="eeman.pserver.params.perlScriptsDir" help="admin-eeman-pserver-win-perlScriptsDir"/>
+
+<param name="defaultWebHost" type="label" defaultvalue="" description="eeman.pserver.params.defaultWebHost" help="admin-eeman-pserver-win-defaultWebHost"/>
+<param name="defaultFtpHost" type="label" defaultvalue="" description="eeman.pserver.params.defaultFtpHost" help="admin-eeman-pserver-win-defaultFtpHost"/>
+
+<param name="frontPagePath" type="winpathparam" defaultvalue="" description="eeman.pserver.params.frontPagePath" help="admin-eeman-pserver-win-frontPagePath"/>
+<param name="frontPageAdmUtil" type="edit" defaultvalue="" description="eeman.pserver.params.frontPageAdmUtil" help="admin-eeman-pserver-win-frontPageAdmUtil"/>
+
+<param name="inheritDefaultDocs" type="edit" defaultvalue="" description="eeman.pserver.params.inheritDefaultDocs" help="admin-eeman-pserver-win-inheritDefaultDocs"/>
+<param name="webAppIsolatedLevel" type="edit" defaultvalue="" description="eeman.pserver.params.webAppIsolatedLevel" help="admin-eeman-pserver-win-webAppIsolatedLevel"/>
+<param name="isRemoveWebContent" type="edit" defaultvalue="" description="eeman.pserver.params.isRemoveWebContent" help="admin-eeman-pserver-win-isRemoveWebContent"/>
+<param name="enableParentPath" type="edit" defaultvalue="" description="eeman.pserver.params.enableParentPath" help="admin-eeman-pserver-win-enableParentPath"/>
+<param name="defaultDocs" type="list" defaultvalue="" description="eeman.pserver.params.defaultDocs" help="admin-eeman-pserver-win-defaultDocs"/>
+<param name="logGetStats" type="label" defaultvalue="" description="eeman.pserver.params.logGetStats" help="admin-eeman-pserver-win-logGetStats"/>
+
+<param name="logWebPath" type="label" defaultvalue="" description="eeman.pserver.params.logWebPath" help="admin-eeman-pserver-win-logWebPath"/>
+<param name="logFtpPath" type="label" defaultvalue="" description="eeman.pserver.params.logFtpPath" help="admin-eeman-pserver-win-logFtpPath"/>
+<param name="logKeepPeriod" type="edit" defaultvalue="" description="eeman.pserver.params.logKeepPeriod" help="admin-eeman-pserver-win-logKeepPeriod"/>
+
+<param name="handlersName" type="slist" defaultvalue="" description="eeman.pserver.params.handlersName" help="admin-eeman-pserver-win-handlersName"/>
+<param name="handlersPath" type="slist" defaultvalue="" description="eeman.pserver.params.handlersPath" help="admin-eeman-pserver-win-handlersPath"/>
+<param name="handlersDscr" type="slist" defaultvalue="" description="eeman.pserver.params.handlersDscr" help="admin-eeman-pserver-win-handlersDscr"/>
+
+<param name="mivaDirectory" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaDirectory" help="admin-eeman-pserver-win-mivaDirectory"/>
+<param name="mivaMerchant" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaMerchant" help="admin-eeman-pserver-win-mivaMerchant"/>
+<param name="mivaRemoveContent" type="edit" defaultvalue="" description="eeman.pserver.params.mivaRemoveContent" help="admin-eeman-pserver-win-mivaRemoveContent"/>
+<param name="mivaSetupScript" type="edit" defaultvalue="" description="eeman.pserver.params.mivaSetupScript" help="admin-eeman-pserver-win-mivaSetupScript"/>
+<param name="mivaCommerceLibDir" type="winpathparam" defaultvalue="" description="eeman.pserver.params.mivaCommerceLibDir" help="admin-eeman-pserver-win-mivaCommerceLibDir"/>
+<param name="mivaLibNames" type="list" defaultvalue="" description="eeman.pserver.params.mivaLibNames" help="admin-eeman-pserver-win-mivaLibNames"/>
+<param name="mivaLibMethods" type="slist" defaultvalue="" description="eeman.pserver.params.mivaLibMethods" help="admin-eeman-pserver-win-mivaLibMethods"/>
+
+<param name="waDirectory" type="edit" defaultvalue="" description="eeman.pserver.params.waDirectory" help="admin-eeman-pserver-win-waDirectory"/>
+<param name="phpHandlersName" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersName" help="admin-eeman-pserver-win-phpHandlersName"/>
+<param name="phpHandlersPath" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersPath" help="admin-eeman-pserver-win-phpHandlersPath"/>
+<param name="phpHandlersDscr" type="slist" defaultvalue="" description="eeman.pserver.params.phpHandlersDscr" help="admin-eeman-pserver-win-phpHandlersDscr"/>
+<param name="ODBCIniFile" type="winpathparam" defaultvalue="" description="eeman.pserver.params.ODBCIniFile" help="admin-eeman-pserver-win-ODBCIniFile"/>
+<param name="cfDir" type="edit" defaultvalue="" description="eeman.pserver.params.cfDir" help="admin-eeman-pserver-win-cfDir"/>
+<param name="mssqlServer" type="ipparam" defaultvalue="" description="eeman.pserver.params.mssqlServer" help="admin-eeman-pserver-win-mssqlServer"/>
+<param name="mssqlHSLogin" type="edit" defaultvalue="" description="eeman.pserver.params.mssqlHSLogin" help="admin-eeman-pserver-win-mssqlHSLogin"/>
+<param name="mssqlHSPasswd" type="edit" defaultvalue="" description="eeman.pserver.params.mssqlHSPasswd" help="admin-eeman-pserver-win-mssqlHSPasswd"/>
+<param name="suspendSkeleton" type="winpathparam" defaultvalue="" description="eeman.pserver.params.suspendSkeleton" help="admin-eeman-pserver-win-suspendSkeleton"/>
+<param name="waSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.waSkeleton" help="admin-eeman-pserver-win-waSkeleton"/>
+<param name="urchinSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.urchinSkeleton" help="admin-eeman-pserver-win-urchinSkeleton"/>
+<param name="OSCommerceSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.OSCommerceSkeleton" help="admin-eeman-pserver-win-OSCommerceSkeleton"/>
+<param name="ASPSecuredSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.ASPSecuredSkeleton" help="admin-eeman-pserver-win-ASPSecuredSkeleton"/>
+<param name="PHPbbSkeleton" type="label" defaultvalue="" description="eeman.pserver.params.PHPbbSkeleton" help="admin-eeman-pserver-win-PHPbbSkeleton"/>
+
+</group>
+<group name="vps">
+    <param name="GATEWAY" type="ipparam"  defaultvalue=""   description="eeman.pserver.params.GATEWAY" help="admin-eeman-pserver-web-GATEWAY"/>
+    <param name="IPROOTDEV"  type="edit"   defaultvalue="" description="eeman.pserver.params.IPROOTDEV" help="admin-eeman-pserver-web-IPROOTDEV"/>
+    <param name="VIPROOTDEV"  type="edit"   defaultvalue="" description="eeman.pserver.params.VIPROOTDEV" help="admin-eeman-pserver-web-VIPROOTDEV"/>
+    <param name="VPSSCRIPTS"  type="unixpathparam"   defaultvalue="" description="eeman.pserver.params.VPSSCRIPTS" help="admin-eeman-pserver-web-VPSSCRIPTS"/>
+    <param name="VSERVER"  type="unixpathparam"   defaultvalue="" description="eeman.pserver.params.VSERVER" help="admin-eeman-pserver-web-VSERVER"/>
+    <param name="VPSLIST"  type="unixpathparam"   defaultvalue="" description="eeman.pserver.params.VPSLIST" help="admin-eeman-pserver-web-VPSLIST"/>
+</group>
+
+-->
+</params>
+

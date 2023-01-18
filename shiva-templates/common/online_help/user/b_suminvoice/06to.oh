@@ -1,0 +1,4 @@
+<center>To</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The date and the time when the system closes the bill. The bill gets closed when the <i>amount</i> reaches or exceeds the credit limit. If the bill gets closed it means that the money accrueded for the resouses bought/used has been charged.

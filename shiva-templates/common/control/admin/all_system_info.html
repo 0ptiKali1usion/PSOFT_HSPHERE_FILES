@@ -1,0 +1,193 @@
+<!-- BEGIN ./control/admin/all_system_info.html  -->
+<call draw_tooltip()>
+<assign admin=account.getChild("reseller_su")>
+
+<if admin>
+  <if !request.step>
+<call draw_table_header("3", lang.admin.allinfo.header)>
+    <tr>
+      <td class="control_header"><call draw_header(lang.admin.allinfo.regular_users)></td>
+      <td colspan="2" >
+        <assign users_count = admin.system_info.admin_users_count>
+        <if users_count == "0">
+          <call draw_label(users_count)>
+        <else>
+          <call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&step=3&r_id=1", users_count)>
+        </if>
+      </td>
+    </tr>
+    <tr>
+      <td class="control_header"><call draw_header(lang.admin.allinfo.reseller_end_users)></td>
+      <td colspan="2" >
+        <assign reseller_users_count = admin.system_info.reseller_users_count>
+        <if reseller_users_count == "0">
+          <call draw_label(reseller_users_count)>
+        <else>
+          <call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&step=2", reseller_users_count)>
+        </if>
+      </td>
+    </tr>
+
+    <assign used_accounts = admin.system_info.total_accounts>
+    <assign licensed_accounts = license["ACCOUNTS"]>
+    <if !licensed_accounts>
+      <assign licensed_accounts = "--">
+      <assign accounts_left = toolbox.sub("0", used_accounts)>
+    <else>
+      <assign accounts_left = toolbox.sub(licensed_accounts, used_accounts)>
+    </if>
+    <assign license_type = license["LICENSE"]>
+    <tr>
+      <td colspan="3" >&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td class="control_header"><call draw_header(lang.admin.quick.lic_accts)></td>
+      <td colspan="2"><call draw_label(licensed_accounts)></td>
+    </tr>
+
+    <tr>
+      <if (toolbox.lt(accounts_left, "0") == "1") && (licensed_accounts != "UNLIMITED")>
+        <td class="control_header"><call draw_header(lang.admin.quick.beyond_accts)></td>
+        <td colspan="2" ><call draw_important_label(toolbox.sub("0",accounts_left))></td>
+      <else>
+        <td class="control_header"><call draw_header(lang.admin.quick.left_accts)></td>
+        <td colspan="2" >
+          <if licensed_accounts == "UNLIMITED">
+            <call draw_label(licensed_accounts)>
+          <else>
+            <call draw_label(accounts_left)>
+          </if>
+        </td>
+      </if>
+    </tr>
+
+    <if toolbox.gt(licensed_accounts, "0") == "1">
+      <assign tmp = toolbox.div(toolbox.mul(used_accounts, "100"), licensed_accounts)>
+      <if (toolbox.gt(tmp,"90")=="1") && (toolbox.lt(used_accounts, toolbox.add(licensed_accounts, "1"))=="1")>
+        <tr><td colspan="3" class="control_align_center"><call draw_important_label(lang.admin.quick.warn)></td></tr>
+      </if>
+    </if>
+
+    <if license.valid == "0">
+      <tr>
+        <td colspan="3"><call draw_important_label(lang.admin.quick.sw_buy_license)></td>
+      </tr>
+    <else><if (licensed_accounts != "UNLIMITED") && (toolbox.gt(used_accounts, licensed_accounts)=="1")>
+      <tr>
+        <td colspan="3"><call draw_important_label(lang.admin.quick.serious_warn)></td>
+      </tr>
+    </if></if>
+
+    <tr>
+      <td colspan="3" class="control_header"><call draw_header(lang.admin.allinfo.license)></td>
+    </tr>
+
+    <if license.valid=="0">
+      <tr>
+        <td colspan="3" class="control_align_center"><call draw_important_label(lang.admin.invalid_lic)></td>
+      </tr>
+    </if>
+      <if (license.isLicenceExpired == "1") && ( license_type == "TRIAL")>
+        <tr >
+          <td colspan="3" class="control_align_center"><call draw_important_label(lang.admin.allinfo.expired("<a href='mailto:sales@psoft.net'>sales@psoft.net</a>"))></td>
+        </tr>
+      </if>
+      <call disp("Company", "COMPANY")>
+      <call disp("Name", "NAME")>
+      <call disp("Issued", "ISSUED")>
+      <call disp("Issued By", "ISSUER")>
+      <call disp("Product", "PRODUCT")>
+      <call disp("Version", "VERSION")>
+      <call disp("License", "LICENSE")>
+      <call disp("Accounts", "ACCOUNTS")>
+      <call disp("License Key", "LICENSE_KEY")>
+      <call disp("Certificate", "CERTIFICATE")>
+  </if>
+
+
+  <if request.step == "2">
+  <call draw_table_header("3", lang.admin.allinfo.header)>
+    <tr>
+      <td class="control_header_align_center"  nowrap ><call draw_header(lang.admin.allinfo.reseller)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(lang.admin.allinfo.users)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(lang.admin.allinfo.moderated)></td>
+    </tr>
+
+    <assign reseller_total_users = "0">
+    <assign reseller_total_moderated = "0">
+    <list admin.system_info.resellers_list as reseller>
+      <tr>
+        <td  class="control_align_center" nowrap><call draw_label_bold(reseller.name)></td>
+        <td  class="control_align_center" nowrap><call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&step=3&r_id="+reseller.id, reseller.users)></td>
+        <td  class="control_align_center" nowrap><call draw_label_bold(reseller.moderated_users)></td>
+      </tr>
+      <assign reseller_total_users=toolbox.add(reseller_total_users, reseller.users)>
+      <assign reseller_total_moderated=toolbox.add(reseller_total_moderated, reseller.moderated_users)>
+    </list>
+    <tr>
+      <td class="control_header"   nowrap><call draw_header(lang.label.total)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(reseller_total_users)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(reseller_total_moderated)></td>
+    </tr>
+  </if>
+
+  <if request.step == "3">
+  <call draw_table_header("3", lang.admin.allinfo.accinfo)>
+
+    <assign  reseller = admin.system_info.getReseller(request.r_id)>
+    <assign total_domains = "0">
+    <assign total_accounts = "0">
+    <tr>
+      <td colspan="3"  class="control_header_align_center">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="control_header_align_center" nowrap ><call draw_header(reseller.name)></td>
+    </tr>
+
+    <list reseller.groups as group >
+      <tr>
+        <td  class="control_align_center" nowrap ><if group.group_id=="0"><call draw_label_bold(lang.admin.allinfo.ungroup)><else><if group.name><call draw_label_bold(group.name)><else>&nbsp;</if></if></td>
+        <td  class="control_align_center" nowrap><call draw_label_bold(lang.admin.allinfo.accounts)></td>
+        <td  class="control_align_center" nowrap><call draw_label_bold(lang.admin.allinfo.domains)></td>
+      </tr>
+      <assign group_domains = "0">
+      <assign group_accounts = "0">
+      <assign been_there = "0">
+      <list group.plans as plan>
+        <assign been_there = "1">
+        <tr>
+          <td    nowrap>&nbsp;&nbsp;<call draw_label(plan.description)></td>
+          <td  class="control_align_center" nowrap><call draw_label(plan.accounts)></td>
+          <td  class="control_align_center" nowrap><call draw_label(plan.domains)></td>
+        </tr>
+        <assign total_domains=toolbox.add(total_domains,plan.domains)>
+        <assign total_accounts=toolbox.add(total_accounts,plan.accounts)>
+        <assign group_domains=toolbox.add(group_domains,plan.domains)>
+        <assign group_accounts=toolbox.add(group_accounts,plan.accounts)>
+      </list>
+      <if been_there == "1">
+        <tr>
+          <td  class="control_align_right" nowrap><call draw_label_bold(lang.label.total)></td>
+          <td  class="control_align_center" nowrap><call draw_label_bold(group_accounts)></td>
+          <td  class="control_align_center" nowrap><call draw_label_bold(group_domains)></td>
+        </tr>
+      </if>
+    </list>
+    <tr>
+      <td class="control_header"   nowrap><call draw_header(lang.label.total)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(total_accounts)></td>
+      <td class="control_header_align_center" nowrap><call draw_header(total_domains)></td>
+    </tr>
+  </if>
+
+<call draw_table_footer()>
+
+  <function disp(label, key)>
+    <tr >
+      <td><call draw_label(label)></td>
+      <td colspan="2"><call draw_label(license[key])></td>
+    </tr>
+  </function>
+</if>
+<!-- END ./control/admin/all_system_info.html  -->

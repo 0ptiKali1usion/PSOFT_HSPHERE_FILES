@@ -1,0 +1,76 @@
+<!-- BEGIN ./quick/control/choice_mssql.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign platform_type = unixuser.host.platform_type>
+
+<assign mssql=account.getChild("MSSQL")>
+<assign logins=account.findAllChildren("MSSQLLogin")>
+<assign databases=account.findAllChildren("MSSQLDatabase")>
+
+<call draw_tooltip()>
+
+<!--MSSQL host -->
+<if mssql>
+<call draw_table_header("2", lang.label.mssql)>
+<tr>
+<td><call draw_label(lang.label.hostname)></td>
+<td><call draw_label(mssql.host.name+" ("+toolbox.int2ext(mssql.host.ip)+")")>&nbsp;</td>
+</tr>
+<call draw_table_footer()>
+</if>
+<!--End of MSSQL host -->
+&nbsp;
+<!--Logins -->
+<call draw_table_header("3", lang.mssql.logins.logins)>
+<if logins>
+<tr><td colspan="3"  class="control_align_center"><call draw_label(lang.mssql.logins.describe)></td>
+</tr>
+<tr >
+  <td width="1%" class="control_align_center"><call draw_TT_header()></td>
+  <td><call draw_label_bold(lang.label.login)></td>
+  <td width="10%"><call draw_label_bold(lang.label.control)></td>
+</tr>
+<list logins as login>
+<tr >
+  <td width="1%" class="control_align_center" nowrap><call draw_tt_link(login,"")></td>
+  <td><call draw_label(login.name)></td>
+  <td width="10%" nowrap><call draw_change(config.CLIENT_CP_URL+"?template_name=MSSQL/change-login-password.html"+"&login="+login+"&stemplate="+template+"&ftemplate="+template+"&dtemplate="+dtemplate, lang.mssql.logins.changepsw)><call disableNew(mssql,login)></td>
+</tr>
+</list>
+</if>
+<tr>
+  <td  class="control_align_center" colspan="3"><call draw_label_bold(lang.mssql.logins.addlogin)><call draw_add(config.CLIENT_CP_URL+"?template_name=MSSQL/mssql-create-login.html"+"&dtemplate="+dtemplate, lang.mssql.logins.addlogin)></td>
+</tr>
+<!--End of logins -->
+<call draw_table_footer()>
+&nbsp;
+<!--Table with databases -->
+<if mssql && logins>
+<call draw_table_header("4", lang.mssql.databases.dbs)>
+<if databases>
+<tr >
+    <td width="1%" class="control_align_center">&nbsp;</td>
+    <td><call draw_label_bold(lang.mssql.dbname)></td>
+    <td><call draw_label_bold(lang.mssql.dblogin)></td>
+    <td   width="10%" nowrap><call draw_label_bold(lang.label.control)></td>
+</tr>
+
+<list databases as database>
+<tr >
+  <td class="control_align_center" ><call draw_tt_link(database,"")></td>
+  <td><call draw_link(config.CLIENT_CP_URL+"?template_name=MSSQL/adm_database.html"+"&database="+database+"&dtemplate="+dtemplate, database.db_name)></td>
+  <td class="control_align_center"><call draw_label(database.login_name)></td>
+  <td class="control_align_center" width="10%" nowrap><call draw_edit(config.CLIENT_CP_URL+"?template_name=MSSQL/adm_database.html"+"&database="+database+"&dtemplate="+dtemplate, lang.mssql.databases.edit)><call disableNewWarn(mssql,database)></td>
+</tr>
+</list>
+</if>
+<tr>
+  <td  class="control_align_center" colspan="4"><call draw_label_bold(lang.label.adddb)><call draw_add(config.CLIENT_CP_URL+"?template_name=MSSQL/mssql-create-database.html"+"&dtemplate="+dtemplate, lang.mssql.databases.add)></td>
+</tr>
+<call draw_table_footer()>
+</if>
+<!--End of table with databases -->
+
+<!-- END ./quick/control/choice_mssql.html  -->
+

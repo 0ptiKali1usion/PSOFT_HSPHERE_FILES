@@ -1,0 +1,103 @@
+<!-- BEGIN ./control/billing_report/search.html -->
+<assign report=account.getChild("daily_report")>
+<if !report><assign report = account.addChild("daily_report", "")></if>
+<assign res=report.initParams(request.r_from,request.r_to)>
+<if res.status!="OK">${session.addMessage(res.msg)}</if>
+<call draw_tooltip()>
+
+<call draw_table_header("5", lang.billingreport.view.repnew(report.date1, report.date2))>
+
+<tr>
+<td class="control_header"><call draw_header(lang.label.plan)></td>
+<td class="control_header"><call draw_header(lang.label.period)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.signup)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.signup)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.year)></td>
+</tr>
+<assign count="0">
+<assign real="0">
+<assign assumed="0">
+<list report.newAccounts() as row>
+<tr>
+<td><call draw_label(row.plan.description)></td>
+<td class="control_align_center"><call draw_label(row.period_month)></td>
+<td class="control_align_center"><call draw_label(row.count)></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(row.real_amount))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(row.assumed_amount))></td>
+</tr>
+<assign count=toolbox.add(count,row.count)>
+<assign real=toolbox.add(real,row.real_amount)>
+<assign assumed=toolbox.add(assumed,row.assumed_amount)>
+</list>
+<tr>
+<td colspan=2><call draw_label(lang.billingreport.view.totalnew)></td>
+<td class="control_align_center"><call draw_label(count)></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(real))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(assumed))></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("5", lang.billingreport.view.repcancel(report.date1, report.date2))>
+<tr>
+<td class="control_header"><call draw_header(lang.label.plan)></td>
+<td class="control_header"><call draw_header(lang.label.period)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.number)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.refund)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.yearloss)></td>
+</tr>
+<assign count="0">
+<assign real="0">
+<assign assumed="0">
+<list report.canceledAccounts() as row>
+<tr>
+<td><call draw_label(row.plan.description)></td>
+<td  class="control_align_center"><call draw_label(row.period_month)></td>
+<td  class="control_align_center"><call draw_label(row.count)></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(row.real_amount))></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(row.assumed_amount))></td>
+</tr>
+<assign count=toolbox.add(count,row.count)>
+<assign real=toolbox.add(real,row.real_amount)>
+<assign assumed=toolbox.add(assumed,row.assumed_amount)>
+</list>
+
+<!--failed accounts -->
+<tr>
+<td  colspan=2><call draw_label(lang.billingreport.view.totalfail)></td>
+<td  class="control_align_center"><call draw_label(count)></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(real))></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(assumed))></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("5", lang.billingreport.view.repfail(report.date1, report.date2))>
+<tr>
+<td class="control_header"><call draw_header(lang.label.plan)></td>
+<td class="control_header"><call draw_header(lang.label.period)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.number)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.refund)></td>
+<td class="control_header"><call draw_header(lang.billingreport.view.yearloss)></td>
+</tr>
+<assign count="0">
+<assign real="0">
+<assign assumed="0">
+<list report.failedAccounts() as row>
+<tr>
+<td><call draw_label(row.plan.description)></td>
+<td  class="control_align_center"><call draw_label(row.period_month)></td>
+<td  class="control_align_center"><call draw_label(row.count)></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(row.real_amount))></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(row.assumed_amount))></td>
+</tr>
+<assign count=toolbox.add(count,row.count)>
+<assign real=toolbox.add(real,row.real_amount)>
+<assign assumed=toolbox.add(assumed,row.assumed_amount)>
+</list>
+<tr>
+<td  colspan=2><call draw_label(lang.billingreport.view.totalfail)></td>
+<td  class="control_align_center"><call draw_label(count)></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(real))></td>
+<td  class="control_align_right"><call draw_label(toolbox.currency(assumed))></td>
+</tr>
+<call draw_table_footer()>
+<!--  END ./control/billing_report/view.html  -->

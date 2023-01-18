@@ -1,0 +1,84 @@
+<!-- BEGIN ./submit/admin/mod_sign_set_bi.sbm  -->
+<if (request.paytype == "CC")>
+  <assign isPayTypeCC = "1">
+</if>
+<assign check=yafv.checkall(
+  yafv.common.s_signup.vSinglename(lang.label.first_name,request["first_name_b"]),
+  yafv.common.s_signup.vSinglename(lang.label.last_name,request["last_name_b"]),
+  yafv.common.s_signup.vAddress(lang.label.address,request["address1_b"]),
+  yafv.common.s_signup.vCity(lang.label.city,request["city_b"]),
+  yafv.common.s_signup.vState(lang.label.state,request["state_b"]),
+  yafv.common.s_signup.vStateOther(lang.label.state_other,request["state2_b"]),
+  yafv.common.s_signup.vPostal_Code(lang.label.postal_code,request["postal_code_b"]),
+  yafv.common.s_signup.vCountry(lang.label.country,request["country_b"]),
+  yafv.common.s_signup.vPhone(lang.label.phone,request["phone_b"]),
+  yafv.common.s_signup.vEmail(lang.label.email,request["email_b"]),
+  yafv.common.s_signup.vOrganization(lang.label.company,request["company_b"]) )>
+<if check.status != "OK">
+  <assign fail = "1">
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if isPayTypeCC>
+  <assign check=yafv.checkall(
+    yafv.common.s_signup.vcc_name(lang.cc.name, request["bi_cc_name"]),
+    yafv.common.s_signup.vCCNumber(lang.cc.number, request["bi_cc_number"],request["bi_cc_type"]),
+    yafv.common.s_signup.vcc_month(lang.cc.month, request["bi_cc_exp_month"]),
+    yafv.common.s_signup.vcc_year(lang.cc.year, request["bi_cc_exp_year"]),
+    yafv.common.s_signup.vCardIssueNum(lang.signup.card_issue_num, request["bi_cc_issue_no"], request["bi_cc_type"]),
+    yafv.common.s_signup.vCardDateMMYY(lang.signup.card_start_date,request["bi_cc_start_month"],request["bi_cc_start_year"],request["bi_cc_type"]) )>
+  <if check.status != "OK">
+    <assign fail = "1">
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if !fail>
+  <assign signup = account.getChild("signupadm")>
+  <assign admin=account.getChild("admin")>
+  <assign tmpAcc = signup.createTempAccount(request.rid)>
+  <if !isPayTypeCC>
+    <assign result=signup.setNewBI(request.rid, request.first_name_b, request.last_name_b, request.company_b, request.address1_b, request.address2_b, request.city_b, request.state_b,request.state2_b, request.postal_code_b, request.country_b, request.phone_b, request.email_b, request.paytype, null, null, null, null, null, null, null, null)>
+  <else>
+    <assign cc_type = request["bi_cc_type"]>
+    <if (cc_type == "SOLO") || (cc_type == "SWITCH")>
+      <assign result=signup.setNewBI(request.rid, request.first_name_b, request.last_name_b, request.company_b, request.address1_b, request.address2_b, request.city_b, request.state_b, request.state2_b, request.postal_code_b, request.country_b, request.phone_b, request.email_b, request.paytype, request.bi_cc_name, request.bi_cc_number, request.bi_cc_exp_month, request.bi_cc_exp_year, request["bi_cc_type"], request.bi_cc_issue_no, request.bi_cc_start_month, request.bi_cc_start_year)>
+    <else>
+      <assign result=signup.setNewBI(request.rid, request.first_name_b, request.last_name_b, request.company_b, request.address1_b, request.address2_b, request.city_b, request.state_b, request.state2_b, request.postal_code_b, request.country_b, request.phone_b, request.email_b, request.paytype, request.bi_cc_name, request.bi_cc_number, request.bi_cc_exp_month, request.bi_cc_exp_year, request["bi_cc_type"], null, null, null)>
+    </if>
+  </if>
+  <if result.status != "OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign fail = "1">
+  </if>
+</if>
+
+<if !fail>
+    <include request.stemplate>
+<else>
+    <assign first_name_b = toolbox.html_encode(request.first_name_b)>
+    <assign last_name_b = toolbox.html_encode(request.first_name_b)>
+    <assign company_b = toolbox.html_encode(request.company_b)>
+    <assign address1_b = toolbox.html_encode(request.address1_b)>
+    <assign address2_b = toolbox.html_encode(request.address2_b)>
+    <assign city_b = toolbox.html_encode(request.city_b)>
+    <assign state_b = request.state_b>
+    <assign state2_b = request.state2_b>
+    <assign postal_code_b = toolbox.html_encode(request.postal_code_b)>
+    <assign country_b = request.country_b>
+    <assign phone_b = toolbox.html_encode(request.phone_b)>
+    <assign email_b = toolbox.html_encode(request.email_b)>
+    <assign paytype = toolbox.html_encode(request.paytype)>
+    <if isPayTypeCC>
+      <assign bi_cc_name = toolbox.html_encode(request.bi_cc_name)>
+      <assign bi_cc_number = toolbox.html_encode(request.bi_cc_number)>
+      <assign bi_cc_exp_month = toolbox.html_encode(request.bi_cc_exp_month)>
+      <assign bi_cc_exp_year = toolbox.html_encode(request.bi_cc_exp_year)>
+      <assign bi_cc_type = toolbox.html_encode(request["bi_cc_type"])>
+      <assign bi_cc_issue_no = toolbox.html_encode(request.bi_cc_issue_no)>
+      <assign bi_cc_start_month = toolbox.html_encode(request.bi_cc_start_month)>
+      <assign bi_cc_start_year = toolbox.html_encode(request.bi_cc_start_year)>
+    </if>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_set_bi.sbm  -->
+

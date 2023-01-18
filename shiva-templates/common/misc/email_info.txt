@@ -1,0 +1,9 @@
+INFO
+====================================
+Servers:
+--------
+<assign p_servers = eeman.getPserverList()><list p_servers as
+pserver>P:${pserver.name}|${pserver.ip1}|${pserver.mask1}|${pserver.ip2}|${pserver.mask2}
+<assign l_servers=pserver.getLServers()><list l_servers as l_server_id><assign l_server=eeman.getLserver(l_server_id)>	L:${l_server.name}|${l_server.ip}|${l_server.mask}|${eeman.groupMap[eeman.getTypeByGroup(l_server.group)]}|${eeman.typeMap[l_server.type_id]}
+</list></list>
+====================================

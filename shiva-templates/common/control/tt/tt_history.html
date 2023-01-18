@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/tt/tt_history.html  -->
+<call draw_tooltip()>
+
+<assign x=""><list account.getChildren("ttadmin") as ttadmins><if x>${ttadmins.delete}<else><assign x="."></if></list>
+
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin><assign ttadmin=account.addChild("ttadmin","",account.login,account.description,account.ci.email)></if>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/tts.html">
+
+
+
+
+<call draw_table_header("2", lang.tt.history.header)>
+
+
+<tr>
+   <td   ><call draw_label(lang.tt.history.show)></td>
+   <td   ><select name="assign_to" size="1"><option value="%" SELECTED>-----<list ttadmin.admin_list as adm><option value="${adm.id}">${adm.name}</list></select></td>
+</tr>
+<tr>
+   <td   ><call draw_label(lang.tt.priority)></td>
+   <td   ><select name="priority" size="1"><option value="%" SELECTED>-----<option value="0">Normal<option value="1">Low<option value="2">High</select></td>
+</tr>
+<tr>
+   <td   ><call draw_label(lang.label.entries)></td>
+   <td   ><select name="stepSize" size="1"><option>10<option>25<option>50<option>100</select></td>
+</tr>
+<tr>
+  <td colspan="2" class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/tt/tt_history.html  -->

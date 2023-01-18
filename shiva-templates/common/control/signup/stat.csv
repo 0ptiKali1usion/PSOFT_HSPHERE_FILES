@@ -1,0 +1,3 @@
+<compress><assign viewer=account.getChild("reportviewer")><assign report=viewer.getAdvReportById(request.arid)></compress>"Seller Id","Seller","Account description","Live accounts","Deleted accounts","Total"
+<assign entries = report.all()><list entries as entry>${entry.sell_id},${toolbox.csv_escape(entry.seller)},${toolbox.csv_escape(entry.seller_acc)},${entry.alive},${entry.dead},${entry.total}
+</list>

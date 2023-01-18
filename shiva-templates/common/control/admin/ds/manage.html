@@ -1,0 +1,217 @@
+<!-- BEGIN ./control/admin/ds/manage.html  -->
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager", "")>
+</if>
+
+<call draw_tooltip()>
+<include "control/misc/popup_note.html">
+
+<if ds_manager>
+<assign report_ok="">
+<assign admin=account.getChild("admin")>
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<assign ns_id = request.sc_ns_id>
+
+<if !report_ok>
+  <assign report = viewer.getAdvReport("ds_report")>
+  <assign result = report(request.sc_status,
+			request.sc_template,
+			request.sc_os,
+			request.sc_cpu,
+			request.sc_ip,
+			request.sc_int_id,
+			request.sc_r_from,
+			request.sc_r_to,
+			request.sc_u_from,
+			request.sc_u_to,
+			request.sc_username,
+			ns_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_status="+toolbox.url_escape(request.sc_status)+
+ "&sc_template="+toolbox.url_escape(request.sc_template)+
+ "&sc_os="+toolbox.url_escape(request.sc_os)+
+ "&sc_cpu="+toolbox.url_escape(request.sc_cpu)+
+ "&sc_ip="+toolbox.url_escape(request.sc_ip)+
+ "&sc_int_id="+toolbox.url_escape(request.sc_int_id)+
+ "&sc_r_from="+toolbox.url_escape(request.sc_r_from)+
+ "&sc_r_to="+toolbox.url_escape(request.sc_r_to)+
+ "&sc_u_from="+toolbox.url_escape(request.sc_u_from)+
+ "&sc_u_to="+toolbox.url_escape(request.sc_u_to)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_ns_id="+toolbox.url_escape(ns_id)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_params" accept-charset="UTF-8">
+<call draw_table_header("4", lang.label.quicksearch)>
+<tr>
+<td><call draw_label(lang.admin.search_ds_template)>&nbsp;
+<assign dstemplates=ds_manager.templates>
+<select name="sc_template" size="1">
+<option value="">${lang.label.any}
+<list dstemplates as dst>
+<option value="${dst.id}">${dst.name}</option>
+</list>
+</select>
+</td>
+<td><call draw_label(lang.admin.search_ds_status)>&nbsp;
+<select name="sc_status" size="1">
+  <option value="">${lang.label.any}</option>
+  <list ds_manager.all_ds_states as state>
+  <option value="${state}">${lang.admin.ds.status[state]}</option>
+  </list>
+</select>
+</td>
+<td><call draw_label(lang.label.entries)>&nbsp;
+<call searchStepBox("")>
+</td>
+<td class="control_align_center">
+  <input type="hidden" name="template_name" value="admin/ds/manage.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td>
+</tr>
+<tr>
+<td colspan="4" class="control_align_right">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/ds_manage_filter.html&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Advanced Search")>
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+&nbsp;
+
+<assign colspan = "9">
+<if ns_id><assign colspan=toolbox.add(colspan, "1")></if>
+<if reseller_id == 1>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign show_reseller_td = "1">
+</if>
+
+<call draw_table_header(colspan, lang.admin.ds.list)>
+<if report_ok=="1">
+<assign entries = report.page()>
+<if entries && (entries.size != "0")>
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_id, "ds_id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_server, "ds_name")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_template, "ds_template")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_ip, "ds_ip")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_created, "ds_added")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_taken, "ds_taken")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_account_id, "ds_account_id")></td>
+  <if show_reseller_td><td class="control_header"><call draw_header(lang.admin.search_ds_reseller)></td></if>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_status, "ds_state")></td>
+  <if ns_id><td class="control_header"><call draw_header(lang.admin.ds.netswitch_interface_s)></td></if>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<list entries as entry>
+  <assign ds = ds_manager.getDServer(entry.ds_id)>
+  <if ds && (ds.status == "OK")>
+    <tr>
+    <td><call draw_label(entry.ds_id)></td>
+    <td><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/edit_ds.html&stemplate="+template+"&ds_id="+entry.ds_id, entry.ds_name)></td>
+    <assign dst = ds_manager.getDSTemplate(entry.ds_template)>
+    <if dst>
+      <assign dst_name_shr = toolbox.shrink_string(dst.name, "15")>
+      <if dst.name != dst_name_shr>
+	<td><call draw_popup_note_l(toolbox.shrink_string(dst.name, "15"), dst.name)></td>
+      <else>
+	<td><call draw_label(dst_name_shr)></td>
+      </if>
+    <else>
+      <td class="control_align_center"><call draw_label("-")></td>
+    </if>
+    <td><call draw_label(entry.ds_ip)></td>
+    <td><call draw_label(entry.ds_added("SHORT"))></td>
+    <td nowrap><call draw_label(entry.ds_taken("SHORT"))>
+      <if entry.ds_cancel>
+      <call draw_popup_note_i("cancel_note", "", lang.admin.ds_manage_cancellation(entry.ds_cancel("MEDIUM")))>
+      </if>
+    </td>
+    <td><call draw_label(entry.ds_account_id)></td>
+    <if show_reseller_td><td><call draw_label(entry.reseller)></td></if>
+    <td><call draw_label(lang.admin.ds.status[entry.ds_state])></td>
+    <if ns_id>
+	<td><foreach ni in entry.ds_netinterfaces><call draw_label(ni.description)><br></foreach></td>
+    </if>
+    <td nowrap width="5%">
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/change_ds_status.html&stemplate="+template+"&ftemplate="+template+"&account_id="+entry.ds_account_id+"&dedicated_server_id="+entry.ds_id+sc_params, "ch_state", lang.admin.ds.change_status)>
+      <call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/ds/edit_ds.html&stemplate="+template+"&ftemplate="+template+"&ds_id="+entry.ds_id+"&account_id="+entry.ds_account_id+sc_params, "")>&nbsp;
+      <if ds.can_be_deleted><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/delete_ds_confirm.html&stemplate="+template+"&ftemplate="+template+"&account_id="+entry.ds_account_id+"&ds_id="+entry.ds_id+sc_params+"&start="+toolbox.url_escape(start), "del", label.delete)></if>
+    </td>
+    </tr>
+  </if>
+</list>
+<tr>
+<td colspan="${colspan}">
+  <table class="inner_control" width="100%">
+  <tr>
+  <if !admin.isReseller() || !admin.isResourceDisabled("allow_own_ds")>
+    <td><call advReportNav(report)></td>
+    <td class="inner_control_align_right"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/add_server.html&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Add new Dedicated Server")></td>
+  <else>
+    <td colspan="2"><call advReportNav(report)></td>
+  </if>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<else>
+  <tr>
+  <td colspan="${colspan}"><call draw_label(lang.admin.gl_no_section_items)>
+  <if !admin.isReseller() && !admin.isResourceDisabled("allow_ds_resell")><br><call draw_label(lang.admin.ds.no_manageable_ds_resel_note)></if>
+  </td>
+  </tr>
+
+  <if !admin.isReseller() || !admin.isResourceDisabled("allow_own_ds")>
+    <tr>
+    <td class="control_align_right" colspan="${colspan}"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/add_server.html&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Add new Dedicated Server")></td>
+    </td>
+    </tr>
+  </if>
+</if>
+
+</if>
+<call draw_table_footer()>
+
+</if>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!-- END ./control/admin/ds/manage.html  -->

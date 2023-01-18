@@ -1,0 +1,4 @@
+<!-- BEGIN ./submit/admin/async/reset.sbm -->
+<assign admin = account.getChild("admin").async_manager.reset(request.rid)>
+<include request.stemplate>
+<!-- END ./submit/admin/async/reset.sbm -->

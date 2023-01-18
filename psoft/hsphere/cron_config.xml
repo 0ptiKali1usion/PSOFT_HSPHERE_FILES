@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE config [
+  <!ELEMENT config (group+)>
+     <!ELEMENT group (job+)>
+        <!ATTLIST group name CDATA #REQUIRED>
+        <!ATTLIST group disabled CDATA #IMPLIED>
+        <!ATTLIST group maxpriority CDATA #IMPLIED>
+        <!ATTLIST group defpriority CDATA #IMPLIED>
+        <!ATTLIST group defperiod CDATA #IMPLIED>
+        <!ATTLIST group maxjobcount CDATA #IMPLIED>
+        <!ELEMENT job EMPTY>
+           <!ATTLIST job name CDATA #REQUIRED>
+           <!ATTLIST job class CDATA #REQUIRED>
+           <!ATTLIST job disabled CDATA #IMPLIED>
+           <!ATTLIST job priority CDATA #IMPLIED>
+           <!ATTLIST job starttime CDATA #IMPLIED>
+           <!ATTLIST job period CDATA #IMPLIED>
+           <!ATTLIST job maxinstancecount CDATA #IMPLIED>
+           <!ATTLIST job threadcount CDATA #IMPLIED>
+           <!ATTLIST job db_mark CDATA #IMPLIED>
+           <!ATTLIST job requires CDATA #IMPLIED>
+]>
+<!--
+if disabled = "1" job is disabled
+priority can be set from 1 to 10. 1 - min priority, 5 - normal, 10 - max priority
+period is set in minuts
+ -->
+<config>
+    <group name="CRON" maxpriority="10" defpriority="3">
+        <job name="accounting" class="psoft.hsphere.cron.Accounting"
+             starttime="4:00" period="1440" db_mark="LAST_LAUNCH"/>
+        <job name="BalanceExhaustionDateEstimator" class="psoft.hsphere.cron.BalanceExhaustionDateEstimator"
+             starttime="5:00" period="1440" db_mark="BALANCE_EXHAUSTION"/>
+        <job name="Suspend" class="psoft.hsphere.cron.SuspendCron"
+             starttime="5:00" period="1440" db_mark="SUSPEND_CRON"/>
+        <job name="escallation" class="psoft.hsphere.cron.EscallationCron"
+             starttime="now+15m" period="15" db_mark="ESCALLATION"/>
+        <job name="revenue" class="psoft.hsphere.cron.RevenueCron"
+             starttime="4:30" period="1440" db_mark="REVENUE"/>
+        <job name="trial" class="psoft.hsphere.cron.TrialCron"
+             starttime="5:00" period="1440" db_mark="TRIAL"/>
+        <job name="reseller" class="psoft.hsphere.cron.ResellerCron"
+             starttime="5:30" period="1440" db_mark="RESELLER"/>
+        <job name="contentMoving" class="psoft.hsphere.cron.ContentMovingCron"
+             starttime="now+5m" period="5" disabled="1" db_mark="MOVING_CRON"/>
+        <job name="overlimit" class="psoft.hsphere.cron.OverLimitWarnCron"
+             starttime="10:00" period="4320" db_mark="OVERLIMIT"/>
+        <job name="fSignups" class="psoft.hsphere.cron.FailedSignupsCron"
+             starttime="now+10m" period="10" db_mark="FAILED_SIGNUPS"/>
+        <job name="ttAutoClose" class="psoft.hsphere.cron.TTAutoCloseCron"
+             starttime="6:30" period="1440" db_mark="TTAutoCloseCron"/>
+        <job name="vps" class="psoft.hsphere.cron.VPSCron"
+             starttime="now+4m" period="5" db_mark="VPS_CRON"/>
+        <job name="extcharge" class="psoft.hsphere.cron.ExternalChargeCron"
+             starttime="now+6m" period="5" db_mark="EX_CHARGE_CRON"/>
+        <job name="transfer" class="psoft.hsphere.cron.TransferCron"
+             starttime="now+5m" period="5" priority="5" db_mark="TRANSFER"/>
+        <job name="DomainRegistrationRenewal" class="psoft.hsphere.cron.DomainRegistrationRenewal"
+             starttime="6:00" period="1440" db_mark="DOMAIN_REGISTRATION"/>
+        <job name="ASYNC_MAN" class="psoft.hsphere.cron.AsyncCron"
+            starttime="now+5m" period="2" db_mark="ASYNC_MAN"/>
+        <job name="MIGRATION" class="psoft.hsphere.cron.MigrationCron"
+            starttime="now+1m" period="1" db_mark="MIGRATION"/>
+        <job name="vpsReconfig" class="psoft.hsphere.cron.VPSRepostConfigJob"
+             starttime="now+5m" period="5" disabled="1" db_mark="VPS_RECONFIG"/>
+	<job name="mailSRS" class="psoft.hsphere.cron.MailSRSCron"
+             starttime="12:00" period="43200" disabled="1" db_mark="MAIL_SRS_CRON"/>
+	<job name="DedicatedServerCancellation" class="psoft.hsphere.cron.DSAutoCancellation"
+             starttime="3:00" period="1440" db_mark="DS_AUTOCANCEL" requires="ds_enable"/>
+    </group>
+</config>
+

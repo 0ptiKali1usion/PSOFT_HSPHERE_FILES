@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/ds/change_backup.sbm  -->
+<assign ds=account.getResource(request.rid)>
+<assign backup = ds.getChild("backup")>
+<switch request.period>
+  <case "1">
+    <assign price=backup.change(request.period,backup.performer_id,request.day_time_hour,request.day_time_min)>
+    <break>
+  <case "2">
+    <assign price=backup.change(request.period,backup.performer_id,request.week_time_hour,request.week_time_min,request.day_of_week)>
+    <break>
+  <case "3">
+    <assign price=backup.change(request.period,backup.performer_id,request.month_time_hour,request.month_time_min,request.day_of_month)>
+    <break>
+</switch>
+<if backup.status != "OK">
+  <assign res = session.addMessage(backup.msg)>
+  <assign failure="1">
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/ds/change_backup.sbm  -->

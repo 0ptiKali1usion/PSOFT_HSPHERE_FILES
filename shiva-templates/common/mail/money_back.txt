@@ -1,0 +1,15 @@
+<compress>
+ <assign domain = account.findChild("domain")>
+ <if !domain><assign domain = account.findChild("3ldomain")></if>
+ <if !domain><assign domain = account.findChild("nodomain")></if>
+ <if !domain><assign domain = account.findChild("service_domain")></if>
+</compress>
+${lang.massmail.moneyback_header}
+${lang.massmail.moneyback_plan} ${account.plan.description}
+${lang.massmail.moneyback_user} ${user.login}
+${lang.massmail.moneyback_account} ${account.id}
+${lang.massmail.moneyback_name} ${account.ci.first_name} ${account.ci.last_name}
+${lang.massmail.moneyback_domain} ${domain.name}
+${lang.massmail.moneyback_created} ${account.created}
+${lang.massmail.moneyback_date} ${toolbox.date}
+${lang.massmail.moneyback_amount} ${toolbox.currency(account.bill.balance)}

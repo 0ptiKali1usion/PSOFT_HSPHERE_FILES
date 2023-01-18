@@ -1,0 +1,14 @@
+<assign result=yafv.checkall(
+    yafv.common.s_signup.vUsername(lang.label.username, request.login),
+    yafv.common.s_signup.vPassword1(lang.label.password, request.password, request.login),
+    yafv.common.s_signup.vPassword2(lang.label.password2, request.password, request.password2)
+    )>
+<if (result.status!="OK") || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign login=toolbox.html_encode(request.login)>
+    <include "signup/login.html">
+<else>
+    <include "signup/vps.html">
+</if>

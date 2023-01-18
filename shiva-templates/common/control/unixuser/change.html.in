@@ -1,0 +1,30 @@
+<!-- BEGIN ./unixuser/change.html.in  -->
+<yafv s_unixuser>
+<call draw_tooltip()>
+<form name="f_change"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}"> 
+<input type="hidden" name="ftemplate" value="${template}"> 
+<input type="hidden" name="template_name" value="submit/unixuser/change_submit.sbm">
+
+
+
+
+<call draw_table_header("2", lang.unixuser.change.header)>
+
+
+<tr>
+   <td><call draw_label(lang.label.password)></td>
+   <td><input type="password" name="password1" label="${lang.label.password}" check="vPassword"></td>
+</tr>
+<tr> 
+    <td><call draw_label(lang.unixuser.change.repeat)></td>
+    <td> <input type="password" name="password2" label="${lang.unixuser.change.repeat}" check="vPassword2(password1,password2)"></td>
+</tr>
+<tr> 
+    <td colspan="2" class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./unixuser/change.html.in  -->

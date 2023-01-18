@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/account/recreation.sbm  -->
+<if request.method!=null>
+    <assign recreation_tool=account.getChild("recreation_manager")>
+    <assign recreating_result=recreation_tool.recreateDNS(request.resource_id, request.method, request.aid)>
+    <if recreating_result.status != "OK">
+        <assign res=session.addMessage(result.msg)>
+        <include request.ftemplate>
+    <else>
+        <include request.stemplate>
+    </if>
+<else>
+    <assign recreation_tool=account.getChild("recreation_manager")>
+    <if !recreation_tool>
+        <if account.plan.isResourceAvailable("recreation_manager")>
+            <assign recreation_tool=account.addChild("recreation_manager","")>
+	        <if recreation_tool!="OK">
+	            <assign res=session.addMessage("Recreation resource is not available")>
+	            <include request.ftemplate>
+		    </if>
+	    </if>
+	</if>
+
+	<assign recreating_result = recreation_tool.recreateResource(request.resource_id, request.aid)>
+    <if recreating_result.status != "OK">
+        <assign res=session.addMessage(lang.msg.internal_problem)>
+        <include request.ftemplate>
+    <else>
+	    <include request.stemplate>
+    </if>
+</if>
+
+<!-- END ./submit/account/recreation.sbm  -->

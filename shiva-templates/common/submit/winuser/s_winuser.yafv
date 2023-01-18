@@ -1,0 +1,3 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vQuota, vEmail, vCronField, vPassword1(string, string), vPassword2(string, string), vCronFieldOpt(string, string);
+
+regexp vLocalDir= "(\.{3}|\.*[\w\+\-])[\w.\+\-]*(\\(\.{3}|\.*[\w\+\-])[\w.\+\-]*)*|()", fail=yafv.vLocalDirOpt.unixuser.fail;

@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/AssureBuy.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if  request.mid>
+<assign result=mm.update(request.mid, "TITLE", request.TITLE, "server", request.server, "port", request.port, "path", request.path, "user_id", request.user_id, "password", request.password, "currency", request.currency, "avslevel", request.avslevel, "testmode", request.testmode, "CLASS_NAME", "psoft.epayment.AssureBuy", "TEMPLATE", "admin/merchant/AssureBuy.html")>
+<else>
+<assign result=mm.new("TITLE", request.TITLE, "server", request.server, "port", request.port, "path", request.path, "user_id", request.user_id, "password", request.password, "currency", request.currency, "avslevel", request.avslevel, "testmode", request.testmode, "CLASS_NAME", "psoft.epayment.AssureBuy", "TEMPLATE", "admin/merchant/AssureBuy.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/AssureBuy.sbm -->

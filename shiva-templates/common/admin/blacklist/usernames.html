@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/admin/blacklist/usernames.html -->
+<assign template="admin/blacklist/remote_ips.html">
+<include "functions">
+<call draw_menu("signup_guard")>
+<assign header=lang.signup.guard.usernames.header>
+<assign description=lang.signup.guard.usernames.desc>
+<assign list_type="8">
+<include "control/admin/blacklist.html">
+<call bottom()>
+<!-- END ./common/admin/blacklist/usernames.html -->

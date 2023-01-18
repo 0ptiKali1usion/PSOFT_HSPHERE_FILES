@@ -1,0 +1,19 @@
+<!-- BEGIN ./domain/add_mail_domain_alias.sbm  -->
+<assign result=yafv.common.s_domain.vTransferDomainName(lang.label.domain.name, request.alias)>
+<if result.status=="OK">
+    <assign tmp = account.getResource(request.rid)>
+    <if tmp>
+        <assign result=tmp.addChild("mail_domain_alias", "", request.alias)>
+    </if>
+    <if result.status=="OK">
+        <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,lang.label.domain.alias, request.alias))>
+    <else>
+        <assign res=session.addMessage(toolbox.compose(lang.msg.domain_name_taken, request.alias))>
+    </if>
+</if>    
+<if result.status == "OK">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>    
+<!--  END ./domain/add_mail_domain_alias.sbm  -->

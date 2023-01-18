@@ -1,0 +1,37 @@
+<assign check=yafv.common.s_mssql.vMSSQLCombLogin(lang.label.username, request.user_name, request.suffix)>
+
+<if check.status=="OK">
+    <assign database=account.getResource(request.database)>
+    <if request.user_login>
+    <assign login=account.getResource(request.user_login)>
+    <assign user=database.isUserExist(request.user_name, database)>
+    <if user>
+	<if user.status=="OK">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_exists, lang.label.user, request.user_name))>
+	<else>
+	    <assign res = session.addMessage(user.msg)>
+	</if>
+	<include request.ftemplate>
+    <else>
+       <assign result=database.addChild("MSSQLUser","",request.user_name, login, database)>
+       <if result.status!="OK">
+         <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_add, lang.label.user, request.user_name))>
+         <include request.ftemplate>
+       <else>
+         <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added, lang.label.user, request.user_name))> 
+         <include request.stemplate>
+       </if>
+    </if>
+    <else>
+	<assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_add, lang.label.user, request.user_name))>
+	<include request.stemplate>
+    </if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+    <include request.ftemplate>
+</if>
+

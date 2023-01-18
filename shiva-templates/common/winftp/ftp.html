@@ -1,0 +1,21 @@
+<!-- BEGIN ./winftp/ftp.html  -->
+<assign template="winftp/ftp.html">
+<assign count="0">
+<list account.findAllChildren("ip") as ip>
+    <assign count=toolbox.add(count,"1")>
+    <if (ip.shared!="1")>
+        <assign ftp_vhost= ip.parent.findChild("ftp_vhost_anonymous")>
+    </if>
+</list>
+<!--Count dedic ${count} -->
+<!--Count ftp ${ftp_vhost.name} -->
+<if (count=="1") && (ftp_vhost!="")>
+<assign final_template = template>
+<include "winftp/ftp_vhost.html">
+<else>
+<include "functions">
+<call draw_menu("ftp_user-ftp")>
+<include "control/winftp/ftp.html">
+<call bottom()>
+</if>
+<!--  END ./winftp/ftp.html  -->

@@ -1,0 +1,29 @@
+<!-- BEGIN ./control/misc/change_backup_service.html.in  -->
+<call draw_tooltip()>
+
+<yafv s_misc>
+<assign res_backup=account.getResource(request.rid)>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_backup" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="type" value="reseller_backup">
+
+<input type="hidden" name="next_template" value="submit/misc/change_backup_service.sbm">
+<input type="hidden" name="template_name" value="submit/misc/change_backup_service_check.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<if vbackup_number>
+  <assign _backup_number=vbackup_number>
+<else>
+  <assign _backup_number=res_backup.size>
+</if>
+<call draw_table_header("2", label.reseller_backup.change.header)>
+<tr>
+   <td><call draw_label(lang.label.reseller_backup.change)></td>
+   <td><input type="text" size="3" name="backup_number" value="${_backup_number}" check="vPositiveIntReq"></td>
+</tr>
+<tr>
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.change}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/misc/change_backup_service.html.in  -->

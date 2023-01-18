@@ -1,0 +1,26 @@
+<!-- BEGIN ./delete_ip.sbm  -->
+<assign vps=account.getChild("vps")>
+<assign ips=vps.getChildren("vps_ip")>
+<list ips as ip>
+<if !deleteable>
+   <assign disabled_ip = ip>
+</if>
+<assign deleteable="1">
+</list>
+<assign vsip=account.getResource(request.did)>
+<if disabled_ip == vsip>
+   <assign res=session.addMessage(toolbox.compose(lang.vps.ip_delete_disabled, disabled_ip.ip))>
+<else>
+   <assign result = vsip.delete()>
+</if>
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <assign res = session.addMessage(result.msg)>
+</if>
+<if success=="1">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./delete_ip.sbm  -->

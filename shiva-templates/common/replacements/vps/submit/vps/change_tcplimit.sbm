@@ -1,0 +1,49 @@
+<!-- BEGIN ./vps/change_tcplimit.sbm  -->
+<if size==""><assign size=request.size></if>
+<if rid==""><assign rid=request.rid></if>
+<assign result=yafv.common.s_vps.vQuota(lang.vps.tcplimit.label, size)>
+<if result.status == "OK">
+  <assign vps=account.getResource(rid)>
+  <assign tcplimit=vps.getChild("vps_tcp_limit")>
+  <assign tcplimits=vps.findChildren("vps_tcp_limit")>
+  <if tcplimit>
+   <if toolbox.gt(tcplimit.used,size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.vps.msg.failed_set_smalltcplimit, size, tcplimit.used))>
+       <assign failure="1">
+   <else>
+          ${toolbox.setBillingNote(lang.vps.billingnote.change_tcplimit(tcplimit.limit, size))}
+	     <list tcplimits as tcplimit>
+	     	<assign result=tcplimit.delete>
+       	     	<if result.status!="OK">
+		  <assign failure="1">
+		  <assign res=session.addMessage(result.msg)>
+	      	</if>
+	     </list>
+          <assign new_tcplimit=vps.addChild("vps_tcp_limit","",size)>
+          <if new_tcplimit.status!="OK">
+	     <assign failure="1">
+	     <assign res=session.addMessage(result.msg)>
+          </if>
+	  
+   </if>
+  <else>
+    <assign result=vps.addChild("vps_tcp_limit","",size)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if silent=="">
+    <if failure>
+    	<assign vsize=toolbox.html_encode(request.size)>
+    	<include request.ftemplate>
+    <else>
+    	<include request.stemplate>
+    </if>
+</if>
+<!--  END ./vps/change_tcplimit.sbm  -->

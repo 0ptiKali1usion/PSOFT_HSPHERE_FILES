@@ -1,0 +1,40 @@
+<!-- BEGIN ./control/admin/ds/add_server.html  -->
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<!-- ds_manager=${ds_manager} -->
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager")>
+</if>
+<call draw_tooltip()>
+
+<if admin && ds_manager>
+<assign dstemplates=ds_manager.templates>
+
+<call draw_table_header("2", lang.admin.ds.add_new_ds)>
+<if !admin.isResourceDisabled("allow_own_ds") || !admin.isReseller()>
+  <if !admin.isResourceDisabled("ds_custom_build")>
+    <tr>
+    <td width="85%"><call draw_label(lang.admin.ds.add_ds_non_templated)>&nbsp;<call draw_help("admin_ds-add-non-templated-ds","")></td>
+    <td><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/add_ds.html&stemplate=admin/ds/manage.html&ftemplate="+template, "select", label.select)></td>
+    </tr>
+  </if>
+  <tr><td class="control_header" colspan="2"><call draw_header(lang.admin.ds.add_ds_templated)>&nbsp;<call draw_help("admin_ds-add-templated-ds","")></td></tr>
+  <list dstemplates as dst>
+  <if dst.reseller_id == user.reseller_id>
+  <tr>
+    <td width="80%"><call draw_label(dst.name)></td>
+    <td>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/add_ds.html&stemplate=admin/ds/manage.html&ftemplate="+template+"&dst_id="+dst.id, "select", label.select)>&nbsp;
+      <if dst &&  !dst.ro><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/edit_ds_template.html&stemplate=" + template + "&dst_id="+dst.id, "edit", label.edit)></if>&nbsp;
+      <if dst.can_be_deleted><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/ds/delete_dst.sbm&stemplate="+template+"&ftemplate="+template+"&dst_id="+dst.id, "del", label.delete)>&nbsp;<else></if>
+    </td>
+  </tr>
+  </if>
+  </list>
+<else>
+  <tr><td colspan="2"><call draw_label(lang.msg.admin_no_permissions)></td></tr>
+</if>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/admin/ds/add_server.html.in  -->

@@ -1,0 +1,54 @@
+<!-- BEGIN ./eeman/add_lserver_submit.html  -->
+<if !request.group><assign group_message=toolbox.compose(
+    lang.msg.name_res_failed_set,lang.label.group,"")></if>
+<if !request.type_id><assign type_id_message=toolbox.compose(
+    lang.msg.name_res_failed_set,lang.eeman.stype,"")></if>
+<if !request.p_server_id><assign p_server_id_message=toolbox.compose(
+    lang.msg.name_res_failed_set,lang.eeman.pserver,"")></if>
+
+<assign result=yafv.checkall(
+  yafv.common.s_eeman.vDomainName(lang.label.domain.name,request.name),
+  group_message,
+  type_id_message,
+  p_server_id_message,
+  yafv.common.s_eeman.vDescription(lang.label.descr,request.description) )>
+<if result.status=="OK">
+ <assign eeman = account.getChild("eeman")>
+ <assign signup="0">
+ <assign result = eeman.addLserver( request.name, request.group, request.fileServer, request.description, request.path, request.type_id, request.p_server_id, signup)>
+ <if result.status!="OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+ <else>
+      <assign lserver = result>
+      <assign result = eeman.reloadHosts()>
+      <if result.status=="OK">
+ 	<assign res=session.addMessage(lang.msg.eeman.changes_applied)>
+      <else>
+	<assign res=session.addMessage(result.msg)>
+      </if>
+ </if>
+  <else>
+ <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+ <assign failure="1">
+</if>
+<if failure>
+ <assign vname=toolbox.html_encode(request.name)>
+ <assign vgroup=request.group>
+ <assign vtype_id=request.type_id>
+ <assign vp_server_id=request.p_server_id>
+ <assign vdescription=toolbox.html_encode(request.description)>
+ <assign vfileServer=toolbox.html_encode(request.fileServer)>
+ <assign vpath=toolbox.html_encode(request.path)>
+ <assign vsignup=request.signup>
+ <include request.ftemplate>
+<else> 
+    <if (l_server.type=="1") || (l_server.type=="5")>
+      <assign res=session.addMessage(lang.eeman.tagwarn)>
+      <list toolbox.getSharedIPTags() as siptag>
+	<assign res=session.addMessage(siptag)>
+      </list>
+      </if>
+    <include request.stemplate>
+</if> 
+<!--  END ./eeman/add_lserver_submit.html  -->

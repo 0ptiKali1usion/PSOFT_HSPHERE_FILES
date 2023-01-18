@@ -1,0 +1,256 @@
+<!ELEMENT users (user+)>
+<!ELEMENT user (account+)>
+<!ELEMENT account (info+, odbc?, limits?, ftpsubaccounts?, crontab?, domain*, mysql?, mssql?, pgsql?)>
+<!ELEMENT info (item+)>
+<!ELEMENT item (#PCDATA)>
+<!ELEMENT odbc (dsn_record+)>
+<!ELEMENT dsn_record (driver_param*)>
+<!ELEMENT driver_param (#PCDATA)>
+<!ELEMENT limits (quota?, traffic?)>
+<!ELEMENT ftpsubaccounts (subaccount+)>
+<!ELEMENT crontab (command*)>
+<!ELEMENT command (#PCDATA)> 
+<!ELEMENT quota (#PCDATA)>
+<!ELEMENT traffic (#PCDATA)>
+<!ELEMENT subaccount (#PCDATA)>
+<!ELEMENT domain (mailservice?, webservice?, ftp?, subdomain*, aliases*, dns?)>
+<!ELEMENT subdomain (mailservice?, webservice?, ftp?, subdomain*, aliases*, dns?)>
+<!ELEMENT mailservice (autoresponder*, mailbox*, forward*, maillist*)*>
+<!ELEMENT autoresponder (#PCDATA)>
+<!ELEMENT mailbox (mailalias*)>
+<!ELEMENT mailalias (#PCDATA)>
+<!ELEMENT forward (subscriber+)>
+<!ELEMENT maillist (subscriber*, moderator*, messagetrailer?)>
+<!ELEMENT subscriber (#PCDATA)>
+<!ELEMENT moderator (#PCDATA)>
+<!ELEMENT messagetrailer (#PCDATA)>
+<!ELEMENT aliases (alias+)>
+<!ELEMENT alias (dns?, mailservice?)>     
+<!ELEMENT dns (record+)>
+<!ELEMENT record (#PCDATA)>
+
+<!ELEMENT mysql (mysqldatabase*, mysqluser*)>
+<!ELEMENT mysqldatabase (#PCDATA)> 
+<!ELEMENT mysqluser (grant*)>
+<!ELEMENT grant (#PCDATA)>
+
+<!ELEMENT mssql (mssqldatabase*, mssqllogin*)>
+<!ELEMENT mssqldatabase (mssqluser*)> 
+<!ELEMENT mssqluser (#PCDATA)>
+<!ELEMENT mssqllogin (#PCDATA)>
+
+<!ELEMENT pgsql (pgsqldatabase*, pgsqluser*)>
+<!ELEMENT pgsqldatabase (#PCDATA)> 
+<!ELEMENT pgsqluser (#PCDATA)>
+
+<!ELEMENT webservice (settings?, errorlog?, transferlog?, webalizer?, modlogan?, referrerlog?, agentlog?, 
+          urchin3?, urchin4?, cgi?, cgidir?, ismap?, mimetype?, php3?, ssi?, errordoc?, vhost_alias?, 
+	  redirect_url?, directory_ind?, throttle?, mnogosearch?, phpbb?, frontpage?, asp?, 
+	  asp_secured_license?, asp_net?, cf?, mssqlmanager?, empresa?, miva?, oscommerce?, ssl )>
+<!ELEMENT settings (#PCDATA)>
+<!ELEMENT listitem (#PCDATA)>
+<!ELEMENT mimelistitem (#PCDATA)>
+<!ELEMENT frontpage (login+, password+)?>
+<!ELEMENT cgi (cgilistitem+)>
+<!ELEMENT cgidir (listitem+)>
+<!ELEMENT cgilistitem (#PCDATA)>
+<!ELEMENT ismap (listitem+)>
+<!ELEMENT mimetype (mimelistitem+)>
+<!ELEMENT php3 (listitem+)>
+<!ELEMENT ssi (listitem+)>
+<!ELEMENT errordoc (errordocitem+)>
+<!ELEMENT errordocitem (#PCDATA)>
+<!ELEMENT redirectitem (#PCDATA)> 
+<!ELEMENT errorlog (#PCDATA)>
+<!ELEMENT transferlog (#PCDATA)>
+<!ELEMENT webalizer (#PCDATA)>
+<!ELEMENT modlogan (#PCDATA)>
+<!ELEMENT referrerlog (#PCDATA)>
+<!ELEMENT agentlog (#PCDATA)>
+<!ELEMENT serveralias (#PCDATA)>
+<!ELEMENT directory_ind (#PCDATA)>
+<!ELEMENT mnogosearch (#PCDATA)>
+<!ELEMENT throttle (#PCDATA)>
+<!ELEMENT phpbb (#PCDATA)>
+<!ELEMENT urchin3 (#PCDATA)>
+<!ELEMENT urchin4 (#PCDATA)>
+<!ELEMENT vhost_alias (listitem+)>
+<!ELEMENT redirect_url (redirectitem+)> 
+<!ELEMENT asp (asp_secured+)>
+<!ELEMENT asp_secured (#PCDATA)>
+<!ELEMENT asp_net (#PCDATA)>
+<!ELEMENT asp_secured_license (#PCDATA)>
+<!ELEMENT login (#PCDATA)> 
+<!ELEMENT password (#PCDATA)>
+<!ELEMENT cf (listitem+)>
+<!ELEMENT mssqlmanager (#PCDATA)>
+<!ELEMENT empresa (#PCDATA)> 
+<!ELEMENT miva (#PCDATA)>
+<!ELEMENT oscommerce (#PCDATA)>
+
+<!ELEMENT ssl (ssl_key, ssl_cert, ssl_chain?)>
+<!ELEMENT ssl_key (#PCDATA)>
+<!ELEMENT ssl_cert (#PCDATA)>
+<!ELEMENT ssl_chain (#PCDATA)>
+
+<!ELEMENT ftp (ftpvhost|winanonymous)>
+<!ELEMENT ftpvhost (unixanonymous?, ftpdirectory*, ftpuser*)>
+<!ELEMENT unixanonymous (#PCDATA)>
+<!ELEMENT winanonymous (#PCDATA)>
+<!ELEMENT ftpdirectory (vdiruser*)>
+<!ELEMENT vdiruser (#PCDATA)>
+<!ELEMENT ftpuser (#PCDATA)>
+
+<!ATTLIST ftpvhost admin CDATA #REQUIRED>
+<!ATTLIST ftpvhost server CDATA #REQUIRED> 
+<!ATTLIST ftpdirectory name CDATA #REQUIRED>
+<!ATTLIST ftpdirectory read CDATA #REQUIRED>
+<!ATTLIST ftpdirectory write CDATA #REQUIRED>
+<!ATTLIST ftpdirectory list  CDATA #REQUIRED>
+<!ATTLIST ftpdirectory forall CDATA #REQUIRED>
+<!ATTLIST ftpuser login CDATA #REQUIRED>
+<!ATTLIST ftpuser password CDATA #REQUIRED>
+<!ATTLIST unixanonymous value (ON|OFF) #REQUIRED>
+<!ATTLIST unixanonymous upload (ON|OFF) #REQUIRED>
+<!ATTLIST winanonymous name   CDATA #REQUIRED>
+<!ATTLIST winanonymous status CDATA #REQUIRED>
+<!ATTLIST winanonymous upload CDATA #REQUIRED>
+<!ATTLIST vdiruser name CDATA #REQUIRED>
+
+<!ATTLIST user login CDATA #REQUIRED>
+<!ATTLIST user password CDATA #REQUIRED>
+<!ATTLIST user reseller CDATA "">
+
+<!ATTLIST account suspended CDATA "">
+<!ATTLIST account plan CDATA #REQUIRED>
+<!ATTLIST account balance CDATA "">
+<!ATTLIST account bpid CDATA "">
+<!ATTLIST account startdate CDATA "">
+
+<!ATTLIST info prefix CDATA #REQUIRED>
+<!ATTLIST item name CDATA #REQUIRED>
+
+<!ATTLIST subaccount login CDATA #REQUIRED>
+<!ATTLIST subaccount password CDATA #REQUIRED>
+<!ATTLIST subaccount homesuffix CDATA #REQUIRED>
+
+<!ATTLIST domain name CDATA #REQUIRED>
+<!ATTLIST domain ip CDATA "">
+<!ATTLIST domain type CDATA "transfer">
+
+<!ATTLIST subdomain name CDATA "">
+<!ATTLIST mailservice catchall CDATA "">
+<!ATTLIST mailbox name CDATA #REQUIRED>
+<!ATTLIST mailbox password CDATA "">
+<!ATTLIST mailbox description CDATA "The Mailbox">
+
+<!ATTLIST forward name CDATA #REQUIRED>
+<!ATTLIST subscriber email CDATA #REQUIRED>
+<!ATTLIST moderator email CDATA #REQUIRED>
+<!ATTLIST maillist name CDATA #REQUIRED>
+
+<!ATTLIST mysqldatabase name CDATA #REQUIRED>
+<!ATTLIST mysqldatabase description CDATA "">
+<!ATTLIST mysqluser login CDATA #REQUIRED>
+<!ATTLIST mysqluser password CDATA #REQUIRED>
+<!ATTLIST grant privileges CDATA #REQUIRED>
+<!ATTLIST grant on CDATA #REQUIRED>
+
+<!ATTLIST mssqldatabase name CDATA #REQUIRED>
+<!ATTLIST mssqldatabase quota CDATA #REQUIRED>
+<!ATTLIST mssqldatabase owner CDATA #REQUIRED>
+<!ATTLIST mssqluser login CDATA #REQUIRED>
+<!ATTLIST mssqluser name CDATA #REQUIRED>
+<!ATTLIST mssqllogin login CDATA #REQUIRED>
+<!ATTLIST mssqllogin password CDATA #REQUIRED>
+
+<!ATTLIST pgsqldatabase name CDATA #REQUIRED>
+<!ATTLIST pgsqldatabase description CDATA "">
+<!ATTLIST pgsqldatabase owner CDATA #REQUIRED>
+<!ATTLIST pgsqluser name CDATA #REQUIRED>
+<!ATTLIST pgsqluser password CDATA #REQUIRED>
+
+<!ATTLIST alias name CDATA #REQUIRED>
+<!ATTLIST alias dns CDATA "1">
+<!ATTLIST alias mail CDATA "1">
+
+<!ATTLIST mailalias name CDATA #REQUIRED>
+
+<!ATTLIST autoresponder local CDATA #REQUIRED>
+<!ATTLIST autoresponder subject CDATA #REQUIRED>
+
+<!ATTLIST record name CDATA #REQUIRED>
+<!ATTLIST record type CDATA #REQUIRED>
+<!ATTLIST record ttl CDATA #REQUIRED>
+<!ATTLIST record data CDATA #REQUIRED>
+<!ATTLIST record pref CDATA "">
+
+<!ATTLIST settings index (enabled|disabled|fancy) #REQUIRED>
+<!ATTLIST settings symlink (enabled|disabled|owner) #IMPLIED>
+<!ATTLIST settings ssi (enabled|disabled) #IMPLIED>
+<!ATTLIST settings multiview (enabled|disabled) #IMPLIED>
+<!ATTLIST settings iis_status (running|stopped) #IMPLIED>
+
+<!ATTLIST errorlog value (ON|OFF) #REQUIRED>
+<!ATTLIST transferlog value (ON|OFF) #REQUIRED>
+<!ATTLIST webalizer value (ON|OFF) #REQUIRED>
+<!ATTLIST modlogan value (ON|OFF) #REQUIRED>
+<!ATTLIST referrerlog value (ON|OFF) #REQUIRED>
+<!ATTLIST agentlog value (ON|OFF) #REQUIRED> 
+<!ATTLIST asp value (ON|OFF) #REQUIRED> 
+<!ATTLIST asp_net value (ON|OFF) #REQUIRED> 
+<!ATTLIST frontpage value (ON|OFF) #IMPLIED>   
+<!ATTLIST mssqlmanager value (ON|OFF) #IMPLIED>
+<!ATTLIST empresa value (ON|OFF) #IMPLIED>
+<!ATTLIST miva value (ON|OFF) #IMPLIED>
+<!ATTLIST oscommerce value (ON|OFF) #IMPLIED>
+
+<!ATTLIST ssl sitename CDATA "">
+<!ATTLIST urchin3 value (ON|OFF) #REQUIRED>
+<!ATTLIST urchin4 value (ON|OFF) #REQUIRED> 
+<!ATTLIST asp_secured value (ON|OFF) #REQUIRED>
+<!ATTLIST asp_secured_license value (ON|OFF) #REQUIRED>
+<!ATTLIST asp_secured_license orderid CDATA #IMPLIED>
+
+<!ATTLIST cgilistitem ext CDATA #REQUIRED>
+<!ATTLIST cgilistitem handler CDATA #IMPLIED>
+
+<!ATTLIST mimelistitem ext CDATA #REQUIRED>
+<!ATTLIST mimelistitem mime CDATA #REQUIRED>
+
+<!ATTLIST errordocitem code CDATA #REQUIRED>
+<!ATTLIST errordocitem message CDATA #REQUIRED>
+<!ATTLIST errordocitem doctype CDATA #IMPLIED>
+
+<!ATTLIST redirectitem urlpath CDATA #REQUIRED>
+<!ATTLIST redirectitem protocol CDATA #REQUIRED>
+<!ATTLIST redirectitem url CDATA #REQUIRED>
+<!ATTLIST redirectitem status CDATA #IMPLIED>  
+<!ATTLIST redirectitem below CDATA #IMPLIED> 
+<!ATTLIST redirectitem exact CDATA #IMPLIED> 
+<!ATTLIST redirectitem perm CDATA #IMPLIED> 
+
+<!ATTLIST throttle type CDATA #REQUIRED>
+<!ATTLIST throttle limit CDATA #REQUIRED>
+<!ATTLIST throttle limitUn CDATA #IMPLIED>
+<!ATTLIST throttle interval CDATA #REQUIRED>
+<!ATTLIST throttle intervalUn CDATA #REQUIRED>
+
+<!ATTLIST mnogosearch db CDATA #REQUIRED>
+<!ATTLIST mnogosearch user CDATA #REQUIRED>
+
+<!ATTLIST phpbb db CDATA #REQUIRED>
+<!ATTLIST phpbb user CDATA #REQUIRED>
+
+<!ATTLIST oscommerce db CDATA #REQUIRED>
+<!ATTLIST oscommerce user CDATA #REQUIRED>
+ 
+<!ATTLIST ssi exec CDATA #IMPLIED> 
+
+<!ATTLIST dsn_record driver-name CDATA #REQUIRED>
+<!ATTLIST dsn_record dsn CDATA #REQUIRED>
+
+<!ATTLIST driver_param name CDATA #REQUIRED> 
+<!ATTLIST driver_param value CDATA #REQUIRED>
+
+<!ATTLIST crontab mailto CDATA #REQUIRED>

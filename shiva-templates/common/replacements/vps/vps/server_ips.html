@@ -1,0 +1,8 @@
+<!-- BEGIN ./vps/server_ips.html  -->
+<include "functions">
+<assign template="vps/server_ips.html">
+<call draw_menu("vps-serverips")>
+<assign vps=account.getChild("vps")>
+<include "control/vps/server_ips.html">
+<call bottom()>
+<!--  END ./vps/server_ips.html  -->

@@ -1,0 +1,45 @@
+<!-- BEGIN ./submit/admin/mod_sign_process.sbm -->
+<assign signup = account.getChild("signupadm")>
+<assign bi = signup.createTempAccount(request.rid).bi>
+
+<if bi.exemption_code && !bi.taxExemptionApproved() && !bi.taxExemptionRejected()>
+  <assign res=session.addMessage(lang.admin.billman.approve_reject_exemption_code)>
+  <assign fail = "1">
+</if>
+
+<assign processors = toolbox.getGateways().processors.processor>
+
+<if !fail>
+  <list signup.getFakeRequest(request.rid) as pair>
+    <if pair.name=="_mod"><assign mod=pair.value></if>
+  </list>
+  <assign isProcessor="FALSE">
+  <assign result = signup.createAccount(request.rid)>
+
+  <list processors as processor>
+    <if processor("name")==result.bi.type>
+      <assign processorname=processor("name")>
+      <assign isProcessor="TRUE">
+    </if>
+  </list>
+
+  <if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.label.account,request.login))>
+    <if result.bi.type == "CC" || isProcessor == "TRUE">
+      <include request.stemplate>
+    <else>
+      <assign aid=result.id.id>
+      <include "admin/deposit.html">
+    </if>
+  <else>
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.account,request.login))>
+    <assign res=session.addMessage(result.msg)>
+    <assign fail = "1">
+  </if>
+</if>
+<if fail>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/mod_sign_process.sbm -->

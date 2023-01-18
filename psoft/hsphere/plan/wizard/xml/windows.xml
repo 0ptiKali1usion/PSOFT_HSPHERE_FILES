@@ -1,0 +1,995 @@
+<?xml version="1.0"?>
+
+<PlanWizard name="windows" description="planeditor.windows_plan_type">
+  <DefaultName>Windows I</DefaultName>
+    <depends>
+        <platform>windows_platform</platform>
+        <LogicalGroup>windows_hosting</LogicalGroup>
+    </depends>
+  <DefaultValues>
+    <value name="_template">design/info.html</value>
+    <value name="menuId">winduz</value>
+  </DefaultValues>
+
+  <special>
+     <res_opensrs>
+        <field type="checkbox" name="leave_osrs_prices"
+	       label="planwizard.leave_osrs_prices" value="1" checked="1">
+          <include ifvalue="" name="admin/wizards/tldprices.html"/>
+        </field>
+     </res_opensrs>
+     <res_domain_transfer>
+         <field type="checkbox" name="leave_domain_transfer_prices"
+               label="planwizard.leave_domain_transfer_prices" value="1" checked="1">
+             <include ifvalue="" name="admin/wizards/tld-transferprices.html"/>
+         </field>
+     </res_domain_transfer>
+  </special>
+  <categories>
+     <category>
+       <resource name="account" required="1" class="psoft.hsphere.Account" />
+       <resource name="unixuser" required="1" noprice="1" class="psoft.hsphere.resource.WinUserResource" />
+       <resource name="billviewer" required="1" noprice="1" class="psoft.hsphere.resource.BillViewer" />
+       <resource name="ftp_user_traffic" required="1" noprice="1" class="psoft.hsphere.resource.Traffic" />
+       <resource name="tt" required="1" noprice="1" class="psoft.hsphere.resource.tt.TroubleTicket" />
+       <resource name="custom_billing" required="1" noprice="1" class="psoft.hsphere.resource.CustomizableBillingResource"/>
+
+     </category>
+
+     <category description="planeditor.quotas">
+       <resource name="traffic" required="1" unit="GB" class="psoft.hsphere.resource.Traffic"/>
+       <resource name="quota" required="1" unit="MB" class="psoft.hsphere.resource.WinQuota"/>
+       <resource name="summary_quota" unit="MB" help="admin-editwizard-o_sumquota" class="psoft.hsphere.resource.SummaryQuota"/>
+     </category>
+
+     <category description="planeditor.domain_types">
+       <resource name="dns_zone" required="1" class="psoft.hsphere.resource.dns.DNSZone"/>
+       <resource name="domain" include="1" help="admin-editwizard-d_transfer" class="psoft.hsphere.resource.Domain"/>
+       <resource name="idomain_alias" required="1" class="psoft.hsphere.resource.IIS.InstantAliasResource"/>
+       <resource name="opensrs" include="1" help="admin-editwizard-d_transfer" class="psoft.hsphere.resource.DomainRegistrationResource"/>
+       <resource name="domain_transfer" include="0" help="admin-editwizard-d_transfer" class="psoft.hsphere.resource.DomainTransferResource"/>
+       <resource name="billing_info" required="1" ifresource="opensrs|domain_transfer" class="psoft.hsphere.resource.ContactInfo"/>
+       <resource name="contact_info" required="1" ifresource="opensrs|domain_transfer" class="psoft.hsphere.resource.ContactInfo"/>
+       <resource name="subdomain" include="1" help="admin-editwizard-d_registration" class="psoft.hsphere.resource.Domain"/>
+       <resource name="nodomain" include="1" help="admin-editwizard-d_stopgap" class="psoft.hsphere.resource.NoDomain"/>
+       <resource name="3ldomain" help="admin-editwizard-d_thirdlevel" class="psoft.hsphere.resource.ThirdLevelDomain"/>
+       <resource name="domain_alias" include="1" help="admin-editwizard-d_domainalias" class="psoft.hsphere.resource.IIS.DomainAliasResource"/>
+       <resource name="domain_alias_a_record" required="1" ifresource="domain_alias" class="psoft.hsphere.resource.dns.DomainAliasADNSRecord"/>
+       <resource name="parked_domain" include="1" help="admin-editwizard-d_parketdomain" class="psoft.hsphere.resource.Domain"/>
+       <resource name="service_domain" help="admin-editwizard-d_servicedomain" class="psoft.hsphere.resource.ServiceDomain"/>
+       <resource name="service_dns_zone" required="1" ifresource="service_domain" class="psoft.hsphere.resource.dns.ServiceDNSZone"/>
+     </category>
+
+
+     <category description="planeditor.web_services">
+       <resource name="hosting" required="1" class="psoft.hsphere.resource.IIS.VirtualHostingResource"/>
+       <resource name="vhost_alias" required="1" class="psoft.hsphere.resource.IIS.ServerAliasResource" reflectable="1"/>
+       <resource name="http_traffic" required="1" class="psoft.hsphere.resource.Traffic"/>
+       <resource name="ftp_traffic" required="1" class="psoft.hsphere.resource.Traffic"/>
+       <resource name="cgi" ifresource="awstats" include="1" active="1" help="admin-editwizard-w_cgi" class="psoft.hsphere.resource.IIS.CGIResource" showable="1"/>
+       <resource name="cgidir" include="1" active="1" help="admin-editwizard-w_cgi_bin" class="psoft.hsphere.resource.IIS.CGIDirResource"/>
+       <resource name="asp" include="1" active="1" help="admin-editwizard-w_asp" class="psoft.hsphere.resource.IIS.ASPResource" showable="1"/>
+       <resource name="asp_secured" include="0" active="0" help="admin-editwizard-w_asp_secured" class="psoft.hsphere.resource.IIS.ASPSecuredResource" />
+       <resource name="asp_secured_license"  include="0" help="admin-editwizard-w_asp_secured_license" class="psoft.hsphere.resource.IIS.ASPSecuredLicenseResource" />
+       <resource name="asp_net" include="1" active="1" help="admin-editwizard-w_asp_net" class="psoft.hsphere.resource.IIS.ASPNETResource" showable="1"/>
+       <resource name="frontpage" include="1" active="0" help="admin-editwizard-w_frontpage" class="psoft.hsphere.resource.IIS.FrontPageResource" showable="1"/>
+       <resource name="ssi" include="1" active="0" help="admin-editwizard-w_ssi" class="psoft.hsphere.resource.IIS.SSIModule" showable="1"/>
+       <resource name="ssi_entry"  required="1" ifresource="ssi" class="psoft.hsphere.resource.IIS.SSIEntry"/>
+       <resource name="php3" include="1" active="1" help="admin-editwizard-w_php" class="psoft.hsphere.resource.IIS.PHPModule" showable="1"/>
+       <resource name="php3entry" required="1" ifresource="php3" class="psoft.hsphere.resource.IIS.PHPEntry"/>
+       <resource name="cf" include="0" active="0" help="admin-editwizard-w_coldfusion" class="psoft.hsphere.resource.IIS.CFModule"/>
+       <resource name="cfentry" required="1" ifresource="cf" class="psoft.hsphere.resource.IIS.CFEntry"/>
+       <resource name="redirect_url" include="1" help="admin-editwizard-w_redirect" class="psoft.hsphere.resource.IIS.RedirectResource"/>
+       <resource name="directory_ind" include="1" help="admin-editwizard-w_directoryindex" class="psoft.hsphere.resource.IIS.DirectoryIndexResource"/>
+       <resource name="phpbb" help="admin-editwizard-w_phpbb" class="psoft.hsphere.resource.IIS.PHPBBResource"/>
+       <resource name="errordoc" include="1" help="admin-editwizard-w_errordoc" class="psoft.hsphere.resource.IIS.ErrorDocumentResource" showable="1"/>
+       <resource name="mimetype" required="1" class="psoft.hsphere.resource.IIS.MimeTypeResource" showable="1"/>
+       <LogicalGroup name="windows_hosting" type="windows_hosting" default="" help="admin-editwizard-w_logservergroup"/>
+     </category>
+
+     <category description="label.statistics">
+       <resource name="transferlog" include="1" active="0" ifresource="webalizer" help="admin-editwizard-s_translog" class="psoft.hsphere.resource.IIS.TransferLogResource" showable="1"/>
+       <resource name="webalizer" active="0" help="admin-editwizard-s_webalizer" class="psoft.hsphere.resource.IIS.WebalizerResource" showable="1"/>
+       <resource name="urchin" active="0" help="admin-editwizard-s_urchin" class="psoft.hsphere.resource.IIS.UrchinResource"/>
+       <resource name="urchin4" active="0" help="admin-editwizard-s_urchin" class="psoft.hsphere.resource.Urchin4Resource"/>
+       <resource name="awstats" active="0" help="admin-editwizard-s_awstats" class="psoft.hsphere.resource.AWStatsResource"/>
+     </category>
+
+     <category description="planeditor.mail_services">
+	 <ifresource name="mail_service">
+	     <ifgroup name="mail" else="mail_service">
+		 <resource name="mail_service" required="1" class="psoft.hsphere.resource.email.MailService"/>
+		 <resource name="mail_domain" required="1" class="psoft.hsphere.resource.email.MailDomain"/>
+		 <resource name="mx" required="1" class="psoft.hsphere.resource.dns.MXRecord"/>
+		 <resource name="cname_record" required="1" class="psoft.hsphere.resource.dns.CNAMERecord"/>
+		 <resource name="mail_traffic" required="1" class="psoft.hsphere.resource.Traffic"/>
+		 <resource name="mailbox" required="1" class="psoft.hsphere.resource.email.Mailbox"/>
+		 <resource name="txt_record" required="1" class="psoft.hsphere.resource.dns.TXTDNSRecord"/>
+		 <resource name="mail_quota" required="1" unit="MB" class="psoft.hsphere.resource.email.MailQuota" check_free_req="vMailQuota" check_free_opt="vMailQuotaOpt"/>
+		 <resource name="responder" include="1" help="admin-editwizard-m_responder" class="psoft.hsphere.resource.email.Autoresponder" showable="1"/>
+		 <resource name="mailbox_alias" include="1" help="admin-editwizard-m_alias" class="psoft.hsphere.resource.email.MailAlias" showable="1"/>
+		 <resource name="mail_forward" include="1" help="admin-editwizard-m_forward" class="psoft.hsphere.resource.email.MailForward" showable="1"/>
+		 <resource name="mailing_list" include="1" help="admin-editwizard-m_list" class="psoft.hsphere.resource.email.MailingList" showable="1"/>
+		 <resource name="mail_domain_alias" help="admin-editwizard-m_alias" class="psoft.hsphere.resource.email.MailDomainAlias"/>
+		 <resource name="mail_relay" active="0" help="admin-editwizard-m_mailrelay" class="psoft.hsphere.resource.email.MailRelay"/>
+		 <resource name="antispam" active="0" help="admin-editwizard-m_antispam" class="psoft.hsphere.resource.email.AntiSpam" showable="1"/>
+		 <resource name="antivirus" active="0" help="admin-editwizard-m_antivirus" class="psoft.hsphere.resource.email.AntiVirus" showable="1"/>
+		 <resource name="spf" active="0" help="admin-editwizard-m_spf" class="psoft.hsphere.resource.email.SPFResource" showable="1"/>
+		 <LogicalGroup name="mail" type="mail" default="" help="admin-editwizard-m_logservergroup"/>
+	     </ifgroup>
+	 </ifresource>
+     </category>
+
+     <category description="planeditor.ecommerce">
+       <resource name="ssl" include="1" help="admin-editwizard-ec_sslmodule" class="psoft.hsphere.resource.IIS.SSLResource" reflectable="1"/>
+       <resource name="comodossl" include="1" help="admin-editwizard-d_comodossl" class="psoft.hsphere.resource.ssl.ComodoSSLResource" showable="1"/>
+       <ifresource name="sharedssl" description="planeditor.sharedssl">
+           <resource name="sharedssl" help="admin-editwizard-ec_sharedssl" class="psoft.hsphere.resource.IIS.SharedSSLResource"/>
+	   <resource name="3ldomain_alias" required="1" class="psoft.hsphere.resource.IIS.ThirdLevelDomainAlias"/>
+	</ifresource>
+       <resource name="empresa" active="0" help="admin-editwizard-ec_empresa" class="psoft.hsphere.resource.IIS.MIVAEmpresaOnlyResource"/>
+       <resource name="miva" active="0" help="admin-editwizard-ec_miva" class="psoft.hsphere.resource.IIS.MIVAResource" showable="1"/>
+       <resource name="oscommerce" help="admin-editwizard-ec_oscommerce" class="psoft.hsphere.resource.IIS.OsCommerce"/>
+     </category>
+
+     <category description="planeditor.other">
+	 <resource name="ip" required="1" class="psoft.hsphere.resource.WinMixedIPResource"/>
+	 <resource name="a_record" required="1" class="psoft.hsphere.resource.dns.ADNSRecord"/>
+	 <resource name="unixsubuser" include="1" help="admin-editwizard-o_ftpsubaccounts" class="psoft.hsphere.resource.WinSubUserResource"/>
+	 <resource name="ftp_vhost_anonymous" include="1" help="admin-editwizard-o_anonymftpserv" class="psoft.hsphere.resource.IIS.FTPVHostAnonymousResource" showable="1"/>
+	 <resource name="cust_dns_record" ifresource="parked_domain" help="admin-editwizard-o_customdnsrec" class="psoft.hsphere.resource.dns.CustomDNSRecord"/>
+	 <resource name="sitestudio" include="1" help="admin-editwizard-o_sitestudio" class="psoft.hsphere.resource.SiteStudioResource"/>
+	 <resource name="kanoodle" help="admin-editwizard-o_kanoodle" class="psoft.hsphere.resource.Kanoodle"/>
+	 <resource name="3l_dns_zone" required="1" ifresource="3ldomain|3l_dns_zone|sharedssl" class="psoft.hsphere.resource.dns.ThirdLevelDNSZone"/>
+
+        <ifresource name="MySQL" description="planeditor.mysql">
+           <ifgroup name="mysql" else="MySQL">
+             <resource name="MySQL" help="admin-editwizard-o_mysql" class="psoft.hsphere.resource.mysql.MySQLResource" showable="1"/>
+             <resource name="MySQLUser" required="1" class="psoft.hsphere.resource.mysql.MySQLUser"/>
+             <resource name="MySQLDatabase" required="1" class="psoft.hsphere.resource.mysql.MySQLDatabase"/>
+             <resource name="mysqldb_quota" required="1" unit="MB" class="psoft.hsphere.resource.mysql.MySQLDbQuota"/>
+             <LogicalGroup name="mysql" type="mysql" help="admin-editwizard-o_lsgmysql"/>
+           </ifgroup>
+        </ifresource>
+
+        <ifresource name="MSSQL" description="planeditor.mssql">
+           <ifgroup name="mssql" else="MSSQL">
+             <resource name="MSSQL" help="admin-editwizard-o_mssql" class="psoft.hsphere.resource.mssql.MSSQLResource" showable="1"/>
+	     <resource name="mssqlmanager" ifresource="mssql|asp|asp_net" class="psoft.hsphere.resource.IIS.MSSQLManager"/>
+             <resource name="MSSQLLogin" required="1" class="psoft.hsphere.resource.mssql.MSSQLLogin"/>
+             <resource name="MSSQLDatabase" required="1" class="psoft.hsphere.resource.mssql.MSSQLDatabase"/>
+             <resource name="MSSQLUser" required="1" class="psoft.hsphere.resource.mssql.MSSQLUser"/>
+             <resource name="MSSQLQuota" required="1" unit="MB" class="psoft.hsphere.resource.mssql.MSSQLQuota"/>
+             <LogicalGroup name="mssql" type="mssql" help="admin-editwizard-o_lsgmssql"/>
+           </ifgroup>
+        </ifresource>
+
+        <ifresource name="pgsql" description="planeditor.pgsql">
+          <ifgroup name="pgsql" else="pgsql">
+             <resource name="pgsql" help="admin-editwizard-o_postgres" class="psoft.hsphere.resource.pgsql.PGSQLResource"/>
+             <resource name="pgsqldatabase" required="1" class="psoft.hsphere.resource.pgsql.PGSQLDatabase"/>
+             <resource name="pgsqluser" required="1" class="psoft.hsphere.resource.pgsql.PGSQLUser"/>
+             <resource name="pgsqldb_quota" required="1" unit="MB" class="psoft.hsphere.resource.pgsql.PGSQLDbQuota"/>
+             <LogicalGroup name="pgsql" type="pgsql" help="admin-editwizard-o_lsgpostgre"/>
+          </ifgroup>
+        </ifresource>
+
+        <ifresource name="odbc" description="planeditor.windowswizardedit.odbc">
+            <resource name="odbc" help="admin-editwizard-o_odbc" class="psoft.hsphere.resource.ODBC.ODBCService"/>
+            <resource name="dsn_record" help="admin-editwizard-o_dsn_record" class="psoft.hsphere.resource.ODBC.DSNRecord"/>
+	    <ifresource name="cf">
+	        <resource name="cf_dsn_record" help="admin-editwizard-o_cf_dsn_record" class="psoft.hsphere.resource.ODBC.CFDSNRecord"/>
+	    </ifresource>
+        </ifresource>
+
+     </category>
+  </categories>
+
+  <options iptype="1" ialias="1" sharediptag="1" stopgap="1" demomode="1" billable="1"/>
+
+  <resources>
+   <res_account>
+        <mod>
+            <initresource name="unixuser" mod="_PARENT_"/>
+            <initresource name="traffic"/>
+            <initresource name="billviewer"/>
+            <initresource name="summary_quota"/>
+        </mod>
+    </res_account>
+
+   <res_unixuser>
+      <mod name="signup" ifresource="opensrs|domain_transfer|domain">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="domain" mod="signup"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+
+      <mod name="empty">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+
+      <mod name="opensrs" ifresource="opensrs">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="domain" mod="opensrs"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+
+       <mod name="dtransfer" ifresource="domain_transfer">
+           <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+           <initvalue type="field" label="Login">login</initvalue>
+           <initvalue type="field" label="Group">settler</initvalue>
+           <initvalue type="static" label="Home Directory">D:\home</initvalue>
+           <initvalue type="field" label="Password">password</initvalue>
+           <initresource name="quota"/>
+           <initresource name="domain" mod="dtransfer"/>
+           <initresource name="ftp_user_traffic"/>
+       </mod>
+
+      <mod name="nodomain" ifresource="nodomain">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="nodomain"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+
+      <mod name="3ldomain" ifresource="3ldomain">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="3ldomain" mod="signup"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+
+
+      <mod name="service" ifresource="service_domain">
+        <initvalue type="hostgroup" label="server">windows_hosting</initvalue>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="static" label="Group">settler</initvalue>
+        <initvalue type="static" label="Home Directory">D:\home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="quota"/>
+        <initresource name="service_domain" mod="signup"/>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+    </res_unixuser>
+
+   <res_traffic><mod><initvalue type="plan_free"/></mod>
+   </res_traffic>
+   <res_summary_quota><mod><initvalue type="plan_free"/></mod>
+   </res_summary_quota>
+   <res_quota><mod><initvalue type="plan_free"/></mod>
+   </res_quota>
+
+   <res_domain>
+      <mod>
+         <initvalue type="field" label="Domain Name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="signup"/>
+         <initresource name="ip" mod="#mixedip" unique="1"/>
+         <initresource name="hosting"/>
+         <initresource name="mail_service" mod="signup"/>
+         <initresource name="http_traffic"/>
+         <initresource name="mail_traffic"/>
+      </mod>
+      <mod name="signup">
+         <initvalue type="field" label="Domain Name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="signup"/>
+         <initresource name="ip" mod="#mixedip" unique="1"/>
+         <initresource name="hosting"/>
+         <initresource name="mail_service" mod="signup"/>
+         <initresource name="http_traffic"/>
+         <initresource name="mail_traffic"/>
+      </mod>
+      <mod name="opensrs" ifresource="opensrs">
+         <initvalue type="field" label="Domain Name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="signup"/>
+         <initresource name="ip" mod="#mixedip" unique="1"/>
+         <initresource name="hosting"/>
+         <initresource name="mail_service" mod="signup"/>
+         <initresource name="opensrs"/>
+         <initresource name="contact_info"/>
+         <initresource name="billing_info"/>
+         <initresource name="http_traffic"/>
+         <initresource name="mail_traffic"/>
+      </mod>
+      <mod name="opensrsmix" ifresource="opensrs">
+         <initvalue type="field" label="Domain Name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="signup"/>
+         <initresource name="ip" mod="#mixedip" unique="1"/>
+         <initresource name="hosting"/>
+         <initresource name="mail_service" mod="signup"/>
+         <initresource name="opensrs"/>
+         <initresource name="contact_info"/>
+         <initresource name="billing_info" mod="mix"/>
+         <initresource name="http_traffic"/>
+         <initresource name="mail_traffic"/>
+      </mod>
+       <mod name="dtransfer" ifresource="domain_transfer">
+          <initvalue type="field" label="Domain Name">domain_name</initvalue>
+          <initresource name="dns_zone" mod="signup"/>
+          <initresource name="ip" mod="#mixedip" unique="1"/>
+          <initresource name="hosting"/>
+          <initresource name="mail_service" mod="signup"/>
+          <initresource name="domain_transfer"/>
+          <initresource name="contact_info"/>
+          <initresource name="billing_info"/>
+          <initresource name="http_traffic"/>
+          <initresource name="mail_traffic"/>
+       </mod>
+
+      <mod name="dtr_mix" ifresource="domain_transfer">
+         <initvalue type="field" label="Domain Name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="signup"/>
+         <initresource name="ip" mod="#mixedip" unique="1"/>
+         <initresource name="hosting"/>
+         <initresource name="mail_service" mod="signup"/>
+         <initresource name="domain_transfer"/>
+         <initresource name="contact_info"/>
+         <initresource name="billing_info" mod="mix"/>
+         <initresource name="http_traffic"/>
+         <initresource name="mail_traffic"/>
+      </mod>
+    </res_domain>
+
+   <res_ftp_user_traffic><mod><initvalue type="static">1</initvalue><initvalue type="static">2</initvalue></mod>
+   </res_ftp_user_traffic>
+
+   <res_nodomain>
+      <mod>
+       <initvalue type="static" label="Parent hosting domain name">$STOPGAP_ZONE</initvalue>
+       <initvalue type="static" label="Host nubmer prefix">$STOPGAP_PREFIX</initvalue>
+       <if type="eq" left="#mixedip" right="dedicated">
+         <true><initresource name="ip" mod="dedic_no_a" unique="1"/></true>
+         <false><initresource name="ip" mod="shard_no_a" unique="1"/></false>
+       </if>
+       <initresource name="hosting" mod="nodomain"/>
+       <initresource name="http_traffic"/>
+       <initresource name="mail_traffic"/>
+      </mod>
+    </res_nodomain>
+
+   <res_3ldomain>
+      <mod>
+        <initresource name="3l_dns_zone" mod="signup"/>
+        <initresource name="ip" mod="#mixedip" unique="1"/>
+        <initresource name="hosting"/>
+        <initresource name="mail_service" mod="signup"/>
+        <initresource name="http_traffic"/>
+        <initresource name="mail_traffic"/>
+      </mod>
+      <mod name="signup">
+        <initvalue type="field" label="Domain Name">domain_name</initvalue>
+        <initresource name="3l_dns_zone" mod="signup"/>
+        <initresource name="ip" mod="#mixedip" unique="1"/>
+        <initresource name="hosting"/>
+        <initresource name="mail_service" mod="signup"/>
+        <initresource name="http_traffic"/>
+        <initresource name="mail_traffic"/>
+      </mod>
+    </res_3ldomain>
+
+   <res_service_domain>
+       <mod>
+          <initresource name="service_dns_zone" mod="signup"/>
+          <initresource name="ip" mod="#mixedip" unique="1"/>
+          <initresource name="hosting"/>
+          <initresource name="mail_service" mod="service"/>
+          <initresource name="http_traffic"/>
+          <initresource name="mail_traffic"/>
+       </mod>
+       <mod name="signup">
+          <initvalue type="field" label="Domain Name">domain_name</initvalue>
+          <initresource name="service_dns_zone" mod="signup"/>
+          <initresource name="ip" mod="#mixedip" unique="1"/>
+          <initresource name="hosting"/>
+          <initresource name="mail_service" mod="service"/>
+          <initresource name="http_traffic"/>
+          <initresource name="mail_traffic"/>
+       </mod>
+    </res_service_domain>
+
+   <res_dns_zone>
+       <mod name="signup">
+          <initvalue type="relative" label="Domain Name">name</initvalue>
+       </mod>
+       <mod name="d_alias" ifresource="domain_alias">
+          <initvalue type="relative" label="name">name</initvalue>
+          <initvalue type="static" label="test">test</initvalue>
+          <initresource name="domain_alias_a_record"/>
+          <initresource name="domain_alias_a_record" mod="wildcard"/>
+       </mod>
+       <mod name="parked" ifresource="parked_domain">
+          <initvalue type="relative" label="Zone name">name</initvalue>
+          <initresource name="cust_dns_record" mod="parked"/>
+       </mod>
+
+    </res_dns_zone>
+
+   <res_ip>
+      <mod name="dedicated">
+         <initvalue type="static">1</initvalue>
+         <initvalue type="field" label="ip">ip</initvalue>
+         <initresource name="a_record"/>
+         <initresource name="a_record" mod="wildcard"/>
+         <initresource name="ftp_traffic"/>
+      </mod>
+      <mod name="shared">
+         <initvalue type="static">2</initvalue>
+         <initresource name="a_record"/>
+         <initresource name="a_record" mod="wildcard"/>
+      </mod>
+      <mod name="dedic_no_a">
+         <initvalue type="static">1</initvalue>
+         <initresource name="ftp_traffic"/>
+      </mod>
+      <mod name="shard_no_a">
+         <initvalue type="static">2</initvalue>
+      </mod>
+      <values>
+       <value name="SHARED_IP">#shared_ip_tag</value>
+      </values>
+    </res_ip>
+
+   <res_unixsubuser>
+      <mod>
+        <initvalue type="field" label="Login">login</initvalue>
+        <initvalue type="field" label="Home">home</initvalue>
+        <initvalue type="field" label="Password">password</initvalue>
+        <initresource name="ftp_user_traffic"/>
+      </mod>
+   </res_unixsubuser>
+
+   <res_hosting>
+      <mod>
+        <initresource name="vhost_alias" mod="www"/>
+        <initresource name="idomain_alias"/>
+        <initresource name="ssi" ifactive="ssi"/>
+        <initresource name="php3" ifactive="php3"/>
+        <initresource name="cgi" ifactive="cgi"/>
+        <initresource name="cgidir" ifactive="cgidir"/>
+        <initresource name="asp" ifactive="asp"/>
+        <initresource name="asp_secured_license" ifactive="asp_secured_license"/>
+        <initresource name="asp_net" ifactive="asp_net"/>
+        <initresource name="transferlog" ifactive="transferlog|webalizer|urchin|urchin4|awstats"/>
+        <initresource name="frontpage" ifactive="frontpage"/>
+        <initresource name="empresa" ifactive="empresa|miva"/>
+        <initresource name="miva" ifactive="miva"/>
+        <initresource name="sitestudio" ifactive="sitestudio"/>
+        <initresource name="cf" ifactive="cf"/>
+      </mod>
+      <mod name="nodomain" ifresource="nodomain">
+        <initresource name="idomain_alias"/>
+        <initresource name="ssi" ifactive="ssi"/>
+        <initresource name="php3" ifactive="php3"/>
+        <initresource name="cgi" ifactive="cgi"/>
+        <initresource name="cgidir" ifactive="cgidir"/>
+        <initresource name="transferlog" ifactive="transferlog|webalizer|urchin|urchin4|awstats"/>
+        <initresource name="frontpage" ifactive="frontpage"/>
+        <initresource name="empresa" ifactive="empresa|miva"/>
+        <initresource name="miva" ifactive="miva"/>
+        <initresource name="sitestudio" ifactive="sitestudio"/>
+        <initresource name="cf" ifactive="cf"/>
+      </mod>
+      <values>
+           <value name="INDEX">0</value>
+           <value name="STATUS">1</value>
+      </values>
+    </res_hosting>
+
+  <res_mail_service>
+      <mod>
+        <initvalue type="hostgroup" label="Mail Server">mail</initvalue>
+        <initresource name="mail_domain" mod="_PARENT_"/>
+        <initresource name="mx"/>
+        <initresource name="cname_record" mod="mail"/>
+	<initresource name="mail_relay" ifactive="mail_relay"/>
+	<initresource name="spf" ifactive="spf"/>
+      </mod>
+      <mod name="service" ifresource="service_domain">
+        <initvalue type="hostgroup" label="Mail Server">mail</initvalue>
+        <initresource name="mail_domain" mod="signup"/>
+        <initresource name="mx"/>
+	<initresource name="mail_relay" ifactive="mail_relay"/>
+	<initresource name="spf" ifactive="spf"/>
+      </mod>
+  </res_mail_service>
+
+  <res_http_traffic>
+      <mod>
+       <initvalue type="static">1</initvalue>
+       <initvalue type="static">1</initvalue>
+      </mod>
+  </res_http_traffic>
+
+  <res_mail_traffic>
+      <mod>
+       <initvalue type="static">1</initvalue>
+       <initvalue type="static">5</initvalue>
+      </mod>
+  </res_mail_traffic>
+
+  <res_opensrs>
+     <mod>
+       <initvalue type="field" label="Period">period</initvalue>
+       <initvalue type="field" label="Login">login</initvalue>
+       <initvalue type="field" label="Password">password</initvalue>
+       <initvalue type="field" label="Domain">domain_name</initvalue>
+     </mod>
+     <values>
+       <value name="_SETUP_CALC">psoft.hsphere.calc.RegistrationSetupCalc</value>
+       <value mask="_TLD"/>
+     </values>
+  </res_opensrs>
+
+  <res_domain_transfer>
+    <mod>
+      <initvalue type="field" label="Period">period</initvalue>
+      <initvalue type="field" label="Login">login</initvalue>
+      <initvalue type="field" label="Password">password</initvalue>
+      <initvalue type="field" label="Domain">domain_name</initvalue>
+    </mod>
+    <values>
+      <value name="_SETUP_CALC">psoft.hsphere.calc.DomainTransferSetupCalc</value>
+      <value mask="_TRANSFER_"/>
+    </values>
+  </res_domain_transfer>
+  <res_billing_info>
+      <mod>
+         <initvalue type="static">_srs_billing_</initvalue>
+      </mod>
+      <mod name="mix">
+         <initvalue type="static">_srs_owner_</initvalue>
+      </mod>
+  </res_billing_info>
+
+  <res_contact_info>
+       <mod>
+          <initvalue type="static">_srs_owner_</initvalue>
+       </mod>
+  </res_contact_info>
+
+   <res_3l_dns_zone>
+      <mod name="signup">
+         <initvalue type="relative" label="Zone Name">name</initvalue>
+      </mod>
+      <mod name="d_alias">
+        <initvalue type="relative">name</initvalue>
+        <initresource name="domain_alias_a_record"/>
+        <initresource name="domain_alias_a_record" mod="wildcard"/>
+      </mod>
+    </res_3l_dns_zone>
+
+   <res_service_dns_zone>
+      <mod name="signup">
+         <initvalue type="relative" label="Zone Name">name</initvalue>
+      </mod>
+   </res_service_dns_zone>
+
+   <res_domain_alias_a_record>
+       <mod name="wildcard">
+           <initvalue type="static">*</initvalue>
+       </mod>
+   </res_domain_alias_a_record>
+
+
+   <res_parked_domain>
+       <mod name="parked">
+         <initvalue type="field" label="Domain name">domain_name</initvalue>
+         <initresource name="dns_zone" mod="parked"/>
+       </mod>
+    </res_parked_domain>
+
+
+   <res_cust_dns_record>
+      <mod name="parked" ifresource="parked_domain">
+         <initvalue type="field" name="Domain Name">domain_name</initvalue>
+         <initvalue type="static" name="Record type">A</initvalue>
+         <initvalue type="static" name="TTL">86400</initvalue>
+         <initvalue type="field" name="Domain IP">domain_ip</initvalue>
+      </mod>
+   </res_cust_dns_record>
+
+   <res_a_record>
+      <mod name="wildcard">
+        <initvalue type="static">*</initvalue>
+      </mod>
+    </res_a_record>
+
+   <res_ftp_traffic>
+      <mod>
+        <initvalue type="static">1</initvalue>
+        <initvalue type="static">3</initvalue>
+      </mod>
+    </res_ftp_traffic>
+
+   <res_asp>
+      <mod>
+	<initresource name="asp_secured" ifactive="asp_secured"/>
+      </mod>
+   </res_asp>
+
+   <res_php3>
+      <mod>
+        <initresource name="php3entry" mod="php3"/>
+        <initresource name="php3entry" mod="php"/>
+        <initresource name="php3entry" mod="source"/>
+      </mod>
+    </res_php3>
+
+   <res_php3entry>
+      <mod name="php3">
+         <initvalue type="static" label="Extention">.php3</initvalue>
+      </mod>
+      <mod name="source">
+         <initvalue type="static" label="Extention">.phps</initvalue>
+         <initvalue type="static" label="Mime Type">application/x-httpd-php-source</initvalue>
+      </mod>
+      <mod name="php">
+         <initvalue type="static" label="Extention">.php</initvalue>
+      </mod>
+   </res_php3entry>
+
+   <res_transferlog>
+   <mod name="simple">
+       <initvalue type="static">7</initvalue>
+       <initvalue type="static">0</initvalue>
+   </mod>
+   <mod>
+       <initvalue type="static">7</initvalue>
+       <initvalue type="static">0</initvalue>
+       <initresource name="webalizer" ifactive="webalizer"/>
+       <initresource name="modlogan" ifactive="modlogan"/>
+       <initresource name="urchin" ifactive="urchin"/>
+       <initresource name="urchin4" ifactive="urchin4"/>
+       <initresource name="awstats" ifactive="awstats"/>
+   </mod>
+   </res_transferlog>
+
+   <res_idomain_alias>
+       <mod>
+          <initvalue type="static">$INSTANT_ZONE</initvalue>
+          <initvalue type="static">$INSTANT_PREFIX</initvalue>
+       </mod>
+    </res_idomain_alias>
+
+   <res_oscommerce>
+        <values>
+            <value name="DIR">/logs</value>
+            <value name="BUNDLE_FILE_NAME">tep-pr2.2.tar.gz</value>
+            <value name="CONFIG_NAME">configure.php</value>
+            <value name="SQL_BUNDLE">/hsphere/shared/3rd_party/oscommerce_win.sql</value>
+        </values>
+    </res_oscommerce>
+
+   <res_rlimitcpu>
+      <values>
+       <value name="RTYPE">CPU</value>
+       <value name="RMIN">10</value>
+       <value name="RMAX">20</value>
+      </values>
+    </res_rlimitcpu>
+
+   <res_rlimitmem>
+      <values>
+       <value name="RTYPE">MEM</value>
+       <value name="RMIN">6291456</value>
+       <value name="RMAX">6291456</value>
+      </values>
+    </res_rlimitmem>
+
+   <res_rlimitnproc>
+      <values>
+       <value name="RTYPE">NPROC</value>
+       <value name="RMIN">3</value>
+       <value name="RMAX">5</value>
+      </values>
+    </res_rlimitnproc>
+
+   <res_mail_domain>
+        <mod>
+            <initresource name="mailbox" mod="webmaster"/>
+	    <initresource name="antispam" mod="webmaster" ifactive="antispam"/>
+	    <initresource name="antispam" mod="postmaster" ifactive="antispam"/>
+	    <initresource name="antivirus" mod="webmaster" ifactive="antivirus"/>	
+	    <initresource name="antivirus" mod="postmaster" ifactive="antivirus"/>
+            <initvalue type="relative_rec" login="Password">password</initvalue>
+        </mod>
+    </res_mail_domain>
+
+
+   <res_mailbox>
+       <mod name="webmaster">
+          <initvalue type="static" label="Name">webmaster</initvalue>
+          <initvalue type="relative_rec" label="Password">password</initvalue>
+          <initvalue type="static" label="Description">webmaster's account</initvalue>
+          <initresource name="mail_quota"/>
+       </mod>
+       <mod name="import">
+          <initvalue type="field" label="email">email</initvalue>
+          <initvalue type="field" label="password">password</initvalue>
+          <initvalue type="field" label="description">description</initvalue>
+          <initresource name="mail_quota"/>
+       </mod>
+       <mod>
+          <initresource name="mail_quota"/>
+       </mod>
+    </res_mailbox>
+
+   <res_mail_quota>
+      <mod>
+        <initvalue type="plan_free" label="Mail Quota"/>
+      </mod>
+    </res_mail_quota>
+
+   <res_cname_record>
+       <mod name="mail">
+         <initvalue type="static" label="mail">mail</initvalue>
+         <initvalue type="relative" label="Mail Server Name">mail_server_name</initvalue>
+       </mod>
+    </res_cname_record>
+    <res_txt_record>
+       <mod>
+         <initvalue type="field" label="data">data</initvalue>
+       </mod>
+    </res_txt_record>
+    <res_spf>
+      <mod>
+        <initresource name="txt_record"/>
+      </mod>
+    </res_spf>
+   <res_sharedssl>
+       <mod name="sharedssl">
+          <initvalue type="field" label="Site Name">name</initvalue>
+       </mod>
+    </res_sharedssl>
+
+   <res_mnogosearch>
+        <values>
+          <value name="SQL_CREATE">/hsphere/shared/3rd_party/mysql_mnogosearch.sql</value>
+        </values>
+    </res_mnogosearch>
+
+   <res_phpbb>
+       <values>
+         <value name="SQL_CREATE">/hsphere/shared/3rd_party/mysql_phpbb.sql</value>
+         <value name="BUNDLE_FILE_NAME">phpBB.tar.gz</value>
+       </values>
+   </res_phpbb>
+
+
+   <res_MSSQL>
+       <mod>
+         <initvalue type="hostgroup" label="server">mssql</initvalue>
+       </mod>
+   </res_MSSQL>
+
+   <res_MSSQLDatabase>
+       <mod>
+         <initvalue type="field" label="db_name">db_name</initvalue>
+         <initvalue type="field" label="login">login</initvalue>
+         <initvalue type="static" label="quota_perc">50</initvalue>
+         <initresource name="MSSQLQuota"/>
+       </mod>
+   </res_MSSQLDatabase>
+
+   <res_MSSQLQuota>
+      <mod>
+         <initvalue type="plan_free" label="MSSQL Quota"/>
+       </mod>
+    </res_MSSQLQuota>
+
+
+   <res_subdomain>
+        <mod>
+          <initresource name="ip" mod="shared"/>
+          <initresource name="hosting"/>
+          <initresource name="mail_service" mod="signup"/>
+          <initresource name="http_traffic"/>
+          <initresource name="mail_traffic"/>
+        </mod>
+        <mod name="import">
+          <initvalue type="field" label="Subdomain name">domain_name</initvalue>
+          <initresource name="ip" mod="shared"/>
+          <initresource name="hosting"/>
+          <initresource name="mail_service" mod="signup"/>
+          <initresource name="http_traffic"/>
+          <initresource name="mail_traffic"/>
+        </mod>
+    </res_subdomain>
+
+
+   <res_domain_alias>
+      <mod name="with_dns">
+        <initresource name="dns_zone" mod="d_alias"/>
+      </mod>
+       <mod name="with_mda">
+	   <initresource name="mail_domain_alias"/>
+       </mod>
+       <mod name="dns_n_mda">
+	   <initresource name="dns_zone" mod="d_alias"/>
+	   <initresource name="mail_domain_alias" mod="with_dns"/>
+       </mod>
+    </res_domain_alias>
+
+   <res_responder>
+      <mod name="import">
+         <initvalue type="field" label="Mail box name">local</initvalue>
+         <initvalue type="field" label="Send copy to">foreign</initvalue>
+         <initvalue type="field" label="Subject">subject</initvalue>
+         <initvalue type="field" label="Message">message</initvalue>
+         <initvalue type="field" label="Description">description</initvalue>
+	 <initvalue type="field" label="Include incoming message">include_incoming</initvalue>
+      </mod>
+    </res_responder>
+
+   <res_mail_forward>
+        <mod name="import">
+          <initvalue type="field" label="local">local</initvalue>
+          <initvalue type="field" label="subscriber">subscriber</initvalue>
+          <initvalue type="field" label="description">description</initvalue>
+        </mod>
+    </res_mail_forward>
+
+   <res_mailing_list>
+       <mod>
+         <initvalue type="field" label="Email">email</initvalue>
+         <initvalue type="field" label="Description">Description</initvalue>
+       </mod>
+    </res_mailing_list>
+
+   <res_MySQL>
+      <mod>
+        <initvalue type="hostgroup" label="MySQL Server">mysql</initvalue>
+      </mod>
+    </res_MySQL>
+
+
+   <res_mysqldb_quota>
+       <mod>
+         <initvalue type="plan_free" label="MySQL Quota"/>
+       </mod>
+    </res_mysqldb_quota>
+
+   <res_MySQLDatabase>
+       <mod>
+          <initresource name="mysqldb_quota"/>
+       </mod>
+       <mod name="import">
+         <initvalue type="field" label="Database Name">name</initvalue>
+         <initvalue type="field" label="Database Description">description</initvalue>
+         <initresource name="mysqldb_quota"/>
+       </mod>
+    </res_MySQLDatabase>
+
+   <res_MySQLUser>
+       <mod name="import">
+          <initvalue type="field" label="User Login">name</initvalue>
+          <initvalue type="field" label="Password">password</initvalue>
+       </mod>
+    </res_MySQLUser>
+
+   <res_pgsql>
+        <mod>
+           <initvalue type="hostgroup" label="PostgreSQL Server">pgsql</initvalue>
+        </mod>
+    </res_pgsql>
+
+   <res_pgsqldb_quota>
+       <mod>
+         <initvalue type="plan_free" label="PostgreSQL Quota"/>
+       </mod>
+    </res_pgsqldb_quota>
+
+   <res_pgsqldatabase>
+       <mod>
+          <initresource name="pgsqldb_quota"/>
+       </mod>
+    </res_pgsqldatabase>
+
+    <res_cgi>
+        <values>
+            <value name="EXT">.pl</value>
+            <value name="HANDLER">Perl</value>
+        </values>
+    </res_cgi>
+
+    <res_vhost_alias>
+        <mod>
+            <initvalue type="static" label="Alias">www</initvalue>
+        </mod>
+    </res_vhost_alias>
+
+    <res_ssi>
+        <mod name="ssi">
+            <initresource name="ssi_entry" mod="shtml"/>
+        </mod>
+    </res_ssi>
+
+    <res_ssi_entry>
+        <mod name="shtml">
+            <initvalue type="static">.shtml</initvalue>
+        </mod>
+    </res_ssi_entry>
+
+    <res_ftp_vhost_anonymous>
+        <values>
+            <value name="ftp_vhost_anonymous">FTP_UPLOAD</value>
+            <value name="ftp_vhost_anonymous">FTP_STATUS</value>
+        </values>
+    </res_ftp_vhost_anonymous>
+
+      <res_custom_billing>
+          <values>
+              <value name="_RECURRENT_CALC">psoft.hsphere.calc.StandardCalc</value>
+              <value name="_UNIT_PRICE_">1</value>
+              <value name="_REFUND_CALC">psoft.hsphere.calc.StandardRefundCalc</value>
+          </values>
+      </res_custom_billing>
+      <res_mail_domain_alias>
+	   <mod>
+	     <initvalue type="relative">name</initvalue>
+	   </mod>
+	   <mod name="with_dns">
+	     <initvalue type="relative">name</initvalue>
+	     <initresource name="mx"/>
+	   </mod>
+       </res_mail_domain_alias>
+       <res_kanoodle/>
+      <res_3ldomain_alias>
+	  <mod>
+	      <initvalue label="Alias Name" type="field">domain_name</initvalue>
+	      <initresource name="3l_dns_zone" mod="d_alias"/>
+	  </mod>
+      </res_3ldomain_alias>
+	<res_antispam>
+	    <mod name="webmaster">
+		<initvalue type="static" label="Local Email">webmaster</initvalue>
+	    </mod>
+	    <mod name="postmaster">
+		<initvalue type="static" label="Local Email">postmaster</initvalue>
+	    </mod>
+	</res_antispam>
+	<res_antivirus>
+	    <mod name="webmaster">
+		<initvalue type="static" label="Local Email">webmaster</initvalue>
+	    </mod>
+	    <mod name="postmaster">
+		<initvalue type="static" label="Local Email">postmaster</initvalue>
+	    </mod>
+	</res_antivirus>
+        <res_dsn_record>
+	  <mod name="cf">
+	      <initresource name="cf_dsn_record"/>
+	  </mod>
+        </res_dsn_record>
+        <res_comodossl>
+          <values>
+            <value name="_SETUP_CALC">psoft.hsphere.calc.ComodoSSLSetupCalc</value>
+          </values>
+        </res_comodossl>
+
+  </resources>
+</PlanWizard>
+

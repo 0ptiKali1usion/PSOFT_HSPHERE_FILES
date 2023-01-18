@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/admin/settings/tt.sbm -->
+<assign admin = account.getChild("admin")>
+<call save("TT_EMAIL")>
+<call save("TT_POP3_HOST")>
+<call save("TT_POP3_USER")>
+<call save("TT_POP3_PASSWORD")>
+<call save("TT_AUTOCLOSE")>
+<call save("TT_FRESHEST_TYPE")> 
+<call save("TT_USERTICKETS_MAX")> 
+<call save("TT_KB")>
+<call save("TT_SUPPORT_KB")>
+<call save("KB_MAX_SUG")>
+<call save("TT_DONT_SEND_CONFIRMATION")>
+<call savel("TT_HIGHLIGHT")>
+<call savel("TT_SPAMLIST")>
+<call savel("TT_PGPPRIVATEKEY")>
+<call savel("TT_PGPPRIVATEPHRASE")>
+<call save("TT_DONT_CHECK_EMAIL")>
+<assign result = admin.updateService("ttmail")>
+<include request.stemplate>
+<function save(name)><assign result = admin.setSettingsValue(name, request[name])></function>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/tt.sbm -->

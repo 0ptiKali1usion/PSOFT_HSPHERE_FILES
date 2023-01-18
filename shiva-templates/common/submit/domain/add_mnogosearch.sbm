@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/domain/add_mnogosearch.sbm  -->
+<assign parent=account.getResource(request.rid)>	
+<!-- ${db_id} ${user_id} -->
+<assign result=parent.addChild(request.resource_name,"", db_id, user_id)>
+<if result.status=="OK">
+    <assign hosting=account.getResource(request.rid)>
+    <assign success="1">
+    <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, "mnoGoSearch", ""))>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.parent_template>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END /submit/domain/add_mnogosearch.sbm  -->

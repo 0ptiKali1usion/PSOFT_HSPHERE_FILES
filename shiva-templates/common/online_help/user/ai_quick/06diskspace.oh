@@ -1,0 +1,21 @@
+<center>Disk Space Quota</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The Web box disk space quota you can use up; it doesn't include disk space on mail, MySQL, MSSQL and RealMedia servers.<br>
+You can always change your web box disk space quota from the <i>Account Preferences</i> page, <i>Account Info</i> menu clicking either the <i>Disk Space</i> link or the <i>Change</i> icon.<br>
+When you set your disc quota to exceed the free amount, you are charged for this difference.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	As a rule you are notified by mail when you approach by certain percentage the disk space quota.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+To learn if you have any free disk space under your plan and its amount along with the range of prices, select <i>Online Price</i> in the <i>Billing</i> menu.<br>
+
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Quota is the amount of the disk space resource that you expect to use and pay for in advance. It is charged at the recurrent fee. However:<br><br>
+
+- if you fail to run up all your quota resource, you are not returned the payment for the unused resource;<br>
+- if you exceed the quota, you are charged usage fee which is usually higher.<br>
+<br>
+<i>*Initially quota is same as available free amount of the resource.</i>
+

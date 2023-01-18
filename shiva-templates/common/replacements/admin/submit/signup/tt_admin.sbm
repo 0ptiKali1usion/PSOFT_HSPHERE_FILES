@@ -1,0 +1,15 @@
+<assign result=yafv.checkall(
+    yafv.common.s_signup.vName(lang.label.name, request.name),
+    yafv.common.s_signup.vEmail(lang.label.email, request.email)
+    )>
+<if (result.status!="OK") || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign email=request.email>
+    <assign name=request.name>
+    <assign description=request.description>
+    <include "signup/tt_admin.html">
+<else>
+    <include "signup/end.html">
+</if>

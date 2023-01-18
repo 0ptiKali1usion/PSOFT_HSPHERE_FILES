@@ -1,0 +1,49 @@
+<!-- BEGIN ./control/admin/plan_edit_showable.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+
+<assign tbl_header = lang.admin.planeditshow.show(plan.description)>
+<if plan.disabled=="1">
+  <assign tbl_header = tbl_header + "&nbsp;" + lang.admin.disabled_plan>
+</if>
+<call prepare_table_header("", tbl_header)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit.html", lang.admin.planeditshow.res)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_settings.html", lang.admin.planeditshow.set)>
+<if !plan.deleted>
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_access.html", lang.admin.planeditshow.acc)>
+</if>
+<call draw_table_header_prepared()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+  <tr>
+    <td >
+    <table class="inner_control">
+      <input type="hidden" name="template_name" value="submit/admin/plan_edit_show_change.sbm">
+      <input type="hidden" name="stemplate" value="${template}">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <input type="hidden" name="plan_id" value="${plan.id}">
+      <list plan.getShowableResources() as resource>
+        <if resource.disabled=="0">
+          <tr>
+            <td class="inner_control_align_center">
+              <input type="checkbox" name="sh" value="${resource.type}"<if resource.isResourceShowable()>CHECKED</if>>
+            </td>
+            <td><call draw_label(resource.description)></td>
+          </tr>
+        </if>
+      </list>
+    </table>
+    </td>
+  </tr>
+  <tr><td class="control_align_right"><input type="submit" value="${lang.button.change}"></td></tr>
+</form>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./admin/control/plan_edit_showable.html  -->

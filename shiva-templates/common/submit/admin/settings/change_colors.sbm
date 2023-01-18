@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/admin/settings/change_color.sbm -->
+<compress>
+<assign design_id = request.design_id>
+<if design_id>
+  <assign design_prefix = design.get_design_prefix(design_id)>
+  <assign admin = account.getChild("admin")>
+  <list design.all_designs[design_id].color_list as color_id>
+    <call save_v(design_prefix + color_id, request[color_id])>
+  </list>
+</if>
+</compress>
+<if !failure>
+  <call save_v(design_prefix + "color_scheme", "custom")>
+  <assign res = design.refreshCurrent()>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/change_colors.sbm -->

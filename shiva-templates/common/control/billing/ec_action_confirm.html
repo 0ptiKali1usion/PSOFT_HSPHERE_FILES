@@ -1,0 +1,31 @@
+<!-- BEGIN ./billing/ec_action_confirm.html  -->
+<switch (request.act)>
+<case "add"><assign message = lang.billing.ec_confirm_add><break>
+<case "edit"><assign message = lang.billing.ec_confirm_edit><break>
+<case "del"><assign message = lang.billing.ec_confirm_del><break>
+</switch>
+<if message && request.next_template>
+<call draw_tooltip()>
+
+<form name="f_confirmation" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<list params as param><if param.name != "template_name" && param.name != "next_template" && param.name != "act">
+<input type="hidden" name="${param.name}" value="${param.value}">
+</if></list>
+<call draw_table_header("", lang.label.confirmation)>
+
+<tr>
+<td><call draw_label(message)><br>
+<center>
+<call draw_link("javascript:document.forms['f_confirmation'].submit()", lang.billing.confirm_yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.billing.confirm_no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./billing/ec_action_confirm.html  -->

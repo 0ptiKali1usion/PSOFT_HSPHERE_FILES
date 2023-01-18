@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/change_cat.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).changeCategory(request.eid, request.cat)>
+<if result>
+	<assign res=session.editMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success changing category">
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/change_cat.sbm -->

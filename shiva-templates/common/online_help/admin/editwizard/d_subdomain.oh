@@ -1,0 +1,24 @@
+<center>Subdomain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to create <i>subdomains</i>.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	A <i>subdomain</i> is an inferior domain,  for example, a subdomain to domain <i>gold.besthosting.com</i> would be <i>news.gold.besthosting.com</i>.<br>
+<i>Subdomain</I>:<br>
+- has IP address (shared or dedicated);<br>
+- can have Web and Mail services;<br>
+- can't have its DNS zone;<br>
+- can be accessed through FTP;<Br>
+- can have subdomains;<br>
+- can have aliases.<br>
+<br>
+
+* Subdomain is platform dependent and requires at least one of the following domain types included:<br>
+<i>Domain Registration</i><br>
+<i>Domain Transfer</i><br>
+<i>Third-level domain</i><br>
+<i>Service domain</i><br>
+
+
+
+

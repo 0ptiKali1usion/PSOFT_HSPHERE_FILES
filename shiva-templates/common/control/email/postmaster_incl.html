@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/email/postmaster_incl.html  -->
+<assign quota="10">
+<assign email="postmaster@"+mail_domain.name>
+<tr>
+<td><call draw_label(lang.email.postmasterincl.mbox)></td>
+<td><call draw_label(email)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.descr)></td>
+<td><call draw_label(lang.email.postmasterincl.builtin)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.quota)>&nbsp;<call draw_help("user-mailinfo-postmaster-h","")></td>
+<td><call draw_label(quota+" MB")>&nbsp;<call draw_label_bold("("+lang.label.unchangeable+")")></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.postmasterincl.catch)></td>
+<td><if mail_domain.catchAll == "postmaster">
+ <call draw_state_on(config.CLIENT_CP_URL+"&?rid="+mail_domain+"&name=postmaster"+"&template_name=submit/email/disable_catch_all.sbm"+"&stemplate="+template+"&ftemplate="+template+"&mo_id=postmaster"+sc_params)>
+<else>
+ <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_domain+"&name=postmaster"+"&template_name=submit/email/set_catch_all.sbm"+"&stemplate="+template+"&ftemplate="+template+"&mo_id=postmaster"+sc_params)>
+</if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.password)></td>
+<td><call draw_change(config.CLIENT_CP_URL+"?template_name=email/update_dpassword_form.html"+"&rid="+mail_domain+"&uid="+mail_domain+"&stemplate="+template+"&ftemplate="+template+sc_params, lang.email.postmasterincl.change)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.postmasterincl.webmail)></td>
+<td><call draw_launch(config.CLIENT_CP_URL+"?template_name=/submit/email/pmwebmail.sbm&mail_domain="+mail_domain+"&mailbox="+mailbox, lang.email.mailboxes2incl.launch)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.postmasterincl.tt)></td>
+<td><call draw_tt_link(mail_domain,"")></td>
+</tr>
+<!--  END ./control/email/postmaster_incl.html  -->

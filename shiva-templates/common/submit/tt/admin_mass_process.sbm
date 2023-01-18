@@ -1,0 +1,26 @@
+<!-- BEGIN ./common/submit/tt/admin_mass_process.sbm  -->
+<assign template="tt/admin.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<list request.ttid as ttid>
+<assign ticket = ttadmin.getTicket(ttid)>
+
+<switch request.act>
+  <case "close">
+     <assign result=ticket.setstate("9")>
+  <break>
+  <case "delete">
+     <assign result=ticket.delete()>
+  <break>
+  <case "assign">
+    <assign result=ticket.assign(ttadmin.id, "false")>
+  <break>
+</switch>
+										 
+</list>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/tt/admin_mass_process.sbm  -->

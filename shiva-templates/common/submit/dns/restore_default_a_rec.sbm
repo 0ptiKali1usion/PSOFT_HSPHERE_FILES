@@ -1,0 +1,28 @@
+<!-- BEGIN ./domain/restore_default_a_rec.smb  -->
+<assign domain=account.getResource(request.rid)>
+
+
+<if (domain.type=="domain_alias") || (domain.type=="3ldomain_alias")>
+	<assign dns_zone = domain.dns_zone>
+	<assign a_records=dns_zone.restoreDefaultARecords()>
+<else>
+  	<assign result=domain.restoreDefaultARecords()>
+</if>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.dns.a_record,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdip=request.dip>
+    <assign vdname=request.dname>
+    <assign vttl=request.dmask>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/restore_default_a_rec.smb  -->

@@ -1,0 +1,53 @@
+<!-- BEGIN ./common/submit/signup/bi_info.sbm -->
+
+<assign result=yafv.checkall(
+yafv.common.s_signup.vSinglename(lang.label.first_name, request["_bi_first_name"]),
+yafv.common.s_signup.vSinglename(lang.label.last_name, request["_bi_last_name"]),
+yafv.common.s_signup.vOrganization(lang.label.company, request["_bi_company"]),
+yafv.common.s_signup.vAddress(lang.label.address, request["_bi_address1"]),
+yafv.common.s_signup.vCity(lang.label.city, request["_bi_city"]),
+yafv.common.s_signup.vState(lang.label.state, request["_bi_state"]),
+yafv.common.s_signup.vStateOther(lang.label.state_other, request["_bi_state2"]),
+yafv.common.s_signup.vPostal_Code(lang.label.postal_code, request["_bi_postal_code"]),
+yafv.common.s_signup.vCountry(lang.label.country, request["_bi_country"]),
+yafv.common.s_signup.vPhone(lang.label.phone, request["_bi_phone"]),
+yafv.common.s_signup.vEmail(lang.label.email, request["_bi_email"])
+)> 
+<if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+
+<if (failure!="") || (request.back!="")>
+    <assign bi_first_name=toolbox.html_encode(request["_bi_first_name"])>
+    <assign bi_last_name=toolbox.html_encode(request["_bi_last_name"])>
+    <assign bi_company=toolbox.html_encode(request["_bi_company"])>
+    <assign bi_address1=toolbox.html_encode(request["_bi_address1"])>
+    <assign bi_address2=toolbox.html_encode(request["_bi_address2"])>
+    <assign bi_city=toolbox.html_encode(request["_bi_city"])>
+    <assign bi_state=request["_bi_state"]>
+    <assign bi_state2=request["_bi_state2"]>
+    <assign bi_postal_code=toolbox.html_encode(request["_bi_postal_code"])>
+    <assign bi_country=request["_bi_country"]>
+    <assign bi_phone=toolbox.html_encode(request["_bi_phone"])>
+    <assign bi_email=toolbox.html_encode(request["_bi_email"])>
+    <assign bi_cc_name=toolbox.html_encode(request["_bi_cc_name"])>
+    <assign bi_cc_number=toolbox.html_encode(request["_bi_cc_number"])>
+    <assign bi_cc_exp_month=toolbox.html_encode(request["_bi_cc_exp_month"])>
+    <assign bi_cc_exp_year=toolbox.html_encode(request["_bi_cc_exp_year"])>
+    <assign ci_usebi=toolbox.html_encode(request["_ci_usebi"])>
+
+    <include "signup/bi_info.html">
+<else>
+  <if request["_bi_company"]=="">
+    <assign tmp_company = request["_bi_first_name"]+" "+request["_bi_last_name"]>
+    <!--tmp_company = ${tmp_company} -->
+    <assign res=params.addHash("name","_bi_company","value",tmp_company)>
+  </if>
+
+  <include "signup/bi_info_cc.html">
+</if>
+
+<!-- END ./common/submit/signup/bi_info.sbm -->

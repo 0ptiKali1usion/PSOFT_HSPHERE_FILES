@@ -1,0 +1,404 @@
+#! /bin/sh
+############################################################################### 
+#        You should check these parameters before you start ./configure       #
+ 
+# The absolute path to root of H-Sphere
+
+SHIVA_ROOT=$HOME/shiva
+ 
+# The path to hsphere.properties
+
+HSPHERE_PROPERTIES=$SHIVA_ROOT/psoft_config/hsphere.properties
+
+# The hsphere_properties variables  
+
+TEMPLATE_VARIABLE=TEMPLATE_PATH
+CUSTOM_TEMPLATE_VARIABLE=USER_TEMPLATE_PATH
+JS_VARIABLE=JS
+
+# Standard Variables (Directory names)
+
+IMAGES=IMAGES
+JS=JS
+ONLINE_HELP=online_help
+ 
+#                                                                             #
+###############################################################################   
+
+
+
+
+#############################################################################
+#                                                                           #
+#                            BODY of Makefile .                             # 
+#                                                                           #
+#                  D o   n o t  c h a n g e   i t   ! ! !                   #
+#                                                                           #
+#############################################################################
+JIKES_C=jikes
+JAVAC_C=javac
+JIKES_PARAMS="+E"
+JAVAC_PARAMS="-nowarn"
+MU1=make
+MU2=gmake
+unset JC_FORCED
+unset RUN_MAKE
+unset MAKE_PARAMS
+unset IS_CUSTOM
+
+if ! which find > /dev/null 2>&1 ; then
+    echo ERROR: Cannot execute the \'find\' utility !
+    exit 5
+elif ! which grep > /dev/null 2>&1 ; then
+    echo ERROR: Cannot execute the \'grep\' utility !
+    exit 5
+elif ! which sed > /dev/null 2>&1 ; then
+    echo ERROR: Cannot execute the \'sed\' utility !
+    exit 5
+fi
+
+if ! test -s "$HSPHERE_PROPERTIES" ; then
+    echo ERROR : Cannot find the \"$HSPHERE_PROPERTIES\" file !
+    exit 2
+fi
+
+TEMPLATE_PATH=`cat $HSPHERE_PROPERTIES | sed -n -e \
+	"s!^ *$TEMPLATE_VARIABLE *= *\([a-zA-Z0-9/_~\.-]*\).*!\1!p" \
+	| sed -n -e '1P'`
+CUSTOM_TEMPLATE_PATH=`cat $HSPHERE_PROPERTIES | sed -n -e \
+	"s!^ *$CUSTOM_TEMPLATE_VARIABLE *= *\([a-zA-Z0-9/_~\.-]*\).*!\1!p" \
+	| sed -n -e '1P'`
+JS_BASEDIR=`cat $HSPHERE_PROPERTIES | sed -n -e \
+	"s!^ *$JS_VARIABLE *= *\([a-zA-Z0-9/_~\.-]*\).*!\1!p" \
+	| sed -n -e '1P'`
+TEMPLATE_DESIGN_BASES="$TEMPLATE_PATH $CUSTOM_TEMPLATE_PATH"
+
+if which $MU1 > /dev/null 2>&1 ; then
+    if ( $MU1 -v -f /dev/null ) 2>/dev/null | grep  GNU > /dev/null ; then
+	MAKE_UTIL=$MU1
+    elif which $MU2 > /dev/null 2>&1 ; then 
+	MAKE_UTIL=$MU2
+    else
+	MAKE_UTIL=
+    fi
+else
+    MAKE_UTIL=
+fi
+
+for param in "$@" ; do
+    case $param in
+
+        --help|-h)
+cat << USAGE
+
+Generates Makefiles for all descendant directories to
+to compile H-Sphere templates and YAFV Java classes.
+
+Usage: $0 [options]
+
+options:
+--force-javac, -javac 	- force javac to compile Java classes
+--force-jikes, -jikes 	- force jikes to compile Java classes (default
+			  if jikes present)
+clean 			- clean all compiled classes, remove only generated
+			  Makefiles from all descendant directories
+--help, -h 		- get help
+make			- run the \`make' (\`gmake') command automatically
+			  right after the configuration. You may also specify
+			  the necessary parameters for the make command. 
+			  In this case, enclose the make parameter sequence
+			  with quotation marks. E.g.: ./configure "make -i"
+
+
+Executing the \`make' command:
+
+\`make [flags] [rules]'
+
+* Note: instead of \`make', use the \`gmake' call on FreeBSD.
+
+Possible flags:
+<empty flag>	- recommended option
+-i		- use to ignore errors and continue the make process
+* Note: you can use other flags in compiance with the GNU Make documentation
+
+Possible rules:
+
+<empty rule>	- perform compilation in the current directory only;
+all		- perform recursive compilation in the current directory and
+		  in all descendant directories;
+clean		- remove all compiled files recursively;
+recompile	- this is a fake rule. It can be combined with other rule(s)
+		  and forces compilation of all source files regardless of
+		  whether or not these files were changed.
+
+* Note: if you run the make command from the main H-Sphere template path
+	$TEMPLATE_PATH
+	to compile all H-Sphere templates, both the \`make' and \`make all'
+	commands do the same. 
+	Besides that, you can also specify the "recompile" rule. In this case,
+	\`make all recompile' and \`make recompile' - both mean the same.
+
+USAGE
+	    exit 0
+	    ;;
+
+	clean)
+	    if [ -s "${TEMPLATE_PATH}/Makefile" -a -n "${MAKE_UTIL}" ] ; then
+	        cd ${TEMPLATE_PATH}; ${MAKE_UTIL} clean
+	    fi
+	    for i in `find ${TEMPLATE_DESIGN_BASES} -name 'Makefile' ` ; do
+		echo Removing $i
+		rm $i
+	    done
+	    exit 0;
+	    ;;
+
+	--force-javac|-javac)
+	    JC_FORCED=$JAVAC_C
+	    ;;
+
+	--force-jikes|-jikes)
+	    JC_FORCED=$JIKES_C
+	    ;;
+
+	make*)
+	    RUN_MAKE=1
+	    MAKE_PARAMS=`echo $param | sed -n -e "s!make\(.*\)!\1!p"`
+	    ;;
+
+	*)
+	    echo Unknown option \"$param\"
+	    exit 4
+	    ;;
+    esac
+done
+
+if [ -z "$JC_FORCED" -o "$JC_FORCED" = "$JAVAC_C" ] && which $JAVAC_C > /dev/null 2>&1 ; then 
+    J_COMPILER="$JAVAC_C $JAVAC_PARAMS "
+elif [ -z "$JC_FORCED" -o "$JC_FORCED" = "$JIKES_C" ] && which $JIKES_C > /dev/null 2>&1 ; then
+    J_COMPILER="$JIKES_C $JIKES_PARAMS "
+else
+    echo ERROR: Cannot find the Java compiler !
+    echo Please check the Java installation and setting of the PATH variable.
+    exit 3
+fi
+
+if [ -z "$MAKE_UTIL" ]; then
+    echo Please install the GNU make utility !
+    exit 4
+fi
+
+MMAX=""
+OS=`uname`
+if echo "$OS" | grep -i "freebsd" > /dev/null; then
+  RMEM=`dmesg | grep "real memory" | sed -n -e \
+	"s/^[[:space:]]*real memory[[:space:]]*=[[:space:]]*\([0-9]*\).*/\1/p" | sed -n -e '1P'`
+  if [ -n "$RMEM" ]; then MMAX=$(($RMEM/1048576)); fi
+elif echo "$OS" | grep -i "linux" > /dev/null; then
+  RMEM=`cat /proc/meminfo | grep "MemTotal:" | sed -n -e \
+	"s/^[[:space:]]*MemTotal:[[:space:]]*\([0-9]*\).*/\1/p" | sed -n -e '1P'`
+  if [ -n "$RMEM" ]; then MMAX=$(($RMEM/1000)); fi
+fi
+
+JAVA_XMS="-Xms64m"
+JAVA_XMX="-Xmx128m"
+#JAVA_OPT="-d64"
+if [ -n "$MMAX" ] && [ $MMAX -ge 512 ]; then
+  if [ $MMAX -ge 768 ]; then
+    MMAX=512
+  else
+    MMAX=256
+  fi
+  JAVA_XMX="-Xmx${MMAX}m"
+fi
+JAVA_OPT="$JAVA_OPT $JAVA_XMS $JAVA_XMX"
+
+for cur_template_path in $TEMPLATE_DESIGN_BASES; do
+
+if [ "${cur_template_path}" = "${TEMPLATE_PATH}" ]; then
+    IS_CUSTOM="";
+    for bl in `find $cur_template_path -mindepth 1 -maxdepth 1 -type l`; do
+	if [ ! -e "${bl}" ]; then
+	    echo Removing a broken link: "${bl}"
+	    rm "${bl}"
+	fi
+    done
+else
+    IS_CUSTOM="1";
+fi
+
+cat << GMAKEFILE > $cur_template_path/Makefile
+MP= \`find $TEMPLATE_DESIGN_BASES -mindepth 2 -maxdepth 2 -name 'Makefile'\`
+
+ifneq (,\$(findstring recompile,\$(MAKECMDGOALS)))
+export RECOMPILE = 1
+endif
+
+.PHONY: recompile all clean clean_all
+
+all:
+	@for i in \$(MP) ; do \\
+	$MAKE_UTIL -C \`dirname \$\$i\` --no-print-directory all || exit 1; \\
+	done
+
+recompile: all
+ 
+clean clean_all:
+	@for i in \$(MP) ; do \\
+	$MAKE_UTIL  -C \`dirname \$\$i\` clean_all || exit 1; \\
+	done
+
+GMAKEFILE
+
+    for bd in `find $cur_template_path -mindepth 1 -maxdepth 1 -type d \
+		| grep -v 'CVS' | grep -v $JS | grep -v $IMAGES \
+		| grep -v $ONLINE_HELP`; do
+	DESIGN_DIR=`basename ${bd}`
+	if [ "${IS_CUSTOM}" = '1' ]; then
+	   if [ ! -d "${TEMPLATE_PATH}/${DESIGN_DIR}" ]; then
+		if [ -L "${TEMPLATE_PATH}/${DESIGN_DIR}" ]; then
+		    rm "${TEMPLATE_PATH}/${DESIGN_DIR}"
+		fi
+		echo Linking: "${TEMPLATE_PATH}/${DESIGN_DIR}"
+		ln -s "$bd" "${TEMPLATE_PATH}/${DESIGN_DIR}"
+	   fi
+	fi
+	for id in `find ${bd} -type d | grep -v 'CVS' \
+		| grep -v $JS | grep -v $IMAGES | grep -v $ONLINE_HELP`; do
+	    if [ '' != "`find ${id} -type f -name '*.yafv'`" -o  '' != "`find ${id} -type f -name '*.html.in'`" ]; then
+		echo ${id}/Makefile
+
+cat << MAKEFILE > $id/Makefile
+TEMPLATE_PATH	= $cur_template_path
+SHIVA_ROOT	= $SHIVA_ROOT
+DESIGN_DIR	= $DESIGN_DIR
+THIS_DIR	= `basename $id`
+
+JS		= $JS
+JS_DIR		= $JS_BASEDIR/$DESIGN_DIR/$JS
+CUR_PATH	= \$(shell pwd)
+ 
+PARSER_DIR	= psoft/yafv
+HTML_PARSER	= \$(PARSER_DIR)/html
+YAFV_PARSER	= \$(PARSER_DIR)/yafv
+ 
+YAFV_JS_SOUR	= $SHIVA_ROOT/\$(PARSER_DIR)/yafv.js
+YAFV_JS_DEST	= $cur_template_path/$DESIGN_DIR/$JS/yafv.js
+
+VALID		= "<call show_image_src(\"valid\")>"
+FAIL		= "<call show_image_src(\"fail\")>"
+ATTENTION	= "<call show_image_src(\"attention\")>"
+INIT_IMG_ATT	= "<call show_img_attributes(\"attention\")>"
+
+JAVA_PATH	= yafv_html/hsphere/\$(DESIGN_DIR)
+JAVA_PACKAGE	= yafv_html.hsphere
+JAVA_OUT	= \$(SHIVA_ROOT)/\$(JAVA_PATH)
+
+JS_OUT		= \$(TEMPLATE_PATH)/$DESIGN_DIR/$JS
+TEMPLATE_OUT	= .
+
+HTML_FILES	= \$(wildcard *.in)
+
+ifeq (,\$(findstring all,\$(MAKECMDGOALS)))
+  YAFV_FILES	= \$(wildcard *.yafv)
+else
+  YAFV_FILES	= \$(shell find . -type f -name '*.yafv')
+endif
+
+SUBDIRS		= \`find . -mindepth 2 -maxdepth 2 -name 'Makefile'\`
+
+ifeq (,\$(RECOMPILE))
+ifneq (,\$(findstring recompile,\$(MAKECMDGOALS)))
+export RECOMPILE = 1
+endif
+endif
+
+ifeq (,\$(RECOMPILE))
+
+  HTML_IN_FILES	= \$(if \$(HTML_FILES),\$(strip \$(shell for hf in \$(basename \$(HTML_FILES)); do if [ ! -e \$\$hf -o \$\${hf}.in -nt \$\$hf ]; then echo \$\${hf}.in; fi; done)))
+  YAFV_IN_FILES	= \$(if \$(YAFV_FILES),\$(strip \$(shell for yif in \$(basename \$(YAFV_FILES)); do yf=\`basename \$\${yif}\`; yof=\$(JAVA_OUT)/\$\${yf}.class; jsof=\$(JS_OUT)/\$\${yf}.js; if [ ! -e \$\$yof -o ! -e \$\$jsof -o \$\${yif}.yafv -nt \$\$jsof -o \$\${yif}.yafv -nt \$\$yof ]; then echo \$\${yif}.yafv; fi; done)))
+
+else
+
+  HTML_IN_FILES	= \$(HTML_FILES)
+  YAFV_IN_FILES	= \$(YAFV_FILES)
+
+endif
+
+HTML_OUT_FILES	= \$(basename \$(HTML_IN_FILES))
+
+DELETE_HTML_FILES	= \$(basename \$(wildcard *.in))
+YAFV_BASE_FILES		= \$(basename \$(wildcard *.yafv))
+DELETE_JAVA_FILES	= \$(addprefix \$(JAVA_OUT)/, \$(addsuffix .java, \$(YAFV_BASE_FILES)))
+DELETE_CLASS_FILES	= \$(addprefix \$(JAVA_OUT)/, \$(addsuffix .class, \$(YAFV_BASE_FILES)))
+DELETE_JS_FILES		= \$(addprefix \$(JS_OUT)/, \$(addsuffix .js, \$(YAFV_BASE_FILES)))
+
+.PHONY: default all clean clean_here html html_all yafv yafv_all
+
+default:	html yafv
+
+recompile:	default
+
+html:
+	@if [ -n "\$(HTML_IN_FILES)" ] ; then \\
+	echo Directory \$(CUR_PATH) : ; \\
+	( chmod -f +w \$(HTML_OUT_FILES) ) 2>/dev/null ; \\
+	java  $JAVA_OPT -Djava.compiler= \$(HTML_PARSER) \$(TEMPLATE_OUT) \$(JS_DIR) \$(JS) \$(INIT_IMG_ATT) -f \$(HTML_IN_FILES) || exit 1; \\
+	chmod -f -w \$(HTML_OUT_FILES) || exit 1; \\
+	fi
+
+html_all:	html
+	@for i in \$(SUBDIRS); do \\
+	$MAKE_UTIL -C \`dirname \$\$i\` --no-print-directory html_all || exit 1; \\
+	done
+
+yafv:
+	@if [ -n "\$(YAFV_IN_FILES)" ] ; then \\
+	echo Directory \$(CUR_PATH) : ; \\
+	if java  $JAVA_OPT -Djava.compiler= \$(YAFV_PARSER) \$(VALID) \$(FAIL) \$(ATTENTION) \$(JS_OUT) \$(JAVA_OUT) \$(JAVA_PACKAGE) \$(DESIGN_DIR) \$(JS) -f \$(YAFV_IN_FILES) ; then \\
+	cd \$(JAVA_OUT); $J_COMPILER *.java || exit 1; \\
+	if id cpanel | grep httpdcp >/dev/null; then chgrp -R -f httpdcp \$(JS_OUT); fi; \\
+	else exit 1; \\
+	fi; \\
+	fi
+
+all:    html_all yafv \$(YAFV_JS_DEST)
+
+clean:
+	-@rm -f \$(DELETE_HTML_FILES)
+	-@rm -f \$(DELETE_CLASS_FILES)
+	-@rm -f \$(DELETE_JAVA_FILES)
+	-@rm -f \$(DELETE_JS_FILES)
+
+clean_all:	clean
+	@for i in \$(SUBDIRS); do \\
+	$MAKE_UTIL -C \`dirname \$\$i\` clean_all || exit 1; \\
+	done
+	-@if [ -s \$(YAFV_JS_DEST) ]; then rm -f \$(YAFV_JS_DEST); fi
+	-@if [ -d \$(JAVA_OUT) ] && [ -z "\`ls -A \$(JAVA_OUT)\`" ]; then rmdir \$(JAVA_OUT); fi
+	-@if [ -d \$(JS_OUT) ] && [ -z "\`ls -A \$(JS_OUT)\`" ]; then rmdir \$(JS_OUT); fi
+
+\$(YAFV_JS_DEST): \$(YAFV_JS_SOUR)
+	@mkdir -p \$(dir \$(YAFV_JS_DEST))
+	@if id cpanel | grep httpdcp >/dev/null; then chgrp -f httpdcp \$(TEMPLATE_PATH)/$DESIGN_DIR \$(JS_OUT); chmod 750 \$(TEMPLATE_PATH)/$DESIGN_DIR \$(JS_OUT); fi; 
+	@cp -f \$(YAFV_JS_SOUR) \$(YAFV_JS_DEST)
+	@if id cpanel | grep httpdcp >/dev/null; then chgrp -f httpdcp \$(YAFV_JS_DEST); chmod 640 \$(YAFV_JS_DEST); fi; 
+
+MAKEFILE
+	    fi
+	done
+    done
+done
+
+if [ -z "$RUN_MAKE" ]; then
+  echo ----------------------------------------------
+  echo That\'s it !
+  echo Use the \`$MAKE_UTIL\' command to create all templates. 
+  echo
+else
+  echo
+  echo "Running \`make' automatically."
+  echo
+  $MAKE_UTIL -C $TEMPLATE_PATH $MAKE_PARAMS
+fi
+#############################################################################

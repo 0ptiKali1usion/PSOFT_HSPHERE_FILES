@@ -1,0 +1,11 @@
+<!-- BEGIN ./eeman/add_mail_srs.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+<assign srs = mail_manager.mail_srs>
+<assign result = srs.add()>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./eeman/add_mail_srs.sbm  -->

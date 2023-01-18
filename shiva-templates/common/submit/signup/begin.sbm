@@ -1,0 +1,14 @@
+<!-- BEGIN submit/signup/begin.sbm -->
+<if (user) && (request.admin_signup=="")>
+    <assign res=params.addHash("name","login","value",user.login)> 
+    <assign res=params.addHash("name","password","value",user.password)> 
+</if>
+<if request.back>
+  <include "signup/begin.html">
+<else><if request.admin_signup != "">
+  <assign res = params.addHash("name", "_eul_accept", "value", "1")>
+  <include "signup/ci_info.html">
+<else>
+  <include "signup/eul.html">
+</if></if>
+<!-- END submit/signup/begin.sbm -->

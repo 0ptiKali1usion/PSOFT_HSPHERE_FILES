@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/admin/change_backup_task_state.sbm -->
+<if request.state=="3">
+  <assign result=obj.backup_task.completeBackupTask(request.task_id)>
+</if>
+<if request.state=="4">
+  <assign result=obj.backup_task.cancelBackupTask(request.task_id)>
+</if>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/change_backup_task_state.sbm -->

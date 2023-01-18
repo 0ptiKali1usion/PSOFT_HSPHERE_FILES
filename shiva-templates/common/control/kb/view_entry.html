@@ -1,0 +1,27 @@
+<!-- BEGIN ./common/control/kb/view.html -->
+<call draw_tooltip()>
+
+<if request.id>
+<assign kb=account.getChild("ttadmin").kb_manager.getReadOnlyKB(request.id)>
+<else>
+<assign kb=account.getChild("tt").getReadOnlyKB(settings.TT_KB)>
+</if>
+
+
+
+
+
+<call draw_table_header("2", lang.kb.search_header(kb.name))>
+
+
+<tr>
+<td colspan="2">
+<assign e=kb.getEntryById(request.eid)>
+<call draw_label(toolbox.formatForHTML(e.q))><hr><call draw_label(toolbox.formatForHTML(e.a))>
+<br>
+<call js_back()>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!-- END ./common/control/kb/view.html -->

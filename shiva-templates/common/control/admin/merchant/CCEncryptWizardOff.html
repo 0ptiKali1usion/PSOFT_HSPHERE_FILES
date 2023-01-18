@@ -1,0 +1,28 @@
+<!-- BEGIN ./common/control/admin/merchant/CCEncryptOnWizard.html -->
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+
+<assign mm = account.getChild("merchant_manager")>
+
+<if !mm><assign mm = account.addChild("merchant_manager", "")></if>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.admin.CCEncryptWizardOff.header)>
+
+
+<tr >
+    <td colspan=2><call draw_label(lang.admin.CCEncryptWizardOff.info)></td>
+</tr>
+<tr >
+<td align=left><call draw_plink(config.CLIENT_CP_URL+"?template_name="+request.ftemplate,"button_back")></td>
+<td align=right><call draw_plink(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/decryptAllCCs.sbm&stemplate="+request.ftemplate+"&ftemplate="+request.ftemplate,"submit")> </td>
+</tr>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/CCEncryptOnWizard.html -->
+

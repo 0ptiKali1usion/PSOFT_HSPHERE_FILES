@@ -1,0 +1,32 @@
+<!-- BEGIN ./eeman/add_lserver_aliases.sbm  -->
+<compress>
+<assign eeman_res=account.getChild("reseller_eeman")>
+<list request.lservers as lserver_id>
+    <assign result=yafv.checkall(
+	yafv.common.s_eeman.vAlias(lang.label.prefix,request["prefix_"+lserver_id]),
+	yafv.common.s_eeman.vIntegerRequired(lang.label.eeman.dns_zone_id,request["zone_id_"+lserver_id])
+    )>
+    <if result.status=="OK">
+	<!--${lserver_id}, ${request["zone_id_"+lserver_id]},${request["prefix_"+lserver_id]} -->
+	<assign result = eeman_res.addAlias(lserver_id, request["zone_id_"+lserver_id], request["prefix_"+lserver_id])>
+	<if result.status!="OK">
+	    <assign res=session.addMessage(result.msg)>
+ 	    <assign failure="1">
+	</if>
+    <else>
+	 <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+	 <assign failure="1">
+    </if>
+</list>
+<assign result=eeman_res.reloadHosts()>
+<if result.status!="OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign failure="1">
+</if>
+</compress>
+<if failure>
+ <include request.ftemplate>
+<else>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/add_lserver_aliases.sbm  -->

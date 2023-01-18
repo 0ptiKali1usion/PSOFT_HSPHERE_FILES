@@ -1,0 +1,47 @@
+<!-- BEGIN ./quick/webmail.html  -->
+<assign unixuser=account.getChild("unixuser")>
+<call draw_tooltip()>
+
+
+
+<form name="f_webmail" action="${config.CLIENT_CP_URL}" method="post" target="_blank" accept-charset="UTF-8">
+
+
+<call draw_table_header("2", lang.quick.webmail.header)>
+
+
+<assign domain_list = account.findAllChildren("mail_domain")>
+<if domain_list>
+  <tr>
+    <td><call draw_label(lang.label.email)></td>
+    <td><input type="text" name="mailbox" label="Mailbox" value="">
+    <call draw_label("@")>
+    <select name="mail_domain">
+      <list domain_list as mail_domain >
+      <option value="${mail_domain}"><call draw_label(mail_domain.name)></option>
+      </list>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.label.password)></td>
+    <td>
+      <input type="hidden" name="stemplate" value="${request.stemplate}">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <input type="hidden" name="template_name" value="submit/quick/webmail.sbm">
+      <input type="password" name="password" label="Password" value="">
+      <input type="submit" value="${lang.button.go}">
+    </td>
+  </tr>
+<else>
+  <tr>
+  <td  colspan="2">
+    <call draw_label_bold(lang.email.no_mail_domains)>
+  </td>
+  </tr>
+</if>
+</form>
+
+<call draw_table_footer()>
+	 
+<!--  END ./quick/webmail.html  -->

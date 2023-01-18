@@ -1,0 +1,24 @@
+<!-- BEGIN ./email/estimate_delete_antispams.sbm  -->
+<assign dids=account.findChildren("antispam")>
+<if toolbox.gt(dids.size,"0")=="1">
+  <assign estimateDeleteMass=account.estimateDeleteMass>
+  <list dids as did>
+    <assign res=estimateDeleteMass(did)> 
+  </list>
+  <assign price=estimateDeleteMass()>
+  <if price.status!="ERROR">
+    <if price.free=="0">
+      <include "billing/delete_confirm_mass.html">
+    <else>
+      <include "submit/email/delete_antispams.sbm">
+    </if>
+  <else>
+    <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+    <assign res=session.addMessage(price.msg)>
+    <include request.ftemplate>
+  </if>
+<else>
+  <assign res=session.addMessage(lang.email.antispam.absent)>
+  <include request.stemplate>
+</if>
+<!--  END ./email/estimate_delete_antispams.sbm  -->

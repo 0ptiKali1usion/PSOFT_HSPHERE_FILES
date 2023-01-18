@@ -1,0 +1,52 @@
+<!-- BEGIN ./control/billing/paymentresult.html  -->
+<call draw_tooltip()>
+
+<call draw_table_header("2", processorName)>
+<tr>
+<td colspan="2">
+<if transResult == "success">
+<call draw_label(lang.extern_pm.success_payment)>
+<else>
+<assign message = lang.extern_pm.processing_error + " " + errorMessage>
+<call draw_label(message)>
+</if>
+</td>
+</tr>
+
+<if transactionId>
+<tr>
+<td><call draw_label(lang.extern_pm.transactionid)></td>
+<td><call draw_label(transactionId)></td>
+</tr>
+</if>
+
+<if transInfo>
+<tr>
+<td><call draw_label(lang.extern_pm.trans_info)></td>
+<td><call draw_label(transInfo)></td>
+</tr>
+</if>
+
+<if accountId>
+<tr>
+<td><call draw_label(lang.extern_pm.account_id)></td>
+<td><call draw_label(accountId)></td>
+</tr>
+</if>
+
+<if requestId>
+<tr>
+<td><call draw_label(lang.extern_pm.request_id)></td>
+<td><call draw_label(requestId)></td>
+</tr>
+</if>
+
+<if amount>
+<tr>
+<td><call draw_label(lang.extern_pm.amount)></td>
+<td><call draw_label(amount)></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/billing/paymentresult.html  -->

@@ -1,0 +1,8 @@
+<!-- BEGIN ./adnsmanager/add_all_records.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<assign result = adnsmanager.addAllCpAliasDNSRecords(request.alias_id)>
+<if result.status!="OK">
+   <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!--  END ./adnsmanager/add_all_records.sbm  -->

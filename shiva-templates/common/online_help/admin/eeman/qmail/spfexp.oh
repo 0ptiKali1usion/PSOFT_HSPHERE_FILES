@@ -1,0 +1,8 @@
+<center> spfexp </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>You can override the default SPF explanation if you want.
+<br>The explanation is the line returned to the SMTP sender when a mail is rejected at the SMTP level. You can use macro expansion. If a domain specifies its own explanation it is going to be used instead. The SMTP answer when rejecting mails will look like:
+<br><i>550 the expanded SPF explanation (#5.7.1)</i><br>
+If you want the macro expansion explained look at the SPF draft.
+<br>

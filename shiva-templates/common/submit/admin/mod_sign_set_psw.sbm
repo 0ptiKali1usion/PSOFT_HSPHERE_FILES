@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/mod_sign_set_psw.sbm  -->
+
+<assign check=yafv.checkall(
+    yafv.common.s_signup.vPassword(lang.label.password, request.password1),
+    yafv.common.s_signup.vPassword2(lang.label.password2, request.password1,request.password2) )>
+
+<if check.status=="OK">
+    <assign signup = account.getChild("signupadm")>
+    <assign admin=account.getChild("admin")>
+    <assign tmpAcc = signup.createTempAccount(request.rid)>
+    <assign result=signup.setNewPassword(request.rid, request.password1)>
+    <if result.status=="OK">
+         <assign success = "1">
+    <else>
+         <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_set_psw.sbm  -->
+

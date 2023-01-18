@@ -1,0 +1,30 @@
+<!-- BEGIN ./tt/admin_edit_save.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+<if request.cc != ticket.cc>
+<assign result=ticket.setCC(request.cc)>
+</if>
+<assign atts="">
+<list request.att_cid as att>
+    <if att!="NA">
+	<assign atts=atts+att+";">
+    </if>
+</list>
+<!--${atts}-->
+<list ttadmin.admin_list as adm>
+  <if adm.id == ttadmin.id>
+    <assign str_ttadmin = adm.name>
+  </if>
+</list>
+<if !str_ttadmin><assign str_ttadmin = lang.label.unknown_admin></if>
+<assign system_note = lang.tt.admin_answered(str_ttadmin)>
+
+<if request.note><assign system_note = lang.tt.admin_answered_with_admin(system_note, request.note)></if>
+<assign result = ticket.addReply(request.answer, system_note, atts)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./tt/admin_edit_save.sbm  -->

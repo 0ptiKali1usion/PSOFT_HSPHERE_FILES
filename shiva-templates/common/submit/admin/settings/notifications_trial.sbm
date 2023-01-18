@@ -1,0 +1,87 @@
+<!-- BEGIN ./submit/admin/settings/notifications_trial.sbm -->
+<assign result = yafv.checkall(
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_not_term1, request["trial_not_term1"], request["is_trial_warning"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_not_term2, request["trial_not_term2"], request["is_trial_warning"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_warn_susp_term1, request["trial_warn_susp_term1"], request["is_trial_susp_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_warn_susp_term2, request["trial_warn_susp_term2"], request["is_trial_susp_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_warn_del_term1, request["trial_warn_del_term1"], request["is_trial_del_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_warn_del_term1, request["trial_warn_del_term2"], request["is_trial_del_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settings.trial_del_term, request["trial_del_term"], request["is_trial_del_reason"])
+)>
+<if result.status == "OK">
+    <if request["is_trial_warning"]>
+      <assign is_trial_warning = request["is_trial_warning"]>
+    <else>
+      <assign is_trial_warning = "false">
+    </if>
+    <if request["is_trial_susp_not"]>
+      <assign is_trial_susp_not = request["is_trial_susp_not"]>
+    <else>
+      <assign is_trial_susp_not = "false">
+    </if>
+    <if request["is_trial_del_not"]>
+      <assign is_trial_del_not = request["is_trial_del_not"]>
+    <else>
+      <assign is_trial_del_not = "false">
+    </if>
+    <if request["is_trial_del_reason"]>
+      <assign is_trial_del_reason = request["is_trial_del_reason"]>
+    <else>
+      <assign is_trial_del_reason = "false">
+    </if>
+    <assign result = "OK">
+    <if is_trial_del_reason == "true" && is_trial_warning == "false"
+                                && is_trial_susp_not == "false"
+                                && is_trial_del_not == "false">
+        <assign res=session.addMessage(lang.yafv.del.warn)>
+        <assign result = "ERROR">
+    </if>
+    <if is_trial_susp_reason == "true" && !request["trial_susp_term"]>
+        <assign res=session.addMessage(lang.yafv.susp.empty)>
+        <assign result = "ERROR">
+    </if>
+    <if is_trial_del_reason == "true" && !request["trial_del_term"]>
+        <assign res=session.addMessage(lang.yafv.del.empty)>
+        <assign result = "ERROR">
+    </if>
+    <if result == "OK">
+        <assign admin = account.getChild("admin")>
+        <if is_trial_warning == "true">
+            <call save("trial_not_term1", request["trial_not_term1"])>
+            <call save("trial_not_term2", request["trial_not_term2"])>
+        <else>
+            <call save("trial_not_term1", "")>
+            <call save("trial_not_term2", "")>
+        </if>
+        <if is_trial_susp_not == "true">
+            <call save("trial_warn_susp_term1", request["trial_warn_susp_term1"])>
+            <call save("trial_warn_susp_term2", request["trial_warn_susp_term2"])>
+        <else>
+            <call save("trial_warn_susp_term1", "")>
+            <call save("trial_warn_susp_term2", "")>
+        </if>
+        <if is_trial_del_not == "true">
+            <call save("trial_warn_del_term1", request["trial_warn_del_term1"])>
+            <call save("trial_warn_del_term2", request["trial_warn_del_term2"])>
+        <else>
+            <call save("trial_warn_del_term1", "")>
+            <call save("trial_warn_del_term2", "")>
+        </if>
+        <if is_trial_del_reason == "true">
+            <call save("trial_del_term", request["trial_del_term"])>
+        <else>
+            <call save("trial_del_term", "")>
+        </if>
+        <call save("is_trial_warning",is_trial_warning)>
+        <call save("is_trial_susp_not",is_trial_susp_not)>
+        <call save("is_trial_del_not",is_trial_del_not)>
+        <call save("is_trial_del_reason",is_trial_del_reason)>
+    </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<include request.stemplate>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/notifications_trial.sbm -->

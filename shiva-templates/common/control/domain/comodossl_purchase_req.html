@@ -1,0 +1,32 @@
+<!--  BEGIN .control/domain/comodossl_purchase_req.html  -->
+<call draw_tooltip()>
+<call draw_table_header("3", "Your Application Validation")>
+<tr><td colspan="3"><call draw_label("When you have enrolled for your SSL Certificate you will be provided with an Order Number and instructions of what to do next. These instructions will also be emailed to you.")><br><br> 
+<call draw_label("Summary of what we need to do: If we already have a record of your company and domain name(s) in the IdAuthority, the largest company directory on the web, we will be able to expedite your SSL application. In most cases, this means that validation of your application and issuance of your SSL Certificate may only take a few minutes.")><br>
+<call draw_label("If we do not already hold sufficient information on your company and domain name(s), or your application data does not completely match the IdAuthority entry for your website, we may require additional information. These informational requirements will be provided during the enrollment process and via email.")>
+</td></tr>
+<tr><td colspan="3" class="control_header" ><call draw_header("Corporate Documents")></td></tr>
+<tr><td colspan="3">
+<call draw_label("We may request your Business License, Articles of Association or DUNS information (depending on your country and incorporation status). If you are a non-incorporated business or use a trading name please contact us for further instructions.")><br>
+<call draw_link("#doc", "Click here for a list of acceptable documentation")>
+</td></tr>
+<tr><td colspan="3" class="control_header"><call draw_header("Comodo Security Services Validation Contact Details:")></td></tr>
+<tr><td colspan="3">
+<call draw_label("If you are emailing validation documentation please send to docs@comodogroup.com stating your order number within the email. You can fax your validation documentation to the below number stating your order number on the pages:")><br>
+<call draw_label_bold("US Fax")><call draw_label(" for validation docs: 1 801 409-3684")><br>
+<call draw_label_bold("Europe Fax")><call draw_label(" for validation docs: +44 0870 7066378")><br><br>
+<call draw_label("Please note that you will only be required to submit either or both of the above if requested during the enrollment process.")><br>
+<call draw_label("For an update on the progress of your application please email ")><call draw_link("mailto:support@comodogroup.com","support@comodogroup.com")><call draw_label(" stating your Order Number and requesting an update.")> 
+</td></tr>
+<tr><td colspan="3" class="control_header"><call draw_header("Acceptable documentation")></td></tr>
+<a name="doc">
+<include "control/domain/comodo_ssl_req/comodossl_purchase_req_" + request.country+".html">
+<tr><td colspan="3">
+<call draw_label("Upon receipt of the relevant documentation, you should verify the information received correctly matches the information provided during application.")><br>
+<call draw_label("It is deemed that the above validation will have taken place when you check the 'I have sufficiently validated this application' checkbox when applying for a Certificate.")>
+<call draw_label("Questions:")><br>
+<call draw_label("Should you have any question regarding any application or would like assistance with the validation process, please contact support@comodogroup.com")>
+</td></tr>
+
+<call draw_table_footer()>
+<!--  END .control/domain/comodossl_purchase_req.html  -->

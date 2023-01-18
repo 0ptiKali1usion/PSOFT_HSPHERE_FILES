@@ -1,0 +1,21 @@
+<assign result= yafv.common.s_signup.v3LDomainName(lang.label.domain.name, request.domain)>
+<if result.status!="OK" || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign domainaction="3ldomain">
+    <assign domain=request.domain>
+    <include "signup/domains.html">
+<else>
+    <assign name=request.domain+"."+request.domain_type>
+    <assign exists=toolbox.DBlookup(name)>
+    <if toolbox.gt(exists, "0")=="1">
+        <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_exists, lang.label.domain, name))>
+	<assign domainaction="3ldomain">
+	<assign domain=request.domain>
+	<include "signup/domains.html">
+    <else>				    
+	<assign res=params.addHash("name","domain_name","value",name)>
+	<include "signup/end.html">
+    </if>
+</if>

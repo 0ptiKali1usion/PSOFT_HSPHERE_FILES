@@ -1,0 +1,28 @@
+<!-- BEGIN ./domain/add_webalizer_submit.html  -->
+<assign trans=account.getResource(request.rid).getChild("transferlog")>
+<if !trans>
+  <assign result=account.getResource(request.rid).addChild("transferlog","simple")>
+  <if result.status=="OK">
+    <assign trans=result>
+    <assign success="1">
+  </if>
+<else>
+  <assign success="1">
+</if>
+<if success>
+  <assign result=trans.addChild("webalizer", "")>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.label.webalizer,""))>
+  <else>
+    <assign res = session.addMessage(result.msg)>
+  </if>
+</if>
+<if success>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./domain/add_webalizer_submit.html  -->

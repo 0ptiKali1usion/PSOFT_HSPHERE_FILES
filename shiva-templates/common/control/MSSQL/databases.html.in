@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/MSSQL/databases.html.in  -->
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("4", lang.mssql.databases.dbs)>
+<tr>
+<assign host=mssql.host>
+<td colspan="4"><call draw_label(lang.mssql.databases.manage)></td>
+</tr>                                                                                                                                      
+<tr>
+<td nowrap WIDTH="1%">&nbsp;</td>
+<td><call draw_label(lang.label.hostname)></td>
+<td colspan="2"><call draw_label(mssql.host.name+" ("+toolbox.int2ext(mssql.host.ip)+")")>&nbsp;</td>
+</tr>                                                                                                                                      
+
+<if mssql>
+<assign databases=account.findAllChildren("MSSQLDatabase")>
+<tr>
+  <td>&nbsp;</td>
+  <td><call draw_header(lang.mssql.dbname)></td>
+  <td><call draw_header(lang.mssql.dblogin)></td>
+  <td nowrap WIDTH="1%"><call draw_header(lang.label.control)></td>
+</tr>
+
+<list databases as database>
+<tr>
+  <td class="control_align_center" nowrap WIDTH="1%"><call draw_tt_link(database,"")></td>
+  <td><call draw_link(config.CLIENT_CP_URL+"?template_name=MSSQL/adm_database.html"+"&database="+database, database.db_name)></td>
+    <td><call draw_label(database.login_name)></td>
+    <td class="control_align_center" nowrap WIDTH="1%">
+	<call draw_edit(config.CLIENT_CP_URL+"?template_name=MSSQL/adm_database.html"+"&database="+database, lang.mssql.databases.edit)><call disableNewWarn(mssql,database)>
+    </td>
+</tr>
+</list>
+    <tr>
+<td class="control_align_right" colspan="4">
+		<call draw_add(config.CLIENT_CP_URL+"?template_name=MSSQL/mssql-create-database.html", lang.mssql.databases.add)>
+	</td>
+    </tr>
+</if>
+
+
+<call draw_table_footer()>
+<!--  END ./control/MSSQL/databases.html.in  -->

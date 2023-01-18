@@ -1,0 +1,198 @@
+<!-- BEGIN ./control/account_preview/customjob.html  -->
+<yafv>
+<yafv s_admin>
+<html>
+<HEAD>
+<call define_css()>
+</HEAD>
+
+<body>
+<assign cursym = toolbox.getCurrencySymbol()>
+<!--cursym=${cursym} -->
+
+<assign cjadmin=account.getChild("ttadmin").cjadmin>
+<assign job = cjadmin.getJob(request.job_id)>
+
+&nbsp;
+<if session.msg>
+<call draw_table_header("", lang.accprev.cj.header(request.job_id))>
+<tr><td bgcolor="${design.color("hint_color")}"><call error()></td></tr>
+<call draw_table_footer()>
+</if>
+&nbsp;
+
+<call draw_table_header("2", lang.accprev.cj.header(request.job_id))>
+  <tr>
+          <td><call draw_label(lang.accprev.cj.subj)></td>
+          <td><call draw_label(job.subject)></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.entered)></td>
+          <td><call draw_label(job.entered_by)></td>
+        </tr>
+<tr>
+          <td><call draw_label(lang.accprev.cj.start)></td>
+          <td><call draw_label(job.start_date("TS_MEDIUM"))></td>
+        </tr>
+<tr>
+          <td><call draw_label(lang.accprev.cj.end)></td>
+          <td><if job.end_date><call draw_label(job.end_date("TS_MEDIUM"))><else><call draw_label("-")></if></td>
+        </tr>
+<tr>
+          <td><call draw_label(lang.accprev.cj.time)></td>
+          <td><call draw_label(job.total_time)></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.amount)></td>
+          <td><call draw_label(job.total_amount)></td>
+        </tr>
+<tr>
+          <td><call draw_label(lang.accprev.cj.descr)></td>
+          <td><call draw_label(job.description)></td>
+        </tr>
+<tr>
+          <td><call draw_label(lang.accprev.cj.status)></td>
+          <td>
+            <switch job.status>
+              <case "0">
+                <call draw_label(lang.accprev.cj.status_label_new)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=2", "cj_finish", lang.accprev.cj.finish)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=1", "cj_start", lang.accprev.cj.progress)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=3", "cj_cancel", lang.accprev.cj.cancel)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=4", "cj_abort", lang.accprev.cj.abort)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=5", "cj_onhold", lang.accprev.cj.hold)>
+                <break>
+              <case "1">
+                <call draw_label(lang.accprev.cj.status_label_progress)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=2", "cj_finish", lang.accprev.cj.finish)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=3", "cj_cancel", lang.accprev.cj.cancel)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=4", "cj_abort", lang.accprev.cj.abort)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=5", "cj_onhold", lang.accprev.cj.hold)>
+                <break>
+              <case "2">
+                <call draw_label(lang.accprev.cj.status_label_finished)>
+                <break>
+              <case "3">
+                <call draw_label(lang.accprev.cj.status_label_canceled)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=2", "cj_finish", lang.accprev.cj.finish)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=1", "cj_start", lang.accprev.cj.progress)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=4", "cj_abort", lang.accprev.cj.abort)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=5", "cj_onhold", lang.accprev.cj.hold)>
+                <break>
+              <case "4">
+                <call draw_label(lang.accprev.cj.status_label_aborted)>
+                <break>
+              <case "5">
+                <call draw_label(lang.accprev.cj.status_label_onhold)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=2", "cj_finish", lang.accprev.cj.finish)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=1", "cj_start", lang.accprev.cj.progress)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=3", "cj_cancel", lang.accprev.cj.cancel)>
+                <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/account_preview/customjob_done.sbm&stemplate="+template+"&ftemplate="+template+"&account_id="+request.account_id+"&job_id="+request.job_id+"&new_status=4", "cj_abort", lang.accprev.cj.abort)>
+                <break>
+            </switch>
+          </td>
+        </tr>
+<!-- tasks -->
+<tr>
+  <td colspan="2" class="control_header"><call draw_header("Tasks")></td>
+        </tr>
+        <list job.tasks as task>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_descr)></td>
+          <td><call draw_label(task.description)></td>
+        </tr>
+<tr >
+          <td><call draw_label("Entered by")></td>
+          <td><call draw_label(task.entered_by+" ("+task.entered_date("TS_MEDIUM")+")")></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_rate)></td>
+          <td><call draw_label(lang.accprev.cj.r_value(task.rate, cursym))></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_time)></td>
+          <td><call draw_label(task.total_time)></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_total)></td>
+          <td><call draw_label(task.total)></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_note)></td>
+          <td><call draw_label(toolbox.formatForHTML(task.note))></td>
+        </tr>
+<tr ><td colspan="2">&nbsp;</td></tr>
+        </list>
+<!-- notes -->
+<tr>
+  <td colspan="2" class="control_header"><call draw_header(lang.accprev.cj.notes)></td>
+        </tr>
+        <list job.notes as note>
+<tr >
+          <td><call draw_label(note.entered_by+"("+note.entered_date("TS_MEDIUM")+")")></td>
+          <td><call draw_label(toolbox.formatForHTML(note.note))></td>
+        </tr>
+        </list>
+<call draw_table_footer()>
+&nbsp;
+
+<if job.status !="2">
+<!-- new task -->
+      <form action="config.CLIENT_CP_URL" method="POST" name="f1" check! accept-charset="UTF-8">
+<call draw_table_header("2", lang.accprev.cj.add_task)>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_descr)></td>
+          <td><input type="text" size="40" name="description"></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_rate)></td>
+	  <td><input type="text" size="10" name="rate" label="rate" check="vPriceReq"> <call draw_label(lang.accprev.cj.rate_cur(cursym))></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_time)></td>
+          <td><input type="text" size="6" name="time" label="time" check="vPositiveIntReq"></td>
+        </tr>
+<tr >
+          <td><call draw_label(lang.accprev.cj.t_note)></td>
+          <td><textarea name="note" rows="5" cols="60"></textarea></td>
+        </tr>
+<tr >
+  <td colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/account_preview/customjob_addtask.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="account_id" value="${request.account_id}">
+    <input type="hidden" name="job_id" value="${request.job_id}">
+    <input type="submit" value="${lang.accprev.cj.add_task}">
+  </td>
+        </tr>
+<call draw_table_footer()>
+      </form>
+&nbsp;
+
+<!-- new note -->
+    <form action="config.CLIENT_CP_URL" method="POST" name="f2" check! accept-charset="UTF-8">
+<call draw_table_header("2", lang.accprev.cj.add_note)>
+<tr >
+  <td><call draw_label(lang.accprev.cj.n_note)></td>
+  <td><textarea name="note" rows="5" cols="60"></textarea></td>
+</tr>
+<tr >
+  <td colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/account_preview/customjob_addnote.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="account_id" value="${request.account_id}">
+    <input type="hidden" name="job_id" value="${request.job_id}">
+    <input type="submit" value="${lang.accprev.cj.add_note}">
+  </td>
+</tr>
+<call draw_table_footer()>
+      </form>
+
+</if>
+
+</body>
+</html>
+
+<!--  END ./control/account_preview/customjob.html  -->

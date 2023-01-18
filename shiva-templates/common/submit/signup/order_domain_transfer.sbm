@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/signup/order_domain_transfer.sbm -->
+    <if request.flag_use_contact_info_ci>
+      <assign srs_owner_first_name=toolbox.html_encode(request["_ci_first_name"])>
+      <assign srs_owner_last_name=toolbox.html_encode(request["_ci_last_name"])>
+      <assign srs_owner_org_name=toolbox.html_encode(request["_ci_company"])>
+      <assign srs_owner_address1=toolbox.html_encode(request["_ci_address1"])>
+      <assign srs_owner_address2=toolbox.html_encode(request["_ci_address2"])>
+      <assign srs_owner_city=toolbox.html_encode(request["_ci_city"])>
+      <assign srs_owner_state=toolbox.html_encode(request["_ci_state"])>
+      <assign srs_owner_country=toolbox.html_encode(request["_ci_country"])>
+      <assign srs_owner_postal_code=toolbox.html_encode(request["_ci_postal_code"])>
+      <assign srs_owner_phone=toolbox.html_encode(request["_ci_phone"])>
+      <assign srs_owner_email=toolbox.html_encode(request["_ci_email"])>
+    </if>
+
+    <include "signup/order_info_ci.html">
+<!-- END ./submit/signup/order_domain_transfer.sbm -->

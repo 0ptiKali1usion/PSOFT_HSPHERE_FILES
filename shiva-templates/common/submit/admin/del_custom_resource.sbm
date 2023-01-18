@@ -1,0 +1,15 @@
+<assign billman=account.getChild("billman")>
+<if request.type == "3">
+    <assign result=billman.delCustomResource(request.aid, request.did)>
+<else>
+    <assign result=billman.delService(request.aid, request.did)>
+</if>
+<if result.status!="OK">   
+   <assign res=session.addMessage(result.msg)>
+   <assign unsuccess="1">
+</if>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

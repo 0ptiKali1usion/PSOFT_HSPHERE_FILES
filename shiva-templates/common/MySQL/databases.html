@@ -1,0 +1,22 @@
+<!-- BEGIN ./MySQL/databases.html.in  -->
+<include "functions">
+<assign mysql=account.getChild("MySQL")>
+<assign databases=mysql.getChildren("MySQLDatabase")>
+<if databases>
+  <if databases.size=="1">
+    <list databases as database>
+       <assign template="MySQL/adm_database2.html">
+       <call draw_menu("mysql-dbs")>
+       <include "control/MySQL/adm_database2.html">
+       <call bottom()>
+    </list>
+  <else>
+    <assign template="MySQL/databases.html">
+    <call draw_menu("mysql-dbs")>
+    <include "control/MySQL/databases.html">
+    <call bottom()>
+  </if>
+<else>
+  <include "MySQL/mysql-db-wiz-step1.html">
+</if>
+<!--  END ./MySQL/databases.html.in  -->

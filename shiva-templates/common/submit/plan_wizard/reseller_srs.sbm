@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/plan_wizard/reseller_srs.sbm -->
+
+<list params as param>
+  <if toolbox.startsWith(param.name, "_SETUP_PRICE_TLD_") == "1">
+    <assign res = yafv.common.s_wizard.vPriceOpt(
+	toolbox.compose(lang.msg.res_price_free,name),param.value)>
+    <if res.status != "OK">
+      <assign failure="1">
+      <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+    </if>
+  </if>
+</list>
+
+<if !failure>
+      <if request.leave_domain_transfer_prices>
+        <include request.stemplate>
+      <else>
+        <include "plan_wizard/reseller_domain_transfer.html">
+      </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/plan_wizard/reseller_srs.sbm -->

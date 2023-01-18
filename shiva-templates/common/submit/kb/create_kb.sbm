@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/create_kb.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.createKB(request.name)>
+<if result.status=="ERROR">
+	<assign res=session.addMessage(result.msg)>
+        <include request.ftemplate>
+<else>
+        <assign res="Success creating KnowledgeBase"+request.name>
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/create_kb.sbm -->

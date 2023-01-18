@@ -1,0 +1,101 @@
+<assign template="real/rmserver.html">
+<include "functions">
+ 
+ 
+<call top_menu("Web | Domain | MIVA Merchant 3.0","4")>
+
+<assign ci = account.ci>
+<assign hosting = account.getResource(request.rid)>
+<assign domain_name=hosting.parent.name>
+<assign e_mail=ci.email>
+<assign address=ci.address1+ci.address2>
+<assign city=ci.city>
+<assign state=ci.state>
+<assign postal_code=ci.postal_code>
+<assign country=ci.country>
+<assign phone=ci.phone>
+
+<assign mail_domain=hosting.parent.getChild("mail_service").getChild("mail_domain").name>
+<assign login=account.getChild("unixuser").login>
+<assign password=account.getChild("unixuser").password>
+
+<assign lic=hosting.getChild("miva").lic>
+
+<FORM NAME="WIZZ" METHOD="POST" TARGET="_blank" ACTION="http://${domain_name}/merchant2/setup.mv" accept-charset="UTF-8">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  align="CENTER" bgcolor="#24559e">
+<tr>
+<td width="575">
+<table width="100%" border="0" cellspacing="1" cellpadding="3" align="CENTER">
+<tr>
+  <td   bgcolor="#24559e" class="tt">MIVA Merchant 3.0</td>
+</tr>
+<INPUT TYPE = "hidden" NAME = "Screen" VALUE = "WIZZ">
+<INPUT TYPE = "hidden" NAME = "Action" VALUE = "WIZZ">
+<INPUT TYPE = "hidden" NAME = "Step" VALUE = "10">
+<INPUT TYPE = "hidden" NAME = "New_Step" VALUE = "0">
+<INPUT TYPE = "hidden" NAME = "Have_Fields" VALUE = "1">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_UI_ID" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "ISP_Defaults" VALUE = "NO">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Name" VALUE = "${domain_name}">
+<INPUT TYPE = "hidden" NAME = "Install_LanguageCode" VALUE = "en-US">
+<INPUT TYPE = "hidden" NAME = "Install_Accept_EULA" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_License" VALUE = "${lic}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Owner" VALUE = "3WCorp">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Email" VALUE = "${e_mail}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Company" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Address" VALUE = "${address}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_City" VALUE = "${city}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Use_State" VALUE = "lkljklj">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_State" VALUE = "${state}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_StateSelect" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Zip" VALUE = "${postal_code}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Country" VALUE = "${country}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Phone" VALUE = "${phone}">
+<INPUT TYPE = "hidden" NAME = "Install_Domain_Fax" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base_Use_Detected" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_Display_Site_Steps" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_MivaMerchantURL" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root_Detected" VALUE = "//Merchant2/">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root_Use_Detected" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Merchant" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Merchant_Detected" VALUE ="http://${domain_name}/merchant2/merchant.mv+">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Merchant_Use_Detected" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_Image_Root" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Image_Root_Detected" VALUE = "//Merchant2/">
+<INPUT TYPE = "hidden" NAME = "Install_Image_Root_Use_Detected" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base_Detected" VALUE ="http://${domain_name}//Merchant2/">
+<INPUT TYPE = "hidden" NAME = "Install_ImageRoot" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_MivaMerchantSecureURL" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Merchant_Secure_Detected" VALUE ="https://${domain_name}/merchant2/merchant.mv+">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Merchant_Secure_Use_Detected" VALUE = "None">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Admin_Secure" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Admin_Secure_Detected" VALUE ="https://${domain_name}/merchant2/admin.mv+">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Admin_Secure_Use_Detected" VALUE = "None">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root_Secure" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root_Secure_Detected" VALUE = "//Merchant2/">
+<INPUT TYPE = "hidden" NAME = "Install_Module_Root_Secure_Use_Detected" VALUE = "None">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base_Secure" VALUE = "">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base_Secure_Detected" VALUE ="https://${domain_name}//Merchant2/">
+<INPUT TYPE = "hidden" NAME = "Install_URL_Base_Secure_Use_Detected" VALUE = "None">
+<INPUT TYPE = "hidden" NAME = "Install_MailHost" VALUE = "${config.SMTP_HOST}">
+<INPUT TYPE = "hidden" NAME = "Install_Mail_AddAngleBrackets" VALUE = "Yes">
+<INPUT TYPE = "hidden" NAME = "Install_User_Name" VALUE = "${login}">
+<INPUT TYPE = "hidden" NAME = "Install_User_Password" VALUE = "${password}">
+<INPUT TYPE = "hidden" NAME = "Install_User_VerifyPassword" VALUE ="${password}">
+<tr>
+  <td align="center" ><br>
+You are going to setup MIVA Merchant 3.0<br>
+If you already have installed MIVA Merchant 3.0 manualy nothing will hapens<br><br>
+  </td>
+</tr>
+<tr>
+   <td align="center" ><INPUT TYPE = "submit" VALUE = "Install"></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</FORM>
+<call bottom()>

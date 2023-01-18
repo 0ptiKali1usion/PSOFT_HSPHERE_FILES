@@ -1,0 +1,17 @@
+<!-- BEGIN ./control/email/manage_mlist_confirm.html  -->
+<call draw_tooltip()>
+<br>
+<call draw_table_header("", lang.label.confirmation)>
+<tr>
+<td class="control_align_center">
+  <call draw_label_bold(lang.email.managemlistconfirm.question)>
+</td>
+</tr>
+<tr>
+<td class="control_align_center">
+  <call draw_link(config.CLIENT_CP_URL+"?rid="+request.rid+"&uid="+request.uid+"&md_id="+request.md_id+"&mo_id="+request.mo_id+"&template_name=submit/email/mlist_del_allsubscriber.sbm"+"&stemplate="+request.stemplate+"&ftemplate="+request.ftemplate+"&sc_page1="+request.sc_page1+"&del=1", lang.email.managemlistconfirm.yes)><br>
+  <call draw_link("javascript:history.go(-1)", lang.email.managemlistconfirm.no)>
+</td>
+</tr>
+<call draw_table_footer()>
+<!--  END ./control/control/manage_mlist_confirm.html  -->

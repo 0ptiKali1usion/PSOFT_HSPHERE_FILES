@@ -1,0 +1,80 @@
+<!-- BEGIN ./common/control/admin/merchant/PSiGate.html -->
+<call draw_js("/common/JS/attachment.js")>
+
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form name="frmPSiGateMGmain"action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/PSiGate.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid>
+<input type="hidden" name="mid" value="${request.mid}">
+	<if merchant.mg_upload_file_cert || merchant.mg_private_key_pwd>
+		<assign vNewForm="1">
+	<else>
+		<assign vNewForm="0">
+	</if>
+<else>
+<assign vNewForm="1">
+</if>
+
+<input type="hidden" name="formType" value="${vNewForm}">
+
+<call draw_table_header("2", lang.admin.epayment.psigate)>
+
+<tr><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.psigate}</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>secure.psigate.com</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>1139</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.email)></td><td><input type="text" name="email" value="<if merchant>${merchant.EMAIL}</if>"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.psigate.config_file)></td><td><input type="text" name="config_file" value="<if merchant>${merchant.CONFIG_FILE}</if>"></td></tr>
+
+
+
+<if vNewForm == "0">
+<tr><td><call draw_label(lang.admin.psigate.keyfile)></td><td><call draw_label("psoft_config/psigate/"+request.mid+"_key.der")></td></tr>
+<tr><td><call draw_label(lang.admin.psigate.certfile)></td><td><call draw_label("psoft_config/psigate/"+request.mid+"_cert.der")></td></tr>
+<else>
+
+<if request.mid>
+<assign vcertFile=merchant.mg_upload_file_cert>
+<assign vkeyFile=merchant.mg_private_key_pwd>
+<else>
+<assign vcertFile="">
+<assign vkeyFile="">
+</if>
+
+<SCRIPT language="Javascript"><!--
+  function addOption(frmName, attsField, value, text) {
+    sel = document.forms[frmName];
+    sel.elements[attsField].value = value.split('|')[0];
+    if("keyFile" == attsField){
+    	sel.elements["file_key_data"].value = text;
+    } else {
+    	sel.elements["file_cert_data"].value = text;
+    }
+  }
+//--></SCRIPT>
+
+<tr><td><call draw_label(lang.admin.psigate.keyfile)></td><td>
+	<input type="text" style="background-color: transparent; border: none;color: black;" name="keyFile" disabled value="${vkeyFile}" size="40">
+	<br><input type="button" value="${lang.admin.epayment.button.upload_new_key}" onclick="javascript:addAttachments('frmPSiGateMGmain','keyFile','${config.UPLOADER_URL}','${lang.label.add_attachment}','${lang.tt.select_uploaded_file}');">
+	<input type="hidden" name="file_key_data" value="${vkeyFile}">
+</td></tr>
+<tr><td><call draw_label(lang.admin.psigate.certfile)></td><td>
+	<input type="text" style="background-color: transparent; border: none;color: black;" name="certificateFile" disabled value="${vcertFile}" size="40">
+	<br><input type="button" value="${lang.admin.epayment.button.upload_new_certificate}" onclick="javascript:addAttachments('frmPSiGateMGmain','certificateFile','${config.UPLOADER_URL}','${lang.label.add_attachment}','${lang.tt.select_uploaded_file}');">
+	<input type="hidden" name="file_cert_data" value="${vcertFile}">
+</td></tr>
+</if>
+
+
+
+<tr><td><call draw_label(lang.admin.epayment.test)></td><td><select name="mode"><option>FALSE<option<if merchant && merchant.MODE=="TRUE"> selected</if>>TRUE</select></td></tr>
+<tr><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./common/control/admin/merchant/PSiGate.html -->

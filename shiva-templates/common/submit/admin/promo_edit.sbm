@@ -1,0 +1,87 @@
+<!--BEGIN /common/submit/admin/promo_edit.sbm -->
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign promo_action = request.promo_action>
+
+<if promo_action=="promo_edit">
+  <assign check=yafv.checkall(
+    yafv.common.s_admin.vPercent(lang.admin.promo_edit_disc, request["promo_disc"]),
+    yafv.common.s_admin.vPromoDesc(lang.admin.promo_edit_desc,request["promo_desc"]) )>
+
+  <if check.status=="OK">
+    <if request.promo_type == "1">
+      <assign prefix = "_SPONSOR_">
+    <else>
+      <assign prefix = "_PROMO_">
+    </if>
+    <assign put_key = plan.putValue(prefix+request.promo_key, request.promo_disc)>
+    <assign put_desc = plan.putValue(prefix+"DESC_"+request.promo_key, request.promo_descr)>
+    <if put_key && put_desc>
+      <assign success = "1">
+    </if>
+  <else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if promo_action=="promo_del">
+  <assign is_promo_disabled = plan.deletePromoValues()>
+  <if is_promo_disabled>
+    <assign success="1">
+  </if>
+</if>
+
+<if promo_action=="promo_del_entry">
+  <assign is_promo_del_entry = plan.deletePromoEntry(request.promo_key)>
+  <if is_promo_del_entry>
+    <assign success="1">
+  </if>
+</if>
+
+<if promo_action=="promo_enable">
+  <assign is_promo_enabled = plan.putValue("_ENABLE_PROMO", request.promo_type)>
+  <if is_promo_enabled>
+    <assign promo_action = "promo_add">
+    <assign success="1">
+  </if>
+</if>
+
+<if promo_action=="promo_add">
+  <assign check=yafv.checkall(
+    yafv.common.s_admin.vPromokode(lang.admin.promo_edit_key, request["promo_key"]),
+    yafv.common.s_admin.vPercentReq(lang.admin.promo_edit_disc, request["promo_disc"]),
+    yafv.common.s_admin.vPromoDesc(lang.admin.promo_edit_desc,request["promo_descr"]) )>
+
+  <if check.status=="OK">
+    <assign isPromoKeyExists = plan.isPromoKeyExist(request.promo_key)>
+    <if isPromoKeyExists == "0">
+      <if request.promo_type == "1">
+        <assign prefix = "_SPONSOR_">
+      <else>
+        <assign prefix = "_PROMO_">
+      </if>
+      <assign put_key = plan.putValue(prefix+request.promo_key, request.promo_disc)>
+      <assign put_desc = plan.putValue(prefix+"DESC_"+request.promo_key, request.promo_descr)>
+      <if put_key && put_desc>
+        <assign success = "1">
+      </if>
+    <else>
+      <assign failed_key = "1">
+      <assign res=session.addMessage(toolbox.compose(lang.admin.promo_edit_mes, request.promo_key))>
+    </if>
+  <else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+</if>
+
+
+<if success=="1">
+  <include request.stemplate>
+<else>
+  <assign promo_disc = request.promo_disc>
+  <assign promo_desc = request.promo_descr>
+  <assign promo_key = "">
+  <include request.ftemplate>
+</if>
+
+<!--END /common/submit/admin/promo_edit.sbm -->

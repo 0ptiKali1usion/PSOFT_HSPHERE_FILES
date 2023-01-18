@@ -1,0 +1,93 @@
+<!-- BEGIN ./control/admin/settings/aff.html -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<script language="javascript">
+  function draw_tag() {
+    var index = document.f_aff.select1.selectedIndex;
+    var str = document.f_aff.select1.options[index].value;
+    document.f_aff.aff_link.value += str;
+  }
+</script>
+<call draw_table_header("2", lang.admin.aff.header)>
+
+<tr>
+<assign useaff = settings["use_aff"]>
+<td valign="center"><call draw_label(lang.admin.aff.use_aff)>
+</td>
+<td>
+<assign useaff = settings["use_aff"]>
+<if !useaff ||(useaff=="0")>
+<assign tmp="">
+<else>
+<assign tmp="1">
+</if>
+<assign template_name="submit/admin/settings/aff.sbm">
+<call draw_state(tmp, config.CLIENT_CP_URL+"?template_name="+template_name+"&use_aff=0&stemplate="+template, config.CLIENT_CP_URL+"?template_name="+template_name+"&use_aff=1&stemplate="+template)>
+</td>
+</tr>
+<if useaff && (useaff=="1")>
+<form name="f_aff" action="${config.CLIENT_CP_URL}" method="POST"  accept-charset="UTF-8">
+<tr >
+<td colspan="2"><call draw_label(lang.admin.aff.example)><br><call draw_label("http://www.affiliate-site.com/cgi-bin/affiliate?clicktrade=432025.0<br>&amount=\$\{amount\}&aid=\$\{account_id\}&username=\$\{user_name\}<br>&domain=\$\{domain\}&plan_id=\$\{plan_id\}&plan_name=\$\{plan_name\}&full_amount=\$\{full_amount\}")></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.aff.autoisert)></td>
+<td>
+<assign tmp_amount="${amount}">
+<assign tmp_aid="${account_id}">
+<assign tmp_username="${user_name}">
+<assign tmp_domain="${domain}">
+<assign tmp_planid="${plan_id}">
+<assign tmp_planname="${plan_name}">
+<assign tmp_fullamount="${full_amount}">
+<select name="select1">
+  <option value="${tmp_amount}">${lang.admin.aff.amount}</option>
+  <option value="${tmp_aid}">${lang.admin.aff.aid}</option>
+  <option value="${tmp_username}">${lang.admin.aff.uname}</option>
+  <option value="${tmp_domain}">${lang.admin.aff.domain}</option>
+  <option value="${tmp_planid}">${lang.admin.aff.pid}</option>
+  <option value="${tmp_planname}">${lang.admin.aff.pname}</option>
+  <option value="${tmp_fullamount}">${lang.admin.aff.famount}</option>
+</select>
+<input type="button" name="btInsert" value="${lang.button.insert}" onClick="draw_tag()">
+</td>
+</tr>
+  <input type="hidden" name="template_name" value="${template_name}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <assign afflink=settings["aff_link"]>
+<tr >
+<td><call draw_label(lang.admin.aff.link+" 1")></td>
+<td>
+  <input type="text" name="aff_link" size="60" value="${settings["aff_link"]}">
+</td>
+</tr><tr >
+<td><call draw_label(lang.admin.aff.link+" 2")></td>
+<td>
+  <input type="text" name="aff_link2" size="60" value="${settings["aff_link2"]}">
+</td>
+</tr><tr >
+<td><call draw_label(lang.admin.aff.link+" 3")></td>
+<td>
+  <input type="text" name="aff_link3" size="60" value="${settings["aff_link3"]}">
+</td>
+</tr><tr >
+<td><call draw_label(lang.admin.aff.link+" 4")></td>
+<td>
+  <input type="text" name="aff_link4" size="60" value="${settings["aff_link4"]}">
+</td>
+</tr><tr >
+<td><call draw_label(lang.admin.aff.link+" 5")></td>
+<td>
+  <input type="text" name="aff_link5" size="60" value="${settings["aff_link5"]}">
+</td>
+</tr>
+<tr ><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+</form>
+</if>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/aff.html -->

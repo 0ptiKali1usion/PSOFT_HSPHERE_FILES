@@ -1,0 +1,16 @@
+<!-- BEGIN ./submit/admin/promo/enable_promo.sbm -->
+
+<assign admin = account.getChild("admin")>
+<assign billman = account.getChild("billman")>
+
+<if admin && billman>
+  <assign promo_enabled = request.promo_enabled>
+  <call save("_PROMO_ENABLED", request.promo_enabled)>
+</if>
+
+<include request.stemplate>
+
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+
+<!-- END ./submit/admin/promo/enable_promo.sbm -->
+

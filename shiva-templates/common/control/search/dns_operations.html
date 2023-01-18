@@ -1,0 +1,72 @@
+<!-- BEGIN ./control/search/dns_operations.html  -->
+<assign recreation_tool=account.getChild("recreation_manager")>
+
+<if !recreation_tool>
+    <if account.plan.isResourceAvailable("recreation_manager")>
+        <assign recreation_tool=account.addChild("recreation_manager","")>
+        <if recreation_tool!="OK">
+             <assign recreation_tool="">
+        </if>
+     </if>
+</if>
+
+<call draw_tooltip()>
+
+<call draw_table_header("3", lang.search.dns_operations.header)>
+<assign resources=recreation_tool.getRecreatableResources(request.aid)>
+<tr>
+<td colspan=3  class="control_align_center">
+    <if resources.size != "0">
+        <call draw_label(lang.search.dns_operations.info)>
+    <else>
+        <call draw_label(lang.search.dns_operations.infono)>
+    </if>
+
+</td>
+</tr>
+<list resources as res>
+<tr>
+  <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/account/recreation.sbm">
+    <input type="hidden" name="template_name_first" value="${request.template_name_first}">
+    <input type="hidden" name="aid" value="${request.aid}">
+    <input type="hidden" name="user" value="${request.user}">
+    <input type="hidden" name="stemplate" value="search/recreation_report.html">
+    <input type="hidden" name="ftemplate" value="search/recreation_report.html">
+    <input type="hidden" name="cur_menu" value="${request.cur_menu}">
+    <input type="hidden" name="search_step" value="${request.search_step}">
+    <input type="hidden" name="start" value="${request.start}">
+    <compress>
+	<list params as sc_param>
+ 	<if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   	    <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+ 	</if>
+	</list>
+    </compress>
+  <td><call draw_label(res.name)></td>
+  <td>
+    <if res.list.size == "1">
+      <list res.list as reslist>
+        <call draw_label(reslist.name)>
+        <input type="hidden" name="resource_id" value="${reslist.id}">
+      </list>
+    <else>
+      <select name="resource_id">
+        <list res.list as reslist>
+          <option value="${reslist.id}"> ${reslist.name}
+        </list>
+      </select>
+    </if>
+    <if res.name == "DNS">
+      <select name="method">
+        <option value="1">${lang.search.DNS_recreate.fromdb}
+        <option value="2">${lang.search.DNS_recreate.randomly}
+      </select>
+    </if>
+  </td>
+  <td class="control_align_center"><input type="submit" value="${lang.button.process}"></td>
+  </form>
+</tr>
+</list>
+
+<call draw_table_footer()>

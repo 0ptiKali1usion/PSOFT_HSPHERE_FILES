@@ -1,0 +1,15 @@
+<!-- BEGIN ./eeman/mail_srs_edit.sbm  -->
+<assign result=yafv.common.s_hsphere.vIntegerRequired(lang.eeman.mail_srs.max_age,request.f_age)>
+<if result.status=="OK">
+  <assign eeman = account.getChild("eeman")>
+  <assign mail_manager = eeman.mail_manager>
+  <assign mail_srs = mail_manager.mail_srs>
+  <assign result = mail_srs.updateAge(request.f_age)>
+</if>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./eeman/mail_srs_edit.sbm  -->

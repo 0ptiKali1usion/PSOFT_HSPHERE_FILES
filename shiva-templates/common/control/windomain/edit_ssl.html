@@ -1,0 +1,103 @@
+<!-- BEGIN ./control/windomain/edit_ssl.html  -->
+<assign hosting=account.getResource(request.rid)>
+<assign ssl=account.getResource(request.uid)>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.domain.ssledit.header)>
+
+
+<tr>
+  <td    width="20%">
+    <call draw_label_bold(lang.domain.generatenewsslcert.site)>
+  </td>
+  <if ssl.site_name><assign site_name = ssl.site_name><else><assign site_name = hosting.parent.name></if>
+  <td>
+    <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=windomain/webservice.html", site_name)>
+  </td>
+</tr>
+<tr >
+  <td>
+    <call draw_label_bold(lang.windomain.addssl.option)>
+  </td>
+ <td>
+   <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+   <input type="hidden" name="rid" value="${hosting}">
+   <input type="hidden" name="uid" value="${ssl}">
+   <input type="hidden" name="template_name" value="submit/windomain/edit_ssl_options.sbm">
+   <input type="hidden" name="stemplate" value="${request.stemplate}">
+   <input type="hidden" name="ftemplate" value="${template}">
+
+   <if forced == ""><assign forced=ssl.forced></if>
+   <if forced == "1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+   <call draw_label("Force SSL Connection")>
+   <input name="forced" type="checkbox" ${vchecked} value="1"><br>
+   <call draw_label("128-bit key required")>
+   <if need128==""><assign need128=ssl.need128></if>
+   <if need128 == "1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+   <input name="need128" type="checkbox" ${vchecked} value="1"><br>
+   <input type="submit" value="${lang.button.submit}">
+   </form>
+
+ </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instprev)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/windomain/edit_ssl_newcert.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert">
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64">${vfile}</textarea><br>
+    <input type="submit" value="${lang.button.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instnew)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/windomain/edit_ssl_pair.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="key">
+    <call draw_label_bold(lang.domain.ssledit.key)><br>
+    <textarea name="key" rows="10" cols="64">${vkey}</textarea><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64">${vfile}</textarea><br>
+    <input type="submit" value="${lang.button.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.auth)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/windomain/edit_ssl_ca.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <textarea name="cert" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./control/windomain/edit_ssl.html  -->

@@ -1,0 +1,50 @@
+<!-- BEGIN ./unixuser/change_disk_usage.sbm  -->
+<if size==""><assign size=request.size></if>
+<if rid==""><assign rid=request.rid></if>
+<assign result=yafv.common.s_unixuser.vQuota(lang.label.quota, size)>
+<if result.status == "OK">
+  <assign u=account.id>
+  <assign quota=u.getChild("summary_quota")>
+  <assign quotas=u.findChildren("summary_quota")>
+  <if quota>
+        <assign res=toolbox.setBillingNote(lang.billingnote.change_disk_usage(quota.limitMb, size))>
+	<if silent=="1">
+	    <assign res=account.setNoRefund("1")>
+	</if>
+	<list quotas as quotad>
+	   <if quotad.id != quota.id>
+            <assign result=quotad.delete>
+	   	<if result.status!="OK">
+	            <assign failure="1">
+	            <assign res=session.addMessage(result.msg)>
+       	        </if>
+	    </if>
+	</list>
+	<if silent=="1">
+	    <assign res=account.setNoRefund("0")>
+	</if>
+        <assign result=quota.change(size)>
+        <if result.status!="OK">
+	   <assign failure="1">
+	   <assign res=session.addMessage(result.msg)>
+	</if>
+  <else>
+    <assign result=u.addChild("summary_quota","",size)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if silent=="">
+    <if failure>
+    	<assign vsize=toolbox.html_encode(request.size)>
+    	<include request.ftemplate>
+    <else>
+    	<include request.stemplate>
+    </if>
+</if>
+<!--  END ./unixuser/change_disk_usage.sbm  -->

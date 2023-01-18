@@ -1,0 +1,67 @@
+<!-- BEGIN ./submit/MSSQL/add_mssqlmanager_check.sbm  -->
+
+<assign notfree="0">
+<assign type="mssqlmanager">
+<assign hosting=account.getResource(request.rid)>
+
+<assign manager_price = hosting.estimateCreate("mssqlmanager", "")>
+<if manager_price.status!="ERROR">
+  <if manager_price.free=="0">
+    <assign notfree="1">
+    <assign setup=manager_price.setup>
+    <assign recurrent=manager_price.recurrent>
+    <assign recurrentAll=manager_price.recurrentAll>
+  </if>
+
+  <assign asp=hosting.getChild("asp")>
+  <if !asp>
+    <assign asp_price = hosting.estimateCreate("asp", "")>
+    <if asp_price.status!="ERROR">
+      <if asp_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup, asp_price.setup)>
+         <assign recurrent=toolbox.add(recurrent, asp_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll, asp_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.windomain.webservice.asp,""))>
+      <assign res = session.addMessage(asp_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+
+  <assign asp_net=hosting.getChild("asp_net")>
+  <if !asp_net>
+    <assign asp_net_price = hosting.estimateCreate("asp_net", "")>
+    <if asp_net_price.status!="ERROR">
+      <if asp_net_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup, asp_net_price.setup)>
+         <assign recurrent=toolbox.add(recurrent, asp_net_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll, asp_net_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.windomain.webservice.asp_net,""))>
+      <assign res = session.addMessage(asp_net_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+
+<else>
+  <assign res = session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.mssql.databases.mssqlmanager,""))>
+  <assign res = session.addMessage(manager_price.msg)>
+  <assign failure="1">
+</if>
+
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/mssqlmanager_add_confirm.html">
+  <else>
+    <include "submit/MSSQL/add_mssqlmanager.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+
+
+<!-- END ./submit/MSSQL/add_mssqlmanager_check.sbm  -->

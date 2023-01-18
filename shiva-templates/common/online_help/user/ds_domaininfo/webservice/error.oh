@@ -1,0 +1,13 @@
+<center>Error</center>
+<hr>
+  &nbsp;&nbsp;&nbsp;&nbsp; <br>
+This feature allows you to define the  necessary actions if  the requested page on your site is missing.
+<br>
+   To Click the <i>Add</i> icon to configure the error document. 
+   In the form that appears, enter the error document settings:
+<ul>
+  <li><i>Error Document Code</i>: Enter the error code to change the default message. One of the common errors is <i>File Not Found</i>.</li>
+  <li><i>Message or URL</i>:<i> </i>Enter a text message the visitor will receive or the URL of the page that the visitor will be taken to if the requested page is not found. </li>
+  <li><i>Type</i>: Specify if the text in the previous field is a URL (Redirect) or an error message (Message). </li>
+</ul>
+Click <i>Submit.</i>

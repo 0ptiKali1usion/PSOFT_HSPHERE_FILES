@@ -1,0 +1,11 @@
+<!-- BEGIN ./domain/delete.html  -->
+<assign result=account.getResource(request.rid).delete>
+<if !result ||  result.status=="OK">
+    <include request.stemplates>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_delete,lang.label.domain,""))>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplates>
+</if>
+<!--  END ./domain/delete.html  -->

@@ -1,0 +1,41 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+
+${lang.massmail.trial_account}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.trial_text(settings.name)}
+
+${lang.massmail.trial_invoice}
+			${lang.massmail.invoice}
+<assign invoice=account.estimateOpenPeriod(account.planId,account.periodId)>
+<if invoice>
+  <assign total=account.bill.balance>
+  <if invoice>
+${lang.massmail.trial_balance}	${toolbox.currency(total)}
+    <assign total=toolbox.mul(total,"-1")>
+    <list invoice.entries as entry>
+${entry.type}	${entry.description}	${toolbox.currency(entry.amount)}
+    </list>
+    <assign new_invoice=toolbox.calculateTaxes(invoice.total)>
+    <assign taxes=new_invoice.taxes>
+    <if taxes.size!="0">
+${lang.massmail.subtotal} ${toolbox.currency(new_invoice.sub_total)}
+      <list taxes.KEYS as tax_id>
+${toolbox.taxes[tax_id].description}(${toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")} %):${toolbox.currency(taxes[tax_id])}
+      </list>
+    </if>
+    <assign total=toolbox.add(total, new_invoice.total)>
+${lang.massmail.total} ${toolbox.currency(total)}
+  </if>
+</if>
+
+<if account.bi.type!="CC">
+<if toolbox.lt(account.bill.balance, "0") == "1"><assign in_value=toolbox.sub("0", account.bill.balance)>
+<if account.bi.type=="Check">${lang.massmail.invoice_check} ${settings.check}<else>${lang.massmail.url} ${toolbox.getPaymentLink(account.bi.type, in_value, "acc-", account.id, account.description)}</if>
+</if>
+</if>
+
+${lang.massmail.trial_support}
+${settings.support}

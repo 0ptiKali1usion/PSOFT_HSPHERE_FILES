@@ -1,0 +1,16 @@
+<!-- BEGIN ./adnsmanager/delete_alias.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<assign result=adnsmanager.delAlias(request.zone_id,request.alias_id)>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_deleted,lang.dns.instant_alias,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/delete_alias.sbm  -->

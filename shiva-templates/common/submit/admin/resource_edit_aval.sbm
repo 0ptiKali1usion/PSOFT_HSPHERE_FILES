@@ -1,0 +1,14 @@
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<if request.r_id>
+    <assign rtype = plan.getResourceType(request.r_id)>
+<else>
+    <assign rtype=plan>
+</if>
+<assign result=rtype.putValue(request.name, request.value)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>

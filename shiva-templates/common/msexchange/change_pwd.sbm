@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/change_pwd.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.changePassword(request.password)>
+<if result && (result.status == "OK")>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.label.password,""))>
+<else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_change,lang.label.password,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/change_pwd.sbm -->

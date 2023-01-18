@@ -1,0 +1,7 @@
+<center>VPS TCP sockets limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	TCP Socket Limit is the maximum number of TPC connections established on a VPS server.<br>
+<br>
+<i>TCP Socket Limit</i> cannot be exceeded. No new connection via TCP (for example, SSH connections) will be established
+if their number reaches <i>TCP Socket Limit</i>.

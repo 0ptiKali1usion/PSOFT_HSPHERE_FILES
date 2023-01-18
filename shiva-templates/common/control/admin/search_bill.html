@@ -1,0 +1,76 @@
+<!-- BEGIN ./control/admin/search_bill.html  -->
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/bill_search.html">
+
+
+
+<call draw_table_header("2", lang.admin.searchbill.header)>
+
+
+<tr>
+  <td><call draw_label(lang.label.accid)></td>
+  <td><input type="text" name="sc_account"></td>
+</tr>
+<tr >
+  <td><call draw_label(lang.label.username)></td>
+  <td><input type="text" name="sc_username"></td>
+</tr>
+<tr >
+  <td><call draw_label(lang.label.plan)></td>
+  <td><select name="sc_plan" size="1">
+<option value="">${lang.label.any}
+<list admin.plans as plan>
+<if !plan.deleted>
+<option value="${plan.id}">${plan.description}
+</if>
+</list>
+</select>
+  </td>
+</tr>
+<tr >
+  <td><call draw_label(lang.admin.searchbill.transtype)></td>
+  <td><select name="sc_type" size="1">
+<option value="">${lang.admin.searchbill.any}
+<option value="1">${lang.admin.searchbill.setup}
+<option value="2">${lang.admin.searchbill.recur}
+<option value="3">${lang.admin.searchbill.usage}
+<option value="4">${lang.admin.searchbill.refund}
+<option value="5">${lang.admin.searchbill.charge}
+<option value="6">${lang.admin.searchbill.credit}
+<option value="10">${lang.admin.searchbill.moneyback}
+<option value="11">${lang.admin.searchbill.debit}
+<option value="-1">${lang.admin.searchbill.reselsum}
+</select>
+  </td>
+</tr>
+<tr >
+  <td><call draw_label(lang.admin.searchbill.created)></td>
+  <td nowrap><table class="inner_control"><tr><td><call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_created_after" size="10">&nbsp;</td><td valign="bottom"><call draw_calendar("f_search","sc_created_after","")></td><td>&nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_created_before" size="10">&nbsp;</td><td valign="bottom"><call draw_calendar("f_search","sc_created_before","")></td></tr></table></td>
+</tr>
+<tr >
+  <td><call draw_label(lang.admin.searchbill.live)></td>
+  <td><input type="checkbox" name="sc_only_live" value="1"></td>
+</tr>
+<tr >
+  <td><call draw_label(lang.admin.searchbill.zeroamount)></td>
+  <td><input type="checkbox" name="sc_zero" value="1"></td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.label.entries)></td>
+  <td><call searchStepBox("10")></td>
+</tr>
+
+<tr >
+  <td>&nbsp;</td>
+  <td><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./control/admin/search_bill.html  -->

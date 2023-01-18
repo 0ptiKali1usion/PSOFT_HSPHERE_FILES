@@ -1,0 +1,62 @@
+<!-- BEGIN ./control/search/delete_confirm.html  -->
+<call draw_tooltip()>
+
+<form name="delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/account/delete.sbm">
+<if request.stemplate>
+    <input type="hidden" name="stemplate" value=${request.stemplate}>
+<else>
+    <input type="hidden" name="stemplate" value="admin/search.html">
+</if>
+<if request.stemplate>
+    <input type="hidden" name="ftemplate" value=${request.stemplate}>
+<else>
+    <input type="hidden" name="ftemplate" value="admin/search.html">
+</if>
+<input type="hidden" name="user" value=${request.user}>
+<input type="hidden" name="aid" value=${request.aid}>
+<input type="hidden" name="search_step" value=${request.search_step}>
+<input type="hidden" name="start" value=${request.start}>
+<list params as sc_param>
+    <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+        <input type="hidden" name="${sc_param.name}" value="${toolbox.url_escape(sc_param.value)}">
+    </if>
+</list>
+
+<call draw_table_header("", lang.search.deleteconfirm.header(request.aid, request.user))>
+
+<tr>
+<td class="control_align_center">
+<table class="inner_control">
+<if reseller_id == "1">
+<tr>
+  <td><input type="radio" name="billlingtype" value="1"></td>
+  <td><call draw_label(lang.search.deleteconfirm.notbill)></td>
+</tr>
+</if>
+<tr>
+  <td><input type="radio" name="billlingtype" value="2" CHECKED></td>
+  <td><call draw_label(lang.search.deleteconfirm.refund_no_charge)></td>
+</tr>
+<tr>
+  <td><input type="radio" name="billlingtype" value="3"></td>
+  <td><call draw_label(lang.search.deleteconfirm.refund_charge)></td>
+</tr>
+<tr>
+  <td><input type="radio" name="billlingtype" value="4"></td>
+  <td><call draw_label(lang.search.deleteconfirm.only_charge)></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+  <td class="control_align_center">
+    <call draw_link("javascript:document.delete_confirm.submit()", lang.search.deleteconfirm.yes)><br>
+    <call draw_link("javascript:history.go(-1)", lang.search.deleteconfirm.no)>
+  </td>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+<!--  END ./control/search/delete_confirm.html  -->

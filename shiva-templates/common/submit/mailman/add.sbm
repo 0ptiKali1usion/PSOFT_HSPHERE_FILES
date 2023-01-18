@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/mailman/add.sbm -->
+<assign result=yafv.checkall(
+    yafv.common.s_email.vString(lang.label.name,request.name),
+    yafv.common.s_email.vEmail(lang.label.email,request.email),
+ ) >
+<if result.status=="OK">
+   <assign admin=account.getChild("admin")>
+   <assign result=admin.addRecipient(request.type, request.email, request.name)>
+<else>
+    <assign failure="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if> 
+<!-- END ./submit/mailman/add.sbm -->

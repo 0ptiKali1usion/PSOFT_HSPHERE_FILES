@@ -1,0 +1,17 @@
+Dear ${account.ci.first_name} ${account.ci.last_name},
+
+Your account #${account.id.id} has been deleted as of ${current_date}, due to
+the fact that you have an outstanding balance of ${toolbox.displayBalance(bill.balance)}.
+
+Account details:
+Login:      ${account.login}
+Account ID: #${account.id.id}
+Plan:       ${account.plan.description}
+Balance:    ${toolbox.displayBalance(bill.balance)}
+Deleted on: ${current_date}
+
+If you have any questions, don't hesitate to contact us.
+
+Regards,
+Support Team
+${settings.TT_EMAIL}

@@ -1,0 +1,22 @@
+${hstoolbox.compose(lang.massmail.login_psw_header, account.ci.first_name, account.ci.last_name)}
+
+<compress>
+<assign u=account.getChild("unixuser")>
+<assign domain=u.getChild("domain")>
+</compress>
+
+${hstoolbox.compose(lang.massmail.login_psw_login, account.login)}
+${hstoolbox.compose(lang.massmail.login_psw_password, account.password)}
+
+<if u>${lang.massmail.login_psw_ftp}
+${hstoolbox.compose(lang.massmail.login_psw_host, u.host.name)}
+${hstoolbox.compose(lang.massmail.login_psw_ftplogin, u.login)}
+${hstoolbox.compose(lang.massmail.login_psw_ftppsw, u.password)}
+</if>
+
+${hstoolbox.compose(lang.massmail.login_psw_access, user.CP_URL)}
+
+${lang.massmail.login_psw_regards}
+${settings.name}
+${lang.massmail.login_psw_mail} ${settings.email}
+${lang.massmail.login_psw_visit} ${settings.website}

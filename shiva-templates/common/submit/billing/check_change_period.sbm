@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/billing/check_change_period.sbm  -->
+<assign invoice=account.estimateChangePaymentPeriod(request.period_id)>
+<if invoice.status=="OK">
+    <assign success = "1">
+<else>
+    <assign res=session.addMessage(invoice.msg)>
+</if>
+<if success>
+    <if toolbox.eq(invoice.total,"0.0")!="1">
+    	<include "billing/invoice_change_period.html">
+    <else>
+    	<include "submit/billing/change_period.sbm">
+    </if>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/billing/check_change_period.sbm  -->

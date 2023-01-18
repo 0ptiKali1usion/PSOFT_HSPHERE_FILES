@@ -1,0 +1,78 @@
+<!-- BEGIN ./vps/change_tcplimit_check.sbm  -->
+<assign result=yafv.common.s_vps.vQuota(lang.vps.tcplimit.label, request.size)>
+<if result.status == "OK">
+  <assign vps=account.getResource(request.rid)>
+  <assign tcplimit=vps.getChild("vps_tcp_limit")>
+  <assign rtype = account.plan.getResourceType("vps_tcp_limit")>
+  <assign max = rtype.values["_MAX"]>
+  <if max>
+    <if toolbox.gt(request.size,max)=="1">
+       <assign failure="1">
+       <assign res = session.addMessage(toolbox.compose(
+         lang.vps.msg.failed_set_exceedtcplimit, max))>
+    </if>
+  </if>
+  <if !failure>
+  <if tcplimit>
+   <if toolbox.gt(tcplimit.used,request.size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.vps.msg.failed_set_smalltcplimit, request.size, tcplimit.used))>
+       <assign failure="1">
+   <else>
+       <assign delprice=tcplimit.estimateDelete()>
+       <if delprice.status != "ERROR">
+          <assign futureprice=vps.estimateCreate("vps_tcp_limit","",request.size)>
+          <if futureprice.status=="ERROR">
+	     <assign failure="1">
+	     <assign res=session.addMessage(futureprice.msg)>
+          </if>
+       <else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(delprice.msg)>
+       </if>
+   </if>
+  <else>
+    <assign futureprice=vps.estimateCreate("vps_tcp_limit","",request.size)>
+    <if futureprice.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(futureprice.msg)>
+    </if>
+  </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if failure>
+    <assign vsize=toolbox.html_encode(request.size)>
+    <include request.ftemplate>
+<else>
+  <assign recurrent = "0">
+  <assign recurrentAll = "0">
+  <if tcplimit>
+    <assign recurrent = toolbox.sub(futureprice.recurrent, delprice.refund)>
+    <assign recurrentAll = futureprice.recurrentAll>
+    <assign price=delprice>
+    <assign total="0">
+    <list futureprice.entries as entry>
+      <assign res=delprice.entries.addHash("type",entry.type,"description",entry.description,"amount",entry.amount)>      <assign total=toolbox.add(total,entry.amount)>
+    </list>
+    <assign amount=toolbox.add(delprice.total,total)>
+    <assign res=delprice.put("total",amount)>
+  <else>
+    <assign recurrent = futureprice.recurrent>
+    <assign recurrentAll = futureprice.recurrentAll>
+    <assign price=futureprice>
+  </if>
+  <assign res=price.put("recurrent",recurrent)>
+  <assign res=price.put("recurrentAll",recurrentAll)>
+  <if futureprice.free=="0">
+    <assign res=price.put("free","0")>
+  </if>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>    
+</if>
+<!--  END ./vps/change_tcplimit_check.sbm  -->

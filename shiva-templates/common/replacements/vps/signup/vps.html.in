@@ -1,0 +1,76 @@
+<!-- BEGIN ./common/replacemets/vps/signup/vps.html.in -->
+<include "functions">
+<assign template="signup/vps.html">
+<assign title=lang.vps.hostname.title>
+<include "control/signup/signup_function.html">
+  
+  <include "signup/signup_top.html">
+  <yafv s_signup>
+  <if vpshostname> 
+	<assign v_vpshostname=vpshostname>
+  <else>
+	<assign v_vpshostname="">
+  </if>
+
+  <if root_passwd> 
+	<assign v_root_passwd=root_passwd>
+  <else>
+	<assign v_root_passwd="">
+  </if>
+
+  <table border="0">
+  <tr><td colspan="2"><p  ><br><call draw_label(lang.vps.hostname.text)><br><call draw_label(lang.vps.use_dns.text)></p></td></tr>
+
+  <tr><td colspan="2"><call draw_spacer("2", "100")></td></tr>
+  <form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/vps.sbm">
+    <input type="hidden" name="_mod" value="s_wo_dns">
+    <input type="hidden" name="vpslogin" value="root">
+    <assign excludeFields=excludeFields+"template_name;">
+    <assign excludeFields=excludeFields+"vpshostname;">
+    <tr>
+        <td class="control_align_right"><call draw_label(lang.vps.hostname)></td>
+        <td><input type="text" name="vpshostname" value="${v_vpshostname}"check="vDomain_Name"></td>
+    </tr>
+
+    <if plans[request.plan_id].isResourceAvailable("domain")>
+        <tr>
+            <td class="control_align_right"><call draw_label(lang.vps.use_dns.label)></td>
+            <td><input type="checkbox" name="use_dns" onClick="setMod(this.form,'use_dns')"></td>
+        </tr>
+    </if>
+    <assign excludeFields=excludeFields+"use_dns;">
+
+
+    <tr>
+       <td class="control_align_right"><call draw_label(lang.vps.rootpasswd)></td>
+       <td><input type="password" name="root_passwd" value="${v_root_passwd}" check="vPassword1(this, login)" label="${lang.label.password}"></td>
+       <assign excludeFields=excludeFields+"root_passwd;">
+    </tr>
+
+    <tr>
+      <td class="control_align_right"><call draw_label(lang.vps.confitm_rootpasswd)></td>
+      <td><input type="password" name="root_passwd2" check="vPassword2(root_passwd,this)" label="${lang.label.confirm_psw}"></td>
+      <assign excludeFields=excludeFields+"root_passwd2;">
+    </tr>
+
+
+
+
+    <if (user) && (request.admin_signup!="")>
+        <input type="hidden" name="seller_id" value="${account.id.id}">
+    </if>
+    <call genHiddenField(excludeFields)>
+  </form>
+</table>
+<script language="javascript">
+    function setMod(form, name) {
+	if (form.elements[name].checked) {
+	    form.elements["_mod"].value="s_w_dns";
+	} else {
+	    form.elements["_mod"].value="s_wo_dns";
+	}
+  }
+</script>
+<include "signup/signup_bottom.html">
+<!-- END ./common/replacemets/vps/signup/vps.html.in -->

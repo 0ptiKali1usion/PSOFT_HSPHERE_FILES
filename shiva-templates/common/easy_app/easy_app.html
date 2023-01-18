@@ -1,0 +1,14 @@
+<!-- BEGIN ./easy_app/easy_app.html-->
+<assign template="easy_app/"+typename+".html">
+<include "functions">
+<if request.cur_menuid!="">
+<assign cur_menuid=request.cur_menuid>
+</if>
+<if cur_menuid!="">
+<call draw_menu(cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/easy_app/"+typename+".html">
+<call bottom()>
+<!-- END ./easy_app/easy_app.html -->

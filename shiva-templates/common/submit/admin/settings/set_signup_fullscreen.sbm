@@ -1,0 +1,10 @@
+<!-- BEGIN ./submit/admin/settings/set_signup_fullscreen.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.value=="1">
+ <call save_v("signup_fullscreen","1")>
+<else>
+ <call save_v("signup_fullscreen","0")>
+</if>
+<include request.stemplate>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/set_signup_fullscreen.sbm -->

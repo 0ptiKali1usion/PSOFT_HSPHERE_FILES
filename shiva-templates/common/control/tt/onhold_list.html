@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/tt/onhold_list.html  -->
+<include "control/tt/ttfunctions.fn">
+<tr>
+  <td  class="control_align_center"><call draw_label(lang.tt.id)></td>
+  <td  class="control_align_center"><call draw_label(lang.label.title)></td>
+  <td  class="control_align_center"><call draw_label(lang.tt.priority)></td>
+  <td  class="control_align_center"><call draw_label(lang.tt.admin.lastmod)></td>
+  <td  class="control_align_center"><call draw_label(lang.tt.type)></td>
+  <td  class="control_align_center"><call draw_label(lang.tt.admin.close)></td>
+  <td  class="control_align_center"><call draw_label(lang.tt.state)></td>
+</tr>
+
+<list ttadmin.tickets as ttid>
+<assign ticket=ttadmin.getTicket(ttid)>
+<if ticket.state=="4">
+<tr>
+  <td  class="control_align_center"><call draw_label(ticket.id)></td>
+  <td  class="control_align_center"><call display_ticket_link(ticket)></td>
+    <td  class="control_align_center">
+	<switch ticket.priority>
+	    <case "0"><call draw_label(lang.tt.normal)><break>
+	    <case "-1"><call draw_label(lang.tt.low)><break>
+	    <case "1"><call draw_label(lang.tt.high)><break>
+	</switch>
+        <if ticket.onHold><call draw_label("*")></if>
+	<if ticket.isAnswered><call draw_label("A")></if>
+    </td>
+  <td  class="control_align_center"><call draw_label(ticket.lastmod)></td>
+  <td  class="control_align_center"><call draw_label(ticket.rDesc)></td>
+  <td  class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_close.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.admin.close)></td>
+  <td  class="control_align_center"><call show_ticket_state(ticket.state)></td>
+</tr>
+</if>
+</list>
+<!-- END ./control/tt/onhold_list.html  -->

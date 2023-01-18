@@ -1,0 +1,8 @@
+<!-- BEGIN ./admin/settings/design_lf.html -->
+<assign template="admin/settings/design_lf.html">
+<include "functions">
+<if request.design_editing><assign design_lf_step = "2"><else><assign design_lf_step = "1"></if>
+<call draw_menu("look_feel-design_settings")>
+<include "control/admin/settings/design_lf_step" + design_lf_step + ".html">
+<call bottom()>
+<!-- END ./admin/settings/design_lf.html -->

@@ -1,0 +1,4 @@
+<center>Catch All</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Designate the mailbox to receive messages sent to nonexistent e-mail addresses containing this domain name. For example, somebody sends a message to blablabla@yourdomain.com, which is not a valid e-mail address in your account. By default, this message will bounce back to the sender with an error notification. To have this message land into one of your mailboxes, for example webmaster@yourdomain.com, you should mark this account as <i>Catch All</i>. Each account can have only one Catch All mailbox. If you switch it ON for one account, it will go OFF for the old Catch All account.

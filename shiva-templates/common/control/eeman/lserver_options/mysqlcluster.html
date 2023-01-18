@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/eeman/lserver_options/mysqlcluster.html  -->
+	<script language="javascript">
+	    function processMySQLClusterSetting(dbClusterSetting){
+		var clust_form = this.document.forms.f_mysql_cluster;
+		var curClusterSetting = clust_form.mysql_clustering.checked;
+		if ( (curClusterSetting && dbClusterSetting!="1")
+			|| (!curClusterSetting && dbClusterSetting=="1")) {
+		    clust_form.submit();
+		}
+	    }
+	</script>
+
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_mysql_cluster" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="eeman/set_mysql_cluster_confirm.html">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.mysql_clustering)></td>
+  <td>
+    <assign mysql_clustering = optManipulator.getOption(lserverId)>
+    <if mysql_clustering == "1">
+        <assign mchecked = "checked">
+    </if>
+    <input type="checkbox" name="mysql_clustering" ${mchecked}>
+    &nbsp;<input type="button" name="clust_set" value="${lang.button.set}" onclick="javascript:processMySQLClusterSetting(${mysql_clustering})">
+  </td>
+</tr>
+
+</form>
+<!-- BEGIN ./control/eeman/lserver_options/mysqlcluster.html  -->

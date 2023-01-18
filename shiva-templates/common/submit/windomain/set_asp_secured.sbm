@@ -1,0 +1,15 @@
+<!-- BEGIN ./windomain/set_asp_secured.sbm  -->
+<assign hosting=account.getResource(request.hid)>
+<assign asp=account.getResource(request.rid)>
+<assign result=asp.addChild("asp_secured", "")>
+  <if result.status=="OK">
+    <assign success="1">
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/set_asp_secured.sbm  -->

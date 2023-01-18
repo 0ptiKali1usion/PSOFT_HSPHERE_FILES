@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/admin/settings/change_account_design.sbm -->
+<assign iconset_id = request.icon_set>
+<if iconset_id>
+  <assign result = account.change_icon_image_set(iconset_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(
+	lang.msg.iconset_failed_change, iconset_id))>
+    <assign failure = "1">
+  </if>
+<else>
+  <assign failure = "1">
+</if>
+
+<if !failure>
+  <assign res = design.refreshCurrent()>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/settings/change_account_design.sbm -->

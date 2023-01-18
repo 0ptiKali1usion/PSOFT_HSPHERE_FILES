@@ -1,0 +1,98 @@
+<!-- BEGIN ./submit/unixuser/change_crontab.sbm -->
+<assign result=yafv.checkall(
+    yafv.common.s_unixuser.vEmail(lang.unixuser.mailto, request.mail_to) 
+)>
+<if result.status != "OK">
+    <assign unsuccess="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if request["job_new"]!="">
+    <assign result=yafv.checkall(
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_minute, request.minute_new),
+	yafv.common.s_unixuser.vCronField(lang.unixuser.new_hour, request.hour_new),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_day_m, request.day_of_month_new),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_month, request.month_new),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_day_w, request.day_of_week_new)
+     )>
+</if>
+<if result.status != "OK">
+    <assign unsuccess="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if request.count><assign count=request.count><else><assign count="0"></if>
+<assign counter=toolbox.counter("0", count)>
+<assign onc=toolbox.counter()>
+<list onc as c>
+<if toolbox.ge(counter,count)=="1">
+    <assign res=c.stop>
+<else>
+    <assign result=yafv.checkall(
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_minute+" #"+counter, request["minute_"+counter]),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_hour+" #"+counter, request["hour_"+counter]),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_day_m+" #"+counter, request["day_of_month_"+counter]),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_month+" #"+counter, request["month_"+counter]),
+    	yafv.common.s_unixuser.vCronField(lang.unixuser.new_day_w+" #"+counter, request["day_of_week_"+counter])
+ 
+    )>
+    <if result.status != "OK">
+    	<assign unsuccess="1">
+    	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+<assign res=counter.next>
+</if>
+</list>
+
+
+<if !unsuccess>
+<assign crontab=account.findChild("crontab")>
+<assign result=crontab.clearLines()>
+<if result.status=="OK">
+    <assign counter=toolbox.counter("0", count)>
+    <assign onc=toolbox.counter()>
+    <list onc as c>
+    <if toolbox.ge(counter,count)=="1">
+    	<assign res=c.stop>
+    <else>
+    	<if (request["delete_"+counter]=="") && (request["job_"+counter]!="")>
+	
+    	    <assign result=crontab.addLine(request["minute_"+counter], 
+					request["hour_"+counter], 
+					request["day_of_month_"+counter], 
+					request["month_"+counter], 
+					request["day_of_week_"+counter],
+					request["job_"+counter])>
+    	    <if result.status != "OK">
+    		<assign unsuccess="1">
+    		<assign res=session.addMessage(result.msg)> 
+   	    </if>
+        </if>
+    <assign res=counter.next>
+    </if>
+    </list>
+    <if request["job_new"]!="" >
+        <!--${request["job_new"]} ${request["minute_new"]}-->
+        <assign result=crontab.addLine(request["minute_new"], request["hour_new"], request["day_of_month_new"], request["month_new"], request["day_of_week_new"], request["job_new"])>
+        <if result.status != "OK">
+            <assign unsuccess="1">
+            <assign res=session.addMessage(result.msg)>
+        </if>
+    </if>
+    <assign result=crontab.setMailTo(request.mail_to)>
+    <assign result=crontab.saveLines()>
+    <if result.status!="OK">
+	<assign unsuccess="1">
+    	<assign res=session.addMessage(result.msg)>
+    </if>   
+<else>
+    <assign unsuccess="1">
+    <assign res=session.addMessage(result.msg)>
+</if>   
+</if>
+
+<if unsuccess>
+   <include request.ftemplate>
+<else>
+   <include request.stemplate>
+</if>
+<!--  END ./submit/unixuser/change_crontab.sbm -->

@@ -1,0 +1,63 @@
+<!-- BEGIN ./control/admin/edit_custom_email.html  -->
+<call draw_tooltip()>
+<assign c_emails = account.getChild("admin").email_manager>
+
+<form name="f_ce_update" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<call draw_table_header("", lang.ce[request.tag].title)>
+
+<tr>
+<td>
+<call draw_label_bold(lang.label.preview_message)><br>&nbsp;<br>
+<call draw_label(lang.ce.preview_subject)><br>${toolbox.formatForHTML(c_emails.previewEmailSubject(request.tag, request.locale))}<br>&nbsp;<br>
+<call draw_label(lang.ce.preview_body)><br>${toolbox.formatForHTML(c_emails.previewEmailBody(request.tag, request.locale))}<br>&nbsp;<br>
+</td>
+</tr>
+<tr>
+<td>
+<assign cm=c_emails.getDefaultMessage(request.tag, request.locale)>
+<assign def=c_emails.isDefault(request.tag, request.locale)>
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="next_template" value="submit/admin/save_custom_email.sbm">
+<input type="hidden" name="template_name" value="admin/ce_update_confirm.html">
+<input type="hidden" name="tag" value="${request.tag}">
+<input type="hidden" name="locale" value="${request.locale}">
+<input type="hidden" name="group_id" value="${cm.group_id}">
+<call draw_label(lang.label.title)><br>
+<input type="text" name="subject" value="${cm.subject}" size="60">
+<br><br>
+<textarea name="body" rows="22" cols="60">${cm.body}</textarea><br>
+<call draw_label(lang.mailman.massmail.choose_cont_type)>
+<select name="content_type" size="1">
+<option value="text/plain"<if cm.contentType=="text/plain"> SELECTED</if>>${lang.mailman.massmail.ct_text_plain}
+<option value="text/html"<if cm.contentType=="text/html"> SELECTED</if>>${lang.mailman.massmail.ct_text_html}
+</select>
+<br>
+<if def == "1"><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<call draw_label(lang.ce.default_message)><input type="checkbox" value="true" name="def" ${vchecked}><br>
+<if cm.no_cc != "true"><assign cc = "CHECKED"><else><assign cc = ""></if>
+<call draw_label(lang.ce.send_cc)><input type="checkbox" value="true" name="cc" ${cc}>
+</tr>
+<tr>
+<td>
+<table width="100%" class="inner_control">
+<tr>
+<td><input type="submit" value="${lang.button.save}"></td>
+<td class="inner_control_align_right"><input type="submit" name="restore_template" value="${lang.button.restore_template}"></td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td>
+<hr>
+<list toolbox.lang_list as l>
+<if l.locale == request.locale><call draw_label(lang[l.desc])><else><call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&tag="+request.tag+"&locale="+l.locale, lang[l.desc])></if>
+</list>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/edit_custom_email.html  -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./adnsmanager/set_hosting_state.sbm  -->
+<assign adnsmanager=account.getChild("adnsmanager")>
+<assign result=adnsmanager.setAllowZoneHosting(request.zone_id,request.state)>
+<if result.status=="OK">
+  <assign success="1">
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/set_hosting_state.sbm  -->

@@ -1,0 +1,55 @@
+<!-- BEGIN ./control/admin/edit_adv_registrar_prices.html -->
+<include "control/admin/plan_function.html">
+<assign plan = admin.getPlan(request.plan_id)>
+<assign billman = account.getChild("billman")>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<call draw_tooltip()>
+
+<yafv s_admin>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_unix_srs" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/edit_adv_registrar_prices.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${request.plan_id}">
+
+
+
+
+<if user.reseller_id != "1">
+  <assign tmp_colspan="11">
+<else>
+  <assign tmp_colspan="9">
+</if>
+<call draw_table_header(tmp_colspan, lang.planwizard.regrar_header)>
+
+
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_duration)></td>
+    <if user.reseller_id != "1">
+       <td><call draw_label(lang.admin.registrar.rprice)></td>
+    </if>
+    <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+    <td><call draw_label(lang.planwizard.regrar_setup_price)></td>
+    <td><call draw_label(lang.planwizard.regrar_renew_price)></td>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_duration)></td>
+    <if user.reseller_id != "1">
+       <td><call draw_label(lang.admin.registrar.rprice)></td>
+    </if>
+    <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+    <td><call draw_label(lang.planwizard.regrar_setup_price)></td>
+    <td><call draw_label(lang.planwizard.regrar_renew_price)></td>
+  </tr>
+  <call draw_adv_osrs_prices()>
+  <tr >
+     <if user.reseller_id != "1">
+       <td colspan="11" class="control_align_center"><else><td colspan="9" class="control_align_center"></if>
+         <input type="submit" name="save" value="${lang.button.save}">
+         <input type="submit" name="done" value="${lang.button.save_exit}">
+       </td>
+  </tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/edit_adv_registrar_prices.html -->

@@ -1,0 +1,6 @@
+<center> samsgsize </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Specify maximum message size, in bytes to be send to spamd, otherwise this step will be skipped.
+<br>Default: 256000.
+<br>

@@ -1,0 +1,22 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/InnovativeGateway.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.innovative)>
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.innovative}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>transactions.innovativegateway.com</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>443</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="path" value="<if merchant>${merchant.PATH}<else>/servlet/com.gateway.aai.Aai</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="login" value="<if merchant>${merchant.LOGIN}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="<if merchant>${merchant.PASSWORD}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.test)></td><td><select name="mode"><option>FALSE<option<if merchant && merchant.MODE=="TRUE"> selected</if>>TRUE</select></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>

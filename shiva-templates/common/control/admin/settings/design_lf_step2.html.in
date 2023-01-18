@@ -1,0 +1,218 @@
+<!-- BEGIN ./control/admin/settings/design_lf_step2.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<compress>
+<assign design_id = request.design_id>
+<assign all_designs = design.all_designs>
+<assign designHash = all_designs[request.design_id]>
+<assign design_list = design.available_design_ids>
+<assign skinColors = design.all_color_types>
+
+<assign default_design = settings.default_design>
+<assign design_prefix = design.get_design_prefix(design_id)>
+
+<if settings[design_prefix + "available"] == "1"><assign isDesignAccessible = "1"></if>
+<if isDesignAccessible && (design_id == default_design)><assign isDefaultDesign = "1"></if>
+<if (default_design == "") || !design.isDesignAvailable(default_design)>
+    <assign setDesignAsDefault = "1">
+</if>
+
+<assign colorSchemes = designHash.color_schemes>
+<assign color_schemes = colorSchemes.KEYS>
+<assign current_color_scheme = design.get_design_color_scheme(design_id)>
+
+<if !colorSchemes[current_color_scheme]>
+  <assign custom_scheme = "custom">
+  <assign current_color_scheme = designHash.default_color_scheme>
+</if>
+<assign curColorScheme = colorSchemes[current_color_scheme]>
+<assign color_list = designHash.color_list>
+
+<assign imageSets = designHash.image_sets>
+<assign image_sets = imageSets.KEYS>
+<assign current_image_set = settings[design_prefix + "image_set"]>
+<if !current_image_set || !imageSets[current_image_set]>
+  <assign current_image_set = curColorScheme.image_set>
+</if>
+
+<assign iconSets = design.all_icon_image_sets>
+<assign allowedIconSets = designHash.allowed_icon_image_sets.user.set>
+<assign allowed_icon_sets = allowedIconSets.KEYS>
+<assign current_icon_set = settings[design_prefix + "icon_image_set"]>
+<if !current_icon_set || !allowedIconSets[current_icon_set]>
+  <assign current_icon_set = curColorScheme.icon_image_set>
+</if>
+
+</compress>
+<yafv s_admin>
+
+<call draw_table_header("2", lang.admin.lookfeel.design_step2_h(lang[designHash.label]))>
+
+<if setDesignAsDefault>
+<tr>
+  <td colspan="2"><call draw_important_label(lang.admin.lookfeel.choose_default_default)></td>
+</tr>
+</if>
+
+<tr>
+  <td width="40%"><call draw_label(lang.admin.lookfeel.user_accessible_design)></td>
+  <td><call draw_state(isDesignAccessible, config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_design_available.sbm&stemplate="+template+"&ftemplate="+template+"&design_id="+design_id+"&value=0&design_editing=1", config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_design_available.sbm&stemplate="+template+"&ftemplate="+template+"&design_id="+design_id+"&value=1&design_editing=1")></td>
+</tr>
+
+<if isDesignAccessible>
+<tr>
+  <td width="40%"><call draw_label(lang.admin.lookfeel.user_default_design)></td>
+  <td><call draw_state(isDefaultDesign, config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_design_default.sbm&stemplate="+template+"&ftemplate="+template+"&design_id="+design_id+"&value=0&design_editing=1", config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_design_default.sbm&stemplate="+template+"&ftemplate="+template+"&design_id="+design_id+"&value=1&design_editing=1")></td>
+</tr>
+</if>
+
+<form name="f_choose_design" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.admin.lookfeel.choose_another_design)></td>
+<td>
+<select name="design_id">
+  <list design_list as did>
+    <if did == design_id><assign vselected="SELECTED"><else><assign vselected=""></if>
+    <option value="${did}" ${vselected}>${lang[all_designs[did].label]}</option>
+  </list>
+</select>&nbsp;
+<input type="hidden" name="template_name" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="submit" name="design_editing" value="${lang.label.alter}">
+</td>
+</tr>
+</form>
+
+<tr>
+  <td colspan="2" class="control_header"><call draw_header(lang.admin.lookfeel.clrschemesets)></td>
+</tr>
+
+<form name="f_schemes" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.admin.lookfeel.clrscheme)></td>
+<td>
+<select name="color_scheme">
+<if custom_scheme>
+ <option value="${custom_scheme}" SELECTED>${lang.label.custom}
+ <list color_schemes as color_scheme>
+ <option value="${color_scheme}">${lang[colorSchemes[color_scheme].label]}
+ </list>
+<else>
+ <list color_schemes as color_scheme><if color_scheme == current_color_scheme><assign vselected="SELECTED"><else><assign vselected=""></if>
+ <option value="${color_scheme}" ${vselected}>${lang[colorSchemes[color_scheme].label]}
+ </list>
+</if>
+</select>&nbsp;
+<input type="hidden" name="template_name" value="admin/settings/change_scheme_confirm.html">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="design_id" value="${design_id}">
+<input type="hidden" name="design_editing" value="1">
+<input type="submit" name="apply_scheme" value="${lang.label.apply}">
+</td>
+</tr>
+</form>
+
+<form name="f_image_set" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr >
+<td><call draw_label(lang.admin.lookfeel.imgset)></td>
+<td>
+<select name="image_set">
+<list image_sets as image_set><if image_set == current_image_set><assign vselected="SELECTED"><else><assign vselected=""></if>
+  <option value="${image_set}" ${vselected}>${lang[imageSets[image_set].label]}
+</list>
+</select>&nbsp;
+<input type="hidden" name="template_name" value="submit/admin/settings/change_image_set.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="design_id" value="${design_id}">
+<input type="hidden" name="design_editing" value="1">
+<input type="submit" name="save_image_set" value="${lang.button.set}">
+</td>
+</tr>
+</form>
+
+<if allowedIconSets>
+<form name="f_icon_img_set" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr >
+<td><call draw_label(lang.admin.lookfeel.user_icon_set)></td>
+<td>
+<select name="icon_image_set">
+<list allowed_icon_sets as icon_set><if icon_set == current_icon_set><assign vselected="SELECTED"><else><assign vselected=""></if>
+  <option value="${icon_set}" ${vselected}>${lang[iconSets[icon_set].label]}
+</list>
+</select>&nbsp;
+<input type="hidden" name="template_name" value="submit/admin/settings/change_icon_image_set.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="design_id" value="${design_id}">
+<input type="hidden" name="design_editing" value="1">
+<input type="submit" name="save_icon_set" value="${lang.button.set}">
+</td>
+</tr>
+</form>
+</if>
+
+<call draw_table_footer()>
+&nbsp;
+
+<call draw_table_header("4", lang.admin.lookfeel.customclrsets)>
+<form name="f_colors" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+  <tr>
+  <td colspan="4" class="control_header"><call draw_colored_label(lang.admin.lookfeel.defaultclrs, HEADER_TEXT_COLOR)></td>
+<assign row_done = "1">
+<list color_list as color_id>
+  <if row_done>
+    </tr><tr>
+    <assign row_done="">
+  <else>
+    <assign row_done="1">
+  </if>
+  <td width="30%"  nowrap><call draw_label(lang[skinColors[color_id].label])></td>
+  <td width="20%"  nowrap><call input_color(color_id)>
+  </td>
+</list>
+</tr>
+<tr >
+<td colspan="4">
+<table class="inner_control" width="100%">
+<tr>
+  <td>&nbsp;<input type="button" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=admin/settings/design_preview.html&design_id=${design_id}','Preview_ONLY','resizable=yes,scrollbars=yes,status=yes'); if (chw != null) chw.focus(); return false" name="preview" value="${lang.button.design_preview}"></td>
+  <td class="inner_control_align_right">
+ <input type="hidden" name="template_name" value="submit/admin/settings/change_colors.sbm">
+ <input type="hidden" name="stemplate" value="${template}">
+ <input type="hidden" name="ftemplate" value="${template}">
+ <input type="hidden" name="design_id" value="${design_id}">
+ <input type="hidden" name="design_editing" value="1">
+ <input type="reset" value="${lang.button.reset}">&nbsp;
+ <input type="submit" name="update_colors" value="${lang.button.save}">&nbsp;
+</td>
+</tr>
+</table>
+</td></tr>
+</form>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+
+<function input_color(type)>
+    <assign vval = design.get_design_scheme_color(design_id, current_color_scheme, type)>
+    <table class="inner_control">
+      <tr>
+      <td nowrap><input type="text" name="${type}" value="${vval}" size="8">&nbsp;</td>
+      <td nowrap>
+        <table>
+          <tr><td style="background-color: ${vval}; border: 0; padding:0; spacing:0;"><call draw_image("decolor")></td></tr>
+        </table>
+      </td>
+      <td>&nbsp;</td>
+      </tr>
+    </table>
+</function>
+<!-- END ./control/admin/settings/design_lf_step2.html -->

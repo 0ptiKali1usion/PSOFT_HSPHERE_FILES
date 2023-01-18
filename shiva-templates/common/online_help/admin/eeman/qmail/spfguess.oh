@@ -1,0 +1,8 @@
+<center> spfguess </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>You can specify a line with guess rules.
+<br>Guess rules means: Rules that are used if the domain doesn't publish SPF rules.
+<br>The local spfrules are always executed afterwards. We suggest adding  a/24 mx/24 ptr.
+<br>This isn't needed but generally gives good results (for spam filters scoring Received-SPF lines).
+<br>

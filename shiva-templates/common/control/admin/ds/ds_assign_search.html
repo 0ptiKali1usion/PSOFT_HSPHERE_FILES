@@ -1,0 +1,125 @@
+<!-- BEGIN ./control/admin/ds/ds_assign_search.html  -->
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<assign reseller_su=account.getChild("reseller_su")>
+
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_by_ds_header)>
+<tr>
+<td colspan="2"><call draw_label(lang.admin.ds.search_account_assign.tip)></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.search_ds_status)></td>
+<td>
+<select name="dss_status" size="1">
+  <option value="">${lang.label.any}</option>
+  <list ds_manager.all_ds_states as state>
+  <option value="${state}">${lang.admin.ds.status[state]}</option>
+  </list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_template)></td>
+<td>
+<assign dstemplates=ds_manager.templates>
+<select name="dss_template" size="1">
+<option value="">${lang.label.any}
+<list dstemplates as dst>
+<option value="${dst.id}">${dst.name}</option>
+</list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_os)></td>
+<td><input type="text" name="dss_os"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_cpu)></td>
+<td><input type="text" name="dss_cpu"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_ip)></td>
+<td><input type="text" name="dss_ip"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_int_id)></td>
+<td><input type="text" name="dss_int_id"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_created)></td>
+<td>
+  <call draw_label(lang.label.from)>
+  <input type="text" name="dss_r_from" size="10" value="">&nbsp;<call draw_calendar("f_search","dss_r_from","")>&nbsp;
+  <call draw_label(lang.label.to)>
+  <input type="text" name="dss_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","dss_r_to","")>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_taken)></td>
+<td>
+  <call draw_label(lang.label.from)>
+  <input type="text" name="dss_u_from" size="10" value="">&nbsp;<call draw_calendar("f_search","dss_u_from","")>&nbsp;
+  <call draw_label(lang.label.to)>
+  <input type="text" name="dss_u_to" size="10" value="">&nbsp;<call draw_calendar("f_search","dss_u_to","")>
+</td>
+</tr>
+
+<if reseller_su>
+  <assign ds = ds_manager.getDServer(request.dedicated_server_id)>
+  <if ds && ds.isTemplated>
+    <tr>
+    <td><call draw_label(lang.admin.search_ds_users_by_reseller)></td>
+    <td>
+      <select name="dss_reseller_id" size="1">
+      <list reseller_su.resellers as reseller>
+        <option value="${reseller.id}"<if reseller.id == "1"> SELECTED</if>>${reseller.name} (${reseller.url})</option>
+      </list>
+      </select>
+    </td>
+    </tr>
+  </if>
+</if>
+
+<tr>
+<td><call draw_label(lang.admin.search_ds_user)></td>
+<td><input type="text" name="dss_username"></td>
+</tr>
+
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="dss_account_id"></td>
+</tr>
+
+<tr><td><call draw_label(lang.label.plan)></td>
+<td>
+  <select name="dss_plan" size="1">
+  <option value="">${lang.label.any}
+  <list admin.plans as plan>
+    <if !plan.deleted && (plan.values["_CREATED_BY_"] == "dedicated_server")><option value="${plan.id}">${plan.description}</option></if>
+  </list>
+  </select>
+</td>
+</tr>
+
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="admin/ds/ds_assign_select.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="admin/ds/manage.html">
+  <input type="hidden" name="dedicated_server_id" value="${request.dedicated_server_id}">
+  <input type="hidden" name="state_id" value="${request.state_id}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/ds_assign_search.html  -->

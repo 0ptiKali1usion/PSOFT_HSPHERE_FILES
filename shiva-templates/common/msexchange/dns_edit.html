@@ -1,0 +1,32 @@
+<!--BEGIN: common/msexchange/dns_edit.html -->
+<include "functions">
+<call START_PAGE("msexchange/dns_edit.html", "he-dns_edit")>
+<call draw_tooltip()>
+<call draw_table_header("7", lang.label.msexchange.dns_config)>
+<tr>
+ <td width="60%" class="control_header_align_center" ><call draw_header(lang.dns.name)></td>
+ <td width="10%" class="control_header_align_center" ><call draw_header(lang.dns.ttl)></td>
+ <td width="5%" class="control_header_align_center" ><call draw_header(lang.dns.class)></td>
+ <td width="5%" class="control_header_align_center" ><call draw_header(lang.dns.type)></td>
+ <td width="20%" class="control_header_align_center" colspan="2"><call draw_header(lang.dns.data)></td>
+ <td width="5%" class="control_header_align_center"><call draw_header(lang.eeman.allocservers.controls)></td>
+</tr>
+<assign bizorg=account.getChild("bizorg")>
+<list bizorg.getChildren("domain") as domain>
+<tr>
+<td><call draw_label(domain.name)></td>
+<td><call draw_label("86400")></td>
+<td><call draw_label("IN")></td>
+<td><call draw_label("MX")></td>
+<td colspan="2"><call draw_label(bizorg.dnsServerName)></td>
+<td>
+<call draw_state(domain.dns_zone, config.CLIENT_CP_URL+"?template_name=msexchange/switch_dns_record.sbm&stemplate="+template+"&state=OFF&rid="+domain, config.CLIENT_CP_URL+"?template_name=msexchange/switch_dns_record.sbm&stemplate="+template+"&state=ON&rid="+domain)>
+</td>
+</tr>
+</list>
+
+<tr><td colspan="7"><call draw_label(lang.label.msexchange.dns_note)></td></tr>
+
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/dns_edit.html -->

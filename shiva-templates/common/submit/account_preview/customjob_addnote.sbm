@@ -1,0 +1,13 @@
+<!-- BEGIN ./commont/submit/account_preview/customjob_addnote.sbm -->
+<assign cj_admin = account.getChild("ttadmin").cjadmin>
+<assign job = cj_admin.getJob(request.job_id)>
+<assign entered_by = cj_admin.getEnteredBy()>
+
+<assign result = job.addNote(entered_by, request.note, "1")>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign result=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/account_preview/customjob_addnote.sbm -->

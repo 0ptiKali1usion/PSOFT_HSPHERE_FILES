@@ -1,0 +1,61 @@
+<!-- BEGIN ./control/misc/show_suspended_bill.html  -->
+<call draw_tooltip()>
+<assign billing_charged_color = "#FFD800">
+<assign billing_cancelled_color = "#FE6C00">
+<assign billing_light_strip = "#D6D1B6">
+<assign billing_dark_strip = "#B6B196">
+<assign billing_text_color = "#000000">
+<assign color = billing_light_strip>
+<assign bill = user.getBill(request.bill_id,request.account_id)>
+
+<assign header_text = bill.description + " (" + bill.opened + "-">
+<if bill.closed>
+  <assign header_text = header_text + bill.closed>
+<else>
+  <assign header_text = header_text + lang.misc.showsuspendedbill.opened>
+</if>
+<assign header_text = header_text + ")">
+
+<call draw_table_header("3", header_text)>
+
+<tr>
+        <td width="30%"class="control_header_align_center" ><call draw_header(lang.misc.showsuspendedbill.date)></td>
+        <td class="control_header_align_center" ><call draw_header(lang.label.descr)></td>
+        <td width="20%"class="control_header_align_center" ><call draw_header(lang.label.amount)></td>
+</tr>
+<list bill.entries as entry>
+<if !(entry.amount=="0.0" || entry.amount=="-0.0")>
+ <compress>
+ <if entry.canceled>
+   <assign color=billing_cancelled_color>
+ <else>
+   <if (entry.type=="5") || (entry.type=="6") || (entry.type=="8")>
+      <assign color=billing_charged_color>
+   </if>
+ </if>
+ </compress>
+<tr bgcolor="${color}">
+        <td class="control_align_center" ><call draw_colored_label(entry.date, billing_text_color)></td>
+        <td class="control_align_center" ><call draw_colored_label(entry.description, billing_text_color)></td>
+        <td class="control_align_right"><call draw_colored_label(toolbox.currency(entry.amount), billing_text_color)></td>
+</tr>
+<if color == billing_light_strip><assign color = billing_dark_strip><else><assign color = billing_light_strip></if>
+</if>
+</list>
+<tr bgcolor="${color}">
+  <td class="control_header"  colspan="2">
+      <table width="100%">
+        <tr>
+        <td nowrap><table border="0" cellspacing="0" cellpadding="0"><tr><td width="1" height="1" bgcolor="${billing_charged_color}"><call draw_image_alt("pay", lang.misc.showsuspendedbill.altcharged)></td></tr></table></td>
+        <td nowrap><call draw_colored_label(lang.misc.showsuspendedbill.charged,settings.header_text_color)></td>
+        <td nowrap><table border="0" cellspacing="0" cellpadding="0"><tr><td width="1" height="1" bgcolor="${billing_cancelled_color}"><call draw_image_alt("pay", lang.misc.showsuspendedbill.altcharged)></td></tr></table></td>
+        <td nowrap><call draw_colored_label(lang.misc.showsuspendedbill.canceled,settings.header_text_color)></td>
+        <td class="control_align_right" width="90%" nowrap><call draw_header(lang.label.total)></td>
+</tr>
+</table>
+</td>
+  <td width="20%" class="control_header_align_right"><call draw_colored_label(toolbox.currency(bill.amount),settings.header_text_color)></td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./control/misc/show_suspended_bill.html  -->

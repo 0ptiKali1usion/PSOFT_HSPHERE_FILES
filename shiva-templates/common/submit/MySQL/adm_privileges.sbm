@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/MySQL/adm_privileges.sbm  -->
+<assign m_user = account.getResource(request.user_id)>
+<assign database = account.getResource(request.db_id)>
+<assign user_pr=m_user.loadUserPrivilegesOn(database.db_name)>
+<assign result=user_pr.revokeAllDatabasePrivileges()>
+<assign privileges = "">
+<list request.dbPrivileges as dbPrivilege>
+   <assign last_priv = dbPrivilege>
+</list>
+<list request.dbPrivileges as dbPrivilege>
+    <assign privileges = privileges + dbPrivilege>
+    <if dbPrivilege != last_priv>
+	<assign privileges = privileges+",">
+    </if>
+</list>
+<assign result = user_pr.setDatabasePrivileges(privileges)>
+<if result.status!="OK">
+   <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!--  END ./submit/MySQL/adm_privileges.sbm  -->

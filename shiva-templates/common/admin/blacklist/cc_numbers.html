@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/admin/blacklist/cc_numbers.html -->
+<assign template="admin/blacklist/cc_numbers.html">
+<include "functions">
+<call draw_menu("signup_guard")>
+<assign header=lang.signup.guard.cc_numbers.header>
+<assign description=lang.signup.guard.cc_numbers.desc>
+<assign list_type="6">
+<include "control/admin/blacklist.html">
+<call bottom()>
+<!-- END ./common/admin/blacklist/cc_numbers.html -->

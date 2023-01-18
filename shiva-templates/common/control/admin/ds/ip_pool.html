@@ -1,0 +1,133 @@
+<!-- BEGIN ./admin/ds/ip_pool.html.in  -->
+<call draw_tooltip()>
+<if request.sc_ip>
+  <assign f_ip = request.sc_ip>
+</if>
+<if request.sc_mask>
+  <assign f_mask = request.sc_mask>
+</if>
+<if request.sc_gw>
+  <assign f_gw = request.sc_gw>
+</if>
+<if request.sc_step>
+  <assign step = request.sc_step>
+<else>
+  <assign step = "10">
+</if>
+<if request.sc_ip_type>
+  <assign f_ip_type=request.sc_ip_type>
+  <if request.sc_ip_type == "1002">
+    <assign vfree="SELECTED">
+  </if>
+  <if request.sc_ip_type == "1003">
+    <assign vtaken="SELECTED">
+  </if>
+</if>
+
+<assign viewer=account.getChild("reportviewer")>
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <assign report_ok="1">
+   </if>
+</if>
+
+<if !report_ok>
+   <assign report = viewer.getAdvReport("ippool")>
+   <assign result = report(f_ip,f_mask,f_gw,f_ip_type)>
+   <if result.status != "OK">
+     <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+   <else>
+     <assign res = report.setStep(step)>
+     <if request.sc_page>
+       <assign page = request.sc_page>
+     <else>
+       <assign page = "1">
+     </if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+   </if>
+</if>
+
+<assign sc_params="&sc_ip="+toolbox.url_escape(f_ip)+
+ "&sc_mask="+toolbox.url_escape(f_mask)+
+ "&sc_gw="+toolbox.url_escape(f_gw)+
+ "&sc_ip_type="+toolbox.url_escape(f_ip_type)+
+ "&sc_step="+toolbox.url_escape(step)>
+<if request.ds_id>
+  <assign sc_params=sc_params+"&ds_id="+request.ds_id>
+</if>
+
+
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_params" accept-charset="UTF-8">
+<call draw_table_header("4", lang.label.quicksearch)>
+<tr>
+<td>
+  <call draw_label(lang.admin.ds.ip_pool.ip.label)>&nbsp;
+  <input type="text" size="15" maxlength="15" name="sc_ip" value="${f_ip}">
+</td>
+<td>
+  <call draw_label(lang.admin.ds.ip_pool.status.label)>&nbsp;
+  <select name="sc_ip_type">
+    <option value="ANY">${lang.admin.ds.ip.any}</option>
+    <option value="1002" ${vfree}>${lang.admin.ds.ip.free}</option>
+    <option value="1003" ${vtaken}>${lang.admin.ds.ip.taken}</option>
+  </select>
+</td>
+<td>
+  <call draw_label(lang.label.entries)>&nbsp;
+  <call searchStepBox("")>
+</td>
+<td class="control_align_center">
+  <input type="hidden" name="template_name" value="admin/ds/ip_pool.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td>
+</tr>
+<tr>
+<td colspan="4" class="control_align_right">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/ip_pool_filter.html&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start), "Advanced Search")>
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+&nbsp;
+
+<call draw_table_header("5", lang.admin.ds.ip_pool.title)>
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.ip.label, "ip")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.mask.label, "mask")></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.ds.ip_pool.gw.label, "gw")></td>
+  <td class="control_header"><call draw_header(lang.admin.ds.ip_pool.status.label)></td>
+  <td class="control_header"><call draw_header(lang.admin.ds.ip_pool.controls.label)></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td class="control_align_center"><call draw_label(entry.ip)></td>
+  <td class="control_align_center"><call draw_label(entry.mask)></td>
+  <td class="control_align_center"><call draw_label(entry.gw)></td>
+  <td class="control_align_center"><call draw_label(entry.status)></td>
+  <td width="3%" nowrap>
+    <if entry.free == "1">
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/ds/delete_ip.sbm&ip="+entry.ip+"&mask="+entry.mask+"&gw="+entry.gw+"&stemplate="+template+"&ftemplate="+template+sc_params,"del",lang.admin.ds.ip.delete.label)>
+    </if>
+  </td>
+</tr>
+</list>
+<tr>
+  <td colspan="5">
+  <table class="inner_control" width="100%">
+  <tr>
+  <td><call advReportNav(report)></td>
+  <td class="inner_control_align_right"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/add_ip_pool.html&stemplate="+template+"&ftemplate="+template+sc_params, lang.admin.ds.ip_add)></td>
+  </tr>
+  </table>
+  </td>
+</tr>
+<call draw_table_footer()>
+<!-- END ./admin/ds/ip_pool.html.in  -->

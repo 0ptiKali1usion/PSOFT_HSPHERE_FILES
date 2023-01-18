@@ -1,0 +1,24 @@
+<!-- BEGIN ./domain/domain_renew.sbm  -->
+<assign result=yafv.common.s_domain.vRegistrationPeriod(lang.label.opensrs.registration_period,request.period)>
+<if result.status=="OK">
+    <assign opensrs=account.getResource(request.oid)>
+    <assign domain=account.getResource(request.rid)>
+    <assign result=opensrs.manualDomainRenew(request.period)>
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.opensrs.domain_renew, domain.name, request.period))>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./domain/domain_renew.sbm  -->

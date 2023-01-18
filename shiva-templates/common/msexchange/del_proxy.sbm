@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/del_proxy.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.deleteProxy(request.proxy)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted,lang.msexchange_proxy,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_deleted,lang.msexchange_proxy,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/del_proxy.sbm -->

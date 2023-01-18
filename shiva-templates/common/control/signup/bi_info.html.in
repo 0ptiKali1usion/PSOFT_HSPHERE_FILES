@@ -1,0 +1,138 @@
+<!-- BEGIN ./signup/control/bi_info.html  -->
+<if request["_bi_useci"]!="">
+<tr>
+   <td ><call draw_label(lang.bci.fname)></td>
+   <td ><call draw_label(bi_first_name)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.lname)></td>
+   <td ><call draw_label(bi_last_name)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.company)></td>
+   <td ><call draw_label(bi_company)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr1)></td>
+   <td ><call draw_label(bi_address1)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr2)></td>
+   <td ><call draw_label(bi_address2)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.city)></td>
+   <td ><call draw_label(bi_city)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.state)></td>
+   <td ><call draw_label(bi_state)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.pcode)></td>
+   <td ><call draw_label(bi_postal_code)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.country)></td>
+   <td ><call draw_label(bi_country)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.phone)></td>
+   <td ><call draw_label(bi_phone)></td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.email)></td>
+   <td ><call draw_label(email)></td>
+</tr>
+
+<else>
+<if request["_bi_type"]=="TRIAL">
+<tr>
+  <td  colspan="2" bgcolor="#24559e"  ><call draw_label(lang.signup.biinfo.trial)></td>
+</tr>
+<else>
+<tr>
+   <td ><call draw_label(lang.bci.fname)></td>
+   <td >
+   <input type="text" name="_bi_first_name" check="vSinglename" value="${bi_first_name}" label="${lang.bci.fname}">
+   <assign excludeFields=excludeFields+"_bi_first_name;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.lname)></td>
+   <td >
+   <input type="text" name="_bi_last_name" check="vSinglename" value="${bi_last_name}" label="${lang.bci.lname}">
+   <assign excludeFields=excludeFields+"_bi_last_name;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.company)></td>
+   <td >
+   <input type="text" name="_bi_company" check="vOrganization" value="${bi_company}" label="${lang.bci.company}">
+   <assign excludeFields=excludeFields+"_bi_company;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr1)></td>
+   <td ><input type="text" name="_bi_address1" check="vAddress" value="${bi_address1}" label="${lang.bci.adr1}"></td>
+   <assign excludeFields=excludeFields+"_bi_address1;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.adr2)></td>
+   <td ><input type="text" name="_bi_address2" value="${bi_address2}"></td>
+   <assign excludeFields=excludeFields+"_bi_address2;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.city)></td>
+   <td ><input type="text" name="_bi_city" check="vCity" value="${bi_city}" label="${lang.bci.city}"></td>
+   <assign excludeFields=excludeFields+"_bi_city;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.state)></td>
+   <td >
+   <select name="_bi_state" size="1">
+      <call buildStates(bi_state)>
+   </select> 
+   <assign excludeFields=excludeFields+"_bi_state;">
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.state_other)></td>
+  <td><input type="text" name="_bi_state2" value="${bi_state2}" check="vStateOther" label="${lang.label.state_other}"><assign excludeFields=excludeFields+"_bi_state2;"></td>
+</tr>
+
+<tr>
+   <td ><call draw_label(lang.bci.pcode)></td>
+   <td ><input type="text" name="_bi_postal_code" check="vPostal_Code" value="${bi_postal_code}" label="${lang.bci.pcode}"><call draw_label(lang.bci.postalwarn)></td>
+   <assign excludeFields=excludeFields+"_bi_postal_code;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.country)></td>
+    <td >
+    <select name="_bi_country" size="1">
+	<call buildCountries(bi_country)>
+    </select>
+   <assign excludeFields=excludeFields+"_bi_country;">
+   </td>
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.phone)></td>
+   <td ><input type="text" name="_bi_phone" check="vPhone" value="${bi_phone}" label="${lang.bci.phone}"></td>
+   <assign excludeFields=excludeFields+"_bi_phone;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.bci.email)></td>
+   <td ><input type="text" name="_bi_email" check="vEmail" value="${bi_email}" label="${lang.bci.email}"></td>
+   <assign excludeFields=excludeFields+"_bi_email;">
+</tr>
+<tr><td colspan="2"><call draw_label(lang.bci.email_rem)></td></tr>
+</if>
+
+
+
+
+</if>
+
+
+
+<!--  END ./signup/control/bi_info.html -->

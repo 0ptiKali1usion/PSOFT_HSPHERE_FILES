@@ -1,0 +1,8 @@
+<assign lic_man = account.getChild("urchin_lic_manager")>
+<assign result = lic_man.getKeyCode(request.f_l_server)>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>

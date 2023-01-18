@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/misc/changeplan2.sbm -->
+<if period_id==""><assign period_id=request.period_id></if>
+<assign result=account.changePlan(request.plan_id, period_id)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res = session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_change,lang.label.plan,""))>
+    <assign res = session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!-- END ./submit/misc/changeplan2.sbm -->

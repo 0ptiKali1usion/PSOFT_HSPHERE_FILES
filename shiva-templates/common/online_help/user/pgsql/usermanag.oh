@@ -1,0 +1,15 @@
+<center> PostgreSQL User </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+As opposed to other 'SQL' databases supported by H-Sphere PostgreSQL users are 'principal' relatively to PostgreSQL databases, which means a database can't be created without a user. In other words, each database should be bound to the owner. This means you must first create a user and then create a database. There is only one owner for each database, however the database can be utilized by other users who obtain permissions from the owner.<br>
+
+- Click the Add icon to add a new user. <br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+- Click the Trash Can icon to remove the existent user.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+N.B.: <b>the Trash Can icon appears only next to 'non-owner' users, i.e. if the user is an owner of a PostgreSQL database, you won't be able to remove him. In this case you'll have to remove the PostgreSQL database he is an owner of first.</b><br><br>
+ &nbsp;&nbsp;&nbsp;&nbsp;
+-Click the Change icon to change the user's password which he uses to get at his PostgreSQL database.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<b>Important:</b> the user privileges can be changed in the <i>phpPgAdmin</i>.
+

@@ -1,0 +1,15 @@
+<!-- BEGIN /submit/admin/merchant/turn_checks_enabled.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.state=="on">
+ <call save_v("checks_disabled","1")>
+<else>
+ <call save_v("checks_disabled","")>
+</if>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(result.msg)>
+ <include request.ftemplate>
+</if>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END /submit/admin/merchant/turn_checks_enabled.sbm -->

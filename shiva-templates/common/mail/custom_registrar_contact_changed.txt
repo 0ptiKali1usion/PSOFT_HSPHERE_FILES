@@ -1,0 +1,14 @@
+${lang.custom_emails.custom_reg.new_ci(user.login, account.id.id)}
+
+${lang.custom_emails.new_ci}
+${lang.custom_emails.custom_reg.acc_details_fname(registrant.first_name)}
+${lang.custom_emails.custom_reg.acc_details_lname(registrant.last_name)}
+<if company!="">${lang.custom_emails.custom_reg.acc_details_company(registrant.org_name)}</if>
+${lang.custom_emails.custom_reg.acc_details_address(registrant.address1)}
+${lang.custom_emails.custom_reg.acc_details_country(registrant.country)}
+<if registrant.state!="">${lang.custom_emails.custom_reg.acc_details_state(registrant.state)}</if>
+${lang.custom_emails.custom_reg.acc_details_zip(registrant.postal_code)}
+${lang.custom_emails.custom_reg.acc_details_city(registrant.city)}
+${lang.custom_emails.custom_reg.acc_details_phone(registrant.phone)}
+<if fax!="">${lang.custom_emails.custom_reg.acc_details_fax(registrant.fax)}</if>
+${lang.custom_emails.custom_reg.acc_details_email(registrant.email)}

@@ -1,0 +1,17 @@
+<!-- BEGIN ./quick/choice_hosting.html  -->
+<assign template="quick/choice_hosting.html">
+<assign count=account.findAllChildren("hosting").size>
+<assign unixuser=account.getChild("unixuser")>
+<if count!="1">
+<include "functions">
+<call draw_menu("acct-pref")>
+<include "control/quick/choice_hosting.html">
+<call bottom()>
+<else>
+<assign hosting = account.findChild("hosting")>
+<!-- hosting ${hosting} -->
+<if unixuser.host.platform_type=="win2k">
+<include "windomain/webservice.html"><else>
+<include "domain/webservice.html"></if>
+</if>
+<!--  END ./quick/choice_hosting.html  -->

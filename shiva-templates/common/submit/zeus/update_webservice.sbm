@@ -1,0 +1,13 @@
+<!-- BEGIN ./zeus/update_webservice.smb  -->
+<assign result=account.getResource(request.rid).updateSettings(request.index, request.ssi, request.multiview)>
+<if result.status=="OK">
+  <assign success="1">
+<else>
+  ${session.addMessage(result.msg)}
+</if>
+<if success=="1">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./zeus/update_webservice.sbm  -->

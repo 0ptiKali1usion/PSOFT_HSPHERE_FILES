@@ -1,0 +1,51 @@
+<!-- BEGIN ./control/adnsmanager/add_a_record.html.in  -->
+<call draw_tooltip()>
+<assign adnsmanager=account.getChild("adnsmanager")>
+
+<if adnsmanager>
+
+<assign zone=adnsmanager.getZone(request.zone_id)>
+<yafv s_adnsmanager>
+<form name="f_add_cip"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="zone_id" value="${request.zone_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_a_record.sbm">
+
+
+
+
+
+<call draw_table_header("5", lang.adnsmanager.addarecord.header)>
+
+
+
+<tr>
+    <td  colspan="5"  ><call draw_label("$ORIGIN "+zone.name)></td>
+</tr>
+
+<tr>
+   <td><call draw_label_bold(lang.dns.name)></td>
+   <td><call draw_label_bold(lang.dns.ttl)></td>
+   <td><call draw_label_bold(lang.dns.class)></td>
+   <td><call draw_label_bold(lang.dns.type)></td>
+   <td><call draw_label_bold(lang.dns.data)></td>
+</tr>
+<tr>
+<td    nowrap><input type="text" name="dname" value="${vdname}" label="${lang.dns.name}" check="vCustomAName" ></td>
+<td    nowrap><input type="text" name="ttl" <if vttl> value="${vttl}" <else> value="86400"</if> label="${lang.dns.ttl}" maxlength="6" size="6"></td>
+<td  class="control_align_center" nowrap><call draw_label("IN")></td>
+<td  class="control_align_center" nowrap><call draw_label("A")></td>
+<td    nowrap><input type="text" name="dip" value="${vdip}" label="${lang.label.mask_check}" check="vIPAddr" maxlength="15" size="15"></td>
+
+<tr>
+   <td colspan="5"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/adnsmanager/add_a_record.html.in  -->

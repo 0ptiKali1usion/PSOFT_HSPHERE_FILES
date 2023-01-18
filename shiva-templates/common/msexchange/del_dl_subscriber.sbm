@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/del_dl_subscriber.sbm -->
+<assign dl=account.getResource(request.rid)>
+<assign result=dl.deleteSubscriber(request.s)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted,lang.label.suscriber, s.prinicipalName))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_deleted,lang.label.suscriber,s.principalName))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/del_dl_subscriber.sbm -->

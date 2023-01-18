@@ -1,0 +1,32 @@
+<!-- BEGIN ./control/eshops/reset_config.html -->
+<call draw_tooltip()>
+<assign resource_type = account.getResource(request.uid).type>
+
+
+
+<form name="upadate_oscommerce_config" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+
+
+<call draw_table_header("", lang.eshops.update_config[resource_type].header)>
+
+
+<tr>
+<td class="control_align_center"><call draw_label(lang.eshops.update_config[resource_type].text)></td>
+</tr>
+<tr>
+<td>
+<input type="hidden" name="template_name" value="submit/eshops/update_oscommerce.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.upadate_oscommerce_config.submit()", lang.eshops.update_config.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.eshops.update_config.no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/eshops/reset_config.html -->

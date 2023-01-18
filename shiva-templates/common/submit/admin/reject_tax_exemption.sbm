@@ -1,0 +1,19 @@
+<!-- BEGIN ./submit/admin/reject_tax_exemption.sbm  -->
+<assign billman = account.getChild("billman")>
+<if billman && request.aid && request.exemption_code>
+  <assign result = billman.rejectTaxExemption(request.exemption_code, request.aid)>
+  <if result.status != "OK">
+    <assign res=session.addMessage(result.msg)>
+    <assign fail = "1">
+  </if>
+<else>
+  <assign res = session.addMessage(lang.admin.billman.unable_perform_operation)>
+  <assign fail = "1">
+</if>
+<if !fail>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/reject_tax_exemption.sbm  -->
+

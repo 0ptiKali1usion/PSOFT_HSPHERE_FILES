@@ -1,0 +1,58 @@
+<!-- BEGIN show_logfile.html-->
+<include "control/domain/webservice.fn">
+<call draw_menu("domain-list")>
+<assign template = "control/domain/show_logfile.html">
+<assign domain = account.getResource(request.rid)>
+<assign hosting = domain.getChild("hosting")>
+<switch request.type>
+  <case "ErrorLog">
+    <assign log = hosting.getChild("errorlog")>
+    <break>
+  <case "TransferLog">
+  <assign log = hosting.getChild("transferlog")>
+    <break>
+  <case "RefererLog">
+    <assign log = hosting.getChild("referrerlog")>
+    <break>
+</switch>
+
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("", request.log)>
+
+
+<tr>
+<td>
+<assign lst=log.showLogFile(request.log, request.line, request.count)>
+  <table>
+    <tr><td>
+    <form method="POST" action="${config.CLIENT_CP_URL}" accept-charset="UTF-8">
+      <input type="hidden" name="rid" value="${request.rid}">
+      <input type="hidden" name="template_name" value="${request.template_name}">
+      <input type="hidden" name="log" value="${request.log}">
+      <input type="hidden" name="type" value="${request.type}">
+      <call draw_label(lang.label.linenum)> 
+      <input type="text" name="line" size="5" value="${request.line}">
+      <call draw_label(lang.label.linecount)> 
+      <input type="text" name="count" size="5" value="${request.count}">
+      <input type="submit" value="${lang.button.submit}">
+    </form>
+    <call draw_label(lang.label.tailtip)> 
+    <hr>
+    </td></tr>
+    <list lst as str>
+    <tr>
+    <td>
+    <call draw_label(str)>
+    </td>
+    </tr>
+    </list>	
+  </table>
+ </td>
+ </tr>
+ 
+<call draw_table_footer()>
+<call bottom()>
+<!-- END show_logfile.hrml-->

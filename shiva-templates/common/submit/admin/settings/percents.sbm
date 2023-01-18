@@ -1,0 +1,49 @@
+<!-- BEGIN ./submit/admin/settings/percents.sbm -->
+<assign result = yafv.checkall(
+ yafv.common.s_admin.vPositiveIntOpt(lang.yafv.perc.twarn, request["traffic_warn"]),
+ yafv.common.s_admin.vPositiveIntOpt(lang.yafv.perc.tsusp, request["traffic_susp"]),
+ yafv.common.s_admin.vPositiveIntOpt(lang.yafv.perc.qwarn, request["quota_warn"]),
+ yafv.common.s_admin.vPositiveIntOpt(lang.yafv.perc.disk_usage_warn, request["usage_warn"]),
+ yafv.common.s_admin.vPositiveIntOpt(lang.yafv.perc.disk_usage_susp, request["usage_susp"])
+)>
+<if result.status == "OK">
+  <assign admin = account.getChild("admin")>
+  <call save("traffic_warn", request["traffic_warn"])>
+  <call save("traffic_susp", request["traffic_susp"])>
+  <call save("quota_warn", request["quota_warn"])>
+  <call save("disk_usage_warn", request["usage_warn"])>
+  <call save("disk_usage_susp", request["usage_susp"])>
+  <if request["dis_qwarn"]>
+    <call save("dis_qwarn",request["dis_qwarn"])>
+  <else>
+    <call save("dis_qwarn","false")>
+  </if>
+  <if request["enable_tsusp"]>
+    <call save("enable_tsusp",request["enable_tsusp"])>
+  <else>
+    <call save("enable_tsusp","false")>
+  </if>
+  <if request["dis_twarn"]>
+    <call save("dis_twarn",request["dis_twarn"])>
+  <else>
+    <call save("dis_twarn","false")>
+  </if>
+  <if request["dis_usage_warn"]>
+    <call save("dis_disk_usage_warn", request["dis_usage_warn"])>
+  <else>
+    <call save("dis_disk_usage_warn","false")>
+  </if>
+  <if request["enable_usage_susp"]>
+    <call save("enable_disk_usage_susp", request["enable_usage_susp"])>
+  <else>
+    <call save("enable_disk_usage_susp","false")>
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<include request.stemplate>
+
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+
+<!-- END ./submit/admin/settings/percents.sbm -->
+~

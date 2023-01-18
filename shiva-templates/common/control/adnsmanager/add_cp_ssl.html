@@ -1,0 +1,153 @@
+<!-- BEGIN ./adnsmanager/add_cp_ssl.html  -->
+<call draw_tooltip()>
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign eeman = account.getChild("eeman")>
+<else>
+  <assign eeman = account.getChild("reseller_eeman")>
+</if>
+
+<if eeman>
+
+  <assign admin = account.getChild("admin")>
+
+  <if admin.isCPSSLEnabled("ip_based") == "1">
+    <if !(config.RESELLER_SSL_SEC_PORT && config.RESELLER_SSL_INSEC_PORT)>
+      <assign useSSL = "-1">
+    </if>
+  <else>
+    <if admin.isCPSSLEnabled("port_based") == "1">
+      <!--proverit na nalichie Service IP u alias.lserver -->
+      <if eeman.hasServiceIP() == "0">
+	<assign useSSL = "-1">
+      <else>
+	<assign port_based_ssl = "1">
+	<!--port_based_ssl = ${port_based_ssl} -->
+      </if>
+    <else>
+      <assign plan_disabled = "1">
+    </if>
+  </if>
+
+  <if (useSSL != "-1") && (plan_disabled != "1")>
+    <if reseller_su>
+      <assign cp_host = eeman.cp_host()>
+      <assign useSSL = "1">
+      <assign alias_name = config.CP_HOST>
+      <assign cp_port = config.CP_PORT>
+    <else>
+      <assign aliases = eeman.aliases>
+      <list aliases as alias>
+        <if alias.l_server.type=="10">
+          <assign lserver = alias.l_server>
+          <assign ips = lserver.getAllIP()>
+          <assign counter = "0">
+          <if ips.size != "0">
+	    <list ips as ip>
+	      <if ip.first.busy>
+	        <assign counter = toolbox.add(counter, "1")>
+	      </if>
+	    </list>
+	    <if !port_based_ssl || (port_based_ssl != "1")>
+	      <assign counter = toolbox.add(counter, "1")>
+	    </if>
+	    <if eeman.isSSLEnabled != "0">
+	      <assign counter = toolbox.sub(counter, "1")>
+	    </if>
+	    <if toolbox.lt(counter, ips.size) == "1">
+              <assign useSSL = "1">
+	    <else>
+	      <assign useSSL = "0">
+	    </if>
+          <else>
+	    <assign useSSL = "0">
+          </if>
+          <assign alias_name = alias.name>
+        </if>
+      </list>
+    </if>
+  </if>
+
+  <assign sType = eeman.checkServerTypeForResellerSSL()>
+  <!--sType = ${sType} -->
+  <!--counter = ${counter} -->
+  <!--ips.size = ${ips.size} -->
+
+
+  
+
+  
+
+
+<call draw_table_header("4", lang.adnsmanager.cp_ssl_manager.header)>
+
+
+
+  <if sType == "apache">
+    <if plan_disabled != "1">
+      <if useSSL == "1">
+        <tr>
+          <td  class="control_align_center" width="40%">
+            <if reseller_su><call draw_label_bold(lang.dns.cp_host)><else><call draw_label_bold(lang.dns.reseller_cp_alias)></if>
+          </td>
+          <td  class="control_align_center" width="10%"><call draw_label_bold(lang.label.port_number)></td>
+          <td  class="control_align_center"><call draw_label_bold(lang.adnsmanager.ip)></td>
+          <td  class="control_align_center" width="15%"><call draw_label_bold(lang.label.action)></td>
+        </tr>
+        <tr>
+          <if eeman.isSSLEnabled != "0">
+            <assign res_ssl = eeman.getResellerSSL(eeman.isSSLEnabled)>
+            <td><call draw_label(res_ssl.server_alias)></td>
+            <td><call draw_label(res_ssl.port)></td>
+            <td><call draw_label(res_ssl.ip)></td>
+            <td  class="control_align_center">
+              <assign disable_ssl_url = config.CLIENT_CP_URL+"?next_template=submit/adnsmanager/disable_reseller_ssl.sbm&stemplate="+template+"&ftemplate="+template+"&ssl_id="+eeman.isSSLEnabled+"&template_name=adnsmanager/cp_ssl_del_confirm.html">
+              <call draw_state_on(disable_ssl_url)>
+              <call draw_edit(config.CLIENT_CP_URL+"?template_name=adnsmanager/cp_ssl_edit.html"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template, lang.adnsmanager.cp_ssl_edit_alt)>
+	      <assign ssl_link = config.CLIENT_CP_URL+"?next_template=submit/adnsmanager/change_url_ssl.sbm&stemplate="+template+"&ftemplate="+template+"&template_name=adnsmanager/cp_ssl_url_change_confirm.html">
+	      <call draw_change(ssl_link, lang.adnsmanager.cp_ssl_edit.change_url)>
+            </td>
+          <else>
+            <td><call draw_label(alias_name)></td>
+            <td><call draw_label(cp_port)></td>
+            <td  class="control_align_center">
+	      <if cp_host><call draw_label(cp_host.ip)><else><call draw_label("-")></if>
+            </td>
+            <td  class="control_align_center">
+	      <assign enable_ssl_url = config.CLIENT_CP_URL+"?template_name=adnsmanager/add_cp_ssl2.html&stemplate="+template+"&ftemplate="+template>
+              <call draw_state_off(enable_ssl_url)>
+            </td>
+          </if>
+        </tr>
+      <else>
+        <tr>
+          <td    colspan="4">
+            <call draw_label_bold(lang.adnsmanager.cp_ssl_sup_disabled)><br>
+            <if reseller_su><call draw_label(lang.adnsmanager.cp_ssl_sup_adm_message)><else><call draw_label(lang.adnsmanager.cp_ssl_sup_res_message)></if>
+          </td>
+        </tr>
+      </if>
+    <else>
+      <tr>
+        <td    colspan="4">
+          <call draw_label_bold(lang.adnsmanager.cp_ssl_sup_disabled)><br>
+          <call draw_label("Your plan doesn't have Reseller SSL feature enabled.")>
+        </td>
+      </tr>
+    </if>
+  <else>
+    <tr>
+        <td    colspan="4">
+          <call draw_label_bold(lang.adnsmanager.cp_ssl_sup_disabled)><br>
+	  <call draw_label("Unfortunately, we support fully automated Reseller SSL only for Apache installations. If you are using another web server, ask your administrator to configure it manually.")>
+        </td>
+      </tr>
+  </if>
+
+  
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/add_cp_ssl.html  -->

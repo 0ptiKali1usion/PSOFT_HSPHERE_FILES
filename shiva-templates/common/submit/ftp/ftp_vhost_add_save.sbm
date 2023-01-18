@@ -1,0 +1,26 @@
+<!-- BEGIN ./ftp/ftp_vhost_add_save.sbm  -->
+<assign result=yafv.checkall(
+	yafv.common.s_ftp.vServer_Name(lang.label.server_name, request.server_name),
+	yafv.common.s_ftp.vEmail(lang.label.admin_email, request.admin_email) )>
+<if result.status=="OK"> 
+    <assign rid = account.getResource(request.rid)>
+    <assign result=rid.addChild( "ftp_vhost","",request.server_name, request.admin_email )>
+    <if result.status == "OK" >
+        <assign success="1">
+        <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_created, lang.label.ftp_vhost, ""))>
+    <else>
+        <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_create, lang.label.ftp_vhost, ""))>
+    </if>
+<else>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if> 
+<!--  END ./ftp/ftp_vhost_add_save.sbm  -->

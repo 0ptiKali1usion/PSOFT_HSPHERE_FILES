@@ -1,0 +1,4 @@
+include common.s_hsphere.yafv: vEmail, vServer_Name, vUsername, vPassword, vQuota, vTrafficLimit, vSize(integer), vPassword1(string, string), vPassword2(string, string);
+
+regexp vLocalDir= "(((\.{3,})|(\.*[\w\+\-_][\w\.\+\-_]*))\/)+", fail=yafv.vLocalDir.ftp.fail;
+

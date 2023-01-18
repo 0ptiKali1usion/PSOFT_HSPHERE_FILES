@@ -1,0 +1,8 @@
+<!-- BEGIN ./submit/tt/queue_admins.sbm  -->
+<assign ttadm=account.getChild("ttadmin")>
+<assign result1 = ttadm.unsubscribeAll(request.quid)>
+<list request.subscr as subscr_id>
+<assign result2 = ttadm.subscribe(subscr_id, request.quid)>
+</list>
+<include "tt/config_tt.html">
+<!--  END ./submit/tt/queue_admins.sbm  -->

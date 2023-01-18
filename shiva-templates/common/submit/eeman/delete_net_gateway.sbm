@@ -1,0 +1,14 @@
+<!-- BEGIN ./eeman/delete_net_gateway.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.deleteNetworkGateway(request.addr)>
+<if result.status!="OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+</if>
+<if failure>
+  <include request.ftemplate>
+<else>
+ <assign res=session.addMessage(lang.eeman.net_gateway.change)>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/delete_net_gateway.sbm  -->

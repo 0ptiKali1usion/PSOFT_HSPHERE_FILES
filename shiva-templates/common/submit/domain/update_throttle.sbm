@@ -1,0 +1,104 @@
+<!-- BEGIN ./domain/submit/update_throttle.sbm  -->
+
+<assign val_result="false">
+<switch request.policy>
+  <case "None">
+    <assign val_result="OK">
+    <break>
+  <case "Idle">
+    <assign result=yafv.common.s_domain.vNumber(lang.domain.update_throttle.interval_err,request.interval)>
+    <if result.status=="OK"><assign val_result="OK"></if>
+    <break>
+  <case "Random">
+    <assign result=yafv.checkall(
+      yafv.common.s_domain.vPercent(lang.domain.update_throttle.limit_err,request.limit),
+      yafv.common.s_domain.vNumber(lang.domain.update_throttle.interval_err,request.interval) )>
+    <if result.status=="OK"><assign val_result="OK"></if>
+  <break>
+  <case "Concurrent">
+  <case "Document">
+  <case "Request">
+  <case "Original">
+  <case "Speed">
+  <case "Volume">
+    <assign result=yafv.checkall(
+      yafv.common.s_domain.vNumber(lang.domain.update_throttle.limit_err,request.limit),
+      yafv.common.s_domain.vNumber(lang.domain.update_throttle.interval_err,request.interval) )>
+    <if result.status=="OK"><assign val_result="OK"></if>
+  <break>
+</switch> 
+ 
+<if val_result=="OK">
+
+<if request.uid>
+  <assign throttle=account.getResource(request.uid)>
+  <switch request.policy>
+    <case "None">
+        <assign result=throttle.update("None","","","","")><break>
+    <case "Concurrent">
+    <case "Document">
+    <case "Request">
+    <case "Idle">
+    <case "Random">
+	<assign result=throttle.update(request.policy,request.limit,"",request.interval,request.time_units)><break>
+    <case "Original">
+    <case "Speed">
+    <case "Volume">
+        <assign result=throttle.update(request.policy,request.limit,request.limit_units,request.interval,request.time_units)>
+	<break>
+    <default>
+        <assign result=throttle.update("None","","","","")><break>
+  </switch>
+  <if result.status == "OK">
+    <assign success_res="OK">
+  <else>
+    <assign success_res="false">
+    <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.throttle,request.policy))>
+  </if>
+<else>
+  <assign hosting = account.getResource( request.rid )>
+  <assign throtte_pol = hosting.getChildren("throttle")>
+  <if throtte_pol>
+    <assign success_res="OK">
+    <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.throttle,""))>
+  <else>
+    <switch request.policy>
+      <case "None">
+	  <assign result=hosting.addChild("throttle","","None")><break>
+      <case "Concurrent">
+      <case "Document">
+      <case "Request">
+      <case "Idle">
+      <case "Random">
+	  <assign result=hosting.addChild("throttle","",request.policy,request.limit,"",request.interval,request.time_units)>
+	  <break>
+      <case "Original">
+      <case "Speed">
+      <case "Volume">
+          <assign result=hosting.addChild("throttle","",request.policy,request.limit,request.limit_units,request.interval,request.time_units)>
+	  <break>
+      <default>
+	  <assign result=hosting.addChild("throttle","","None")><break>
+    </switch>
+    <if result.status == "OK">
+      <assign success_res="OK">
+    <else>
+      <assign success_res="false">
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.throttle,""))>
+    </if>
+  </if>
+</if>
+
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign success_res="false">
+</if>
+
+<if success_res=="OK">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+
+
+<!--  END ./domain/submit/update_throttle.sbm  -->

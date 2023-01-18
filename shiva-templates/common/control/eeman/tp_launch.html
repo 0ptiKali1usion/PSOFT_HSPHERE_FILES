@@ -1,0 +1,32 @@
+<!-- BEGIN ./control/eeman/tp_launch.html  -->
+<assign eeman = account.getChild("eeman")>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_del_content" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/tp_process.sbm">
+<input type="hidden" name="tp_id" value="${request.tp_id}">
+<input type="hidden" name="arid" value="${request.arid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="sc_step" value="${request.sc_step}">
+
+<call draw_table_header("2", lang.eeman.tp.launch.title)>
+
+
+<tr>
+  <td><input type="checkbox" name="force">&nbsp;
+    <switch tp.stage>
+	<case "3"><call draw_label(lang.eeman.tp.force_content_transfer)><break>
+	<case "6"><call draw_label(lang.eeman.tp.force_source_cleaning)><break>
+    </switch>
+  </td>
+</tr>
+<tr>
+    <td  class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/eeman/tp_launch.html  -->

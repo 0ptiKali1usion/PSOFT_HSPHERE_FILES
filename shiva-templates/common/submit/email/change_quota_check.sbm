@@ -1,0 +1,42 @@
+<!-- BEGIN ./email/change_quota_check.sbm  -->
+<assign result=yafv.common.s_email.vMailQuota(lang.label.quota,request.quota)> 
+<if result.status == "OK">
+  <assign mailbox=account.getResource(request.mid)>
+  <assign quota=mailbox.getChild("mail_quota")>
+  <if quota>
+   <if toolbox.gt(quota.usedMb,request.quota)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.failed_set_smallquota, request.quota, quota.usedMb))>
+       <assign failure="1">
+   <else>
+   	<assign price=quota.estimateChange(request.quota)>
+	 <if price.status!="ERROR">
+	    <assign success = "1">
+         <else>
+  	    <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  	    <assign res = session.addMessage(price.msg)>
+  	    <include request.ftemplate>
+	 </if>
+   </if>
+  <else>
+    <assign price=mailbox.estimateCreate("mail_quota","",request.quota)>
+    <if price.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(price.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if failure>
+    <assign vsize=toolbox.html_encode(request.quota)>
+    <include request.ftemplate>
+<else>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>    
+</if>
+<!--  END ./email/change_quota_check.sbm  -->

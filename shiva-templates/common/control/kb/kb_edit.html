@@ -1,0 +1,63 @@
+<!-- BEGIN ./common/control/kb/kb_edit.html -->
+<call draw_tooltip()>
+
+<assign kb=account.getChild("ttadmin").kb_manager.getKB(request.id)>
+
+
+
+
+
+<call draw_table_header("2", lang.kb.search_header(kb.name))>
+
+
+<tr>
+<td colspan="2">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="kb/adm_search.html">
+<input type="hidden" name="inPanel" value="${request.inPanel}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="id" value="${kb.id}">
+<call draw_label(lang.label.search)> <input type="text" name="query">
+<select name="cat" size="1">
+<option value="0"<if request.cat=="0"> SELECTED</if>>${lang.label.any}
+<list kb.category_list as cat><option value="${cat}"<if request.cat==cat> SELECTED</if>>${kb.category[cat]}
+</list>
+</select>
+<input type="submit" value="${lang.label.search}" name="f_sbm">
+</form>
+<hr>
+<assign cat_c=toolbox.counter>
+<assign inPanel=request.inPanel>
+<list kb.category_list as cat>
+${cat_c.next}<call draw_label(cat_c+".")> <call draw_label(kb.category[cat])>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/kb/del_cat.sbm&stemplate="+template+"&id="+kb.id+"&cat_id="+cat+"&inPanel="+inPanel, lang.button.delete)>
+<br>
+<assign e_c=toolbox.counter><list kb.getEntriesByCat(cat) as eid>
+${e_c.next}
+<call draw_label("&nbsp;&nbsp;"+cat_c+"."+e_c+".")> <call draw_label(toolbox.shrink_string(kb.getEntryById(eid).q, "80"))>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=/kb/edit_ent.html&stemplate="+template+"&id="+kb.id+"&eid="+eid+"&inPanel="+inPanel, lang.button.edit)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/kb/del_ent.sbm&stemplate="+template+"&id="+kb.id+"&eid="+eid+"&inPanel="+inPanel, lang.button.delete)>
+<br></list>
+${e_c.next}
+<call draw_label("&nbsp;&nbsp;"+cat_c+"."+e_c+".")> <call draw_link(config.CLIENT_CP_URL+"?template_name=kb/add_entry.html&id="+kb.id+"&cat="+cat+"&stemplate="+template+"&ftemplate="+template+"&inPanel="+inPanel, lang.button.add)><br>
+</list>
+</td>
+</tr>
+
+<tr><td colspan=2 class="control_header"><call draw_header(lang.kb.add_category)></td></tr>
+
+<tr >
+<td colspan="2">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/kb/add_cat.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="id" value="${kb.id}">
+<call draw_label(lang.label.name)> <input type="text" name="name"> <input type="submit" value="${lang.button.create}" name="f_sbm">
+</form>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!-- END ./common/control/kb/kb_edit.html -->

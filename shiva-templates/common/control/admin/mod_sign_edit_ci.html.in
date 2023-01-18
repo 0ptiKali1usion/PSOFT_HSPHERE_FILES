@@ -1,0 +1,133 @@
+<!-- BEGIN ./admin/mod_sign_edit_ci.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<if admin>
+
+<list signup.getFakeRequest(request.rid) as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+</list>
+
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign tmpOther = tmpAcc.other>
+<assign tmpbi = tmpAcc.bi>
+<assign tmpci = tmpAcc.ci>
+
+
+<assign ci=tmpAcc.ci>
+<assign bi=tmpAcc.bi>
+
+<if !first_name > <assign first_name = ci.first_name>   </if>
+<if !last_name >  <assign last_name  = ci.last_name>    </if>
+<if !company >    <assign company    = ci.company>      </if>
+<if !address1 >   <assign address1   = ci.address1>     </if>
+<if !address2 >   <assign address2   = ci.address2>     </if>
+<if !city >       <assign city       = ci.city>         </if>
+<if !state>       <assign state      = ci.state>        </if>
+<if !state2>      <assign state2     = ci.state2>       </if>
+<if !postal_code ><assign postal_code = ci.postal_code> </if>
+<if !country>     <assign country     = ci.country>     </if>
+<if !phone >      <assign phone      = ci.phone>        </if>
+<if !email >      <assign email      = ci.email>        </if>
+
+<call draw_tooltip()>
+<yafv s_signup>
+<form action="${config.CLIENT_CP_URL}" name="f_cinfo_view" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_ci.sbm">
+<input type="hidden" name="stemplate" value="admin/mod_sign_view.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="planid" value="${planId}">
+<input type="hidden" name="login" value="${request.login}">
+
+
+
+
+
+<call draw_table_header("2", lang.search.userinfo.header(account.ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.fname)></td>
+        <td     nowrap>
+                <input type="text" name="first_name" label="${lang.bci.fname}" check="vSinglename" value="${first_name}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.lname)></td>
+        <td     nowrap>
+                <input type="text" name="last_name" label="${lang.bci.lname}" check="vSinglename" value="${last_name}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.company)></td>
+        <td     nowrap>
+                <input type="text" name="company" label="${lang.bci.company}" check="vOrganization" value="${company}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.adr1)></td>
+        <td     nowrap>
+                <input type="text" name="address1" label="${lang.bci.adr1}" check="vAddress" value="${address1}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.adr2)></td>
+        <td      nowrap>
+                <input type="text" name="address2" value="${address2}" size="30"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.city)></td>
+        <td     nowrap>
+                <input type="text" name="city" label="${lang.bci.city}" check="vCity" value="${city}"></td>
+</tr>
+
+<tr>
+    <td    nowrap><call draw_label(lang.bci.state)></td>
+    <td     nowrap>
+    <select name="state" size="1">
+        <call buildStates(state)>
+    </select>
+    </td>
+</tr>
+<tr >
+  <td><call draw_label(lang.label.state_other)></td>
+  <td><input type="text" name="state2" value="${state2}" check="vStateOther" label="${lang.label.state_other}"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.pcode)></td>
+        <td     nowrap>
+                <input type="text" name="postal_code"  label="${lang.bci.pcode}" check="vPostal_Code" value="${postal_code}"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.country)></td>
+        <td     nowrap>
+           <select name="country" size="1">
+              <if country=="US">
+                  <option value="US" SELECTED>United States
+              <else>
+                  <option value="US">United States
+              </if>
+           <list toolbox.countries as curcountry>
+              <if (curcountry.code!="US") && (country==curcountry.code)>
+                   <option value="${curcountry.code}" SELECTED>${lang[curcountry.name]}
+              <else>
+                   <option value="${curcountry.code}">${lang[curcountry.name]}
+              </if>
+           </list>
+           </select>
+        </td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.phone)></td>
+        <td    nowrap>
+                <input type="text" name="phone" label="${lang.bci.phone}" check="vPhone" value="${phone}"></td>
+</tr>
+<tr>
+    <td    nowrap><call draw_label(lang.bci.email)></td>
+        <td     nowrap>
+                <input type="text" name="email" label="${lang.bci.email}" check="vEmail" value="${email}"></td>
+</tr>
+<tr>
+    <td  class="control_align_center" colspan="2"  nowrap>
+        <input type="submit" value="${lang.button.save}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./admin/mod_sign_edit_ci.html  -->

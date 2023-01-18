@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/admin/merchant/cc_desc.sbm -->
+<assign admin = account.getChild("admin")>
+<call save_v("CC_DESCRIPTION", request.cc_desc)>
+<call save_v("CC_DESCRIPTION_ONLY", request.cc_desc_only)>
+
+<if res.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(res.msg)>
+ <include request.ftemplate>
+</if>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/merchant/cc_desc.sbm -->

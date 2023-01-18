@@ -1,0 +1,68 @@
+reg_username
+${srs.login}
+reg_password
+${srs.password}
+domain
+${srs.parent.name}
+period
+${srs.period}
+owner_first_name<assign tmp=srs.parent.getChild("contact_info")>
+${tmp.first_name}
+owner_last_name
+${tmp.last_name}
+owner_org_name
+${tmp.org_name}
+owner_address1
+${tmp.address1}
+owner_address2
+${tmp.address2}
+owner_address3
+${tmp.address3}
+owner_city
+${tmp.city}
+owner_state
+${tmp.state}
+owner_country
+<if tmp.countr>${tmp.country}<else>US</if>
+owner_postal_code
+${tmp.postal_code}
+owner_phone
+${tmp.phone}
+owner_fax
+${tmp.fax}
+owner_email
+${tmp.email}
+billing_first_name<assign tmp=srs.parent.getChild("billing_info")>
+${tmp.first_name}
+billing_last_name
+${tmp.last_name}
+billing_org_name
+${tmp.org_name}
+billing_address1
+${tmp.address1}
+billing_address2
+${tmp.address2}
+billing_address3
+${tmp.address3}
+billing_city
+${tmp.city}
+billing_state
+${tmp.state}
+billing_country
+<if tmp.country>${tmp.country}<else>US</if>
+billing_postal_code
+${tmp.postal_code}
+billing_phone
+${tmp.phone}
+billing_fax
+${tmp.fax}
+billing_email
+${tmp.email}
+<assign tmp=srs.parent.getChild("dns_zone")>nameserver_list_name
+${tmp.master.name}
+<if tmp.slave1>custom_nameservers
+1
+nameserver_list_name
+${tmp.slave1.name}</if>
+<if tmp.slave2>nameserver_list_name
+${tmp.slave2.name}</if>

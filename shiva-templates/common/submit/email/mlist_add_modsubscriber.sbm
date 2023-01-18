@@ -1,0 +1,22 @@
+<!-- BEGIN ./email/mlist_add_modsubscriber.sbm  -->
+<assign result=yafv.common.s_email.vEmail(lang.label.email,request.email)>
+<if result.status == "OK">
+    <assign mlist = account.getResource(request.uid)>
+    <assign result = mlist.subscribeMod(request.email)>
+    <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.mail_moderator, ""))>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vemail=toolbox.html_encode(request.email)>
+    <include request.ftemplate>
+</if>
+<!--  END ./email/mlist_add_modsubscriber.sbm  -->

@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/admin/other.html  -->
+<call draw_tooltip()>
+<assign reseller_su=account.getChild("reseller_su")>
+<assign admin=account.getChild("admin")>
+<if admin>
+
+
+
+<call draw_table_header("", lang.admin.other.title)>
+
+
+
+<tr >
+<td class="control_align_center"><call draw_label(lang.admin.other.text)><br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/reset_credit.sbm&stemplate="+template+"&ftemplate="+template, lang.admin.other.resel)>
+<if reseller_su>
+<br><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/reset_credit.sbm&all=1&stemplate="+template+"&ftemplate="+template, lang.admin.other.all)>
+</if>
+</td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("", lang.admin.other.title.receive_invoice)>
+
+<tr >
+<td class="control_align_center"><call draw_label(lang.admin.other.text.receive_invoice)><br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/reset_invoice.sbm&stemplate="+template+"&ftemplate="+template+"&receive_invoice=1", lang.admin.other.receive_invoice.on)>&nbsp;&nbsp;
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/reset_invoice.sbm&stemplate="+template+"&ftemplate="+template+"&receive_invoice=0", lang.admin.other.receive_invoice.off)>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</if>
+
+<!-- END ./control/admin/other.html  -->

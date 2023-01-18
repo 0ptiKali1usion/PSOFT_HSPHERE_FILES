@@ -1,0 +1,6 @@
+<center> doublebounceto </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>User  to  receive double-bounces. If a single-bounce notice is permanently undeliverable, qmail-send sends a double-bounce notice to doublebounceto@doublebouncehost.  (If that  bounces, qmail-send gives up.)  As a special case,  if  the  first line  of  doublebounceto  is  blank  (contains a single linefeed), qmail-send will not queue the double-bounce at all.
+<br>Default: postmaster
+<br>

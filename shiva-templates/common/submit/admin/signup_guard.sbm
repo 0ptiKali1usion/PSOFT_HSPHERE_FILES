@@ -1,0 +1,5 @@
+<!-- BEGIN ./common/submit/admin/signup_guard.sbm -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.getSignupGuard().updateFlags(request.matchIPCountry, request.domainReg, request.domainTransfer, request.domainStopgap, request.domain3rdLevel, request.noDomain, request.trialAccount, request.moderateEverything, request.maxAmount, request.cvvvalidation)>
+<include request.stemplate>
+<!-- END ./common/submit/admin/signup_guard.sbm -->

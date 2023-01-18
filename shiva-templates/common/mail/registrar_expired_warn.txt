@@ -1,0 +1,8 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.registrar_exp_text(osrs.domain_name)}
+
+${lang.massmail.registrar_warn_support(settings.support)}

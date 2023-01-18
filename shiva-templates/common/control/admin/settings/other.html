@@ -1,0 +1,39 @@
+<!-- BEGIN ./control/admin/settings/other.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<form name="f_other" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/other.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("", lang.admin.other.header)>
+
+
+<tr>
+<td><call draw_label(lang.admin.other.priv)><br>
+<textarea name="privacy" rows="5" cols="60">${toolbox.html_encode(settings.privacy)}</textarea>
+</tr></tr>
+<tr>
+<td><call draw_label(lang.admin.other.cust)><br>
+<textarea name="support" rows="5" cols="60">${toolbox.html_encode(settings.support)}</textarea>
+</td></tr>
+<tr>
+<td><call draw_label(lang.admin.other.sale)><br>
+<textarea name="sales" rows="5" cols="60">${toolbox.html_encode(settings.sales)}</textarea>
+</td></tr>
+<tr>
+<td><call draw_label(lang.admin.other.check)><br>
+<textarea name="check" rows="5" cols="60">${toolbox.html_encode(settings.check)}</textarea>
+</td></tr>
+<tr><td class="control_align_right"><input type="reset" value="${lang.button.reset}">&nbsp;<input type="submit" value="${lang.button.save}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/other.html -->
+

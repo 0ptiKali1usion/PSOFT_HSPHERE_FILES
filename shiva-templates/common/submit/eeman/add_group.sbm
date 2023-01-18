@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/eeman/add_group.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.addServerGroup(request.group, request.type)>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.group,""))>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/eeman/add_group.sbm  -->

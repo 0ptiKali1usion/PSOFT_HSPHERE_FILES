@@ -1,0 +1,20 @@
+<!-- BEGIN: ./msexchange/public_folder.sbm -->
+<assign public_storage=account.getResource(request.rid)>
+
+<if request.state=="ON">
+  <assign result = public_storage.addChild("public_folder", "")>
+<else>
+  <assign pfs = public_storage.findChildren("public_folder")>
+  <list pfs as pf>
+    <assign result = pf.delete>
+  </list>
+</if>
+
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+
+<!-- END: ./msexchange/public_folder.sbm -->

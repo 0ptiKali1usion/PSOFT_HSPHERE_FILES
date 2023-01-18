@@ -1,0 +1,15 @@
+<!-- BEGIN ./tt/new_tt_form.html  -->
+<assign template="tt/new_tt_form.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.getChild("ttadmin") && request.inPanel != "0">
+<call top_tt()>
+<call ticket_menu("new-ticket")>
+<else><if account.suspended>
+<call draw_blank_menu()>
+<else>
+<call draw_menu("info-make-tt")>
+</if></if>
+<include "control/tt/new_tt_form.html">
+<call bottom()>
+<!--  END ./tt/new_tt_form.html  -->

@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/eeman/commence_transfer.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.commenceTransferProcess(request.aid,request.source,request.target)>
+<if result.status=="OK">
+  <assign res = session.addMessage(lang.msg.eeman.tp.transfer_commence_succeed)>
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(lang.msg.eeman.tp.transfer_commence_failed)>
+  <assign res = session.addMessage(result.msg)>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/eeman/commence_transfer.sbm  -->

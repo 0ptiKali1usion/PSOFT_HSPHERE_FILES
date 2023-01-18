@@ -1,0 +1,9 @@
+<center>Directory Indexes</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	With this feature you  can tell the Internet users' browsers which page should be loaded first as they enter your URL  e.g. www.mywebsite.com into thier browsers' Address field. H-Sphere sets this page to /index.html by default, but you may still set another custom welcome page or even the sequence. <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	To disable H-Sphere's defult settings, toggle the ON/OFF button to enable the resource.<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	To create or edit page(s) that you want your visitors to be referred to when entering your site enter the <i>Edit</i> icon. You may enter several pages separated by spaces (e.g. <i>index.html cgi.bin about.html</i>). This way, you point the visitor's browser to a different page (in the order that you enter them into the box) if the first one on the list for some reason cannot be reached.

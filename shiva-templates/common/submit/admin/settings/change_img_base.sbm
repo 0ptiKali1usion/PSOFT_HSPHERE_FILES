@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/settings/change_img_base.sbm -->
+<assign admin = account.getChild("admin")>
+<assign url_prefix = request.img_base>
+<if admin>
+  <if !url_prefix>
+    <call save_v("IMAGE_BASE", "")>
+  <else>
+    <assign result = obj.ht_utils.checkImageByURL("spacer", url_prefix)>
+    <if result.status == "OK">
+      <call save_v("IMAGE_BASE", url_prefix)>
+    <else>
+      <assign res=session.addMessage(lang.admin.lookfeel.invalid_image_base)>
+      <if result.msg>
+        <assign res=session.addMessage(toolbox.compose(
+	  lang.admin.lookfeel.server_response, result.msg))>
+      </if>
+      <assign failure="1">
+    </if>
+  </if>
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/change_img_base.sbm -->

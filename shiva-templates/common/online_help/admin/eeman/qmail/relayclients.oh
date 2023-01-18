@@ -1,0 +1,10 @@
+<center> relayclients </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of IP addresses of clients allowed to relay mail through this host. 
+<br>Addresses in relayclients may be wildcarded:
+<br>192.168.0.1:
+<br>192.168.1.:
+<br>Default: the relayclients file is absent (all client IPs are allowed to relay mail via this host)
+<br>
+

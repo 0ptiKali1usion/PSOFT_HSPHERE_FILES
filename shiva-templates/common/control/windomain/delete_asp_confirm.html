@@ -1,0 +1,34 @@
+<!-- BEGIN ./control/windomain/delete_asp_confirm.html  -->
+<assign stype = account.plan.getResourceType(account.getResource(request.did).type).description>
+
+<call draw_tooltip()>
+
+<form name="delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<compress>
+<list params as param>
+<if param.name != "template_name" && param.name != "next_template">
+<input type="hidden" name="${param.name}" value="${param.value}">
+</if>
+</list>
+</compress>
+<input type="hidden" name="template_name" value="submit/misc/delete.sbm">
+
+<call draw_table_header("", lang.billing.delconfirm)>
+
+<tr>
+<td><call draw_label(lang.windomain.webservice.asp.del_warn)><br>
+<center>
+<call draw_link("javascript:document.delete_confirm.submit()", lang.billing.del_yes)><br>
+<assign price = account.getResource(request.did).estimateDelete()>
+<if (price.status!="ERROR") && (price.free=="0")>
+<call draw_link("javascript:history.go(-2)", toolbox.compose(lang.billing.del_no, stype))>
+<else>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no, stype))>
+</if>
+</center>
+</td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./control/windomain/delete_asp_confirm.html  -->

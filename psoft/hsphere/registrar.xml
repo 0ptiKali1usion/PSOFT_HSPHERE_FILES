@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<registrars>
+    <registrar name="opensrs" template="admin/registrar/OpenSRS.html" description="admin.registrar.opensrs"/>
+    <registrar name="enom" template="admin/registrar/Enom.html" description="admin.registrar.enom"/>
+    <registrar name="alldomains" template="admin/registrar/AllDomains.html" description="admin.registrar.alldomains"/>
+    <registrar name="custom" template="admin/registrar/Custom.html" description="admin.registrar.custom"/>
+</registrars>
+

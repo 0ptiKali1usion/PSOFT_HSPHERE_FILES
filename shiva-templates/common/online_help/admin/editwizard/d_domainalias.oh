@@ -1,0 +1,19 @@
+<center>Domain Alias</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Domain alias is an extra domain name that points to a 'primary' domain. For example, the owner of the domain <i>example.com</i> can register another domain name such as <i>example.net</i> and have it point to the location of <i>example.com</i>. This means that every Internet user who goes to <i>example.net</i> will land in <i>example.com</i>. <br>
+<br>
+A domain alias:<br>
+- points to the same IP as the real domain;<br> 
+- has a DNS zone of its own;<br>
+- has a mail service of its own;<br>
+- shares Web service with the primary domain;<br>
+- can't have subdomains;<br>
+- can't have aliases;<br>
+- can't be accessed through FTP.<br>
+<br>
+Domain alias requires at least one of the following domain types included:<br>
+<i>Domain Registration</i><br>
+<i>Domain Transfer</i><br>
+<i>Third-level domain</i><br>
+<i>Service domain</i><br>

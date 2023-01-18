@@ -1,0 +1,7 @@
+<center> authsender </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Demands that domain name in the user address during SMTP authentication should coincide with the domain name in the MAIL FROM address field. 
+<br>Default: 0 (any sender address is allowed).
+<br>
+

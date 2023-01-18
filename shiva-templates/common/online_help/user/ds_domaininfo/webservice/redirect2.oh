@@ -1,0 +1,12 @@
+<center>Redirect</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	With this feature you can redirect visitors from one URL to another. When an Internet user tries to connect to a URL that is redirected, he is taken to the address this URL is mapped to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	For example entering:<br>
+<i>http://www.demo.com/products</i> in the <b>Redirect from:</b>field and
+<i>http://www.demo.com/new_products.html</i> in the <b>to</b> field will take all the <i>http://www.demo.com/products</i> visitors to the <i>http://www.demo.com/new_products.html</i> page.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+Note: URL path must be an absolute path, not a relative path.
+

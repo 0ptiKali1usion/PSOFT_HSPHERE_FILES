@@ -1,0 +1,94 @@
+<!-- BEGIN ./control/billing/mail_add_confirm_joined.html  -->
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_mail_add_confirm_joined" check! accept-charset="UTF-8">
+<input type="hidden" name="password" value="${request.password}">
+<input type="hidden" name="template_name" value="submit/email/create_mailobject.sbm">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="sc_page" value="${request.sc_page}">
+<input type="hidden" name="i_mailbox" value="${request.i_mailbox}">
+<input type="hidden" name="i_forward" value="${request.i_forward}">
+<input type="hidden" name="i_alias" value="${request.i_alias}">
+<input type="hidden" name="i_responder" value="${request.i_responder}">
+<input type="hidden" name="local" value="${request.local}">
+<input type="hidden" name="description" value="${request.description}">
+<input type="hidden" name="subject" value="${request.subject}">
+<input type="hidden" name="message" value="${request.message}">
+<input type="hidden" name="include_incoming" value="${request.include_incoming}">
+<input type="hidden" name="catchall" value="${request.catchall}">
+<input type="hidden" name="discard" value="${request.discard}">
+<input type="hidden" name="i_antispam" value="${request.i_antispam}">
+<input type="hidden" name="i_antivirus" value="${request.i_antivirus}">
+<input type="hidden" name="subscribers" value="${request.subscribers}">
+<input type="hidden" name="aliasSubscribers" value="${aliasSubscribers}">
+<input type="hidden" name="aliased_by" value="${request.aliased_by}">
+<input type="hidden" name="new_aliased_by" value="${new_aliased_by}">
+<input type="hidden" name="change_new_aliased_by" value="${change_new_aliased_by}">
+<input type="hidden" name="new_responder_atts" value="${new_responder_atts}">
+
+<assign stype="">
+<if request.i_mailbox>
+    <assign stype=account.plan.getResourceType("mailbox").description>
+</if>
+<if request.i_antispam>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("antispam").description>
+  <else>
+    <assign stype=account.plan.getResourceType("antispam").description>
+  </if>
+</if>
+<if request.i_antivirus>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("antivirus").description>
+  <else>
+    <assign stype=account.plan.getResourceType("antivirus").description>
+  </if>
+</if>
+<if request.i_forward>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("mail_forward").description>
+  <else>
+    <assign stype=account.plan.getResourceType("mail_forward").description>
+  </if>
+</if>
+
+<if request.i_alias || new_aliased_by>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("mailbox_alias").description+"(es)">
+  <else>
+    <assign stype=account.plan.getResourceType("mailbox_alias").description+"(es)">
+  </if>
+</if>
+<if request.i_responder>
+  <if stype>
+    <assign stype=stype+", "+account.plan.getResourceType("responder").description>
+  <else>
+    <assign stype=account.plan.getResourceType("responder").description>
+  </if>
+</if>
+<assign message=toolbox.compose(lang.billing.add_msg1, stype)>
+<if price.setup!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(price.setup))>
+</if>
+<if price.recurrent!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg3,toolbox.currency(price.recurrent))>
+</if>
+<if price.recurrentAll!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg4,toolbox.currency(price.recurrentAll))>
+</if>
+
+
+<if request.aliased_by>
+  <assign message=message+toolbox.compose(lang.billing.aliased_by.choosen,new_aliased_by)>
+  <if new_aliased_by>
+    <assign message=message+" "+toolbox.compose(lang.billing.aliased_by.new,new_aliased_by)>
+  </if>
+  <if change_new_aliased_by>
+    <assign message=message+" "+toolbox.compose(lang.billing.aliased_by.change_new,change_new_aliased_by)>
+  </if>
+</if>
+<call draw_warn_invoice_with_charge_info(message,price,"","","f_mail_add_confirm_joined")>
+</form>
+<!--  END ./control/billing/mail_add_confirm_joined.html  -->

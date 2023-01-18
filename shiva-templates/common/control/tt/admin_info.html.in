@@ -1,0 +1,45 @@
+<!-- BEGIN ./common/control/tt/admin.html -->
+<call draw_tooltip()>
+<include "control/tt/ttfunctions.fn">
+<call setTTAdmin()>
+
+<if ttadmin>
+
+<yafv s_tt>
+<!--${ttadmin}-->
+<!--${account.getChild("ttadmin")}-->
+<!--${ttadmin.info.name}-->
+<if !name><assign name=ttadmin.info.name></if>
+<if !description><assign description=ttadmin.info.description></if>
+<if !email><assign email=ttadmin.info.email></if>
+<if !signature><assign signature=ttadmin.info.signature></if>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_admin_info" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/admin_info.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+
+
+
+<call draw_table_header("2", lang.tt.admininfo.header)>
+
+
+
+<tr><td><call draw_label(lang.tt.admininfo.name)></td>
+<td><input type="text" name="name" value="${name}" check="vName"></td></tr>
+<tr><td><call draw_label(lang.label.descr)></td>
+<td><input type="text" name="description" value="${description}"></td></tr>
+<tr><td><call draw_label(lang.tt.email)></td>
+<td><input type="text" name="email" value="${email}" check="vEmail"></td></tr>
+<tr><td valign="top"><call draw_label(lang.tt.signature)></td>
+<td><textarea rows=5 cols=40 name="signature">${signature}</textarea></td></tr>
+<tr><td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+
+<call draw_table_footer()>
+
+</form>
+<else>&nbsp;
+</if>
+<!-- BEGIN ./common/control/tt/admin.html -->

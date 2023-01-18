@@ -1,0 +1,45 @@
+<!-- BEGIN ./commont/control/admin/merchant/PayNova.html -->
+<call draw_tooltip()>
+<assign mm=account.getChild("merchant_manager")>
+
+<if mm>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/PayNova.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+
+
+<call draw_table_header("2", lang.label.paynova)>
+
+
+
+<tr ><td><call draw_label(lang.admin.paynova.icpaccountid)></td><td><input type="text" name="icpaccountid" value="${settings.PayNova_icpaccountid}"></td></tr>
+
+<tr >
+  <td><call draw_label(lang.admin.paynova.currency)></td>
+  <td>
+    <select name="currency">
+      <call buildCurrencies(settings.PayNova_currency)>
+    </select>
+  </td>
+</tr>
+
+<tr ><td><call draw_label(lang.admin.paynova.secretkey)></td><td><input type="password" name="secretkey" value="${settings.PayNova_secretkey}"></td></tr>
+
+<if settings.PayNova_testmode == "TRUE"><assign vtestmode="CHECKED"><else><assign vtestmode=""></if>
+<tr ><td colspan="2"><input type=checkbox name="testmode" ${vtestmode}><call draw_label(lang.admin.epayment.test)></td></tr>
+
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/PayPal.html -->

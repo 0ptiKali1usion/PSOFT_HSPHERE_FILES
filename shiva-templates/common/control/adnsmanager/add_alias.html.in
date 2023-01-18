@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/adnsmanager/add_alias.html.in  -->
+<call draw_tooltip()>
+<assign adnsmanager=account.getChild("adnsmanager")>
+
+<if adnsmanager>
+
+<yafv s_adnsmanager>
+<form name="f_add_alias"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="zone_id" value="${request.zone_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_alias.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.adnsmanager.addalias.header)>
+
+
+<tr>
+   <td><call draw_label(lang.adnsmanager.addalias.prefix)></td>
+   <td><input type="text" name="prefix" value="${vprefix}" label="${lang.adnsmanager.addalias.prefix}" size="10" Maxlength="10"  check="vPrefix"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.adnsmanager.addalias.ip)></td>
+   <td>
+	<select name="tag">
+	<list toolbox.getSharedIPTags() as siptag>
+	    <if siptag==vtag><assign selected="SELECTED"></if>
+	    <option value=${siptag} ${selected}>${siptag}</option>
+	</list>
+	</select>
+</td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/adnsmanager/add_alias.html.in  -->

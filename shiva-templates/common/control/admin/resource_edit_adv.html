@@ -1,0 +1,76 @@
+<!-- BEGIN ./admin/resource_edit_adv.html  -->
+<function showMod(mod,key)>
+<input type="hidden" name="names" value="${key}">
+<input type="radio" name="mod_${key}" value="0"<if mod.disabled!="1"> CHECKED</if>><call draw_label(lang.label.enabled)>
+<input type="radio" name="mod_${key}" value="1"<if mod.disabled=="1"> CHECKED</if>><call draw_label(lang.label.disabled)><br>
+<if mod.iresources>
+<call draw_label_bold(lang.admin.reseditadv.header)><br>
+<table class="inner_control">
+<assign count=toolbox.counter()>
+<list mod.iresources as ir>
+<tr>
+  <td><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/resource_edit_adv.html&plan_id="+plan.id+"&r_id="+ir.type, plan.getResourceType(ir.type).description)> <if ir.mod><call draw_label("("+ir.mod+")")></if> </td>
+  <td><if ir.disabled=="0"><call draw_label(lang.label.enabled)>&nbsp;<if !plan.deleted><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/resource_edit_irdisable.sbm&stemplate="+template+"&ftemplate="+template+"&plan_id="+plan.id+"&r_id="+rtype.type+"&count="+count+"&key="+key+"#imod", lang.label.disable)>&nbsp;</if>
+<else><if !plan.deleted><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/resource_edit_irdisable.sbm&stemplate="+template+"&ftemplate="+template+"&plan_id="+plan.id+"&r_id="+rtype.type+"&count="+count+"&key="+key+"&do=enable#imod", lang.label.enable)>&nbsp;</if><call draw_label(lang.label.disabled)>&nbsp;</if></td></tr>${count.next}</list>
+</table>
+</if>
+<if mod.ivalues><call draw_label_bold(lang.admin.reseditadv.initvals)><br><assign count=toolbox.counter()><list mod.ivalues as iv>
+<switch iv.type>
+<case "0"><assign itype=iv+"(static)"><break>
+<case "1"><assign itype="<u>"+iv.label+"</u> <i>("+iv+")</i>"><break>
+<case "2"><assign itype="<u>"+iv+"</u> <i>(relative)</i>"><break>
+<case "3"><assign itype="<u>"+iv+"</u> <i>(absolute)</i>"><break>
+<case "4"><assign itype="<u>"+iv+"</u> <i>(relative, recursive)</i>"><break>
+<case "5"><assign itype="<u>"+iv+"</u> <i>(absolute, recursive)</i>"><break>
+<case "6">
+<assign eeman=account.getChild("eeman")>
+<assign group_name="UNKNOWN">
+<list eeman.groups as group><if group.id == iv><assign group_name=group.name></if></list>
+<assign itype="<u>["+iv+"]</u> "+group_name+" <i>(hostgroup)</i>"><break>
+<default><assign itype=iv>
+</switch>
+<if !plan.deleted><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/change_ivalue.html&plan_id="+request.plan_id+"&r_id="+request.r_id+"&key="+key+"&count="+count+"&stemplate="+template+"&ftemplate="+template, itype)><else><call draw_label(itype)></if>${count.next}
+<br></list></if>
+</function>
+
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/resource_edit_emod.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="r_id" value="${rtype.type}">
+
+<call prepare_table_header("2", lang.admin.reseditadv.adv(rtype.description))>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit.html&stemplate=admin/plan_edit.html", lang.admin.reseditadv.edit)>
+  <if plan.b_info!="0">
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit_price.html&stemplate=admin/plan_edit.html", lang.admin.resedit.price)>
+</if>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <a name="imod"><call draw_header(lang.admin.reseditadv.init)></a>
+  </td>
+</tr>
+<if rtype.modDefault>
+<tr>
+  <td  valign="top"><call draw_label(lang.admin.reseditadv.default)></td>
+  <td nowrap ><call showMod(rtype.modDefault,"")>
+</tr></if>
+<list rtype.modKeys as key><if key>
+<tr>
+  <td  valign="top"><call draw_label(key)></td>
+  <td nowrap ><call showMod(rtype.mods[key], key)></td>
+</tr></if></list>
+<tr>
+  <td  colspan="2" class="control_align_center"><if !plan.deleted><input type="submit" value="${lang.button.submit}"><else>&nbsp;</if></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<!--  END ./admin/resource_edit_adv.html  -->

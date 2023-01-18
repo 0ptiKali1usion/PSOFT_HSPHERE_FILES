@@ -1,0 +1,17 @@
+<!--  Begin ./control/eeman/pserver_check_incl.html  -->
+<tr>
+<td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>       
+<input type="checkbox" name="${param.param_name}" ${param.checked}>
+<if param.onoff><call draw_label(lang.eeman.params.on_off)>
+<else>
+  <if param.yesno><call draw_label(lang.eeman.params.yes_no)>
+  <else>
+    <if param.digit><call draw_label(lang.eeman.params.boolean_digit)>
+    </if>
+  </if>
+</if><br>
+<include "control/eeman/pserver_incl/pserver_param_description_incl.html">
+</td></tr>
+<!--  END ./control/eeman/pserver_check_incl.html  -->

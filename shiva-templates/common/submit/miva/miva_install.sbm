@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/miva/miva_install.sbm  -->
+<include "functions">
+<assign miva = account.getResource(request.rid)>
+<assign result = miva.setup()>
+<if result.status != "OK">
+   <call draw_popup_window(miva.setup_url,"Miva setup routine encountered and error")>
+</if>
+<include "miva/setup_result.html">   
+
+<!-- BEGIN ./submit/miva/miva_install.sbm  -->
+

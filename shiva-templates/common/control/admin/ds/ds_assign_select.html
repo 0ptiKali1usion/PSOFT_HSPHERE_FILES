@@ -1,0 +1,215 @@
+<!-- BEGIN ./control/admin/ds/ds_assign_select.html  -->
+<assign admin=account.getChild("admin")>
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign billman=account.getChild("billman")>
+<assign su=account.getChild("su")>
+
+<if !su>
+    <if account.plan.isResourceAvailable("su")>
+	<assign su=account.addChild("su","")>
+	<if su.status!="OK">
+	    <assign su="">
+	</if>
+    </if>
+</if>
+
+<assign report_ok="">
+
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.dss_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+
+<if !report_ok>
+  <assign report = viewer.getAdvReport("ds_user_search")>
+  <assign result = report(request.dss_status,
+			request.dss_template,
+			request.dss_os,
+			request.dss_cpu,
+			request.dss_ip,
+			request.dss_int_id,
+			request.dss_r_from,
+			request.dss_r_to,
+			request.dss_u_from,
+			request.dss_u_to,
+			request.dss_username,
+			request.dss_account_id,
+			request.dss_plan,
+			request.dss_reseller_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.dss_step><assign step = request.dss_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.dss_page><assign page = request.dss_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign dss_params="&dss_status="+toolbox.url_escape(request.dss_status)+
+ "&dss_template="+toolbox.url_escape(request.dss_template)+
+ "&dss_os="+toolbox.url_escape(request.dss_os)+
+ "&dss_cpu="+toolbox.url_escape(request.dss_cpu)+
+ "&dss_ip="+toolbox.url_escape(request.dss_ip)+
+ "&dss_int_id="+toolbox.url_escape(request.dss_int_id)+
+ "&dss_r_from="+toolbox.url_escape(request.dss_r_from)+
+ "&dss_r_to="+toolbox.url_escape(request.dss_r_to)+
+ "&dss_u_from="+toolbox.url_escape(request.dss_u_from)+
+ "&dss_u_to="+toolbox.url_escape(request.dss_u_to)+
+ "&dss_reseller_id="+toolbox.url_escape(report.dss_reseller_id)+
+ "&dss_username="+toolbox.url_escape(request.dss_username)+
+ "&dss_account_id="+toolbox.url_escape(request.dss_account_id)+
+ "&dss_plan="+toolbox.url_escape(request.dss_plan)+
+ "&dss_step="+toolbox.url_escape(step)+
+ "&dss_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<if billman>
+  <assign colspan="15">
+<else>
+  <assign colspan="11">
+</if>
+
+<call draw_table_header(colspan, lang.admin.search_by_ds_header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "account_id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <if billman>
+    <td class="control_header"><call advReportLabel(report, lang.label.ptype, "b_type")></td>
+    <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+    <td class="control_header"><call advReportLabel(report, lang.search.credit, "credit")></td>
+  </if>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_server, "ds_name")></td>
+  <td class="control_header"><call draw_header(lang.admin.search_ds_status)></td>
+  <td class="control_header"><call advReportLabel(report, lang.admin.search_ds_taken, "ds_taken")></td>
+  <td class="control_header"><call draw_header("Internal ID")></td>
+  <td class="control_header"><call draw_header("IP")></td>
+  <td class="control_header"><call draw_header("Created")></td>
+
+  <td class="control_header"><call draw_header(lang.label.select)></td>
+</tr>
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+<td>
+  <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.account_id,"USER_INFO",entry.username)>
+  <if entry.suspended !=""><br><call draw_label_bold("suspended "+entry.suspended)></if>
+</td>
+<td><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.account_id, "PREVIEW", entry.account_id)></td>
+<td><call draw_label(entry.account_created("SHORT"))></td>
+<td><call draw_label(entry.plan_id)></td>
+<td><call draw_label(entry.ci_email)></td>
+
+<if billman>
+  <assign billtype = "none">
+  <switch entry.b_type>
+    <case "CC"><assign billtype = lang.label.cc><break>
+    <case "Check"><assign billtype = lang.label.check><break>
+    <case "none"><assign billtype = lang.label.none><break>
+    <case "Trial"><assign billtype =  lang.label.trial><break>
+    <default><assign billtype = entry.billingType>
+  </switch>
+  <td><if entry.without_bill><call draw_label(billtype + entry.without_bill)><else><call draw_label(billtype)></if></td>
+  <if (entry.b_type != "none") && (entry.b_type != "Trial")>
+    <td nowrap><call draw_label(toolbox.displayBalance(entry.balance))></td>
+    <td><call draw_label(toolbox.currency(entry.credit))></td>
+  <else>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </if>
+</if>
+
+<if entry.ds_name>
+  <td><call draw_label(entry.ds_name)></td>
+<else>
+  <call drawEmptyTd()>
+</if>
+<if !entry.ds_state>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+  <call drawEmptyTd()>
+<else>
+  <td><call draw_label(lang.admin.ds.status[entry.ds_state])></td>
+  <td><call draw_label(entry.ds_taken)></td>
+  <td><call draw_label(entry.ds_internal_id)></td>
+  <td><call draw_label(entry.ds_ip)></td>
+  <td><call draw_label(entry.ds_created)></td>
+</if>
+
+<!-- dedicated_server_id = ${request.dedicated_server_id}-->
+<td nowrap><call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/select_ds_confirm.html&stemplate="+request.stemplate+"&ftemplate="+template+"&dedicated_server_id="+request.dedicated_server_id+"&account_id="+entry.account_id+"&state_id="+request.state_id, "select", lang.admin.ds.click_select_account)></td>
+</tr>
+</list>
+<tr>
+<td colspan="${colspan}">
+<call advReportNavDS(report)>
+</td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+dss_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+
+<function advReportNavDS(report)>
+<if dss_params>
+<if toolbox.startsWith(dss_params, "&") != "1"><assign dss_params_new = "&" + dss_params>
+<else><assign dss_params_new = dss_params>
+</if>
+<else>
+<assign dss_params_new = "">
+</if>
+<if report.isPrev>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&stemplate="+request.stemplate+"&ftemplate="+template+"&dedicated_server_id="+request.dedicated_server_id+"&account_id="+entry.account_id+"&state_id="+request.state_id+"&arid="+report.id+"&search_action=prev"+dss_params_new,lang.functions.prev)>
+<else><if report.isNext><call draw_label(lang.functions.prev)></if>
+</if>
+<list report.pages as p>
+<if p != report.currentPage>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&stemplate="+request.stemplate+"&ftemplate="+template+"&dedicated_server_id="+request.dedicated_server_id+"&account_id="+entry.account_id+"&state_id="+request.state_id+"&arid="+report.id+"&search_action=pos&search_page="+p+dss_params_new,"["+p+"]")>
+<else><call draw_label("["+p+"]")>
+</if>
+</list>
+<if report.isNext>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&stemplate="+request.stemplate+"&ftemplate="+template+"&dedicated_server_id="+request.dedicated_server_id+"&account_id="+entry.account_id+"&state_id="+request.state_id+"&arid="+report.id+"&search_action=next"+dss_params_new,lang.functions.next)>
+<else><if report.isPrev><call draw_label(lang.functions.next)></if>
+</if>
+</function>
+
+<function advReportLabel(report, label, field)>
+<a href="${config.CLIENT_CP_URL}?template_name=${template}&stemplate=${request.stemplate}&ftemplate=${template}&dedicated_server_id=${request.dedicated_server_id}&account_id=${entry.account_id}&state_id=${request.state_id}&arid=${report.id}&search_action=reorder&search_field=${field}<if dss_params>&${dss_params}</if><if !(report.field==field && report.direction)>&search_direction=true</if>">
+<call draw_header(label)></a>
+</function>
+
+<function drawEmptyTd()>
+  <td class="control_align_center"><call draw_label("-")></td>
+</function>
+<!--  END ./control/admin/ds/ds_assign_select.html  -->

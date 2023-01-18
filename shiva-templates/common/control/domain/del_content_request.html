@@ -1,0 +1,143 @@
+<assign res_type = request.res_to_del>
+
+<call draw_tooltip()>
+
+<script language="javascript">
+    var form;
+
+    function clickOnDelContent(frm) {
+        form = frm;
+        if ( form.isDelContent.checked ) {
+            setCheckBoxes("on");
+        } else {
+            setCheckBoxes("off");
+        }
+
+    }
+
+    function setCheckBoxes(boolean) {
+        var cElements = form.elements;
+        for (var i = 0; i < cElements.length; i++) {
+            if ( (cElements[i].type == "checkbox")
+                    && (cElements[i].name != "isDelContent") ) {
+
+                if ( cElements[i].name == "isDelLog") {
+                    if (boolean == "on") {
+                        cElements[i].disabled = false;
+                    } else {
+                        cElements[i].checked = false;
+                        cElements[i].disabled = true;
+                    }
+                } else if ( cElements[i].name.substring(0,9) != "isDelLog_") {
+                    if (boolean == "on") {
+                        cElements[i].disabled = false;
+                    } else {
+                        cElements[i].checked = false;
+                        cElements[i].disabled = true;
+                    }
+                } else {
+                    if (boolean == "off") {
+                        cElements[i].checked = false;
+                        cElements[i].disabled = true;
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    function clickOnSubDelContent(frm, curElement) {
+        form = frm;
+        var logName = "isDelLog_" + curElement.name;
+        var cElements = form.elements;
+        for (var i = 0; i < cElements.length; i++) {
+            if ( (cElements[i].type == "checkbox")
+                    && (cElements[i].name == logName) ) {
+                if (curElement.checked) {
+                    cElements[i].disabled = false;
+                } else {
+                    cElements[i].checked = false;
+                    cElements[i].disabled = true;
+                }
+            }
+        }
+    }
+
+</script>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_del_content" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/domain/del_webservice.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="did" value="${request.did}">
+<input type="hidden" name="hosting" value="${request.hosting}">
+<input type="hidden" name="res_to_del" value="${request.res_to_del}">
+
+
+
+
+
+<call draw_table_header("2", lang.domain.del_content_request.header)>
+
+
+<tr>
+  <td  colspan="2">
+    <call draw_label(lang.domain.del_content_request.text)>
+  </td>
+</tr>
+<tr>
+  <td>
+    <input type="checkbox" name="isDelContent" onclick="clickOnDelContent(this.form)">
+	<if res_type=="domain">
+	  <assign domain = account.getResource(request.did)>
+	  <assign domain_name = domain.name>
+	<else>
+	  <assign domain = account.getResource(request.rid)>
+          <assign domain_name = domain.name>
+	</if>
+	<call draw_label(domain_name)>
+  </td>
+  <td>
+    <if domain.findChild("errorlog") || domain.findChild("referrerlog") || domain.findChild("agentlog") || domain.findChild("transferlog")>
+      <input type="checkbox" name="isDelLog" "DISABLED"><call draw_label(lang.domain.del_logs)>
+      <if domain.findChild("errorlog")><assign log_type="errorlog"></if>
+      <if domain.findChild("referrerlog")><assign log_type="referrerlog"></if>
+      <if domain.findChild("agentlog")><assign log_type="agentlog"></if>
+      <if domain.findChild("transferlog")><assign log_type="transferlog"></if>
+      <input type="hidden" name="domain_logtype" value="${log_type}">
+    <else>
+      &nbsp;
+    </if>
+  </td>
+</tr>
+<if res_type=="domain">
+  <assign tmp_domain = account.getResource(request.did)>
+  <list tmp_domain.findChildren("subdomain")as subdomain>
+    <tr>
+      <td>
+        <input type="checkbox" name="${subdomain.name}" "DISABLED" onclick="clickOnSubDelContent(this.form, this)"><call draw_label(subdomain.name)>
+      </td>
+      <td>
+	<if subdomain.findChild("errorlog") || domain.findChild("referrerlog") || domain.findChild("agentlog") || domain.findChild("transferlog")>
+	  <input type="checkbox" name="isDelLog_${subdomain.name}" "DISABLED"><call draw_label(lang.domain.del_logs)>
+      <if subdomain.findChild("errorlog")><assign sub_log_type="errorlog"></if>
+      <if subdomain.findChild("referrerlog")><assign sub_log_type="referrerlog"></if>
+      <if subdomain.findChild("agentlog")><assign sub_log_type="agentlog"></if>
+      <if subdomain.findChild("transferlog")><assign sub_log_type="transferlog"></if>
+      <input type="hidden" name="domain_logtype_${subdomain.name}" value="${sub_log_type}">
+	<else>
+	  &nbsp;
+	</if>
+      </td>
+    </tr>
+  </list>
+</if>
+<tr>
+    <td  class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+

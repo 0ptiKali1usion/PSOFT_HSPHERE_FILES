@@ -1,0 +1,5 @@
+<compress>
+<assign viewer=account.getChild("reportviewer")>
+<if request.arid><assign report = viewer.getAdvReportById(request.arid)></if>
+</compress>${lang.label.account_id},${lang.label.domain},${lang.label.registrar},${lang.label.created},${lang.label.period},${lang.label.tt_type},${lang.label.error},${lang.label.result},${lang.label.details}
+<assign entries = report.all()><list entries as entry>${toolbox.csv_escape(entry.accountId)},${toolbox.csv_escape(entry.domain)},${toolbox.csv_escape(entry.registrar)},${toolbox.csv_escape(entry.created)},${toolbox.csv_escape(entry.period)},${toolbox.csv_escape(entry.tt_type)},${toolbox.csv_escape(entry.error_message)},${toolbox.csv_escape(entry.result)},${toolbox.csv_escape(entry.details)}</list>

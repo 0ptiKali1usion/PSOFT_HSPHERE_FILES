@@ -1,0 +1,37 @@
+<!-- BEGIN ./common/control/kb/add_entry.html -->
+<call draw_tooltip()>
+
+<assign kb=account.getChild("ttadmin").kb_manager.getKB(request.id)>
+
+
+
+
+
+<call draw_table_header("2", lang.kb.search_header(kb.name))>
+
+
+<tr>
+<td colspan="2">
+<call draw_label(lang.label.category+": "+kb.category[request.cat])><br><hr>
+<form name="kb" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/kb/add_entry.sbm">
+<input type="hidden" name="inPanel" value="${request.inPanel}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.stemplate}">
+<input type="hidden" name="id" value="${kb.id}">
+<input type="hidden" name="cat" value="${request.cat}">
+<call draw_label(lang.label.question)><br>
+<textarea name="q" rows="4" cols="60"></textarea><br>
+<call spellcheck("kb", "q")><hr>
+<call draw_label(lang.label.answer)><br>
+<textarea name="a" rows="4" cols="60"></textarea><br>
+<call spellcheck("kb", "a")><hr>
+<input name="submit" type="submit">
+</form>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<call spellCheckInit()>
+<!-- END ./common/control/kb/add_entry.html -->

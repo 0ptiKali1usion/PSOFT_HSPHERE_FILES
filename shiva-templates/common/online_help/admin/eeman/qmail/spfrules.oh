@@ -1,0 +1,9 @@
+<center> spfrules </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>You can specify a line with local rules.
+<br>Local rules means: Rules that are executed before the real SPF rules for a domain would fail (fail, softfail, neutral). They are also executed for domains that don't publish SPF entries.
+<br>We suggest adding
+<br>include:spf.trusted-forwarder.org.
+<br>You can also add mechanisms to trust known mail servers like backup MX servers, though we suggest that you should at least also use tcprules (to modify SPFBEHAVIOR).
+<br>

@@ -1,0 +1,6 @@
+<center> srs maximum permitted age of a rewritten address </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+SRS rewritten addresses expire after a specified number of days (after which it is assumed no more bounces may be generated in response to the original mail). Mail sent to expired SRS address is dropped without ceremony. The default (about a month) should be appropriate for all purposes.
+<br>

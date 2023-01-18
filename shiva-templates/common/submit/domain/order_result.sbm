@@ -1,0 +1,124 @@
+<!-- BEGIN ./domain/order_result.html  -->
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<if account.bi.type=="TRIAL">
+     <assign res=session.addMessage("<b>"+lang.msg.domain_unable_register_osrs_trial+"</b>")>
+<else>
+<assign result=yafv.common.s_domain.vOsrs_Domain_Name(lang.label.domain.name,request.domain_name)>
+<if result.status=="OK" && account.bi.type!="TRIAL">
+  <assign result=yafv.checkall(
+    yafv.common.s_domain.vSinglename(toolbox.compose(
+	lang.label.field_name_ci,lang.label.first_name), request["_srs_owner_first_name"]),
+    yafv.common.s_domain.vSinglename(toolbox.compose(
+	lang.label.field_name_ci,lang.label.last_name), request["_srs_owner_last_name"]),
+    yafv.common.s_domain.vOrganization(toolbox.compose(
+	lang.label.field_name_ci,lang.label.organization), request["_srs_owner_org_name"]),
+    yafv.common.s_domain.vAddress(toolbox.compose(
+	lang.label.field_name_ci,lang.label.address),request["_srs_owner_address1"]),
+    yafv.common.s_domain.vCity(toolbox.compose(
+	lang.label.field_name_ci,lang.label.city), request["_srs_owner_city"]),
+    yafv.common.s_domain.vState(toolbox.compose(
+	lang.label.field_name_ci,lang.label.state), request["_srs_owner_state"]),
+    yafv.common.s_domain.vCountry(toolbox.compose(
+	lang.label.field_name_ci,lang.label.country), request["_srs_owner_country"]),
+    yafv.common.s_domain.vPostal_Code(toolbox.compose(
+	lang.label.field_name_ci,lang.label.postal_code), request["_srs_owner_postal_code"]),
+    yafv.common.s_domain.vPhoneOSRS(toolbox.compose(lang.label.field_name_ci,lang.label.phone),
+	request["_srs_owner_phone"], request["_srs_owner_country"], request[tld]),
+    yafv.common.s_domain.vFaxOSRS(toolbox.compose(lang.label.field_name_ci,lang.label.fax),
+	 request["_srs_owner_fax"], request["_srs_owner_country"], request[tld]),
+    yafv.common.s_domain.vEmail(toolbox.compose(
+	lang.label.field_name_ci,lang.label.email), request["_srs_owner_email"]),
+    yafv.common.s_domain.vBiSinglename(toolbox.compose(
+		lang.label.field_name_bi,lang.label.first_name), 
+	request["_srs_billing_first_name"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiSinglename(toolbox.compose(
+		lang.label.field_name_bi,lang.label.last_name), 
+	request["_srs_billing_last_name"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiOrganization(toolbox.compose(
+		lang.label.field_name_bi,lang.label.organization), 
+	request["_srs_billing_org_name"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiAddress(toolbox.compose(
+		lang.label.field_name_bi,lang.label.address), 
+	request["_srs_billing_address1"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiCity(toolbox.compose(
+		lang.label.field_name_bi,lang.label.city), 
+	request["_srs_billing_city"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiState(toolbox.compose(
+		lang.label.field_name_bi,lang.label.state), 
+	request["_srs_billing_state"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiCountry(toolbox.compose(
+		lang.label.field_name_bi,lang.label.country), 
+	request["_srs_billing_country"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiPostal_Code(toolbox.compose(
+		lang.label.field_name_bi,lang.label.postal_code), 
+	request["_srs_billing_postal_code"], request.flag_use_contact_info),
+    yafv.common.s_domain.vBiPhoneOSRS(toolbox.compose(lang.label.field_name_bi,lang.label.phone), 
+	request["_srs_billing_phone"], request["_srs_billing_country"], request[tld],
+	request.flag_use_contact_info),
+    yafv.common.s_domain.vBiFaxOSRS(toolbox.compose(lang.label.field_name_bi,lang.label.fax),
+	request["_srs_billing_fax"], request["_srs_billing_country"], request[tld],
+	request.flag_use_contact_info),
+    yafv.common.s_domain.vBiEmail(toolbox.compose(
+		lang.label.field_name_bi,lang.label.email), 
+	request["_srs_billing_email"], request.flag_use_contact_info) ) >
+ <if result.status=="OK">
+  <assign domainManager = account.getChild("unixuser")>
+  <if !domainManager><assign domainManager = account></if>
+  <if request.flag_use_contact_info != "1">
+    <assign domain = domainManager.addChild("domain", "opensrs", request.domain_name)>
+  <else>
+    <assign domain = domainManager.addChild("domain", "opensrsmix", request.domain_name)>
+  </if>
+  <if domain.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.domain,request.domain_name))>
+    <assign res = session.addMessage(domain.msg)>
+  </if>
+  <assign success="1">
+ <else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+<else>
+ <assign res=session.addMessage(result.msg)>
+</if>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign period=request["period"]>
+    <assign flag_use_contact_info=request["flag_use_contact_info"]>
+    <assign srs_owner_first_name=toolbox.html_encode(request["_srs_owner_first_name"])>
+    <assign srs_owner_last_name=toolbox.html_encode(request["_srs_owner_last_name"])>
+    <assign srs_owner_org_name=toolbox.html_encode(request["_srs_owner_org_name"])>
+    <assign srs_owner_address1=toolbox.html_encode(request["_srs_owner_address1"])>
+    <assign srs_owner_address2=toolbox.html_encode(request["_srs_owner_address2"])>
+    <assign srs_owner_address3=toolbox.html_encode(request["_srs_owner_address3"])>
+    <assign srs_owner_city=toolbox.html_encode(request["_srs_owner_city"])>
+    <assign srs_owner_state=toolbox.html_encode(request["_srs_owner_state"])>
+    <assign srs_owner_country=toolbox.html_encode(request["_srs_owner_country"])>
+    <assign srs_owner_postal_code=toolbox.html_encode(request["_srs_owner_postal_code"])>
+    <assign srs_owner_phone=toolbox.html_encode(request["_srs_owner_phone"])>
+    <assign srs_owner_fax=toolbox.html_encode(request["_srs_owner_fax"])>
+    <assign srs_owner_email=toolbox.html_encode(request["_srs_owner_email"])>
+
+    <if !flag_use_contact_info>
+	<assign srs_billing_first_name=toolbox.html_encode(request["_srs_billing_first_name"])>
+        <assign srs_billing_last_name=toolbox.html_encode(request["_srs_billing_last_name"])>
+        <assign srs_billing_org_name=toolbox.html_encode(request["_srs_billing_org_name"])>
+        <assign srs_billing_address1=toolbox.html_encode(request["_srs_billing_address1"])>
+        <assign srs_billing_address2=toolbox.html_encode(request["_srs_billing_address2"])>
+        <assign srs_billing_address3=toolbox.html_encode(request["_srs_billing_address3"])>
+        <assign srs_billing_city=toolbox.html_encode(request["_srs_billing_city"])>
+        <assign srs_billing_state=toolbox.html_encode(request["_srs_billing_state"])>
+        <assign srs_billing_country=toolbox.html_encode(request["_srs_billing_country"])>
+        <assign srs_billing_postal_code=toolbox.html_encode(request["_srs_billing_postal_code"])>
+        <assign srs_billing_phone=toolbox.html_encode(request["_srs_billing_phone"])>
+        <assign srs_billing_fax=toolbox.html_encode(request["_srs_billing_fax"])>
+        <assign srs_billing_email=toolbox.html_encode(request["_srs_billing_email"])>
+    </if>
+
+    <include request.ftemplate>
+</if>
+
+<!--  END ./domain/order_result.html  -->

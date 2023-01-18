@@ -1,0 +1,15 @@
+<!-- BEGIN ./submin/eeman/enable_get_server_info.sbm  -->
+<assign eeman=account.getChild("eeman")>
+<assign pserver=eeman.getPserver(request.rid)>
+<assign result=pserver.setGetServerInfo("1")>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_enabled,lang.eeman.get_server_info,""))>
+    <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_enable,lang.eeman.get_server_info,""))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submin/eeman/enable_get_server_info.sbm  -->

@@ -1,0 +1,78 @@
+<!-- BEGIN ./control/admin/signup.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+
+<call draw_tooltip()>
+<if admin>
+
+
+
+<call draw_table_header("3", lang.servmon.header1)>
+<tr>
+  <td class="control_header">
+    <if settings.cp_agent><assign cp_d = settings.cp_agent><else><assign cp_d = "H-SPHERE"></if>
+    <call draw_header(cp_d)>
+  </td>
+  <td colspan="2" class="control_header"><call draw_header(version)></td>
+</tr>  
+
+
+<tr>
+    <td colspan="3" class="control_header" ><call draw_header(lang.admin.sysinfo.header)></td>
+</tr>  
+<tr>
+<td  class="control_align_center"  rowspan="2" nowrap >&nbsp;</td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.sysinfo.users)></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.sysinfo.moderated)></td>
+</tr>
+<tr>
+<td  class="control_align_center" nowrap><call draw_label_bold(admin.system_info.accounts)></td>
+<td  class="control_align_center" nowrap><call draw_label_bold(admin.system_info.moderated_users)></td>
+</tr>
+<tr>
+    <td colspan="3" class="control_header" ><call draw_header(lang.admin.sysinfo.accinfo)></td>
+</tr>  
+<assign total_domains = "0">
+<assign total_accounts = "0">
+
+<list admin.system_info.groups as group >
+<tr>
+<td class="control_header_align_center" nowrap ><if group.group_id=="0"><call draw_header(lang.admin.sysinfo.ungrouped)><else><if group.name><call draw_header(group.name)><else>&nbsp;</if></if></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.sysinfo.accs)></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.sysinfo.domains)></td>
+</tr>
+
+<assign group_domains = "0">
+<assign group_accounts = "0">
+<assign been_there = "0">
+<list group.plans as plan> 
+<assign been_there = "1">
+    <tr>
+    <td    nowrap>&nbsp;&nbsp;<call draw_label(plan.description)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.accounts)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.domains)></td>
+    </tr>
+<assign total_domains=toolbox.add(total_domains,plan.domains)>
+<assign total_accounts=toolbox.add(total_accounts,plan.accounts)>
+<assign group_domains=toolbox.add(group_domains,plan.domains)>
+<assign group_accounts=toolbox.add(group_accounts,plan.accounts)>
+
+</list>
+<if been_there == "1">
+    <tr>
+    <td  class="control_align_right" nowrap><call draw_label_bold(lang.label.total)></td>
+<td  class="control_align_center" nowrap><call draw_label_bold(group_accounts)></td>
+<td  class="control_align_center" nowrap><call draw_label_bold(group_domains)></td>
+    </tr> 
+</if>
+</list>
+<tr>
+<td class="control_header"  nowrap><call draw_header(lang.label.total)></td>
+<td class="control_header_align_center" nowrap><call draw_header(total_accounts)></td>
+<td class="control_header_align_center" nowrap><call draw_header(total_domains)></td>
+</tr>
+
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/admin/signup.html  -->

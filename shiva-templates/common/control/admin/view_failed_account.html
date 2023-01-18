@@ -1,0 +1,179 @@
+<!-- BEGIN ./admin/view_failed_account.html  -->
+<call draw_tooltip()>
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+
+<assign failedAcc = signup.getFailedAccount(request.fid)>
+<assign tmpAcc = failedAcc.account>
+<assign signup_record = failedAcc.srecord>
+
+<list signup_record.values as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+<if pair.name=="seller_id"><assign sellerId=pair.value></if>
+</list>
+
+<assign ci=tmpAcc.ci>
+<assign bi=tmpAcc.bi>
+
+<call draw_table_header("2", lang.search.userinfo.header(ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<tr><td><call draw_label(lang.search.userinfo.name)></td><td><call draw_label(ci.first_name+" "+ci.last_name)></td></tr>
+<tr><td><call draw_label(lang.bci.company)></td><td><call draw_label(ci.company)></td></tr>
+<tr><td><call draw_label(lang.bci.adr1)></td><td><call draw_label(ci.address1)></td></tr>
+<tr><td><call draw_label(lang.bci.adr2)></td><td><call draw_label(ci.address2)></td></tr>
+<tr><td><call draw_label(lang.bci.city)></td><td><call draw_label(ci.city)></td></tr>
+<tr><td><call draw_label(lang.label.country)></td><td>
+<assign country_name=toolbox.countries[ci.country]>
+<call draw_label(lang[country_name])></td></tr>
+<tr><td><call draw_label(lang.bci.state)></td><td>
+<assign state_name="">
+<if ci.state=="NA"><assign state_name=ci.state></if>
+<if !state_name><assign state_name=toolbox.statesCanada[ci.state]></if>
+<if !state_name><assign state_name=toolbox.states[ci.state]></if>
+<call draw_label(state_name)></td></tr>
+
+<tr><td><call draw_label(lang.label.state_other)></td><td><call draw_label(ci.state2)></td></tr>
+
+<tr><td><call draw_label(lang.bci.pcode)></td><td><call draw_label(ci.postal_code)></td></tr>
+<tr><td><call draw_label(lang.bci.phone)></td><td><call draw_label(ci.phone)>
+<assign phone=toolbox.getPhone(ci.phone)><call draw_preview_target("http://www.anywho.com/qry/wp_rl?npa=" + phone.name + "&telephone=" + phone.value, "PHONE_PREVIEW", "")>
+</td></tr>
+<tr><td><call draw_label(lang.bci.email)></td><td><call draw_link("mailto:"+ci.email,ci.email)></td></tr>
+<call draw_table_footer()>
+&nbsp;
+
+<if bi.id != "0">
+<call draw_table_header("2", lang.search.userinfo.bi(bi.first_name+" "+bi.last_name, tmpAcc.plan.description))>
+
+<tr><td><call draw_label(lang.search.userinfo.name)></td><td><call draw_label(bi.first_name+" "+bi.last_name)></td></tr>
+<tr><td><call draw_label(lang.bci.company)></td><td><call draw_label(bi.company)></td></tr>
+<tr><td><call draw_label(lang.bci.adr1)></td><td><call draw_label(bi.address1)></td></tr><tr><td><call draw_label(lang.bci.adr2)></td><td><call draw_label(bi.address2)></td></tr><tr><td><call draw_label(lang.bci.city)></td><td><call draw_label(bi.city)></td></tr>
+<tr><td><call draw_label(lang.bci.country)></td><td>
+<assign country_name=toolbox.countries[bi.country]>
+<call draw_label(lang[country_name])></td></tr>
+<tr><td><call draw_label(lang.bci.state)></td><td>
+<assign state_name="">
+<if bi.state=="NA"><assign state_name=bi.state></if>
+<if !state_name><assign state_name=toolbox.statesCanada[bi.state]></if>
+<if !state_name><assign state_name=toolbox.states[bi.state]></if>
+<call draw_label(state_name)></td></tr>
+<tr><td><call draw_label(lang.label.state_other)></td><td><call draw_label(bi.state2)></td></tr>
+<tr><td><call draw_label(lang.bci.pcode)></td><td><call draw_label(bi.postal_code)></td></tr>
+<tr><td><call draw_label(lang.bci.phone)></td><td><call draw_label(bi.phone)>
+<assign phone=toolbox.getPhone(bi.phone)><call draw_preview_target("http://www.anywho.com/qry/wp_rl?npa=" + phone.name + "&telephone=" + phone.value, "PHONE_PREVIEW", "")>
+</td></tr>
+<tr><td><call draw_label(lang.bci.email)></td><td><call draw_link("mailto:"+bi.email,bi.email)></td></tr>
+<assign pi=bi.pi>
+<include "control/search/pi."+bi.type>
+<call draw_table_footer()>
+&nbsp;
+</if>
+<if signup_record.id>
+<call prepare_table_header("2", lang.label.signup_info)>
+<call add_table_header_ptalink(config.CP_URL + "?template_name=admin/mod_signup_record.html&rid=" + request.rid, "SIGNUP_PREVIEW", "lupa", "")>
+<call draw_table_header_prepared()>
+
+
+<tr>
+  <td><call draw_label(lang.label.remote_ip)></td>
+  <td><call draw_label(signup_record.ip)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.country)></td>
+  <td>
+<if signup_record.country><call draw_label(lang[toolbox.countries[(signup_record.country)]]+" ("+signup_record.country+")")><else><call draw_label("Unknown")></if>
+  </td>
+</tr>
+<else>
+
+<call draw_table_header("2", lang.label.unknown_signup)>
+</if>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("2", lang.search.userinfo.plan_bp(ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<tr>
+  <td><call draw_label(lang.label.plan)></td>
+  <td><call draw_label(tmpAcc.plan.description)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.bp)></td>
+  <td><call draw_label(toolbox.numberToCurLocale(tmpAcc.plan.values["_PERIOD_SIZE_"+bpId],"false")+"&nbsp;"+tmpAcc.plan.values["_PERIOD_TYPE_"+bpId])></td>
+</tr>
+<tr>
+<td><call draw_label_bold(lang.billview.list.balance)></td>
+<td><call draw_label(toolbox.displayBalance(tmpAcc.bill.balance))></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+
+<call draw_table_header("2", lang.search.userinfo.other(ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<list signup_record.values as param>
+<if param.name=="_mod"><assign mod=param.value></if>
+<if toolbox.startsWith(param.name,"_") == "0" || toolbox.startsWith(param.name,"_srs") == "1">
+<tr>
+     <td><call draw_label(param.name)></td>
+    <td><call draw_label(param.value)></td>
+</tr>
+</if>
+</list>
+<call draw_table_footer()>
+&nbsp;
+
+<assign charge_entries = tmpAcc.getChargeLogEntries()>
+<if charge_entries.size != "0">
+<call draw_table_header("3", lang.search.userinfo.chargelog(ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+
+<tr>
+<td><call draw_header(lang.admin.chlogentry.id)></td>
+<td><call draw_header(lang.admin.chlogentry.type)></td>
+<td><call draw_header(lang.admin.chlogentry.value)></td>
+</tr>
+<list charge_entries as entry>
+<tr>
+  <td class="control_align_center"  rowspan=4><call draw_label(entry.id)></td>
+  <td><call draw_label(lang.admin.chlogentry.created)></td>
+  <td><call draw_label(entry.created)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.chlogentry.request)></td>
+  <td><call draw_label(entry.request)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.chlogentry.response)></td>
+  <td><call draw_label(entry.response)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.chlogentry.errmessage)></td>
+  <td><call draw_label(entry.error)></td>
+</tr>
+</list>
+<call draw_table_footer()>
+&nbsp;
+</if>
+
+<comment><if bi.id != "0"><!-- tut pokazat` bill --> </if></comment>
+ &nbsp;
+
+    <form action="${config.CLIENT_CP_URL}" method="POST" name="f_complete" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/admin/complete_signup.sbm">
+    <input type="hidden" name="fid" value="${request.fid}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+<call draw_table_header("2", lang.signup.moderate.actions)>
+<tr>
+  <td  class="control_align_center" width="50%">
+    <input type="checkbox" name="charge">&nbsp;<call draw_label(lang.admin.modsignview.charge)><br>
+    <a href="#" onClick="document.forms['f_complete'].submit();return true"><call draw_colored_label(lang.admin.modsignview.create,design.color("link_color"))>
+</a>
+  </td>
+<td  class="control_align_center"><br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/del_failed_signup.sbm&fid="+request.fid+"&stemplate=signup/moderate.html&ftemplate="+template, lang.label.del)>
+  </td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<!--  END ./admin/view_failed_account.html  -->

@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/MySQL/delete_user.sbm  -->
+<assign m_user=account.getResource(request.user_id)>
+<assign database=account.getResource(request.db_id)>
+<if m_user.isNeedToBeDeleted()=="1">
+   <assign result=m_user.delete>
+   <if result.status=="OK"><assign success="1"></if>
+<else>
+<assign result=m_user.loadUserPrivilegesOn(database.db_name)>
+<if result.status=="OK">
+  <assign result=result.revokeAllDatabasePrivileges()>
+  <if result=="1"><assign success="1"></if>
+</if>
+</if>
+<if success>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_deleted, lang.label.user, ""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_delete, lang.label.user, ""))>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/MySQL/delete_user.sbm  -->

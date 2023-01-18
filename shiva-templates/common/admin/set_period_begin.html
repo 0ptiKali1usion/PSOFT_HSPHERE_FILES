@@ -1,0 +1,8 @@
+<!-- BEGIN ./admin/set_period_begin.html  -->
+<assign template="admin/set_period_begin.html">
+<include "functions">
+<if !request.cur_menu><assign cur_menu="search-accounts"><else><assign cur_menu=request.cur_menu></if>
+<call draw_menu(cur_menu)>
+<include "control/admin/set_period_begin.html">
+<call bottom()>
+<!-- END ./admin/set_period_begin.html  -->

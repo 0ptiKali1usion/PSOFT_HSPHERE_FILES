@@ -1,0 +1,29 @@
+<!-- BEGIN: ./msexchange/estimate_add_user.sbm -->
+<assign bizorg=account.getChild("bizorg")>
+<assign estimator=bizorg.createComplexEstimator()>
+<assign res=estimator.setCurrentStepId("1")>
+
+  <assign res=estimator.addResource(bizorg, "bizuser", "", "")>
+  <assign res=estimator.addResource(bizorg, request.i_bizuser_plan, "", "")>
+
+  <assign add_price=estimator.estimateCreate()>
+  <if add_price.status=="ERROR">
+      <assign failure="1">
+      <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+      <assign res=session.addMessage(add_price.msg)>      
+  </if>
+<if !failure>
+  <if add_price.free=="0">
+    <include "msexchange/add_user_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign vvalues="1">
+  <assign vi_bizuser_admin=toolbox.html_encode(request.i_bizuser_admin)>
+  <assign vi_bizuser_plan=toolbox.html_encode(request.i_bizuser_plan)>
+  <include request.ftemplate>
+</if>
+
+
+<!-- END: ./msexchange/estimate_add_user.sbm -->

@@ -1,0 +1,46 @@
+<!-- BEGIN ./SiteStudio/signup/SiteStudio.html.in -->
+<assign template="signup/SiteStudio.html">
+<include "control/signup/signup_function.html">
+<assign title=request.title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+<td colspan="3">
+<p><call draw_label(lang.sitestudio.sitestudio.info)></p><br>
+
+</td>
+</tr>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<assign LIGHT_STRIP=settings.menu_color1>
+<input type="hidden" name="template_name" value="submit/signup/end.sbm">
+<tr  vlign="top"><td>FTP Server:</td><td><input type="text" name="server" value="${server}"></td>
+<td>The name of the server, where your website located, it can be either IP, or simbolic name, like 207.12.33.55 or web1.psoft.net</td>
+<assign exludeFiles=exludeFiles+"server;">
+</tr>
+<tr  vlign="top"><td>FTP Port:</td><td><input type="text" name="port" value="<if port>${port}<else>21</if>" size="4"></td>
+<assign exludeFiles=exludeFiles+"port;"><td>The default value is 21, usually you should not change it.</td>
+</tr>
+<tr  vlign="top"><td>FTP Login:</td><td><input type="text" name="ftplogin" value="${ftplogin}"></td><td>The login name for to your website. SiteStudio will FTP using your login name, to your server, and upload all the necessary files</td>
+<assign exludeFiles=exludeFiles+"ftplogin;">
+</tr>
+
+<tr  vlign="top"><td>WebSite URL:</td><td><input type="text" name="url" value="${url}"></td>
+<td>The url to your website. Site Studio understands supports both http &amp; https sites. Usual format would be: <b>protocol://server:port/uri/</b><br> Examples: <i>http://www.mydomain.com/</i> or <i>http://www.myprovider.com/~myisite/</i> or </i>http://207.12.77.11:8080/xyz/mysite/</i>, <i>https://www.mysecuredomain.com/</td>
+<assign exludeFiles=exludeFiles+"url;">
+</tr>
+
+<tr  vlign="top"><td>HTML Directory:</td><td><input type="text" name="dir" value="${dir}"></td>
+<td>Directory on the webserver all your html files located. It have to be absolute path, like <i>/home/myaccount/html/</i>, don't forget / at the end.</td>
+<assign exludeFiles=exludeFiles+"dir;">
+</tr>
+
+<tr  vlign="top"><td>E-Mail:</td><td><input type="text" name="email" value="<if email>${email}<else>${request["_ci_email"]}</if>"></td><td>WebMaster E-Mail address. This address will be used on the new website that you are about to create. It can be changed latter on.</td>
+<assign exludeFiles=exludeFiles+"email;">
+</tr>
+
+<call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./SiteStudio/signup/SiteStudio.html.in -->

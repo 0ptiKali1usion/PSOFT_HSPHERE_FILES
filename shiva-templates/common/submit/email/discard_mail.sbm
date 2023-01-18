@@ -1,0 +1,31 @@
+<!-- BEGIN ./email/discard_mail.sbm  -->
+<assign mailbox = account.getResource(request.mo_id)>
+<if (mailbox.discard_incomm_mail=="enabled" && request["mbox_action"]=="disable") ||
+    (mailbox.discard_incomm_mail=="disabled" && request["mbox_action"]=="enable")>
+<assign result= mailbox.discardMail(request["mbox_action"])>
+
+<if result.status == "OK" >
+    <assign success="1">
+    <if request["mbox_action"]=="enable">
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_enabled, lang.label.mail_discard, ""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_disabled, lang.label.mail_discard, ""))>
+    </if>
+<else>
+    <if request["mbox_action"]=="enable">
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_enable, lang.label.mail_discard, ""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_disable, lang.label.mail_discard, ""))>
+    </if>
+    <assign res = session.addMessage(result.msg)>
+</if>
+</if>
+<if success>
+    <assign name = request.name>
+    <assign mailType = "mail_object">
+    <include request.stemplate>	
+<else>
+    <include request.ftemplate>
+</if>   
+
+<!--  END ./email/discard_mail.sbm  -->

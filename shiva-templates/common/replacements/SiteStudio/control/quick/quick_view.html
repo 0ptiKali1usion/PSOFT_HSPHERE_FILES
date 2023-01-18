@@ -1,0 +1,61 @@
+<!-- BEGIN SiteStudio/control/quick/quick_view.html  -->
+<call draw_tooltip()>
+
+<function check_newrow(count)>
+    <assign mod=toolbox.mod(count,"4")>
+    <if mod=="0">
+	</tr>
+	<tr>
+    </if> 
+</function>
+
+<call draw_table_header("2", lang.sitestudio.accinfo)>
+
+<tr>
+
+<td  width="50%" valign="top">
+<b><call draw_label(lang.label.plan)></b>&nbsp;<call draw_label(account.plan.description)><call draw_link(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.sitestudio.change)><br>
+<b><call draw_label(lang.label.bp)></b>&nbsp;<call draw_label(account.plan.values["_PERIOD_SIZE_"+account.periodId]+" "+account.plan.values["_PERIOD_TYPE_"+account.periodId])> <call draw_link(config.CLIENT_CP_URL+"?template_name=misc/changebp.html&stemplate="+template+"&ftemplate="+template, lang.sitestudio.change)><br>
+<b><call draw_label(lang.label.username)></b>&nbsp;<call draw_label(user.login)><br>
+</td>
+<td  width="50%" valign="top">
+<assign ss_list=account.getChildren("site_studio")>
+<if ss_list>
+<list account.getChildren("site_studio") as ss>
+<call draw_label(lang.sitestudio.quickview.server)><b>&nbsp;<call draw_label(ss.server)>&nbsp;</b><call draw_label(lang.label.login)><b>&nbsp;<call draw_label(ss.login)></b> <call draw_link(config.CLIENT_CP_URL+"?template_name=edit.html&rid="+ss, lang.sitestudio.edit)>
+</list>
+<else>
+<i><call draw_label(lang.sitestudio.text)></i>
+</if>
+</td>
+</tr>
+<call draw_table_footer()>
+<br>
+<br>
+<call draw_table_header("", lang.label.qa)>
+
+<tr>
+<td  width="100%" align="center">
+<assign counter="0">
+<table width="100%" border="0" cellspacing="5" cellpadding="0">
+<tr>
+	<td   width="25%" align="center"><assign counter=toolbox.add(counter,"1")><a href="${config.CLIENT_CP_URL}?template_name=list.html"><call draw_image_alt("site_st", lang.sitestudio.ss)><br><call draw_label(lang.sitestudio.ss)></a></td>
+<call check_newrow(counter)>
+	<td   width="25%" align="center"><assign counter=toolbox.add(counter,"1")><a href="${config.CLIENT_CP_URL}?template_name=billview/list.html"><call draw_image_alt("money", lang.sitestudio.quickview.invoice)><br><call draw_label(lang.sitestudio.quickview.invoice)></a></td>
+<call check_newrow(counter)>
+	<td   width="25%" align="center"><assign counter=toolbox.add(counter,"1")><a href="${config.CLIENT_CP_URL}?template_name=billing/cinfo_view.html"><call draw_image_alt("contact_info", lang.label.ci)><br><call draw_label(lang.label.ci)></a></td>
+<call check_newrow(counter)>
+	<td   width="25%" align="center"><assign counter=toolbox.add(counter,"1")><a href="${config.CLIENT_CP_URL}?template_name=billing/view.html"><call draw_image_alt("billing_info", lang.label.bi)><br><call draw_label(lang.label.bi)></a></td>
+<call check_newrow(counter)>
+<assign mod=toolbox.mod(counter,"4")>
+<if mod!="0">
+<assign proc=toolbox.mul(mod,"25")>
+<td  colspan="${mod}" width="${proc}%"  align="center">
+</if>
+</tr>
+</table>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./SiteStudio/control/quick/quick_view.html  -->

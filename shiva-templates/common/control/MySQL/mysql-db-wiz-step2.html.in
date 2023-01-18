@@ -1,0 +1,127 @@
+<!-- BEGIN ./control/MySQL/mysql-db-wiz-step2.html -->
+<call draw_tooltip()>
+<assign mysql = account.getChild("MySQL")>
+<assign suffix=mysql.prefix>
+<assign users = mysql.getChildren("MySQLUser")>
+<if db_id><assign database=db_id><else>
+<assign database = account.getResource(request.db_id)></if>
+<yafv s_mysql>
+<if users>
+  <assign tmp_colspan="2">
+<else>
+  <assign tmp_colspan="">
+</if>
+<call draw_table_header(tmp_colspan, lang.mysql.wiz2.header + " " + database.db_name)>
+<tr>
+<if tmp_colspan>
+  <assign td_c = "colspan=\""+tmp_colspan+"\"">
+<else>
+  <assign td_c="">
+</if>
+<td  ${td_c}>
+<call draw_label(lang.mysql.wiz2.text)>
+</td>
+</tr>
+<tr>
+  <td   width="60%">
+        <form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_new_user" check! accept-charset="UTF-8">
+	<if request.dtemplate><input type="hidden" name="dtemplate" value="${request.dtemplate}"></if>
+        <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+        <input type="hidden" name="next_template" value="submit/MySQL/add_new_user.sbm">
+        <input type="hidden" name="db_id" value="${database}">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="type" value="MySQLUser">
+        <input type="hidden" name="rid" value="${mysql}">
+        <input type="hidden" name="mod" value="">
+        <input type="hidden" name="suffix" value="${suffix}">
+        <table class="inner_control_grid">
+          <tr><td colspan="2" class="inner_control_grid_header"><call draw_header(lang.mysql.wiz2.adduser+" " + database.db_name)></td></tr>
+          <tr>
+            <td><call draw_label(lang.label.username)></td>
+            <td><call draw_label_bold(suffix)><input type="text" name="user_name" size="16" check="vMySQLCombLogin(this, suffix)" label="${lang.label.username}"></td>
+          </tr>
+          <tr>
+            <td><call draw_label(lang.label.password)></td>
+            <td><input type="password" name="user_password" size="15" check="vPassword1(this, user_name)" label="${lang.label.password}"></td>
+          </tr>
+          <tr>
+            <td><call draw_label(lang.label.confirm_psw)></td>
+            <td><input type="password" name="user_password1" size="15" check="vPassword2(user_password,this)" label="${lang.label.confirm_psw}"></td>
+          </tr>
+          <tr>
+            <td><call draw_label(lang.mysql.role)></td>
+            <td>
+              <select name="user_role">
+                 <option value="1">${lang.mysql.role_r}</option>
+                 <option value="2">${lang.mysql.role_rw}</option>
+                 <option value="3">${lang.mysql.role_dba}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td   class="inner_control_grid_align_center" colspan="2">
+              <input type="submit" value="${lang.mysql.wiz2.submitadduser}">
+            </td>
+          </tr>
+        </table>
+        </form>
+  </td>
+  <if users>
+  <td   width="40%">
+          <form action="${comfig.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+	  <if request.dtemplate><input type="hidden" name="dtemplate" value="${request.dtemplate}"></if>
+          <input type="hidden" name="template_name" value="submit/MySQL/add_exist_user.sbm">
+          <input type="hidden" name="db_id" value="${database}">
+          <input type="hidden" name="stemplate" value="${template}">
+          <input type="hidden" name="ftemplate" value="${template}">
+          <table width="100%" class="control">
+            <tr>
+              <td  colspan="2" class="control_header"><call draw_header(lang.mysql.wiz2.grant + database.db_name)></td>
+            </tr>
+            <tr>
+              <td   width="30%"><call draw_label(lang.mysql.pick)></td>
+              <td>
+                <select name="u_id">
+                  <list users as m_user>
+                  <option value="${m_user}">${m_user.name}</option>
+                  </list>
+                </select>
+              </td>
+            <tr> 
+              <td   width="30%"><call draw_label(lang.mysql.role)></td>
+              <td>
+                <select name="user_role">
+                  <option value="1">${lang.mysql.role_r}</option>
+                  <option value="2">${lang.mysql.role_rw}</option>
+                  <option value="3">${lang.mysql.role_dba}</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td   class="control_align_center" colspan="2">
+                <input type="submit" value="${lang.mysql.wiz2.submitgrant}">
+              </td>
+            </tr>
+	    </form> 
+          </table>
+        </td>
+</if>
+</tr>
+<tr>
+<form action="${comfig.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+  <td   class="control_align_center" valign="center" <if users>colspan="2"</if>>
+    <if request.dtemplate>
+      <assign final_template=request.dtemplate>
+      <input type="hidden" name="dtemplate" value="${final_template}">
+    <else>
+      <assign final_template="MySQL/databases.html">
+    </if>
+    <input type="hidden" name="template_name" value="${final_template}">
+    <input type="submit" value="${lang.mysql.wiz2.submitfinish}">
+  </td>
+</form>
+</tr>
+<call draw_table_footer()>
+<br>
+<!--  END ./control/MySQL/mysql-db-wiz-step2.html  -->

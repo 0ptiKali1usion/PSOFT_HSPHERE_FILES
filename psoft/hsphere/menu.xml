@@ -1,0 +1,504 @@
+<?xml version="1.0"?>
+<!DOCTYPE config [
+ <!ELEMENT config (menus,interface)>
+  <!ELEMENT menus (menu+)>
+  <!ELEMENT menu (menuitem*,initmenu*)>
+  <!ELEMENT menuitem (#PCDATA)>
+  <!ELEMENT initmenu (#PCDATA)>
+  <!ELEMENT interface (menudef+)>
+  <!ELEMENT menudef (initmenu*,menuitem*)>
+
+
+  <!ATTLIST menudef id CDATA #REQUIRED>
+
+  <!ATTLIST menu name CDATA #REQUIRED>
+  <!ATTLIST menu label CDATA #REQUIRED>
+  <!ATTLIST menu platform_type CDATA "">
+  <!ATTLIST menu resource CDATA "">
+  <!ATTLIST menu defaultitem CDATA #REQUIRED>
+  <!ATTLIST menu tip CDATA "">
+
+  <!ATTLIST menuitem name CDATA #REQUIRED>
+  <!ATTLIST menuitem label CDATA #REQUIRED>
+  <!ATTLIST menuitem URL CDATA #REQUIRED>
+  <!ATTLIST menuitem platform_type CDATA "">
+  <!ATTLIST menuitem resource CDATA "">
+  <!ATTLIST menuitem tip CDATA "">
+  <!ATTLIST menuitem check_type CDATA "1">
+  <!ATTLIST menuitem new_window CDATA "0">
+
+  <!ATTLIST initmenu name CDATA #REQUIRED>
+]>
+<config>
+<menus>
+
+<menu name="SiteStudio"	label="sitestudio.label" defaultitem="SiteStudio-edit" tip="sitestudio.tip">
+    <menuitem name="SiteStudio-edit" label="sitestudio.edit.label" URL="list.html" resource="" tip="sitestudio.edit.tip"/>
+    <menuitem name="SiteStudio-add" label="sitestudio.add.label" URL="add.html" resource="" tip="sitestudio.add.tip"/>
+</menu>
+
+<menu name="acct-pref" label="acctpref.label" defaultitem="acct-pref-quick" tip="acctpref.tip">
+    <menuitem name="acct-pref-quick" label="acctpref.quick.label" URL="quick/quick_view.html" resource="" tip="acctpref.quick.tip"/>
+    <menuitem name="acct-pref-ai" label="acctpref.ai.label" URL="design/generic.html" resource="" tip="acctpref.ai.tip"/>
+    <menuitem name="acct-pref-ci" label="acctpref.ci.label" URL="billing/cinfo_view.html" resource="" tip="acctpref.ci.tip"/>
+    <menuitem name="acct-pref-lf" label="acctpref.lf.label" URL="misc/user_account_lf.html" resource="" tip="acctpref.lf.tip"/>
+    <menuitem name="info-change-url" label="acctpref.changeurl.label" URL="misc/admin_url.html" resource="reseller" tip="acctpref.changeurl.tip"/>
+</menu>
+
+<menu name="user-pref" label="user_pref.label" defaultitem="user-pref-pass" tip="user_pref.tip">
+    <menuitem name="user-pref-pass" label="user_pref.psw.label" URL="misc/password_form.html" resource="" tip="user_pref.psw.tip"/>
+    <menuitem name="user-pref-choose-acct" label="user_pref.chooseacct.label" URL="misc/choose_account.html" resource="!bizorg" tip="user_pref.chooseacct.tip"/>
+    <menuitem name="user-pref-add-acct" label="user_pref.addacct.label" URL="misc/add_accounts.html" resource="!bizorg" tip="user_pref.addacct.tip"/>
+    <menuitem name="user-pref-lang" label="user_pref.lang.label" URL="misc/langs.html" resource="" tip="user_pref.lang.tip"/>
+</menu>
+
+
+<menu name="ftp_user" label="ftpuser.label" defaultitem="ftp_user-view" tip="ftpuser.tip">
+    <menuitem name="ftp_user-view" label="ftpuser.view.label" URL="unixuser/view.html" resource="" check_type="2" tip="ftpuser.view.tip"/>
+    <menuitem name="ftp_user-ftp" label="ftpuser.ftp.label" URL="ftp/ftp.html" resource="" tip="ftpuser.ftp.tip"/>
+</menu>
+
+<menu name="mysql" label="mysql.label" defaultitem="mysql-dbs" tip="mysql.tip">
+    <menuitem name="mysql-dbs" label="mysql.dbs.label" URL="MySQL/databases.html" resource="MySQL" tip="mysql.dbs.tip"/>
+    <menuitem name="mysql-wiz1" label="mysql.wiz.label" URL="MySQL/mysql-db-wiz-step1.html" resource="MySQL" tip="mysql.wiz.tip"/>
+</menu>
+
+<menu name="msexchange" label="msexchange.label" defaultitem="he-users" tip="msexchange.tip">
+    <menuitem name="he-users" label="msexchange_users.label" URL="msexchange/users.html" resource="" tip="msexchange_users.tip"/>
+    <menuitem name="he-domains" label="msexchange_domains.label" URL="msexchange/smtpdomains.html" resource="" tip="msexchange_domains.tip"/>
+    <menuitem name="he-dns_edit" label="msexchange_dns_edit.label" URL="msexchange/dns_edit.html" resource="" tip="msexchange_dns_edit.tip"/>
+    <menuitem name="he-dl" label="msexchange_dl.label" URL="msexchange/dl.html" resource="distribution_list" tip="msexchange_dl.tip"/>
+</menu>
+
+<menu name="mssql" label="mssql.label" defaultitem="mssql-dbs" tip="mssql.tip">
+    <menuitem name="mssql-logins" label="mssql.logins.label" URL="MSSQL/logins.html" resource="MSSQL" tip="mssql.logins.tip"/>
+    <menuitem name="mssql-dbs" label="mssql.dbs.label" URL="MSSQL/databases.html" resource="MSSQL" tip="mssql.dbs.tip"/>
+    <menuitem name="mssql-manager" label="mssql.manager.label" URL="MSSQL/manager.html" platform_type="win2k" resource="MSSQL" tip="mssql.manager.label"/>
+</menu>
+
+<menu name="pgsql" label="pgsql.label" defaultitem="pgsql-dbs" tip="pgsql.tip">
+	<menuitem name="pgsql-dbs" label="pgsql.dbs.label" URL="PGSQL/databases.html" resource="pgsql" tip="pgsql.dbs.tip"/>
+	<menuitem name="pgsql-users" label="pgsql.users.label" URL="PGSQL/users.html" resource="pgsql" tip="pgsql.users.tip"/>
+</menu>
+
+<menu name="databases" label="databases.label" defaultitem="mysql-dbs" tip="databases.tip">
+    <initmenu name="mysql"/>
+    <initmenu name="mssql"/>
+    <initmenu name="pgsql"/>
+</menu>
+
+<menu name="domain" label="domain.label" defaultitem="domain-list" tip="domain.tip" resource="domain; nodomain; service_domain; 3ldomain; parked_domain">
+    <menuitem name="domain-list" label="domain.list.label" URL="domain/list.html" resource="" tip="domain.list.tip"/>
+    <menuitem name="web_options" label="domain.web_options.label" URL="quick/choice_hosting.html" resource="hosting" tip="domain.web_options.tip"/>
+    <menuitem name="domain-reg" label="domain.reg.label" URL="domain/registration.html&amp;stemplate=domain/list.html" resource="" tip="domain.reg.tip"/>
+    <menuitem name="traceroute-view" label="domain.view.label" URL="domain/traceroute.html" resource="" tip="domain.view.tip"/>
+    <menuitem name="kanoodle" label="domain.kanoodle.label" URL="misc/kanoodle.html" resource="kanoodle" tip="domain.kanoodle.tip"/>
+    <menuitem name="statistics" label="domain.stats.label" URL="quick/choice_stat.html" resource="webalizer; modlogan; urchin; awstats" tip="domain.stats.tip"/>
+</menu>
+
+<menu name="mail_only_domain" label="domain.label" defaultitem="domain-list" tip="domain.tip" resource="domain; nodomain; service_domain; 3ldomain; parked_domain">
+    <menuitem name="domain-list" label="domain.list.label" URL="domain/list.html" resource="" tip="domain.list.tip"/>
+    <menuitem name="domain-reg" label="domain.reg.label" URL="domain/registration.html&amp;stemplate=domain/list.html" resource="" tip="domain.reg.tip"/>
+    <menuitem name="traceroute-view" label="domain.view.label" URL="domain/traceroute.html" resource="" tip="domain.view.tip"/>
+</menu>
+
+<menu name="billing" label="billing.label" defaultitem="billing-invoice" tip="billing.tip">
+    <menuitem name="billing-price" label="billing.price.label" URL="billing/price.html" resource="BILLING" tip="billing.price.tip"/>
+    <menuitem name="billing-price_res" label="billing.res.label" URL="billing/reseller_price.html" resource="reseller" tip="billing.res.tip"/>
+    <menuitem name="billing-invoice" label="billing.invoice.label" URL="billview/list.html" resource="BILLING;WITHOUT_BILLING" tip="billing.invoice.tip"/>
+    <menuitem name="billing-suminvoice" label="billing.suminvoice.label" URL="sumbill/list.html" resource="BILLING;WITHOUT_BILLING" tip="billing.suminvoice.tip"/>
+    <menuitem name="billing-bi" label="billing.bi.label" URL="billing/view.html" resource="BILLING;WITHOUT_BILLING" tip="billing.bi.tip"/>
+    <menuitem name="billing-money-back" label="billing.back.label" URL="billing/money_confirm.html" resource="BILLING,MONEY_BACK" tip="billing.back.tip"/>
+</menu>
+
+
+<menu name="mail" label="mail.label" defaultitem="mail-list" tip="mail.tip">
+    <menuitem name="mail-list" label="mail.list.label" URL="email/list2.html" resource="mail_service" tip="mail.list.tip"/>
+</menu>
+
+<menu name="tt" label="tt.label" defaultitem="user-tickets" tip="tt.tip">
+    <menuitem name="adminpanel-tt" label="tt.adminpanel.label" URL="tt/new_tt_admin.html" resource="ttadmin" tip="tt.adminpanel.tip" new_window="1"/>
+    <menuitem name="user-tickets" label="tt.usertickets.label" URL="tt/user_view_tts.html" resource="tt" tip="tt.usertickets.tip"/>
+    <menuitem name="kb-admin" label="kb.admin.label" URL="kb/old_admin.html" resource="ttadmin" tip="kb.admin.tip"/>
+    <menuitem name="kb-search" label="kb.search.label" URL="kb/old_view.html" resource="tt" tip="kb.search.tip"/>
+    <menuitem name="info-make-tt" label="tt.make.label" URL="tt/new_tt_form.html&amp;inPanel=0" resource="tt" tip="tt.make.tip"/>
+    <menuitem name="info-tt-customjob" label="tt.cj.label" URL="tt/customjobs.html" tip="tt.cj.tip"/>
+</menu>
+
+<menu name="info" label="info.label" defaultitem="acct-pref-quick" tip="info.tip">
+    <menuitem name="acct-pref-quick" label="acctpref.quick.label" URL="quick/quick_view.html" resource="" tip="acctpref.quick.tip"/>
+    <menuitem name="info-plans" label="info.plans.label" URL="admin/plans.html" resource="admin" tip="info.plans.tip"/>
+    <menuitem name="info-plan_wizards" label="info.wiz.label" URL="admin/wizards/list.html" resource="admin" tip="info.wiz.tip"/>
+    <menuitem name="info-cmp-plans" label="info.cmp.label" URL="admin/group_plans.html" resource="cmp_groups" tip="info.cmp.tip"/>
+    <menuitem name="info-global-resources" label="info.gl_resources.label" URL="admin/gl_resources.html" resource="reseller_su" tip="info.gl_resources.tip"/>
+    <menuitem name="ssh-manager" label="info.sshmanager.label" URL="admin/sshmanager.html" resource="sshmanager" tip="info.sshmanager.tip"/>
+    <menuitem name="system-info" label="info.system.label" URL="admin/system_info.html" resource="admin" tip="info.system.tip"/>
+    <menuitem name="enterprise-system-info" label="info.enterprise.label" URL="admin/all_system_info.html" resource="reseller_su" tip="info.enterprise.tip"/>
+</menu>
+
+<menu name="user_admin" label="user_admin.label" defaultitem="user-pref-pass" tip="user_admin.tip">
+    <menuitem name="user-pref-pass" label="user_admin.psw.label" URL="misc/info_password_form.html" resource="" tip="user_admin.psw.tip"/>
+    <menuitem name="user-pref-choose-acct" label="user_pref.chooseacct.label" URL="misc/info_choose_account.html" resource="" tip="user_pref.chooseacct.tip"/>
+    <menuitem name="user_admin-add-acct" label="user_pref.addacct.label" URL="admin/add_accounts.html" resource="signupadm" tip="user_pref.addacct.tip"/>
+    <menuitem name="acct-pref-lf" label="acctpref.lf.label" URL="misc/user_account_lf.html" resource="" tip="acctpref.lf.tip"/>
+    <menuitem name="user-pref-lang" label="user_admin.lang.label" URL="misc/langs.html" resource="" tip="user_admin.lang.tip"/>
+</menu>
+
+<menu name="ds_server" label="ds_servers.label" defaultitem="ds_server-manage" resource="admin, ds_enable" tip="ds_server.tip">
+<!--    <menuitem name="ds_server-add_template" label="ds_server-add_template.label" URL="admin/ds/add_ds_template.html" tip="ds_server-add_template.tip"/> -->
+    <menuitem name="ds_server-manage_templates" label="ds_server-manage_templates.label" URL="admin/ds/manage_ds_templates.html" tip="ds_server-manage_templates.tip"/>
+<!--    <menuitem name="ds_server-add_server" label="ds_server-add_server.label" URL="admin/ds/add_server.html" tip="ds_server-add_server.tip"/> -->
+    <menuitem name="ds_server-manage" label="ds_server-manage.label" URL="admin/ds/manage.html" resource="M_ADMIN;R_ADMIN,allow_own_ds" tip="ds_server-manage.tip"/>
+    <menuitem name="ds_ip_pool" label="ds_server-ip_pool.label" URL="ds_ip_pool/list.html" resource="M_ADMIN;R_ADMIN,allow_own_ds" tip="ds_server-ip_pool.tip"/>
+    <menuitem name="ds_netswitch_manage" label="ds_netswitch_manage.label" resource="M_ADMIN;R_ADMIN,allow_own_ds" URL="admin/ds/netswitch_manage.html" tip="ds_netswitch_manage.tip"/>
+    <menuitem name="ds_cancel_settings" label="ds_cancel_settings.label" URL="admin/ds/ds_cancel_settings.html" tip="ds_cancel_settings.tip"/>
+    <menuitem name="info-tt-backups" label="tt.backup.label" URL="admin/backup_schedule_params.html" resource="ds_backup_enable" tip="tt.backup.tip"/>
+</menu>
+
+<menu name="signup" label="signup.label" defaultitem="signup-signup" tip="signup.tip">
+    <menuitem name="signup-signup" label="signup.signup.label" URL="admin/signup.html" resource="signupadm" tip="signup.signup.tip"/>
+    <menuitem name="signup-moderate" label="signup.moderate.label" URL="signup/moderate.html" resource="signupadm" tip="signup.moderate.tip"/>
+    <menuitem name="signup-stats" label="signup.stats.label" URL="signup/stat.html" resource="reportviewer,signupadm" tip="signup.stats.tip"/>
+</menu>
+
+<menu name="search" label="search.label" defaultitem="search-accounts" tip="search.tip">
+    <menuitem name="search-accounts" label="search.acc.label" URL="admin/search.html" resource="reportviewer,admin" tip="search.acc.tip"/>
+    <menuitem name="search-domains" label="search.domains.label" URL="admin/domains.html" resource="reportviewer,admin" tip="search.domains.tip"/>
+    <menuitem name="search-byci" label="search.byci.label" URL="admin/search_ci.html" resource="reportviewer,admin" tip="search.byci.tip"/>
+    <menuitem name="search-all" label="search.all.label" URL="admin/search_all.html" resource="reseller_su,admin" tip="search.all.tip"/>
+    <menuitem name="search-suspended" label="search.susp.label" URL="admin/search_suspended.html" resource="reportviewer,admin" tip="search.susp.tip"/>
+    <menuitem name="search-deleted" label="search.del.label" URL="admin/search_deleted.html" resource="reportviewer,admin" tip="search.del.tip"/>
+    <menuitem name="search-users" label="search.users.label" URL="admin/users.html" resource="reseller_su,admin" tip="search.users.tip"/>
+    <menuitem name="search-by-ds" label="search.ds_users.label" URL="admin/ds/ds_user_search.html" resource="admin, ds_enable" tip="search.ds_users.tip"/>
+    <menuitem name="search-vps" label="search.vps.label" URL="admin/search_vps.html" resource="reportviewer,admin" tip="search.vps.tip"/>
+</menu>
+
+<menu name="settings" label="settings.label" defaultitem="mailman-list" tip="settings.tip">
+    <menuitem name="settings-custom-emails" label="settings.custom_email.label" URL="admin/custom_emails.html" resource="admin" tip="settings.custom_email.tip"/>
+    <menuitem name="mailman-list" label="settings.mail.label" URL="mailman/settings.html" resource="admin" tip="settings.mail.tip"/>
+    <menuitem name="settings-perc" label="settings.perc.label" URL="admin/settings/percents.html" resource="admin" tip="settings.perc.tip"/>
+    <menuitem name="cc_encryption" label="settings.cc_encryption.label" URL="admin/merchant/CCEncryption.html" resource="reseller_su" tip="settings.cc_encryption.tip"/>
+    <menuitem name="cc-brands" label="settings.ccbrands.label" URL="admin/settings/ccbrands.html" resource="merchant_manager" tip="settings.ccbrands.tip"/>
+    <menuitem name="merchant_view" label="settings.merchant.label" URL="admin/merchant/view.html" resource="merchant_manager" tip="settings.merchant.tip"/>
+<!-- FIXME should be registrar_manager OR billman -->
+    <menuitem name="registrar_view" label="settings.registrar.label" URL="admin/registrar/view.html" resource="admin" tip="settings.registrar.tip"/>
+    <menuitem name="comodossl" label="settings.comodossl.label" URL="admin/comodossl_view.html" resource="admin" tip="settings.comodossl.tip"/>
+    <menuitem name="signup_guard" label="settings.signup_guard.label" URL="admin/signup_guard.html" resource="admin" tip="settings.signup_guard.tip"/>
+    <menuitem name="settings-license" label="settings.license.label" URL="admin/settings/license.html" resource="reseller_su" tip="settings.license.tip"/>
+    <menuitem name="settings-tt" label="settings.tt.label" URL="admin/settings/tt.html" resource="admin" tip="settings.tt.tip"/>
+    <menuitem name="settings-easyapp" label="settings.easyapp.label" URL="admin/settings/easyapp.html" resource="admin" tip="settings.easyapp.tip"/>    
+    <menuitem name="settings-not" label="settings.not.label" URL="admin/settings/notifications.html" resource="admin" tip="settings.not.tip"/>
+    <menuitem name="settings-not-trial" label="settings.not_trial.label" URL="admin/settings/notifications_trial.html" resource="admin" tip="settings.not_trial.tip"/>
+    <menuitem name="settings-taxes" label="settings.taxes.label" URL="admin/settings/taxes.html" resource="admin" tip="settings.taxes.tip"/>
+    <menuitem name="settings-aff" label="settings.aff.label" URL="admin/settings/aff.html" resource="admin" tip="settings.aff.tip"/>
+    <menuitem name="settings-pkgs" label="settings.pkgs.label" URL="admin/packages/list.html" resource="reseller_su" tip="settings.pkgs.tip"/>
+    <menuitem name="settings-promo" label="settings.promo.label" URL="admin/promo/list.html" resource="admin,billman" tip="settings.promo.tip"/>
+    <menuitem name="settings-billing-settings" label="settings.billing.label" URL="admin/settings/billing_settings.html" resource="admin" tip="settings.billing.tip"/>
+</menu>
+
+<menu name="look_feel" label="lf.label" defaultitem="look_feel-corp_img" tip="lf.tip">
+    <menuitem name="look_feel-corp_img" label="lf.corp_img.label" URL="admin/settings/corp_img_lf.html" resource="admin" tip="lf.corp_img.tip"/>
+    <menuitem name="look_feel-design_settings" label="lf.design_settings.label" URL="admin/settings/design_lf.html" resource="admin" tip="lf.design_settings.tip"/>
+    <menuitem name="look_feel-company" label="lf.ci.label" URL="admin/settings/info.html" resource="admin" tip="lf.ci.tip"/>
+    <menuitem name="look_feel-login-texts" label="lf.login.label" URL="admin/settings/login_texts.html" resource="admin" tip="lf.login.tip"/>
+    <menuitem name="look_feel-signup-texts" label="lf.signup.label" URL="admin/settings/signup_texts.html" resource="admin" tip="lf.signup.tip"/>
+    <menuitem name="look_feel-misc-texts" label="lf.misc.label" URL="admin/settings/other.html" resource="admin" tip="lf.misc.tip"/>
+    <menuitem name="look_feel-langs" label="lf.lang.label" URL="admin/settings/langs.html" resource="admin" tip="lf.lang.tip"/>
+    <menuitem name="look_feel-regions" label="lf.regions.label" URL="admin/settings/regions.html" resource="admin" tip="lf.regions.tip"/>
+</menu>
+
+<menu name="e.manager" label="em.label" defaultitem="e.manager-enterprise" tip="em.tip">
+    <menuitem name="e.manager-enterprise" label="em.em.label" URL="eeman/list.html" resource="eeman" tip="em.em.tip"/>
+    <menuitem name="e.manager-p.servers" label="em.ps.label" URL="eeman/pservers.html" resource="eeman" tip="em.ps.tip"/>
+    <menuitem name="e.manager-add-p.server" label="em.addps.label" URL="eeman/add_pserver.html" resource="eeman" tip="em.addps.tip"/>
+    <menuitem name="e.manager-l.servers" label="em.ls.label" URL="eeman/lservers.html" resource="eeman" tip="em.ls.tip"/>
+    <menuitem name="e.manager-add-l.server" label="em.addls.label" URL="eeman/add_lserver.html" resource="eeman" tip="em.addls.tip"/>
+    <menuitem name="e.manager-server-groups" label="em.group.label" URL="eeman/groups.html" resource="eeman" tip="em.group.tip"/>
+    <menuitem name="e.manager-adnsmanager" label="em.dns.label" URL="adnsmanager/list.html" resource="adnsmanager" tip="em.dns.tip"/>
+    <menuitem name="e.manager-res" label="em.res.label" URL="eeman/list_res.html" resource="reseller_eeman" tip="em.res.tip"/>
+    <menuitem name="e.manager-ssl" label="em.ssl.label" URL="adnsmanager/listssl.html" resource="sharedssl_enable" tip="em.ssl.tip"/>
+    <menuitem name="e.manager-cp_ssl" label="em.cp-ssl.label" URL="adnsmanager/add_cp_ssl.html" resource="reseller_eeman" tip="em.cp-ssl.tip"/>
+    <menuitem name="e.manager-m.servers" label="em.ms.label" URL="eeman/mservers.html" resource="eeman" tip="em.ms.tip"/>
+    <menuitem name="e.manager-cmove" label="em.cmove.label" URL="eeman/cmove.html" resource="eeman" tip="em.cmove.tip"/>
+    <menuitem name="e.manager-transfers" label="em.cmove-processes.label" URL="eeman/transfers.html" resource="eeman" tip="em.cmove-processes.tip"/>
+    <menuitem name="e.manager-gateways" label="em.gateways.label" URL="eeman/gateways.html" resource="eeman" tip="em.gateways.tip"/>
+    <menuitem name="e.manager-allocservers" label="em.allocservers.label" URL="eeman/allocservers.html" resource="eeman" tip="em.allocservers.tip"/>
+    <menuitem name="e.manager-other" label="em.other.label" URL="admin/other.html" resource="admin" tip="em.other.tip"/>
+    <menuitem name="e.manager-he" label="msexchange.label" URL="msexchange/admin_settings.html" resource="eeman,MSEXCHANGE" tip="msexchange.tip"/>
+    <menuitem name="migration" label="settings.import_users.label" URL="migrator/migration_main.html" resource="admin" tip="migrator.import_users.tip"/>
+</menu>
+
+<menu name="maintainary.a" label="maint.a.label" defaultitem="maintainary.a-contract-adm" tip="maint.a.tip">
+    <menuitem name="maintainary.a-contract-adm" label="maint.a.admin.label" URL="maintain/list.html" resource="maintainAdmin" tip="maint.a.admin.tip"/>
+    <menuitem name="maintainary.a-contract-sup" label="maint.a.supervisor.label" URL="maintain/general_maintainer.html" resource="generalMaintainAdmin" tip="maint.a.supervisor.tip"/>
+</menu>
+
+<menu name="maintainary.c" label="maint.c.label" defaultitem="maintainary.c-contract-clnt" tip="maint.c.tip">
+    <menuitem name="maintainary.c-contract-clnt" label="maint.c.client.label" URL="maintain/list.html" resource="" tip="maint.c.client.tip"/>
+    <menuitem name="maintainary.c-contract-buyer" label="maint.c.buyer.label" URL="maintain/general_maintainer.html" resource="generalMaintainer" tip="maint.c.buyer.tip"/>
+</menu>
+
+<menu name="win-ftp_user" label="winftp.label" defaultitem="ftp_user-view" tip="winftp.tip">
+    <menuitem name="ftp_user-view" label="winftp.view.label" URL="winuser/view.html" resource="unixuser" tip="winftp.view.tip"/>
+    <menuitem name="ftp_user-ftp" label="winftp.ftp.label" URL="winftp/ftp.html" resource="ftp_vhost_anonymous" tip="winftp.ftp.tip"/>
+</menu>
+
+<menu name="win_domain" label="windomain.label" defaultitem="domain-list" tip="windomain.tip">
+    <menuitem name="domain-list" label="windomain.list.label" URL="windomain/list.html" resource="" tip="windomain.list.tip"/>
+    <menuitem name="domain-reg" label="windomain.reg.label" URL="domain/registration.html&amp;stemplate=windomain/list.html" resource="" tip="windomain.reg.tip"/>
+    <menuitem name="traceroute-view" label="windomain.view.label" URL="domain/traceroute.html" resource="" tip="windomain.view.tip"/>
+</menu>
+
+<menu name="real_srv" label="real.label" defaultitem="real_srv-users" tip="real.tip">
+    <menuitem name="real_srv-users" label="real.users.label" URL="real/rmserver.html" resource="realserver_user" tip="real.users.tip"/>
+</menu>
+
+<menu name="reports" label="report.label" defaultitem="search-balance" tip="report.tip">
+    <menuitem name="search-balance" label="report.balance.label" URL="admin/search_balance.html" resource="billman" tip="report.balance.tip"/>
+    <menuitem name="search-balance-exhaustion" label="report.balance_exhaustion_date.label" URL="admin/exhaution_balance.html" resource="billman" tip="report.balance_exhaustion_date.tip"/>
+    <menuitem name="daily_report" label="report.daily.label" URL="billing_report/search.html" resource="daily_report" tip="report.daily.tip"/>
+    <menuitem name="search-chargelog" label="report.charge.label" URL="admin/charge_log.html" resource="billman" tip="report.charge.tip"/>
+    <menuitem name="search-webpaymentlog" label="report.webpayment.label" URL="admin/webpayment_log.html" resource="billman" tip="report.webpayment.tip"/>
+    <menuitem name="search-registrarlog" label="report.registrarlog.label" URL="admin/registrarlog-form.html" resource="reportviewer" tip="report.registrarlog.tip"/>
+    <menuitem name="search-cc_charge" label="report.cc_charge.label" URL="admin/cc_charge.html" resource="billman" tip="report.cc_charge.tip"/>
+    <menuitem name="search-billing" label="report.entries.label" URL="admin/search_bill.html" resource="billman" tip="report.entries.tip"/>
+    <menuitem name="monthly-churn-rate" label="report.rate.label" URL="admin/monthly_churn_rate.html" resource="billman" tip="report.rate.tip"/>
+    <menuitem name="monthly-revenu" label="report.rev.label" URL="admin/monthly_revenu.html" resource="billman" tip="report.rev.tip"/>
+    <menuitem name="monetary-trans" label="report.trans.label" URL="admin/monetary_transaction.html" resource="billman" tip="report.trans.tip"/>
+    <menuitem name="search-transfer" label="search.transfer.label" URL="admin/transfer.html" resource="reportviewer" tip="search.transfer.tip"/>
+    <menuitem name="usage-disc" label="search.usage-disc.label" URL="admin/usage_disc.html" resource="reportviewer" tip="search.usage-disc.tip"/>
+    <menuitem name="inreseller-search-transfer" label="search.inreseller-transfer.label" URL="admin/inreseller_transfer.html" resource="reseller_su" tip="search.inreseller-transfer.tip"/>
+    <menuitem name="inreseller-usage-disc" label="search.inreseller-usage-disc.label" URL="admin/inreseller_usage_disc.html" resource="reseller_su" tip="search.inreseller-usage-disc.tip"/>
+    <menuitem name="search-ip" label="search.ip.label" URL="admin/ip.html" resource="eeman" tip="search.ip.tip"/>
+    <menuitem name="search-fatts" label="search.fatts.label" URL="admin/fatts.html" resource="billman" tip="search.fatts.tip"/>
+</menu>
+
+<menu name="odbc" label="odbc.label" defaultitem="odbc_service" tip="odbc.tip">
+    <menuitem name="odbc_service" label="odbc.service.label" URL="odbc/list.html" resource="odbc" tip="odbc.service.tip"/>
+</menu>
+
+<menu name="reseller_info" label="reseller.label" defaultitem="reseller_info-aa" tip="reseller.tip">
+    <menuitem name="acct-pref-quick" label="acctpref.quick.label" URL="quick/quick_view.html" resource="" tip="acctpref.quick.tip"/>
+    <menuitem name="reseller_info-aa" label="reseller.aa.label" URL="misc/add_admin_account.html" resource="" tip="reseller.aa.tip"/>
+    <menuitem name="acct-pref-ai" label="acctpref.ai.label" URL="misc/generic.html" resource="" tip="acctpref.ai.tip"/>
+    <menuitem name="acct-pref-ci" label="reseller.ci.label" URL="billing/cinfo_view.html" resource="" tip="reseller.ci.tip"/>
+    <menuitem name="info-change-url" label="reseller.url.label" URL="misc/admin_url.html" resource="reseller" tip="reseller.url.tip"/>
+    <menuitem name="acct-pref-lf" label="acctpref.lf.label" URL="misc/user_account_lf.html" resource="" tip="acctpref.lf.tip"/>
+</menu>
+
+<menu name="user_reseller" label="user_reseller.label" defaultitem="user-pref-pass" tip="user_reseller.tip">
+    <menuitem name="user-pref-pass" label="user_pref.psw.label" URL="misc/password_form.html" resource="" tip="reseller.psw.tip"/>
+    <menuitem name="user-pref-choose-acct" label="user_pref.chooseacct.label" URL="misc/choose_account.html" resource="" tip="user_pref.chooseacct.tip"/>
+    <menuitem name="user-pref-add-acct" label="user_pref.addacct.label" URL="misc/add_accounts.html" resource="" tip="user_pref.addacct.tip"/>
+    <menuitem name="user-pref-lang" label="user_pref.lang.label" URL="misc/langs.html" resource="" tip="user_pref.lang.tip"/>
+</menu>
+
+<menu name="vps" label="vps.menu.label" defaultitem="vps-serverinfo" tip="vps.menu.tip">
+    <menuitem name="vps-serverinfo" label="vps.menu.serverinfo.label" URL="vps/server_info.html" resource="vps" tip="vps.menu.serverinfo.tip"/>
+    <menuitem name="vps-dns_zone" label="vps.menu.dns.label" URL="vps/dns_list.html" resource="dns_zone" tip="vps.menu.dns.tip"/>
+    <menuitem name="vps-rootpasswd" label="vps.menu.rootpasswd.label" URL="vps/server_rootpasswd.html" resource="vps" tip="vps.menu.rootpasswd.tip"/>
+    <menuitem name="vps-serverips" label="vps.menu.serverips.label" URL="vps/server_ips.html" resource="vps" tip="vps.menu.serverips.tip"/>
+    <menuitem name="vps-serverlimits" label="vps.menu.serverlimits.label" URL="vps/server_limits.html" resource="vps" tip="vps.menu.serverlimits.tip"/>
+    <menuitem name="vps-serverdetails" label="vps.menu.serverdetails.label" URL="vps/server_details.html" resource="vps" tip="vps.menu.serverdetails.tip"/>
+</menu>
+
+<menu name="3rd_party" label="3rd_party.label" defaultitem="3rd_party-miva_lics" tip="3rd_party.tip">
+    <menuitem name="3rd_party-miva_lics" label="3rd_party.miva.label" URL="admin/miva_lic_man.html" resource="miva_lic_manager" tip="3rd_party.miva.tip"/>
+   <menuitem name="3rd_party-urchin_lics" label="3rd_party.urchin.label" URL="admin/urchin_lic.html" resource="urchin_lic_manager" tip="3rd_party.urchin.tip"/>
+    <menuitem name="3rd_party-sitetoolbox" label="3rd_party.sitetoolbox.label" URL="admin/sitetoolbox.html" resource="sitetoolboxmanager" tip="3rd_party.sitetoolbox.tip"/>
+    <menuitem name="3rd_party-kanoodle-mager" label="3rd_party.kanoodle.label" URL="admin/kanoodle.html" resource="kanoodlemanager" tip="3rd_party.kanoodle.tip"/>
+    <menuitem name="3rd_party_spamassassin_manager" label="3rd_party.spamassassin_manager.label" URL="admin/spamassassin_manager.html" resource="spamassassin_manager" tip="3rd_party.spamassassin_manager.tip"/>
+</menu>
+
+<menu name="ds" label="ds.menu.label" defaultitem="ds-view" tip="ds.menu.tip">
+    <menuitem name="ds-view" label="ds.menu.manage.label" URL="ds/manage.html" resource="ds" tip="ds.menu.view.tip"/> 
+    <menuitem name="ds-add" label="ds.menu.add_ds" URL="ds/add_server.html" resource="ds" tip="ds.menu.add.tip"/>
+</menu>
+
+<menu name="background_job" label="backgroundjob.label" defaultitem="job_admin" tip="backgroundjob.tip">
+    <menuitem name="job_admin" label="backgroundjob.admin.label" URL="background/job_admin.html" resource="reseller_su" tip="backgroundjob.admin.tip"/>
+    <menuitem name="job_alive" label="backgroundjob.alive.label" URL="background/job_alive.html" resource="reseller_su" tip="backgroundjob.alive.tip"/>
+    <menuitem name="async-man" label="backgroundjob.async_manager.label" URL="admin/async/async_manager.html" resource="reseller_su" tip="backgroundjob.async_manager.tip"/>
+</menu>
+
+</menus>
+<!--End of menu descriptions-->
+
+<interface>
+<menudef id="SiteStudio">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+	<initmenu name="billing"/>
+	<initmenu name="SiteStudio"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+<menudef id="unix">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+	<initmenu name="ftp_user"/>
+	<initmenu name="databases"/>
+	<initmenu name="domain"/>
+	<initmenu name="billing"/>
+	<initmenu name="mail"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="admin">
+	<initmenu name="info"/>
+	<initmenu name="user_admin"/>
+	<initmenu name="ds_server"/>
+	<initmenu name="signup"/>
+	<initmenu name="search"/>
+        <initmenu name="tt"/>
+	<initmenu name="look_feel"/>
+        <initmenu name="settings"/>
+	<initmenu name="e.manager"/>
+	<initmenu name="background_job"/>
+	<initmenu name="reports"/>
+	<initmenu name="3rd_party"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="ttadmin">
+	<initmenu name="info"/>
+	<initmenu name="user_admin"/>
+	<initmenu name="signup"/>
+	<initmenu name="search"/>
+        <initmenu name="tt"/>
+	<initmenu name="look_feel"/>
+        <initmenu name="settings"/>
+	<initmenu name="e.manager"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="bill">
+	<initmenu name="info"/>
+	<initmenu name="user_admin"/>
+	<initmenu name="signup"/>
+	<initmenu name="search"/>
+        <initmenu name="tt"/>
+	<initmenu name="reports"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="reseller">
+        <initmenu name="reseller_info"/>
+	<initmenu name="user_reseller"/>
+        <initmenu name="tt"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="MCAdmin">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+	<initmenu name="maintainary.a"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="MCClient">
+        <initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+        <initmenu name="maintainary.c"/>
+        <initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="winduz">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+	<initmenu name="win-ftp_user"/>
+	<initmenu name="databases"/>
+	<initmenu name="win_domain"/>
+	<initmenu name="billing"/>
+	<initmenu name="mail"/>
+	<initmenu name="odbc"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="real">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+	<initmenu name="real_srv"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+<menudef id="data">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+	<initmenu name="ftp_user"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="colo2">
+        <menuitem name="viewtickets" label="Trouble Tickets" URL="tt/user_view_tts.html" resource=""/>
+        <menuitem name="addticket" label="Add Trouble Ticket" URL="tt/new_tt_form.html" resource=""/>
+        <menuitem name="addaccount" label="Add Account" URL="misc/add_accounts.html" resource=""/>
+
+        <menuitem name="chaccount" label="Choose Account" URL="misc/info_choose_account.html" resource=""/>
+        <menuitem name="chpassword" label="Change Password" URL="misc/password_form.html" resource=""/>
+
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="mysql">
+        <initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+        <initmenu name="mysql"/>
+        <initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="msexchange">
+    <initmenu name="acct-pref"/>
+    <initmenu name="user-pref"/>
+    <initmenu name="tt"/>
+    <initmenu name="billing"/>
+    <initmenu name="msexchange"/>
+    <menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+    <menudef id="email_only">
+        <initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+        <initmenu name="tt"/>
+        <initmenu name="mail_only_domain"/>
+	<initmenu name="mail"/>
+        <initmenu name="billing"/>
+        <menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+<menudef id="vps">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+	<initmenu name="vps"/>
+        <initmenu name="mail_only_domain"/>
+        <initmenu name="mail"/>
+	<initmenu name="tt"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+<menudef id="ds">
+	<initmenu name="acct-pref"/>
+	<initmenu name="user-pref"/>
+	<initmenu name="ds"/>
+	<initmenu name="mail_only_domain"/>
+	<initmenu name="mail"/>
+	<initmenu name="tt"/>
+	<initmenu name="billing"/>
+	<menuitem name="logout" label="logout.label" URL="design/logout.html&amp;action=logout" resource="" tip="logout.tip"/>
+</menudef>
+
+
+</interface>
+</config>
+

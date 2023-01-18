@@ -1,0 +1,26 @@
+<!-- BEGIN ./common/control/admin/merchant/PrivateKeyPost.html -->
+<assign admin = account.getChild("admin")>
+
+<if admin && !admin.isPrivateKeyPosted()>
+<if !request.stemplate><assign stemplate="admin/merchant/CCEncryption.html">
+<else><assign stemplate=request.stemplate></if>
+<if !request.ftemplate><assign ftemplate="admin/merchant/CCEncryption.html">
+<else><assign ftemplate=request.ftemplate></if>
+<form method="POST" action="${config.CLIENT_CP_URL}" name="f_post_private_key" accept-charset="UTF-8">
+<table class="inner_control" border="0" width="100%">
+<tr><td><call draw_label(lang.admin.CCEncryption.privateKeyNotLoaded)></td></tr>
+<tr><td><textarea rows="20" cols="60" name="private_key"></textarea></td></tr>
+<tr>
+<td class="inner_control_align_center">
+<input type="hidden" name="template_name" value="submit/admin/merchant/postPrivateKey.sbm">
+<input type="hidden" name="stemplate" value="${stemplate}">
+<input type="hidden" name="ftemplate" value="${ftemplate}">
+<input type="hidden" name="step" value="${next_step}">
+<call draw_submit("submit", "submit")>
+</td>
+</tr>
+</table>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/PrivateKeyPost.html -->

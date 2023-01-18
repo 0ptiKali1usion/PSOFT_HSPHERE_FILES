@@ -1,0 +1,18 @@
+<!-- BEGIN ./domain/add_sharedssl.sbm  -->
+<assign hosting = account.getResource(request.rid)>
+<assign sharedssl=hosting.getChild("sharedssl")>
+<if !name><assign name = request.name></if>
+<if !sharedssl>
+<assign result = hosting.addChild("sharedssl", "", name)>
+<if result.status == "OK">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_added, lang.label.shared_ssl_support, ""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<else>
+<include request.stemplate>
+</if>
+<!--  END ./domain/add_sharedssl.sbm  -->

@@ -1,0 +1,37 @@
+<!-- BEGIN ./unixuser/enable_ssh.html  -->
+<yafv unixuser/s_unixuser>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.unixuser.enablessh.req_stat)>
+
+
+
+<tr >
+<td><call draw_label(lang.unixuser.enablessh.req_stat)></td>
+<assign reqstatus = obj.user_requests.isSSHRequested()>
+<assign sshresource = account.getChild("unixuser").getChild("sshresource")>
+<if reqstatus.refused>
+<td><call draw_label(lang.unixuser.enablessh.req_prohibit)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/unixuser/dismissreq.sbm&ftemplate="+template+"&stemplate="+request.stemplate, lang.unixuser.enablessh.req_dismiss)>
+</td>
+<else>
+<if sshresource>
+<td><call draw_label(lang.unixuser.enablessh.ssh_enabled)></td>
+<else>
+<td><call draw_label(lang.unixuser.enablessh.ssh_notenabled)></td>
+</if>
+</if>
+</tr>
+<if reqstatus.refused>
+<tr >
+<td><call draw_label(lang.unixuser.enablessh.ssh_cause_of_prohibit)></td>
+<td><call draw_label(reqstatus.response)></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./unixuser/enable_ssh.html  -->

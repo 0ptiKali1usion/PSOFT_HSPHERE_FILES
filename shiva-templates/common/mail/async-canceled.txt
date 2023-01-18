@@ -1,0 +1,6 @@
+Following async. processes were canceled as of ${root.toolbox.now("TS_SHORT")}:
+
+<list root.d as d>
+${d.description} ${d.last_check("TS_SHORT")}
+<if d.error>${d.error_code}: ${d.error}</if>
+</list>

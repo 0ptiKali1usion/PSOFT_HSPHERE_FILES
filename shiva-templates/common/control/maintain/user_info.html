@@ -1,0 +1,15 @@
+<assign ci=account.getChild("maintainAdmin").getAccountInfo(request.account_id).ci>
+<H2>Contact info for User :${ci.name}<H2>
+<table border="0"  cellpadding="0"  class="formlight" >
+<tr><td width="10%">Name</td><td>${ci.name}</td></tr>
+<tr><td>Address 1</td><td>${ci.address1}</td></tr>
+<tr><td>Address 2</td><td>${ci.address2}</td></tr>
+<tr><td>City</td><td>${ci.city}</td></tr>
+<tr><td>State</td><td>${ci.state}</td></tr>
+<tr><td>Postal Code</td><td>${ci.postalCode}</td></tr>
+<tr><td>Country</td><td>${ci.country}</td></tr>
+<tr><td>Phone</td><td>${ci.phone}</td></tr>
+<tr><td>Email</td><td>${ci.email}</td></tr>
+<td><a href="${config.CLIENT_CP_URL}?&template_name=${request.template}&stemplate=${template}&task_id=${request.task_id}">&lt;&lt;back</a></td>
+</form>
+</table>

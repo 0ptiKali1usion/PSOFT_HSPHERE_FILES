@@ -1,0 +1,9 @@
+<!-- BEGIN ./billing/money_back.html  -->
+<assign result=account.moneyBack()>
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./billing/money_back.html  -->

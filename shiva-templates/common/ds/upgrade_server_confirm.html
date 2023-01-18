@@ -1,0 +1,16 @@
+<!-- BEGIN ./ds/upgrade_server_confirm.html  -->
+<if request.ds_id != "">
+  <include "functions">
+  <assign template="ds/upgrade_server_confirm.html">
+  <call draw_menu("ds-upgrade")>
+  <include "control/ds/upgrade_server_confirm.html">
+  <call bottom()>
+<else>
+  <assign res = session.addMessage(lang.ds.upgrade_src_server_not_chosen)>
+  <if request.ftemplate>
+    <include request.ftemplate>
+  <else>
+    <include "ds/upgrade_request.html">
+  </if>
+</if>
+<!--  END ./ds/upgrade_server_confirm.html  -->

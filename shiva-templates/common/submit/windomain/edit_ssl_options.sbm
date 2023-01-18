@@ -1,0 +1,26 @@
+<!-- BEGIN ./windomain/edit_ssl_newcert.html  -->
+<if request.forced=="">
+    <assign forced="0">
+<else>
+    <assign forced="1">
+</if>
+<if request.need128=="">
+    <assign need128="0">
+<else>
+    <assign need128="1">
+</if>
+<assign ssl=account.getResource(request.uid)>
+<assign result=ssl.updateSettings(forced, need128)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_changed, lang.label.ssl_options, ""))>
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/edit_ssl_newcert.html  -->

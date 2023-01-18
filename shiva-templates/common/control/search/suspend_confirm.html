@@ -1,0 +1,50 @@
+<!-- BEGIN ./control/search/suspend_confirm.html  -->
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.search.suspendconfirm.header)>
+<assign admin=account.getChild("admin")>
+<if admin.canBeSuspended(request.aid)>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/account/suspend.sbm">
+<input type="hidden" name="aid" value="${request.aid}">
+<input type="hidden" name="user" value="${request.user}">
+<if request.stemplate><input type="hidden" name="stemplate" value="${request.stemplate}"><else><input type="hidden" name="stemplate" value="admin/search.html"></if>
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+ </if>
+</list>
+</compress>
+
+<tr>
+  <td colspan="2"  class="control_align_center"><call draw_label(lang.search.suspendconfirm.info)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.search.suspendconfirm.reason)></td>
+   <td><select name="reason" size="1"><option value="1">${lang.search.suspendconfirm.unpaid}<option value="2">${lang.search.suspendconfirm.censor}<option value="3">${lang.search.suspendconfirm.other}</select></td>
+</tr>
+<tr>
+<td colspan="2"  class="control_align_center"><call draw_label(lang.search.suspendconfirm.text)></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center"><textarea name="description" cols=40 rows=10> </textarea></td>
+</tr>
+<tr>
+<td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+</form>
+<else>
+ <tr>
+   <td colspan="2"  class="control_align_center"><call draw_label(lang.search.suspendconfirm.cannotbesuspended)></td>
+ </tr>
+</if>
+
+<call draw_table_footer()>
+<!-- END ./control/search/suspend_confirm.html  -->

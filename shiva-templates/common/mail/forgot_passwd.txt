@@ -1,0 +1,2 @@
+${lang.massmail.forgotten_pas_message(user.CP_URL, user.login, user.password)}
+<if settings.support>${lang.massmail.forgotten_pas_support(settings.support)}</if>

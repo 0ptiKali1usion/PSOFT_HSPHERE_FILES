@@ -1,0 +1,23 @@
+<!-- BEGIN ./domain/restore_default_cname_rec.smb  -->
+<assign domain=account.getResource(request.rid)>
+
+<assign result=domain.restoreDefaultCNameRecords()>
+
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.dns.cname_record,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdip=request.dip>
+    <assign vdname=request.dname>
+    <assign vttl=request.dmask>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/restore_default_cname_rec.smb  -->

@@ -1,0 +1,49 @@
+<!-- BEGIN ./submit/domain/del_webservice.sbm  -->
+<assign res_type = request.res_to_del>
+<assign resource_to_del = account.getResource(request.did)>
+<if request.isDelContent == "on">
+  <assign hosting = account.getResource(request.hosting)>
+  <if hosting>
+    <assign is_del=hosting.removeContent()>
+    <if request.isDelLog=="on">
+      <assign log = resource_to_del.findChild(request.domain_logtype)>
+      <assign res_log = log.delLogFiles()>
+    </if>
+    <if res_type=="domain">
+      <assign tmp=resource_to_del.findChildren("subdomain")>
+      <if tmp>
+	<list tmp as subdomain>
+	  <if params.contains(subdomain.name)>
+	    <assign check_to_del = request[subdomain.name]>
+	    <if check_to_del=="on">
+	      <assign sub_hosting = subdomain.findChild("hosting")>
+	      <assign sub_del = sub_hosting.removeContent()>
+	    </if>
+	  </if>
+	  <assign isDelSubLog = "isDelLog_"+subdomain.name>
+	  <!--${isDelSubLog} -->
+	  <if request[isDelSubLog]=="on">
+	    <assign log_type = "domain_logtype_"+subdomain.name>
+            <assign log = resource_to_del.findChild(request[log_type])>
+            <assign res_log = log.delLogFiles()>
+          </if>
+	</list>
+      </if>
+    </if>
+
+    <if is_del.status=="OK">
+      <assign result=resource_to_del.delete>
+    </if>
+  </if>
+<else>
+    <assign result=resource_to_del.delete>
+</if>
+
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/domain/del_webservice.sbm  -->
+

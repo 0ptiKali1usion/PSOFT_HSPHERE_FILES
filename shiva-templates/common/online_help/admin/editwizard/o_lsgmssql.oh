@@ -1,0 +1,7 @@
+<center>Logical Server Group (MS SQL servers) </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	If there is more than one logical server group for MS SQL data base disposing, you can select which one will be used for the plan.
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Check the <i>Include</i> box to make this resource available under the plan.
+

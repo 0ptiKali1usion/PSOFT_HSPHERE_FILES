@@ -1,0 +1,9 @@
+<center> rblhosts </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>RBL (Remote Black List) database hosts. Example:
+<br>dnsbl.njabl.org
+<br>spamguard.leadmon.net			      
+<br>Default: the rblhosts file is absent (RBL check is disabled: no external RBL databases is being checked).
+<br>
+

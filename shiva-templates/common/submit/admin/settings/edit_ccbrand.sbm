@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/admin/settings/edit_ccbrand.sbm  -->
+<assign mm = account.getChild("merchant_manager")>
+<assign result = mm.editCCbrand(request.id, request.name, request.name_sh)>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_change,result.msg,""))>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/settings/edit_ccbrand.sbm  -->

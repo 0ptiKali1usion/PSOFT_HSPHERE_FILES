@@ -1,0 +1,47 @@
+<!-- BEGIN ./submit/domain/change_ip_submit.sbm  -->
+
+<if request.dns_not_equal_vhIP=="web">
+    <assign u=account.getResource(request.domain)>
+<else>
+    <assign u=account.getResource(request.rid)>
+</if>
+<assign ip_list=u.findChildren("ip")>
+<assign ip = u.getChild("ip")>
+
+<list ip_list as curr_ip>
+<if ip!=curr_ip>
+<assign result=curr_ip.delete>
+</if>
+</list>
+
+<if (!request.dns_not_equal_vhIP && (ip.shared=="1") && ((request.ip_type=="shared") || (request.ip_type=="shard_no_a"))) ||
+	((ip.shared!="1") && ((request.ip_type=="dedicated") || (request.ip_type=="dedic_no_a")))> 
+    <if ip.shared=="1">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.domain.duplicate_changing_ip, lang.msg.shared_ip))>
+    <else>
+        <assign res=session.addMessage(toolbox.compose(
+            lang.domain.duplicate_changing_ip, lang.msg.dedicated_ip))>
+    </if>
+<else>
+<if ip && (ip.status == "OK")>
+  <assign result=ip.ipdelete()>
+  <assign ip2=u.addChild("ip",request.ip_type)>
+  <if ip2.status=="OK">
+     <assign result=ip.delete>
+     <if result.status!="OK">
+         <assign result=session.addMessage(result.msg)>
+         <assign result=ip2.delete>
+         <if result.status!="OK">
+             <assign result=session.addMessage(result.msg)>
+         </if>
+     <else>
+         <assign result=ip2.reconfig()>
+     </if>
+  <else>
+     <assign result=session.addMessage(ip2.msg)>
+  </if>
+</if>
+</if>
+<include request.stemplate>
+<!--  END ./submit/domain/change_ip_submit.sbm  -->

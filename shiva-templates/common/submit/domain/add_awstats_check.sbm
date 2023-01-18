@@ -1,0 +1,68 @@
+<!-- BEGIN ./submit/domain/add_awstats_check.sbm  -->
+<assign notfree="0">
+<assign type="awstats">
+<assign hosting=account.getResource(request.rid)>
+<assign transferlog=hosting.getChild("transferlog")>
+<assign cgi_resources=hosting.getChildren("cgi")>
+<list cgi_resources as cgi>
+   <if cgi.ext == ".pl">
+	<assign cgi_pl = "1">
+   </if>
+</list>
+<assign awstats_price = hosting.estimateCreate("awstats", "")>
+<if awstats_price.status!="ERROR">
+  <if awstats_price.free=="0">
+    <assign notfree="1">
+    <assign setup=awstats_price.setup>
+    <assign recurrent=awstats_price.recurrent>
+    <assign recurrentAll=awstats_price.recurrentAll>
+  </if>
+  <if !transferlog>
+    <assign transferlog_price = account.getResource(request.rid).estimateCreate("transferlog", "simple")>
+    <if transferlog_price.status!="ERROR">
+      <if transferlog_price.free=="0">
+        <assign notfree="1">
+        <assign setup=toolbox.add(setup,transferlog_price.setup)>
+        <assign recurrent=toolbox.add(recurrent,transferlog_price.recurrent)>
+        <assign recurrentAll=toolbox.add(recurrentAll,transferlog_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_add,lang.label.transferlog,""))>
+      <assign res = session.addMessage(transferlog_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+  <if !cgi_pl>
+    <assign cgi_price = account.getResource(request.rid).estimateCreate("cgi", "", ".pl")>
+    <if cgi_price.status!="ERROR">
+      <if cgi_price.free=="0">
+        <assign notfree="1">
+        <assign setup=toolbox.add(setup, cgi_price.setup)>
+        <assign recurrent=toolbox.add(recurrent, cgi_price.recurrent)>
+        <assign recurrentAll=toolbox.add(recurrentAll, cgi_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_add,lang.accprev.web.cgi,""))>
+      <assign res = session.addMessage(cgi_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.awstats,""))>
+  <assign res = session.addMessage(awstats_price.msg)>
+  <assign failure="1">
+</if>
+
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/awstats_add_confirm.html">
+  <else>
+    <include "submit/domain/add_awstats_submit.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/domain/add_awstats_check.sbm  -->

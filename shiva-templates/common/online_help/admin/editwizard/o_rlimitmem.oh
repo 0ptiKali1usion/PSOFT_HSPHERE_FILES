@@ -1,0 +1,10 @@
+<center>RLimitMEM</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Restrict the memory used by processes run on the server.<br>
+<br>
+ <i>Resouce Limit</i> is applied to user CGI scripts and  SSI exec commands, but not any processes forked off from the Apache parent such as piped logs.<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Memory resource limits are expressed in bytes per process. </i>
+<br>
+Check the <i>Include</i> box to make this resource available under the plan.

@@ -1,0 +1,85 @@
+<!-- BEGIN ./quick/quick_view.html  -->
+<include "control/quick/quick.fn">
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.statistics)>
+
+<assign rmserver=account.getChild("realserver_user")>
+<assign rmuser=rmserver.getChild("real_user")>
+
+<assign traffic=account.getChild("traffic")>
+<assign quota=rmserver.getChild("winquota")>
+
+<tr>
+<td  width="50%">
+<b><call draw_label(lang.label.plan)></b>&nbsp;<call draw_label(account.plan.description)><br>
+<b><call draw_label(lang.real.quickview.user)></b>&nbsp;<call draw_label(user.login)><br>
+<b><call draw_label(lang.label.ftplogin)></b>&nbsp;<call draw_label(rmserver.login)>
+</td>
+<assign domains=account.findAllChildren("domain")>
+<td  width="50%">
+<assign count="0">
+&nbsp;
+</td>
+</tr>
+
+<tr>
+  <td    valign="top" width="50%">
+    <call draw_label_bold(lang.label.traffic)><call draw_help("user-ai_quick-totaltraffic","")>
+    <if traffic>
+      <br>
+      <assign limit=toolbox.mul(traffic.size,"1024")>
+      <call draw_load_diagram(traffic.text_traffic, limit, "90", "70%")>
+      <call draw_label(lang.quick.quickview.used_traffic(traffic.start_date, traffic.text_traffic, traffic.size))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&stemplate=quick/quick_view.html&ftemplate="+template, lang.label.changetraffic)>
+    </if>
+
+  </td>
+  <td     valign="top">
+
+    <call draw_label_bold(lang.label.quota)>
+    <if quota>
+      <br>
+      <call draw_load_diagram(quota.usedMb, quota.limitMb, "90", "70%")>
+      <call draw_label(toolbox.compose(lang.quick.quickview.usedquota, quota.usedMb, quota.limitMb))>
+      <call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, quota.start_date))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=real/change_quota.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+rmserver, lang.label.changequota)>
+    </if>
+
+  </td>
+</tr>
+
+<tr>
+  <td     valign="top">
+
+      <call draw_label_bold(lang.quick.quickview.trafficdetails)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=quick/traffic_details.html","lupa", lang.quick.quickview.viewtd)>
+
+  </td>
+  <td     valign="top">
+
+  </td>
+</tr>
+
+<tr>
+  <td    colspan="2">
+    <call draw_diagram_legend()>
+  </td>
+</tr>
+
+<call draw_table_footer()>
+<br>
+<br>
+<call draw_table_header("", lang.label.qa)>
+
+<tr>
+<td  width="100%"  style="padding:5">
+<table class="inner_control">
+<call draw_icon_rows("7")>
+</table>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/quick_view.html  -->

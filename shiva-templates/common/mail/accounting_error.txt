@@ -1,0 +1,11 @@
+======== ${lang.massmail.accounting_header} ==========
+${lang.massmail.accounting_text}
+${lang.massmail.accounting_user(user.login)}
+${lang.massmail.accounting_account(account.id.id)}
+${lang.massmail.accounting_plan(account.plan.description)}
+${lang.massmail.accounting_date(date)}
+===========================
+${lang.massmail.accounting_error(error)}
+<if stack>===========================
+${lang.massmail.accounting_log}
+${stack}</if>

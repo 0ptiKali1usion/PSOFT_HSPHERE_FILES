@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/change_plan.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.changePlan(request.i_bizuser_plan)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.label.msexchange.plan,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_change,lang.label.msexchange.plan,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/change_plan.sbm -->

@@ -1,0 +1,12 @@
+<!-- BEGIN ./email/list.html  -->
+<assign template="email/list2.html">
+<include "functions">
+<call draw_menu("mail-list")>
+<if request.md_id>
+  <assign md_id=request.md_id>
+<else>
+  <assign md_id=account.findChild("mail_domain")>
+</if>
+<include "control/email/list2.html">
+<call bottom()>
+<!--  END ./email/list.html  -->

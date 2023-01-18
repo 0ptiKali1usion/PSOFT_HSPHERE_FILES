@@ -1,0 +1,154 @@
+<!-- BEGIN ./domain/contact_info_update.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+<form name="f_ci_update" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" NAME="template_name" value="submit/domain/contact_info_update_submit.sbm">
+<input type="hidden" NAME="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" NAME="type" value="${request.type}">
+
+<assign domain = account.getResource(request.rid)>
+
+
+
+
+<assign header_text = lang.domain.contactinfoupdate.update>
+<if request.type=="contact_info">
+  <assign header_text = header_text + " " + lang.domain.contactinfoupdate.contact>
+<else>
+  <assign header_text = header_text + " " + lang.domain.contactinfoupdate.billing>
+</if>
+<assign header_text = header_text + " " + " " + lang.domain.contactinfoupdate.info>
+
+<call draw_table_header("2", header_text)>
+
+<assign tmp=domain.getChild(request.type)>
+
+<if !failure>
+    <assign vfirst_name=toolbox.html_encode(tmp.first_name)>
+    <assign vlast_name=toolbox.html_encode(tmp.last_name)>
+    <assign vorg_name=toolbox.html_encode(tmp.org_name)>
+    <assign vaddress1=toolbox.html_encode(tmp.address1)>
+    <assign vaddress2=toolbox.html_encode(tmp.address2)>
+    <assign vaddress3=toolbox.html_encode(tmp.address3)>
+    <assign vcity=toolbox.html_encode(tmp.city)>
+    <assign vstate=toolbox.html_encode(tmp.state)>
+    <assign vpostal_code=toolbox.html_encode(tmp.postal_code)>
+    <assign vphone=toolbox.html_encode(tmp.phone)>
+    <assign vfax=toolbox.html_encode(tmp.fax)>
+    <assign vemail=toolbox.html_encode(tmp.email)>
+    <assign vcountry=toolbox.html_encode(tmp.country)>
+    <assign vaffect="0">
+<else>
+    <assign vfirst_name=toolbox.html_encode(request.first_name)>
+    <assign vlast_name=toolbox.html_encode(request.last_name)>
+    <assign vorg_name=toolbox.html_encode(request.org_name)>
+    <assign vaddress1=toolbox.html_encode(request.address1)>
+    <assign vaddress2=toolbox.html_encode(request.address2)>
+    <assign vaddress3=toolbox.html_encode(request.address3)>
+    <assign vcity=toolbox.html_encode(request.city)>
+    <assign vstate=toolbox.html_encode(request.state)>
+    <assign vpostal_code=toolbox.html_encode(request.postal_code)>
+    <assign vphone=toolbox.html_encode(request.phone)>
+    <assign vfax=toolbox.html_encode(request.fax)>
+    <assign vemail=toolbox.html_encode(request.email)>
+    <assign vcountry=toolbox.html_encode(request.country)>
+    <assign vaffect=toolbox.html_encode(request.affect)>
+</if>
+
+
+
+<if vaffect == "1">
+    <assign vchecked0="">
+    <assign vchecked1="CHECKED">
+<else>
+    <assign vchecked0="CHECKED">
+    <assign vchecked1="">
+</if>
+
+<tr>
+	<td><call draw_label(lang.domain.contactinfoupdate.affect)><if request.type=="0"><call draw_label(lang.domain.contactinfoupdate.billing)><else><call draw_label(lang.domain.contactinfoupdate.owner)></if><call draw_label(lang.domain.contactinfoupdate.info)></td>
+		<td>
+		<input type="radio" NAME="affect" value="1" ${vchecked1}><call draw_label(lang.domain.contactinfoupdate.yes)>
+		<input type="radio" NAME="affect" value="0" ${vchecked0}><call draw_label(lang.domain.contactinfoupdate.no)></td>
+</tr>
+
+<tr>
+	<td><call draw_label(lang.bci.fname)></td>
+	<td>
+		<input name="first_name" label="${lang.bci.fname}" check="vSinglename" size="15" value="${vfirst_name}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.lname)></td>
+		<td>
+			<input name="last_name" label="${lang.bci.lname}" size="15" value="${vlast_name}" check="vSinglename"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.company)></td>
+		<td>
+			<input name="org_name" size="30" value="${vorg_name}" label="${lang.bci.company}" check="vOrganization"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr1)></td>
+		<td>
+		<input name="address1" size="30" value="${vaddress1}" check="vAddress" label="${lang.bci.adr1}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr2)></TD>
+		<td>
+			<input name="address2" size="30" value="${vaddress2}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr3)></td>
+		<td>
+			<input name="address3" size="30" value="${vaddress3}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.city)></td>
+		<td>
+			<input name="city" size="15" value="${vcity}" check="vCity" label="lang.bci.city"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.state)></td>
+	<td>
+		<select name="state">
+		<call buildStates(vstate)>
+		</select>
+	</td>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.country)></td>
+	<td>
+		<SELECT NAME="country" onChange="checkForm(this.form)">
+		<call buildCountries(vcountry)>
+		</SELECT>
+	</td>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.pcode)></td>
+		<td>
+			<input name="postal_code" size="15" value="${vpostal_code}" check="vPostal_Code" label="${lang.bci.pcode}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")></td>
+		<td>
+			<input name="phone" size="20" value="${vphone}" check="vPhoneCountry(this, country)" label="${lang.bci.phone}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+		<td>
+			<input name="fax" size="20" value="${vfax}" check="vFaxCountry(this, country)" label="${lang.bci.fax}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.email)></td>
+		<td>
+			<input name="email" label="${lang.bci.email}" check="vEmail" size="30" value="${vemail}"></TD>
+</TR>
+<tr>
+  <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}" name="submit"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/contact_info_update.html.in  -->

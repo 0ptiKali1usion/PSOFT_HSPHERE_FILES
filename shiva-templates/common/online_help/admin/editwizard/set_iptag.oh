@@ -1,0 +1,10 @@
+<center> Shared IP tag  </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Shared IP Tag is a digital "mark" that is assigned to all accounts created on shared IP under this plan. All sites located on the same logical host are usually assigned the same shared IP. The Shared IP Tag allows to dedicate a different shared IP to a group of sites of, say, explicit nature. This may become necessary as many corporate firewalls filter sites based on their IP, not domain name, which may affect the accessibility of other sites with the same IP address. To use this feature you must already have this tag (or tags) defined for every logical host.  <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>IMPORTANT</b>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+You mustn't change the shared IP tag in the Window based plans, unless there are no live users under them.
+In Unix based plans changed shared IP tag immediately shows up in the system control panel interface, however it actually takes effect only when the changes to the server configuration is applied.
+

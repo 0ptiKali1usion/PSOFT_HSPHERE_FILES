@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/PGSQL/change_user_pswd.html.in  -->
+<call draw_tooltip()>
+<assign pgsql = account.getChild("pgsql")>
+<assign user = account.getResource(request.user_id)>
+<yafv s_pgsql>
+<form action="${config.CLIENT_CP_URL}" name="f_adm_user" method="POST" check! accept-charset="UTF-8">
+ 
+<input type="hidden" name="template_name" value="submit/PGSQL/change_user_password.sbm">
+<input type="hidden" name="user_id" value="${user}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="user_name" value="${user.name}">
+
+
+
+
+
+<call draw_table_header("2", lang.pgsql.chupwd.header(user.name))>
+
+
+
+<tr>
+    <td><call draw_label(lang.label.password)></td>
+    <td><input type="password" name="new_password" value=""  label="${lang.label.password}" check="vPassword1(this, user_name)"></td>
+</tr>
+<tr >
+    <td><call draw_label(lang.label.password2)></td>
+    <td><input type="password" name="new_password1" value="" label="${lang.label.password2}" check="vPassword2(new_password,this)"></td>
+</tr>
+<tr >
+    <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.change}">
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/PGSQL/change_user_pswd.html.in  --> 

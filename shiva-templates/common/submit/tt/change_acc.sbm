@@ -1,0 +1,11 @@
+<!-- BEGIN ./tt/change_state.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+<assign result = ticket.setAccount(request.aid)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.stemplate>
+</if>
+<!--  END ./tt/change_state.sbm  -->

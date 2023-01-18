@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+
+<PlanWizard name="msexchange" description="planeditor.res_msexchange">
+    <DefaultName>MS Exchange I</DefaultName>
+    <depends>
+	<platform>msexchange_platform</platform>
+    </depends>
+
+    <DefaultValues>
+	<value name="_template">design/info.html</value>
+	<value name="menuId">msexchange</value>
+    </DefaultValues>
+
+    <categories>
+	<category>
+	    <resource name="account" required="1" class="psoft.hsphere.Account"/>
+	    <resource name="billviewer" required="1" noprice="1" class="psoft.hsphere.resource.BillViewer"/>
+	    <resource name="tt" required="1" noprice="1" class="psoft.hsphere.resource.tt.TroubleTicket"/>
+	    <resource name="custom_billing" required="1" noprice="1" class="psoft.hsphere.resource.CustomizableBillingResource"/>
+	</category>
+
+	<category description="planeditor.other">
+	    <resource name="bizorg" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.BusinessOrganization"/>
+	    <resource name="bizuser" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.BusinessUser"/>
+	    <resource name="mailstore" required="1" unit="MB" class="psoft.hsphere.resource.mpf.hostedexchange.StoreQuota"/>
+	    <resource name="pubstore" required="1" unit="MB" class="psoft.hsphere.resource.mpf.hostedexchange.StoreQuota"/>
+	    <resource name="domain" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.SMTPDomain"/>
+	    <resource name="dns_zone" required="1" noprice="1" class="psoft.hsphere.resource.dns.DNSZone"/>
+	    <resource name="cust_dns_record" required="1" noprice="1" class="psoft.hsphere.resource.dns.CustomDNSRecord"/>
+	    <resource name="distribution_list" included="1" class="psoft.hsphere.resource.mpf.hostedexchange.DistributionList"/>
+	    <resource name="exchange_contact" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.Contact"/>
+	    <resource name="public_folder" include="1" active="1" noprice="1" class="psoft.hsphere.resource.mpf.hostedexchange.PublicFolder"/>
+	    <resource name="base_mail" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.HostedExchangePlan"/>
+	    <resource name="gold_mail" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.HostedExchangePlan"/>
+	    <resource name="plat_mail" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.HostedExchangePlan"/>
+	    <resource name="plat_mailp" required="1" class="psoft.hsphere.resource.mpf.hostedexchange.HostedExchangePlan"/>
+	</category>
+    </categories>
+
+    <billable></billable>
+
+    <options demomode="1" billable="1"/>
+
+    <resources>
+	<res_account>
+	    <mod>
+		<initresource name="billviewer"/>
+		<initresource name="summary_quota"/>
+		<initresource name="bizorg"/>
+	    </mod>
+	</res_account>
+
+	<res_summary_quota>
+	    <mod>
+		<initvalue type="plan_free"/>
+	    </mod>
+	</res_summary_quota>
+
+	<res_bizorg>
+	    <mod>
+		<initvalue type="field" label="name">login</initvalue>
+		<initresource name="domain" mod="primary"/>
+		<initresource name="mailstore"/>
+		<initresource name="pubstore"/>
+	    </mod>
+	</res_bizorg>
+
+	<res_mailstore>
+	    <mod>
+		<initvalue type="plan_free" label="Mail Store Quota"/>
+	    </mod>
+	</res_mailstore>
+
+	<res_pubstore>
+	    <mod>
+		<initvalue type="plan_free" label="Public Store Quota"/>
+		<initresource name="public_folder" ifactive="public_folder"/>
+	    </mod>
+	</res_pubstore>
+
+	<res_domain>
+	    <mod>
+		<initvalue type="field" label="Domain Name">domain_name</initvalue>
+	    </mod>
+	    <mod name="primary">
+		<initvalue type="field" label="Domain Name">domain_name</initvalue>
+		<initvalue type="static" label="Type">1</initvalue>
+	    </mod>
+	</res_domain>
+
+	<res_distribution_list>
+	    <mod>
+		<initvalue type="field" label="Managed By">managedBy</initvalue>
+		<initvalue type="name" label="Name">name</initvalue>
+	    </mod>
+	</res_distribution_list>
+
+	<res_custom_billing>
+	    <values>
+		<value name="_RECURRENT_CALC">psoft.hsphere.calc.StandardCalc</value>
+		<value name="_UNIT_PRICE_">1</value>
+		<value name="_REFUND_CALC">psoft.hsphere.calc.StandardRefundCalc</value>
+	    </values>
+	</res_custom_billing>
+
+	<res_bizuser>
+	    <mod name="base_mail">
+		<initresource name="base_mail"/>
+	    </mod>
+	    <mod name="gold_mail">
+		<initresource name="gold_mail"/>
+	    </mod>
+	    <mod name="plat_mail">
+		<initresource name="plat_mail"/>
+ 	    </mod>
+	    <mod name="plat_mailp">
+		<initresource name="plat_mailp"/>
+	    </mod>
+	</res_bizuser>
+    </resources>
+</PlanWizard>
+

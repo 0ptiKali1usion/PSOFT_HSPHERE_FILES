@@ -1,0 +1,10 @@
+${lang.massmail.header(ci.first_name, ci.last_name)}
+${lang.massmail.vps_text(vpsname)}
+${lang.massmail.vps_server} ${vpsname}
+${lang.massmail.vps_ip} <compress>
+<list ips as ip>
+    ${ip.ip}
+</list>    
+</compress>
+
+${lang.massmail.vps_thanks}

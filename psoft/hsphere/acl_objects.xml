@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<objects>
+    <object key="demo" class="psoft.util.freemarker.acl.DemoObject"/>
+    <object key="ht_utils" class="psoft.hsphere.fmacl.HTUtils"/>
+    <object key="user_requests" class="psoft.hsphere.fmacl.UserRequests"/>
+    <object key="backup_task"  class="psoft.hsphere.fmacl.BackupTaskAccessor"/>
+    <object key="comodo_manager" class="psoft.hsphere.fmacl.ComodoManager"/>
+    <object key="as_manager" class="psoft.hsphere.fmacl.AllocatedServerManagerAccessor"/>
+    <object key="subnet_manager" class="psoft.hsphere.fmacl.IPSubnetManagerAccessor"/>
+    <object key="raq4_migrator" class="psoft.hsphere.migrator.wizards.Raq4Migrator"/>
+    <object key="cpanel_migrator" class="psoft.hsphere.migrator.wizards.CPanelMigrator"/>
+    <object key="mpf" class="psoft.hsphere.resource.mpf.MPFConfigurator"/>
+    <object key="lserveroptions" class="psoft.hsphere.fmacl.LServerOptionManager"/>
+</objects>
+

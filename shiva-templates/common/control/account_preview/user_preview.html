@@ -1,0 +1,3 @@
+<assign preview=account.getChild("account_preview")>
+<if !preview><assign preview = account.addChild("account_preview", "")></if>
+${preview.display(request.aid, "user_info.html")}

@@ -1,0 +1,26 @@
+<center>Symbolic Links</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp; Symbolic links (also referred to as 'symlinks') are files 
+that act as pointers to other files. A symbolic link contains the name of the 
+file to which it is linked, i.e. it is a pointer to another name, and not to an 
+underlying object. For this reason, symbolic links may reference directories and 
+may span file systems. Symbolic links allow multiple references to files and folders 
+without requiring multiple copies of these items. Symbolic links are implemented 
+as a reference to a path in the file system. The file system tries to resolve 
+a symbolic link by parsing the path information. Your files (and directories) 
+may be located on several different file systems. To link files that are in different 
+file systems, you need to make a <i>symbolic link</i>. For example, if there were 
+a symbolic link &quot;slink&quot; which pointed to a file named &quot;afile&quot;, 
+the system call &quot;open(&quot;slink&quot; ...)&quot; would return a file descriptor 
+to the file &quot;afile&quot;.<br>
+  <br>
+<i>Symlink pros</i>: it is useful sometimes to have a reference to a file known 
+to always exist at a specific path in the file system, thus assigning importance 
+to the file at that location. For these cases a symbolic link works very well; 
+even if the file at the specified location is replaced with a new file, the symbolic 
+link still refers to the file at that location in the file system.<br>
+  <br>
+<i>Symlink cons</i>: if you move a file that a symbolic link references to a different 
+location in the file system, the symbolic link breaks. <br>
+<br>
+If set to <i>Owner's Only</i>, symlinks will work only within the user file system.

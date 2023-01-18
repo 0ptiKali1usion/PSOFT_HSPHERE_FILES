@@ -1,0 +1,11 @@
+<!-- BEGIN ./admin/registrar/view.html -->
+<assign template="admin/registrar/view.html">
+<include "functions">
+<call draw_menu("registrar_view")>
+<if account.plan.isResourceAvailable("registrar_manager") && account.getChild("reseller_su")>
+   <include "control/admin/registrar/view.html">
+<else>
+   <include "control/admin/registrar/view_simple.html">
+</if>
+<call bottom()>
+<!-- END ./admin/registrar/view.html -->

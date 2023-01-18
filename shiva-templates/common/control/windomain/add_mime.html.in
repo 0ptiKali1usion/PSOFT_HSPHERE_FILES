@@ -1,0 +1,31 @@
+<!-- BEGIN ./windomain/add_mime.html.in  -->
+<call draw_tooltip()>
+<yafv s_windomain>
+<form name="f_add_mime"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="windomain/add_mime.html">
+<input type="hidden" name="template_name" value="submit/windomain/add_mime_submit.sbm">
+
+
+
+
+<call draw_table_header("2", lang.windomain.addmime.header)>
+
+
+<tr>
+	<td><call draw_label(lang.label.file_ext)></td>
+	<td><input type="text" name="ext" value="${vext}" label="${lang.label.file_ext}" check="vfileExt"></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.windomain.mimetype)></td>
+	<td><input type="text" name="mime" value="${vmime}" label="Mime Type" check="vmimeType"></td>
+</tr>
+<tr>
+	<td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./windomain/add_mime.html.in  -->

@@ -1,0 +1,27 @@
+<!-- BEGIN ./common/control/admin/merchant/IonGate.html -->
+<assign mm=account.getChild("merchant_manager")>
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/IonGate.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.iongate)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.iongate}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>secure.iongate.com</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>443</if>"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="path" value="<if merchant>${merchant.PATH}<else>/iongate.asp</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="login" value="<if merchant>${merchant.LOGIN}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.iongate_email)></td><td><input type="text" name="email" value="<if merchant>${merchant.EMAIL}</if>"> </td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset"></td></tr>
+</form>
+
+<call draw_table_footer()>
+<!-- END ./common/control/admin/merchant/IonGate.html -->

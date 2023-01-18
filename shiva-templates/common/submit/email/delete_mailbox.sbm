@@ -1,0 +1,27 @@
+<!-- BEGIN ./email/delete_mailbox.sbm  -->
+<assign mail_domain = account.getResource(request.md_id)>
+<assign mailbox = account.getResource(request.did)>
+<assign mbox_email = mailbox.email>
+<list mail_domain.getChildren("mailbox_alias") as alias>
+  <if alias.foreign == mbox_email><assign malias_exists = alias.local></if>
+</list>
+<if malias_exists>
+  <assign res = session.addMessage(toolbox.compose(
+      lang.msg.mailbox_with_alias_unable_delete, malias_exists))>
+  <assign failure = "1">
+<else>
+  <assign result = mailbox.delete>
+  <if result.status != "OK">
+    <failure = "1">
+    <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_delete, lang.label.mail_box, ""))>
+    <assign res = session.addMessage(result.msg)>
+  </if>
+</if>
+
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--  END ./email/delete_mailbox.sbm  -->

@@ -1,0 +1,6 @@
+<center> rotateBySize </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>If this parameter = 0, log files will be rotated by size, otherwise log files will be rotated by time
+<br>
+

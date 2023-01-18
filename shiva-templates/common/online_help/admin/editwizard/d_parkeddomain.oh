@@ -1,0 +1,15 @@
+<center>Parked Domain</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to buy your DNS services. A parked domain allows a user to register a domain that is hosted elsewhere. This creates a DNS zone that will map user's domain to the IP of the external server where the site is hosted.
+<br><br>
+<i>Parked domain</i>:
+- has IP address (shared or dedicated);<br>
+- can't have Web service;<br>
+- can't have Mail services;<br>
+- can have its DNS zone;<br>
+- can't be accessed through FTP;<br>
+- can't  have subdomains;<br>
+- can't  have aliases.<br>
+<br>
+* Parked Domain is a platform independent resource. It requires neither of the <i>domain</i> resources included.

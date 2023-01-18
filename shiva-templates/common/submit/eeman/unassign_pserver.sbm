@@ -1,0 +1,13 @@
+<!-- BEGIN ./eeman/unassign_pserver.sbm  -->
+<assign result = obj.as_manager.unassignPServer(request.ps_id)>
+<if result.status != "OK">
+  <assign failure="1">
+</if>
+
+<if !failure>
+     <include request.stemplate>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./eeman/unassign_pserver.sbm  -->

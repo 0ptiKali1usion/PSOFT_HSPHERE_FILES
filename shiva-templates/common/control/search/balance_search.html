@@ -1,0 +1,90 @@
+<!-- BEGIN ./control/search/bill_search.html  -->
+<assign billman=account.getChild("billman")>
+<if !billman>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("balancereport")>
+  <assign result = report(request.sc_plan, request.sc_type, request.sc_mult,request.sc_value, request.sc_days )>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<assign sc_params="&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_type="+toolbox.url_escape(request.sc_type)+
+ "&sc_mult="+toolbox.url_escape(request.sc_mult)+
+ "&sc_value="+toolbox.url_escape(request.sc_value)+
+ "&sc_days="+toolbox.url_escape(request.sc_days)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<assign colspan="11">
+<call draw_table_header(colspan, lang.admin.searchbalance.header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.bp, "period")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balancesearch.days, "days")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.type, "type")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balancesearch.susp, "suspended")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.company, "company")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.name, "name")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+</tr>  
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr >
+<td><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)></td>
+<td class="control_align_right"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)></td>
+<td><call draw_label(entry.plan)></td>
+<td><call draw_label(entry.period)></td>
+<td><call draw_label(entry.days)></td>
+<td><call draw_label(entry.type)></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.balance))></td>
+<if entry.suspended><assign suspended=entry.suspended><else><assign suspended="Active"></if>
+<td><call draw_label(suspended)></td>
+<td><call draw_label(entry.company)></td>
+<td><call draw_label(entry.name)></td>
+<td><call draw_link("mailto:"+entry.email,entry.email)></td>
+</tr>
+</list>
+<tr ><td colspan="11">
+<call advReportNav(report)><a href="${config.CLIENT_CP_URL}/report_balance.csv?template_name=control/search/balance_search.csv&arid=${report.id}&_content_type=csv">${lang.search.export}</a>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<!--  END ./control/search/bill_search.html  -->

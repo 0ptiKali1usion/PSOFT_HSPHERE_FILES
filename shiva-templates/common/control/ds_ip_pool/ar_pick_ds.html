@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/ds_ip_pool/ar_pick_ds.html -->
+<call draw_tooltip()>
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager", "")>
+</if>
+<if ds_manager>
+   <assign viewer=account.getChild("reportviewer")>
+   <assign report = viewer.getAdvReport("ds_report")>
+  <assign result = report("IN_USE",
+                          "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "")>
+</if>
+<if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+<else>
+    <assign res = report.setStep("10")>
+    <assign res = report.setPage("1")>
+    <call advReportInit(report)>
+    <call draw_table_header("3", lang.label.quicksearch)>
+    <assign entries = report.page()>
+    <assign sc_params="&subnet_id=" + toolbox.url_escape(request.subnet_id)+ 
+		      "&range_id=" + toolbox.url_escape(request.range_id) + 
+                      "&stemplate=" + toolbox.url_escape(request.stemplate) +
+                      "&sc_page="+toolbox.url_escape(report.currentPage)>
+    <list entries as entry>
+      <tr>
+        <td><call draw_label(entry.ds_id)></td>
+        <td><call draw_label(entry.ds_name)></td>
+        <td><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/ds_ip_pool/assign_range_nav.sbm" + "&subnet_id="+request.subnet_id + "&range_id="+request.range_id+"&ds_id="+entry.ds_id+"&ftemplate="+request.ftemplate+"&stemplate="+request.stemplate, "select", lang.button.select)></td>
+      </tr>
+    </list>
+    <tr><td colspan="3"><call advReportNav(report)></td></tr>
+    <call draw_table_footer()>
+</if>
+<!-- END ./control/ds_ip_pool/ar_pick_ds.html -->

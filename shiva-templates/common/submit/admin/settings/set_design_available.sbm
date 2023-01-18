@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/admin/settings/set_design_available.sbm -->
+<compress>
+<assign design_id = request.design_id>
+<assign availability = request.value>
+<if design_id && availability>
+  <assign admin = account.getChild("admin")>
+  <assign design_prefix = design.get_design_prefix(design_id)>
+  <call save_v(design_prefix + "available", availability)>
+  <if (availability != "1") && (design_id == settings.default_design)>
+    <call save_v("default_design", "")>
+    <assign res = design.refreshCurrent()>
+  </if>
+<else>
+  <assign failure="1">
+</if>
+</compress>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.design_availability_failed_change, color_scheme))>
+  <include request.ftemplate>
+</if>
+<function save_v(name,value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/set_design_available.sbm -->

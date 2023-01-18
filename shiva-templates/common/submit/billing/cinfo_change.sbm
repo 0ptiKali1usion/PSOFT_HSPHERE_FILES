@@ -1,0 +1,41 @@
+<!-- BEGIN ./billing/cinfo_change.html  -->
+<assign check=yafv.checkall(
+yafv.common.s_billing.vSinglename(lang.label.last_name,request["last_name"]),
+yafv.common.s_billing.vAddress(lang.label.address,request["address1"]),
+yafv.common.s_billing.vCity(lang.label.city,request["city"]),
+yafv.common.s_billing.vState(lang.label.state,request["state"]),
+yafv.common.s_billing.vStateOther(lang.label.state_other,request["state2"]),
+yafv.common.s_billing.vPostal_Code(lang.label.postal_code,request["postal_code"]),
+yafv.common.s_billing.vCountry(lang.label.country,request["country"]),
+yafv.common.s_billing.vPhone(lang.label.phone,request["phone"]),
+yafv.common.s_billing.vEmail(lang.label.email,request["email"]) )>
+
+<if check.status=="OK">
+    <assign result=account.updateContactInfo(request.first_name, request.last_name,request.company, request.address1, request.address2, request.city, request.state, request.state2, request.postal_code, request.country, request.phone, request.email)>
+    <if result.status=="OK">
+        <assign success="1">
+        <assign res=sesion.addMessage(check.msg)>
+        <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_changed, lang.label.ci, ""))>
+    </if>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign first_name  = request.first_name>
+    <assign last_name   = request.last_name>
+    <assign company     = request.company>
+    <assign address1    = request.address1>
+    <assign address2    = request.address2>
+    <assign city        = request.city>
+    <assign postal_code = request.postal_code>
+    <assign phone       = request.phone>
+    <assign email       = request.email>
+    <assign state       = request.state>
+    <assign state2      = request.state2>
+    <assign country     = request.country>
+    <include request.ftemplate>
+</if>
+<!--  END ./billing/cinfo_change.html  -->

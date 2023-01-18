@@ -1,0 +1,47 @@
+<!-- BEGIN ./sumbill/list.html  -->
+<call draw_tooltip()>
+
+
+<call prepare_table_header("2", lang.sumbill.list.selectbp)>
+<call add_table_header_help("user-b_suminvoice-selbilprof","")>
+<call draw_table_header_prepared()>
+
+<form action=${config.CLIENT_CP_URL} method="POST" accept-charset="UTF-8">
+<tr>
+   <td width="5%"    ><call draw_tt_help(account.id,"","")></td>
+   <td width="95%"  class="control_align_center" valign="middle">
+   <input type="hidden" name="template_name" value="${template}">
+   <select name="bi_id">
+     <list user.billing_infos as bi>
+     <option value="${bi.bi_id}" <if bi.bi_id==bi_id>SELECTED</if>>${bi.name} (${bi.pi.info})</option>
+     </list>
+   </select>
+   <input type="submit" value="${lang.sumbill.list.submit}">
+   </td>
+</tr>
+</form>
+<call draw_table_footer()>
+&nbsp;
+
+<if bi_id>
+<call prepare_table_header("4", lang.sumbill.list.bills)>
+<call add_table_header_help("user-b_suminvoice-bills","")>
+<call draw_table_header_prepared()>
+<tr>
+    <td  class="control_align_center" ><call draw_label_bold(lang.label.descr)>&nbsp;<call draw_help("user-b_suminvoice-description","")></td>
+    <td width="20%"  class="control_align_center" ><call draw_label_bold(lang.label.amount)>&nbsp;<call draw_help("user-b_suminvoice-amount","")></td>
+    <td width="20%"  class="control_align_center" ><call draw_label_bold(lang.label.from)>&nbsp;<call draw_help("user-b_suminvoice-from","")></td>
+    <td width="20%"  class="control_align_center" ><call draw_label_bold(lang.label.to)>&nbsp;<call draw_help("user-b_suminvoice-to","")></td>
+</tr>
+<list user.getListBill(bi_id) as bill>
+<assign total=bill.bill.amount>
+<tr>
+    <td  class="control_align_center" ><call draw_link(config.CLIENT_CP_URL+"?template_name=sumbill/show.html"+"&bill_id="+bill.bill.id+"&account_id="+bill.account_id,bill.bill.description+" "+bill.account.description)></td>
+    <td width="20%"  class="control_align_center" ><if total><call draw_label(toolbox.currency(total))></if></td>
+    <td width="20%"  class="control_align_center" ><call draw_label(bill.bill.opened)></td>
+    <td width="20%"  class="control_align_center" ><if bill.bill.closed><call draw_label(bill.bill.closed)><else><call draw_label(lang.sumbill.list.opened)></if></td>
+</tr>
+</list>
+<call draw_table_footer()>
+</if>
+<!--  END ./sumbill/list.html  -->

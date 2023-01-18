@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/admin/price_edit.html  -->
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<if periods><assign counter=toolbox.counter("0", periods)><else><assign counter=toolbox.counter("0", "0")></if>
+<assign onc=toolbox.counter()>
+
+<tr>
+  <td class="control_header"><call draw_header(lang.admin.priceedit.interval)></td>
+  <td class="control_header"><call draw_header(lang.admin.size)></td>
+  <td class="control_header"><call draw_header(lang.label.free_units)></td>
+  <td class="control_header"><call draw_header(lang.label.setup_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.usage_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.recurr_fee)></td>
+  <td class="control_header"><call draw_header(lang.label.refund_perc)></td>
+</tr>
+<tr>
+  <td nowrap  colspan="2"><call draw_label(lang.admin.priceedit.default)></td>
+  <td nowrap  class="control_align_center"><if editFree><input type="text" label="${lang.label.free_units}" name="_FREE_UNITS_" value="${toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"],"false")}" size="6" check="vUnits"><else>&nbsp;</if></td>
+  <td nowrap  class="control_align_center"><if editSetup><input type="text" label="${lang.label.setup_fee}" name="_SETUP_PRICE_" value="${toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td nowrap  class="control_align_center"><if editUsage><input type="text" label="${lang.label.usage_fee}" name="_USAGE_PRICE_" value="${toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td nowrap  class="control_align_center"><if editRecurrent><input type="text" label="${lang.label.recurr_fee}" name="_UNIT_PRICE_" value="${toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td nowrap  class="control_align_center"><if editRefund><input type="text" label="${lang.label.refund_perc}" name="_REFUND_PRICE_" value="${toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"],"false")}" size="6" check="vPercent"><else>&nbsp;</if></td>
+</tr>
+
+<list onc as c><if counter==periods>${c.stop}<else>
+<tr>
+  <td  class="control_align_center"><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+counter],"false"))></td>
+  <td  class="control_align_center"><call draw_label(plan.values["_PERIOD_TYPE_"+counter])></td>
+  <td  class="control_align_center"><if editFree><input type="text" label="${toolbox.compose(lang.admin.priceedit.free_period, counter)}" name="_FREE_UNITS_${counter}" value="${toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"+counter],"false")}" size="6" check="vUnits"><else>&nbsp;</if></td>
+  <td  class="control_align_center"><if editSetup><input type="text" label="${toolbox.compose(lang.admin.priceedit.setup_period, counter)}" name="_SETUP_PRICE_${counter}" value="${toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"+counter],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td  class="control_align_center"><if editUsage><input type="text" label="${toolbox.compose(lang.admin.priceedit.usage_period, counter)}" name="_USAGE_PRICE_${counter}" value="${toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"+counter],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td  class="control_align_center"><if editRecurrent><input type="text" label="${toolbox.compose(lang.admin.priceedit.rec_period, counter)}" name="_UNIT_PRICE_${counter}" value="${toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"+counter],"false")}" size="6" check="vPrice"><else>&nbsp;</if></td>
+  <td  class="control_align_center"><if editRefund><input type="text" label="${toolbox.compose(lang.admin.priceedit.refund_period, counter)}" name="_REFUND_PRICE_${counter}" value="${toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"+counter],"false")}" size="6" check="vPercent"><else>&nbsp;</if></td>
+</tr>
+${counter.next}
+</if></list>
+<!--  END ./control/admin/price_edit.html  -->

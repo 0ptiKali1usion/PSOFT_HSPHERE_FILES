@@ -1,0 +1,13 @@
+<!-- BEGIN ./mailman/massmail.html  -->
+<assign template="mailman/massmail.html">
+<include "functions">
+<if request.curr_menu_id>
+  <assign cur_menu = request.curr_menu_id>
+  <call draw_menu(cur_menu)>
+<else>
+  <assign cur_menu = "">
+  <call draw_menu("mailman-list")>
+</if>
+<include "control/mailman/massmail.html">
+<call bottom()>
+<!--  END ./mailman/massmail.html  -->

@@ -1,0 +1,20 @@
+<!-- BEGIN ./control/admin/settings/ccbrand_incl.html -->
+<yafv s_admin>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_ccbrand_incl" check! accept-charset="UTF-8">
+<tr>
+  <td colspan="3" class="control_header"><call draw_header(lang.admin.ccbrands.add)></td>
+</tr>
+<tr  valign="middle">
+  <td colspan="3" valign="middle">
+   <input type="hidden" name="template_name" value="submit/admin/settings/ccbrand_incl.sbm">
+   <input type="hidden" name="stemplate" value="${template}">
+   <input type="hidden" name="ftemplate" value="${template}">
+   <call draw_label(lang.label.name)>
+   <input type="text" name="name" label="${lang.label.name}" check="vStringReq">
+   <call draw_label(lang.label.sh_name)>
+   <input type="text" name="name_sh" label="${lang.label.sh_name}" maxlength="8" check="vStringReq">
+   <input type="submit" value="${lang.button.add}">
+  </td>
+</tr>
+</form>
+<!-- END ./control/admin/settings/ccbrand_incl.html -->

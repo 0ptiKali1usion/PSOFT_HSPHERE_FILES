@@ -1,0 +1,11 @@
+<html>
+<body onLoad="javascript:window.document.forms['urchin'].submit()">
+<assign urchin4=account.getResource(request.rid)>
+<form name="urchin" method="POST" action="${urchin4.urchin_url}">
+<input type="hidden" name="app" value="${urchin4.app}">
+<input type="hidden" name="action" value="login">
+<input type="hidden" name="user" value="${urchin4.user}">
+<input type="hidden" name="pass" value="${urchin4.pass}">
+</form>
+</body>
+</html>

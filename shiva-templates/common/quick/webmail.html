@@ -1,0 +1,13 @@
+<!-- BEGIN ./quick/webmail.html  -->
+<if account.isDemo>
+<assign header=lang.quick.quickview.webmail>
+<assign image="webmail_demo">
+<include "misc/show_demo.html">
+<else>
+<assign template="quick/webmail.html">
+<include "functions">
+<call draw_menu("acct-pref")>
+<include "control/quick/webmail.html">
+<call bottom()>
+</if>
+<!--  END ./quick/webmail.html  -->

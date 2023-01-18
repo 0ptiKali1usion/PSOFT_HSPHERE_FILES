@@ -1,0 +1,17 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vSinglename, vName, vAddress, vAddress2, vCity, vState, vStateOther, vPostal_Code, vCountry, vPhone, vFax, vEmail, vPeriod, vcc_name, vcc_number, vSS_number, vcc_month, vcc_year, vDomain_Name, vNewDomainName, vSubDomain, v3LDomainName, vOsrsDomainName, vReferal_ID, vIssueNum, vDateYY, vDomainDescription, vExemptionCode, vExemptionCodeReq, vCvvNum, vSignupPromocode(string);
+
+include common.s_hsphere.yafv: vPassword1(string, string), vPassword2(string, string),
+	vCiSinglename(string, boolean), vCiName(string, boolean),
+	vCiAddress(string, boolean), vCiCity(string, boolean), vCiState(string, boolean),
+	vCiOrganization(string, boolean), vCiPostal_Code(string, boolean), vCiCountry(string, boolean),
+	vCiPhone(string, boolean), vCiFax(string, boolean),
+	vCiEmail(string, boolean), vBiSinglename(string, boolean), vBiName(string, boolean),
+	vBiAddress(string, boolean), vBiCity(string, boolean), vBiState(string, boolean),
+	vBiOrganization(string, boolean), vBiPostal_Code(string, boolean), vBiCountry(string, boolean),
+	vBiPhone(string, boolean), vBiFax(string, boolean), vBiEmail(string, boolean),
+	vSSCards(string), vCardIssueNum(string, string), vCardDateMMYY(string, string, string), vCCNumber(string, string),
+	vPhoneOSRS(string, string, string), vFaxOSRS(string, string, string),
+        vFaxOSRSReq(string, string, string),
+	vCardCvvNum(string, string);
+
+regexp vOrganization= ".*", maxlength="98", fail=yafv.vOrganization.fail;

@@ -1,0 +1,60 @@
+<!--  END ./domain/update_dir_ind.sbm -->
+<assign error="false">
+<list toolbox.tokenizer(request.indexes) as entry>
+<assign result=yafv.common.s_domain.vLocalFileName(lang.label.message_dirindex, entry)>
+<if result.status!="OK">
+<assign error="true">
+<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+</list>
+
+<if error=="false">
+  <assign hosting = account.getResource( request.rid )>
+  <if request.uid>
+    <assign adder= account.getResource(request.uid).updateInd> 
+    <list toolbox.tokenizer(request.indexes) as entry>
+      <assign res=adder(entry)>
+    </list>
+    <assign result = adder()>
+    <if result.status == "OK">
+      <assign success_res="OK">
+    <else>
+      <assign res=session.addMessage(
+	  toolbox.compose(lang.msg.name_res_failed_update,lang.label.directory_ind,""))>
+      <assign success_res="false">
+    </if>
+  <else>
+    <assign directory_ind=hosting.getChildren("directory_ind")>
+    <if directory_ind>
+      <assign success_res="OK">
+      <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.directory_ind,""))>
+    <else>
+      <list toolbox.tokenizer(request.indexes) as entry>
+        <assign str_ind = str_ind +" "+ entry>
+      </list>
+      <if str_ind!="">
+        <assign result=hosting.addChild("directory_ind","",str_ind)>
+        <if result.status == "OK">
+           <assign success_res="OK">
+        <else>
+          <assign success_res="false">
+          <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.directory_ind,""))>
+        </if>
+      <else>
+        <assign success_res="false">
+        <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.directory_ind,""))>
+      </if>
+    </if>
+  </if>
+<else>
+  <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_update,lang.label.directory_ind,""))>
+  <assign success_res="false">
+</if>
+
+<if success_res == "OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>    
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/update_dir_ind.sbm  -->

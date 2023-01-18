@@ -1,0 +1,22 @@
+<!-- BEGIN ./submit/admin/merchant/WorldPay.sbm -->
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign mm=account.getChild("merchant_manager")>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<if request.useCustomResultPage == "on">
+<assign use_custom_page="1">
+<assign custom_page_name=request.pageName>
+<else>
+<assign use_custom_page="0">
+<assign custom_page_name="">
+</if>
+<assign res = mm.webprocessorparams("WorldPay","INSTALLATION_ID", request.installationId, "ACCOUNT_ID", request.accountId, "CURRENCY", request.currencyCode,"TEST_MODE", request.test_mode, "USE_CUSTOM_PAGE", use_custom_page, "CUSTOM_PAGE_NAME", custom_page_name,"enabled", enabled)>
+<if res.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(res.msg)>
+ <include request.ftemplate>
+</if>
+</if>
+<!-- END ./submit/admin/merchant/PayPal.sbm -->
+

@@ -1,0 +1,11 @@
+<!-- BEGIN ./common/submit/admin/merchant/LinkPoint.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign base="/hsphere/local/home/cpanel/shiva/psoft_config/linkpoint/">
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "CONFIG_FILE", request.config_file, "CERT_PATH", base+request.mid+"_cert.p12", "CLASS_NAME", "psoft.epayment.LinkPoint","MODE", request.mode, "AVS", request.avs, "PASSWD", request.passwd, "TEMPLATE", "admin/merchant/LinkPoint.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "CONFIG_FILE", request.config_file, "CERT_PATH", "", "CLASS_NAME", "psoft.epayment.LinkPoint","MODE", request.mode, "AVS", request.avs, "PASSWD", request.passwd, "TEMPLATE", "admin/merchant/LinkPoint.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./common/submit/admin/merchant/LinkPoint.sbm -->
+                                Me

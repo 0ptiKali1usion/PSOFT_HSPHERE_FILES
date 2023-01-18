@@ -1,0 +1,58 @@
+<if request.done>
+  <include request.stemplate>
+<else><if request.edit>
+  <include request.ftemplate>
+<else>
+  <compress>
+  <assign admin = account.getChild("admin")> 
+  <assign plan = admin.getPlan(request.plan_id)>
+  <assign rtype = plan.getResourceType(request.r_id)>
+  
+  <assign name="_FREE_UNITS_">                                                                
+  <assign result=yafv.common.s_admin.vUnits(lang.label.free_units, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign failure="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+  <else>
+      <assign failure="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>
+
+  <assign periods=plan.values["_PERIOD_TYPES"]>
+  <assign counter=toolbox.counter("0", periods)>
+  <assign onc=toolbox.counter()>
+  <list onc as c>
+  <if counter==periods>
+      <assign res=c.stop>
+  <else>
+      <assign name="_FREE_UNITS_"+counter>
+      <assign result=yafv.common.s_admin.vUnits(
+  	toolbox.compose(lang.msg.period_free_units,counter), request[name])>
+      <if result.status=="OK">
+          <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+          <if result.status!="OK">
+  	    <assign failure="1">
+              <assign res=session.addMessage(result.msg)>
+          </if>
+      <else>
+          <assign failure="1">
+          <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+      </if>
+  
+      <assign res=counter.next>
+  </if>
+  </list>
+  </compress>
+  <if failure>
+      <include request.ftemplate>
+  <else>
+      <if request.edit_done>
+        <include request.ftemplate>
+      <else>
+        <include request.stemplate>
+      </if>
+  </if>
+</if></if>

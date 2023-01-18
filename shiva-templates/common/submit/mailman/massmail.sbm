@@ -1,0 +1,45 @@
+<!-- BEGIN ./submit/mailman/massmail.sbm  -->
+
+<assign check=yafv.checkall(
+yafv.common.s_signup.vEmail(toolbox.compose(lang.label.field_name_ci,lang.label.email),request["from"])
+)>
+
+<if check.status=="OK">
+  <assign viewer=account.getChild("reportviewer")>
+  <assign useTemplates=request.useTemplates>
+  <assign useSettings=request.useSettingsCharset>
+  <if useTemplates=="on">
+    <assign tmpl=request.select1>
+    <if useSettings=="on">
+        <assign result=viewer.massMail(request.arid, request.from, request.subject, request.message, tmpl, "1", request.oepa, request.content_type)>
+    <else>
+        <assign result=viewer.massMail(request.arid, request.from, request.subject, request.message, tmpl, "0", request.oepa, request.content_type)>
+    </if>
+  <else>
+    <if useSettings=="on">
+        <assign result=viewer.massMail(request.arid, request.from, request.subject, request.message, null, "1", request.oepa, request.content_type)>
+    <else>
+        <assign result=viewer.massMail(request.arid, request.from, request.subject, request.message, null, "0", request.oepa, request.content_type)>
+    </if>
+  </if>
+<else>
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if !result.status && (check.status=="OK")>
+  <assign success = "1">
+</if>
+
+<if success>
+  <include "mailman/massmail_success.html">
+<else>
+  ${session.addMessage(result.msg)}
+  <assign from = toolbox.html_encode(request.from)>
+  <assign subject = toolbox.html_encode(request.subject)>
+  <assign message = toolbox.html_encode(request.message)>
+
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/mailman/massmail.sbm  -->
+

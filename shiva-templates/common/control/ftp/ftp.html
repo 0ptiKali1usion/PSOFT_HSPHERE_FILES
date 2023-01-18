@@ -1,0 +1,62 @@
+<!-- BEGIN control/ftp/ftp.html  -->
+<call draw_tooltip()>
+
+<function displayDomain(domain)>
+<tr>
+   <td><call draw_label(domain.name)></td>
+   <td><assign ftp_vhost=domain.getChild("ftp_vhost")><assign ip=domain.getChild("ip")>
+<if ip.shared=="1">
+<call draw_off()><call draw_label(lang.ftp.ftp.header)>
+<else>
+<if ftp_vhost>
+<call disable(domain, ftp_vhost)> <call draw_edit(config.CLIENT_CP_URL+"?template_name=ftp/ftp_vhost.html"+"&rid="+ftp_vhost+"&dtemplate="+template, lang.ftp.ftp.change)>
+<else>
+<call  enableWizard(domain, "ftp_vhost", "ftp/ftp_vhost_add_form.html")>
+</if>
+</if>
+</td>
+
+<td>
+<if ip.shared=="1">
+    <call draw_off()><call draw_label(lang.ftp.ftp.ftpreq)>    
+<else>
+
+<if ftp_vhost>
+    <call onoff(ftp_vhost, "ftp_vhost_anonymous")>
+<else>
+    <call draw_off()><call draw_label(lang.ftp.ftp.ftpreq)>    
+</if>
+</if>
+</td>
+</tr>
+<list domain.getChildren("subdomain") as subdomain>
+<call displayDomain(subdomain)>
+</list>
+
+</function>
+
+<assign domainManager = account.getChild( "unixuser" )>
+
+
+<call draw_table_header("3", lang.domain.editincluded.ftp)>
+<tr>
+    <td><call draw_label_bold(lang.label.domain.name)>&nbsp;<call draw_help("user-ftp-domainname","")></td>
+    <td><call draw_label_bold(lang.ftp.ftp.ftp)>&nbsp;<call draw_help("user-ftp-ftp","")></td>
+    <td><call draw_label_bold(lang.ftp.ftp.anonftp)>&nbsp;<call draw_help("user-ftp-anonymousftp","")></td>
+</tr>
+
+<list domainManager.getChildren("domain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("service_domain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("3ldomain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("nodomain") as domain>
+<call displayDomain(domain)>
+</list>
+
+<call draw_table_footer()>
+<!--  END control/ftp/ftp.html  -->

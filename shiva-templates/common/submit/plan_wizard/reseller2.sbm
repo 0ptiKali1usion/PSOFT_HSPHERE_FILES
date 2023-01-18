@@ -1,0 +1,128 @@
+<!-- BEGIN ./submit/plan_wizard/reseller.sbm -->
+<function vServicePrice(tag)>
+  <if request["i_"+tag]>
+    <assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+    <assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+    <if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1"> 
+      <if toolbox.consists(priceType,"F")=="1">
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_free,name),request["f_"+tag])>
+      </if>
+      <if toolbox.consists(priceType,"M")=="1">
+        <assign res = yafv.common.s_wizard.vPriceReq(
+		toolbox.compose(lang.msg.res_price_free,name),request["f_"+tag])>
+      </if>
+      <assign r = oldValues.put("f_"+tag,toolbox.html_encode(request["f_"+tag]))>
+      <if res.status != "OK">
+        <assign failure="1">
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+      </if>
+    </if>
+
+    <if toolbox.consists(priceType,"S")=="1">
+      <assign res = yafv.common.s_wizard.vPriceOpt(
+	toolbox.compose(lang.msg.res_price_setup_fee,name),request["s_"+tag])>
+      <assign r = oldValues.put("s_"+tag,toolbox.html_encode(request["s_"+tag]))>
+      <if res.status != "OK">
+        <assign failure="1">
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+      </if>
+    </if>
+
+    <if toolbox.consists(priceType,"R")=="1">
+      <assign res = yafv.common.s_wizard.vPriceOpt(
+	toolbox.compose(lang.msg.res_price_setup_fee,name),request["m_"+tag])>
+      <assign r = oldValues.put("m_"+tag,toolbox.html_encode(request["m_"+tag]))>
+      <if res.status != "OK">
+        <assign failure="1">
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+      </if>
+    </if>
+
+    <if toolbox.consists(priceType,"U")=="1">
+      <assign res = yafv.common.s_wizard.vPriceOpt(
+	toolbox.compose(lang.msg.res_price_setup_fee,name),request["u_"+tag])>
+      <assign r = oldValues.put("u_"+tag,toolbox.html_encode(request["u_"+tag]))>
+      <if res.status != "OK">
+        <assign failure="1">
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+      </if>
+    </if>
+  </if>
+</function>
+
+<assign oldValues = toolbox.new_hash>
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if !reseller_su>
+   <assign failure="1">
+   <assign res=session.addMessage(lang.planwizard.forbidden_create_plan)>
+</if>
+
+<assign result=yafv.checkall(
+    yafv.common.s_wizard.vPriceReq(lang.planeditor.credit_limit,request.hard_credit)
+)>
+<if result.status != "OK">
+    <assign failure="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<call vServicePrice("account")>
+<call vServicePrice("r_ds_bandwidth")>
+<call vServicePrice("reseller_traffic")>
+
+<list reseller_su.priced_types as priced_type>
+<assign typeName = toolbox.getTypeName(priced_type)>
+<assign typePrice = toolbox.getResellerResourcePriceType(priced_type)>
+
+<if toolbox.consists(typePrice,"M")=="1">
+  <assign result=yafv.common.s_wizard.vPriceReq(lang.label.free_units, request["_FREE_UNITS_"+typeName+"_"])>
+<else>
+  <assign result=yafv.common.s_wizard.vPriceOpt(lang.label.free_units, request["_FREE_UNITS_"+typeName+"_"])>
+</if>
+<assign r=oldValues.put("_FREE_UNITS_"+typeName+"_",request["_FREE_UNITS_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+<assign result=yafv.common.s_wizard.vPriceOpt(lang.label.setup_price, request["_SETUP_PRICE_"+typeName+"_"])>
+<assign r=oldValues.put("_SETUP_PRICE_"+typeName+"_",request["_SETUP_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+<assign result=yafv.common.s_wizard.vPriceOpt(lang.label.usage_price, request["_USAGE_PRICE_"+typeName+"_"])>
+<assign r=oldValues.put("_USAGE_PRICE_"+typeName+"_",request["_USAGE_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+<assign result=yafv.common.s_wizard.vPriceOpt(lang.label.recurrent_price, request["_UNIT_PRICE_"+typeName+"_"])>
+<assign r=oldValues.put("_UNIT_PRICE_"+typeName+"_",request["_UNIT_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+<assign result=yafv.common.s_wizard.vPercentOpt(lang.label.refund_percent, request["_REFUND_PRICE_"+typeName+"_"])>
+<assign r=oldValues.put("_REFUND_PRICE_"+typeName+"_",request["_REFUND_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+<assign result=yafv.common.s_wizard.vPriceOpt(lang.label.max_units, request["_MAX_"+typeName+"_"])>
+<assign r=oldValues.put("_MAX_"+typeName+"_",request["_MAX_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><list result.msgs as msg><assign res=session.addMessage(msg)></list></if>
+ 
+</list>
+
+<if !failure>
+    <assign admin = account.getChild("admin")>
+    <assign plan = admin.resellerPlanWizard()>
+    <if plan.status != "OK">
+        <assign failure="1">
+        <assign res=session.addMessage(lang.msg.plan_unable_create)>
+        <assign res=session.addMessage(plan.msg)>
+    </if>
+</if>
+<if !failure>
+    <assign res = session.addMessage(toolbox.compose(
+      lang.msg.name_res_created,lang.label.plan,plan.description))>
+    <include request.stemplate>
+<else>
+    <assign vs_account=toolbox.html_encode(request.s_account)>
+    <assign vm_account=toolbox.html_encode(request.m_account)>
+    <assign vhard_credir=toolbox.html_encode(request.hard_credit)>
+    <include request.ftemplate>
+</if>
+
+<!-- END ./submit/plan_wizard/reseller.sbm -->

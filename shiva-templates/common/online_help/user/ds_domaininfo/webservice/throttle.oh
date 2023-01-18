@@ -1,0 +1,34 @@
+<center>Throttle Module</center>
+<hr>
+	&nbsp;&nbsp;&nbsp;&nbsp;<i>Throttle Module</i> was developed to to reduce the load on your bandwidth by delaying or refusing requests to your sites.<br>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;There are eight<i> 'throttling policies'</i> (each expecting two parameters: a limit and a time period):<br>
+<br>
+<b>Concurrent</b> - impose a limit on the number of concurrent requests at any one time. The period specifies how long data is accumulated before the counters are reset.<br>
+<br>
+<b>Document </b> - excluding requests for HTML page elements such as images and style sheets, impose a limit on the number of requests per period. When this limit is exceeded all further requests are refused, until the elapsed time exceeds the period length, at which point the elapsed time and the counters are reset. Note that the requests (hits) column of the throttle status display does not include the requests for page elements. <br>
+<br>
+<b>Idle</b> - impose a mimimum idle time between requests. When the miminum is not reached, then the request incurs a calculated delay penalty or is refused. First, whenever the elapsed time exceeds the period length, then the counters are reset. Second, if the idle time between requests exceeds the minimum, then the the request proceeds without delay. Otherwise the request is delayed between one and 60 seconds. If the delay would exceed 60 seconds, then the request is refused entirely to avoid occupying servers unnecessarily. The delay is computed as the policy minimum less the idle time between requests. <br>
+<br>
+<b>Original</b> - impose a limit on the volume (kbytes sent) per period, which when exceeded the request incurs a counter-based delay penalty or is refused. First, whenever the elapsed time exceeds the period length, then the volume and elapsed time are halved. Second, if the volume is below the limit, then the delay counter is decreased by one second if it is not yet zero. Otherwise, when the limit is exeeded, the delay counter is increased by one second. The delay can be between zero and 60 seconds, after which the request will be refused to avoid occupying servers unnecessarily. 
+<br>
+<br>
+<b>Random</b> - randomly accept a percentage (limit) of the requests. If the percentage is zero (0), then every request is refused; if the percentage is 100, then all requests are accepted. The period specifies how long data is accumulated before the counters are reset. 
+<br>
+<br>
+<b>Request </b> - impose a limit on the number of requests per period. When this limit is exceeded all further requests are refused until the elapsed time exceeds the period length, at which point the elapsed time and counters are reset. 
+<br>
+<br>
+<b>Speed</b> - impose a limit on the volume (kbytes sent) per period, which when 
+exceeded the request incurs a calculated delay penalty or is refused. First, whenever 
+the elapsed time exceeds the period length, then the limit (allowance) is deducted 
+from the volume, which cannot be a negative result; also the period length is 
+deducted from the elapse time. Second, if the volume is below the limit, in which 
+case the request proceeds without delay. Otherwise the request is delayed between 
+one and 60 seconds. If the delay would exceed 60 seconds then we refuse the request 
+entirely to avoid occupying servers unnecessarily. The delay is computed as one 
+plus the integer result of the volume times 10 divided by the limit. <br>
+<br>
+<b>Volume</b> - impose a limit on the volume (kbytes sent) per period. When this limit is exceeded all further requests are refused, until the end of the period at which point the elapsed time and counters are reset. 
+<br>
+<br>You can also set throttle policy to <b>None</b> which imposes no restrictions on a request and used as a place holder to allow monitoring. The limit currently serves no purpose. The period specifies how long data is accumulated before the counters are reset. 

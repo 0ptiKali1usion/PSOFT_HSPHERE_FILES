@@ -1,0 +1,8 @@
+<!-- BEGIN ./submit/domain/webservice_content.sbm  -->
+<assign result=account.getResource(request.rid).initContent()>
+<if result.status=="OK">
+ <assign success="1">
+<else>${session.addMessage(result.msg)}
+</if>
+<include request.stemplate>
+<!--  END ./submit/domain/webservice_content.sbm  -->

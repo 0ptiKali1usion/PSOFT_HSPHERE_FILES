@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/domain/install_comodo_cert.sbm  -->
+<assign comodossl=account.getResource(request.comodossl)>
+<assign result = comodossl.installCertificate()>
+<if result.status != "OK">
+   <assign failute="1">
+   <assign res=session.addMessage(result.msg)>
+</if>
+
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/domain/install_comodo_cert.sbm  -->

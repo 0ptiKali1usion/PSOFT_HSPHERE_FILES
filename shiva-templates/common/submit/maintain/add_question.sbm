@@ -1,0 +1,8 @@
+<assign maintainary=account.getChild(request.user_type)>
+<assign task = maintainary.setQuestion(request.task_id,request.answ_quest)>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(msg.maintain_question_failed_add)>
+ <include request.ftemplate>
+</if> 

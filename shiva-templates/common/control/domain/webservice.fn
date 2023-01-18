@@ -1,0 +1,576 @@
+<include "functions">
+
+<function draw_frontpage(hosting, platform_type, template)>
+  <assign frontpage=hosting.getChild("frontpage")>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <if frontpage>
+      <call disable(hosting, frontpage)>
+      <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=domain/add_frontpage.html"+"&stemplate="+template+"&login="+frontpage.login+"&password="+frontpage.password+"&uid="+frontpage, lang.domain.webservice.edit)>
+      <call draw_fix(config.CLIENT_CP_URL+"&?rid="+hosting+"&uid="+frontpage+"&template_name=domain/fix_frontpage_confirm.html"+"&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.fp_fixing)>
+    <else>
+      <call enableWizard(hosting, "frontpage", "domain/add_frontpage.html")>
+    </if>
+  </if>
+  <if platform_type=="IIS">
+    <call onoff(hosting, "frontpage")>
+    <if frontpage>
+      <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=windomain/edit_frontpage.html"+"&stemplate="+template+"&uid="+frontpage, lang.domain.webservice.edit)>
+      <call draw_fix(config.CLIENT_CP_URL+"&?rid="+hosting+"&uid="+frontpage+"&template_name=domain/fix_frontpage_confirm.html"+"&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.fp_fixing)>
+    </if>
+  </if>
+</function>
+
+<function draw_ssl(hosting, platform_type, template, ip)>
+  <asiign platform_type = hosting.server>
+  <assign ssl=hosting.getChild("ssl")>
+  <assign comodossl = hosting.getChild("comodossl")>
+  <if !hosting.getChild("sharedssl")>
+      <if ip.shared!="1">
+	<if ssl>
+          <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&did="+ssl+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=0", lang.label.ssl.disable.ssl)><br>
+          <if comodossl><call draw_label(comodossl.ext_description)><br></if>
+	  <if platform_type=="apache">
+	      <call draw_edit(config.CLIENT_CP_URL+"?template_name=domain/ssl_edit.html"+"&stemplate="+template+"&rid="+hosting+"&uid="+ssl, lang.domain.webservice.edit)>
+	  </if>
+	  <if platform_type=="zeus">
+	      <call draw_edit(config.CLIENT_CP_URL+"?template_name=zeus/ssl_edit.html"+"&stemplate="+template+"&rid="+hosting+"&uid="+ssl, lang.domain.webservice.edit)>
+	  </if>
+	  <if platform_type=="IIS">
+	      <call draw_edit(config.CLIENT_CP_URL+"?template_name=windomain/edit_ssl.html"+"&stemplate="+template+"&ftemplate="+template+"&rid="+hosting+"&uid="+ssl, lang.domain.webservice.edit)>
+	  </if>
+	  <if ssl.site_name><assign site_name = ssl.site_name><else><assign site_name = hosting.parent.name></if>
+	  <call draw_preview("https://" + site_name, lang.domain.webservice.opensite)>
+	<else>
+          <call draw_label(lang.label.ssl.support_disabled)><br>
+          <if comodossl>
+            <call draw_label(comodossl.descr)>&nbsp;
+            <if comodossl.cert_available>
+              <call draw_label(lang.label.ssl.cert.available)><br>     
+              <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=submit/domain/install_comodo_cert.sbm"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM + "&comodossl="+comodossl, toolbox.compose(lang.label.ssl.purchaise.add_ssl_support_and_intsall_purchaised_cert, comodossl.descr))>
+            <else>
+              <call draw_label(lang.label.ssl.cert.not_available)>
+              <call draw_link(config.CLIENT_CP_URL+"?template_name=domain/comodossl_purchase_req.html"+"&country="+account.ci.country+"&stemplate="+template+"&ftemplate="+template, lang.comodossl.doc_req)><br>
+	      <if (platform_type=="apache") || (platform_type=="zeus")>
+                <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/add_ssl.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.ssl.purchaise.import)><br>
+                <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/generate_new_ssl_cert.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+ GLOBAL_ACTIVE_ITEM + "&generate=1", lang.label.ssl.purchaise.generate)>
+	      </if>
+	      <if platform_type=="IIS">
+                <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/add_ssl.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.ssl.purchaise.import)><br>
+                <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/generate_new_ssl_cert.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM + "&generate=1", lang.label.ssl.purchaise.generate)>
+	      </if>
+            </if>
+          <else>
+            <if account.plan.isResourceAvailable("comodossl") && obj.comodo_manager.listProducts().size != "0"><call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&type=comodossl"+"&stemplate="+template+"&ftemplate="+template+"&template_name=domain/comodossl_purchase.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.ssl.purchaise.by)><br></if>
+	    <if (platform_type=="apache") || (platform_type=="zeus")>
+              <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/add_ssl.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.ssl.purchaise.import)><br>
+              <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/generate_new_ssl_cert.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+ GLOBAL_ACTIVE_ITEM + "&generate=1", lang.label.ssl.purchaise.generate)>
+	    </if>
+	    <if platform_type=="IIS">
+              <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/add_ssl.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.ssl.purchaise.import)><br>
+              <call draw_link(config.CLIENT_CP_URL+"?rid=" + hosting + "&aid=" + hosting + "&type=ssl" + "&stemplate=" + template+"&ftemplate="+template+"&next_template=domain/generate_new_ssl_cert.html"+"&template_name=submit/misc/add_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM + "&generate=1", lang.label.ssl.purchaise.generate)>
+	    </if>
+          </if>
+	</if>
+      <else>
+	<call draw_off()>
+	<call draw_label(lang.domain.webservice.dedip)>
+      </if>
+  <else>
+      <call draw_off()>
+      <call draw_label(lang.domain.webservice.sslenabled)>
+  </if>
+</function>
+
+
+
+
+<function draw_comodossl(hosting, ip)>
+  <assign comodo_ssl=hosting.getChild("comodossl")>
+      <if ip.shared!="1">
+	<if comodo_ssl>
+          <call draw_on()>&nbsp;<call draw_label(comodossl.ext_description)>&nbsp;
+            <if comodossl.cert_available>
+               <if !comodossl.cert_installed>
+                 <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/domain/install_comodo_cert.sbm" + "&comodossl="+comodossl+"&stemplate="+template+"&ftemplate="+template+"&rid="+hosting, lang.comodossl.cert.install)>
+               </if>
+            <else><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/comodossl_purchase_req.html"+"&country="+account.ci.country+"&stemplate="+template+"&ftemplate="+template, lang.comodossl.doc_req)>
+            </if>
+	<else>
+          <call draw_palink(config.CLIENT_CP_URL+"?rid="+hosting+"&type=comodossl"+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&template_name=domain/comodossl_purchase.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM, "off", "Add")>
+	</if>
+      <else>
+	<call draw_off()>
+	<call draw_label(lang.domain.webservice.dedip)>
+      </if>
+</function>
+
+
+
+<function draw_sharedssl(hosting, platform_type)>
+  <assign sharedssl=hosting.getChild("sharedssl")>  
+  <if !hosting.getChild("ssl")>
+      <if sharedssl>
+        <call disable(hosting, sharedssl)>
+        <call draw_preview("https://"+sharedssl.name, lang.domain.webservice.opensite)><else><call enableWizard(hosting, "sharedssl", "submit/domain/check_sharedssl.sbm")>
+      </if>
+  <else>
+      <call draw_off()>
+      <call draw_label(lang.domain.webservice.sslenabled)>
+  </if>
+</function>
+
+<function draw_cgi(hosting, platform_type)>
+  <assign cgis=hosting.getChildren("cgi")>
+  <if platform_type=="apache">
+    <list cgis as cgi>
+      <call draw_label(cgi.ext)>&nbsp;<call disableNew(hosting, cgi)><br>
+    </list>
+    <call addNewWizard(hosting, "cgi", "domain/add_cgi.html", lang.domain.webservice.addcgi)>
+  </if>
+  <if platform_type=="zeus">
+    <list cgis as cgi>
+      <call draw_label(cgi.ext+" ("+cgi.handler+")")>&nbsp;<call disableNew(hosting, cgi)><br>
+    </list>
+    <call addNewWizard(hosting, "cgi", "zeus/add_cgi.html", lang.domain.webservice.addcgi)>
+  </if>
+  <if platform_type=="IIS">
+    <list cgis as cgi>
+      <call draw_label(cgi.ext+" ("+cgi.handler+")")><call disableNew(hosting, cgi)><br>
+    </list>
+    <if account.plan.isResourceAvailable("cgi")>
+      <call addNewWizard(hosting, "cgi", "windomain/add_cgi.html", lang.domain.webservice.addcgi)>
+    </if>
+  </if>
+</function>
+
+<function draw_cgidir(hosting, platform_type)>
+  <assign cgidirs = hosting.getChildren("cgidir")>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <assign empresa=hosting.getChild("empresa")>
+    <list cgidirs as cgidir>
+      <call draw_label(cgidir.alias)>&nbsp;<call draw_label("->")>&nbsp;<call draw_label(cgidir.dir)>
+      <if empresa && cgidir.dir=="/cgi-bin">
+	<call draw_label(lang.domain.webservice.cgiempresa)>
+      <else>
+	<call disableNew(hosting, cgidir)>
+      </if>
+      <br>
+    </list>
+    <call addNewWizard(hosting, "cgidir", "domain/add_cgidir.html", lang.domain.webservice.addcgi)>
+  </if>
+  <if platform_type=="IIS">
+    <call onoff(hosting, "cgidir")>
+  </if>
+</function>
+
+<function draw_mime(hosting, platform_type)>
+  <assign mimes=hosting.getChildren("mimetype")>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <list mimes as mime>
+      <call draw_label(mime.ext+" "+mime.mime)>
+      <call disableNew(hosting, mime)><br>
+    </list>
+    <call addNewWizard(hosting, "mimetype", "domain/add_mime.html", lang.domain.webservice.addmime)>
+  </if>
+  <if platform_type=="IIS">
+    <list mimes as mime>
+      <call draw_label(mime.ext+" "+mime.mime)>
+      <call disableNew(hosting, mime)><br>
+    </list>
+    <call addNewWizard(hosting, "mimetype", "windomain/add_mime.html", lang.domain.webservice.addmime)>
+  </if>
+</function>
+
+<function draw_miva(hosting, platform_type, template)>
+ <if account.plan.isDemoPlan()>
+  <call draw_label(lang.label.demo_restrictions)>
+ <else>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <assign cgidir=hosting.getChild("cgidir")>
+    <assign miva=hosting.getChild("miva")>
+    <assign ssl=hosting.getChild("ssl")>
+    <if miva>
+      <assign ext=miva.ext>
+      <assign execute=miva.execute>
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/misc/delete_check.sbm"+"&did="+miva+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      <call draw_setup(config.CLIENT_CP_URL+"?template_name=/miva/miva_install.html"+"&rid="+hosting, lang.domain.webservice.setupmiva)>
+      <call draw_uninstall(miva.uninstall_url, lang.domain.webservice.uninstmiva)>
+      <br>
+      <call draw_edit(miva.admin_url, lang.domain.webservice.admmiva)>
+      <call draw_preview(miva.merchant_url, lang.domain.webservice.eshop)>
+      <if ssl>
+        <br>
+        <call draw_edit(miva.admin_url, lang.domain.webservice.admmivassl)>
+        <call draw_preview(miva.merchant_url, lang.domain.webservice.eshopssl)>
+        <call draw_label(lang.domain.webservice.sslcon)>
+        <br>
+      </if>
+    <else>
+       <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/miva/add_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+    </if>
+  </if>
+  <if platform_type=="IIS">
+    <assign miva=hosting.getChild("miva")>
+    <assign ssl = hosting.getChild("ssl")>
+    <if miva>
+      <assign ext=miva.ext>
+      <assign execute=miva.execute>
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/misc/delete_check.sbm"+"&did="+miva+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      <call draw_setup(config.CLIENT_CP_URL+"?template_name=/miva/miva_install.html"+"&rid="+hosting, lang.domain.webservice.setupmiva)>
+      <call draw_uninstall(miva.uninstall_url,"_blank", lang.domain.webservice.uninstmiva)><br>
+      <call draw_edit(miva.admin_url, lang.domain.webservice.admmiva)>
+      <call draw_preview(miva.merchant_url, lang.domain.webservice.eshop)>
+      <if ssl>
+        <br>
+        <call draw_edit(miva.admin_url, lang.domain.webservice.admmivassl)>
+        <call draw_preview(miva.merchant_url, lang.domain.webservice.eshopssl)>
+        <call draw_label(lang.domain.webservice.sslcon)>
+      </if>
+    <else>
+    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/miva/add_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+    </if>
+  </if>
+ </if>
+</function>
+
+
+<function draw_empresa(hosting, platform_type, template)>
+ <if account.plan.isDemoPlan()>
+  <call draw_label(lang.label.demo_restrictions)>
+ <else>
+    <assign miva=hosting.getChild("miva")>
+    <assign empresa=hosting.getChild("empresa")>
+    <assign ssl=hosting.getChild("ssl")>
+    <if empresa>
+      <if miva>
+	<call draw_on()><call draw_label(lang.domain.webservice.empresamiva)>
+      <else>
+        <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/misc/delete_check.sbm"+"&did="+empresa+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+    <else>
+       <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/miva/add_empresa_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+    </if>
+ </if>
+</function>
+
+
+<function draw_php(hosting, platform_type)>
+  <assign php3=hosting.getChild("php3")>
+  <assign tmp=php3.getChildren("php3entry")>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <if php3>
+      <call disable(hosting,php3)><br>
+      <list tmp as php3entry>
+	<call draw_label(php3entry.ext)>
+	<call disableNew(hosting, php3entry)><br>
+      </list>
+      <call addNewWizard(hosting, "php3entry", "domain/add_php_entry.html", lang.domain.webservice.addphp)>
+    <else>
+      <call enable(hosting, "php3")>
+    </if>
+  </if>
+  <if platform_type=="IIS">
+    <if php3>
+      <call disable(hosting,php3)><br>
+      <list tmp as php3entry>
+	<call draw_label(php3entry.ext)>
+	<call disableNew(hosting, php3entry)><br>
+      </list>
+      <call addNewWizard(hosting, "php3entry", "windomain/add_php_entry.html", lang.domain.webservice.addphp)>
+    <else>
+      <call enable(hosting, "php3")>
+    </if>
+  </if>
+</function>
+
+<function draw_os_commerce(hosting, platform_type, template)>
+<if account.isDemo>
+  <call draw_label(lang.label.demo_restrictions)>
+<else>
+    <assign oscommerce=hosting.getChild("oscommerce")>
+    <if oscommerce>
+      <call disable(hosting, oscommerce)>
+      <call draw_edit(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+oscommerce+"&template_name=eshops/reset_config.html&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.oscommerce_reset)>
+	<call draw_palink(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+oscommerce+"&template_name=eshops/upgrade.html&stemplate="+template+"&ftemplate="+template,"upgrade",lang.domain.webservice.oscommerce_upgrade)>
+      <call draw_oscommerce("http://"+hosting.parent.name+"/catalog/default.php", lang.domain.webservice.eshop)>
+      <call draw_oscommerce_admin("http://"+hosting.parent.name+"/admin/index.php", lang.domain.webservice.oscommerce_admin)>
+    <else>
+      <if (account.plan.isResourceAvailable("php3")) && (account.plan.isResourceAvailable("MySQL"))>
+	<call enableWizard(hosting, "oscommerce", "eshops/select_db.html")>
+      <else>
+	<call draw_off()><call draw_label(lang.eshops.add_oscommerce.requires)>
+      </if>
+    </if>
+</if>
+</function>
+
+<function draw_ssi(hosting, platform_type)>
+  <assign tmp=hosting.getChildren("ssi")>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <list tmp as ssi>
+      <call draw_label(ssi.ext)>
+      <call disableNew(hosting, ssi)><br>
+    </list>
+      <call addNewWizard(hosting, "ssi", "domain/add_ssi.html", lang.domain.webservice.addssi)>
+  </if>
+  <if platform_type=="IIS">
+    <call onoff(hosting, "ssi")><br>
+    <if ssi>
+      <list entries as ssi_entry>
+	<call draw_label(ssi_entry.ext)>
+	<call disableNew(hosting, ssi_entry)><br>
+      </list>
+      <call addNewWizard(hosting,"ssi_entry","windomain/add_ssi_extension.html", lang.domain.webservice.addssi)>
+    </if>
+  </if>
+</function>
+
+<function draw_errordoc(hosting, platform_type, template)>
+  <assign tmp=hosting.getChildren("errordoc")>
+  <if platform_type=="apache">
+    <list tmp as edoc>
+      <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+edoc+"&template_name=domain/update_errordoc.html&stemplate="+template+"&ftemplate="+template, edoc.code)>
+      <call draw_edit(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+edoc+"&template_name=domain/update_errordoc.html&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.edit)>
+      <call disableNew(hosting, edoc)><br>
+    </list>
+    <call addNewWizard(hosting, "errordoc", "domain/add_errordoc.html", lang.domain.webservice.adderror)>
+  </if>
+  <if platform_type=="IIS">
+    <list tmp as edoc>
+      <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+edoc+"&template_name=windomain/update_errordoc.html&stemplate="+template+"&ftemplate="+template, edoc.code)>
+      <call draw_edit(config.CLIENT_CP_URL+"?rid="+hosting+"&uid="+edoc+"&template_name=windomain/update_errordoc.html&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.edit)>
+      <call disableNew(hosting, edoc)><br>
+    </list>
+    <call addNewWizard(hosting, "errordoc", "windomain/add_errordoc.html", lang.domain.webservice.adderror)>
+  </if>
+</function>
+
+<function draw_redirect(hosting, platform_type, template)>
+  <assign tmp=hosting.getChildren("redirect_url")>
+  <if platform_type=="apache">
+    <list tmp as redirect>
+      <call draw_label("/"+redirect.url_path+" ("+redirect.stat +")")>
+      <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=domain/update_redirect.html"+"&stemplate="+template+"&uid="+redirect, lang.domain.webservice.edit)>
+      <call disableNew(hosting, redirect)><br>
+    </list>
+      <call addNewWizard(hosting, "redirect_url", "domain/add_redirect.html", lang.domain.webservice.redirect)>
+  </if>
+  <if platform_type=="IIS">
+    <list tmp as redirect>
+      <call draw_label(redirect.rdescription)>
+      <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=windomain/update_redirect.html"+"&stemplate="+template+"&uid="+redirect, lang.domain.webservice.edit)>
+      <call disableNew(hosting, redirect)><br>
+    </list>
+    <call addNewWizard(hosting, "redirect_url", "windomain/add_redirect.html", lang.domain.webservice.addredirect)>
+  </if>
+</function>
+
+<function draw_vhost_alias(hosting, platform_type)>
+  <assign tmp=hosting.getChildren("vhost_alias")>
+  <list tmp as alias>
+      <call draw_label(alias.alias+"."+hosting.parent.name)>
+      <call disableNew(hosting, alias)>
+      <call draw_preview("http://"+alias.alias+"."+hosting.parent.name, lang.domain.webservice.opensite)><br>
+  </list>
+  <call addNewWizard(hosting,"vhost_alias","domain/add_alias.html", lang.domain.webservice.addalias)>
+</function>
+
+<function draw_directory_ind(hosting, platform_type, template)>
+  <assign directory_ind=hosting.getChild("directory_ind")>
+  <if directory_ind>
+     <call disable(hosting, directory_ind)>
+     <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=domain/update_dir_ind.html"+"&stemplate="+template+"&uid="+directory_ind, lang.domain.webservice.edit)>
+  <else>
+     <call enableWizard(hosting, "directory_ind", "domain/update_dir_ind.html")>
+  </if>
+</function>
+
+<function draw_webalizer_trans(hosting, platform_type, template)>
+  <assign trans=hosting.getChild("transferlog")>
+  <assign tmp=trans.getChild("webalizer")>
+  <if tmp>
+      <call disable(hosting,tmp)>
+      <if platform_type == "IIS">
+	<assign def_page="/default.html">
+      <else>
+	<assign def_page="/index.html">
+      </if>
+      <call draw_preview("http://"+hosting.parent.name+tmp.web_dir+def_page, lang.domain.webservice.viewstat)>
+  <else>
+      <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_webalizer_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+  </if>
+</function>
+
+<function draw_webalizer(hosting, platform_type, template)>
+  <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_webalizer_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+</function>
+
+<function draw_modlogan_trans(hosting, platform_type, template)>
+    <assign trans=hosting.getChild("transferlog")>
+    <assign tmp=trans.getChild("modlogan")>
+    <if tmp>
+      <if platform_type == "IIS">
+	<assign def_page="/default.html">
+      <else>
+	<assign def_page="/index.html">
+      </if>
+      <call disable(hosting, tmp)>
+      <call draw_preview("http://"+hosting.parent.name+tmp.mod_dir+def_page, lang.domain.webservice.viewstat)>
+    <else>
+      <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_modlogan_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+    </if>
+</function>
+
+<function draw_modlogan(hosting, platform_type, template)>
+    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_modlogan_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+</function>
+
+<function draw_urchin(hosting, platform_type, template)>
+  <assign tmp=hosting.findChild("urchin")>
+  <if tmp>
+      <call disable(hosting, tmp)>
+      <call draw_preview("http://"+hosting.parent.name+"/urchin/", lang.domain.webservice.viewstat)>
+  <else>
+      <if (platform_type=="apache") || (platform_type=="zeus")>
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_urchin_check_unix.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+      <if platform_type=="IIS">
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_urchin_check.sbm&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+  </if>
+</function>
+
+<function draw_urchin4(hosting, platform_type, template)>
+  <assign urchin4=hosting.findChild("urchin4")>
+  <if urchin4>
+      <call disable(hosting, urchin4)>
+      <call draw_preview(config.CLIENT_CP_URL+"?template_name=control/domain/urchin_redirect.html"+"&rid="+urchin4, lang.domain.webservice.viewstat)>
+      <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=domain/urchin_passwd.html&stemplate="+template+"&ftemplate="+template, lang.quick.quickview.changepsw)>
+  <else>
+      <if (platform_type=="apache") || (platform_type=="zeus")>
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_urchin4_check_unix.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+      <if platform_type=="IIS">
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_urchin4_check.sbm&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+  </if>
+</function>
+
+<function draw_awstats(hosting, platform_type, template)>
+  <assign awstats=hosting.findChild("awstats")>
+  <if awstats>
+      <call disable(hosting, awstats)>
+      <assign awstats_url = awstats.awstats_url>
+      <if awstats_url>
+          <call draw_preview(awstats_url, lang.domain.webservice.viewstat)>
+      </if>
+  <else>
+      <if (platform_type=="apache") || (platform_type=="zeus")>
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_awstats_check.sbm"+"&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+      <if platform_type=="IIS">
+         <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_awstats_check.sbm&rid="+hosting+"&ftemplate="+template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+      </if>
+  </if>
+</function>
+
+
+<function draw_throttle(hosting, platform_type, template)>
+  <assign throttle=hosting.findChild("throttle")>
+  <if throttle>
+      <call disable(hosting, throttle)>
+      <call draw_edit(config.CLIENT_CP_URL+"&?rid="+hosting+"&template_name=domain/update_throttle.html"+"&stemplate="+template+"&uid="+throttle, lang.domain.webservice.edit)>
+      <call draw_preview("http://"+hosting.parent.name+"/throttle-me", lang.domain.webservice.status)>
+    <else>
+      <call enableWizard(hosting, "throttle", "domain/update_throttle.html")>
+  </if>
+</function>
+
+<function draw_mnogosearch(hosting, platform_type, template)>
+<if account.isDemo>
+  <call draw_label(lang.label.demo_restrictions)>
+<else>
+  <assign mnogosearch=hosting.getChild("mnogosearch")>
+  <if mnogosearch>
+      <call disable(hosting, mnogosearch)>
+      <call draw_preview("http://"+hosting.parent.name+"/fe_mnogosearch/search.php", lang.domain.webservice.viewsearch)>
+      <assign search_urls = mnogosearch.getSearchURLs()>
+      <if search_urls>
+      	<list search_urls as url>
+      	   <br><call draw_label(url)>
+      	   <call draw_palink(config.CLIENT_CP_URL+"?uid="+mnogosearch+"&rid="+hosting+"&url="+url+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/mnogosearch/remove_url.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, "del", lang.functions.action_remove)>
+      	</list>
+      </if>
+      <br><call draw_palink(config.CLIENT_CP_URL+"?uid="+mnogosearch+"&rid="+hosting+"&stemplate="+template+"&next_template=submit/mnogosearch/set_new_url.sbm&template_name=mnogosearch/set_new_url.html&cur_menuid="+GLOBAL_ACTIVE_ITEM, "add", lang.mnogosearch.setnewurl)>
+    <else>
+      <call enableWizard(hosting, "mnogosearch", "domain/mnogosearch_db.html")>
+  </if>
+</if>
+</function>
+
+<function draw_phpbb(hosting, platform_type)>
+<if account.isDemo>
+  <call draw_label(lang.label.demo_restrictions)>
+<else>
+  <assign phpbb=hosting.getChild("phpbb")>
+  <if phpbb>
+      <call disable(hosting, phpbb)>
+      <call draw_setup(config.CLIENT_CP_URL+"?template_name=/domain/phpbb_install.html&rid="+hosting+"&uid="+phpbb, lang.domain.webservice.setupphpbb)>
+      <if platform_type=="apache"><call draw_fix(config.CLIENT_CP_URL+"?uid="+phpbb+"&rid="+hosting+"&template_name=submit/domain/fix_phpbb.sbm"+"&stemplate="+template+"&ftemplate="+template, lang.domain.webservice.fix_phpbb)></if>
+      <call draw_preview("http://"+hosting.parent.name+"/phpBB2/index.php", lang.label.phpbb)>
+    <else>
+      <call enableWizard(hosting, "phpbb", "domain/phpbb_db.html")>
+  </if>
+</if>
+</function>
+
+<function draw_script(hosting, platform_type, template, script_type)>
+  <if (platform_type=="apache") || (platform_type=="zeus")>
+    <assign scripts = hosting.script_list>
+    <list scripts as script>
+      <assign name = script.name>
+      <if name==script_type>	
+	<assign enabled = script.enabled>
+	<assign final_name = script.name>
+	<if name=="bscounter">
+	  <assign bscounter_enabled = enabled>
+	</if>
+	<if enabled=="1">
+	  <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/domain/del_script.sbm"+"&hosting_id="+hosting+"&name="+final_name+"&ftemplate="+template+"&stemplate="+template+"&sname="+script_type)>
+	  <call draw_preview("http://"+hosting.parent.name+"/cp/scripts/"+script.mainfile, lang.domain.webservice.openscript)>
+	<else>
+	  <if name=="bscounter" && toolbox.ge(config.WEBSHELL,"4")=="1">
+	    <call draw_preview(config.CLIENT_CP_URL+"?template_name=quick/choice_shellcounter.html", lang.domain.webservice.opensite)>
+	  <else>
+	    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_script.sbm"+"&hosting_id="+hosting+"&name="+final_name+"&ftemplate="+template+"&stemplate="+template+"&sname="+script_type)>
+	  </if>
+	</if>
+      </if>
+    </list>
+  </if>
+</function>
+
+<function draw_apache_status(hosting, template)>
+  <if !hosting.state>
+    <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=submit/domain/webservice_restart_check.sbm"+"&stemplate="+template, lang.label.apply)>
+  <else>
+    <call draw_label(lang.quick.choiceredirect.ok)>
+  </if>
+</function>
+
+<function draw_app(hosting, platform_type, stype)>
+<if account.isDemo>
+  <call draw_label(lang.label.demo_restrictions)>
+<else>
+  <assign app=hosting.getChild(stype)>
+  <if app>
+      <call delResource(lang.functions.disable, hosting, app, template, templaet, "")>
+      <call draw_setup("?template_name=/app/change.html&stemplate="+template+"&rid="+app, lang.label.setup)>
+      <if platform_type=="apache"><call draw_fix(config.CLIENT_CP_URL+"?uid="+app+"&rid="+hosting+"&template_name=submit/app/"+stype+"/fix.sbm"+"&stemplate="+template+"&ftemplate="+template, lang.label.fix)></if>
+      <if app.path><call draw_preview("http://"+hosting.parent.name+"/"+app.path, lang.label.preview)></if>
+    <else>
+      <call draw_palink(config.CLIENT_CP_URL+"?rid="+hosting+"&stype="+stype+"&template_name=app/install.html&ftemplate="+
+                        template+"&stemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM, "off", lang.functions.action_enable)>
+  </if>
+</if>
+</function>

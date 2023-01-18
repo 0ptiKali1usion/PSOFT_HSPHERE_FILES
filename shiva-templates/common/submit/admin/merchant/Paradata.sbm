@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Paradata.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "ACCOUNT_TOKEN", request.account_token, "CLASS_NAME", "psoft.epayment.Paradata", "TEMPLATE", "admin/merchant/Paradata.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "ACCOUNT_TOKEN", request.account_token, "CLASS_NAME", "psoft.epayment.Paradata", "TEMPLATE", "admin/merchant/Paradata.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Paradata.sbm -->

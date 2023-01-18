@@ -1,0 +1,45 @@
+<!-- BEGIN ./errors/InvalidCpLocation.html  -->
+<html>
+<head>
+   <title>Invalid Control panel location</title>
+</head>
+<body style="font-family: Verdana, sans-serif;">
+<assign new_cp_url = user.CP_URL>
+
+<if !new_cp_url>
+<if !cpuri><assign cpuri="psoft.hsphere.CP"></if>
+<form action="${cpuri}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="action" value="cp_login">
+<input type="hidden" name="template_name" value="errors/InvalidCpLocation.html">
+<h1>Control Panel Error</h1>
+<if !errmessage>
+<i><font color="red">You have entered invalid control panel location. Please enter your account login and password.</font></i>
+<else>
+<i><font color="red">${errmessage}</font></i>
+</if>
+<br>
+<hr>
+<br>
+<table>
+<tr>
+<td><b>Login:</b></td><td><input type="text" name="login" value="${request.login}" size="11"></td>
+</tr>
+<tr>
+<td><b>Password:</b></td><td><input type="password" name="password" value="${request.password}" size="11"></td>
+</tr>
+<tr>
+<td>&nbsp;</td><td align="center"><input type="submit" name="Submit" value="Login"></td>
+</tr>
+</table>
+</form>
+<else>
+<form name= "form_login" action="${new_cp_url}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="action" value="login">
+<input type="hidden" name="login" value="${user.login}">
+<input type="hidden" name="password" value="${user.password}">
+</form>
+<script language="javascript">document.form_login.submit();</script>
+</if>
+</body>
+</html>
+<!--  END ./errors/InvalidCpLocation.html  -->

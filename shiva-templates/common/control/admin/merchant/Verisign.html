@@ -1,0 +1,35 @@
+<!-- BEGIN ./common/control/admin/merchant/Verisign.html -->
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/Verisign.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.verisign)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.verisign}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>payflow.verisign.com</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>443</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.signio.partner)></td><td><input type="text" name="partner" value="<if merchant>${merchant.PARTNER}<else>VeriSign</if>"></td></tr>
+<if merchant><assign avs=merchant.AVS><else><avc="N"></if>
+<tr ><td><call draw_label(lang.admin.epayment.avs)></td>
+<td><select name="avs">
+<option value="F" <if avs=="F">SELECTED</if>>${lang.admin.signio.avsfull}
+<option value="M" <if avs=="M">SELECTED</if>>${lang.admin.signio.avsmedium}
+<option value="L" <if avs=="L">SELECTED</if>>${lang.admin.signio.avslight}
+<option value="N" <if avs=="N">SELECTED</if>>${lang.admin.signio.avsnone}
+</select></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="login" value="<if merchant>${merchant.LOGIN}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.signio.vendor)></td><td><input type="text" name="vendor" value="<if merchant>${merchant.VENDOR}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="<if merchant>${merchant.PASSWORD}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.payflow.certpath)></td><td><input type="text" name="certpath" value="<if merchant>${merchant.CERT_PATH}<else>/hsphere/shared/ssl/</if>"></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset"></td></tr>
+</form>
+
+<call draw_table_footer()>
+<!-- END ./common/control/admin/merchant/Verisign.html -->

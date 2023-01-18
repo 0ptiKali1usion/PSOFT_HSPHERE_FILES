@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+    <group name="unix_hosting">
+	<option name="user_homedir" manipulator="psoft.hsphere.admin.optionmanipulators.UserhomeOptionManipulator">control/eeman/lserver_options/userhome.html</option>
+	<option name="miva">control/eeman/lserver_options/miva.html</option>
+    </group>
+    <!--group name="mysql">
+	<option name="phpmyadmin" manipulator="psoft.hsphere.admin.optionmanipulators.PHPMyAdminOptionManipulator">control/eeman/lserver_options/phpmyadmin.html</option>
+        <option name="mysql_clustering">control/eeman/lserver_options/mysqlcluster.html</option>
+    </group-->
+    <group name="windows_hosting">
+	<option name="ftp_type" manipulator="psoft.hsphere.admin.optionmanipulators.FTPTypeOptionManipulator">control/eeman/lserver_options/ftptype.html</option>
+	<option name="miva">control/eeman/lserver_options/miva.html</option>
+    </group>
+    <group name="mail">
+	<option name="mail_role">control/eeman/lserver_options/mailrole.html</option>
+        <!--option name="ext_mysql" manipulator="psoft.hsphere.admin.optionmanipulators.ExtMySQLOptionManipulator">control/eeman/lserver_options/extmysql.html</option>
+        <option name="ext_webmail">control/eeman/lserver_options/extwebmail.html</option-->
+    </group>
+    <group name="dns">
+	<option name="named_role">control/eeman/lserver_options/namedrole.html</option>
+	<option name="named_access">control/eeman/lserver_options/namedaccess.html</option>
+    </group>
+    <!--group name="pgsql">
+        <option name="phppgadmin">control/eeman/lserver_options/phppgadmin.html</option>
+    </group-->
+</options>

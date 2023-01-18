@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/change_quota.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.changeQuota(request.quota)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.label.quota,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_change,lang.label.quota,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/change_quota.sbm -->

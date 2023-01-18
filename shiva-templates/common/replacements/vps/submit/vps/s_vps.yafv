@@ -1,0 +1,1 @@
+regexp vQuota=	"\d+([,\.]?\d{3})*", fail=yafv.vQuota.fail;

@@ -1,0 +1,13 @@
+<if (user) && (request.admin_signup=="")>
+    <assign res=params.addHash("name","login","value",user.login)> 
+    <assign res=params.addHash("name","password","value",user.password)> 
+</if>
+<if request.back>
+<include "signup/begin.html">
+<else>
+    <if (user) && (request.admin_signup=="")>
+	<include "signup/end.html">
+    <else>
+	<include "signup/login.html">
+    </if>
+</if>

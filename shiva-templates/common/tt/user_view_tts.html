@@ -1,0 +1,12 @@
+<!-- BEGIN ./tt/user_view_tts.html  -->
+<assign template="tt/user_view_tts.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.suspended>
+<call draw_blank_menu()>
+<else>
+<call draw_menu("user-tickets")>
+</if>
+<include "control/tt/user_view_tts.html">
+<call bottom()>
+<!--  END ./tt/user_view_tts.html  -->

@@ -1,0 +1,7 @@
+<center>FTP</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The status of your Virtual FTP Server. Virtual FTP Server allows authorized and anonymous (in case Anonymous FTP is activated) Internet users to download, upload or view files in your FTP directories on the hosting server.<br>
+To enable Virtual FTP Server, first make sure you are hosted on a dedicated IP.To obtain a dedicated IP ,go to <i>Domain Settings -> Domain Info -> </i>, choose the domain that you would like to create Virtual FTP server at. On the <i>Edit Domain</i> page click the <i>Dedicated IP</i> link.<br>
+<br>
+*For more information see the <i>Allowing Others To Access Your Home Directory</i> chapter of User Guide.

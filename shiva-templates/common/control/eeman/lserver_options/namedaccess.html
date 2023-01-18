@@ -1,0 +1,32 @@
+<!-- BEGIN ./control/eeman/lserver_options/namedaccess.html  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_access" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="named_access">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.named_access)></td>
+  <td>
+    <assign access=optManipulator.getOption(lserverId)>
+    <!--miva version ${miva}-->
+    <select name="value">
+        <if (access == "reseller_only")><assign reseller_only ="SELECTED"></if>
+        <if (access == "main_only")><assign main_only ="SELECTED"></if>
+	<if (access == "")><assign na=""></if>
+        <option value="" ${na}><call draw_label(lang.eeman.lserveredit.options.all)>
+        <option value="reseller_only" ${reseller_only}><call draw_label(lang.eeman.lserveredit.options.reseller_only)>
+        <option value="main_only" ${main_only}><call draw_label(lang.eeman.lserveredit.options.main_only)>
+    </select>
+    &nbsp;&nbsp;<input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+</form>
+<!-- END ./control/eeman/lserver_options/namedaccess.html  -->

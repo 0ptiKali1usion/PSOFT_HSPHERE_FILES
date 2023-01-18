@@ -1,0 +1,40 @@
+<!-- BEGIN ./control/domain/scripts.html -->
+<assign hosting=account.getResource(request.hosting_id)>
+
+<call draw_tooltip()>
+
+<call draw_table_header("3", lang.domain.scripts.script)>
+
+<tr>
+<td class="control_header_align_center" width="15%"><call draw_header(lang.domain.scripts.script)></td>
+<td class="control_header_align_center" width="75%"><call draw_header(lang.label.descr)></td>
+<td class="control_header_align_center"><call draw_header(lang.label.control)></td>
+</tr>
+
+<list hosting.script_list as script>
+<tr>
+<td   class="control_align_center">
+<call draw_label(script.caption)>
+</td>
+<td   class="control_align_center">
+<call draw_label(script.description)> 
+</td>
+
+
+<td   class="control_align_center" NOWRAP>
+<if script.enabled=="1">
+<call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/domain/del_script.sbm"+"&hosting_id="+hosting+"&name="+script.name+"&ftemplate="+template+"&stemplate="+template)>
+<call draw_preview("http://"+hosting.parent.name+"/cp/scripts/"+script.mainfile, lang.domain.webservice.opensite)></td>
+<else>
+  <if script.name=="bscounter" && toolbox.ge(config.WEBSHELL,"4")=="1">
+    <call draw_preview(config.CLIENT_CP_URL+"?template_name=quick/choice_shellcounter.html", lang.domain.webservice.opensite)>
+  <else>
+    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/domain/add_script.sbm"+"&hosting_id="+hosting+"&name="+script.name+"&ftemplate="+template+"&stemplate="+template)>	
+  </if>
+</if>
+</td>
+
+</tr>
+</list>  
+<call draw_table_footer()>
+<!--  END ./control/domain/scripts.html  -->

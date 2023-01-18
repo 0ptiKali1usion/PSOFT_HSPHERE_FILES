@@ -1,0 +1,13 @@
+<!-- BEGIN ./tt/tt_mass_action.html  -->
+<assign template="tt/tt_mass_action.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.getChild("ttadmin") && request.inPanel !="0">
+<call top_tt()>
+<call ticket_menu("mass-action")>
+<else>
+<call draw_menu("info-tt-search")>
+</if>
+<include "control/tt/tt_mass_action.html">
+<call bottom()>
+<!--  END ./tt/tt_mass_action.html  -->

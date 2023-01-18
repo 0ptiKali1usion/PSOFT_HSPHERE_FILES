@@ -1,0 +1,7 @@
+<center> bouncehost </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Bounce host.  Default: me, if that is supplied; otherwise the literal  name  bouncehost, which is probably not what you want.  If a message is permanently undeliverable, qmail-send sends  a  single-bounce  notice  back to the message's envelope sender.  The notice is From: bouncefrom@bouncehost, although its  envelope  sender is empty.
+<br>Default: bouncehost
+<br>
+

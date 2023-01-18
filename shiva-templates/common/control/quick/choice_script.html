@@ -1,0 +1,34 @@
+<!-- BEGIN ./quick/choice_script.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign script_name = request.sname>
+
+<function draw_hosting(hosting)>
+<assign platform_type = hosting.server>
+<tr>
+ <td><call draw_label(hosting.parent.name)></td>
+ <td  width="20%"  ><call draw_script(hosting, platform_type, template, script_name)></td>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.quick.choicescript[script_name])>
+
+
+<tr>
+  <td colspan="2" ><call draw_label(lang.skellist[script_name])></td>
+</tr>
+
+<list account.findAllChildren("hosting") as hosting>
+<call draw_hosting(hosting)>
+</list>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choice_script.html -->
+

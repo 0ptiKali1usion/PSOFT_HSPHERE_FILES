@@ -1,0 +1,8 @@
+<center> popbeforesmtp </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables POP-BEFORE-SMTP authentication. Allows simultaneous POP-BEFORE-SMTP and SMTP AUTH authentication and uses the one that was established first.
+<br>Default: 1 (POP-BEFORE-SMTP mode is on). 
+<br>
+<i>Important:</i>To allow POP-BEFORE-SMTP, set this parameter to 1.
+

@@ -1,0 +1,27 @@
+<!-- BEGIN ./common/control/servmon/logged_users.html -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver = eeman.getPserver(request.server_id)>
+<assign si = pserver.server_info>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.servmon.users.logged)>
+<if !si>
+<tr>
+<td colspan="2"><call draw_label(lang.servmon.failed)></td>
+</tr>
+<else>
+<tr>
+<td width="25%"><call draw_label_bold(lang.servmon.hostname)></td>
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&&server_id="+request.server_id, si.hostname)></td>
+</tr>
+<tr>
+<td colspan="2">
+<pre>
+<list si.user as u>
+${u("info")}</list>
+</pre>
+</td>
+</tr>
+</if>
+<call draw_table_footer()>
+<!-- END ./common/control/servmon/logged_users.html -->

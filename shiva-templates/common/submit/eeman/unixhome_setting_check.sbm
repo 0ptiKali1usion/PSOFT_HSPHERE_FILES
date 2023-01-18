@@ -1,0 +1,21 @@
+<!-- BEGIN ./submin/eeman/unixhome_setting_check.sbm -->
+<assign result= yafv.common.s_eeman.vHomeDir(lang.eeman.lserveredit.options.unix_homedir, request.value)>
+<if result.status != "OK">
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure = "1">
+<else>
+  <assign eeman = account.getChild("eeman")>
+  <assign lserver = eeman.getLserver(request.rid)>
+  <assign result = lserver.add_user_homes(lserver.unix_user_home_prefix + request.value)>
+  <if result.status != "OK">
+    <list result.msgs as msg><assign res = session.addMessage(msg)></list>
+    <assign failure = "1">
+  </if>
+</if>
+<if !failure>
+  <include "submit/eeman/set_setting.sbm">
+<else>
+  <assign vhomedir = request.value>
+  <include request.ftemplate>
+</if>
+<!-- END ./submin/eeman/unixhome_setting_check.sbm -->

@@ -1,0 +1,67 @@
+<!-- BEGIN ./submit/plan_wizard/reseller3.sbm -->
+<assign oldValues = toolbox.new_hash>
+
+<function vServicePrice(tag)>
+  <if request["i_"+tag]>
+     <assign ending="_"+request.period_id>
+     <assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+     <assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+     <if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+        <assign r = oldValues.put("f_"+tag+ending,toolbox.html_encode(request["f_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_free,name),request["f_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"S")=="1">
+        <assign r = oldValues.put("s_"+tag+ending,toolbox.html_encode(request["s_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["s_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"R")=="1">
+        <assign r = oldValues.put("m_"+tag+ending,toolbox.html_encode(request["m_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["m_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"U")=="1">
+        <assign r = oldValues.put("u_"+tag+ending,toolbox.html_encode(request["u_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["u_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+  </if>
+</function>
+
+<assign failure="">
+<call vServicePrice("account")>
+<call vServicePrice("r_ds_bandwidth")>
+<call vServicePrice("reseller_traffic")>
+<if !failure>
+    <if request.periods == toolbox.add(request.period_id,"1")>
+        <include "submit/plan_editor/reseller_final.sbm">
+    <else>
+        <assign period_id=request.period_id>
+        <include request.stemplate>
+    </if>
+<else>
+    <assign period_id=toolbox.sub(request.period_id,"1")>
+    <include request.ftemplate>
+</if>
+
+<!-- END ./submit/plan_wizard/reseller3.sbm -->

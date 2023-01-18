@@ -1,0 +1,9 @@
+<!-- BEGIN ./commont/submit/account_preview/customjob_done.sbm -->
+<assign result=account.getChild("ttadmin").cjadmin.setStatus(request.job_id, request.new_status)>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign result=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/account_preview/customjob_done.sbm -->

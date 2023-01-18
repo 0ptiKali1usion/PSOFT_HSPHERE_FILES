@@ -1,0 +1,9 @@
+<!-- BEGIN ./suspended/new_billing.html.in  -->
+<include "functions">
+<assign template="suspended/new_billing.html">
+<assign stemplate1=account.getPlanValue("_template")>
+<assign stemplate=request.stemplate>
+<call draw_blank_menu()>
+<include "control/billing/new_billing.html">
+<call bottom()>
+<!--  END ./suspended/new_billing.html.in  -->

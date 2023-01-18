@@ -1,0 +1,6 @@
+<center>
+  mnoGoSearch 
+</center>
+<hr>
+This is a simple search engine your customers can add to search their own sites. 
+<br>mnoGoSearch uses MySQL, so make sure to enable MySQL resource as well.

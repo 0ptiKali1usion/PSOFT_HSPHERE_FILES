@@ -1,0 +1,21 @@
+<!--BEGIN: common/msexchange/dl.html -->
+<include "functions">
+<call START_PAGE("msexchange/dl.html", "he-users")>
+<call draw_tooltip()>
+<call draw_table_header("3", lang.msexchange_dl)>
+<assign bizorg = account.getChild("bizorg")>
+<list bizorg.getChildren("distribution_list") as dl>
+<tr>
+<td><call draw_label(dl.name)></td>
+<td><call draw_label(dl.managedBy)></td>
+<td><call disableNewWarn(bizorg, dl)>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=msexchange/change_dl.html&rid="+dl, lang.lable.change)>
+</td>
+</tr>
+</list>
+<tr><td colspan="4">
+       <call draw_label(lang.msexchange_adddl)> <call addNewResourceWizard(lang.msexchange_adddl ,bizorg,bizorg, "distribution_list","",template, template,"msexchange/add_dl.html")>
+</td></tr>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/dl.html -->

@@ -1,0 +1,8 @@
+<!-- BEGIN ./admin/settings/notifications.html -->
+<assign res=session.addMessage(lang.admin.settings.first_time.warning)>
+<assign template="admin/settings/notifications.html">
+<include "functions">
+<call draw_menu("settings-not")>
+<include "control/admin/settings/notifications.html">
+<call bottom()>
+<!-- END ./admin/settings/notifications.html -->

@@ -1,0 +1,137 @@
+<!-- BEGIN ./tt/new_tt_form.html  -->
+<call draw_tooltip()>
+<if request.rid><assign resource = account.getResource(request.rid)>
+<else><assign resource = account.id>
+</if>
+
+<if resource>
+<assign tt = account.getChild("tt")><if !tt><assign tt=account.addTTResource()></if>
+<assign tts = tt.getTicketsByResourceId(resource.id)>
+
+<if tts>
+
+<call draw_table_header("4", lang.tt.form.header)>
+ <tr>
+ <td width="40%"><call draw_label(lang.label.title)></td>
+ <td width="20%"><call draw_label(lang.tt.priority)></td>
+ <td width="20%"><call draw_label(lang.tt.lastmod)></td>
+ <td width="20%" class="control_align_center"><call draw_label(lang.tt.type)></td>
+ </tr>
+<list tts as tt>
+ <if tt.closed!="1">
+<tr>
+ <td    >
+ <if tt.modby=="1">
+ <assign tit="*"+tt.title>
+ <else>
+ <assign tit=tt.title>
+ </if> 
+ <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/user_view.html&stemplate="+template+"&ttid="+tt.id,tit)></td>
+ <td class="control_align_center"><switch tt.priority><case "50"><call draw_label(lang.tt.normal)><break><case "25"><call draw_label(lang.tt.low)><break><case "75"><call draw_label(lang.tt.high)><break></switch></td>
+ <td><call draw_label(tt.lastmod)></td>
+ <td><call draw_label(tt.rDesc)></td>
+</tr>
+</if>
+</list>
+<call draw_table_footer()>
+</if>
+
+<yafv s_tt>
+
+<SCRIPT language="Javascript"><!--
+  function raiseUploaderForm(uplFormName, targFormName, fileFieldName) {
+    var uploader=window.open("${config.CLIENT_CP_URL}?template_name=misc/standalone_uploader_form.html"
+	+"&uploader_form="+uplFormName+"&target_form="+targFormName+"&file_field="+fileFieldName,
+	"Uploader", "resizable=yes,scrollbars=no,width=330,height=150");
+    uploader.focus();
+  }
+
+  function addOption(value, text) {
+    nop=new Option();
+    nop.value = value;
+    nop.text = text;
+    nop.selected = true;
+    sel = document.forms['f_new_tt'].elements['att_cid'];
+    sel.options[sel.options.length] = nop;
+  }
+//--></SCRIPT>
+
+<call prepare_table_header("2", lang.tt.form.descr)>
+<call add_table_header_help("user-sc_makett-makett","")>
+<call draw_table_header_prepared()>
+
+<form action="${config.CLIENT_CP_URL}" name="f_new_tt" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/new_tt_save.sbm">
+<input type="hidden" name="inPanel" value="${request.inPanel}">
+<input type="hidden" name="rid" value="${resource}">
+<if request.stemplate>
+   <input type="hidden" name="stemplate" value="${request.stemplate}">
+<else>
+   <input type="hidden" name="stemplate" value="tt/new_tt_form.html">
+</if>
+<if request.ftemplate>
+   <input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<else>
+   <input type="hidden" name="ftemplate" value="${template}"> 
+</if>
+      <tr>
+        <td><call draw_label(lang.label.title)></td>
+	<td><input type="text" name="title" size="30" value="${vtitle}" label="${lang.label.title}" check="vStringReq"></td>
+      </tr>
+      <tr >
+<if !vemail><assign vemail=account.ci.email></if>
+ <td><call draw_label(lang.tt.email)></td>
+ <td><input type="text" name="email" value="${vemail}" label="E-Mail" check="vTTMail(this,flags)">
+     <input type="checkbox" name="flags" onClick="checkForm(this.form)" value="1"<if (flag=="1")||(request.flags)> CHECKED</if>><call draw_label(lang.tt.web)>
+ </td>
+</tr>
+      <tr>
+        <td><call draw_label(lang.tt.priority)></td>
+	<td>
+	<select name="priority">
+	<option<if vpriority=="50"> SELECTED</if> value="50"><call draw_label(lang.tt.normal)></option>
+	<option<if vpriority=="25"> SELECTED</if> value="25"><call draw_label(lang.tt.low)></option>
+	<option<if vpriority=="75"> SELECTED</if> value="75"><call draw_label(lang.tt.high)></option>
+	</select>
+	</td>
+      </tr>
+
+      <tr>
+	<td colspan=2><call draw_label(lang.tt.form.descr2)></td>
+      </tr>
+      <tr>
+	<td colspan=2 ><textarea name="description" cols="60" rows="10">${vdescription}</textarea></td>
+      </tr>
+
+<!--List of attachments -->
+      <tr>
+      <td valign="top"><call draw_label(lang.tt.attachments)></td>
+      <td>
+        <table class="inner_control" width="100%">
+          <tr>
+          <td width="10%">
+	    <select NAME="att_cid" SIZE=5 MULTIPLE>
+	      <option value="NA">${lang.tt.select_attachments}</option>
+	    </select>
+   	  </td>
+   	  <td width="5%">&nbsp;</td>
+   	  <td>
+   	  <!--call draw_uploader("attachments")-->
+   	  <call draw_onclick_palink("attachments", "raiseUploaderForm('upload', 'f_new_tt', 'att')", lang.tt.click_att_upload)>
+   	  </td>
+	  </tr>
+	</table>
+      </td>
+      </tr>
+<!--End of attachments list -->
+
+      <tr>
+	<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+      </tr>
+</form>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./tt/new_tt_form.html  -->

@@ -1,0 +1,92 @@
+<!-- BEGIN ./control/tt/search_reseller.html  -->
+<br><br>
+<assign admin=account.getChild("admin")>
+<include "control/misc/mini_calendar.html">
+<include "control/tt/ttfunctions.fn">
+<include "functions">
+<if admin>
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+
+
+
+<call draw_table_header("2", lang.admin.criteria)>
+
+<assign processors = toolbox.getGateways().processors.processor>
+<tr><td><call draw_label(lang.label.ptype)></td>
+ <td><select name="sc_payment" size="1">
+<option value="">${lang.label.any}
+<option value="CC">${lang.label.cc}
+<option value="Check">${lang.label.check}
+<option value="none">${lang.label.none}
+<option value="Trial">${lang.label.trial}
+<list processors as processor>
+  <assign processorname=processor("name")>
+  <assign bildescription=lang[processor("description")]>
+  <option value=${processorname}>${bildescription}
+</list>
+</select>
+ </td>
+</tr>
+<tr><td><call draw_label(lang.label.status)></td>
+ <td><select name="sc_suspended" size="1">
+<option value="">${lang.label.any}
+<option value="active">${lang.admin.view.active}
+<option value="suspended">${lang.search.balancesearch.susp}
+</select>
+ </td>
+</tr>
+
+<tr><td><call draw_label(lang.label.plan)></td>
+ <td>
+<select name="sc_plan" size="1">
+<option value="">${lang.label.any}
+<list admin.plans as plan>
+<if !plan.deleted><option value="${plan.id}">${plan.description}</if>
+</list>
+</select>
+ </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.username)></td>
+ <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.email)></td>
+ <td><input type="text" name="sc_email"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.admin.mailtype)></td>
+ <td><input type="radio" name="sc_bci_email" value="ci" checked><call draw_label(lang.admin.ci)>&nbsp;&nbsp;<input type="radio" name="sc_bci_email" value="bi"><call draw_label(lang.admin.bi)></td>
+</tr>
+<tr>
+ <td colspan="2" class="control_align_center"><call draw_label_bold(lang.admin.regdate)></td>
+ </tr>
+<tr>
+ <td><call draw_label(lang.label.from)></td>
+ <td nowrap><input type="text" name="sc_r_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","sc_r_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td nowrap><input type="text" name="sc_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_to","")></td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="tt/choose_reseller.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="res_id" value="${request.res_id}">  
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ttid" value="${request.ttid}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/tt/search_reseller.html  -->

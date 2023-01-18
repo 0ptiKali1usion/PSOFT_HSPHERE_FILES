@@ -1,0 +1,66 @@
+<!-- BEGIN ./control/eeman/pserver_edit.html  -->
+<assign eeman=account.getChild("eeman")>
+<if eeman>
+<yafv s_eeman>
+
+<if request.rid><assign pserver=eeman.getPserver(request.rid)><else><assign pserver=result></if>
+<assign notfoundconfig = pserver.notfoundconfig()>
+<if notfoundconfig>
+  <assign txt = lang.eeman.pserver.configfileerror><assign mes = session.addMessage(txt)>
+</if>
+
+<call draw_tooltip()>
+<if ! notfoundconfig>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="pserverparams" check! accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.eeman.physical_server_params)>
+
+<tr>
+  <td colspan="2" class="control_align_center">
+    <call draw_important_label(lang.eeman.mservers.warn)><br>
+    <call draw_label(lang.eeman.mservers.server_tochange(pserver.name))>
+  </td>
+</tr>
+
+<if pserver.notEmpty()>
+  <assign groups = pserver.getGroupsIDs()>
+  <list groups as groupid>
+    <assign params = pserver.getParamsList(groupid)><assign cond = pserver.paramsnotempty(groupid)>
+    <if cond>
+      <list eeman.groups as group>
+         <if group.id == groupid>
+            <tr>
+              <td class="control_header" colspan="2"><call draw_header(group.name)></td>
+            </tr>
+        </if>
+        </list>
+    </if>    
+    <list params as param>
+       <assign tmpl = "control/eeman/pserver_incl/" + param.param_template>
+       <include tmpl>    
+    </list>    
+    </list>
+    <assign windows = pserver.iswindows()>
+    <if windows>
+      <tr>
+        <td colspan="2" class="control_header_align_center">
+          <input type="checkbox" name="restart">&nbsp;<call draw_label(lang.eeman.mservers.winwarn)>
+        </td>
+      </tr>
+    </if>
+    <tr>
+      <td colspan="2" class="control_align_center">
+        <input type="hidden" name="template_name" value="submit/eeman/pserver_params_edit.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="rid" value="${pserver.id}">
+        <input type="submit" value="${lang.button.submit}">
+      </td>
+    </tr>
+</if>
+<call draw_table_footer()>
+</form>
+</if>
+<else>&nbsp;</if>
+<!--  END ./control/eeman/pserver_edit.html  -->

@@ -1,0 +1,79 @@
+<!--  BEGIN ./admin/promo_edit.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+<assign promo_enabled=toolbox.html_encode(plan.values["_ENABLE_PROMO"])>
+
+<if !failed_key>
+  <if !promo_enabled || (promo_enabled == "0")>
+    <assign promo_key = "">
+    <assign promo_disc = "">
+    <assign promo_desc = "">
+  <else>
+    <if request.promo_key>
+      <assign promo = plan.getPromoValuesByKey(request.promo_key)>
+      <assign promo_key = request.promo_key>
+      <assign promo_disc = promo.disc>
+      <assign promo_desc = promo.desc>
+    </if>
+  </if>
+</if>
+
+<yafv s_admin>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_promo" check! accept-charset="UTF-8">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="template_name" value="submit/admin/promo_edit.sbm">
+<input type="hidden" name="stemplate" value="admin/plan_edit_settings.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<if !promo_action>
+  <input type="hidden" name="promo_action" value="${request.promo_action}">
+<else>
+  <input type="hidden" name="promo_action" value="${promo_action}">
+</if>
+<input type="hidden" name="promo_type" value="${promo_enabled}">
+
+
+
+
+  <if promo_action == "promo_add">
+  <call draw_table_header("2", lang.admin.promo_edit_header_add)>
+  <else>
+  <call draw_table_header("2", lang.admin.promo_edit_header_edit)>
+  </if>
+
+
+<if request.promo_action != "promo_edit">
+<tr >
+  <td><call draw_label(lang.admin.promo_edit_key)></td>
+  <td>
+    <input type="text" name="promo_key" value="${promo_key}" label="${lang.admin.promo_edit_key}" check="vPromokode">
+  </td>
+</tr>
+<else>
+  <input type="hidden" name="promo_key" value="${promo_key}">
+</if>
+  <tr >
+    <td><call draw_label(lang.admin.promo_edit_disc)></td>
+    <td>
+      <input type="text" name="promo_disc" value="${promo_disc}" label="${lang.admin.promo_edit_disc}" check="vPercentReq">
+    </td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.admin.promo_edit_desc)></td>
+    <td>
+      <input type="text" name="promo_descr" value="${promo_desc}" label="${lang.admin.promo_edit_desc}" check="vPromoDesc">
+    </td>
+  </tr>
+  <tr >
+    <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./admin/promo_edit.html  -->

@@ -1,0 +1,18 @@
+<!-- BEGIN ./adnsmanager/test_shared_tag.sbm -->
+<assign admin = account.getChild("admin")>
+<if !admin || admin.isResourceDisabled("sharedssl")>
+  <assign res=session.addMessage(lang.msg.domain_shared_ssl_unavailable)>
+  <assign failure = "1">
+<else>
+  <assign manager = account.getChild("adnsmanager")>
+  <if !toolbox.getSharedIPTags() || (manager.getFreeSSLIpTags().size == "0")>
+    <assign res=session.addMessage(lang.adnsmenager.not_availabel_sharedtag)>
+    <assign failure = "1">
+  </if>
+</if>
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include "adnsmanager/add_ssl.html">
+</if>
+<!--  END ./adnsmanager/test_shared_tag.sbm -->

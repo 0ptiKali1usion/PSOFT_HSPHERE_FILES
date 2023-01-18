@@ -1,0 +1,111 @@
+<!-- BEGIN ./control/admin/urchin_lic2.html  -->
+<call draw_tooltip()>
+
+<if account.getChild("reseller_su")>
+
+<assign lic_man=account.getChild("urchin_lic_manager")>
+<if !lic_man><assign lic_man=account.addChild("urchin_lic_manager","")></if>
+<assign res=lic_man.reloadLicenses()>
+
+<yafv s_admin>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_urchin_key" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/urchin_key.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("2", lang.admin.urchin.getkeycode)>
+
+<tr>
+<td  colspan="2">
+<if lic_man.keycode>
+<call draw_label(lang.admin.urchin.keycode)>
+<call draw_header(lic_man.keycode_ls)>
+<call draw_label(lic_man.keycode)></td>
+<else>
+<call draw_label(lang.admin.urchin.chkeycode)>
+</if>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.urchin.lserver)>
+<select name="f_l_server" size="1" onChange="checkForm(this.form,false)">
+<list lic_man.l_servers() as ls>
+    <option value="${ls.id}"> ${ls.name}</option>
+</list>
+</select>
+</td>
+
+<td  class="control_align_center"><input type="submit" value="${lang.admin.urchin.getkeycode_sh}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<br>
+
+<call draw_table_header("6", lang.admin.urchin.licmanager)>
+
+<tr>
+<td><call draw_label_bold(lang.admin.urchin.lserver)></td>
+<td><call draw_label_bold(lang.admin.urchin.sernumber)></td>
+<td><call draw_label_bold(lang.admin.urchin.liccode)></td>
+<td><call draw_label_bold(lang.admin.urchin.forsites)></td>
+<td><call draw_label_bold(lang.admin.urchin.used)></td>
+<td><call draw_label_bold(lang.label.control)></td>
+</tr>
+
+<list lic_man.licenses as lic>
+
+<tr>
+<td  nowrap><call draw_label(lic.l_server_name)></td>
+<td  nowrap><call draw_label(lic.ser_num)></td>
+<td  nowrap><call draw_label(lic.lic_code)></td>
+<td  nowrap><call draw_label(lic.lic_size)></td>
+<td  nowrap><call draw_label(lic.lic_used)></td>
+<td>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=admin/modify_urchin_lic.html&lic_id="+lic.id+"&l_server_id="+lic.l_server_id+"&ser_num="+lic.ser_num+"&lic_code="+lic.lic_code+"&lic_size="+lic.lic_size+"&lic_used="+lic.lic_used+"&stemplate="+template+"&ftemplate="+template, lang.admin.mivalic.modify)>
+<if toolbox.eq(lic.lic_used,"0")=="1">
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/delete_urchin_lic.sbm&lic_id="+lic.id+"&l_server_id="+lic.l_server_id+"&stemplate="+template+"&ftemplate="+template, lang.label.delete)>
+</if>
+</td>
+</tr>
+</list>
+
+<call draw_table_footer()>
+<br>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_urchin_lic_incl" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/add_urchin_lic.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("4", lang.admin.mivalic.add)>
+
+<tr>
+<td><call draw_label(lang.admin.urchin.lserver)></td>
+<td>
+<select name="f_l_server2" size="1" onChange="checkForm(this.form,false)">
+<list lic_man.l_servers() as ls2>
+    <option value="${ls2.id}"> ${ls2.name}</option>
+</list>
+</select>
+</td>
+
+<td><call draw_label(lang.admin.urchin.forsites)></td>
+<td><input type="text" name="f_lic_size" size="3" value="25" check="vNumberReq"></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.urchin.sernumber)></td>
+<td><input type="text" name="f_ser_num" size="18" check="vStringReq"></td>
+<td><call draw_label(lang.admin.urchin.liccode)></td>
+<td><input type="text" name="f_lic_code" size="20" check="vStringReq"></td>
+
+</tr>
+
+<tr>
+<td  class="control_align_center" colspan="4"><input type="submit" value="${lang.admin.mivalic.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/urchin_lic2.html  -->

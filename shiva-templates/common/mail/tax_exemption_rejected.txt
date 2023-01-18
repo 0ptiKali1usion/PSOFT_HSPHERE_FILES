@@ -1,0 +1,7 @@
+${lang.massmail.new_account_header(bi.first_name, bi.last_name)}
+
+${lang.massmail.tax_exemption_rejected_mes(bi.exemption_code)}
+
+${lang.massmail.to_approve_ec_contact_us}
+
+${settings.support}

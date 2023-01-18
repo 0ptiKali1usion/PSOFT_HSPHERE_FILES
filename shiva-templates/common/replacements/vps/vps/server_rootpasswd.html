@@ -1,0 +1,12 @@
+<!-- BEGIN ./vps/server_rootpasswd.html  -->
+<include "functions">
+<assign vps=account.getChild("vps")>
+<assign template="vps/server_rootpasswd.html">
+<call draw_menu("vps-rootpasswd")>
+<if vps.isVPSInitialized()>
+  <include "control/vps/server_rootpasswd.html">
+<else>
+  <include "control/misc/vps-not-initialized.html">
+</if>
+<call bottom()>
+<!--  END ./vps/server_rootpasswd.html  -->

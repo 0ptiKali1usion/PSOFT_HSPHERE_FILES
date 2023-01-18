@@ -1,0 +1,18 @@
+<assign billman=account.getChild("billman")>
+<if request.aid>
+  <assign result=billman.resetFatts(request.bid, request.aid)>
+<else>
+  <assign result=billman.resetFatts(request.bid)>
+</if>
+    <if result.status=="OK">   
+      <assign res=session.addMessage(lang.msg.fatts_reset)>
+    <else>
+      <assign res=session.addMessage(lang.msg.failed_to_reset_fatts)>
+      <assign res=session.addMessage(result.msg)>
+      <assign failure="1">
+    </if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

@@ -1,0 +1,12 @@
+<!-- BEGIN ./common/submit/tt/admin_close.smb  -->
+<assign template="tt/admin.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket = ttadmin.getTicket(request.ttid)>
+  <assign result=ticket.delete()>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/tt/admin_close.smb  -->

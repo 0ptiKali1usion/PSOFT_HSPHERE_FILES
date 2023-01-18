@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/misc/change_backup_service.sbm  -->
+<assign res_backup = account.getResource(request.rid)>
+<assign result= yafv.common.s_misc.vPositiveIntReq(lang.label.reseller_backup.backup_number, request.backup_number)>
+<if result.status=="OK">
+  <assign result = res_backup.change(request.backup_number)>
+  <if result.status!="OK">
+    <assign failure = "1">
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign vbackup_number=toolbox.html_encode(request.backup_number)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/misc/change_backup_service.sbm  -->

@@ -1,0 +1,80 @@
+<!--BEGIN: common/msexchange/change_dl.html.in -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/change_dl.html", "he-dl")>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.msexchange_changedl)>
+<assign dl=account.getResource(request.rid)>
+<assign bizorg=account.getChild("bizorg")>
+<tr><td><call draw_label(lang.label.name)></td><td><call draw_label(dl.name)></td></tr>
+
+<form name="f_chagne_mb" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/change_dl.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<tr>
+<td><call draw_label(lang.msexchange_managed_by)></td>
+<td>
+<assign busers=bizorg.getChildren("bizuser")>
+<select name="managedBy">
+<list busers as bizuser>
+<if  (bizuser.principalName + "@" + bizuser.domain.name) == dl.managedBy>
+<assign selected = "SELECTED">
+<else>
+<assign selected = "">
+</if>
+<option value="${bizuser.principalName}@${bizuser.domain.name}" ${selected}>${bizuser.displayName} | ${bizuser.principalName}@${bizuser.domain.name}</option>
+</list>
+</td>
+</tr>
+<tr>
+<td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<tr><td class="control_header" colspan="2"><call draw_label(lang.email.managemlistform.header)></td></tr>
+<tr><td><call draw_label(lang.label.suscribers)></td>
+<td>
+<list dl.subscribers as s>
+<if s.type=="bizuser">
+<call draw_label(s.displayName + " | " + s.principalName + "@" + s.domain.name)>
+<else>
+<call draw_label(s.name)>
+</if>
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=msexchange/del_dl_subscriber.sbm&stemplate=msexchange/change_dl.html&rid="+request.rid+"&s="+s,lang.label.delete)>
+<br>
+</list>
+</td></tr>
+</form>
+<form name="f_subscribers" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/add_dl_subscriber.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<tr><td width="20%"><call draw_label(lang.email.managemlistform.add)></td>
+<td><select name="s" size="1">
+<list bizorg.findChildren("bizuser") as bizuser>
+<if dl.contains(bizuser) == "false"><option value="${bizuser}">${bizuser.displayName} | ${bizuser.principalName}@${bizuser.domain.name}</option>
+</if>
+</list>
+<list bizorg.findChildren("distribution_list") as distlist>
+<if dl.contains(distlist) == "false" && dl.name != distlist.name><option value="${distlist}">${distlist.name}</option>
+</if>
+</list>
+</select>
+</td></tr>
+
+
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/change_dl.html.in -->

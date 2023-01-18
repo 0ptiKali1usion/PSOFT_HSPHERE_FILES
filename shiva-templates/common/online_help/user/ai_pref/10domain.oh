@@ -1,0 +1,12 @@
+<center>Domain Name</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+An address at which your site is accessible from the Internet.
+It may have subdomains, aliases, dedicated/shared IP. Various web services can go with this domain name.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For more information see <i>Domain Managment</i> of <i>H-Sphere 2.x User Guide</i>.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+Click either the <i>Domian Name</i> link or the <i>Edit</i> icon to view and/or change domain name settings.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Click the <i>View</i> icon to go to your site as a visitor.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;In the brackets you can see an<i> Instant Alias</i> of your domain name. It provides an instant access to your site from the Internet. It is usually helpful when the DNS is being refreshed and the site is temporarily unavailable at the regular domain name.

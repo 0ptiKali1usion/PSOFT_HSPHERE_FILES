@@ -1,0 +1,43 @@
+<!-- BEGIN ./admin/ds/ip_pool.html_filter.in  -->
+<call draw_tooltip()>
+
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_params" accept-charset="UTF-8">
+<call draw_table_header("2", lang.admin.ds_ip_pool_filter_header)>
+<tr>
+<td><call draw_label(lang.admin.ds.ip_pool.ip.label)></td>
+<td><input type="text" size="15" maxlength="15" name="sc_ip" value="${f_ip}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ip_pool.mask.label)></td>
+<td><input type="text" size="15" maxlength="15" name="sc_mask" value="${f_mask}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ip_pool.gw.label)></td>
+<td><input type="text" size="15" maxlength="15" name="sc_gw" value="${f_gw}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.ds.ip_pool.status.label)></td>
+<td>
+  <select name="sc_ip_type">
+    <option value="ANY">${lang.admin.ds.ip.any}</option>
+    <option value="1002" ${vfree}>${lang.admin.ds.ip.free}</option>
+    <option value="1003" ${vtaken}>${lang.admin.ds.ip.taken}</option>
+  </select>
+</td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+</td>
+</tr>
+
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="admin/ds/ip_pool.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+
+</form>
+<call draw_table_footer()>
+<!-- END ./admin/ds/ip_pool_filter.html.in  -->

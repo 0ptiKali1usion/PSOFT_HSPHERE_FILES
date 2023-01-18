@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/email/create_mailbox.sbm  -->
+<assign md_id = request.rid>
+<assign result = yafv.checkall(
+    yafv.common.s_email.vMBoxName(lang.email.local_name, request.email),
+    yafv.common.s_email.vPassword(lang.label.password, request.password)
+)>
+<if result.status=="OK">
+    <assign rid = account.getResource(request.rid)>
+    <assign result = rid.addChild("mailbox", "", request.email, request.password, request.description)>
+    <if result.status == "OK">
+        <assign success = "1">
+	<assign mo_id = result>
+        <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.mail_box, ""))>
+    <else>
+        <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_add, lang.label.mail_box, ""))>
+        <assign res = session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg>
+        <assign res = session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vemail = toolbox.html_encode(request.email)>
+    <assign vdescription = toolbox.html_encode(request.description)>
+    <include request.ftemplate>
+</if> 
+<!--  END ./submit/email/create_mailbox.sbm  -->

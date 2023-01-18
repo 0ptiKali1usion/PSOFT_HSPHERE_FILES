@@ -1,0 +1,14 @@
+<!-- BEGIN ./SiteStudio/submit/add.sbm -->
+<assign result=account.addChild("site_studio", "", request.ftplogin, request.server, request.port, request.url, request.dir, request.email)>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added, lang.label.account, ""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add, lang.label.account, ""))>
+  <assign res = result.msg>
+<include request.ftemplate>
+</if>
+<!-- BEGIN ./SiteStudio/submit/add.sbm -->

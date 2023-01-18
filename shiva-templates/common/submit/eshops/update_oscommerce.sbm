@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/eshops/add_oscommerce.sbm  -->
+<assign oscommerce=account.getResource(request.uid)>	
+<assign result=oscommerce.restoreConfig()>
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END /submit/eshops/add_oscommerce.sbm  -->

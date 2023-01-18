@@ -1,0 +1,26 @@
+<!-- BEGIN ./admin/merchant/Tucows.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+
+<if request.avs_x=="X"><assign vavs_x="X"></if>
+<if request.avs_y=="Y"><assign vavs_y="Y"></if>
+<if request.avs_a=="A"><assign vavs_a="A"></if>
+<if request.avs_w=="W"><assign vavs_w="W"></if>
+<if request.avs_z=="Z"><assign vavs_z="Z"></if>
+<if request.avs_n=="N"><assign vavs_n="N"></if>
+<if request.avs_u=="U"><assign vavs_u="U"></if>
+<if request.avs_r=="R"><assign vavs_r="R"></if>
+<if request.avs_e=="E"><assign vavs_e="E"></if>
+<if request.avs_s=="S"><assign vavs_s="S"></if>
+<if request.avs_g=="G"><assign vavs_g="G"></if>
+
+<assign avslevel=vavs_x+vavs_y+vavs_a+vavs_w+vavs_z+vavs_n+vavs_u+vavs_r+vavs_e+vavs_s+vavs_g>
+
+<!-- AVSLEVEL ${avslevel} request: ${request.avs_x} ${request.avs_y}-->
+<if request.testmode!=""><assign testmode="TRUE"><else><assign testmode="FALSE"></if>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "LOGIN", request.login, "PASSWD", request.password, "CURRENCY", request.currency, "NOTIFICATIONEMAIL", request.email, "MODE", testmode, "AVSLEVEL", avslevel, "CLASS_NAME", "psoft.epayment.Tucows", "TEMPLATE", "admin/merchant/Tucows.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "LOGIN", request.login, "PASSWD", request.password, "CURRENCY", request.currency, "NOTIFICATIONEMAIL", request.email, "MODE", testmode, "AVSLEVEL", avslevel, "CLASS_NAME", "psoft.epayment.Tucows", "TEMPLATE", "admin/merchant/Tucows.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Tucows.sbm -->

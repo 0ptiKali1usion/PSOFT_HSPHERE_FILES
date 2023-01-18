@@ -1,0 +1,76 @@
+<!-- HOSTING SETTINGS START -->
+<assign domain=account.getResource(request.rid)>
+<assign hosting=domain.getChild("hosting")>
+
+
+
+&nbsp;
+<call draw_table_header("2", lang.accprev.host_settings)>
+<tr>
+  <td><call draw_label_bold(lang.accprev.web.header)></td>
+  <td><if hosting><call draw_label(lang.accprev.web.on)><else><call draw_label(lang.accprev.web.off)></if></td>
+</tr>
+<if hosting>
+<tr >
+  <td colspan="2">
+<switch hosting.index><case "0"><assign state=lang.label.disabled><break><case "1"><assign state=lang.label.web.enabled><break><case "2"><assign state=lang.accprev.web.fancy><break></switch>
+<call draw_label_bold(lang.accprev.web.indexes)><call draw_label(state)>;
+
+<switch hosting.symlink><case "0"><assign state=lang.label.disabled><break><case "1"><assign state=lang.label.enabled><break><case "2"><assign state=lang.accprev.web.owner><break></switch>
+<call draw_label_bold(lang.accprev.web.links)><call draw_label(state)>;
+
+<if hosting.ssi=="1"><assign state=lang.label.enabled><else><assign state=lang.label.disabled></if>
+<call draw_label_bold(lang.accprev.web.ssiexec)><call draw_label(state)>;<br>
+
+<if hosting.multiview=="1"><assign state=lang.label.enabled><else><assign state=lang.label.disabled></if>
+<call draw_label_bold(lang.accprev.web.multiviews)><call draw_label(state)>;
+<call draw_label_bold(lang.accprev.web.ssl)><call state(hosting.getChild("ssl"))>;
+<call draw_label_bold(lang.accprev.web.fp)><call state(hosting.getChild("frontpage"))>;
+<call draw_label_bold(lang.accprev.web.php)><call state(hosting.getChild("php3"))>;
+<br>
+<assign cgi_list=hosting.getChildren("cgi")>
+<call draw_label_bold(lang.accprev.web.cgi)><if cgi_list><list cgi_list as cgi><call draw_label("["+cgi.ext+"] ")></list><else><call draw_label(lang.label.disabled)></if><br>
+<if hosting.getChild("cgidir")>
+<call draw_label_bold(lang.accprev.web.cgipath)><call draw_label(hosting.getChild("cgidir").path)><br>
+<call draw_label_bold(lang.accprev.web.cgidir)><call draw_label(hosting.getChild("cgidir").dir)><br>
+<else>
+<call draw_label_bold(lang.accprev.web.cgidir)><call draw_label(lang.label.disabled)><br>
+</if>
+<call draw_label_bold(lang.accprev.web.ssialias)><list hosting.getChild("ssi") as ssi><call draw_label("["+ssi.ext+"] ")></list><br>
+<call draw_label_bold(lang.accprev.web.miva)><call state(hosting.getChild("miva"))><br>
+<call draw_label_bold(lang.accprev.web.mime)>(<list hosting.getChildren("mimetype") as mime><call draw_label(mime.ext+"-&gt;"+mime.mime)></list>)<br>
+<call draw_label_bold(lang.accprev.web.errdoc)><list hosting.getChildren("errordoc") as edoc><call draw_label("["+edoc.code+"=&gt;"+edoc.msg+"] ")></list><br>
+<call draw_label_bold(lang.accprev.web.errlog)><call state(hosting.getChild("errorlog"))><br>
+<call draw_label_bold(lang.accprev.web.transferlog)><call state(hosting.getChild("transferlog"))><br>
+<call draw_label_bold(lang.accprev.web.reflog)><call state(hosting.getChild("referrerlog"))><br>
+<call draw_label_bold(lang.accprev.web.agentlog)><call state(hosting.getChild("agentlog"))><br>
+<assign trans=hosting.getChild("transferlog")>
+<if trans><assign tmp1=trans.getChild("webalizer")><assign tmp2=trans.getChild("modlogan")><else><assign tmp1=""><assign tmp2=""></if>
+<call draw_label_bold(lang.accprev.web.webaliazer)><call state(tmp1)><br>
+<call draw_label_bold(lang.accprev.web.modlogan)><call state(tmp2)><br>
+<call draw_label_bold(lang.accprev.web.aliases)><list hosting.getChildren("vhost_alias") as alias><call draw_label(alias.config+"."+domain.name+"; ")></list><br>
+<if domain.getChildren("subdomain")>
+<call draw_label_bold(lang.accprev.web.subdomains)><list domain.getChildren("subdomain") as subdomain><call draw_label(subdomain.name+"; ")></list><br></if>
+</td></tr>
+<assign http_traffic=domain.getChild("http_traffic")>
+<if http_traffic>
+<tr >
+  <td><call draw_label_bold(lang.accprev.web.httptraffic)></td>
+  <td>${http_traffic.reload}<call draw_label(toolbox.compose(lang.label.traffic.used, http_traffic.text_traffic))></td>
+</tr>
+</if>
+
+<if SESSION_PLATFORM != "win2k">
+<tr >
+  <td><call draw_label_bold(lang.accprev.web.htmldir)></td>
+  <td><call draw_label(hosting.path)></td>
+</tr>
+</if>
+
+</if>
+<call draw_table_footer()>
+<!-- HOSTING SETTINGS END -->
+
+<function state(resource)>
+<if resource><call draw_label(lang.label.enabled)><else><call draw_label(lang.label.disabled)></if>
+</function>

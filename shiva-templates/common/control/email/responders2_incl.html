@@ -1,0 +1,24 @@
+<!-- BEGIN ./email/responders2_incl.html  -->
+<tr>
+<td><call draw_label(lang.email.responders2incl.local)></td>
+<td><call draw_label(responder.local)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.responders2incl.message)></td>
+<td><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+responder+"&template_name=email/mod_responder_form.html"+"&stemplate="+template+"&mo_id="+request.mo_id+sc_params, lang.email.responders2incl.edit)></td>
+</tr>
+<if ! config.IRIS_USER>
+<tr>
+<td><call draw_label(lang.email.responders2incl.copyto)></td>
+<td><call draw_label(responder.foreign)></td>
+</tr>
+</if>
+<tr>
+  <td><call draw_label(lang.label.del)></td>
+  <td><call draw_delete(config.CLIENT_CP_URL+"?did="+responder+"&dtemplate=submit/email/delete_responder.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+sc_params+"&del=1", lang.label.delete)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.email.responders2incl.tt)></td>
+   <td><call draw_tt_link(responder,"")></td>
+</tr>
+<!--  END ./email/responders2_incl.html  -->

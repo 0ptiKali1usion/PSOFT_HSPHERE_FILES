@@ -1,0 +1,82 @@
+<!-- BEGIN ./quick/choice_stat.html -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign platform = unixuser.host.platform_type>
+
+<function draw_hosting(hosting)>
+<assign platform_type = hosting.server>
+<assign trans=hosting.getChild("transferlog")>
+<tr >
+  <td><call draw_label(hosting.parent.name)></td>
+  <if haswebalizer=="1"><td><if trans><call draw_webalizer_trans(hosting, platform_type, template)><else><call draw_webalizer(hosting, platform_type, template)></if></td></if>
+  <if hasmodlogan=="1"><td><if trans><call draw_modlogan_trans(hosting, platform_type, template)><else><call draw_modlogan(hosting, platform_type, template)></if></td></if>
+  <if hasurchin=="1"><td><call draw_urchin(hosting, platform_type, template)></td></if>
+  <if hasurchin4=="1"><td><call draw_urchin4(hosting, platform_type, template)></td></if>
+  <if hasawstats=="1"><td><call draw_awstats(hosting, platform_type, template)></td></if>
+  <if (platform_type=="apache") || (platform_type=="zeus")><td width="10%" class="control_align_center"><call draw_apache_status(hosting, template)></td></if>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+<assign trans=hosting.getChild("transferlog")>
+<assign colspan="1">
+<if account.plan.isResourceAvailable("webalizer")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign haswebalizer="1">
+</if>
+<if account.plan.isResourceAvailable("modlogan")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hasmodlogan = "1">
+</if>
+<if account.plan.isResourceAvailable("urchin")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hasurchin = "1">
+</if>
+<if account.plan.isResourceAvailable("urchin4")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hasurchin4 = "1">
+</if>
+<if account.plan.isResourceAvailable("awstats")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hasawstats = "1">
+</if>
+<if platform=="unix">
+  <assign colspan=toolbox.add(colspan, "1")>
+</if>
+
+
+
+
+
+<call draw_table_header(colspan, lang.quick.choicestat.header)>
+
+
+<tr>
+  <td><call draw_label_bold(lang.label.domain)></td>
+  <if haswebalizer=="1">
+    <td width="15%"><call draw_label_bold(lang.label.webalizer)></td>
+  </if>
+  <if hasmodlogan=="1">
+    <td width="15%"><call draw_label_bold(lang.label.modlogan)></td>
+  </if>
+  <if hasurchin=="1">
+    <td width="15%"><call draw_label_bold(lang.label.urchin)></td>
+  </if>
+  <if hasurchin4=="1">
+    <td width="15%"><call draw_label_bold(lang.label.urchin)></td>
+  </if>
+  <if hasawstats=="1">
+    <td width="15%"><call draw_label_bold(lang.label.awstats)></td>
+  </if>
+  <if platform=="unix">
+    <td width="10%"><call draw_label_bold(lang.label.status)></td>
+  </if>
+</tr>
+<list account.findAllChildren("hosting") as hosting>
+<call draw_hosting(hosting)>
+</list>
+
+<call draw_table_footer()>
+<!--  END ./quick/choice_stat.html -->

@@ -1,0 +1,10 @@
+<center>
+   PHP
+</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;PHP Hypertext Preprocessor is a server-side, HTML embedded scripting language used to create dynamic Web pages.
+In  HTML document, PHP script  is enclosed within special PHP tags.
+The goal of the language is to allow web developers to write dynamically generated pages quickly. <br>
+  It allows the author to jump between HTML and PHP (similar to ASP and Cold Fusion) instead of having to rely on heavy amounts of code to output HTML. 
+<br>And, because PHP is executed on the server, the client cannot view the PHP code.
+ Click the icon to enable PHP support.

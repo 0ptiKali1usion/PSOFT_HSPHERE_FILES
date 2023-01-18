@@ -1,0 +1,41 @@
+<!-- BEGIN ./control/admin/sitetoolbox_config.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<assign sitetoolbox = account.getChild("sitetoolboxmanager")>
+<call draw_tooltip()>
+<if admin>
+<form name="f_sshrefuse" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/enable_sitetoolbox.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="state" value="on">
+
+
+
+
+<call draw_table_header("2", lang.admin.sitetoolbox_conf)>
+
+  
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_refid)></td>
+<td><input type="text" name="referralid" value="${request.refid}"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox_url)></td>
+<assign surl=request.toolbox_url>
+<if !surl>
+<assign surl="sitetoolbox.hsphere.com">
+</if>
+<td><call draw_label("http://")><input type="text" name="toolbox_url" value="${surl}"></td>
+</tr>
+
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/sitetoolbox_config.html  -->

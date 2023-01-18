@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/admin/ds/save_ds_template.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign dst = ds_manager.getDSTemplate(request.dst_id)>
+
+<assign result=yafv.checkall(
+           yafv.common.s_admin.vStringReq(lang.admin.ds.template_name,request.name),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.os_name,request.os),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.cpu,request.cpu),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.ram,request.ram),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.storage,request.storage)
+)>
+
+<if result.status=="OK">
+  <!-- VALIDATION OK -->
+  <assign res=dst.save(request.name,request.os,request.cpu,request.ram,request.storage)>
+  <if res.status!="OK">
+    <!-- SAVE FAILURE -->
+    <assign failure="1">
+    <assign r=session.addMessage(res.msg)>
+  </if>
+<else>
+  <assign failure="1">
+  <assign r=session.addMessage(result.msg)>
+</if>
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign f_dst_name = toolbox.html_encode(request.name)> 
+  <assign f_dst_os = toolbox.html_encode(request.os)>
+  <assign f_dst_cpu = toolbox.html_encode(request.cpu)>
+  <assign f_dst_ram = toolbox.html_encode(request.ram)>
+  <assign f_dst_storage = toolbox.html_encode(request.storage)> 
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/ds/save_ds_template.sbm  -->

@@ -1,0 +1,37 @@
+<!-- BEGIN submit/MSSQL/change_db_quota.sbm  -->
+<assign result=yafv.common.s_mssql.vQuota(lang.label.db_quota, request.quota_size)>
+<if result.status == "OK">
+  <assign database=account.getResource(request.database)>
+  <assign quota=account.getResource(request.quota)>
+  <if quota>
+  	<!-- ESTIMATE CHANGE -->
+  	<assign price=quota.estimateChange(request.quota_size)>
+	 <if price.status!="ERROR">
+	    <assign success = "1">
+         <else>
+  	    <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  	    <assign res = session.addMessage(price.msg)>
+  	    <include request.ftemplate>
+	 </if>
+  <else>
+        <assign price = database.estimateCreate("MSSQLQuota","",request.quota_size)>
+ 	<if price.status!="ERROR">
+	    <assign success = "1">
+        <else>
+  	    <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  	    <assign res = session.addMessage(price.msg)>
+  	    <include request.ftemplate>
+	</if>
+  </if>
+</if>
+<if success>
+  <if toolbox.le(price.total,"0")!="1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign vsize=toolbox.html_encode(request.size)>
+  <include request.ftemplate>
+</if>
+<!--  END submit/MSSQL/change_db_quota.sbm  -->

@@ -1,0 +1,4 @@
+<center>AntiSpam MaxScore level</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+This parameter defines additional spam check level. It is much stronger than that of the 'Spam check level' parameter. If an email is detected as "spam" on this level, it will be deleted irrespective of your choice for spam processing ("Mark As Spam" or "Move To"). This allows for more flexible configuring of your antispam system. 

@@ -1,0 +1,34 @@
+<!-- BEGIN ./email/mlist_put_trailer.sbm  -->
+<assign mlist = account.getResource(request.uid)>
+<assign trailerMsg = request.trailer>
+<if trailerMsg>
+  <assign result = mlist.put_trailer(request.trailer)>
+  <if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_added, lang.label.mail_list_trailer, ""))>
+  <else>
+    <assign failure = "1">
+    <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_add, lang.label.mail_list_trailer, ""))>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+  <assign result = mlist.del_trailer()>
+  <if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted, lang.label.mail_list_trailer, ""))>
+  <else>
+    <assign failure = "1">
+    <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete, lang.label.mail_list_trailer, ""))>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+</if>
+<if !failure>
+    <assign type = "mailing_list">	
+    <include request.stemplate>
+<else>
+    <assign vtrailer = toolbox.html_encode(request.trailer)>
+    <include request.ftemplate>
+</if>
+<!--  END ./email/mlist_put_trailer.sbm  -->

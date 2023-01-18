@@ -1,0 +1,5 @@
+<!-- BEGIN admin/merchant/activate.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign result=mm.setActive(request.mid, request.type)>
+<if result.status!="OK"><include request.ftemplate><else><include request.stemplate></if>
+<!-- END admin/merchant/activate.sbm -->

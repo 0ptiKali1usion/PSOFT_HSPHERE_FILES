@@ -1,0 +1,6 @@
+<center> badurls </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enables/disables sending any URLs contained in infected messages to the Comodo antispam database. See also parameter urlscnt.
+<br>Default: 0 (disabled).
+<br>

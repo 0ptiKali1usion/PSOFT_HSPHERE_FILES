@@ -1,0 +1,94 @@
+<!-- BEGIN ./control/admin/settings/design_lf_step1.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<compress>
+<assign design_hash = design.all_designs>
+<assign design_list = design.available_design_ids>
+<assign default_design = settings.default_design>
+<if !default_design><assign default_design = design.design_id></if>
+<assign common_images = design.all_common_images>
+<assign image_file_prefix = IMG_PREFIX>
+<assign de_preview_images = design.all_design_previews>
+<assign cur_de_preview_image = de_preview_images[default_design]>
+</compress>
+
+<script language="javascript"><!--
+    de_images = new Array();
+    <list de_preview_images.KEYS as image><compress>
+    <assign image_file = de_preview_images[image].file>
+    <if image_file>
+      <assign img_src = image_file_prefix + image_file>de_images["${image}"]='${img_src}';
+    </if>
+    </compress></list>
+    function changeImage(imageObject, imageArray, selectObject) {
+        newId = selectObject.options[selectObject.selectedIndex].value;
+        if (imageArray[newId] != null)
+            imageObject.src = imageArray[newId];
+        else
+            imageObject.src = '${SPACER_IMAGE}';
+    }
+    function changeDeImage(imageObject, selectObject) {
+        changeImage(imageObject, de_images, selectObject);
+    }
+//-->
+</script>
+
+
+
+<call draw_table_header("2", lang.admin.lookfeel.design_step1_h)>
+
+
+<form name="f_choose_design" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.admin.lookfeel.choose_design)></td>
+<td>
+<select name="design_id" onChange="javascript:changeDeImage(document.images.design_preview, this)">
+  <list design_list as design_id>
+    <if design_id == default_design><assign vselected="SELECTED"><else><assign vselected=""></if>
+    <option value="${design_id}" ${vselected}>${lang[design_hash[design_id].label]}
+  </list>
+</select>&nbsp;
+<input type="hidden" name="template_name" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="submit" name="design_editing" value="${lang.label.alter}">
+</td>
+</tr>
+<tr>
+<td  class="control_align_center" valign="middle" colspan="2">&nbsp;<br>
+  <img name="design_preview" src="${IMG_PREFIX}${cur_de_preview_image.file}" width="${cur_de_preview_image.width}" height="${cur_de_preview_image.height}"><br>
+  &nbsp;
+</td>
+</tr>
+</form>
+<form name="f_change_img_prefix" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.admin.lookfeel.img_prefix)></td>
+<td>
+  <call draw_label_bold(IMG_PREFIX)>&nbsp;
+  <input type="hidden" name="template_name" value="admin/settings/change_img_base.html">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="submit" value="${lang.button.change}">
+</td>
+</tr>
+</form>
+
+<tr>
+<td><call draw_label(lang.admin.lookfeel.signup_fullscreen)></td>
+<td>
+  <if settings.signup_fullscreen=="1">
+    <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_signup_fullscreen.sbm&stemplate="+template+"&value=0")>
+  <else>
+    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/admin/settings/set_signup_fullscreen.sbm&stemplate="+template+"&value=1")>
+  </if>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/design_lf_step1.html -->

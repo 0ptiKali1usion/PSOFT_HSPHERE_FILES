@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/admin/del_plan_warn.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+
+
+
+<call draw_table_header("", lang.admin.delplanwarn.header)>
+
+
+<tr>
+<td class="control_align_center"><call draw_label(toolbox.compose(lang.admin.delplanwarn.deltext, plan.description))></td>
+</tr>
+<tr>
+<td>
+<form name="plan_delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/delete_plan.sbm">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.plan_delete_confirm.submit()", lang.admin.delplanwarn.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.admin.delplanwarn.no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/del_plan_warn.html  -->

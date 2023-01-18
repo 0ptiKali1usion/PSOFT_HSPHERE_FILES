@@ -1,0 +1,22 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+
+${lang.massmail.resume_text}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.resume_login}
+<compress>
+<assign domain=account.findChild("domain")>
+<if !domain><assign domain=account.findChild("service_domain")></if>
+<if !domain><assign domain=account.findChild("3ldomain")></if>
+<if !domain><assign domain=account.findChild("nodomain")></if>
+</compress><if domain><if domain.ip.shared=="1">http://${domain.findChild("idomain_alias").alias}/login.html<else>http://${toolbox.int2ext(domain.ip.ip)}/login.html</if> ${lang.massmail.resume_or}</if>
+${user.CP_URL}/ 
+
+${settings.support}
+
+
+
+
+

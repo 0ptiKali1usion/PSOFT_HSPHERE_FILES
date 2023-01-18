@@ -1,0 +1,342 @@
+<!-- BEGIN ./control/admin/plan_edit_settings.html  -->
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<assign billman = account.getChild("billman")>
+
+<call draw_tooltip()>
+
+<yafv s_admin>
+
+<function draw_subsidizing()>
+<form name="f_plan_edit1" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/assign_promo.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<table class="inner_control">
+<tr>
+  <td colspan="3">
+    <call draw_label_bold(lang.admin.promo.header)>
+  </td>
+</tr>
+<assign promo_enabled = settings["_PROMO_ENABLED"]>
+<if promo_enabled && promo_enabled == "TRUE">
+<assign promo_state = "1">
+</if>
+<tr>
+  <td colspan="2"><call draw_label(lang.admin.promo.use_promo)></td>
+  <td><call draw_state(promo_state, config.CLIENT_CP_URL+"?template_name=submit/admin/promo/enable_promo.sbm&promo_enabled=FALSE"+"&plan_id="+request.plan_id+"&stemplate="+template + "&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/admin/promo/enable_promo.sbm"+"&plan_id="+request.plan_id+"&promo_enabled=TRUE&stemplate="+template+"&ftemplate="+template)></td>
+</tr>
+<assign plan_promos = plan.assigned_promos>
+<if promo_state=="1" && toolbox.gt(plan_promos.size, "1")>
+<tr>
+<td><call draw_label_bold("["+lang.admin.promo.promo_name+"]")></td>
+<td><call draw_label_bold("["+lang.admin.promo.promo_bill_descr+"]")></td>
+<td><call draw_label_bold("["+lang.admin.promo.control+"]")></td>
+</tr>
+<list plan.assigned_promos as promo>
+<tr>
+    <td><call draw_label(promo.name)></td>
+    <td><call draw_label(promo.billing_description)></td>
+    <td class="control_align_center"><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/unassign_promo.sbm&promo_id="+promo.id+"&plan_id="+request.plan_id+"&stemplate="+template + "&ftemplate="+template, "deleted", lang.admin.promo.unassign.tip)></td>
+</tr>
+</list>
+<assign av_promos = plan.available_promos>
+<if av_promos && toolbox.gt(av_promos.size, "1")>
+  <tr><td><call draw_label(lang.admin.promo.assign_new)></td><td colspan="2"><select name="new_promo"><list av_promos as av_promo><option value="${av_promo.id}">${av_promo.name}</option></list></select>&nbsp;<input type="submit" value="${lang.button.add}"></td><tr>
+</if>
+</if>
+</table>
+</form>
+</function>
+
+
+<assign tbl_header = lang.admin.planeditsets.settings(plan.description)>
+<if plan.disabled=="1">
+  <assign tbl_header = tbl_header + "&nbsp;" + lang.admin.disabled_plan>
+</if>
+<call prepare_table_header("", tbl_header)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit.html", lang.admin.planeditsets.res)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_access.html", lang.admin.planeditsets.acc)>
+<if !plan.deleted>
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_showable.html", lang.admin.planeditsets.show)>
+</if>
+<call draw_table_header_prepared()>
+
+<tr><td>
+<table class="inner_control">
+
+  <tr>
+  <td colspan="2">
+    <call draw_label_bold(lang.admin.planeditsets.planconfig)>
+    </td>
+  </tr>
+
+        <form name="f_plan_edit1" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+        <input type="hidden" name="template_name" value="submit/admin/plan_description.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="plan_id" value="${plan.id}">
+        <if !vdescription>
+	  <assign vdescription=toolbox.html_encode(plan.description)>
+	</if>
+        <tr>
+  <td width="20%" nowrap>
+    <call draw_label(lang.admin.planeditsets.planname)>
+  </td>
+	  <td nowrap>
+	    <input type="text" name="description" value="${vdescription}" ${disabled} label="${lang.admin.planeditsets.planname}" check="vStringReq">
+	    <if !plan.deleted>
+	      <input type="submit" value="${lang.button.change}">
+	    </if>
+	  </td>
+        </tr>
+      </form>
+
+      <form  name="f_plan_edit2" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+	<input type="hidden" name="template_name" value="submit/admin/plan_template.sbm">
+	<input type="hidden" name="stemplate" value="${template}">
+	<input type="hidden" name="ftemplate" value="${template}">
+	<input type="hidden" name="plan_id" value="${plan.id}">
+	<if !vtemplate>
+	  <assign vtemplate=toolbox.html_encode(plan.values["_template"])>
+	</if>
+        <tr>
+	  <td nowrap>
+    <call draw_label(lang.admin.planeditsets.deftempl)>
+	  </td>
+          <td nowrap>
+	    <input type="text" name="template" value="${vtemplate}" label="${lang.admin.planeditsets.deftempl}" check="vLocalFileName">
+	    <if !plan.deleted>
+	      <input type="submit" value="${lang.button.change}">
+	    </if>
+	  </td>
+        </tr>
+      </form>
+
+      <form name="f_plan_edit3"  action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+	<input type="hidden" name="template_name" value="submit/admin/plan_dir_template.sbm">
+	<input type="hidden" name="stemplate" value="${template}">
+	<input type="hidden" name="ftemplate" value="${template}">
+	<input type="hidden" name="plan_id" value="${plan.id}">
+	<if !vtemplate_dir>
+	  <assign vtemplate_dir=toolbox.html_encode(plan.values["_TEMPLATES_DIR"])>
+	</if>
+	<tr>
+	  <td nowrap>
+    <call draw_label(lang.admin.planeditsets.templdir)>
+	  </td>
+	  <td nowrap>
+	    <input type="text" name="template" value="${vtemplate_dir}" label="${lang.admin.planeditsets.templdir}" check="vLocalDirOpt">
+	    <if !plan.deleted>
+	      <input type="submit" value="${lang.button.change}">
+	    </if>
+	  </td>
+	</tr>
+      </form>
+
+<assign bTypeURL=config.CLIENT_CP_URL+"?template_name=submit/admin/plan_billable.sbm&stemplate="+template+"&ftemplate="+template+"&plan_id="+plan.id+"&b_info=">
+
+      <if !plan.isResourceAvailable("admin")>
+        <tr>
+          <td nowrap>
+    <call draw_label(lang.label.ci)>
+	  </td>
+	  <assign cTypeURL=config.CLIENT_CP_URL+"?template_name=submit/admin/plan_cinfo.sbm&stemplate="+template+"&ftemplate="+template+"&plan_id="+plan.id+"&c_info=">
+	  <if plan.c_info=="1">
+	    <td>
+      <if plan.deleted><call draw_on()><else><call draw_state_on(cTypeURL+"0")></if>
+	    </td>
+	  <else>
+	    <td>
+      <if plan.deleted><call draw_off()><else><call draw_state_off(cTypeURL+"1")></if>
+	    </td>
+	  </if>
+	</tr>
+
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+  <td colspan="2">
+    <call draw_label_bold(lang.admin.planeditsets.billconf)>
+  </td>
+</tr>
+
+        <form name="f_plan_edit4" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+          <input type="hidden" name="template_name" value="submit/admin/plan_template_credit.sbm">
+          <input type="hidden" name="stemplate" value="${template}">
+          <input type="hidden" name="ftemplate" value="${template}">
+          <input type="hidden" name="plan_id" value="${plan.id}">
+          <if !vcredit>
+            <assign vcredit=toolbox.numberToCurLocale(toolbox.html_encode(plan.values["_HARD_CREDIT"]),"false")>
+	  </if>
+          <if !vtrial_credit>
+	    <assign vtrial_credit=toolbox.numberToCurLocale(toolbox.html_encode(plan.values["_TRIAL_CREDIT"]),"false")>
+	  </if>
+
+        <tr>
+          <td><call draw_label(lang.admin.planeditsets.credit)></td>
+          <td>
+	    <input type="text" name="credit" value="${vcredit}" size="7" label="${lang.admin.planeditsets.credit}" check="vPrice">
+	  </td>
+        </tr>
+
+        <if  plan.b_info=="2">
+          <tr>
+            <td><call draw_label(lang.admin.planeditsets.trialcredit)></td>
+            <td>
+	      <input type="text" name="trial_credit" value="${vtrial_credit}" size="7" label="${lang.admin.planeditsets.trialcredit}" check="vPrice">
+	    </td>
+          </tr>
+        </if>
+
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+    <if !plan.deleted><input type="submit" value="${lang.button.change}"><else>&nbsp;</if>
+	  </td>
+        </tr>
+        </form>
+
+        <tr>
+          <td valign="top"><call draw_label(lang.admin.planeditsets.payint)></td>
+          <td valign="top" nowrap>
+            <assign periods=plan.values["_PERIOD_TYPES"]>
+            <if periods>
+              <assign counter=toolbox.counter("0", periods)>
+              <assign onc=toolbox.counter()>
+            </if>
+    <table>
+              <tr>
+                <td nowrap><call draw_label_bold(lang.admin.planeditsets.interval)></td>
+                <td nowrap><call draw_label_bold("["+lang.admin.size+"]")></td>
+                <td nowrap><call draw_label_bold(lang.admin.planeditsets.setup)></td>
+                <td nowrap><call draw_label_bold(lang.admin.planeditsets.usage)></td>
+                <td nowrap><call draw_label_bold(lang.admin.planeditsets.rec)></td>
+                <td nowrap><call draw_label_bold(lang.admin.planeditsets.control)></td>
+              </tr>
+              <if periods>
+                <list onc as c>
+                  <if counter==periods>
+		    <assign res=c.stop>
+                  <else>
+              <tr>
+              <td class="control_align_center" nowrap><call draw_label(plan.values["_PERIOD_TYPE_"+counter])></td>
+              <td class="control_align_center" nowrap><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+counter],"false"))></td>
+              <td class="control_align_center" nowrap><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_SETUP_DISC_"+counter],"false")+"%")></td>
+              <td class="control_align_center" nowrap><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_USAGE_DISC_"+counter],"false")+"%")></td>
+              <td class="control_align_center" nowrap><call draw_label(toolbox.numberToCurLocale(plan.values["_PERIOD_UNIT_DISC_"+counter],"false")+"%")></td>
+              <td class="control_align_center" nowrap>
+		  <if !plan.deleted>
+		    <call draw_edit(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/binterval_edit.html&stemplate="+template+"&count="+counter, lang.admin.planeditsets.edit)>
+		  <else>
+		    &nbsp;
+		  </if>
+		</td>
+              </tr>
+                     <assign res=counter.next>
+                   </if>
+                 </list>
+               </if>
+              <tr>
+        <td colspan="6">
+	          <if !plan.deleted>
+	            <call draw_add(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/binterval_edit.html&stemplate="+template, lang.admin.planeditsets.add)>
+                  </if>
+	        </td>
+	      </tr>
+            </table>
+          </td>
+              <else>
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+  <td colspan="2">
+    <call draw_label_bold(lang.admin.planeditsets.billconf)>
+		</td>
+        </tr>
+<tr>
+  <td><call draw_label(lang.label.bi)></td>
+  <td>
+    <if plan.deleted><call draw_off()><else><call draw_state_off(bTypeURL+"1")></if>
+  </td>
+	</tr>
+</if>
+
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+
+<if !plan.deleted>
+  <if billman><tr><td colspan="2"><call draw_subsidizing()></td></tr></if>
+  <tr>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+</if>
+
+
+
+<if plan.valueKeys>
+<tr>
+  <td colspan="2">
+    <call draw_label_bold(lang.admin.planeditsets.custvals)>
+  </td>
+</tr>
+</if>
+
+<form  name="f_plan_edit5" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden"  name="template_name" value="submit/admin/resource_edit_cval.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<list plan.valueKeys as key>
+  <if key && toolbox.startsWith(key, "_")=="0">
+    <tr>
+      <td><call draw_label(key)></td>
+      <td>
+        <input type="hidden" name="names" value="${key}">
+        <input type="text" name="${key}" value="${plan.values[key]}">
+      </td>
+    </tr>
+  </if>
+</list>
+<tr>
+  <td>&nbsp;</td>
+  <td>
+    <if !plan.deleted><input type="submit" value="${lang.button.submit}"><else>&nbsp;</if></td></tr>
+</form>
+
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+<if !plan.deleted>
+<tr>
+  <td colspan="2">
+    <call draw_label_bold(lang.admin.planeditsets.addcustval)>
+  </td>
+</tr>
+<form name="f_plan_edit6" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/resource_edit_aval.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<tr>
+  <td><call draw_label(lang.admin.planeditsets.name)></td>
+  <td><input type="text" name="name"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.planeditsets.value)></td>
+  <td><input type="text" name="value"></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+</if>
+
+</table></td></tr>
+<call draw_table_footer()>
+<!--  END ./control/admin/plan_edit_settings.html  -->

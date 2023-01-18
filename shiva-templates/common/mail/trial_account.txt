@@ -1,0 +1,18 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+
+${lang.massmail.trial_account}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.trial_text(settings.name)}
+
+${lang.massmail.trial_balance} ${toolbox.currency(account.bill.balance)}
+
+<if account.bi.type!="CC">
+<if toolbox.lt(account.bill.balance, "0") == "1"><assign in_value=toolbox.sub("0", account.bill.balance)>
+<if account.bi.type=="Check">${lang.massmail.invoice_check} ${settings.check}<else>${lang.massmail.url} ${toolbox.getPaymentLink(account.bi.type, in_value, "acc-", account.id, account.description)}</if>
+</if>
+</if>
+${lang.massmail.trial_support}
+${settings.support}

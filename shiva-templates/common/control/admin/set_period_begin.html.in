@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/admin/set_period_begin.html -->
+<call draw_tooltip()>
+<assign billman=account.getChild("billman")>
+
+<if billman>
+
+<if request.aid!="">
+<assign period_begin_old=billman.getPeriodBegin(request.aid)>
+</if>
+<if period_begin==""><assign period_begin=period_begin_old></if>
+<if aid==""><assign aid=request.aid></if>
+<yafv s_admin>
+<form name="f_debit" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/set_period_begin.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="aid" value="${aid}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.admin.set_period_begin.header)>
+
+<tr>	<td><call draw_label(lang.label.period_begin)></td>
+<td>
+		<input type="text" name="period_begin" value="${period_begin}" label="${lang.label.period_begin}" size="10" maxlength="10" check="vDate">
+	</td>
+</tr>
+<tr>
+	<td  colspan="2" class="control_align_center">
+		<input type="submit" value="${lang.button.submit}">
+	</td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/set_period_begin.html -->

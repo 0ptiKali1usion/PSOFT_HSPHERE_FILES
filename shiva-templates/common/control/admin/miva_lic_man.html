@@ -1,0 +1,89 @@
+<!-- BEGIN ./control/admin/miva_lic_man.html  -->
+<call draw_tooltip()>
+<if account.getChild("admin")>
+<assign lic_man=account.getChild("miva_lic_manager")>
+<assign res=lic_man.reloadLicenses()>
+
+
+
+<call draw_table_header("2", lang.admin.mivalic.info)>
+<tr>
+<td><call draw_label(lang.admin.mivalic.freelic)></td>
+<td><call draw_label(lic_man.free_licenses)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.mivalic.occlic)></td>
+<td><call draw_label(lic_man.occupied_licenses)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.mivalic.instlic)></td>
+<td><call draw_label(lic_man.installed_licenses)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.mivalic.deadlic)></td>
+<td><call draw_label(lic_man.dead_licenses)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.mivalic.totallic)></td>
+<td><call draw_label(lic_man.total_licenses)></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("3", lang.admin.mivalic.header)>
+<tr>
+<td class="control_header"><call draw_header(lang.miva.license)></td>
+<td class="control_header"><call draw_header(lang.admin.mivalic.licstate)></td>
+<td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<list lic_man.licenses as lic>
+<assign state=lic_man.getLicenseState(lic)>
+<tr>
+<td  nowrap><call draw_label(lic)></td>
+<if state=="0">
+<td>
+<call draw_label(lang.admin.mivalic.free)></td>
+<td><call draw_change(config.CLIENT_CP_URL+"?template_name=admin/modify_miva_lic.html&lic="+lic+"&stemplate="+template+"&ftemplate="+template, lang.admin.mivalic.modify)>
+<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/delete_miva_lic.sbm&lic="+lic+"&stemplate="+template+"&ftemplate="+template, lang.label.delete)></td>
+</if>
+<if state=="1">
+<td  nowrap>
+<assign aId=lic_man.getAccountId(lic)>
+<assign domain=lic_man.getDomain(lic)>
+<call draw_label(lang.admin.mivalic.occ1+aId)><if domain><call draw_label(", "+domain+" "+lang.admin.mivalic.occ2)></if></td>
+<td>&nbsp;</td>
+</if>
+<if state=="2">
+<td  nowrap>
+	<call draw_label(lang.admin.mivalic.dead)></td>
+<td><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/free_miva_lic.sbm&lic="+lic+"&stemplate="+template+"&ftemplate="+template, lang.admin.mivalic.free)></td>
+</if>
+<if state=="3">
+<assign aId=lic_man.getAccountId(lic)>
+<assign domain=lic_man.getDomain(lic)>
+<td  nowrap>
+<call draw_label(lang.admin.mivalic.inst+aId)><if domain><call draw_label(", "+domain+" "+lang.admin.mivalic.occ2)></if></td>
+</td>
+<td>&nbsp;</td>
+</if>
+</td>
+</tr>
+</list>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/add_miva_lic.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<tr>
+  <td colspan="3" class="control_header"><call draw_header(lang.admin.mivalic.add)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.miva.license_num)></td>
+<td colspan="2"><textarea  cols="20" rows="5" name="miva_lic"></textarea></td>
+</tr>
+<tr>
+<td  class="control_align_center" colspan="3"><input type="submit" name="${lang.admin.mivalic.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+</if>
+<!--  END ./control/admin/miva_lic_man.html  -->

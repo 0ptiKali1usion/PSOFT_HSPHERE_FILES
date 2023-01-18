@@ -1,0 +1,16 @@
+<!-- BEGIN ./submit/windomain/add_webservice.sbm  -->
+<assign domain=account.getResource(request.rid)>
+<if domain.getChild("hosting")>
+  <include request.stemplate>
+<else>
+  <assign result=domain.addChild("hosting", "")>
+  <if result.status=="OK">
+	<include request.stemplate>
+  <else>
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_enable,lang.label.webservice,""))>
+	<assign res=session.addMessage(result.msg)>
+	<include request.ftemplate>
+  </if>
+</if>
+<!-- END ./submit/windomain/add_webservice.sbm  -->

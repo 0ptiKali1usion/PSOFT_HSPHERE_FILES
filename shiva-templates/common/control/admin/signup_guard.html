@@ -1,0 +1,70 @@
+<!-- BEGIN ./common/control/admin/signup_guard.html -->
+<function checkbox(name, flag)><input type=checkbox value=1 name=${name}<if flag> CHECKED</if>><call draw_label(lang.signup.guard[name])></function>
+<assign admin=account.getChild("admin")>
+<assign guard=admin.getSignupGuard()>
+<call draw_tooltip()>
+<if admin>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/signup_guard.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.signup.guard.title)>
+
+
+<tr><td>
+<call checkbox("moderateEverything", guard.MODERATE_EVERYTHING_FLAG)>
+</td><td>
+<call checkbox("matchIPCountry", guard.MATCH_IP_COUNTRY_FLAG)>
+</td></tr>
+<tr ><td>
+<call checkbox("domainReg", guard.DOMAIN_REG_FLAG)>
+</td><td>
+<call checkbox("domainTransfer", guard.DOMAIN_TRANSFER_FLAG)>
+</td></tr>
+<tr ><td>
+<call checkbox("domainStopgap", guard.DOMAIN_STOPGAP_FLAG)>
+</td><td>
+<call checkbox("domain3rdLevel", guard.DOMAIN_3RDLEVEL_FLAG)>
+</td></tr>
+<tr ><td>
+<call checkbox("noDomain", guard.NO_DOMAIN_FLAG)>
+</td><td>
+<call checkbox("trialAccount", guard.TRIAL_ACCOUNT_FLAG)>
+</td></tr>
+<tr><td>
+<call checkbox("cvvvalidation", guard.CVV_VALIDATION)>
+</td><td>
+&nbsp;
+</td></tr>
+<tr ><td colspan="2"><call draw_label(lang.signup.guard.maxAmount)> <input type=text" name=maxAmount value=${guard.maxAmount}></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+</form>
+<function draw_link(page)>
+<a href="${config.CLIENT_CP_URL}?template_name=admin/blacklist/${page}.html&template=${template}"><call draw_label(lang.signup.guard[page].header)></a>
+</function>
+
+<tr><td colspan="2" class="control_header"><call draw_header(lang.signup.guard.blacklists)></td></tr>
+<tr >
+<td class="control_align_center"><call draw_link("domains")></td>
+<td class="control_align_center"><call draw_link("remote_ips")></td>
+</tr>
+<tr >
+<td class="control_align_center"><call draw_link("emails")></td>
+<td class="control_align_center"><call draw_link("phones")></td>
+</tr>
+<tr >
+<td class="control_align_center"><call draw_link("countries")></td>
+<td class="control_align_center"><call draw_link("cc_numbers")></td>
+</tr>
+<tr >
+<td class="control_align_center"><call draw_link("names")></td>
+<td class="control_align_center"><call draw_link("usernames")></td>
+</tr>
+
+
+<call draw_table_footer()>
+</if>
+<!-- END ./common/control/admin/signup_guard.html -->

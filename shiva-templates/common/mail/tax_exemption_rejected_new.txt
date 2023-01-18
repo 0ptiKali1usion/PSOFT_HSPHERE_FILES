@@ -1,0 +1,25 @@
+${lang.massmail.new_account_header(bi.first_name, bi.last_name)}
+
+${lang.massmail.tax_exemption_rejected_mes(bi.exemption_code)}
+
+${lang.massmail.new_account_signup_plan(plan.description)}
+
+<assign invoice = toolbox.getInvoice(request["_mod"])>
+<if invoice>                                 INVOICE
+<list invoice.entries as entry>
+${entry.type}       ${entry.description}            ${toolbox.currency(entry.amount)}</list>
+<assign new_invoice=toolbox.calculateTaxes(invoice.total, bi.id)><assign
+taxes=new_invoice.taxes><if
+taxes.size!="0">SUBTOTAL:${toolbox.currency(new_invoice.sub_total)}<list taxes.KEYS as tax_id>
+${toolbox.taxes[tax_id].description}(${toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")} %) ${toolbox.currency(taxes[tax_id])}</list></if>
+TOTAL:     ${toolbox.currency(new_invoice.total)}
+<if bi.type!="CC">
+<if request["_bi_type"]=="Check">${lang.massmail.new_account_pay} ${settings.check}<else>${lang.massmail.new_account_pay_cc} ${toolbox.getPaymentLink(request["_bi_type"], new_invoice.total, "mail-",  request_id, plan.description)}
+</if>
+</if>
+</if>
+${massmail.new_account_notify}
+
+${lang.massmail.to_approve_ec_contact_us}
+
+${settings.support}

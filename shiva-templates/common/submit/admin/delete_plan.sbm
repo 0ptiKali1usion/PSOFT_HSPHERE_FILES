@@ -1,0 +1,24 @@
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign signuped_users=plan.signuped_users>
+<if signuped_users=="0">
+   <assign result=admin.deletePlan(request.plan_id)>
+   <if result.status=="OK">   
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_deleted,lang.label.plan,""))>
+   <else>
+      <assign failure="1">
+      <assign res = session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_delete,lang.label.plan,""))>
+      <assign res=session.addMessage(result.msg)>
+   </if>
+<else>
+   <assign failure="1">
+   <assign res=session.addMessage(toolbox.compose(
+     lang.msg.plan_unable_delete, plan.description, signuped_users))>
+</if>
+<if failure>
+   <include request.ftemplate>
+<else>
+   <include request.stemplate>
+</if>

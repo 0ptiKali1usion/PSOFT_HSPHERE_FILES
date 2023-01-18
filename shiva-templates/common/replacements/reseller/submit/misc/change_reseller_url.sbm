@@ -1,0 +1,43 @@
+<!-- BEGIN ./submit/misc/change_reseller_url.sbm  -->
+
+<if request.set_default=="1">
+    <assign reseller = account.getChild("reseller")>
+    <assign res = reseller.resetURL()>
+    <if res.status!="OK">
+        <assign failure="1">
+        <assign err=session.addMessage(toolbox.compose(
+           lang,msg.name_res_failed_set, admin.reseditadv.default, lang.reseller.url))>
+    </if>
+<else>
+
+
+<assign result=yafv.checkall(
+        yafv.common.s_misc.vDomain_Name(lang.label.domain.name, request.reseller_url),
+        yafv.common.s_misc.vProtocol(lang.label.protocol, request.reseller_protocol),
+        yafv.common.s_misc.vPort(lang.label.protocol, request.reseller_port)
+    )>
+<if result.status=="OK">
+    <assign reseller = account.getChild("reseller")>
+    <assign res = reseller.setURL(request.reseller_url, request.reseller_protocol, request.reseller_port)>
+    <if res.status!="OK">
+	<assign failure="1">
+	<assign err=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_change, lang.reseller.url, ""))>
+        <assign err=session.addMessage(res.msg)>
+    </if>
+<else>
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+
+</if>
+
+<if !failure>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+
+<!-- END ./submit/misc/change_reseller_url.sbm  -->

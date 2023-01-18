@@ -1,0 +1,61 @@
+<!-- BEGIN ./billing/new_billing.CC.in  -->
+<assign existingSoloOrSwitch = "">
+<tr>
+   <td colspan="2" class="control_header"><call draw_header(lang.cc.info)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.cc.type)></td>
+    <td>
+    <select name="_bi_cc_type" size="1" onChange="checkForm(this.form,false)"><if bi_cc_type><assign vselected = ""><else><assign vselected = "SELECTED"></if>
+     <list toolbox.getActiveCCbrands() as ccb><compress><assign ccb_name_sh = ccb.name_sh>
+       <if ccb_name_sh == "SOLO" || ccb_name_sh == "SWITCH"><assign existingSoloOrSwitch="1"></if>
+       <if (ccb_name_sh == "VISA" || ccb_name_sh == "MC" || ccb_name_sh == "AX" || ccb_name_sh == "DISC") && toolbox.SignupGuardParams("CVV_VALIDATION")><assign validateCVV="1"></if>
+       <if ccb_name_sh == bi_cc_type><assign vselected = "SELECTED"></if></compress>
+       <option value="${ccb_name_sh}" ${vselected}>${ccb.name}</option><assign vselected = "">
+     </list>
+    </select></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.cc.name)></td>
+    <td><input type="text" name="_bi_cc_name" label="${lang.cc.name}" value="${bi_cc_name}" check="vcc_name"><call draw_label("
+    ")></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.cc.number)></td>
+   <td><input type="text" name="_bi_cc_number" label="${lang.cc.number}" value="${bi_cc_number}" check="vCCNumber(this,_bi_cc_type)"><call draw_label("
+   ")></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.cc.exp)></td>
+   <td><input type="text" name="_bi_cc_exp_month" size="2" label="${lang.cc.exp}" value="${bi_cc_exp_month}" check="vcc_month" >
+   /<input type="text" name="_bi_cc_exp_year" size="4" label="${lang.cc.exp}" value="${bi_cc_exp_year}" check="vcc_year" >
+</td>
+</tr>
+<if existingSoloOrSwitch>
+<tr>
+   <td><call draw_label(lang.signup.card_issue_num)></td>
+   <td><input type="input" name="_bi_cc_issue_no" label="${lang.signup.card_issue_num}" check="vCardIssueNum(this,_bi_cc_type)" size="3" value="${vbi_cc_issue_no}"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.signup.card_start_date)></td>
+   <td><call draw_label(lang.signup.card_start_mm_yy)><input type="input" name="_bi_cc_start_month" size="3" value="${vbi_cc_start_month}"><call draw_label_bold("/")><input type="input" name="_bi_cc_start_year" label="${lang.signup.card_start_date}" check="vCardDateMMYY(_bi_cc_start_month,this,_bi_cc_type)" size="3" value="${vbi_cc_start_year}"></td>
+</tr>
+<tr>
+   <td colspan="2"><call draw_label(lang.signup.card_ss_remark)></td>
+</tr>
+</if>
+
+<if validateCVV>
+<tr>
+   <td><call draw_label(lang.signup.card_cvv)></td>
+   <td><input type="input" name="_bi_cc_cvv" label="${lang.signup.card_cvv}" check="vCardCvvNum(this, _bi_cc_type)" size="3" value=""></td>
+</tr>
+<tr>
+   <td align="left"><call draw_label(lang.cc.cvv_text)></td>
+   <td class="control_align_center"><call draw_image("axcc")><call draw_image("visacc")></td>
+</tr>
+</if>
+
+
+
+<!--  END ./billing/new_billing.CC.in  -->

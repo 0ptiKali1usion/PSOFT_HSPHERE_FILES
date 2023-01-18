@@ -1,0 +1,13 @@
+<!-- BEGIN ./sumbill/invoice.html  -->
+<call draw_tooltip()>
+<assign bill = user.getBill(request.bill_id,request.account_id)>
+<assign ci=user.getLastContactInfo()>
+<assign period = bill.format_closed><if !period><assign period = account.p_end></if>
+<assign closed = bill.format_closed>
+<assign taxes = bill.taxes>
+<if taxes.size != "0">
+<include "/control/sumbill/invoice_taxes.html">
+<else>
+<include "control/sumbill/invoice_no_taxes.html">
+</if>
+<!--  END ./sumbill/invoice.html  -->

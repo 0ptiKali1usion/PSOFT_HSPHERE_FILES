@@ -1,0 +1,106 @@
+<!-- BEGIN ./domain/generate_new_ssl_cert.html  -->
+<assign hosting=account.getResource(request.rid)>
+<assign domain_name=hosting.parent.name>
+<if !vemail><assign vemail=account.ci.email></if>
+<if !vorganization><assign vorganization=account.ci.org_name></if>
+<if !vorgan_unit><assign vorgan_unit="Not specified"></if>
+<if !vlocality><assign vlocality=account.ci.city></if>
+<if !vstate><assign vstate=account.ci.state></if>
+<if !vstate2><assign vstate2=account.ci.state2></if>
+<if !vcountry><assign vcountry=account.ci.country></if>
+<call draw_tooltip()>
+<yafv s_domain>
+<form name="f_generate_ssl" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/generate_ssl.sbm">
+
+<call draw_table_header("2", lang.domain.generatenewsslcert.header)>
+
+<tr>
+<td>
+     <call draw_label(lang.domain.generatenewsslcert.site)>
+  </td>
+  <if vsite && vsite != domain_name><assign vsa = "1">
+    <assign vselected = ""><else><assign vselected = "SELECTED">
+  </if>
+  <assign tmp=hosting.getChildren("vhost_alias")>
+  <td>
+    <select name="site">
+      <option ${vselected}>${domain_name}
+      <if tmp><list tmp as alias><assign site_alias = alias.alias + "." + domain_name>
+	<if va && site_alias == vsite><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+	<option ${vselected}>${site_alias}
+      </list></if>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.email)>
+  </td>
+  <td>
+     <input name="email" label="${lang.bci.email}" value="${vemail}" check="vEmail">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.company)>
+  </td>
+  <td>
+     <input name="organization" label="${lang.bci.company}" value="${vorganization}" check="vOrganReq">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.domain.generatenewsslcert.unit)>
+  </td>
+  <td>
+     <input name="organ_unit" label="${lang.domain.generatenewsslcert.unit}" value="${vorgan_unit}" check="vOrganUnit">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.domain.generatenewsslcert.local)>
+  </td>
+  <td>
+     <input name="locality" label="${lang.domain.generatenewsslcert.local}" value="${vlocality}" check="vLocality">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.state)>
+  </td>
+  <td>
+    <select name="state" size="1">
+	<call buildStates(vstate)>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.label.state_other)>
+  </td>
+  <td>
+        <input type="text" label="${lang.label.state_other}" name="state2" value="${vstate2}" check="vStateOther">
+  </td>
+</tr>
+<tr>
+  <td>
+     <call draw_label(lang.bci.country)>
+  </td>
+  <td>
+    <SELECT NAME="country">
+	<call buildCountries(vcountry)>
+    </SELECT>
+  </td>
+</tr>
+<tr>
+  <td  class="control_align_center" colspan="2">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/generate_new_ssl_cert.html  -->

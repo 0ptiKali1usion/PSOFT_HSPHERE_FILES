@@ -1,0 +1,69 @@
+<!-- BEGIN ./control/unixuser/edit_crontab.html -->
+<assign crontab=account.getResource(request.rid)>
+<assign res=crontab.reload()>
+<if (crontab.mail_to=="") || (crontab.mail_to=="root@localhost")>
+    <assign mail_to=account.ci.email>
+<else>
+    <assign mail_to=crontab.mail_to>
+</if>
+<yafv s_unixuser>
+<call draw_tooltip()>
+<form name="f_change"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/unixuser/change_crontab.sbm">
+
+<call draw_table_header("8", lang.quick.quickview.cron)>
+
+<tr>
+   <td class="control_align_center" width="1" nowrap><call draw_tt_help(crontab,"","")></td>
+   <td colspan="7"><call draw_label(lang.unixuser.mailto)>&nbsp;<input name="mail_to" type="input" value="${mail_to}" check="vEmail"></td>
+</tr>
+<tr>
+ <td class="control_header" width="1" nowrap><call draw_TT_header()></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.min)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.hour)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.dofm)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.month)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.dofw)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.unixuser.cron.cmd)><call draw_help("user-ftpuser-crontab","")></td>
+ <td class="control_header" nowrap><call draw_header(lang.label.del)></td>
+</tr>
+
+<assign count="0">
+<list crontab.cron_list as job>
+<tr>
+   <td  class="control_align_center" width="1" nowrap><call draw_tt_help(crontab,"","")></td>
+   <assign num=job.num>
+	<td nowrap><input name="minute_${num}" type="text" size="3" value="${job.minute}" check="vCronField"></td>
+	<td nowrap><input name="hour_${num}" type="text" size="3" value="${job.hour}" check="vCronField"></td>
+	<td nowrap><input name="day_of_month_${num}" type="text" size="3" value="${job.day_of_month}" check="vCronField"></td>
+	<td nowrap><input name="month_${num}" type="text" size="3" value="${job.month}" check="vCronField"></td>
+	<td nowrap><input name="day_of_week_${num}" type="text" size="3" value="${job.day_of_week}" check="vCronField"></td>
+	<td nowrap><input name="job_${num}" type="text" size="20" value="${job.job}"></td>
+	<td nowrap><input type="checkbox" name="delete_${num}"></td>
+</tr>
+<assign count=toolbox.add(count,"1")>
+</list>
+
+<tr>
+   <td class="control_align_center" width="1" nowrap><call draw_tt_help(crontab,"","")></td>
+   <td nowrap><input name="minute_new" type="text" size="3" check="vCronFieldOpt(this,job_new)"></td>
+   <td nowrap><input name="hour_new" type="text" size="3" check="vCronFieldOpt(this,job_new)"></td>
+   <td nowrap><input name="day_of_month_new" type="text" size="3" check="vCronFieldOpt(this,job_new)"></td>
+   <td nowrap><input name="month_new" type="text" size="3" check="vCronFieldOpt(this,job_new)"></td>
+   <td nowrap><input name="day_of_week_new" type="text" size="3" check="vCronFieldOpt(this,job_new)"></td>
+   <td nowrap><input name="job_new" type="text" size="20" onChange="checkForm(this.form)"></td>
+   <td nowrap><call draw_label(lang.label.new)></td>
+</tr>
+
+<tr>
+<td  colspan="8" class="control_align_right" ><input type="submit"></td>
+</tr>
+
+
+<call draw_table_footer()>
+<input type="hidden" name="count" value="${count}">
+</form>
+<!--  END ./control/unixuser/edit_crontab.html -->

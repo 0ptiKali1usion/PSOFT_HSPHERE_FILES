@@ -1,0 +1,31 @@
+
+<center>Indexes</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The index page is the first page entered on your site. If for any reason it is corrupted or missing, the system can automatically generate a substitute index page. Switch the radio buttons to enable or disable this option.<br>
+<br>
+When pointed at a directory, the server looks for a file called index.html; if found, that is what is sent back. If it's pointed at a directory that doesn't have an index.html, the server will perform "<i>fancy indexing</i>" and return the following HTML: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Set the title and main header to "Index of dir" <br>
+&nbsp;&nbsp;&nbsp;&nbsp;- The header file for this directory, if any<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- A list of the files in this directory.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Each file name is a link to 
+the file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- The first file is "Parent Directory".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Last modification date, size, 
+and an icon indicating the type of file are included.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- The readme file for this directory, if any.<br>
+<br>
+Indexing is typically used to make a set of files available to the browser. Of 
+course, you could just provide index.html. But you may have a large number of 
+files in your directory, and writing your own index would be time-consuming. Also, 
+one advantage of directory indexing is that it's done on-the-fly. If you have 
+a directory whose contents change often, you probably don't want to keep updating 
+index.html. Directory indexing will list the contents of the directory when the 
+request is made. Actually, you don't have to do anything and the server will return 
+a list of your files formatted as above. If you just want people to be able to 
+get at your files, that will work fine. However, if you want to provide some context 
+for the user, you should probably include header and/or readme files. Those files 
+should be named HEADER.html and README.html, and reside in the directory that 
+you want indexed. In the header file, you can set both the and elements to provide 
+a more meaningful description of the directory. The readme file is a good place 
+to give an overview of the files in your directory. 

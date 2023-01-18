@@ -1,0 +1,208 @@
+<!-- BEGIN ./email/iris_mlist_messages.html -->
+<assign mdomain = account.getResource(request.rid)>
+<assign mlist = account.getResource(request.uid)>
+<assign messages = mlist.getIrisMessages()>
+<call draw_tooltip()>
+
+<call prepare_table_header("3", lang.email.mlists2incl.header)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?template_name=email/list2.html&md_id="+mdomain+"&mo_id="+mlist+"&sc_page="+request.sc_page, mlist.email+"@"+mdomain.name)>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td colspan="2"><call draw_header(lang.email.mlist_message.confirm_subscribe_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.confirm_subscribe)></td>
+  <if messages["confirm-subscribe"]>
+    <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=confirm-subscribe&text_value="+toolbox.url_escape(messages["confirm-subscribe"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.confirm_subscribe+"&title_sh="+lang.email.mlist_message.confirm_subscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=confirm-subscribe&mode=delete&template_name=submit/email/iris_mlist_message.sbm&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+    <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=confirm-subscribe&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.confirm_subscribe+"&title_sh="+lang.email.mlist_message.confirm_subscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.confirm_unsubscribe_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.confirm_unsubscribe)></td>
+  <if messages["confirm-unsubscribe"]>
+    <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=confirm-unsubscribe&text_value="+toolbox.url_escape(messages["confirm-unsubscribe"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.confirm_unsubscribe+"&title_sh="+lang.email.mlist_message.confirm_unsubscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=confirm-unsubscribe&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+    <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=confirm-unsubscribe&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.confirm_unsubscribe+"&title_sh="+lang.email.mlist_message.confirm_unsubscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_already_subscribed_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_already_subscribed)></td>
+  <if messages["err-already-subscribed"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-already-subscribed&text_value="+toolbox.url_escape(messages["err-already-subscribed"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_already_subscribed+"&title_sh="+lang.email.mlist_message.err_already_subscribed_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-already-subscribed&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-already-subscribed&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_already_subscribed+"&title_sh="+lang.email.mlist_message.err_already_subscribed_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_members_only_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_members_only)></td>
+  <if messages["err-members-only"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-members-only&text_value="+toolbox.url_escape(messages["err-members-only"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_members_only+"&title_sh="+lang.email.mlist_message.err_members_only_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-members-only&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-members-only&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_members_only+"&title_sh="+lang.email.mlist_message.err_members_only_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_name_missing_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_name_missing)></td>
+  <if messages["err-name-missing"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-name-missing&text_value="+toolbox.url_escape(messages["err-name-missing"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_name_missing+"&title_sh="+lang.email.mlist_message.err_name_missing_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-name-missing&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-name-missing&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_name_missing+"&title_sh="+lang.email.mlist_message.err_name_missing_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_no_commands_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_no_commands)></td>
+  <if messages["err-no-commands"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-no-commands&text_value="+toolbox.url_escape(messages["err-no-commands"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_no_commands+"&title_sh="+lang.email.mlist_message.err_no_commands_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-no-commands&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-no-commands&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_no_commands+"&title_sh="+lang.email.mlist_message.err_no_commands_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_not_subscribed_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_not_subscribed)></td>
+  <if messages["err-not-subscribed"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-not-subscribed&text_value="+toolbox.url_escape(messages["err-not-subscribed"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_not_subscribed+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-not-subscribed&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)>
+</td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-not-subscribed&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_not_subscribed+"&title_sh="+lang.email.mlist_message.err_not_subscribed+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_private_list_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_private_list)></td>
+  <if messages["err-private-list"]>
+  <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-private-list&text_value="+toolbox.url_escape(messages["err-private-list"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_private_list+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-private-list&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-private-list&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_private_list+"&title_sh="+lang.email.mlist_message.err_private_list_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_sub_confirm_bad_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_sub_confirm_bad)></td>
+  <if messages["err-sub-confirm-bad"]>
+  <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-sub-confirm-bad&text_value="+toolbox.url_escape(messages["err-sub-confirm-bad"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_sub_confirm_bad+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-sub-confirm-bad&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)>
+</td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-sub-confirm-bad&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_sub_confirm_bad+"&title_sh="+lang.email.mlist_message.err_sub_confirm_bad_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.err_unsub_confirm_bad_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.err_unsub_confirm_bad)></td>
+  <if messages["err-unsub-confirm-bad"]>
+  <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-unsub-confirm-bad&text_value="+toolbox.url_escape(messages["err-unsub-confirm-bad"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_unsub_confirm_bad+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=err-unsub-confirm-bad&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)>
+</td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=err-unsub-confirm-bad&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.err_unsub_confirm_bad+"&title_sh="+lang.email.mlist_message.err_unsub_confirm_bad_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.farewell_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.farewell)></td>
+  <if messages["farewell"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=farewell&text_value="+toolbox.url_escape(messages["farewell"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.farewell+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=farewell&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=farewell&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.farewell+"&title_sh"+lang.email.mlist_message.farewell_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.help_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.help)></td>
+  <if messages["help"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help&text_value="+toolbox.url_escape(messages["help"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=help&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help+"&title_sh="+lang.email.mlist_message.help_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.helpblurb_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.helpblurb)></td>
+  <if messages["helpblurb"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=helpblurb&text_value="+toolbox.url_escape(messages["helpblurb"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.helpblurb+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=helpblurb&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=helpblurb&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.helpblurb+"&title_sh="+lang.email.mlist_message.helpblurb_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.help_commands_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.help_commands)></td>
+  <if messages["help-commands"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-commands&text_value="+toolbox.url_escape(messages["help-commands"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_commands+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=help-commands&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-commands&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_commands+"&title_sh"+lang.email.mlist_message.help_commands_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.help_subscribe_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.help_subscribe)></td>
+  <if messages["help-subscribe"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-subscribe&text_value="+toolbox.url_escape(messages["help-subscribe"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_subscribe+"&title_sh="+lang.email.mlist_message.help_subscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=help-subscribe&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-subscribe&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_subscribe+"&title_sh="+lang.email.mlist_message.help_subscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.help_unsubscribe_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.help_unsubscribe)></td>
+  <if messages["help-unsubscribe"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-unsubscribe&text_value="+toolbox.url_escape(messages["help-unsubscribe"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_unsubscribe+"&title_sh="+lang.email.mlist_message.help_unsubscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=help-unsubscribe&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-unsubscribe&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_unsubscribe+"&title_sh="+lang.email.mlist_message.help_unsubscribe_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.help_introduction_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.help_introduction)></td>
+  <if messages["help-introduction"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-introduction&text_value="+toolbox.url_escape(messages["help-introduction"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_introduction+"&title_sh="+lang.email.mlist_message.help_introduction_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=help-introduction&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=help-introduction&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.help_introduction+"&title=_sh"+lang.email.mlist_message.help_introduction_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.message_footer_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.message_footer)></td>
+  <if messages["message-footer"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=message-footer&text_value="+toolbox.url_escape(messages["message-footer"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.message_footer+"&title_sh="+lang.email.mlist_message.message_footer_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=message-footer&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=message-footer&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.message_footer+"&title_sh="+lang.email.mlist_message.message_footer_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.message_header_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.message_header)></td>
+  <if messages["message-header"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=message-header&text_value="+toolbox.url_escape(messages["message-header"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.message_header+"&title_sh="+lang.email.mlist_message.message_header_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=message-header&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=message-header&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.message_header+"&title_sh="+lang.email.mlist_message.message_header_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.subject_prepend_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.subject_prepend)></td>
+  <if messages["subject-prepend"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=subject-prepend&text_value="+toolbox.url_escape(messages["subject-prepend"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.subject_prepend+"&title_sh="+lang.email.mlist_message.subject_prepend_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=subject-prepend&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=subject-prepend&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.subject_prepend+"&title_sh="+lang.email.mlist_message.subject_prepend_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+<tr>
+<td colspan="2"><call draw_header(lang.email.mlist_message.welcome_sh)>&nbsp;&nbsp;<call draw_label(lang.email.mlist_message.welcome)></td>
+  <if messages["welcome"]>
+   <td><call draw_edit(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=welcome&text_value="+toolbox.url_escape(messages["welcome"])+"&mode=edit&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.welcome+"&title_sh="+lang.email.mlist_message.welcome_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_edit)><call draw_delete(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&text_name=welcomed&mode=delete&template_name=submit/email/iris_mlist_message.sbm"+"&stemplate="+template+"&ftemplate="+template+"&sc_page="+request.sc_page, lang.email.mlist_message_del)></td>
+  <else>
+   <td><call draw_add(config.CLIENT_CP_URL+"?uid="+mlist+"&rid="+mdomain+"&template_name=email/iris_mlist_messages_edit.html&text_name=welcome&text_value=&mode=add&stemplate="+template+"&mail_domain="+mdomain.name+"&mail_list="+mlist.email+"&title="+lang.email.mlist_message.welcome+"&title_sh="+lang.email.mlist_message.welcome_sh+"&sc_page="+request.sc_page, lang.email.mlist_message_add)></td>
+  </if>
+</tr>
+
+
+
+<call draw_table_footer()>
+<!--  END ./email/iris_mlist_messages.html  -->

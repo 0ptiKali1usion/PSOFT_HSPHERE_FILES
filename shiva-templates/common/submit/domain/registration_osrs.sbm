@@ -1,0 +1,25 @@
+<!-- BEGIN ./domain/registration_osrs.sbm  -->
+<assign name = request.domain_name+"."+request.tld>
+<assign result=yafv.common.s_domain.vOsrs_Domain_Name(lang.label.osrs_domain_name,name)>
+<if result.status=="OK">
+    <assign result=toolbox.lookup(name)>
+    <switch result>
+    <case "0">
+	<assign res=session.addMessage(toolbox.compose(
+			lang.msg.domain_name_taken, name))>
+	<break>
+    <case "1">
+	<assign success="1">
+	<break>
+    <default>
+	<assign res=session.addMessage(result.msg)>
+    </switch>
+<else>
+    <list result.msgs as mes><assign res=session.addMessage(mes)></list>
+</if>
+<if success=="1">
+ <include "domain/domain_lookup_opensrs.html">
+<else>
+ <include request.ftemplate>
+</if>
+<!--  END ./domain/registration_osrs.sbm  -->

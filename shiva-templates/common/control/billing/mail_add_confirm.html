@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/billing/mail_add_confirm.html  -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_mail" accept-charset="UTF-8">
+
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="control/email/load_control.html">
+<input type="hidden" name="next_template" value="submit/misc/add.sbm">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="rtype" value="${request.rtype}">
+<input type="hidden" name="mo_id" value="${request.mo_id}">
+
+<assign stype=account.plan.getResourceType(type).description>
+<assign message=toolbox.compose(lang.billing.add_msg1,stype)>
+<if price.setup!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(price.setup))>
+</if>
+<if price.recurrent!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg3,toolbox.currency(price.recurrent))>
+</if>
+<if price.recurrentAll!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg4,toolbox.currency(price.recurrentAll))>
+</if>
+<call draw_warn_invoice_with_charge_info(message,price,"","","f_add_mail")>
+</form>
+<!--  END ./control/billing/mail_add_confirm.html  -->

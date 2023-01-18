@@ -1,0 +1,21 @@
+<center>Phone Number</center>
+<hr>
+Phone number format depends on the country you've chosen.<br>
+<br>
+<ul>
+<li>For North America:<br>either <b><i>NXX-NXX-XXXX/YYYY</i></b><br>
+or <b><i>+1.ZZZZZZZZZZ/YYYY</i></b>
+</li>
+<br>
+<li>For other countries:<br>
+<b><i>+CCC.ZZZZZZZZZZ/YYYY</i></b> ,</li>
+</ul>where:<br>
+<b><i>N</i></b> is a digit 2 to 9,<br>
+<b><i>X</i></b> is any digit,<br>
+<b><i>YYYY</i></b> is an optional extension <nobr>(up to 4 digits)</nobr>,<br>
+<b><i>CCC</i></b> is a country code <nobr>(up to 3 digits)</nobr>,<br>
+<b><i>ZZZZZZZZZZ</i></b> is a phone number inside the country <nobr>.</nobr><br>
+<br><b>Examples:</b>
+<br>800-234-5678&nbsp;&nbsp;(USA)
+<br>+1.8002345678&nbsp;&nbsp;(USA alternative)
+<br>+44.2081234567&nbsp;&nbsp;(UK)

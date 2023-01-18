@@ -1,0 +1,57 @@
+<!-- BEGIN ./control/admin/sshmanager.html  -->
+<call draw_tooltip()>
+
+
+<if account.getChild("reseller_su")>
+<assign sshmanager=account.getChild("sshmanager")>
+<if !sshmanager><assign sshmanager = account.addChild("sshmanager", "")></if>
+</if>
+
+<if sshmanager>
+
+<call draw_table_header("4", lang.planeditor.adminedit.shellmanager)>
+
+
+<tr>
+<td colspan="3" class="control_align_center"><call draw_label(lang.admin.sshmanager.notifications)></td>
+<td class="control_align_center"><call draw_state(settings.sshnotifications=="1", config.CLIENT_CP_URL+"?template_name=submit/admin/sshnotifications.sbm&act=disable&stemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/admin/sshnotifications.sbm&act=enable&stemplate="+template)></td>
+</tr>
+
+<tr>
+<td colspan="4" class="control_header_align_center"><call draw_header(lang.admin.sshmanager.requested)></td>
+</tr>
+
+<tr >
+<td  class="control_align_center"><call draw_label_bold(lang.label.username)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.admin.accid)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.admin.date)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.label.action)></td>
+</tr>
+<assign ssh_requests =  sshmanager.getRequests("requested")>
+<list ssh_requests as ssh_req>
+<tr >
+<td class="control_align_center"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+ssh_req.accountId, "PREVIEW", ssh_req.username)></td>
+<td class="control_align_center"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+ssh_req.accountId, "PREVIEW", ssh_req.accountId)></td>
+<td class="control_align_center"><call draw_label(ssh_req.date)></td>
+<td class="control_align_center">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/accept_req.sbm&aid="+ssh_req.accountId+"&stemplate="+template+"&ftemplate="+template, lang.admin.sshmanager.allow)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=/admin/sshrefuse.html&aid="+ssh_req.accountId+"&stemplate="+template, lang.admin.sshmanager.prohibit)>
+</td>
+</tr></list>
+<tr>
+<td colspan="4" class="control_header_align_center"><call draw_header(lang.admin.sshmanager.enabled)></td>
+</tr>
+<assign ssh_requests =  sshmanager.getRequests("accepted")>
+<list ssh_requests as ssh_req>
+<tr >
+<td class="control_align_center"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+ssh_req.accountId, "PREVIEW", ssh_req.username)></td>
+<td class="control_align_center"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+ssh_req.accountId, "PREWIEW", ssh_req.accountId)></td>
+<td class="control_align_center"><call draw_label(ssh_req.date)></td>
+<td class="control_align_center">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/disable_sh_access.sbm&aid="+ssh_req.accountId+"&stemplate="+template+"&ftemplate="+template, lang.admin.sshmanager.delete)>
+</td>
+</tr></list>
+
+<call draw_table_footer()>
+</if>
+<!-- END ./control/admin/sshmanager.html  -->

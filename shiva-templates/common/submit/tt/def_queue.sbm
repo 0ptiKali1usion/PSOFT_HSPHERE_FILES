@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/tt/def_queue.sbm  -->
+<assign ttadm=account.getChild("ttadmin")>
+<assign queue=ttadm.getQueue(request.quid)>
+<assign result = queue.setDef("1")>
+  <if result.status=="OK">
+     <assign success="1">
+  <else>
+      <assign res=session.addMessage(result.msg)>
+  </if>
+<include "tt/config_tt.html">
+
+<!--  END ./submit/tt/def_queue.sbm  -->

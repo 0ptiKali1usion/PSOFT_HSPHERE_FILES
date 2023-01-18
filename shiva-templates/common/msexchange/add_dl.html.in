@@ -1,0 +1,41 @@
+<!--BEGIN: common/msexchange/add_dl.html.in -->
+<include "functions">
+<yafv s_hsphere>
+
+<call START_PAGE("msexchange/add_dl.html", "he-dl")>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.msexchange_adddl)>
+
+<assign bizorg = account.getChild("bizorg")>
+
+<form name="f_adddl" check! action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="msexchange/add_dl.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="msexchange/dl.html">
+<tr><td><call draw_label(lang.label.name)></td>
+<td>
+<input type="text" name="name" value="${request.name}" check="vMBoxName">
+</td></tr>
+
+<assign busers=bizorg.getChildren("bizuser")>
+<if busers>
+<tr><td><call draw_label(lang.msexchange_managed_by)></td>
+
+<td>
+<select name="managedBy">
+<list busers as bizuser>
+<option value="${bizuser.principalName}@${bizuser.domain.name}">${bizuser.displayName} | ${bizuser.principalName}@${bizuser.domain.name}</option>
+</list>
+</td></tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<else>
+   <tr><td colspan="2"  class="control_align_center"><call draw_important_label(lang.label.msexchange_adddl_nousers)></td></tr>
+</if>
+</form>
+
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/add_dl.html.in -->

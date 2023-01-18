@@ -1,0 +1,44 @@
+<!-- BEGIN ./ftp/update_vdir.html.in  -->
+<call draw_tooltip()>
+<yafv s_ftp>
+<form name="f_update_dir" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="template_name" value="submit/ftp/update_vdir_submit.sbm">
+
+<assign ftp=account.getResource(request.rid)>
+<assign vdir=account.getResource(request.uid)>
+
+
+
+
+
+<call draw_table_header("2", lang.ftp.updatevdir.header)>
+
+
+<tr>
+	<td><call draw_label(lang.ftp.dir)></td>
+	<td><call draw_label(vdir.name)></td>
+</tr>
+<tr>
+	<td><call draw_label(lang.ftp.perm)></td>
+	<td><input type="checkbox" name="read" <if vdir.r=="1">checked</if> ><call draw_label(lang.ftp.read)><input type="checkbox" name="write" <if vdir.w=="1">checked</if> ><call draw_label(lang.ftp.write)><input type="checkbox" name="list" <if vdir.l=="1">checked</if> ><call draw_label(lang.ftp.list)><input type="checkbox" name="forall" <if vdir.forAll=="1">checked</if> ><call draw_label(lang.ftp.grant)></td>
+</tr>
+<if vdir.forAll=="0">
+<tr>
+	<td><call draw_label(lang.ftp.updatevdir.authusrs)></td>
+	<td>
+	<list vdir.userList() as vuser><call draw_link(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vuser+"&template_name=ftp/update_vuser.html"+"&stemplate=ftp/ftp_vhost.html"+"&ftemplate="+request.ftemplate,vuser.vlogin)><call draw_change(config.CLIENT_CP_URL+"?rid="+ftp+"&uid="+vuser+"&template_name=ftp/update_vuser.html"+"&stemplate=ftp/ftp_vhost.html"+"&ftemplate="+request.ftemplate, lang.ftp.updatevdir.changepsw)>&nbsp;<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/ftp/del_vdir_perm_submit.sbm"+"&user_rid="+vuser+"&rid="+ftp+"&uid="+vdir+"&stemplate="+template+"&ftemplate="+template, lang.ftp.updatevdir.delauth)><br>
+	</list>
+	<call draw_add(config.CLIENT_CP_URL+"?template_name=ftp/add_vdir_perm.html"+"&rid="+ftp+"&uid="+vdir+"&stemplate="+template+"&ftemplate="+template, lang.ftp.updatevdir.authusr)></td>
+</tr>
+</if>
+<tr>
+	<td  class="control_align_center"  colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/update_vdir.html.in  -->

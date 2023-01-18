@@ -1,0 +1,8 @@
+<!-- BEGIN ./submit/admin/settings/login_texts.sbm -->
+<assign admin = account.getChild("admin")>
+<call savel("welcome_message")>
+<call savel("welcome_text")> 
+<call savel("welcome_services")> 
+<include request.stemplate>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/login_texts.sbm -->

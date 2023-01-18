@@ -1,0 +1,34 @@
+<!-- BEGIN ./control/MSSQL/logins.html  -->
+
+<assign mssql=account.getChild("MSSQL")>
+<call draw_tooltip()>
+
+
+
+  
+
+<call draw_table_header("3", lang.mssql.logins.logins)>
+<tr>
+  <td colspan="3"><call draw_label(lang.mssql.logins.describe)></td>
+  </tr>
+  <tr>
+  <td nowrap WIDTH="1%" class="control_header">&nbsp;</td>
+  <td class="control_header"><call draw_header(lang.label.login)></td>
+  <td nowrap WIDTH="1%" class="control_header"><call draw_header(lang.label.control)></td>
+  </tr>
+  <if mssql>
+    <assign logins=mssql.getChildren("MSSQLLogin")>
+    <list logins as login>
+    <tr>
+  <td nowrap WIDTH="1%"><call draw_tt_link(login,"")></td>
+  <td><call draw_label(login.name)></td>
+  <td class="control_align_center" nowrap WIDTH="1%"><call draw_change(config.CLIENT_CP_URL+"?template_name=MSSQL/change-login-password.html"+"&login="+login+"&stemplate="+template+"&ftemplate="+template, lang.mssql.logins.changepsw)><call disableNewWarn(mssql,login)></td>
+    </tr>
+    </list>
+    <tr>
+  <td  class="control_align_right" colspan="3"><call draw_add(config.CLIENT_CP_URL+"?template_name=MSSQL/mssql-create-login.html", lang.mssql.logins.addlogin)></td>
+    </tr>
+  </if>
+
+<call draw_table_footer()>
+<!--  END ./control/MSSQL/logins.html  -->

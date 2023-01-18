@@ -1,0 +1,148 @@
+<!-- BEGIN ./common/control/sumbill/invoice_no_taxes.html  -->
+<assign bill = user.getBill(request.bill_id,request.account_id)>
+<assign taxes = bill.taxes>
+
+<list toolbox.countries as curcountry>
+    <if settings.country==curcountry.code>
+	    <assign adm_country = lang[curcountry.name]>
+    </if>
+    <if ci.country==curcountry.code>
+	    <assign user_country = lang[curcountry.name]>
+    </if>
+</list>
+
+<HTML>
+<HEAD>
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${user.login} (${account.plan.description})</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+</HEAD>
+
+<body>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="control_align_center">
+<tr >
+	<td colspan="5">
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr>
+  <td colspan="2" class="control_align_center">${lang.sumbill.invoice.header}<if !closed>&nbsp;${lang.sumbill.invoice.open}</if></td>
+</tr>
+<tr>
+  <td   valign="bottom">${settings.name}</td>
+  <td class="control_align_right">${lang.sumbill.invoice.duedate}&nbsp;${period}<if !closed><br>${lang.sumbill.invoice.totaldue}&nbsp;${toolbox.currency(bill.balance)}</if></td>
+</tr>
+<tr>
+  <td>${settings.address}</td>
+  <td class="control_align_right">${lang.sumbill.invoice.invid} ${bill.id}</td>
+</tr>
+<if settings.state=="" || settings.state=="NA">
+    <assign adm_post_info = settings.city + "&nbsp;&nbsp;" + settings.zip>
+<else>
+    <assign adm_post_info = settings.city + ", " + settings.state + "&nbsp;&nbsp;" + settings.zip>
+</if>
+<tr>
+  <td>${adm_post_info}</td>
+  <td class="control_align_right">${lang.sumbill.invoice.accid} ${request.account_id}</td>
+</tr>
+<tr>
+  <td>${adm_country}</td>
+  <td class="control_align_right">${lang.sumbill.invoice.uname}&nbsp;${ci.first_name}&nbsp;${ci.last_name}</td>
+</tr>
+<if settings.fax!="" && settings.fax!="NA">
+    <assign fax_info = ", " + lang.sumbill.invoice.fax + " " + settings.fax>
+</if>
+<tr>
+  <td>${lang.sumbill.invoice.phone} ${settings.phone} ${fax_info}</td>
+  <td class="control_align_right"></td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${ci.first_name} ${ci.last_name}</td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${ci.company}</td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${ci.address1}</td>
+</tr>
+<if ci.state=="" || ci.state=="NA">
+    <assign post_info = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ci.city + "&nbsp;&nbsp;"
+    + ci.postal_code>
+<else>
+    <assign post_info = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ci.city + ", " + ci.state + "&nbsp;&nbsp;"
+    + ci.postal_code>
+</if>
+
+<tr>
+  <td colspan="2">${post_info}</td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${user_country}</td>
+</tr>
+<tr>
+  <td colspan="2">&nbsp;</td>
+</tr>
+<tr><td colspan="2">
+<if bill.closed>
+  ${lang.billview.show.closed_statement_header(bill.desc_short, bill.opened("MEDIUM"), bill.closed("MEDIUM"))}
+<else>
+  ${lang.billview.show.open_statement_header(bill.desc_short, bill.opened("MEDIUM"))}
+</if>
+<if account.suspended=="1"><assign path="suspended"><else><assign path="sumbill"></if>
+</td></tr></table></td>
+</tr>
+<tr >
+	<td class="control_align_center" valign="bottom" width="5%">${lang.label.accid}</td>
+        <td class="control_align_center" valign="bottom">${lang.label.plan}</td>
+	<td class="control_align_center" valign="bottom" width="5%">${lang.billview.b_balance}</td>
+	<td class="control_align_center" valign="bottom" width="5%">${lang.billview.changes}</td>
+	<td class="control_align_center" valign="bottom" width="5%">${lang.billview.e_balance}</td>
+</tr>
+<tr >
+	<td  class="control_align_center" valign="bottom">${account.id.id}</td>
+	<td  class="control_align_center" valign="bottom">${account.plan.description}</td>
+	<td   class="control_align_right" valign="bottom" nowrap>${toolbox.displayBalance(bill.start_balance)}</td>
+	<td   class="control_align_right" valign="bottom" nowrap>${toolbox.displayBalance(bill.change)}</td>
+	<td   class="control_align_right" valign="bottom" nowrap><if bill.end_balance>${toolbox.displayBalance(bill.end_balance)}<else>${toolbox.displayBalance(bill.balance)}</if></td>
+</tr>
+<tr >
+<td colspan="5"  ><if bill.closed>${lang.billview.show.closed_statement_activity(account.plan.description, bill.opened("MEDIUM"), bill.closed("MEDIUM"))}<else>${lang.billview.show.open_statement_activity(account.plan.description, bill.opened("MEDIUM"))}</if></td>
+</tr>
+<tr >
+	<td class="control_align_center">${lang.billview.show.date}</td>
+	<td class="control_align_center">${lang.label.descr}</td>
+	<td class="control_align_center">${lang.label.debits}</td>
+	<td class="control_align_center">${lang.label.credits}</td>
+	<td class="control_align_center">${lang.label.balances}</td>
+
+</tr>
+<list bill.entries as entry>
+<if !(entry.amount=="0.0" || entry.amount=="-0.0")>
+<tr bgcolor="${color}">
+        <td class="control_align_center" nowrap>${entry.date("TS_SHORT")}</td>
+        <td>${entry.description}
+           ${entry.note}
+	</td>
+        <td class="control_align_right"><if entry.is_credit>&nbsp;<else>${toolbox.currency(entry.amount)}</if></td>
+        <td class="control_align_right"><if entry.is_credit>${toolbox.currency(entry.amount)}<else>&nbsp;</if></td>
+        <td class="control_align_right" nowrap>${toolbox.displayBalance(entry.balance)}</td>
+</tr>
+</if>
+</list>
+
+<tr >
+<if bill.closed>
+<td colspan="2">${lang.billview.show.statement_footer(bill.closed("MEDIUM"))}</td><td class="control_align_right">${toolbox.currency(bill.debits)}</td><td class="control_align_right">${toolbox.currency(bill.credits)}</td><td class="control_align_right" nowrap>${toolbox.displayBalance(bill.end_balance)}</td>
+<else>
+<td colspan="2">${lang.billview.show.statement_footer(toolbox.now("MEDIUM"))}</td><td class="control_align_right">${toolbox.currency(bill.debits)}</td><td class="control_align_right">${toolbox.currency(bill.credits)}</td><td class="control_align_right" nowrap>${toolbox.displayBalance(bill.balance)}</td>
+</if>
+</tr>
+<tr>
+<td colspan="2" class="control_align_center"><br>${lang.sumbill.invoice.thanks}</td>
+</tr>
+</table>
+</BODY>
+</HTML>
+<!--  END ./common/control/sumbill/invoice_no_taxes.html  -->

@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/admin/settings/tax_options.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.allow_tax_exemption == "1">
+ <call save_v("allow_tax_exemption","1")>
+<else>
+ <call save_v("allow_tax_exemption","")>
+</if>
+<include request.stemplate>
+<function save_v(name, value)><assign res=admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/tax_options.sbm -->
+

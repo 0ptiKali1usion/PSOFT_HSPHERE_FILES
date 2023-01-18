@@ -1,0 +1,11 @@
+<!-- BEGIN submit/admin/set_cc.sbm -->
+<assign c_emails = account.getChild("admin").email_manager>
+<assign result = c_emails.setNoCC(request.tag, request.no_cc)>
+<if result.status == "OK">
+  <assign res=session.addMessage(lang.msg.changes_applied)>
+<else>
+  <assign res=session.addMessage(lang.msg.failed_apply_changes)>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END submit/admin/set_cc.sbm -->

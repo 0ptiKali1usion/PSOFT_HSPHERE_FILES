@@ -1,0 +1,7 @@
+<center> DNS Reseller IPs </center>
+<hr>
+<br>You can host resellers on a shared IP (Service IP) or on dedicated IPs (DNS Reseller IPs).
+Hosting resellers on the Service IP compromizes your transparency as the underlying hosting
+company, but spares IP addresses and helps to get around the operating system limit on the number
+of IPs per one DNS server.
+<br><br> You can allow your reseller to use available DNS Reseller IP in this specific reseller plan. If you don't have enough free dedicated DNS IPs for all resellers, they will be automatically switched to use Service IP. So, before you choose dedicated DNS IP, make sure to add a pool of free DNS IPs for resellers.

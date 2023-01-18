@@ -1,0 +1,35 @@
+<!-- BEGIN ./submit/email/delete_da_spfs.sbm  -->
+
+<if toolbox.gt(dids.size,"0")=="1" || toolbox.gt(request.dids_count,"0")=="1">
+  <if toolbox.gt(dids.size,"0")=="1">
+    <list dids as did>
+      <assign spf=account.getResource(did)>
+      <assign result=spf.delete>
+    </list>
+  <else>
+    <list params as rq_param>
+      <if rq_param.name && (toolbox.startsWith(rq_param.name,"did_")=="1")>
+	<assign spf=account.getResource(rq_param.value)>
+	<assign result=spf.delete>
+      </if>
+    </list> 	
+  </if>
+<else>
+  <assign mail_service=account.getResource(request.mail_service)>
+  <assign result=mail_service.deleteDomainAliasSPFs()>
+</if>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_deleted, lang.label.spfs, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_delete, lang.label.spfs, ""))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/email/delete_da_spfs.sbm  -->

@@ -1,0 +1,4 @@
+<center> Rules Du Jour.</center>
+<hr>
+<br>
+RulesDuJour is a bash script intended to automatically download new versions of custom SpamAssassin rule sets as the authors release new versions.<br>

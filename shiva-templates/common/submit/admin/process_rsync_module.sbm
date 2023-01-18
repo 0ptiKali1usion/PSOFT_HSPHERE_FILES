@@ -1,0 +1,35 @@
+<!-- BEGIN ./common/submit/admin/process_rsync_module.sbm -->
+<assign reseller_su=account.getChild("reseller_su")>
+<assign module = reseller_su.getContentMoveItem(request.cmi_id)>
+<if module.status == "OK"> 
+    <assign result = module.processRsyncModule(request.force, request.launch)>
+    <switch result>
+	<case "1">
+	    <assign res=session.addMessage(toolbox.compose(lang.msg.contentmove.launch_result, 
+						lang.msg.contentmove.launch_result_started))>
+	    <break>
+	<case "2">
+	    <assign res=session.addMessage(toolbox.compose(lang.msg.contentmove.launch_result, 
+						lang.msg.contentmove.launch_result_restarted))>
+	    <break>
+	<case "3">
+	    <assign res=session.addMessage(toolbox.compose(lang.msg.contentmove.launch_result, 
+						lang.msg.contentmove.launch_result_finished))>
+	    <break>
+	<case "4">
+	    <assign res=session.addMessage(lang.msg.contentmove.launch_result_running)>
+	    <break>
+	<default>
+	    <assign res=session.addMessage(toolbox.compose(lang.msg.contentmove.launch_result, 
+						lang.msg.contentmove.launch_result_failed))>
+    </switch>
+<else>
+    <assign failure="1">
+    <assign res=session.addMessage(lang.msg.contentmove.failed_load_module)>
+</if>
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./common/submit/admin/process_rsync_module.sbm -->

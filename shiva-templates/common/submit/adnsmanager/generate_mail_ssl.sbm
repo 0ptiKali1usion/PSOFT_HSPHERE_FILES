@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/adnsmanager/generate_mail_ssl.sbm  -->
+<assign result=yafv.checkall(
+  yafv.common.s_domain.vWildCardDomain(lang.label.site_name,request.site),
+  yafv.common.s_domain.vEmail(lang.label.email,request.email),
+  yafv.common.s_domain.vOrganReq(lang.label.organization,request.organization),
+  yafv.common.s_domain.vOrganUnit(lang.label.org_unit,request.organ_unit),
+  yafv.common.s_domain.vLocality(lang.label.locality,request.locality) )>
+<if result.status=="OK">
+  <assign state_name="">
+  <if request.state2><assign state_name=request.state2></if>
+  <if !state_name && (request.state=="NA")><assign state_name=request.state></if>
+  <if !state_name><assign state_name=toolbox.statesCanada[request.state]></if>
+  <if !state_name><assign state_name=toolbox.states[request.state]></if>
+  <assign ssl = toolbox.generateSSL(request.country, state_name, request.locality, request.organization, request.organ_unit, request.site, request.email)>
+  <if !ssl>
+   <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_generate, lang.label.ssl_certificate, request.ext))>
+   <assign failure="1">
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+  <assign vemail=toolbox.html_encode(request.email)>
+  <assign vorganization=toolbox.html_encode(request.organization)>
+  <assign vorgan_unit=toolbox.html_encode(request.organ_unit)>
+  <assign vlocality=toolbox.html_encode(request.locality)>
+  <assign vcountry=request.country>
+  <assign vstate=request.state>
+  <assign vstate2=request.state2>
+  <include request.ftemplate>
+<else>
+ <include "adnsmanager/generate_new_mail_ssl_cert_result.html">
+</if>
+<!--  END ./submit/adnsmanager/generate_mail_ssl.sbm  -->

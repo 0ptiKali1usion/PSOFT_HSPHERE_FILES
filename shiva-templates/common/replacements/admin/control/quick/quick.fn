@@ -1,0 +1,90 @@
+<!-- BEGIN ./common/control/quick/quick.fn  --><compress>
+<function prepare_icon(icon_id)><compress>
+<assign s__CurIcon = design.icon(icon_id)>
+<assign s__CurImg = design.icon_image(icon_id)>
+<if s__CurImg && design.isIconDrawable(icon_id)>
+  <assign s__CurImgFile = IMG_PREFIX + s__CurImg.file>
+  <if (s__CurIcon.demo_available) && ((account.plan.values["_EMULATION_MODE"] == "1") || (config.EMULATION_MODE == "TRUE"))>
+    <assign q__PREP_ICON = "<a href=\"#\" onClick=\"alert('"+lang.label.demo_restrictions+"');return false\">"
+        + "<IMG SRC=\"" + s__CurImgFile + "\" WIDTH=\"" + s__CurImg.width + "\" HEIGHT=\""
+        + s__CurImg.height + "\" ALT=\"" + lang[s__CurIcon.tip]
+        + "\" BORDER=\"0\"><br><font class=\"quick_icon\" color=\""
+        + design.color("text_color") + "\">" + lang[s__CurIcon.label] + "</font></a>">
+  <else> 
+    <if s__CurIcon.new_window>
+      <assign q__PREP_ICON = "<a href=\"" + config.CLIENT_CP_URL + "?"
+        + s__CurIcon.url_param + "&stemplate=" + template + "\" target=\"_blank\"><IMG SRC=\""
+        + s__CurImgFile + "\" WIDTH=\"" + s__CurImg.width + "\" HEIGHT=\""
+        + s__CurImg.height + "\" ALT=\"" + lang[s__CurIcon.tip]
+        + "\" BORDER=\"0\"><br><font class=\"quick_icon\" color=\""
+        + design.color("text_color") + "\">" + lang[s__CurIcon.label] + "</font></a>">
+    <else>
+      <assign q__PREP_ICON = "<a href=\"" + config.CLIENT_CP_URL + "?" 
+	+ s__CurIcon.url_param + "&stemplate=" + template + "\"><IMG SRC=\"" 
+	+ s__CurImgFile + "\" WIDTH=\""	+ s__CurImg.width + "\" HEIGHT=\"" 
+	+ s__CurImg.height + "\" ALT=\"" + lang[s__CurIcon.tip] 
+	+ "\" BORDER=\"0\"><br><font class=\"quick_icon\" color=\""
+	+ design.color("text_color") + "\">" + lang[s__CurIcon.label] + "</font></a>">
+    </if>
+  </if>
+<else>
+  <assign q__PREP_ICON = "">
+</if>
+</compress></function>
+
+<function draw_empty_tds(number, td_width)><compress>
+<if toolbox.le(number, "0") != "1">
+<list toolbox.counter as c__v>
+<TD WIDTH="${td_width}"><call draw_spacer("1", "1")></TD>
+<if toolbox.le(number, "1") == "1">
+ <assign res = c__v.stop>
+<else>
+ <assign number = toolbox.sub(number, "1")>
+</if>
+</list>
+</if>
+</compress></function>
+
+<function draw_icon_rows(columns)>
+  <assign td_width = toolbox.div("100", columns) + "%">
+  <assign col_counter = columns>
+  <assign icons_were_drawn = "">
+  <assign icon_group_hash = design.icon_group_hash>
+  <list design.icon_group_list as group_id><compress>
+    <assign curGroup = icon_group_hash[group_id]>
+    <assign q__GROUP_HEADER = "<TR><TD COLSPAN=\""+columns+"\"><font class=\"quick_header\" color=\""+design.color("text_color")+"\"><U><B>"+lang[curGroup.label]+"</B></U></font></TD></TR>">
+    <assign col_counter = columns>
+    <assign q__ALL_PREP_ICONS = "">
+    <list curGroup.group as icon_id>
+      <call prepare_icon(icon_id)>
+      <if q__PREP_ICON>
+        <if col_counter == columns><assign q__ALL_PREP_ICONS = q__ALL_PREP_ICONS + "<TR>"></if>
+        <assign q__ALL_PREP_ICONS = q__ALL_PREP_ICONS + "<TD WIDTH=\""+td_width+"\" CLASS=\"inner_control_align_center\" VALIGN=\"top\">"+q__PREP_ICON+"</TD>">
+        <if toolbox.le(col_counter, "1") == "1"><assign q__ALL_PREP_ICONS = q__ALL_PREP_ICONS + "</TR><TR><TD COLSPAN=\"" + columns + "\"><IMG SRC=\"" + SPACER_IMAGE+ "\" HEIGHT=\"10\" WIDTH=\"1\"></TD></TR>">
+          <assign col_counter = columns>
+        <else>
+          <assign col_counter = toolbox.sub(col_counter, "1")>
+        </if>
+      </if>
+    </list></compress>
+    <if q__ALL_PREP_ICONS>
+        ${q__GROUP_HEADER}
+	<!--TR><TD COLSPAN="${columns}"><call draw_spacer("1","1")></TD></TR-->
+        ${q__ALL_PREP_ICONS}<if col_counter != columns><call draw_empty_tds(col_counter, td_width)></if></TR>
+        <TR><TD COLSPAN="${columns}"><call draw_spacer("1","5")></TD></TR>
+    </if>
+  </list>
+</function>
+
+<function draw_icon(icon_id)>
+<call prepare_icon(icon_id)>
+${q__PREP_ICON}
+</function>
+
+<function draw_icon_table()>
+<table width="100%" class="inner_control">
+<call draw_icon_rows("7")>
+</table>
+</function>
+
+</compress><!-- END ./common/control/quck/quick.fn  -->

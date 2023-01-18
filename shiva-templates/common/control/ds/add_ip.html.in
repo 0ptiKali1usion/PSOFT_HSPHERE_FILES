@@ -1,0 +1,50 @@
+<!-- BEGIN ./control/ds/add_ip.html -->
+<call draw_tooltip()>
+<yafv s_admin>
+<call draw_table_header("2", lang.ds.add_ip_header)>
+<form action="${config.CLIENT_CP_URL}" name="f_add_ip" method="POST" check! accept-charset="UTF-8">
+<tr>
+<td width="1%" nowrap><call draw_tt_help(domain,help_id,"")></td>
+<td ><call draw_label(lang.ds.add_ip_text)></td>
+</tr>
+<tr>
+<td width="1%" nowrap>&nbsp;</td>
+<td>
+  <table class="inner_control" width="100%">
+    <tr>
+      <td><call draw_label(lang.ds.name)></td>
+      <td>
+          <select name="ds_id">
+            <assign ds_servers = account.getChildren("ds")>
+            <list ds_servers as ds>
+            <if ds.id == request.ds_id><assign vChecked = "SELECTED"><else><assign vChecked = ""></if>
+            <option ${vChecked} value="${ds}">${ds.name}
+            </list>
+          </select>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+
+  <tr>
+    <td><call draw_label(lang.ds.add_ip_ipnum)></td>
+    <td><input type="text" name="ip" value="${ip}" label="${lang.ds.add_ip_ipnum}" check="vPositiveIntReq"></td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.ds.add_ip_useip)></td>
+    <td><textarea cols="50" rows="5" name="note"></textarea></td>
+  </tr>
+  </table>
+</td>
+</tr>
+<tr>
+  <td width="1%" nowrap>&nbsp;</td>
+  <td class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/ds/add_ip_request.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+  <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+</form>
+<call draw_table_footer()>
+<!-- END ./control/ds/add_server.html -->

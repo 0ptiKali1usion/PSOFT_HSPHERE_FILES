@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/domain/update_errordoc_submit.sbm  -->
+<assign doc=account.getResource(request.uid)>
+<assign result=yafv.common.s_domain.vHttpURLMessage(lang.label.message_url, request.msg, request.type, doc.code)>
+<if result.status=="OK">
+  <assign result=doc.update(request.msg, request.type)>
+  <if result.status=="OK">
+    <assign success="1">
+  <else>
+    <assign res=session.addMessage(msg)>
+  </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>    
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vtype = toolbox.html_encode(request.type)>
+    <assign vmsg=toolbox.html_encode(request.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/domain/update_errordoc_submit.sbm  -->

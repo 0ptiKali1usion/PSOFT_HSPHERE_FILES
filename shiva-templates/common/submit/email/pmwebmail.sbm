@@ -1,0 +1,39 @@
+<!-- BEGIN ./submit/email/webmail.sbm -->
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+<assign mail_domain=account.getResource(request["mail_domain"])>
+<assign server_name = toolbox.int2ext(mail_domain.parent.extwebmail)>
+<assign email = "postmaster@"+mail_domain.name>
+<if (config.WEB_MAIL=="IMP")>
+<form action="http://${server_name}/horde/imp/redirect.php" method="post" name="implogin" accept-charset="UTF-8">
+<input type="hidden" name="actionID" value="105">
+<input type="hidden" name="mailbox" value="INBOX">
+<input type="hidden" name="imapuser" value="${email}" >
+<input type="hidden" name="pass" value="${mail_domain.password}">
+<input type="hidden" name="smtphost" value="${server_name}">
+<if config.MAIL_PROTOCOL=="imap"><assign mail_type = "imap"><else><assign mail_type = "pop"></if>
+<input type="hidden" name="server" value="${mail_type}">
+<input type="hidden" name="language" value="${toolbox.current_lang}_${toolbox.current_country}">
+</form>
+<script language="javascript">
+document.implogin.submit();
+</script>
+<else>
+
+<assign url="http://"+server_name+"/cgi-bin/sqwebmail">
+<form name="webmail" action="${url}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="username" value="${email}">
+<input type="hidden" name="password" value="${mail_domain.password}">
+</form>
+<script language="javascript">
+document.webmail.submit();
+</script>
+
+</if>
+
+</body>
+</html>
+<!-- END ./submit/email/webmail.sbm -->
+		 

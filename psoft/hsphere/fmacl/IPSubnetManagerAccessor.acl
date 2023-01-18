@@ -1,0 +1,13 @@
+calculateSubnet ar
+calculateSubnetMask ar
+calculateSubnetSlash ar
+getSubnet ar
+saveNewSubnet ar
+getSubnets ar
+splitRange ar
+mergeRanges ar
+assignRange ar
+unassignRange ar
+getRangesByDS ar
+deleteIPSubnet ar
+getAssignedRangeInfo ar

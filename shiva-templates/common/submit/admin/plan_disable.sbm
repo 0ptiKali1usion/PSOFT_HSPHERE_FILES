@@ -1,0 +1,13 @@
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<if request.do=="1">
+    <assign result = plan.enable()>
+<else>
+    <assign result = plan.disable()>
+</if>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if> 

@@ -1,0 +1,30 @@
+<!-- BEGIN ./control/eshops/upgrade.html -->
+<call draw_tooltip()>
+<assign resource_type = account.getResource(request.uid).type>
+
+
+
+<form name="upgrade_database" action="${config.CLIENT_CP_URL}" method="post" target="_blank" accept-charset="UTF-8">
+
+<call draw_table_header("", lang.eshops.upgrade.header)>
+
+<tr>
+<td class="control_align_center"><call draw_label(lang.eshops.upgrade.text)></td>
+</tr>
+<tr>
+<td>
+<input type="hidden" name="template_name" value="submit/eshops/upgrade.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.upgrade_database.submit()", lang.eshops.upgrade_database.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.eshops.upgrade_database.no)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/eshops/upgrade.html -->

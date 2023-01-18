@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/billing/change_info.sbm  -->
+<if (request.bi_id!="0") && (request.bi_id!="-1") && (request.bi_id!="")>
+    <assign result=account.setBillingInfo(request.bi_id)>
+    <if result.status=="OK">
+         <assign success = "1">
+    <else>
+         <assign res=session.addMessage(result.msg)>
+    </if>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/billing/change_info.sbm  -->

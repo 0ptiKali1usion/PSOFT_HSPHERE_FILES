@@ -1,0 +1,10 @@
+<!-- BEGIN ./domain/del_script.sbm  -->
+<assign hosting=account.getResource(request.hosting_id)>
+<assign result=hosting.delScript(request.name)>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/del_script.sbm  -->

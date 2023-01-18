@@ -1,0 +1,35 @@
+<!-- BEGIN ./control/MySQL/change_user_pswd.html.in  -->
+<call draw_tooltip()>
+<assign mysql = account.getChild("MySQL")>
+<assign m_user = account.getResource(request.user_id)>
+<yafv s_mysql>
+<form action="${config.CLIENT_CP_URL}" name="f_adm_user" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/MySQL/change_user_password.sbm">
+<input type="hidden" name="user_id" value="${m_user}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="db_id" value="${request.db_id}">
+<input type="hidden" name="user_name" value="${m_user.name}">
+
+
+
+
+<call draw_table_header("2", lang.mysql.changepsw.header(m_user.name))>
+
+
+
+<tr>
+        <td><call draw_label(lang.mysql.changepsw.psw)></td>
+        <td><input type="password" name="new_password" value="" label="${lang.mysql.changepsw.psw}" check="vPassword1(this, user_name)"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.confirm_psw)></td>
+<td><input type="password" name="new_password1" value="" label="${lang.label.confirm_psw}" check="vPassword2(new_password,this)"></td>
+</tr>
+<tr>
+        <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.change}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/MySQL/change_user_pswd.html.in  --> 

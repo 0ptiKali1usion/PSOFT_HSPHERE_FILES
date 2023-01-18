@@ -1,0 +1,63 @@
+<tr>
+<td colspan="3"><call draw_label_bold(lang.signup.geninfo.header)></td>
+</tr>
+<tr>
+<td ><call draw_label_bold(lang.signup.geninfo.use)></td>
+<td >
+	<input TYPE="radio" VALUE="personal" NAME="user_type" CHECKED>${lang.signup.geninfo.personal} 
+	<input TYPE="radio" VALUE="business" NAME="user_type">${lang.signup.geninfo.business}
+</td>
+</tr>	
+<tr>
+<td ><call draw_label_bold(lang.signup.geninfo.empls)></td>
+<td >
+	<select NAME="list1">
+	   <option SELECTED VALUE="0">_________
+	   <option VALUE="5">${lang.signup.geninfo.emplunder}
+	   <option VALUE="6">6-25
+	   <option VALUE="26">26-100
+	   <option VALUE="101">101-500
+	   <option VALUE="500">${lang.signup.geninfo.ageover}
+	</select>
+</td>
+</tr>	
+<tr>
+<td ><call draw_label_bold(lang.signup.geninfo.age)></td>
+<td >
+	<select NAME="list2">
+	   <option SELECTED VALUE="0">_________
+	   <option VALUE="1">${lang.signup.geninfo.ageunder}
+	   <option VALUE="18">18-24
+	   <option VALUE="25">25-34
+	   <option VALUE="35">35-55
+	   <option VALUE="55">${lang.signup.geninfo.ageover}
+	</select>
+</td>
+</tr>	
+<tr>
+<td ><call draw_label_bold(lang.signup.geninfo.gender)></td>
+<td >
+<select name="Radio2" size="1"><option>____<option>${lang.signup.geninfo.male}<option>${lang.signup.geninfo.female}</select>
+</td>
+</tr>	
+<tr>
+<td  colspan="3">
+<input TYPE="checkbox" VALUE=3 NAME="n1" CHECKED>${lang.signup.geninfo.news}
+</td>
+</tr>	
+<tr>
+<td  colspan="3">
+<input TYPE="checkbox" VALUE=3 NAME="n2" CHECKED>${lang.signup.geninfo.offers}
+</td>
+</tr>	
+<tr>
+<td class="control_align_center"  colspan="3"><call draw_label_bold(lang.signup.geninfo.find)><br>
+	<select NAME="list3">
+	   <option SELECTED VALUE="0">________________________
+	   <option VALUE="Newsparer">${lang.signup.geninfo.newspaper}
+	   <option VALUE="Web">${lang.signup.geninfo.web}
+	   <option VALUE="Friends">${lang.signup.geninfo.friends}
+
+	</select>
+</td>
+</tr>	

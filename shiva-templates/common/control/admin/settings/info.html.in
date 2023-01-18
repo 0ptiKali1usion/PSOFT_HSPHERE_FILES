@@ -1,0 +1,100 @@
+<!-- BEGIN ./control/admin/settings/info.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<yafv s_admin>
+<form name="f_info" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8" check!>
+<input type="hidden" name="template_name" value="submit/admin/settings/info.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.info.header)>
+
+
+
+<tr >
+<td><call draw_label(lang.bci.ownerfname)></td>
+<if request.name><assign vname = toolbox.html_encode(request.ofname)><else><assign vname = toolbox.html_encode(settings.ofname)></if>
+<td><input type="text" name="ofname" value="${vname}" check="vSinglename"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.bci.ownerlname)></td>
+<if request.name><assign vname = toolbox.html_encode(request.olname)><else><assign vname = toolbox.html_encode(settings.olname)></if>
+<td><input type="text" name="olname" value="${vname}" check="vSinglename"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.bci.company)></td>
+<if request.name><assign vname = toolbox.html_encode(request.name)><else><assign vname = toolbox.html_encode(settings.name)></if>
+<td><input type="text" name="name" value="${vname}" check="vOrganization"></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.bci.adr1)></td>
+<if request.address><assign vaddress = toolbox.html_encode(request.address)><else><assign vaddress = toolbox.html_encode(settings.address)></if>
+<td><input type="text" name="address" value="${vaddress}" check="vAddress"></td></tr>
+<tr >
+<td><call draw_label(lang.bci.adr2)></td>
+<if request.address2><assign vaddress2 = toolbox.html_encode(request.address2)><else><assign vaddress2 = toolbox.html_encode(settings.address2)></if>
+<td><input type="text" name="address2" value="${vaddress2}"></td></tr>
+<tr ><td><call draw_label(lang.bci.adr3)></td>
+<if request.address3><assign vaddress3 = toolbox.html_encode(request.address3)><else><assign vaddress3 = toolbox.html_encode(settings.address3)></if>
+<td><input type="text" name="address3" value="${vaddress3}"></td></tr>
+
+<tr ><td><call draw_label(lang.bci.city)></td>
+<if request.city><assign vcity = toolbox.html_encode(request.city)><else><assign vcity = toolbox.html_encode(settings.city)></if>
+<td><input type="text" name="city" value="${vcity}" check="vCity"></td></tr>
+
+<tr ><td><call draw_label(lang.bci.state)></td>
+ <td>
+  <select name="state">
+	<call buildStates(settings.state)>
+  </select>
+ </td>
+</tr>
+
+<tr >
+  <td><call draw_label(lang.label.state_other)></td>
+<if request.state2><assign vstate2 = toolbox.html_encode(request.state2)><else><assign vstate2 = toolbox.html_encode(settings.state2)></if>
+  <td><input type="text" label="${lang.label.state_other}" name="state2" value="${vstate2}" check="vStateOther"></td>
+</tr>
+
+<tr ><td><call draw_label(lang.bci.country)></td>
+ <td>
+  <select name="country" onChange="checkForm(this.form)">
+	<call buildCountries(settings.country)>
+  </select>
+ </td>
+</tr>
+<tr ><td><call draw_label(lang.bci.pcode)></td>
+<if request.zip><assign vzip = toolbox.html_encode(request.zip)><else><assign vzip = toolbox.html_encode(settings.zip)></if>
+<td><input type="text" name="zip" value="${vzip}" check="vPostal_Code"></td></tr>
+<tr  valign="top"><td><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></td>
+<if request.phone><assign vphone = toolbox.html_encode(request.phone)><else><assign vphone = toolbox.html_encode(settings.phone)></if>
+<td valign="top"><input type="text" name="phone" value="${vphone}" label="${lang.bci.phone}" check="vPhoneCountry(this, country)"><br><call draw_label(lang.bci.country_phone_examples)></td></tr>
+<tr >
+<td valign="top"><call draw_label(lang.bci.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></td>
+<if request.fax><assign vfax = toolbox.html_encode(request.fax)><else><assign vfax = toolbox.html_encode(settings.fax)></if>
+<td valign="top"><input type="text" name="fax" value="${vfax}" label="${lang.bci.fax}" check="vFaxCountry(this, country)"></td>
+</tr>
+<tr ><td><call draw_label(lang.bci.email)></td>
+<if request.email><assign vemail = toolbox.html_encode(request.email)><else><assign vemail = toolbox.html_encode(settings.email)></if>
+<td><input type="text" name="email" value="${vemail}" label="${lang.bci.email}" check="vEmail"></td></tr>
+<tr ><td><call draw_label(lang.admin.info.hostmaster)></td>
+<if request.hostmaster><assign vhostmaster = toolbox.html_encode(request.hostmaster)><else><assign vhostmaster = toolbox.html_encode(settings.hostmaster)></if>
+<td><input type="text" name="hostmaster" value="${vhostmaster}" label="${lang.admin.info.hostmaster}" check="vDNSEmail"></td></tr>
+<tr ><td><call draw_label(lang.admin.info.site)></td>
+<if request.website><assign vwebsite = toolbox.html_encode(request.website)><else><assign vwebsite = toolbox.html_encode(settings.website)></if>
+<td><input type="text" name="website" value="${vwebsite}"></td></tr>
+<tr ><td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.save}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/info.html -->

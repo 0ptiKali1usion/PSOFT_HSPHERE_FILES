@@ -1,0 +1,43 @@
+<!-- BEGIN ./control/mailman/massmail_success.html -->
+<call draw_tooltip()>
+<form name="f_deposit" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<input type="hidden" name="arid" value="${request.arid}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+
+
+
+
+<call draw_table_header("2", lang.mailman.massmailsuccess.header)>
+
+
+<tr>
+<td><call draw_label(lang.mailman.massmailsuccess.total)></td><td><call draw_label(result.sent)></td></tr>
+
+<tr >
+<td><call draw_label(lang.mailman.massmailsuccess.errors)></td><td><call draw_label(result.errors)></td></tr>
+<tr >
+<td><call draw_label(lang.mailman.massmailsuccess.noadr)></td><td><call draw_label(result.empty)></td></tr>
+<if result.duplicate>
+<tr >
+<td><call draw_label(lang.mailman.massmailsuccess.dup)></td><td><call draw_label(result.duplicate)></td></tr>
+</if>
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.mailman.massmailsuccess.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/mailman/massmail_success.html -->

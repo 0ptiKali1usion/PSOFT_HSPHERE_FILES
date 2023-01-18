@@ -1,0 +1,6 @@
+<!-- BEGIN submit/easy_app/remove.sbm -->
+<assign easyapp = account.getChild(request.typename)>
+<assign res=easyapp.deleteApp(request.eid)>
+<assign typename=request.typename>
+<include "easy_app/easy_app.html">
+<!-- END submit/easy_app/remove.sbm -->

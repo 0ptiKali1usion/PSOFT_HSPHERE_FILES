@@ -1,0 +1,4 @@
+<center>Name Servers</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The name and IP of the server, where your domain is registered (so called <i>Master server</i>). The <i>Name Servers</i> field can also list one or more <i>Slave servers</i> that are activated when the traffic becomes too heavy for the <i>Master server</i> to handle. 

@@ -1,0 +1,30 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/EPDQ.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.epdq)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.epdq}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>secure2.epdq.co.uk</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>12000</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epdq.ipaddress)></td><td><input type="text" name="ip" value="<if merchant>${merchant.IP_ADDRESS}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="login" value="<if merchant>${merchant.USERNAME}</if>"></td></tr>
+<tr ><td><call draw_label(lang.admin.epdq.clientId)></td><td><input type="text" name="client_id" value="<if merchant>${merchant.CLIENT_ID}</if>"></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="<if merchant>${merchant.PASSWORD}</if>"></td></tr>
+<if merchant><assign currency = merchant.CURRENCY><else><assign currency = "840"></if>
+<tr ><td><call draw_label(lang.admin.epayment.currency)></td><td><select name="currency"><list toolbox.getCurrencies() as curr>
+<option value="${curr.code}" <if curr.code==currency>SELECTED</if>>${curr.name}
+</list></select></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.fraudshield)></td><td><select name="pipeline"><option value="PaymentNoFraud">FALSE<option value="Payment" <if merchant && merchant.PIPELINE=="Payment"> SELECTED</if>>TRUE</select></td></tr>
+<tr ><td><call draw_label(lang.admin.epayment.test)></td><td><select name="mode"><option value="P">FALSE<option value="Y" <if merchant && merchant.MODE=="Y"> SELECTED</if>>TRUE</select></td></tr>
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>

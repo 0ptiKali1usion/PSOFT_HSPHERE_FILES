@@ -1,0 +1,4 @@
+include common.s_hsphere.yafv: vUsername, vPassword, vSinglename, vName, vOrganization, vAddress, vAddress2, vCity, vPostal_Code, vCountry, vStateOther, vPhone, vFax, vEmail, vDomain_Name, vProtocol, vPort, vPassword1(string, string), vPassword2(string, string), vnURL, vPositiveIntReq;
+
+regexp vState=       ".{2,}", maxlength="20", fail=yafv.vState.fail;
+

@@ -1,0 +1,19 @@
+<!-- BEGIN ./submit/admin/spamassassin_config_set.sbm -->
+
+<assign result=yafv.checkall(
+    yafv.common.s_admin.vIntegerOrNumber("required_score", request.f_required_score),
+    yafv.common.s_admin.vIntegerOrNumber(lang.admin.spamassassin.config_file_size, request.f_file_size))>
+<if result.status=="OK">
+  <assign sa_man=account.getChild("spamassassin_manager")>
+  <assign result=sa_man.setPrefs(request.ms_id,request.f_required_score,request.f_rewrite_header_subject,request.f_report_safe,request.f_clear_headers,request.f_use_bayes,request.f_use_auto_whitelist,request.f_file_size)>
+</if>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_updated,lang.label.spamassassin_config,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/spamassassin_config_set.sbm -->

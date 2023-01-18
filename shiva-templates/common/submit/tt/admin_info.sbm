@@ -1,0 +1,32 @@
+<!-- BEGIN ./commont/submit/tt/admin_info.sbm -->
+<assign result=yafv.checkall(
+    yafv.common.s_tt.vName(lang.label.name, request.name),
+    yafv.common.s_tt.vEmail(lang.label.email, request.email)
+)>
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <assign success="">
+    <list result.msgs as msg>
+	<assign res=session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+    <assign ttadmin=account.getChild("ttadmin")>
+    <assign result=ttadmin.updateInfo(request.name, request.description, request.email, request.signature)>
+    <if result.status!="OK">
+        <assign success="">
+	<assign res=session.addMessage(result.msg)>
+    </if>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign email=request.email>
+    <assign name=request.name>
+    <assign description=request.description>
+    <assign signature=request.signature>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/tt/admin_info.sbm -->

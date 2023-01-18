@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/admin/wizards/create.sbm -->
+<assign admin=account.getChild("admin")>
+<assign wizard=admin.getWizard(request.wizard)>
+<include "submit/admin/wizards/checkvalues.sbm">
+
+<if !failure>
+<include "submit/admin/wizards/process_special.sbm">
+
+  <if processNextSpecial=="1">
+      <include request.stemplate>
+  </if>
+<else>
+  <assign vplan_name=toolbox.html_encode(request.plan_name)>
+  <assign vhomedir=toolbox.html_encode(request.homedir)>
+  <assign vmixedip=toolbox.html_encode(request.mixedip)>
+  <assign vshared_ip_tag=toolbox.html_encode(request.shared_ip_tag)>
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/wizards/create.sbm -->

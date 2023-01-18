@@ -1,0 +1,11 @@
+<center>RLimitCPU</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Restricts the strain of Control Panel Usage.<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	 <i>Resouce Limit</i> is applied to user CGI scripts and  SSI exec commands, but not any processes forked off from the Apache parent such as piped logs.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<i>* CPU resource limits are expressed in seconds per process. </i>
+<br>
+Check the <i>Include</i> box to make this resource available under the plan.

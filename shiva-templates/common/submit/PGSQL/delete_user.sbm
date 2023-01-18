@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/PGSQL/delete_user.sbm  -->
+<assign user=account.getResource(request.user_id)>
+<assign database=account.getResource(request.db_id)>
+<if user.isNeedToBeDeleted()=="1">
+   <assign result=user.delete>
+   <if result.status=="OK"><assign success="1"></if>
+<else>
+   <assign success="0">
+   <session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_delete, lang.label.user, ""))>
+</if>   
+<if success>
+  <assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_deleted, lang.label.user, ""))>
+  <include request.stemplate>
+<else>
+<assign res=session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_delete, lang.label.user, ""))>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/PGSQL/delete_user.sbm  -->

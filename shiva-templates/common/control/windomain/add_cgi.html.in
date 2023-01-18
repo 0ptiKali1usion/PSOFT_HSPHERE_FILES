@@ -1,0 +1,25 @@
+<!-- BEGIN ./windomain/add_cgi.html.in  -->
+<call draw_tooltip()>
+<yafv s_windomain>
+<form name="cgi"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="windomain/add_cgi.html">
+<input type="hidden" name="template_name" value="submit/windomain/add_cgi_submit.sbm">
+
+<call draw_table_header("2", lang.windomain.addcgi.header)>
+
+<tr>
+   <td><call draw_label(lang.label.file_ext)></td>
+   <td><input type="text" name="ext" label="${lang.label.file_ext}" value="${vext}" check="vfileExt"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.windomain.addcgi.handler)></td>
+   <td><select name="handler"><option value="Perl">Perl</select></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./windomain/add_cgi.html.in  -->

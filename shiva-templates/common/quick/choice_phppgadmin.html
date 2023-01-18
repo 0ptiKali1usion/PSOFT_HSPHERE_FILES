@@ -1,0 +1,22 @@
+<!-- BEGIN ./quick/choice_phppgadmin.html  -->
+<assign template="quick/choice_phppgadmin.html">
+<include "functions">
+<assign pgsql=account.getChild("pgsql")>
+<if pgsql>
+  <assign databases=pgsql.getChildren("pgsqldatabase")>
+  <if databases>
+    <call draw_menu("acct-pref")>
+    <include "control/quick/choice_phppgadmin.html">
+  <else>
+    <assign pgusers = pgsql.getChildren("pgsqluser")>
+    <if pgusers>
+      <include "PGSQL/add_database.html">
+    <else>
+      <include "PGSQL/add_user.html">
+    </if>
+  </if>
+<else>
+  <include "PGSQL/add_user.html">
+</if>
+<call bottom()>
+<!--  END ./quick/choice_phppgadmin.html  -->

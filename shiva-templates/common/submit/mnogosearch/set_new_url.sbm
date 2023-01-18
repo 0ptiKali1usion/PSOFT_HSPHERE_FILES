@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/mnogosearch/set_new_url.sbm  -->
+<assign result=yafv.common.s_hsphere.vMnogoURL(lang.mnogosearch.newurl, request.url)>
+<if result.status=="OK">
+    <assign mnogo=account.getResource(request.uid)>
+    <assign result=mnogo.setURL(request.url)>
+    <if result.status=="OK">
+	<assign success="1">
+    <else>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vUrl=request.url>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/mnogosearch/set_new_url.sbm  -->

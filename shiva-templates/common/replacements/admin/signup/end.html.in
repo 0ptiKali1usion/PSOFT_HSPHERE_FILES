@@ -1,0 +1,34 @@
+<include "functions">
+<assign template="signup/end.html">
+<include "control/signup/signup_function.html">
+<if !session.msg>
+    <assign title=lang.label.thanks>
+<else>
+    <assign title=lang.label.reg_failed>
+    <assign error_disabled="true">
+</if>
+<include "signup/signup_top.html">
+<table border="0">
+<tr>
+<td>
+<if !session.msg><call draw_label(lang.admin.end.text)><else><call error()></if>
+</p> 	
+<yafv s_signup>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/end.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <input type="hidden" name="_mod" value="">
+    <assign excludeFields=excludeFields+"_mod;">
+    <assign plan=plans[request.plan_id]>
+    <if plan.isResourceAvailable("ttadmin")>
+	<assign ftemplate="submit/signup/tt_admin.sbm">
+    <else>
+	<assign ftemplate="submit/signup/begin.sbm">
+    </if>
+    <assign excludeFields=excludeFields+"template_name;">
+    <call genHiddenField(excludeFields)>
+</form>
+</td>
+</tr>
+</table>
+<include "signup/signup_bottom.html">

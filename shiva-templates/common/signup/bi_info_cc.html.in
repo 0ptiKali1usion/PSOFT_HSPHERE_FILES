@@ -1,0 +1,57 @@
+<!-- BEGIN ./common/signup/bi_info_cc.html.in -->
+<assign template="signup/bi_info_cc.html">
+<include "functions">
+<include "control/signup/signup_function.html">
+      <switch request["_bi_type"]>
+         <case "CC">
+<assign title=lang.common_signup_bi_info_cc_ccinfo>
+         <break>
+         <case "Check">
+<assign title=lang.common_signup_bi_info_cc_checkinfo>
+         <break>
+      </switch>
+
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+    <td colspan="2">
+      <switch request["_bi_type"]>
+         <case "CC"><call draw_label(lang.common_signup_bi_info_cc_ccdetail)>
+         <break>
+         <case "Check"><call draw_label(lang.common_signup_bi_info_cc_checkdetail)>
+         <break>
+      </switch>
+    </td>
+</tr>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/bi_info_cc.sbm">
+    <input type="hidden" name="ftemplate" value="signup/bi_info_cc.html">
+    <assign excludeFields=excludeFields+"template_name;">
+    <if !bi_if>
+       <switch request["_bi_type"]>
+         <case "CC"><include "control/signup/credit_card.html">
+         <break>
+         <case "Check"><include "control/signup/pi.Check">
+         <break>
+      </switch>
+
+    <else>
+
+      <switch bi_if.type>
+         <case "CC"><include "signup/credit_card_view.html">
+         <break>
+         <case "Check"><include "signup/pi.Check">
+         <break>
+      </switch>
+   </if>
+    <if request["_bi_useci"]!="">
+        <assign ftemplate="submit/signup/pay_info.sbm">
+    <else>
+        <assign ftemplate="submit/signup/bi_info.sbm">
+    </if>
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./common/signup/bi_info_cc.html.in -->

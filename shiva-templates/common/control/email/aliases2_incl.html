@@ -1,0 +1,22 @@
+<!-- BEGIN ./email/aliases2_incl.html  -->
+<tr>
+  <td><call draw_label(lang.email.aliases2incl.alias)></td>
+  <td><call draw_label(alias.local)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.email.aliases2incl.store)></td>
+  <td><call draw_label(alias.foreign)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.descr)></td>
+  <td><call draw_label(" "+alias.description+" ")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.del)></td>
+ <td><call draw_delete(config.CLIENT_CP_URL+"?did="+alias+"&dtemplate=submit/email/delete_alias.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&alias="+alias+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+sc_params+"&del=1", lang.label.delete)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.email.aliases2incl.tt)></td>
+  <td><call draw_tt_link(alias,"")></td>
+</tr>
+<!--  END ./email/aliases2_incl.html  -->

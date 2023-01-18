@@ -1,0 +1,29 @@
+<!-- BEGIN ./control/adnsmanager/add_alias.html.in  -->
+<yafv s_adnsmanager>
+<call draw_tooltip()>
+<form name="f_add_alias"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="zone_id" value="${request.zone_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="tag" value="4">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_reseller_cp_alias.sbm">
+
+
+
+
+
+<call draw_table_header("2", lang.adnsmanager.addresellercpalias.header)>
+
+
+<tr>
+   <td><call draw_label(lang.adnsmanager.addresellercpalias.prefix)></td>
+   <td><input type="text" name="prefix" value="${vprefix}" label="${lang.adnsmanager.addresellercpalias.prefix}" size="10" Maxlength="10"  check="vPrefix"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/adnsmanager/add_alias.html.in  -->

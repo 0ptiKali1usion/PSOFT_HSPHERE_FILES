@@ -1,0 +1,22 @@
+<!-- BEGIN ./common/submit/tt/admin_release.sbm  -->
+<assign template="tt/admin.html">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket = ttadmin.getTicket(request.ttid)>
+<list ttadmin.admin_list as adm>
+  <if adm.id == ttadmin.id>
+    <assign str_ttadmin = adm.name>
+  </if>
+</list>
+<if !str_ttadmin><assign str_ttadmin = lang.label.unknown_admin></if>
+<assign system_note = lang.tt.admin_released(str_ttadmin)>
+<if request.note><assign system_note = system_note + request.note></if>
+<assign result = ticket.addReply("", system_note, "")>
+<if ticket.state == "9"><assign result = ticket.setstate("7")></if> 
+<assign result = ticket.assign("0")>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/tt/admin_release.sbm  -->

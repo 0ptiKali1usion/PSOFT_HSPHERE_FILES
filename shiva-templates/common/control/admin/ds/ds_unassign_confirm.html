@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/admin/ds/select_ds_confirm.html  -->
+<call draw_tooltip()>
+
+<form name="add_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="dedicated_server_id" value ="${request.dedicated_server_id}">
+<input type="hidden" name="account_id" value ="${request.account_id}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="submit/admin/ds/unassign_ds.sbm">
+
+<call draw_table_header("", lang.admin.ds.unassign_header)>
+<tr>
+<td><call draw_label(lang.admin.ds.changing_status_tip)></td>
+</tr>
+<tr>
+<td class="control_align_center">
+<br>
+<call draw_link("javascript:document.add_confirm.submit()", lang.admin.ds._unassign_ds_yes)>
+<br>
+<call draw_link("javascript:history.go(-1)", lang.admin.ds._unassign_ds_no)>
+<br>&nbsp;
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/ds/select_ds_confirm.html  -->

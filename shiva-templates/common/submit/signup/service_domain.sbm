@@ -1,0 +1,18 @@
+<!-- BEGIN ./common/submit/signup/service_domain.sbm -->
+
+<list new_user.free_zones as zone>
+    <if zone.name==request.domain_name>
+	<assign valid="1">
+    </if>
+</list>
+<if valid!="1" || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign domainaction="service_domain">
+    <include "signup/domains.html">
+<else>
+    <include "signup/end.html">
+</if>
+
+<!-- END ./common/submit/signup/service_domain.sbm -->

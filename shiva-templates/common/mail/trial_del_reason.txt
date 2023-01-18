@@ -1,0 +1,10 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.trial_del_reason_text}
+
+${lang.massmail.regards}
+${settings.TT_EMAIL}

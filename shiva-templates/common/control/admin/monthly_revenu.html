@@ -1,0 +1,178 @@
+<!-- BEGIN ./control/admin/monthly_revenu.html  -->
+<assign billman=account.getChild("billman")>
+
+<call draw_tooltip()>
+<if billman>
+
+
+<call draw_table_header("8", lang.admin.monthlyrevenu.header)>
+<form name="MonthlyRate" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8"> 
+<tr>
+<td colspan="8" class="control_header_align_center">
+  <call draw_header(lang.admin.monthlyrevenu.for)>
+  <input type="hidden" name="template_name" value="admin/monthly_revenu.html">
+  <font color="${design.color("header_text_color")}">
+    <select name="endMonth" size="1">
+        <option value="01" >${lang.admin.monthlyrate.month1}</option>
+        <option value="02" SELECTED >${lang.admin.monthlyrate.month2}</option>
+        <option value="03" >${lang.admin.monthlyrate.month3}</option>
+        <option value="04" >${lang.admin.monthlyrate.month4}</option>
+        <option value="05" >${lang.admin.monthlyrate.month5}</option>
+        <option value="06" >${lang.admin.monthlyrate.month6}</option>
+        <option value="07" >${lang.admin.monthlyrate.month7}</option>
+        <option value="08" >${lang.admin.monthlyrate.month8}</option>
+        <option value="09" >${lang.admin.monthlyrate.month9}</option>
+        <option value="10" >${lang.admin.monthlyrate.month10}</option>
+        <option value="11" >${lang.admin.monthlyrate.month11}</option>
+        <option value="12" >${lang.admin.monthlyrate.month12}</option>
+    </select>
+ 
+    <select name="endYear" size="1">
+        <option value="2000" SELECTED>2000</option>
+        <option value="2001" >2001</option>
+        <option value="2002" >2002</option>
+        <option value="2003" >2003</option>
+        <option value="2004" >2004</option>
+        <option value="2005" >2005</option>
+        <option value="2006" >2006</option>
+        <option value="2007" >2007</option>
+    </select>
+    &nbsp;<input type="submit" value="${lang.admin.monthlyrate.submget}">
+</td>
+</tr>  
+</form>
+
+<assign total_setup = "0">
+<assign total_special = "0">
+<assign total_recurrent = "0">
+<assign total_usage = "0">
+<assign total_refund = "0">
+<assign total_moneyback = "0">
+<assign total_total = "0">
+
+<if (request.endMonth!="") && (request.endYear!="")>
+    <assign groups = billman.getMothlyRevenu( request.endYear,request.endMonth).groups >
+<else>
+    <assign groups = billman.getMothlyRevenu( "0", "0").groups >
+</if>
+<list groups as group >
+<tr>
+<td WIDTH="20%" class="control_header_align_center" nowrap ><if group.group_id=="0"><call draw_header(lang.admin.monthlyrate.ungrouped)><else><if group.name><call draw_header(group.name)><else>&nbsp;</if></if></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.label.setup)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrevenu.srs)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrevenu.recc)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrevenu.usage)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrevenu.refund)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrevenu.back)></td>
+<td WIDTH="10%" class="control_header_align_center" nowrap><call draw_header(lang.label.total)></td>
+</tr>
+<assign group_setup = "0">
+<assign group_special = "0">
+<assign group_recurrent = "0">
+<assign group_usage = "0">
+<assign group_refund = "0">
+<assign group_moneyback = "0">
+<assign group_total = "0">
+
+
+
+<assign been_there = "0">
+<list group.plans as plan> 
+<assign been_there = "1">
+    <tr>
+    <td    nowrap>&nbsp;&nbsp;<call draw_label(plan.description)></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.setup))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.special))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.recurrent))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.usage))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.refund))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.moneyback))></td>
+<td  class="control_align_right" nowrap><call draw_label(toolbox.currency(plan.total))></td>
+    </tr>
+<assign group_setup = toolbox.add(group_setup, plan.setup)>
+<assign group_special = toolbox.add(group_special, plan.special)>
+<assign group_recurrent = toolbox.add(group_recurrent, plan.recurrent)> 
+<assign group_usage = toolbox.add(group_usage, plan.usage)>
+<assign group_refund = toolbox.add(group_refund, plan.refund)>
+<assign group_moneyback = toolbox.add(group_moneyback, plan.moneyback)>
+<assign group_total = toolbox.add(group_total, plan.total)>
+
+<assign total_setup = toolbox.add(total_setup, plan.setup)>
+<assign total_special = toolbox.add(total_special, plan.special)>
+<assign total_recurrent = toolbox.add(total_recurrent, plan.recurrent)> 
+<assign total_usage = toolbox.add(total_usage, plan.usage)>
+<assign total_refund = toolbox.add(total_refund, plan.refund)>
+<assign total_moneyback = toolbox.add(total_moneyback, plan.moneyback)>
+<assign total_total = toolbox.add(total_total, plan.total)>
+
+
+</list>
+<if been_there == "1">
+  <tr>
+    <td  class="control_align_right" nowrap><call draw_label_bold(lang.admin.monthlyrate.subtotal)></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_setup))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_special))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_recurrent))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_usage))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_refund))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_moneyback))></td>
+    <td  class="control_align_right" nowrap><call draw_label_bold(toolbox.currency(group_total))></td>
+  </tr> 
+</if>
+</list>
+ <tr>
+    <td class="control_header" nowrap><call draw_header(lang.label.total)></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_setup))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_special))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_recurrent))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_usage))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_refund))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_moneyback))></td>
+    <td class="control_header_align_right" nowrap><call draw_header(toolbox.currency(total_total))></td>
+  </tr>
+
+<call draw_table_footer()>
+<script language="javascript">
+<if request.endMonth>
+sendedMonth = ${request.endMonth};
+<else>
+sendedMonth = "";
+</if>
+<if request.endYear>
+sendedYear = ${request.endYear};
+<else>
+sendedYear = "";
+</if>
+
+today = new Date();
+todayMonth=today.getMonth();
+todayYear=today.getYear();
+if(todayYear < 1000) {
+   todayYear = todayYear + 1900;
+}
+
+if(sendedMonth==""){
+    document.forms[0].endMonth[todayMonth].selected=true;
+} else {
+    document.forms[0].endMonth[sendedMonth-1].selected=true;
+}
+for ( i=window.document.MonthlyRate.endYear.options.length; i>=0; i--) {
+     window.document.MonthlyRate.endYear.options[i]=null;
+}
+j=0;
+for(i = 2000; i<= todayYear; i++) {
+   nop=new Option();
+   nop.text = i;
+   nop.value = i; 
+   window.document.MonthlyRate.endYear.options[j++] = nop;
+}
+
+if(sendedYear==""){
+    document.forms[0].endYear[todayYear-2000].selected=true;
+} else {
+    sendedYear = sendedYear - 2000;
+    document.forms[0].endYear[sendedYear].selected=true;
+}
+</script>
+</if>
+<!-- END ./control/admin/monthly_revenu.html  -->

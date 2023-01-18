@@ -1,0 +1,12 @@
+<center> badmailpatterns </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>The same as standard badfromaddress but with patterns. Example:
+<br>*@earthlink.net
+<br>!fred@earthlink.net
+<br>[0-9][0-9][0-9][0-9][0-9]@[0-9][0-9][0-9].com
+<br>answerme@save*
+<br>*%*;
+<br>Default: the badmailpatterns file is absent (all sender addresses are allowed).
+<br>
+

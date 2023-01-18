@@ -1,0 +1,193 @@
+<!-- BEGIN ./control/eeman/pserver_edit.html  -->
+<call draw_tooltip()>
+<assign eeman=account.getChild("eeman")>
+
+<if eeman>
+
+<yafv s_eeman>
+<if request.rid><assign pserver=eeman.getLoadBalServer(request.rid)><else><assign pserver=result></if>
+
+<call prepare_table_header("2", lang.eeman.pserveredit.header)>
+
+<if pserver.hasParams()>
+        <call add_table_header_palink(config.CLIENT_CP_URL+"?template_name=eeman/pserver_params.html&rid="+pserver.id, "ps_params", "" )>
+</if>
+  <if pserver.get_server_info=="1">
+    <assign si = pserver.server_info>
+    <if si>
+      <call add_table_header_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "lupa" , "")>
+    <else>
+      <call add_table_header_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "attention" , "")>
+    </if>
+  </if>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td><call draw_label(lang.eeman.id)></td>
+  <td><call draw_label(pserver.id)></td></tr>
+<tr>
+<td><call draw_label(lang.eeman.name)></td>
+<td><call draw_label(pserver.name)></td>
+</tr>
+<tr>
+
+<td><call draw_label(lang.eeman.os_type)></td>
+<td><if pserver.os_type == "1"><call draw_label(lang.eeman.os_type.unix)><else><call draw_label(lang.eeman.os_type.win)></if></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.status)></td>
+<td><call draw_label(pserver.pstatus)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.eeman.pserveredit.usage)></td>
+<td>
+<assign lservers = pserver.getLServers()>
+<if lservers.size != "0">
+  <list lservers as l>
+	<assign lserver=eeman.getLserver(l)>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+l, lserver.name)><br>
+  </list>
+<else>
+  <call draw_label(lang.eeman.pserveredit.unused)>&nbsp;
+  <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_pserver.sbm&rid="+pserver.id+"&stemplate=eeman/list.html"+"&ftemplate="+template, lang.eeman.pserveredit.remove)>
+</if>
+</td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="editps" check! accept-charset="UTF-8">
+<tr>
+<td><call draw_label(lang.eeman.ip1)></td>
+<td>
+  <input type="hidden" name="template_name" value="submit/eeman/pserver_edit_submit.sbm">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="rid" value="${pserver.id}">
+  <input type="text" name="ip1" value="${pserver.ip1}" check="vIPAddr">
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.eeman.mask1)></td>
+<td><input type="text" name="mask1" value="${pserver.mask1}" check="vIPMask" label="${lang.eeman.mask1}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.eeman.ip2)></td>
+<td><input type="text" name="ip2" value="${pserver.ip2}" check="vIPAddrOpt" label="${lang.eeman.ip2}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.eeman.mask2)></td>
+<td><input type="text" name="mask2" value="${pserver.mask2}" check="vIPMaskOpt" label="${lang.eeman.mask2}"></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.label.login)></td>
+<td><input type="text" name="login" value="${pserver.login}"></td>
+</tr>
+    <!-- AUTHORIZED = ${pserver.authorized}-->
+<if (pserver.os_type == "2") || ! pserver.authorized>
+<tr>
+<td><call draw_label(lang.label.password)></td>
+<td><input type="password" name="password" value=""></td>
+</tr>
+</if>
+<tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<tr>
+<td><call draw_label(lang.label.group)></td>
+<td>
+<assign groups = pserver.getGroups()>
+<if !groups>&nbsp;
+<else>
+  <list groups as group>
+    <call draw_label(eeman.groupMap[group])><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_group_pserver.sbm&rid="+pserver.id+"&group="+group+"&stemplate="+template+"&ftemplate="+template, label.delete)><br>
+  </list>
+</if>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.eeman.pserveredit.addgroup)></td>
+<td>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/eeman/add_group_pserver_submit.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${pserver.id}">
+<select name="group" size="1">
+<list eeman.groups as group>
+<option value="${group.id}">${group.name}
+</list>
+</select>
+
+<input type="submit" value="${lang.button.add}">
+</form>
+</td></tr>
+
+<tr>
+  <td width="40%"><call draw_label(lang.eeman.pserveredit.generate_pserver_recs)></td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" name="f_gen_cust_recs" method="POST"  accept-charset="UTF-8">
+        <input type="hidden" name="template_name" value="submit/eeman/generate_cust_recs.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="hidden" name="rid" value="${pserver.id}">
+        <input type="hidden" name="action" value="pserver">
+        &nbsp;<input type="submit" name="gen_cust_recs" value="${lang.eeman.lserveredit.generate}">
+        </td>
+        </tr>
+    </form>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.eeman.get_server_info)></td>
+  <td><call draw_state(pserver.get_server_info=="1", config.CLIENT_CP_URL+"?template_name=submit/eeman/disable_get_server_info.sbm&rid="+pserver.id+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/eeman/enable_get_server_info.sbm&rid="+pserver.id+"&stemplate="+template+"&ftemplate="+template)></td>
+
+</tr>
+
+<if pserver.lbParentId>
+    <assign isLBallowed = "1">
+<else>
+    <assign mainGroups = pserver.getUniqueTypes()>
+    <list mainGroups as mGroup>
+        <if (mGroup == "1") || (mGroup == "3")>
+		<assign isLBallowed = "1">
+        </if>
+    </list>
+</if>
+
+<if isLBallowed == "1">
+<tr>
+ <td><call draw_label(lang.eeman.pserveredit.loadbalanced_server)></td>
+ <td>
+    <call draw_state(pserver.lbParentId != "",
+      config.CLIENT_CP_URL+"?template_name=submit/eeman/del_loadbalserver.sbm&rid="+pserver.id+"&stemplate="+template+"&ftemplate="+template,
+      config.CLIENT_CP_URL+"?template_name=eeman/add_loadbalserver.html&rid="+pserver.id+"&stemplate="+template+"&ftemplate="+template+"&action=add")>
+
+    <if pserver.lbParentId != "">
+    	<call draw_edit(config.CLIENT_CP_URL+"?template_name=eeman/add_loadbalserver.html&rid="+pserver.id+
+    		"&stemplate="+template+"&ftemplate="+template+"&action=update", "")>
+    	<if pserver.lbParentId == pserver.id>
+    		<call draw_label(lang.eeman.loadbalserver.no_parent)><br>
+                      <list pserver.getChildLoadBalancedPServers() as childserver>
+                          <if (pserver.id != childserver.id) >
+                            <if !firstserver>
+                            	<call draw_label(lang.eeman.loadbalserver.usedby)><br>
+                            	<assign firstserver = 1 >
+                            </if>
+                            <call draw_label(childserver.name)><br>
+                          </if>
+                      </list>
+    	<else>
+    		<assign parent_pserver = eeman.getPserver(pserver.lbParentId)>
+    		<call draw_label(lang.eeman.loadbalserver.parent(parent_pserver.name))>
+    	</if>
+    </if>
+  </td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/pserver_edit.html  -->

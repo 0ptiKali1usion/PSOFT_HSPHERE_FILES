@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/admin/kanoodle_params.sbm -->
+<assign kanoodle = account.getResource(request.rid)>
+<assign res=kanoodle.update(request.userid)>
+<if res.status=="OK">
+<include request.stemplate>
+<else>
+<assign result=session.addMessage(res.msg)>
+<include request.ftemplate>
+</if>
+<!-- END ./common/submit/admin/kanoodle_params.sbm -->

@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/account/resume.sbm  -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.resumeAccount(request.user, request.aid)>
+<if result.status != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <assign res=session.addMessage(
+	toolbox.compose(lang.msg.account_resumed,request.aid))>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/account/resume.sbm  -->

@@ -1,0 +1,23 @@
+<!-- BEGIN ./domain/add_modlogan_submit.html  -->
+<assign trans=account.getResource(request.rid).getChild("transferlog")>
+<if !trans>
+  <assign trans=account.getResource(request.rid).addChild("transferlog","simple")>
+</if>
+<if trans.status=="OK">
+ <assign result=trans.addChild("modlogan", "")>
+ <if result.status=="OK">
+    <assign success="1">
+    <assign res = session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.mod_logan,""))>
+ <else>
+    <assign res = session.addMessage(result.msg)>
+ </if>
+<else>
+  <assign res = session.addMessage(trans.msg)>
+</if>
+<if success>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!--  END ./domain/add_modlogan_submit.html  -->

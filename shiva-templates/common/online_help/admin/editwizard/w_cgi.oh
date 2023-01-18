@@ -1,0 +1,10 @@
+<center>CGI Resource</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your users to map file extentions, so they are treated as CGI scripts.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+E.g.:  Files with *.php and *.pl extentions will be executed as CGI scripts.<br>
+<br>
+
+Check the <i>Include</i> box to make this  resource available under the plan.<br>
+Check the <i>Activated</i> box to make it ready for use immediately after signup.

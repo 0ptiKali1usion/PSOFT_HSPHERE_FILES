@@ -1,0 +1,39 @@
+<!-- BEGIN ./control/admin/settings/ccbrands.html -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<assign mm = account.getChild("merchant_manager")>
+
+
+
+
+<call draw_table_header("3", lang.admin.ccbrands.header)>
+
+
+
+<tr>
+<td class="control_header" ><call draw_header(lang.label.name)></td>
+<td class="control_header" ><call draw_header(lang.label.sh_name)></td>
+<td class="control_header"  width="1%"><call draw_header(lang.label.control)></td>
+</tr>
+
+<assign ccbrands = mm.getCCbrands()>
+<if ccbrands>
+  <list ccbrands as ccbrand>
+  <tr >
+    <td><call draw_label(ccbrand.name)></td>
+    <td><call draw_label(ccbrand.name_sh)></td>
+    <if toolbox.gt(ccbrand.id, "99")=="1">
+      <td class="control_align_center"><call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/settings/edit_ccbrand.html&template="+template+"&id="+ccbrand.id+"&name="+toolbox.url_escape(ccbrand.name)+"&name_sh="+toolbox.url_escape(ccbrand.name_sh), lang.admin.ccbrands.edit)><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/settings/delete_ccbrand.sbm&template="+template+"&id="+ccbrand.id, lang.admin.ccbrands.delete)></td>
+      <else><td>&nbsp;</td>
+    </if>    
+  </tr>
+  </list>  
+</if>
+<include "control/admin/settings/ccbrand_incl.html">
+
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/ccbrands.html -->

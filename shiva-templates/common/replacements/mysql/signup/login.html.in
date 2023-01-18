@@ -1,0 +1,29 @@
+<include "functions">
+<assign template="signup/login.html">
+<include "control/signup/signup_function.html">
+<assign title=lang.label.signup_login_title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+<td colspan="2">
+<call draw_label(lang.label.signup_login_text)>
+</td>
+</tr>
+<tr>
+<td colspan="2" ><call draw_spacer("2", "100")>
+</td>
+</tr> 
+    <form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/login.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <if request["_bi_type"]!="TRIAL">
+    	<assign ftemplate="submit/signup/bi_info_cc.sbm">
+    <else>
+        <assign ftemplate="submit/signup/pay_info.sbm">
+    </if>
+    <include "control/signup/login.html">
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">

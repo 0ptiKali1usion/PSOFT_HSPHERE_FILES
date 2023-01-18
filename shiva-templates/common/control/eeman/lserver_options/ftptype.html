@@ -1,0 +1,27 @@
+<!-- BEGIN ./control/eeman/lserver_options/ftptype.html  -->
+<if useXML == "false">
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_ftp_type" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="ftp-type">
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.ftp_type)></td>
+  <td>
+    <assign ftpType=optManipulator.getOption(lserverId)>
+    <!-- FTP TYPE=${ftpType} -->
+    <select name="value">
+        <if ftpType == "ServU"><assign ftpTypeServU = "SELECTED"></if>
+        <if ftpType == "IIS"><assign ftpTypeIIS = "SELECTED"></if>
+	<option value="ServU" ${ftpTypeServU}><call draw_label(lang.eeman.lserveredit.options.ftp_type.servu)>
+	<option value="IIS" ${ftpTypeIIS}><call draw_label(lang.eeman.lserveredit.options.ftp_type.iis)>
+    </select>
+    &nbsp;<input type="submit" value="${lang.button.set}">
+  </td>
+</tr>
+<tr>
+</form>
+</if>
+<!-- END ./control/eeman/lserver_options/ftptype.html  -->

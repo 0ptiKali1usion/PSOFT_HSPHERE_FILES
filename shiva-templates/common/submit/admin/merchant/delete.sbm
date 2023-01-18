@@ -1,0 +1,12 @@
+<!-- BEGIN submit/admin/merchant/delete.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<assign result=mm.resetActive(request.type)>
+<if result.status!="OK">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_deactivate,lang.label.merchant_gateway,""))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END submit/admin/merchant/delete.sbm -->

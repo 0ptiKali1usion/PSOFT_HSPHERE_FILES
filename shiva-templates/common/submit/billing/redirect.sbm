@@ -1,0 +1,16 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="${design.color("bgcolor")}">
+
+<form name="login" action="${paymenturl}" method="${paymentmethod}" accept-charset="UTF-8">
+<list values as value>
+<input type="hidden" name="${value.key}" value="${value.data}">
+</list>
+</form>
+
+<SCRIPT language="javascript">
+ window.document.forms['login'].submit();
+</SCRIPT>
+</BODY>
+</HTML>

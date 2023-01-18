@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/admin/ds/add_ds_template.sbm  -->
+
+<assign ds_manager=account.getChild("ds_manager")>
+<assign result=yafv.checkall(
+  yafv.common.s_admin.vStringReq(lang.admin.ds.template_name,request.name),
+  yafv.common.s_admin.vStringReq(lang.admin.ds.os_name,request.os),
+  yafv.common.s_admin.vStringReq(lang.admin.ds.cpu,request.cpu),
+  yafv.common.s_admin.vStringReq(lang.admin.ds.ram,request.ram),
+  yafv.common.s_admin.vStringReq(lang.admin.ds.storage,request.storage)
+)>
+
+<if result.status=="OK"> 
+    <assign res=ds_manager.addDSTemplate(request.name,request.os,request.cpu,request.ram,request.storage)>
+    <if res.status!="OK">
+	<list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        <assign failure="1">
+    </if>
+<else>
+    <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+<if failure>
+    <assign f_name=toolbox.html_encode(request.name)>
+    <assign f_os=toolbox.html_encode(request.os)>
+    <assign f_cpu =toolbox.html_encode(request.cpu)>
+    <assign f_ram=toolbox.html_encode(request.ram)>
+    <assign f_storage=toolbox.html_encode(request.storage)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/add_ds_template.sbm  -->

@@ -1,0 +1,24 @@
+<!-- BEGIN ./submit/ds/setup_backup.sbm  -->
+<assign ds=account.getResource(request.rid)>
+<switch request.period>
+  <case "1">
+    <assign backup=ds.addChild("backup","",request.period,request.performer_id,request.day_time_hour,request.day_time_min)>
+    <break>
+  <case "2">
+    <assign backup=ds.addChild("backup","",request.period,request.performer_id,request.week_time_hour,request.week_time_min,request.day_of_week)>
+    <break>
+  <case "3">
+    <assign backup=ds.addChild("backup","",request.period,request.performer_id,request.month_time_hour,request.month_time_min,request.day_of_month)>
+    <break>
+</switch>
+<if bakup.status!="OK">
+  <assign failure="1">
+</if>
+
+<if failure>
+   <assign res=session.addMessage(backup.msg)>
+   <include request.stemplate>
+<else>
+   <include request.stemplate>
+</if>
+<!-- END ./submit/ds/setup_backup.sbm  -->

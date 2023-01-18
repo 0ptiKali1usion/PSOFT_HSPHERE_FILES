@@ -1,0 +1,31 @@
+<!-- BEGIN ./submit/admin/wizards/create2.sbm -->
+<assign admin=account.getChild("admin")>
+<assign wizard=admin.getWizard(request.wizard)>
+<assign failure="">
+<assign ops=wizard.options>
+
+<if ops("billable") == "1">
+<include "submit/admin/wizards/checkpricing.sbm">
+</if>
+
+<if !failure>
+<assign plan = admin.createPlan()>
+<if plan.status != "OK">
+  <assign failure="1">
+  <assign res=session.addMessage(lang.msg.plan_unable_create)>
+  <assign res=session.addMessage(plan.msg)>
+</if>
+</if>
+
+<if !failure>
+   <assign res = session.addMessage(toolbox.compose(lang.msg.name_res_created, lang.label.plan, plan.description))>
+   <if ops("billable") == "1">
+      <include request.stemplate>
+   <else>
+      <include "admin/plans.html">
+   </if>
+<else>
+   <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/wizards/create2.sbm -->

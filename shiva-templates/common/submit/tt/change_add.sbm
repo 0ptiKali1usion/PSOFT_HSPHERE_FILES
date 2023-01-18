@@ -1,0 +1,24 @@
+<!-- BEGIN ./tt/change_state.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+
+<if !request.flags>
+  <assign result=yafv.checkall(
+  yafv.common.s_tt.vStringReq(lang.label.title, request.title),
+  yafv.common.s_tt.vTTMail(lang.label.email,request.email,request.flags))>
+<else>
+  <assign result=yafv.checkall(
+  yafv.common.s_tt.vStringReq(lang.label.title, request.title))>
+</if>
+<if result.status == "OK">
+  <assign res=session.addMessage(tt.msg)>
+  <assign result2 = ticket.setTitle(request.title)>
+  <if result2.status!="OK"> <assign res=session.addMessage(result.msg)></if>
+  <assign result3 = ticket.setEmail(request.email,request.flags)>
+  <if result3.status!="OK"> <assign res=session.addMessage(result.msg)></if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+    <include request.ftemplate>
+<!--  END ./tt/change_state.sbm  -->

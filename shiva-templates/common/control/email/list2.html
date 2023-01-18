@@ -1,0 +1,629 @@
+<!-- BEGIN ./email/list2.html  -->
+<call draw_tooltip()>
+
+<if !request.is_more>
+<call draw_table_header("2", lang.email.list2.header)>
+
+<assign domain_list = account.findAllChildren("mail_domain")>
+<if request.md_id><assign md_id = request.md_id></if>
+<if domain_list>
+  <tr>
+    <td colspan="2">
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+      <table class="inner_control_grid">
+      <tr>
+      <td><call draw_label(lang.email.list2.mdomains)></td>
+      <td class="inner_control_grid_align_center">
+	<input type="hidden" name="template_name" value="email/list2.html">
+	<select name="md_id">
+	<list domain_list as mail_domain>
+	<option value="${mail_domain}" <if mail_domain==md_id>SELECTED</if>>${mail_domain.name}</option>
+	</list>
+	</select>
+	<input type="submit" value="${lang.button.go}">
+      </td>
+      </tr>
+      </table>
+    </form>
+    </td>
+  </tr>
+
+  <if md_id>
+    <assign mail_domain = account.getResource(md_id)>
+    <assign mail_service = mail_domain.parent>
+    <tr>
+    <td colspan="2">
+    <table class="inner_control_grid">
+      <tr>
+      <td class="inner_control_grid_header" colspan="2"><call draw_header(lang.email.list2.mservice)></td>
+      </tr>
+      <assign cname=mail_domain.parent.getChild("cname_record")>
+      <if !cname><assign ms_name = mail_domain.parent.mail_server.name><else><assign ms_name = cname.name></if>
+      <tr>
+        <td><call draw_label(lang.email.list2.mserver)></td>
+        <td><call draw_label(ms_name)></td>
+      </tr>
+      <tr>
+        <td><call draw_label(lang.email.list2.mserver2)></td>
+        <td><call draw_label(ms_name)></td>
+      </tr>
+      <tr>
+        <td><call draw_label(lang.label.login)></td>
+        <td><call draw_label(lang.email.list2.used)></td>
+      </tr>
+      <assign domain=mail_domain.parent.parent>
+      <if !(domain.type=="domain_alias" || domain.type=="3ldomain_alias")>
+	<tr>
+	  <td><call draw_label(lang.email.list2.mailtrafquota)></td>
+	  <assign mail_traffic=domain.getChild("mail_traffic")>
+	  <if mail_traffic>
+	    <assign res=mail_traffic.reload>        
+	  </if>
+	  <td nowrap><call draw_label(toolbox.compose(lang.label.traffic.used, mail_traffic.text_traffic))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, mail_traffic.start_date))></td>
+	</tr>
+      </if>	
+      <assign mail_relay = mail_service.findChild("mail_relay")>
+      <if mail_relay || account.plan.areResourcesAvailable("mail_relay")>
+	<assign eeman = account.getChild("eeman")>
+	<assign mservers_cnt = toolbox.getMailRelayHosts().size>
+	<if mail_relay || toolbox.gt(mservers_cnt,"1")=="1" >
+	  <tr>
+	  <td><call draw_label(lang.email.mail_relay)></td>
+	  <td nowrap>
+	  <if mail_relay>
+	    <call draw_state_on(config.CLIENT_CP_URL+"?rid="+mail_service+"&template_name=submit/misc/delete_check.sbm&hid="+mail_domain+"&did="+mail_relay+"&stemplate="+template+"&ftemplate="+template+"&md_id="+mail_domain)>
+	    <if !config.IRIS_USER>
+	      &nbsp;<call draw_label(mail_relay.mail_server_name)>
+	      <call draw_label("->")><call draw_label(mail_service.mail_server_name)>&nbsp;
+	      <if mail_relay.mail_server_name==mail_service.mail_server_name>
+		<call draw_label(lang.email.mail_relay.turnoff)>
+	      </if>
+	    </if>
+	  <else>
+	    <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_service+"&aid="+mail_service+"&template_name=submit/misc/add_check.sbm&type=mail_relay&stemplate="+template+"&ftemplate="+template+"&md_id="+mail_domain)>
+	  </if>
+	  </td>
+	  </tr>
+	</if>
+      </if>
+      <if account.plan.areResourcesAvailable("antispam") && !config.IRIS_USER>
+	<tr>
+	<td><call draw_label(lang.label.antispam)><call draw_help("user-mailinfo-antispam_prefs","")></td>
+	<td nowrap>
+        <!--if toolbox.gt(mail_domain.whitelist.size(),0)=="1"-->
+	  <call draw_antispam_type(config.CLIENT_CP_URL+"?md_id="+mail_domain+"&mid="+mail_domain+"&type=mdomain&email="+mail_domain.name+"&template_name=email/manage_antispam.html"+"&stemplate="+template)>
+	  <call draw_label(lang.email.antispam.mdomain_note)>
+	</td>
+	</tr>
+	<tr>
+	<td>&nbsp;</td>
+	<td><call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_add_antispams.sbm&range=mailbox&md_id="+mail_domain+"&next_template=submit/email/add_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.add_for_all_mailboxes)><call draw_label(lang.email.for_all_mailboxes)>&nbsp;&nbsp;&nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_add_antispams.sbm&range=all&md_id="+mail_domain+"&next_template=submit/email/add_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.add_for_all_mailobjects)><call draw_label(lang.email.for_all_mailresources)>
+	<if mail_domain.findChild("antispam")>
+	    &nbsp;&nbsp;&nbsp;<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_delete_antispams.sbm&mail_domain="+mail_domain+"&next_template=submit/email/delete_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.delete_all)><call draw_label(lang.email.all_antispams)>
+	</if>
+	</td>
+	</tr>
+      </if>
+
+      <if account.plan.areResourcesAvailable("antivirus") && !config.IRIS_USER>
+	<tr>
+        <td><call draw_label(lang.label.antivirus)><call draw_help("user-mailinfo-antivirus_prefs","")></td>
+        <td nowrap>
+        <!--if toolbox.gt(mail_domain.whitelist.size(),0)=="1"-->
+          <call draw_antivirus_type(config.CLIENT_CP_URL+"?md_id="+mail_domain+"&mid="+mail_domain+"&type=mdomain&email="+mail_domain.name+"&template_name=email/manage_antivirus.html"+"&stemplate="+template)>
+          <call draw_label(lang.email.antispam.mdomain_note)>
+        </td>
+        </tr>
+	<tr>
+	<td>&nbsp;</td>
+	<td><call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_add_antiviruses.sbm&range=mailbox&md_id="+mail_domain+"&next_template=submit/email/add_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antivirus.add_for_all_mailboxes)><call draw_label(lang.email.for_all_mailboxes)>&nbsp;&nbsp;&nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_add_antiviruses.sbm&range=all&md_id="+mail_domain+"&next_template=submit/email/add_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antivirus.add_for_all_mailobjects)><call draw_label(lang.email.for_all_mailresources)>
+	<if mail_domain.findChild("antivirus")>
+	    &nbsp;&nbsp;&nbsp;<call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_delete_antiviruses.sbm&mail_domain="+mail_domain+"&next_template=submit/email/delete_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antivirus.delete_all)><call draw_label(lang.email.all_antiviruses)>
+	</if>
+	</td>
+	</tr>
+      </if>
+      <assign spf=mail_service.findChild("spf")>
+      <if !config.IRIS_USER && (account.plan.areResourcesAvailable("spf") || spf)>
+	<tr>
+	  <td><call draw_label(lang.label.spf)><call draw_help("user-mailinfo-spf","")></td>
+	  <td>
+	  <if spf>
+	    <call disable(mail_service,spf)>
+	    <call draw_edit(config.CLIENT_CP_URL+"?uid="+spf+"&rid="+mail_service+"&mid="+mail_service+"&processing="+spf.processing+"&name="+spf.getName()+"&rid_type=mail_service&md_id="+mail_domain+"&domain_type="+domain.type+"&template_name=email/update_spf.html&stemplate="+template+"&ftemplate="+template, lang.email.spf.edit)>
+	  <else>
+	    <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_service+"&aid="+mail_service+"&mid="+mail_service+"&rid_type=mail_service&type=spf&domain_type="+domain.type+"&template_name=submit/misc/add_check.sbm&next_template=email/update_spf.html&stemplate="+template+"&ftemplate="+template)>
+          </if>
+	</tr>
+	<if mail_service.existDomainAliasesWithoutSPF()=="true">
+	  <assign daWithoutSPF="1">
+	</if>
+	<if mail_service.existDomainAliasesWithSPF()=="true">
+	  <assign daWithSPF="1">
+	</if>
+	<if domain.type!="domain_alias" && (daWithoutSPF=="1" || daWithSPF=="1")>
+	  <tr>
+	  <td>&nbsp;</td>
+	  <td>
+	    <if daWithoutSPF=="1">
+	      <call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_add_da_spfs.sbm&next_template=email/update_spf.html&end_template=submit/email/add_da_spfs.sbm&mail_service="+mail_service+"&md_id="+mail_domain+"&for_da=1&processing="+spf.processing+"&stemplate="+template+"&ftemplate="+template, lang.email.spf.add_for_all_das)><call draw_label(lang.email.spf.for_all_das)>
+	    </if>
+	    <if daWithSPF=="1">
+	      <if daWithoutSPF=="1">&nbsp;&nbsp;&nbsp;</if>
+	      <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/email/estimate_delete_da_spfs.sbm&next_template=submit/email/delete_da_spfs.sbm&mail_service="+mail_service+"&md_id="+mail_domain+"&stemplate="+template+"&ftemplate="+template, lang.email.spf.delete_for_all_das)><call draw_label(lang.email.spf.all_das)>
+	    </if>
+	  </td>
+	  </tr>
+	</if>
+      </if>
+    </table>
+    </td>
+  </tr>
+  </if>
+
+  <!-- Mail domain aliases -->
+  <if account.plan.areResourcesAvailable("mail_domain_alias") && mail_domain && account.plan.type != "mailonly">
+    <tr>
+    <td width="100%" colspan="2">
+    <table class="inner_control_grid">
+      <tr>
+      <td class="inner_control_grid_header" colspan="2"><call draw_header(lang.domain.addmaildomainalias.aliases)></td>
+      </tr>
+      <assign count="0">
+      <assign alias_list=domain.getChildren("domain_alias")>
+      <assign more="false">
+      <list alias_list as domain_alias>
+        <assign mail_domain_alias=domain_alias.getChild("mail_domain_alias")>
+        <if mail_domain_alias>
+	  <if count!="3">
+	    <tr>
+	    <td>
+	      <call draw_label(mail_domain_alias.domain_alias)>
+	    </td>
+	    <td width="1" nowrap class="inner_control_grid_align_center"><call draw_delete(config.CLIENT_CP_URL+"?md_id="+mail_domain+"&did="+mail_domain_alias+"&dtemplate=submit/domain/delete_mail_domain_alias.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&alias="+mail_domain_alias+"&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.delete)></td>
+	    </tr>
+	    <assign count=toolbox.add(count, "1")>
+	  <else>
+	    <assign more="true">
+	    <assign res=alias_list.stop>
+	  </if>
+	</if>
+      </list>
+      <if more=="true">
+        <tr>
+	  <td colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&rid="+domain+"&mo_id="+mail_domain_alias+"&is_more=true", lang.domain.moremaildomainaliases.header)>
+	  </td>
+	</tr>
+      </if>
+      </tr>
+      </table>
+      </td>
+      </tr>
+    </if>
+
+    <!-- Mail objects -->
+<if config.IRIS_USER><assign old="1"></if>
+<if !old>
+      <if md_id>
+	<if !mailbox><assign mailbox=request.mailbox></if>
+	<if !forward><assign forward=request.forward></if>
+	<if !alias><assign alias=request.alias></if>
+	<if !responder><assign responder=request.responder></if>
+	<if !antispam><assign antispam=request.antispam></if>
+	<if !antivirus><assign antivirus=request.antivirus></if>
+
+	<if request.sc_page><assign page=request.sc_page><else><assign page="1"></if>
+	<if request.sortField><assign sortField=request.sortField></if>
+	<if request.sortDirection><assign sortDirection=request.sortDirection></if>
+
+	<if request.del && !failure>
+	  <assign name="">
+	  <assign mailType="">
+	  <assign removed="1">
+	<else>
+	  <if !name><assign name=request.name></if>
+	  <if request.mailType><assign mailType=request.mailType></if>
+	</if>
+
+	<if mo_id>
+	  <assign report=mail_domain.getReportJoined(name)>
+	<else>
+	  <if (request.del && !failure) || del>
+	    <assign report=mail_domain.getReportJoined("")>
+	  <else>
+	    <assign report=mail_domain.getReportJoined("0")>
+	  </if>
+	</if>
+
+	<if report.status!="OK">
+	  <assign res=session.addMessage(toolbox.compose(lang.label.errorrepmsg, report.msg))>
+	<else>
+	  <assign res=report.setStep("10")>
+	  <if mo_id && name!=request.old_name>
+	    <assign res=report.setPageForNewMailObject()>
+	  <else>
+	  <if (sortField && (report.field!=sortField || report.direction!=sortDirection))>
+	    <if sortDirection>
+	      <assign res=report.reorder(sortField,"true")>
+	    <else>
+	      <assign res=report.reorder(sortField,"false")>
+	    </if>
+	  </if>
+	  <assign res=report.setPage(page)>
+	</if>
+	<call advReportInit(report)>
+      </if>
+      <assign sc_params="&sc_page="+report.currentPage+"&md_id="+mail_domain+"&sortField="+report.field+"&sortDirection="+report.direction>
+
+      <tr>
+	  <td width="100%" colspan="2">
+	  <table class="inner_control_grid">
+	    <tr>
+	      <td class="inner_control_grid_header" colspan="3"><call draw_header(lang.email.list2.setup)></td>
+	    </tr>
+	    <tr>
+	     <td>
+	     <call draw_add(config.CLIENT_CP_URL+"?template_name=email/add_mailobject.html&stemplate="+template+sc_params, lang.email.new_email)>
+	     <call draw_link(config.CLIENT_CP_URL+"?template_name=email/add_mailobject.html&stemplate="+template+sc_params, lang.email.new_email)>
+              <if account.plan.areResourcesAvailable("mailing_list")>
+	        <td>
+	        <call draw_add(config.CLIENT_CP_URL+"?template_name=submit/email/create_confirm.sbm&stemplate="+template+"&ftemplate="+template+"&rtype=4"+"&rid="+mail_domain+sc_params, lang.email.new_mlist)>
+	        <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/email/create_confirm.sbm&stemplate="+template+"&ftemplate="+template+"&rtype=4"+"&rid="+mail_domain+sc_params, lang.email.new_mlist)>
+	        </td>
+              </if>
+	     <if account.plan.areResourcesAvailable("mail_domain_alias") && mail_domain && account.plan.type != "mailonly">
+	       <td>
+	       <call draw_add(config.CLIENT_CP_URL+"?template_name=domain/add_mail_domain_alias.html"+"&rid="+domain+"&md_id="+mail_domain+"&stemplate="+template+"&ftemplate=email/list2.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rtype=6", lang.domain.addmaildomainalias.header)>
+               <call draw_link(config.CLIENT_CP_URL+"?template_name=domain/add_mail_domain_alias.html"+"&rid="+domain+"&md_id="+mail_domain+"&stemplate="+template+"&ftemplate=email/list2.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rtype=6", lang.domain.addmaildomainalias.header)>
+               </td>
+	     </if>
+	     </td>
+	    </tr>
+	    </table>
+	  </tr>
+
+
+      <tr>
+      <td colspan="2">
+        <table class="inner_control_grid">
+          <tr>
+            <td width="50%"><call advReportNav(report)></td>
+          </tr>
+        </table>
+      </td>
+      </tr>
+      <tr>
+      <td colspan="2">
+      <table class="inner_control_grid">
+      <tr>
+      <td class="inner_control_grid_header"><call advReportLabel(report, lang.label.email, "orderName")>&nbsp;<call draw_help("user-mailinfo-object","")></td>
+      <td class="inner_control_grid_header"><call draw_header(lang.email.resources_included)></td>
+      <td class="inner_control_grid_header" colspan="2"><call draw_header(lang.email.properties)></td>
+      </tr>
+
+<!--${step} ${page}-->
+      <assign entries = report.page()>
+      <list entries as entry>
+	<switch entry.mailType>
+	  <case "mail_object">
+	    <assign path = config.CLIENT_CP_URL+"?template_name=email/manage_mailobject.html"+"&rid="+mail_domain+"&stemplate="+template+"&mailbox="+entry.mailbox+"&forward="+entry.forward+"&alias="+entry.alias+"&responder="+entry.responder+"&antispam="+entry.antispam+"&antivirus="+entry.antivirus+"&local="+entry.name+sc_params>
+	    <tr>
+	    <td><call draw_link(path,entry.name+"@"+mail_domain.name)></td>
+	    <td>
+	      <if entry.mailbox>
+		<assign mailbox=account.getResource(entry.mailbox)>
+		<call draw_mailbox_type(path)>
+	      <else>
+		<assign mailbox="">
+	      </if>
+	      <if entry.forward>
+	        <assign forward=account.getResource(entry.forward)>
+	        <call draw_mailforward_type(path)>
+	      <else>
+	        <assign forward="">
+	      </if>
+	      <if entry.alias>
+	        <assign alias=account.getResource(entry.alias)>
+	        <call draw_mailalias_type(path)>
+	      <else>
+	        <assign alias="">
+	      </if>
+	      <if entry.responder>
+	        <assign responder=account.getResource(entry.responder)>
+	        <call draw_responder_type(path)>
+	      <else>
+		<assign responder="">
+	      </if>
+	      <if entry.antispam>
+                <assign antispam=account.getResource(entry.antispam)>
+		<call draw_antispam_type(config.CLIENT_CP_URL+"?rid="+mail_domain+"&mid="+antispam+"&type=mbox&email="+entry.name+"@"+mail_domain.name+"&template_name=email/manage_antispam.html&stemplate="+template+"&ftemplate="+template+sc_params)>
+              <else>
+                <assign antispam="">
+              </if>
+	      <if entry.antivirus>
+                <assign antivirus=account.getResource(entry.antivirus)>
+		<call draw_antivirus_type(config.CLIENT_CP_URL+"?rid="+mail_domain+"&mid="+antivirus+"&type=mbox&email="+entry.name+"@"+mail_domain.name+"&template_name=email/manage_antivirus.html&stemplate="+template+"&ftemplate="+template+sc_params)>
+              <else>
+                <assign antivirus="">
+              </if>
+	    </td>
+	    <td>
+	      <if mail_domain.catchAll==entry.name>
+                <call draw_catchall_type(path)>
+              </if>	
+	      <if mailbox>
+		<if entry.name=="postmaster">
+		  <call draw_label("10 MB")>&nbsp;<call draw_label_bold("("+lang.label.unchangeable+")")>
+		<else>
+		  <assign quota=mailbox.getChild("mail_quota")>
+		  <if quota>
+		    <assign used=quota.usedMb>
+		    <assign limit=quota.limitMb>
+		  <else>
+		    <assign used="N/A">
+		    <assign limit="0">
+		  </if>
+		  <call draw_label("<b>"+used+"</b> MB of ")><call draw_link(config.CLIENT_CP_URL+"?rid="+mail_domain+"&mid="+mailbox+"&template_name=email/update_quota_form.html&stemplate="+template+"&ftemplate="+template+sc_params, limit+" MB")>
+	        </if>
+		<if entry.name=="postmaster">
+		  <call draw_launch(config.CLIENT_CP_URL+"?template_name=/submit/email/pmwebmail.sbm&mail_domain="+mail_domain+"&mailbox="+mailbox,lang.email.mailboxes2incl.launch)>
+		<else>
+		  <call draw_launch(config.CLIENT_CP_URL+"?template_name=/submit/email/webmail.sbm&mail_domain="+mail_domain+"&mailbox="+mailbox,lang.email.mailboxes2incl.launch)>
+		</if>
+		<if mailbox.discard_incomm_mail=="enabled">
+		  <call draw_discard_type(path)>
+		</if>
+		<if !forward && !alias && !responder && mailbox.description!="No description">
+	          <call draw_label(mailbox.description)>
+	        </if>
+	      </if>
+	      <if forward && toolbox.gt(forward.subs_cnt,0)=="1">
+	        <if forward.subs_cnt!="1">
+		  <call draw_label_bold(lang.label.suscribers)><call draw_label(":")>
+		  <call draw_label(forward.subscribers[0])>
+		  <call draw_label_bold("...")>
+		  <call draw_label("["+forward.subs_cnt+"]")>
+		<else>
+		  <call draw_label_bold(lang.label.suscriber)><call draw_label(":")>
+		  <call draw_label(forward.subscribers[0])>
+		</if>
+	      </if>
+	    <if alias>
+	      <if !mailbox || !forward>
+	        <if alias.subs_cnt=="1">
+		  <call draw_label_bold(lang.email.alias.store_to)><call draw_label(":")>
+		  <call draw_label(alias.subscribers[0])>
+	        <else>
+		  <if toolbox.gt(alias.subs_cnt,"0")=="1">
+	            <call draw_label_bold(lang.email.alias.store_to)><call draw_label(":")>
+	            <call draw_label(alias.subscribers[0])><call draw_label_bold("...")>
+	            <call draw_label("["+alias.subs_cnt+"]")>
+		  <else>
+	            <call draw_label_bold(lang.email.alias.error)>
+		  </if>
+	        </if>
+	      </if>
+	    </if>
+	    <if responder>
+	      <if (!mailbox && !forward) || (!mailbox  && !alias) || (!forward && !alias)>
+	        <call draw_label_bold(lang.email.addresponder.subj)><call draw_label(":")>
+	        <call draw_label(responder.subject)>
+	      </if>
+	    </if>
+	    </td>
+	    <td class="inner_control_grid_align_center"><if entry.name!="postmaster" && entry.name!=mail_domain.catchAll><call draw_delete(config.CLIENT_CP_URL+"?rid="+mail_domain+"&dtemplate=submit/email/delete_mailobject.sbm&template_name=submit/email/delete_confirm_joined.sbm&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&del=1"+sc_params+"&mailbox="+mailbox+"&forward="+forward+"&alias="+alias+"&responder="+responder+"&antispam="+antispam+"&antivirus="+antivirus+"&name="+entry.name+"&mailType=mail_object", lang.label.delete)><else>&nbsp;</if></td>
+	    </tr>
+	    <break>
+
+	  <case "mailing_list">
+	    <if old>
+	      <tr>
+	      <td><call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+"&arid="+report.id+sc_params,entry.name+"@"+mail_domain.name)></td>
+	      <td><call draw_maillist_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+"&arid="+report.id+sc_params)></td>
+	    <else>
+	      <assign mlist=account.getResource(entry.mailing_list)>
+	      <assign list=mlist.list()>
+	      <assign path=config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/mod_mlist_form.html"+"&stemplate="+template+sc_params>
+	      <tr>
+	      <td><call draw_link(path, entry.name+"@"+mail_domain.name)></td>
+	      <td><call draw_maillist_type(path)></td>
+	      <td><call draw_label_bold(lang.email.mlists2incl.subscrs)><call draw_label(":")>
+	        <if !list><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/manage_mlist_form.html"+"&stemplate="+template+"&sc_page1="+toolbox.url_escape(report.currentPage)+"&md_id="+mail_domain, lang.email.mlists2incl.add)><else><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_mlist_form.html"+"&stemplate="+template+"&sc_page1="+toolbox.url_escape(report.currentPage)+"&md_id="+mail_domain, lang.email.mlists2incl.editsubscr)>&nbsp;<call draw_label("["+list.size+"]")></if>
+		<call draw_label_bold(lang.email.mlists2incl.moderators)><call draw_label(":")><assign list=mlist.listMod()><if !list><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_modlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.addmoderator)><else><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_modlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.editmodlist)>&nbsp;<call draw_label("["+list.size+"]")></if>
+		<call draw_label_bold(lang.email.mlists2incl.trailer)><call draw_label(":")><call draw_help("user-mailinfo-mlist_trailer", "")>
+		<if mlist.trailer>
+		  <call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/mlist_put_trailer.html"+"&stemplate="+template+sc_params, lang.email.mlist_trailer_alt_edit)>
+		<else>
+		  <call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/mlist_put_trailer.html"+"&stemplate="+template+sc_params, lang.email.mlist_trailer_alt_add)>
+		</if>
+	      </td>
+	      <td class="control_align_center"><call draw_delete(onfig.CLIENT_CP_URL+"?did="+mlist+"&dtemplate=submit/email/delete_mlist.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&del=1"+sc_params, lang.label.delete)></td>
+	    </if>
+            <break>
+	  </switch>
+
+	</list>
+        </table>
+        </td>
+        </tr>
+      <else>
+        <tr>
+        <td colspan="2">
+        <table class="inner_control_grid">
+	<tr><td class="inner_control_grid_header"><call draw_header(lang.email.list2.mobjects)></td></tr>
+	<tr><td><call draw_label(lang.email.list2.domainhint)></td></tr>
+        </table>
+        </td>
+        </tr>
+      </if>
+    <else> <!-- OLD -->
+
+    <td bgcolor="${LIGHT_STRIP}"  width="50%" valign="top">
+    <table class="inner_control_grid">
+    <!--table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="${design.color("border_color")}"-->
+      <tr>
+      <td valign="top" height="100%">
+      <table class="inner_control_grid">
+      <!--table width="100%" border="0" cellspacing="1" cellpadding="3" align="CENTER"-->
+      <if md_id>
+            <if mo_id>
+                <assign report = mail_domain.getReport(mo_id.id)>
+            <else>
+                <if request.del>
+                    <assign report = mail_domain.getReport("-1")>
+                <else>
+                    <assign report = mail_domain.getReport("0")>
+                </if>
+            </if>
+            <if report.status != "OK">
+                <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, report.msg))>
+            <else>
+                <assign res = report.setStep("10")>
+                <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+                <assign res = report.setPage(page)>
+                <call advReportInit(report)>
+                <if mo_id>
+                    <assign res = report.setPageForNewMailObject()>
+                </if>
+            </if>
+        <assign sc_params="&sc_page="+toolbox.url_escape(report.currentPage)+"&md_id="+toolbox.url_escape(mail_domain)>
+        <tr bgcolor="${HEADER_COLOR}">
+          <td><call advReportLabel(report, lang.label.email, "orderName")>&nbsp;<call draw_help("user-m
+ailinfo-object","")></td>
+          <td><call advReportLabel(report, lang.email.list2.type, "orderType")></td>
+        </tr>
+<!--${step} ${page}-->
+        <assign entries = report.page()>
+        <list entries as entry>
+            <switch entry.mailType>
+              <case "mailbox">
+                <tr><td bgcolor="${LIGHT_STRIP}">
+                <if entry.name=="postmaster">
+                    <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id=postmaster"+sc_params,"postmaster@"+mail_domain.name)>
+                    </td><td bgcolor="${LIGHT_STRIP}"><call draw_mailbox_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+sc_params+"&mo_id=postmaster")></td>
+                <else>
+                    <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params,entry.name+"@"+mail_domain.name)>
+                    </td><td bgcolor="${LIGHT_STRIP}"><call draw_mailbox_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params)></td>
+                </if>
+                </td>
+                </tr>
+                <break>
+            <case "mail_forward">
+                <tr><td bgcolor="${LIGHT_STRIP}" >
+                <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params,entry.name+"@"+mail_domain.name)>
+                </td><td bgcolor="${LIGHT_STRIP}"><call draw_mailforward_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params)></td>
+                </tr>
+                <break>
+            <case "mailbox_alias">
+                <tr><td bgcolor="${LIGHT_STRIP}" >
+                <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params,entry.name+"@"+mail_domain.name)>
+</td><td bgcolor="${LIGHT_STRIP}"><call draw_mailalias_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params)></td>
+                 <break>
+	    <case "responder">
+                <tr><td bgcolor="${LIGHT_STRIP}" >
+                <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params,entry.name+"@"+mail_domain.name)>
+                </td><td bgcolor="${LIGHT_STRIP}"><call draw_responder_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params)></td>
+                <break>
+            <case "mailing_list">
+                <tr><td bgcolor="${LIGHT_STRIP}" >
+                <call draw_link(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params,entry.name+"@"+mail_domain.name)></td>
+                <td bgcolor="${LIGHT_STRIP}"><call draw_maillist_type(config.CLIENT_CP_URL+"?template_name=email/list2.html"+"&mo_id="+entry.id+sc_params)></td>
+                 <break>
+            </switch>
+        </list>
+        <tr><td bgcolor="${LIGHT_STRIP}" align="center" colspan="2"><call advReportNav(report)><br><call draw_link(config.CLIENT_CP_URL+"?template_name=email/add_new_resource.html"+"&rid="+mail_domain+"&stemplate="+template+sc_params, lang.email.list2.add)></td></tr>
+      <else>
+        <tr bgcolor="${HEADER_COLOR}"><td><call draw_header(lang.email.list2.mobjects)></td></tr>
+        <tr><td bgcolor="${LIGHT_STRIP}"><call draw_label(lang.email.list2.domainhint)></td></tr>
+      </if>
+      </table>
+      </td>
+      </tr>
+    </table>
+    </td>
+<!-- Mail objects -->
+        <td bgcolor="${LIGHT_STRIP}"  width="50%" valign="top">
+	<table class="inner_control_grid">
+    <!--table width="100%" border="0" cellspacing="0" cellpadding="0"  align="CENTER" bgcolor="${design.color("border_color")}"-->
+      <tr>
+      <td height="100%" valign="top">
+	<table class="inner_control_grid">
+        <!--table width="100%" border="0" cellspacing="1" cellpadding="3" align="CENTER"-->
+        <if !mo_id><assign mo_id = request.mo_id></if>
+        <if mo_id>
+          <if mo_id=="postmaster">
+            <tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.postmaster)>&nbsp;<call draw_help("user-mailinfo-postmaster-h","")></td></tr>
+            <include "control/email/postmaster_incl.html">
+          <else>
+            <assign mo=account.getResource(mo_id)>
+            <switch mo.type>
+              <case "mailbox">
+                <tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.mboxprop)></td></tr>
+                <assign mailbox=account.getResource(mo_id)>
+                <include "control/email/mailboxes2_incl.html">
+              <break>
+              <case "mail_forward">
+                <tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.mforwardprop)></td></tr>
+                <assign forward=account.getResource(mo_id)>
+                <include "control/email/forwards2_incl.html">
+              <break>
+              <case "mailbox_alias">
+                <tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.maliasprop)></td></tr>
+                <assign alias=account.getResource(mo_id)>
+                <include "control/email/aliases2_incl.html">
+              <break>
+              <case "mailing_list">
+<case "mailing_list">
+                <tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.mlistprop)></td></tr>
+                <assign mlist=account.getResource(mo_id)>
+                <include "control/email/mailing_lists2_incl.html">
+              <break>
+              <case "responder">
+<tr bgcolor="${HEADER_COLOR}"><td colspan="2"><call draw_header(lang.email.list2.mresponderprop)></td></tr>
+                <assign responder=account.getResource(mo_id)>
+                <include "control/email/responders2_incl.html">
+              <break>
+            </switch>
+          </if>
+        <else>
+          <tr bgcolor="${HEADER_COLOR}">
+            <td><call draw_header(lang.email.properties)>&nbsp;<call draw_help("user-mailinfo-prop","")></td>
+          </tr>
+          <tr>
+            <td bgcolor="${LIGHT_STRIP}"><call draw_label(lang.email.list2.mobjecthint)></td>
+          </tr>
+        </if>
+	</table>
+      </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</if>
+  <else>
+    <tr><td colspan="2"><call draw_label_bold(lang.email.no_mail_domains)></td></tr>
+  </if>
+  <call draw_table_footer()>
+
+<else><!-- if !is_more -->
+  <!-- Mail domain aliases -->
+  <call draw_table_header("2", lang.domain.addmaildomainalias.aliases)>
+    <assign domain = account.getResource(request.rid)>
+    <assign alias_list = domain.getChildren("domain_alias")>
+    <list alias_list as domain_alias>
+      <assign mail_domain_alias = domain_alias.getChild("mail_domain_alias")>
+      <if mail_domain_alias>
+      <tr>
+      <td><call draw_label(mail_domain_alias.domain_alias)></td>
+      <td><call draw_delete(config.CLIENT_CP_URL+"?md_id="+mail_domain+"&did="+mail_domain_alias+"&dtemplate=submit/domain/delete_mail_domain_alias.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&alias="+mail_domain_alias+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&is_more=true", lang.label.delete)></td>
+      </tr>
+      </if>
+    </list>
+    </tr>
+    <tr>
+    <td class="control_align_center" colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=domain/add_mail_domain_alias.html"+"&rid="+domain+"&md_id="+mail_domain+"&stemplate="+template+"&ftemplate=email/list2.html"+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&rtype=6", lang.domain.addmaildomainalias.header)></td>
+    </tr>
+  <call draw_table_footer()>
+</if><!-- if is_more -->
+
+<!--  END ./email/list2.html  -->

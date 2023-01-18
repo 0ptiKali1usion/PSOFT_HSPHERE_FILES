@@ -1,0 +1,85 @@
+<!-- BEGIN ./control/background/job_admin.html  -->
+<call draw_tooltip()>
+<include "control/misc/popup_note.html">
+
+<SCRIPT language="Javascript">
+<!--
+function selectall(elements) {
+var mode=elements.selector.checked;
+var el;
+for (var i = 0; i < elements.length; i++) {
+  el = elements[i];
+  if (el.type == "checkbox") {
+  el.checked = mode;
+    }
+  }
+}
+//-->
+</SCRIPT>
+
+<call draw_table_header("4", lang.quick.quickview.background_man)>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+  <input type="hidden" name="template_name" value="submit/background/joblist_action.sbm">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+
+<assign jobMgr = account.jobManager>
+<assign grouplist = jobMgr.getGroupNames().sortNatural()>
+<list grouplist as group>
+<tr>
+<td colspan="4" class="control_header"><call draw_header(lang.background.group_name.mes(group))></td>
+</tr>
+<tr>
+<td class="control_header"><call draw_header(lang.background.job.name)></td>
+<td class="control_header"><call draw_header(lang.background.job.priority)></td>
+<td class="control_header"><call draw_header(lang.background.job.period)></td>
+<td class="control_header"><call draw_header(lang.background.job.status)></td>
+</tr>
+
+<assign joblist = jobMgr.getJobNamesOfGroup(group).sortNatural()>
+<assign jobcount = "0">
+
+<list joblist as job>
+<assign jobcount = toolbox.add(jobcount, 1)>
+<assign job_status = jobMgr.getJobStartParam(job, "status")>
+<tr>
+<td>
+<if job_status != "disabled_globally">
+  <input type="checkbox" name="jobid" value="${job}">
+<else><if !browser.complies("Netscape_-4.99")>
+  <input type="checkbox" value="" DISABLED>
+<else>&nbsp;
+</if></if>
+&nbsp;<call draw_link(config.CLIENT_CP_URL+"?template_name=background/job_edit.html&jobname=" + job, job)>
+</td>
+<td><call draw_label(jobMgr.getJobStartParam(job, "priority"))></td>
+<td><call draw_label(jobMgr.getJobStartParam(job, "period_min"))></td>
+<td width="15%" nowrap>
+  <if job_status == "disabled_globally">
+  <call draw_popup_note_l(lang.bg_job.STATUS[job_status], lang.background.job.disabled_globally_note)>
+  <else>
+  <call draw_label(lang.bg_job.STATUS[job_status])>
+  </if>
+</td>
+</tr>
+</list>
+
+</list>
+
+<tr>
+<td colspan="4">
+  <input type="checkbox" name="selector" onChange="selectall(this.form.elements)">
+  <call draw_label(lang.background.admin.selall)>
+  <input type="radio" name="act" value="start">
+  <call draw_label(lang.background.action.start)>
+  <input type="radio" name="act" value="disable">
+  <call draw_label(lang.background.action.disable)>
+  <input type="radio" name="act" value="enable">
+  <call draw_label(lang.background.action.enable)>&nbsp;
+  <input type="submit" value="${lang.button.apply}">
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/background/job_admin.html  -->

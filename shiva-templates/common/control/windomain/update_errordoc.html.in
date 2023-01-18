@@ -1,0 +1,41 @@
+<!-- BEGIN ./submit/windomain/update_errordoc.html  -->
+<yafv s_windomain>
+<call draw_tooltip()>
+
+<assign doc=account.getResource(request.uid)>
+<if !vmsg><assign vmsg=doc.msg></if>
+<if !vmtype><assign vmtype=doc.mtype></if>
+<form name="f_update_ed" check! action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="windomain/update_errordoc.html">
+<input type="hidden" name="template_name" value="submit/windomain/update_errordoc_submit.sbm">
+
+<call draw_table_header("2", lang.domain.updateerrordoc.header)>
+
+<tr>
+    <td><call draw_label(lang.domain.updateerrordoc.doccode)></td>
+    <td><call draw_label(doc.code)></td>
+</tr>
+<if vmtype == "URL"><assign vchecked1 = ""><assign vchecked2 = "CHECKED"><else><assign vchecked1 = "CHECKED"><assign vchecked2 = ""></if>
+<tr>
+   <td><call draw_label("Choose the document type")></td>
+   <td    nowrap><input type="radio" name="mtype" value="FILE" onChange="checkForm(this.form,false)" ${vchecked1}>FILE&nbsp;&nbsp;<input type="radio" name="mtype" value="URL" onChange="checkForm(this.form,false)" ${vchecked2}>URL</td>
+</tr>
+<tr>
+    <td><call draw_label(lang.windomain.adderrordoc.path)></td>
+    <td nowrap    ><input type="text" name="msg" size="49" value="${vmsg}" label="${lang.domain.updateerrordoc.messageurl}" check="vWinURLPath(this, mtype)"></td>
+</tr>
+
+<tr>
+    <td colspan="2"><call draw_label(lang.windomain.adderrordoc.html_note)></td>
+</tr>
+
+<tr>
+    <td  class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./submit/windomain/update_errordoc.html  -->
+

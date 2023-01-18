@@ -1,0 +1,34 @@
+<assign maintainAdmin=account.getChild("maintainAdmin")>
+<if request.change=="MAX_HOURS">
+    <assign result=yafv.common.s_maintain.vHours(lang.maintain.max_hours,request.new_max_hours)>
+    <if result.status=="OK">
+	<assign result = maintainAdmin.changeMaxHours(request.task_id,request.new_max_hours)>
+	<if result.status=="OK">
+	    <assign success="1">
+	<else>
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.maintain_max_hours_failed_add,reques.new_max_hours))>
+	</if>
+    <else>
+	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+</if>
+<if request.change=="HOURS">
+    <assign result=yafv.common.s_maintain.vHours(lang.maintain.hours,request.new_hours)>
+    <if result.status=="OK">
+	<assign result = maintainAdmin.changeHours(request.task_id,request.new_hours)>
+	<if result.status=="OK">
+	    <assign success="1">
+	<else>
+	    <assign res=session.addMessage(toolbox.compose(
+                lang.msg.maintain_hours_failed_add,reques.new_hours))>
+	</if>
+    <else>
+	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>

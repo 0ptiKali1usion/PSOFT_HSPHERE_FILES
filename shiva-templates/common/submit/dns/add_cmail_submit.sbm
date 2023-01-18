@@ -1,0 +1,31 @@
+<!-- BEGIN ./dns/add_cmail_submit.sbm  -->
+<assign rid=request.rid>
+<assign domain=account.getResource(request.rid)>
+<assign dns_zone = domain.dns_zone>
+<assign check=yafv.checkall(
+  yafv.common.s_dns.vCustomMXName(lang.dns.name,request.dname), 
+  yafv.common.s_dns.vPriority(lang.dns.priority,request.dpriority),
+  yafv.common.s_dns.vDomain_Name(lang.dns.ttl,request.dmail_server) )>
+<if check.status=="OK">
+  <if request.dname><assign fname = request.dname+"."+domain.name><else><assign fname = domain.name></if>
+  <assign result=dns_zone.addChild("cust_dns_record", "", fname,"MX","",request.dmail_server,request.dpriority)>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.dns.mx_record,""))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdname=request.dname>
+    <assign vdmail_server=request.dmail_server>
+    <assign vdpriority=request.dpriority>
+    <include request.ftemplate>
+</if>
+
+<!--  END ./dns/add_cmail_submit.sbm  -->

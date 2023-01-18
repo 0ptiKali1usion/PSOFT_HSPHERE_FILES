@@ -1,0 +1,38 @@
+<!-- BEGIN ./turn_server.sbm -->
+<assign vps=account.getResource(request.rid)>
+<if vps>
+   <if request.param=="start">
+       <if vps.server_status == "2">
+	    <assign result = vps.startServer()>
+	    <if result.status!="OK">
+		<assign failure="1">
+		<assign res = session.addMessage(result.msg)>
+            </if>
+       <else>
+	    <assign failure="1">
+            <assign res = session.addMessage(lang.vps.unable_to_start_not_stopped)>
+       </if>
+   <else>
+       <if request.param=="stop">
+	    <if vps.server_status == "1">
+		<assign result = vps.stopServer()>
+		<if result.status!="OK">
+		    <assign failure="1">
+		    <assign res = session.addMessage(result.msg)>
+		</if>
+	    <else>
+		<assign failure="1">
+		<assign res = session.addMessage(lang.vps.unable_to_stop_not_running)>
+	    </if>
+       </if>
+   </if>
+<else>
+   <assign failure="1">
+</if>
+
+<if failure>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!--  END ./turn_server.sbm -->

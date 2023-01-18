@@ -1,0 +1,25 @@
+<!-- BEGIN ./control/signup/failed_to_charge.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin= account.getChild("admin")>
+
+<if signup && admin && (signup.failed_accounts.size != "0")>
+&nbsp;
+<call draw_table_header("3", lang.signup.failed_to_charge)>
+   <list signup.failed_accounts.KEYS as plan_id>
+      <assign plan = admin.getPlan(plan_id)>
+      <tr >
+	<td colspan="3"><call draw_header(plan.description)></td>
+      </tr>
+      <assign faccounts = signup.failed_accounts[plan_id]>
+      <list signup.failed_accounts[plan_id] as faccount>
+        <tr >
+          <td><call draw_link(config.CLIENT_CP_URL+"?template_name=/admin/view_failed_account.html&fid="+faccount.id+"&stemplate="+template,faccount.username)></td>
+          <td><call draw_label(faccount.created("TS_SHORT"))></td>
+          <td><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/del_failed_signup.sbm&fid="+faccount.id+"&stemplate=signup/moderate.html&ftemplate="+template, lang.label.del)></td>
+        </tr>
+      </list>
+   </list>
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/signup/failed_to_charge.html  -->

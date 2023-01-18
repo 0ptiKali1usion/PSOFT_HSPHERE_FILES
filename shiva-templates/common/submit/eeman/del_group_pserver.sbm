@@ -1,0 +1,11 @@
+<!-- BEGIN ./eeman/del_group_pserver.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver = eeman.getPserver(request.rid)>
+<assign result = pserver.delGroup(request.group)>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./eeman/del_group_pserver.sbm  -->

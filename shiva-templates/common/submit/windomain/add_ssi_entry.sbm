@@ -1,0 +1,24 @@
+<!-- BEGIN ./windomain/add_ssi_entry.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_windomain.vfileExt(lang.label.extention, request.ext))>
+<if result.status=="OK">
+  <assign hosting=account.getResource(request.rid)>
+  <assign ssi=hosting.getChild("ssi")>
+  <assign result=ssi.addChild("ssi_entry", "", request.ext)>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_added, lang.label.ssi_ext, request.ext))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vext=toolbox.html_encode(request.ext)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/add_ssi_entry.sbm  -->

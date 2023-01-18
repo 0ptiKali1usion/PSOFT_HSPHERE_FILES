@@ -1,0 +1,37 @@
+<!-- BEGIN ./email/forwards2_incl.html  -->
+<tr>
+<td><call draw_label(lang.email.forwards2incl.local)></td>
+<td><call draw_label(forward.local)></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.email.forwards2incl.remote)></td>
+<if ! config.IRIS_USER>
+  <td><if !forward.subscribers><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+forward+"&template_name=email/manage_forward_form.html"+"&stemplate="+template+sc_params, lang.email.forwards2incl.add)><else><call draw_edit(config.CLIENT_CP_URL+"&?rid="+mail_domain+"&uid="+forward+"&template_name=email/manage_forward_form.html"+"&stemplate="+template+sc_params, lang.email.forwards2incl.edit)></if></td>
+<else>
+  <list forward.subscribers as subs>
+    <td><call draw_label(subs)></td>
+  </list>
+</if>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.descr)></td>
+  <td><call draw_label(forward.description)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.email.forwards2incl.catch)>&nbsp;<call draw_help("user-mailinfo-catch","")></td>
+<td><if mail_domain.catchAll == forward.local>
+ <call draw_state_on(config.CLIENT_CP_URL+"?rid="+mail_domain+"&name="+forward.local+"&template_name=submit/email/disable_catch_all.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+forward+sc_params)>
+<else>
+ <call draw_state_off(config.CLIENT_CP_URL+"?rid="+mail_domain+"&name="+forward.local+"&template_name=submit/email/set_catch_all.sbm&stemplate="+template+"&ftemplate="+template+"&mo_id="+forward+sc_params)>
+</if></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.del)></td>
+  <td><if mail_domain.catchAll != forward.local><call draw_delete(config.CLIENT_CP_URL+"?did="+forward+"&dtemplate=submit/email/delete_forward.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+sc_params+"&del=1", lang.label.delete)><else><call draw_label(lang.email.forwards2incl.impossible)></if></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.email.forwards2incl.tt)></td>
+   <td><call draw_tt_link(forward,"")></td>
+</tr>
+<!--  END ./email/forwards2_incl.html  -->

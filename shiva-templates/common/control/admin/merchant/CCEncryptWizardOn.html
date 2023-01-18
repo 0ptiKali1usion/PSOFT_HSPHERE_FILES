@@ -1,0 +1,73 @@
+<!-- BEGIN ./common/control/admin/merchant/CCEncryptOnWizard.html -->
+<assign reseller_su = account.getChild("reseller_su")>
+<assign admin=account.getChild("admin")>
+<assign stat=admin.encryptionStatus()>
+<if reseller_su>
+<if stat=="1">
+<assign mm = account.getChild("merchant_manager")>
+
+<if !mm><assign mm = account.addChild("merchant_manager", "")></if>
+<call draw_tooltip()>
+
+
+<if request.step=="1">
+<call draw_table_header("2", lang.admin.CCEncryptWizardOn.header.step1)>
+<tr><td colspan=2><call draw_label(lang.admin.CCEncryptWizardOn.instructions)></td></tr>
+<tr>
+<td><call draw_label(lang.admin.CCEncryptWizardOn.generateKeys)></td>
+<td class="control_align_right"><call draw_plink(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/generate_enc_keys.sbm&step=2&stemplate="+template+"&ftemplate="+request.ftemplate,"button_next")> </td>
+</tr>
+</if>
+
+<if request.step=="2">
+<call draw_table_header("2", lang.admin.CCEncryptWizardOn.header.step2)>
+<tr>
+<td class="control_align_center" colspan=2><call draw_label(lang.admin.CCEncryptWizardOn.generatedKeys)></td>
+</tr>
+<tr>
+<td colspan=2><call draw_colored_label_bold(lang.admin.CCEncryptWizardOn.warning,design.color("important_color"))></td>
+</tr>
+<tr>
+<td valign="top" width="30%"><call draw_label(lang.admin.CCEncryptWizardOn.privateKey)></td>
+<td class="control_align_center">
+<form width="100%" method="POST" accept-charset="UTF-8">
+<textarea rows="20" cols="60">${admin.getPrivateKey()}</textarea>
+</form>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.CCEncryptWizardOn.gotoStep3)></td>
+<td class="control_align_right"><call draw_plink(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/clear_private_key.sbm&step=3&stemplate="+template+"&ftemplate="+request.ftemplate,"button_next")> </td>
+</tr>
+</if>
+
+<if request.step=="3">
+<call draw_table_header("", lang.admin.CCEncryptWizardOn.header.step3)>
+<tr><td><call draw_label(lang.admin.CCEncryptWizardOn.validateKey)></td></tr>
+<assign next_step="4">
+<tr><td><include "control/admin/merchant/PrivateKeyPost.html"></td></tr>
+</if>
+
+<if request.step=="4">
+<call draw_table_header("", lang.admin.CCEncryptWizardOn.header.step4)>
+<tr><td><call draw_label(lang.admin.CCEncryptWizardOn.encryptCC)></td></tr>
+<tr>
+<td><table class="inner_control" width="100%">
+  <tr>
+  <td class="inner_control"><call draw_plink(config.CLIENT_CP_URL+"?template_name="+request.ftemplate,"cancel")></td>
+  <td class="inner_control_align_right"><call draw_plink(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/encryptAllCCs.sbm&stemplate="+request.ftemplate+"&ftemplate="+request.ftemplate,"submit")></td>
+  </tr>
+</table></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<else>
+<if stat=="2"><call draw_label(lang.admin.CCEncryption.encryption)></if>
+<if stat=="3"><call draw_label(lang.admin.CCEncryption.already_on)></if>
+<if stat=="4"><call draw_label(lang.admin.CCEncryption.decryption)></if>
+</if>
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/CCEncryptOnWizard.html -->
+

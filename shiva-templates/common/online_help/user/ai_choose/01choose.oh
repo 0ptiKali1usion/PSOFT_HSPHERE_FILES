@@ -1,0 +1,7 @@
+<center>Choose Account</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+With H-Sphere you can have several accounts under one login and easily switch between them either loginig into the control panel or later whenever you want from this page. Several accounts are usual for different plans and platforms (Unix or Win2000). As each of your accounts has own billing periods, different sets of resources, different prices, etc., they are charged separately. However, you can share one billing profile for all of them. For more information see <i>Using Multiple Accounts</i>, <i> User Guide</i>.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Click the <i>Select</i> icon next to the account you want to log into.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If there is only one entry in the chart, it means that you don't have any other accounts and therefore there aren't any accounts to switch between. * If it is the case, this page is skipped at the login and you are taken directly to the <i>Account Info</i> page.

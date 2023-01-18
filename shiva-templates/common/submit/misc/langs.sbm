@@ -1,0 +1,6 @@
+<!-- BEGIN ./submit/misc/langs.sbm -->
+<if account>
+<assign setlang=account.preferences("lang", request["_language_"])>
+</if>
+<include request.stemplate>
+<!-- END ./submit/misc/langs.sbm -->

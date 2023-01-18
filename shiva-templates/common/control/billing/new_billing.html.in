@@ -1,0 +1,136 @@
+<!-- BEGIN ./billing/new_billing.html.in  -->
+<yafv s_billing>
+<call draw_tooltip()>
+<assign bi = account.bi>
+
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_billing_new"  check!  accept-charset="UTF-8">
+
+<if !account.suspended>
+  <input type="hidden" name="template_name" value="billing/new_info_confirm.html">
+  <input type="hidden" name="next_template" value="submit/billing/new_info.sbm">
+<else>
+  <input type="hidden" name="template_name" value="submit/suspended/new_billing_info.sbm">
+</if>
+<input type="hidden" name="stemplate" value="${stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="${request.type}">
+
+<if !first_name><assign first_name = bi.first_name></if>
+<if !last_name><assign last_name = bi.last_name></if>
+<if !company><assign company = bi.company></if>
+<if !address1><assign address1 = bi.address1></if>
+<if !address2><assign address2 = bi.address2></if>
+<if !city><assign city = bi.city></if>
+<if !state><assign state = bi.state></if>
+<if !state2><assign state2 = bi.state2></if>
+<if !postal_code><assign postal_code = bi.postal_code></if>
+<if !country><assign country = bi.country></if>
+<if !phone><assign phone = bi.phone></if>
+<if !email><assign email = bi.email></if>
+<if !exemption_code><assign exemption_code = bi.exemption_code></if>
+
+
+
+
+
+<call draw_table_header("2", lang.billing.newbilling.header)>
+
+
+<tr>
+  <td    width="50%"><call draw_label(lang.bci.fname)></td>
+<td>
+   	<input type="text" name="_bi_first_name"  value="${first_name}" size="30" check="vSinglename(this)" label="${lang.bci.fname}">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.lname)></td>
+   	<td>
+   	<input type="text" name="_bi_last_name" value="${last_name}" size="30" check="vSinglename(this)" label="${lang.bci.lname}">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.company)></td>
+   	<td>
+   	<input type="text" name="_bi_company" value="${company}" size="30" check="vOrganization(this)" label="${lang.bci.company}">
+  </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.adr1)></td>
+   	<td>
+   	<input type="text" name="_bi_address1" value="${address1}" size="30" check="vAddress" label="${lang.bci.adr1}">
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.adr2)></td>
+   	<td>
+		<input type="text" name="_bi_address2" value="${address2}" size="30">
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.city)></td>
+   	<td>
+		<input type="text" name="_bi_city" value="${city}" check="vCity" label="${lang.bci.city}">
+	</td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.state)></td>
+   	<td>
+	<select name="_bi_state" size="1">
+	    <call buildStates(state)>
+	</select> 
+	</td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.state_other)></td>
+  <td><input type="text" label="${lang.label.state_other}" name="_bi_state2" value="${state2}" check="vStateOther"></td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.bci.pcode)></td>
+        <td>
+                <input type="text" name="_bi_postal_code" value="${postal_code}" check="vPostal_Code" label="${lang.bci.pcode}">
+		<br><call draw_label(lang.bci.postalwarn)>
+        </td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.bci.country)></td>
+   	<td>
+	<select name="_bi_country" size="1">
+	    <call buildCountries(country)>
+        </select>
+	</td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.phone)></td>
+   	<td>
+		<input type="text" name="_bi_phone" value="${phone}" check="vPhone" label="${lang.bci.phone}">
+	</td>
+</tr>
+<tr>
+   <td><call draw_label(lang.bci.email)></td>
+   	<td>
+		<input type="text" name="_bi_email" value="${email}" check="vEmail" label="${lang.bci.email}">
+	</td>
+</tr>
+
+<if settings.allow_tax_exemption == "1">
+<tr>
+   <td><call draw_label(lang.bci.exemption_code)></td>
+   <td>
+     <input type="text" name="_bi_exemption_code" value="${exemption_code}" check="vExemptionCode" label="${lang.bci.email}">
+   </td>
+</tr>
+</if>
+<input type="hidden" name="_bi_type" value="${request.type}">
+
+<include "control/billing/new_billing."+request.type>
+<tr>
+   <td  class="control_align_center"  colspan="2"><input type="submit" value="${lang.button.add}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./billing/new_billing.html.in  -->

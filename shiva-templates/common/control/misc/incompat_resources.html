@@ -1,0 +1,39 @@
+<!-- BEGIN ./control/misc/incompat_resources.html -->
+<if period_id==""><assign period_id=request.period_id></if>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.misc.changeplan.header)>
+<tr>
+<td>
+  <call draw_label_bold(lang.misc.changeplan.currentplan)>
+</td>
+<td>
+  <call draw_label_bold(account.plan.description)>
+  <call draw_label_bold("("+account.getPeriodAsString(account.periodId)+")")>
+</td>
+</tr>
+<tr>
+<td>
+  <call draw_label_bold(lang.misc.changeplan.targetplan)>
+</td>
+<td>
+  <call draw_label_bold(plans[request.plan_id].description)>
+  <call draw_label_bold("("+plans[request.plan_id].getPeriodAsString(period_id)+")")>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<call draw_warn_invoice(inv_resources)>
+</td>
+</tr>
+<tr>
+<td class="control_align_center" colspan="2">
+<br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/changeplan2.sbm"+"&stemplate="+request.stemplate+"&ftemplate="+template+"&plan_id="+request.plan_id+"&period_id="+period_id, lang.misc.changeplan.yes)>
+<br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=design/generic.html", lang.misc.changeplan.no)><br>
+<br>&nbsp;
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!-- END ./control/misc/incompat_resources.html -->

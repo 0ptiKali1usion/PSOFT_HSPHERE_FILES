@@ -1,0 +1,85 @@
+<!-- BEGIN ./control/adnsmanager/records.html  -->
+<call draw_tooltip()>
+
+<if account.getChild("admin")>
+
+<assign dnsmanager=account.getChild("adnsmanager")>
+<if !dnsmanager>
+<assign dnsmanager=account.addChild("adnsmanager","")>
+</if>
+<assign alias=dnsmanager.getAlias(request.alias_id)>
+
+<call draw_table_header("4", lang.adnsmanager.created_records)>
+
+<if alias.records>
+
+<tr>
+<td  class="control_align_center"><call draw_label_bold(lang.dns.name)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.dns.ttl)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.dns.data)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.label.control)></td>
+</tr>
+
+<list alias.records as record>
+<tr>
+<td><call draw_label(record.name)></td>
+<td><call draw_label(record.ttl)></td>
+<td><call draw_label(toolbox.int2ext(record.ip))></td>
+<td  class="control_align_center"><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/delete_record.sbm"+"&alias_id="+alias.id+"&record_id="+record.id+"&stemplate="+template+"&ftemplate="+template, lang.label.delete)></td>
+</tr>
+</list>
+<else>
+<tr>
+  <td colspan="4" class="control_align_center"><br><call draw_label(lang.adnsmanager.no_created_records)><br><br></td>
+</tr>
+</if>
+
+<if alias.l_servers>
+<tr>
+    <td colspan="4" class="control_header"><call draw_header(lang.adnsmanager.lservers)></td>
+</tr>
+
+<tr>
+<td  class="control_align_center"><call draw_header(lang.dns.name)></td>
+<td  class="control_align_center"><call draw_header(lang.adnsmanager.ip)></td>
+<td  class="control_align_center"><call draw_header(lang.label.descr)></td>
+<td  class="control_align_center"><call draw_header(lang.label.control)></td>
+</tr>
+<list alias.l_servers as l_server>
+<tr>
+<td><call draw_label(l_server.lserver.name)></td>
+<td><call draw_label(toolbox.int2ext(l_server.ip))></td>
+<td><call draw_label(l_server.lserver.desc)></td>
+<td  class="control_align_center"><call draw_add(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/add_record.sbm"+"&alias_id="+alias.id+"&lserver_id="+l_server.lserver.id+"&ip="+l_server.ip+"&stemplate="+template+"&ftemplate="+template, lang.adnsmanager.create_record)></td>
+</tr>
+</list>
+<tr>
+<td  class="control_align_center" colspan="4"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/add_all_records.sbm"+"&alias_id="+alias.id+"&stemplate="+template+"&ftemplate="+template, lang.adnsmanager.add)></td>
+</tr>
+</if>
+<if alias.free_lservers>
+<tr>
+    <td colspan="4" class="control_header"><call draw_header(lang.adnsmanager.warn)></td>
+</tr>
+<tr>
+<td  colspan="4"><call draw_label(toolbox.compose(lang.adnsmanager.shared, alias.tag))></td>
+</tr>
+<tr>
+<td  class="control_align_center"><call draw_header(lang.adnsmanager.id)></td>
+<td  class="control_align_center"><call draw_header(lang.dns.name)></td>
+<td  class="control_align_center" colspan="2"><call draw_header(lang.label.descr)></td>
+</tr>
+<list alias.free_lservers as free_lserver>
+<tr>
+<td><call draw_label(free_lserver.id)></td>
+<td><call draw_label(free_lserver.name)></td>
+<td  colspan="2"><call draw_label(free_lserver.desc)></td>
+</tr>
+</list>
+</if>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/adnsmanager/records.html  -->

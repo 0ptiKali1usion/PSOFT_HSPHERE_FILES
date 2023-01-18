@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<PlanWizard name="admin" description="planwizard.res_admin">
+    <DefaultName>Admin I</DefaultName>
+    <DefaultValues>
+	<value name="_template">quick/quick_view.html</value>
+	<value name="menuId">admin</value>
+	<value name="_TEMPLATES_DIR">admin/</value>
+    </DefaultValues>
+
+    <categories>
+	<category>
+	    <resource name="account" required="1" class="psoft.hsphere.Account"/>
+	</category>
+	<category description="planeditor.adminedit.essential_opt">
+	    <resource name="admin" required="1" class="psoft.hsphere.resource.admin.AccountManager"/>
+	    <resource name="signupadm" include="1" class="psoft.hsphere.resource.SignupResource"/>
+	    <resource name="reportviewer" required="1" class="psoft.hsphere.resource.admin.ReportManager"/>
+	    <resource name="cmp_groups" class="psoft.hsphere.resource.admin.CmpPlanGroup" include="1"/>
+	</category>
+	<category description="planeditor.adminedit.support_opt">
+	    <resource name="su" include="1" class="psoft.hsphere.resource.admin.SUResource"/>
+	    <resource name="ttadmin" class="psoft.hsphere.resource.tt.TroubleTicketAdmin" include="1">
+		<field name="assign_tt" type="checkbox" value="TRUE" planvalue="_ASSIGN_TT"
+		    label="planeditor.adminedit.assign_tt"/>
+	    </resource>
+	    <resource name="tt" required="1" noprice="1" class="psoft.hsphere.resource.tt.TroubleTicket" />
+	    <resource name="account_preview" class="psoft.hsphere.resource.admin.AccountPreviewResource" include="1"/>
+
+	</category>
+	<category description="planeditor.adminedit.billing_opt">
+	    <resource name="merchant_manager" class="psoft.hsphere.resource.admin.MerchantManager" include="1"/>
+	    <resource name="billman" class="psoft.hsphere.resource.admin.BillingManager" include="1"/>
+	    <resource name="daily_report" class="psoft.hsphere.resource.admin.DailyReportResource" ifresource="billman"/>
+	</category>
+	<category description="planeditor.adminedit.3rdparty_mgrs">
+	    <resource name="registrar_manager" class="psoft.hsphere.resource.admin.RegistrarManager" include="1" adminonly="1"/>
+	    <resource name="miva_lic_manager" class="psoft.hsphere.resource.admin.MivaLicenseManipulator" adminonly="1"/>
+	    <resource name="urchin_lic_manager" class="psoft.hsphere.resource.admin.UrchinLicenseManager" adminonly="1"/>
+	    <resource name="kanoodlemanager" class="psoft.hsphere.resource.admin.KanoodleManager"/>
+	    <resource name="sitetoolboxmanager" class="psoft.hsphere.resource.admin.SiteToolboxManager"/>
+	    <resource name="spamassassin_manager" class="psoft.hsphere.resource.admin.SpamAssassinManager" adminonly="1"/>
+	</category>
+	<category description="planeditor.adminedit.system_opt">
+	    <resource name="adnsmanager" include="1" class="psoft.hsphere.resource.admin.AdmDNSManager"/>
+	    <resource name="eeman" class="psoft.hsphere.resource.admin.EnterpriseManager" adminonly="1"/>
+	    <resource name="recreation_manager" class="psoft.hsphere.resource.admin.RecreationManagerResource" adminonly="1"/>
+	    <resource name="sshmanager" class="psoft.hsphere.resource.admin.SSHManager" include="1" adminonly="1"/>
+	    <resource name="ds_manager" include="0" class="psoft.hsphere.resource.admin.ds.DSManager"/>
+	    <resource name="reseller_eeman" class="psoft.hsphere.resource.admin.ResellerEnterpriseManager" reselleronly="1"/>
+	</category>
+
+    </categories>
+
+    <options/>
+
+    <resources>
+	<res_account>
+	    <mod>
+		<initresource name="reportviewer"/>
+		<initresource name="admin"/>
+		<initresource name="ttadmin"/>
+		<initresource name="signupadm"/>
+		<initresource name="billman"/>
+		<initresource name="daily_report"/>
+		<initresource name="cmp_groups"/>
+		<initresource name="sshmanager"/>
+		<initresource name="registrar_manager"/>
+		<initresource name="ds_manager"/>
+	    </mod>
+	</res_account>
+
+	<res_ttadmin>
+	    <mod>
+		<initvalue type="field" label="Name">login</initvalue>
+		<initvalue type="field" label="Description">description</initvalue>
+		<initvalue type="field" label="E-Mail">email</initvalue>
+	    </mod>
+	    <values>
+		<value name="_ASSIGN_TT">#assign_tt</value>
+	    </values>
+	</res_ttadmin>
+
+    </resources>
+
+
+</PlanWizard>
+

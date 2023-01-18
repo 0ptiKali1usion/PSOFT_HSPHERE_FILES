@@ -1,0 +1,25 @@
+<!-- BEGIN ./commont/submit/account_preview/customjob_addtask.sbm -->
+<assign check=yafv.checkall(
+    yafv.common.s_admin.vPriceReq(lang.accprev.cj.t_rate,request.rate),
+    yafv.common.s_admin.vPositiveIntReq(lang.accprev.cj.t_time, request.time)
+)>
+<if check.status != "OK">
+  <assign failure="1">
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+<else>		    
+  <assign cj_admin = account.getChild("ttadmin").cjadmin>
+  <assign job = cj_admin.getJob(request.job_id)>
+  <assign entered_by = cj_admin.getEnteredBy()>
+
+  <assign result=job.addTask(entered_by, request.description, request.note, request.rate, request.time)>
+  <if result.status != "OK">
+    <assign failure="1">
+  </if>
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign result=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./commont/submit/account_preview/customjob_addtask.sbm -->

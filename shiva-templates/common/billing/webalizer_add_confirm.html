@@ -1,0 +1,11 @@
+<!-- BEGIN ./billing/webalizer_add_confirm.html  -->
+<assign template="billing/webalizer_add_confirm.html">
+<include "functions">
+<if request.cur_menuid!="">
+<call draw_menu(request.cur_menuid)>
+<else>
+<call draw_menu("acct-pref")>
+</if>
+<include "control/billing/webalizer_add_confirm.html">
+<call bottom()>
+<!--  END ./billing/webalizer_confirm.html  -->

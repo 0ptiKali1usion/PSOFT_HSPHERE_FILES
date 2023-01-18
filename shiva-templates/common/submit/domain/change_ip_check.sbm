@@ -1,0 +1,25 @@
+<!-- BEGIN ./submit/domain/change_ip_check.sbm  -->
+<assign u=account.getResource(request.rid)>
+<assign ip=u.getChild("ip")>
+<if ip && (ip.status == "OK")>
+  <assign del_price = ip.estimateDelete()>
+  <assign add_price = u.estimateCreate("ip",request.ip_type)>
+  <if add_price.status == "ERROR" || del_price.status == "ERROR">
+    <assign failure="1">
+    <assign res=session.addMessage(del_price.msg)>
+    <assign res=session.addMessage(add_price.msg)>
+  </if>
+<else>
+  <assign failure="1">
+  <assign res=session.addMessage(ip.msg)>
+</if>
+<if failure>
+  <include request.ftemplate>
+<else>
+  <if del_price.free=="0" || add_price.free=="0">
+    <include "billing/change_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+</if>
+<!-- END ./submit/domain/change_ip_check.sbm  -->

@@ -1,0 +1,39 @@
+<!-- BEGIN ./zeus/add_cgi.html.in  -->
+<call draw_tooltip()>
+<yafv s_windomain>
+<table width="70%" border="0" cellspacing="0" cellpadding="0"  class="control_align_center" bgcolor="${design.color("border_color")}">
+<form name="cgi"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="zeus/add_cgi.html">
+<input type="hidden" name="template_name" value="submit/zeus/add_cgi_submit.sbm">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="1" cellpadding="3" class="control_align_center">
+<tr bgcolor="${HEADER_COLOR}">
+    <td colspan=2   ><call draw_header(lang.windomain.addcgi.header)></td>
+</tr>
+<tr>
+   <td   ><call draw_label(lang.label.file_ext)></td>
+   <td   ><input type="text" name="ext" label="${lang.label.file_ext}" value="${vext}" check="vfileExt"></td>
+</tr>
+<tr>
+   <td   ><call draw_label(lang.windomain.addcgi.handler)></td>
+   <td  >
+   <assign hosting = account.getResource(request.rid)> 
+   <select name="handler">
+   <list hosting.handlers as handler>
+	<option value="${handler.name}">${handler.caption}
+   </list>
+   </select>
+   </td>
+</tr>
+<tr>
+   <td colspan="2" class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+</table>
+</td>
+</tr>
+</table>
+</form>
+<!--  END ./zeus/add_cgi.html.in  -->

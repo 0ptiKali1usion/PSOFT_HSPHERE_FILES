@@ -1,0 +1,40 @@
+<assign failure="">
+
+<if request["_bi_type"]=="CC">
+<assign result=yafv.checkall(
+  yafv.common.s_signup.vcc_name(lang.cc.name, request["_bi_cc_name"]),
+  yafv.common.s_signup.vCCNumber(lang.cc.number, request["_bi_cc_number"],request["_bi_cc_type"]),
+  yafv.common.s_signup.vCvvNum(lang.cc.cvv, request["_bi_cc_cvv"]),
+  yafv.common.s_signup.vcc_month(lang.cc.month, request["_bi_cc_exp_month"]),
+  yafv.common.s_signup.vcc_year(lang.cc.year, request["_bi_cc_exp_year"]),
+  yafv.common.s_signup.vCardIssueNum(lang.signup.card_issue_num, request["_bi_cc_issue_no"], request["_bi_cc_type"]),
+  yafv.common.s_signup.vCardDateMMYY(lang.signup.card_start_date,request["_bi_cc_start_month"],request["_bi_cc_start_year"],request["_bi_cc_type"])
+)>
+
+<if result.status!="OK">
+    <assign failure="1">
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+</if>
+</if>
+
+<if (failure!="") || (request.back!="")>
+    <assign bi_cc_name=toolbox.html_encode(request["_bi_cc_name"])>
+    <assign bi_cc_number=toolbox.html_encode(request["_bi_cc_number"])>
+    <assign vbi_cc_cvv=toolbox.html_encode(request["_bi_cc_cvv"])>
+    <assign bi_cc_exp_month=toolbox.html_encode(request["_bi_cc_exp_month"])>
+    <assign bi_cc_exp_year=toolbox.html_encode(request["_bi_cc_exp_year"])>
+    <assign bi_cc_type=toolbox.html_encode(request["_bi_cc_type"])>
+    <assign vbi_cc_issue_no = toolbox.html_encode(request["_bi_cc_issue_no"])>
+    <assign vbi_cc_start_month = toolbox.html_encode(request["_bi_cc_start_month"])>
+    <assign vbi_cc_start_year = toolbox.html_encode(request["_bi_cc_start_year"])>
+    <include "signup/bi_info_cc.html">
+<else>
+    <if user && request.admin_signup=="">
+	<assign domainaction="begin">
+	<include "signup/end.html">
+    <else>
+        <include "signup/login.html">
+    </if>
+</if>

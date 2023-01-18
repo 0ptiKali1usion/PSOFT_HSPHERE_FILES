@@ -1,0 +1,158 @@
+<!-- BEGIN ./control/plan_wizard/reseller.html.in -->
+<assign admin = account.getChild("admin")>
+<include "control/admin/plan_function.html">
+<call draw_tooltip()>
+
+<if account.getChild("reseller_su")>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<function servicePrice(tag, unit, oh_id)>
+<if toolbox.gt(admin.isResourceDisabled(tag), "1") != "1"><comment>Added to check whether a resource is Not Disabled entirely</comment>
+<assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+<!-- tag=${tag} priceType=${priceType} -->
+<if tag=="account">
+<assign name = lang.label.reseller_account>
+<else>
+<assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+</if>
+<tr >
+<td><call draw_label(name)><if oh_id>&nbsp;<call draw_help(oh_id, "")></if></td>
+<if failure>
+  <assign vf=toolbox.html_encode(oldValues["f_"+tag])>
+  <assign vs=toolbox.html_encode(oldValues["s_"+tag])>
+  <assign vm=toolbox.html_encode(oldValues["m_"+tag])>
+  <assign vu=toolbox.html_encode(oldValues["u_"+tag])>
+<else>
+  <assign vf="">
+  <assign vs="">
+  <assign vm="">
+  <assign vu="">
+</if>
+<td nowrap>
+  <if tag == "reseller_traffic" || tag == "summary_quota" || tag == "reseller_backup" || tag == "allocated_server" || tag == "r_ds_bandwidth">
+    <if request["i_"+tag]><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+    <input type="checkbox" name="i_${tag}" value="on" ${vchecked} onClick="checkForm(this.form)">&nbsp;
+    <assign include_hidden = "">
+  <else>
+    <input type="hidden" name="i_${tag}" value="on">
+    <assign include_hidden = "1">
+  </if>
+  <if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+    <if toolbox.consists(priceType,"F")=="1">
+      <call draw_label(lang.planeditor.free)>&nbsp;<input type="text" name="f_${tag}" size="5" value="${vf}" label="${name} (${lang.planeditor.free})" check="vPriceOpt">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+    <else><if include_hidden>
+      <call draw_label(lang.planeditor.free)>&nbsp;<input type="text" name="f_${tag}" size="5" value="${vf}" label="${name} (${lang.planeditor.free})" check="vPriceReq">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+    <else>
+      <call draw_label(lang.planeditor.free)>&nbsp;<input type="text" name="f_${tag}" size="5" value="${vf}" label="${name} (${lang.planeditor.free})" check="vPriceDep(this, i_${tag})">&nbsp;<if unit><call draw_label(unit)>&nbsp;</if>
+    </if></if>
+  </if>
+  <if toolbox.consists(priceType,"S")=="1">
+    <call draw_label(lang.planeditor.setup)>&nbsp;<input type="text" name="s_${tag}" size="5" value="${vs}" label="${name} (${lang.planeditor.setup})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+  </if>
+  <if toolbox.consists(priceType,"R")=="1">
+    <call draw_label(lang.planeditor.monthly)>&nbsp;<input type="text" name="m_${tag}" size="5" value="${vm}" label="${name} (${lang.planeditor.monthly})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+  </if>
+  <if toolbox.consists(priceType,"U")=="1">
+    <call draw_label(lang.planeditor.extra)>&nbsp;<input type="text" name="u_${tag}" size="5" value="${vu}" label="${name} (${lang.planeditor.extra})" check="vPriceOpt"><if unit>&nbsp;<call draw_label(unit)>&nbsp;</if>
+  </if>
+  <if tag == "r_ds_bandwidth">
+    <br><call draw_spacer("1", "3")><br>
+    <assign options = ["PERC95_INOUT_MBPS", "AVERAGE_INOUT_MBPS",
+	"PERC95_INOUT_GB", "AVERAGE_INOUT_GB",
+	"PERC95_OUT_MBPS", "AVERAGE_OUT_MBPS",
+	"PERC95_OUT_GB", "AVERAGE_OUT_GB"]>
+    <assign vSELECTED="SELECTED">
+    <call draw_label(lang.planwizard.dsbandwidth_type_short)>
+    <select name="r_ds_bandwidth_type">
+      <foreach value in options>
+	<option value="${value}" ${vSELECTED}>${lang.planwizard.dsbandwidth[value]}</option>
+	<if vSELECTED><assign vSELECTED = ""></if>
+      </foreach>
+    </select>
+  </if>
+</td>                                                                        
+</tr>
+</if>
+</function>
+
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" name="f_reseller" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/plan_wizard/reseller.sbm">
+<input type="hidden" name="stemplate" value="plan_wizard/reseller_srs.html">
+<input type="hidden" name="next_stemplate" value="plan_wizard/reseller2.html">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<input type="hidden" name="i_reseller" value="on">
+<input type="hidden" name="trial" value="1">
+<input type="hidden" name="current_special" value="${template}">
+
+<call draw_table_header("2", toolbox.compose(lang.planwizard.header, lang.planeditor.res_reseller, planwizard.step1))>
+
+<tr>
+  <td><call draw_label(lang.planeditor.plan_name)>&nbsp;<call draw_help("admin-editwizard-r_1_name", "")></td>
+  <td><input type="text" name="plan_name" label="${lang.planeditor.plan_name}" value="${vplan_name}" check="vPlanName"></td>
+</tr>
+ 
+<call draw_global_sections()>
+
+<tr >
+<td><call draw_label(lang.planeditor.send_invoice)>&nbsp;<call draw_help("admin-editwizard-r_1_emailnotification", "")></td>
+<td>
+<input type="checkbox" name="send_invoice" CHECKED>
+</td> 
+</tr>
+
+<tr >
+<td><call draw_label(lang.planwizard.leave_osrs_prices)>&nbsp;<call draw_help("admin-editwizard-r_1_registrar_price", "")></td>
+<td>
+<input type="checkbox" name="leave_osrs_prices">
+</td> 
+</tr>
+
+<tr >
+<td><call draw_label(lang.planwizard.leave_domain_transfer_prices)>&nbsp;<call draw_help("admin-editwizard-r_1_registrar_price", "")></td>
+<td>
+<input type="checkbox" name="leave_domain_transfer_prices">
+</td>
+</tr>
+
+
+<tr >
+<if !vhard_credit><assign vhasrdcredit=""></if>
+<td><call draw_label(lang.planeditor.credit_limit)>&nbsp;<call draw_help("admin-editwizard-r_1_credit", "")></td>
+<td><input type="text" size="4" name="hard_credit" value="${vhasrdcredit}" label="Hard credit" check="vPriceReq"></td>
+</tr>
+
+<call servicePrice("account", cursym, "admin-editwizard-r_1_actualaccount")>
+<call servicePrice("reseller_traffic", cursym, "admin-editwizard-r_1_traffic")>
+<call servicePrice("summary_quota", cursym, "")>
+<call servicePrice("r_ds_bandwidth", cursym, "")>
+<call servicePrice("reseller_backup", cursym, "")>
+<call servicePrice("allocated_server", cursym, "")>
+
+<tr >
+<td><call draw_label(lang.planeditor.reseller.cp_alias)>&nbsp;<call draw_help("admin-editwizard-r_1_alias", "")></td>
+<td><select name="cp_alias"><list toolbox.getCpAliases() as alias><option value=".${alias.prefix}.${alias.zone}">rNNNN.${alias.prefix}.${alias.zone}</option></list></select></td>
+</tr>
+
+<tr >
+  <td colspan="2" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>
+  <call draw_plan_unavailable_table()>
+</if>
+
+<function header(topic)>
+<tr>
+ <td colspan="2" class="control_header_align_center">
+   <call draw_header(topic)>
+ </td>
+</tr>
+</function>
+<!-- END ./control/plan_wizard/reseller.html.in -->

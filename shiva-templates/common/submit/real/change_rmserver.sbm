@@ -1,0 +1,43 @@
+<assign check=yafv.checkall(
+	yafv.common.s_real.vConnection(lang.label.eeman.min_con,request["min_con"]),
+        yafv.common.s_real.vConnection(lang.label.eeman.max_con,request["max_con"]) )>
+<if check.status=="OK">
+    <assign rmserver=account.getChild("realserver_user")>
+    <assign rmuser=rmserver.getChild("real_user")> 
+    <if !rmserver>
+	<assign rmserver=account.addChild("realserver_user","")>
+    </if>
+    <if rmserver>
+	<if rmuser>
+	    <assign result=rmuser.delete>
+	    <if result.status=="OK">
+		<assign result=rmserver.addChild("real_user","",request.min_con, request.max_con)>
+		<if result.status!="OK">
+		  <assign res=session.addMessage(toolbox.compose(
+		    lang.msg.name_res_failed_add,lang.real.realuser,""))>
+		  <assign res=session.addMessage(result.msg)>
+		</if>
+	    <else>
+	        <assign res=session.addMessage(toolbox.compose(
+                    lang.msg.name_res_failed_delete,lang.real.realuser,""))>
+		<assign res=session.addMessage(result.msg)>
+	    </if>
+	<else>
+	    <assign result=rmserver.addChild("real_user","",request.min_con, request.max_con)>
+	    <if result.status!="OK">
+		<assign res=session.addMessage(toolbox.compose(
+		  lang.msg.name_res_failed_add,lang.real.realuser,""))>
+		<assign res=session.addMessage(result.msg)>
+	    </if>
+	</if>
+    <else>
+	<assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_add,lang.real.realuser,""))>
+    </if>
+    <include request.stemplate>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(check.msg)></list>
+    <assign vmin_con=toolbox.html_encode(request["min_con"])>
+    <assign vmax_con=toolbox.html_encode(request["max_con"])>
+    <include request.ftemplate>
+</if>

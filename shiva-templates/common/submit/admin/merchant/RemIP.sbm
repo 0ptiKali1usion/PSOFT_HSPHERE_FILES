@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/admin/merchant/RemIP.sbm -->
+<assign admin = account.getChild("admin")>
+<assign mm=account.getChild("merchant_manager")>
+<assign result = mm.removeIP(request.gateway, request.ip)>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(result.msg)>
+ <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/merchant/RemIP.sbm -->
+

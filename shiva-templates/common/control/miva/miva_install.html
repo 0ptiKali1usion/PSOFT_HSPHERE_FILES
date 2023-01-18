@@ -1,0 +1,26 @@
+<!-- BEGIN .control/miva/miva_install.html  -->
+<call draw_tooltip()>
+<assign hosting = account.getResource(request.rid)>
+<assign domain_name=hosting.parent.name>
+<assign miva=hosting.getChild("miva")>
+<form name="miva_setup_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/miva/miva_install.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="rid" value=${miva}>
+<call draw_table_header("", lang.miva.mivainstall.header(miva.version))>
+<tr>
+  <td  class="control_align_center"><br>
+      <call draw_label(toolbox.compose(lang.miva.mivainstall.setup, ver))>
+      <call draw_label(toolbox.compose(lang.miva.mivainstall.text, ver))>
+  </td>
+</tr>
+<tr>
+<td colspan="2" class="control_align_center">
+  <call draw_link("javascript:document.miva_setup_confirm.submit()", lang.miva.setup.yes)><br>
+  <call draw_link("javascript:history.go(-1)", lang.miva.setup.no)>
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END .control/miva/miva_install.html  -->

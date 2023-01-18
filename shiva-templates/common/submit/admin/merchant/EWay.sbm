@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/EWay.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "ID", request.customerid, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "NOTIFICATIONEMAIL", request.notificationemail, "CLASS_NAME", "psoft.epayment.EWay", "TEMPLATE", "admin/merchant/EWay.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "ID", request.customerid, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "NOTIFICATIONEMAIL", request.notificationemail, "CLASS_NAME", "psoft.epayment.EWay", "TEMPLATE", "admin/merchant/EWay.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/EWay.sbm -->

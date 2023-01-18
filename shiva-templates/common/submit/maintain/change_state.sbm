@@ -1,0 +1,21 @@
+<assign maintainAdmin=account.getChild("maintainAdmin")>
+<if request.change_state=="INWORK">
+   <assign result = maintainAdmin.changeStateInWork(request.task_id)>
+</if>
+<if request.change_state=="ENDWORK">
+      <assign result = maintainAdmin.changeStateEndWork(request.task_id)>
+</if>
+<if request.change_state=="REVOKE">
+      <assign result = maintainAdmin.changeStateRevoke(request.task_id)>
+</if>
+<if request.change_state=="SUPLIED">
+      <assign result = maintainAdmin.changeStateSupplied(request.task_id)>
+</if>
+<assign task_id=request.task_id>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(toolbox.compose(
+	lang.msg.maintain_state_failed_change,request.change_state))>
+ <include request.ftemplate>
+</if> 

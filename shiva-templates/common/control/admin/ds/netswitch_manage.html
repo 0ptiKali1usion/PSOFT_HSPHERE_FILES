@@ -1,0 +1,78 @@
+<!-- BEGIN ./control/admin/ds/netswitch_manage.html  -->
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+  <assign ds_manager = account.addChild("ds_manager", "")>
+</if>
+
+<call draw_tooltip()>
+
+<if ds_manager>
+
+<assign colspan = "7">
+<if reseller_id == 1>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign isMasterAdmin = "1">
+</if>
+
+<call draw_table_header(colspan, lang.admin.netswitch_manage_h)>
+
+<assign netswitches = ds_manager.netSwitchList()>
+<if netswitches && (netswitches.size != "0")>
+  <tr>
+  <td class="control_header" width="3%"><call draw_header(lang.admin.netswitch.id)></td>
+  <td class="control_header"><call draw_header(lang.admin.netswitch.device)></td>
+  <if isMasterAdmin><td class="control_header"><call draw_header(lang.admin.search_ds_reseller)></td></if>
+  <td class="control_header"><call draw_header(lang.admin.netswitch.com_name)></td>
+  <td class="control_header"><call draw_header(lang.admin.netswitch.description)></td>
+  <td class="control_header" width="5%" nowrap><call draw_header(lang.admin.netswitch.used_ports_h)></td>
+  <td class="control_header" width="3%"><call draw_header(lang.admin.netswitch.web_url_h)></td>
+  <td class="control_header" width="7%"><call draw_header(lang.label.control)></td>
+  </tr>
+
+  <list netswitches as ns>
+    <assign com_name = ns.com_name>
+    <if (com_name != "") && (com_name != "public")><assign com_name = lang.admin.netswitch.com_name_protect></if>
+    <tr>
+    <if ns.reseller_id != reseller_id>
+	<td><call draw_label(ns.id)></td>
+	<td><call draw_label(ns.device)></td>
+	<if isMasterAdmin><td><call draw_label(admin.getResellerName(ns.reseller_id))></td></if>
+	<td><call draw_label(com_name)></td>
+	<td><call draw_label(ns.description)></td>
+	<td class="control_align_center"><call draw_label(ns.used_ports)></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+    <else>
+	<td><call draw_label(ns.id)></td>
+	<td><call draw_link(config.CLIENT_CP_URL+"?ns_id="+ns.id+"&template_name=admin/ds/edit_netswitch.html&stemplate="+template+"&ftemplate="+template, ns.device)></td>
+	<if isMasterAdmin><td>&nbsp;</td></if>
+	<td><call draw_label(com_name)></td>
+	<td><call draw_label(ns.description)></td>
+	<td class="control_align_center">
+	  <if toolbox.gt(ns.used_ports, "0") == "1"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/manage.html&sc_ns_id="+ns.id, ns.used_ports)>
+	  <else><call draw_label(ns.used_ports)>
+	  </if>
+	</td>
+	<td><if ns.web_url><call draw_launch(ns.web_url, ns.web_url)><else>&nbsp;</if></td>
+	<td>
+	  <call draw_edit(config.CLIENT_CP_URL+"?ns_id="+ns.id+"&template_name=admin/ds/edit_netswitch.html&stemplate="+template+"&ftemplate="+template, lang.admin.netswitch_edit)>
+	  <if ns.can_be_deleted>
+	    <call draw_delete(config.CLIENT_CP_URL+"?ns_id="+ns.id+"&template_name=admin/ds/netswitch_del_confirm.html&stemplate="+template+"&ftemplate="+template, lang.admin.netswitch_del)>
+	  </if>
+	</td>
+    </if>
+    </tr>
+  </list>
+<else>
+  <tr><td colspan="${colspan}"><call draw_label(lang.admin.gl_no_section_items)></td></tr>
+</if>
+
+<tr>
+  <td class="control_align_right" colspan="${colspan}"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/ds/add_netswitch.html&stemplate="+template+"&ftemplate="+template, lang.admin.netswitch_add)></td>
+</tr>
+
+<call draw_table_footer()>
+
+</if>
+<!-- END ./control/admin/ds/netswitch_manage.html  -->

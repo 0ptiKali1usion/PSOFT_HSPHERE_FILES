@@ -1,0 +1,6 @@
+<center> Rules Du Jour configuration. Mail address parameter.</center>
+<hr>
+<br>
+This parameter contains the mail address where notifications are sent on the fact of the rules update. If this parameter is empty, the notifications aren't sent.
+<br>
+

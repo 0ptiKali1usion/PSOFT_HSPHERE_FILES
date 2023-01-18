@@ -1,0 +1,97 @@
+<!-- BEGIN ./submit/admin/settings/notifications.sbm -->
+<assign result = yafv.checkall(
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.not_term, request["not_term"], request["is_warning"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.warn_susp_term1, request["warn_susp_term1"], request["is_susp_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.warn_susp_term2, request["warn_susp_term2"], request["is_susp_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.susp_term, request["susp_term"], request["is_susp_reason"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.warn_del_term1, request["warn_del_term1"], request["is_del_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.warn_del_term2, request["warn_del_term2"], request["is_del_not"]),
+ yafv.common.s_admin.vPeriodDependent(lang.admin.settins.debtors.del_term, request["del_term"], request["is_del_reason"])
+)>
+<if result.status == "OK">
+    <if request["is_warning"]>
+      <assign is_warning = request["is_warning"]>
+    <else>
+      <assign is_warning = "false">
+    </if>
+    <if request["is_susp_not"]>
+      <assign is_susp_not = request["is_susp_not"]>
+    <else>
+      <assign is_susp_not = "false">
+    </if>
+    <if request["is_susp_reason"]>
+      <assign is_susp_reason = request["is_susp_reason"]>
+    <else>
+      <assign is_susp_reason = "false">
+    </if>
+    <if request["is_del_not"]>
+      <assign is_del_not = request["is_del_not"]>
+    <else>
+      <assign is_del_not = "false">
+    </if>
+    <if request["is_del_reason"]>
+      <assign is_del_reason = request["is_del_reason"]>
+    <else>
+      <assign is_del_reason = "false">
+    </if>
+    <assign result = "OK">
+    <if is_del_reason == "true" && is_warning == "false"
+                                && is_susp_not == "false"
+                                && is_susp_reason == "false"
+                                && is_del_not == "false">
+        <assign res=session.addMessage(lang.yafv.del.warn)>
+        <assign result = "ERROR">
+    </if>
+    <if is_susp_reason == "true" && !request["susp_term"]>
+        <assign res=session.addMessage(lang.yafv.susp.empty)>
+        <assign result = "ERROR">
+    </if>
+    <if is_del_reason == "true" && !request["del_term"]>
+        <assign res=session.addMessage(lang.yafv.del.empty)>
+        <assign result = "ERROR">
+    </if>
+    <if result == "OK">
+        <assign admin = account.getChild("admin")>
+        <if is_warning == "true">
+            <call save("not_term", request["not_term"])>
+        <else>
+            <call save("not_term", "")>
+        </if>
+        <if is_susp_not == "true">
+            <call save("warn_susp_term1", request["warn_susp_term1"])>
+            <call save("warn_susp_term2", request["warn_susp_term2"])>
+        <else>
+            <call save("warn_susp_term1", "")>
+            <call save("warn_susp_term2", "")>
+        </if>
+        <if is_susp_reason == "true">
+            <call save("susp_term", request["susp_term"])>
+        <else>
+            <call save("susp_term", "")>
+        </if>
+        <if is_del_not == "true">
+            <call save("warn_del_term1", request["warn_del_term1"])>
+            <call save("warn_del_term2", request["warn_del_term2"])>
+        <else>
+            <call save("warn_del_term1", "")>
+            <call save("warn_del_term2", "")>
+        </if>
+        <if is_del_reason == "true">
+            <call save("del_term", request["del_term"])>
+        <else>
+            <call save("del_term", "")>
+        </if>
+        <call save("is_warning",is_warning)>
+        <call save("is_susp_not",is_susp_not)>
+        <call save("is_susp_reason",is_susp_reason)>
+        <call save("is_del_not",is_del_not)>
+        <call save("is_del_reason",is_del_reason)>
+    </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<include request.stemplate>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/admin/settings/notifications.sbm -->

@@ -1,0 +1,4 @@
+<compress><assign viewer=account.getChild("reportviewer")><if request.arid><assign report = viewer.getAdvReportById(request.arid)></if></compress>Username,"Acc. Id","Account description",Created,Plan,"E-mail","Payment type","Billing period",Balance,Credit
+<assign entries = report.all()><list entries as entry>${toolbox.csv_escape(entry.username)},${entry.acc_id},${toolbox.csv_escape(entry.description)},${toolbox.csv_escape(entry.created)},${toolbox.csv_escape(entry.plan)},${toolbox.csv_escape(entry.email)},<switch (entry.ptype)><case "CC">"Credit Card"<break><case "Check">"Check"<break><case "None">"None"<break><case "Trial">"Trial"<break><default>""</switch>,${toolbox.csv_escape(entry.period)},${entry.balance},${entry.credit}
+</list>
+

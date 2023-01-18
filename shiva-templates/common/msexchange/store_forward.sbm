@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/store_forward.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.setStoreAndForward(request.sf)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.msexchange_store_forward,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_changed,lang.msexchange_store_forward,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/store_forward.sbm -->

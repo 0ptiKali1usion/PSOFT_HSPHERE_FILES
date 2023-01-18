@@ -1,0 +1,49 @@
+<!-- START ./common/control/account_preview/trans_details.html -->
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.search.chargelog.details)>
+
+<assign mm=account.getChild("merchant_manager")>
+
+<if request.mgid>
+<assign merchant=mm.get(request.mgid)>
+<tr >
+<td width="20%"><call draw_label(lang.search.chargelog.mg)></td>
+<td><call draw_label(merchant.TITLE)><call draw_edit(config.CLIENT_CP_URL+"?mid="+request.mgid+"&template_name=admin/merchant/edit.html&stemplate=admin/merchant/view.html",merchant.TITLE)>
+</td>
+</tr>
+</if>
+
+<assign details=mm.getTransDetails(request.reqid)>
+
+<tr >
+<td><call draw_label(lang.search.chargelog.amount)></td>
+<td><call draw_label(details.amount)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.label.performed)></td>
+<td><call draw_label(details.created)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.search.chargelog.trtype)></td>
+<td><call draw_label(details.trtype)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.search.chargelog.result)></td>
+<td><call draw_label(details.result)></td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.search.chargelog.msgout)></td>
+<td><call draw_label(toolbox.html_encode(details.message_out))></td>
+</tr>
+<tr >
+<td><call draw_label(lang.search.chargelog.msgin)></td>
+<td><call draw_label(toolbox.html_encode(details.message_in))></td>
+</tr>
+<call draw_table_footer()>
+
+<!-- END ./common/control/account_preview/trans_details.html -->

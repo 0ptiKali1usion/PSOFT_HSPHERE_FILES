@@ -1,0 +1,43 @@
+<!-- BEGIN ./quick/choice_webshell.html  -->
+<HTML>
+<HEAD>
+</HEAD>
+           <BODY>
+<assign unixuser=account.getChild("unixuser")>
+<if unixuser.host.platform_type=="unix">
+<if config.WEBSHELL3=="TRUE">
+<FORM name="webshell3" method="POST" action="http://${unixuser.host.name}/webshell3/index2.php" accept-charset="UTF-8">
+  <input type="hidden" name="login" value="${unixuser.login}">
+  <input type="hidden" name="passwd" value="${unixuser.password}">
+  <input type="hidden" name="host" value="${unixuser.host.name}">
+  <input type="hidden" name="protocol" value="http">
+<!--	<input type="submit" name="RUN"> -->
+</FORM>
+<SCRIPT language="javascript"><!--
+    document.webshell3.submit();
+//--></SCRIPT>
+<else>
+<script language="javascript1.1" src="http://${unixuser.host.name}/wshsupp/mysubmit.js">
+</script>
+<form name=srcForm method="POST" accept-charset="UTF-8">
+        <input type=hidden name=login value="${unixuser.login}">
+        <input type=hidden name=passwd value="${unixuser.password}">
+</form>
+<form name=dstForm
+        action="http://${unixuser.host.name}/cgi-bin/webshell.cgi"
+        method="post">
+        <input type=hidden name=login value="">
+        <input type=hidden name=passwd value="">
+        <input type=hidden name=local_login value="#">
+        <input type=hidden name=action value=login>
+</form>
+<form action="http://${unixuser.host.name}/wshsupp/logerror.html" method="POST" onSubmit='return mySubmit(document.srcForm, document.dstForm)'></form>
+<SCRIPT language="javascript">
+mySubmit(document.srcForm, document.dstForm);
+history.go(-1);
+</SCRIPT>
+</if>
+</if> 
+</BODY>
+</HTML>
+<!--  END ./quick/choice_webshell.html  -->

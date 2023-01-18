@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/ds_pool/calculate_subnet.sbm-->
+
+<if !request.netmask && !request.slash>
+<assign ips = obj.subnet_manager.calculateSubnet(request.start_ip, request.end_ip)>
+<else>
+  <if request.slash>
+    <assign ips = obj.subnet_manager.calculateSubnetSlash(request.start_ip, request.end_ip, request.slash)>
+  <else>
+    <assign ips = obj.subnet_manager.calculateSubnetMask(request.start_ip, request.end_ip, request.netmask)>
+  </if>
+</if>
+
+<if ips.status!="OK">
+   <assign res=session.addMessage(ips.msg)>
+   <assign failure = "1">
+</if>
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds_ip_pool/calculate_subnet.sbm  -->

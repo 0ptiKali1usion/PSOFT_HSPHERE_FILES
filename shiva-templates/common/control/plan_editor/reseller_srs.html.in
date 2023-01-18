@@ -1,0 +1,146 @@
+<!-- BEGIN ./control/plan_editor/reseller_srs.html -->
+
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign billman = account.getChild("billman")>
+<assign cursym = toolbox.getCurrencySymbol()>
+
+<call draw_tooltip()>
+
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_unix_srs" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/plan_editor/reseller_srs.sbm">
+<input type="hidden" name="stemplate" value="plan_editor/reseller2.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="plan_name" value="${toolbox.html_encode(plan.description)}">
+<input type="hidden" name="current_special" value="${template}">
+
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate" && param.name != "period_id" && param.name != "current_special">
+       <input type="hidden" name="${param["name"]}" value="${param["value"]}">
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+
+<call draw_table_header("7", lang.planwizard.regrar_header)>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_duration)></td>
+    <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+    <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_duration)></td>
+    <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+    <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+  </tr>
+<assign tlds = toolbox.getActiveTLDs()>
+<list tlds as tld>
+  <call draw_prices(tld)>
+</list>
+<tr >
+  <td colspan="7" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<function draw_prices(tld)>
+  <assign registrar = toolbox.getRegistrarInfo(tld)>
+  <assign prices = billman.getTLDPrices(tld)>
+  <assign rtype=plan.getResourceType("reseller")>
+  <tr><td colspan="7" class="control_header"><call draw_header("."+tld)></td>
+  </tr>
+<if failure>
+  <assign price1  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_1_"])>
+  <assign price2  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_2_"])>
+  <assign price3  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_3_"])>
+  <assign price4  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_4_"])>
+  <assign price5  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_5_"])>
+  <assign price6  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_6_"])>
+  <assign price7  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_7_"])>
+  <assign price8  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_8_"])>
+  <assign price9  = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_9_"])>
+  <assign price10 = toolbox.html_encode(oldValues["_SETUP_PRICE_TLD_"+tld+"_10_"])>
+<else>
+  <assign price1  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_1_"],"false")>
+  <assign price2  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_2_"],"false")>
+  <assign price3  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_3_"],"false")>
+  <assign price4  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_4_"],"false")>
+  <assign price5  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_5_"],"false")>
+  <assign price6  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_6_"],"false")>
+  <assign price7  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_7_"],"false")>
+  <assign price8  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_8_"],"false")>
+  <assign price9  = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_9_"],"false")>
+  <assign price10 = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_TLD_"+tld+"_10_"],"false")>
+</if>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year1)></td>
+    <assign def_price1= toolbox.numberToCurLocale(prices["1"], "0")>
+    <td><if def_price1><call draw_label(def_price1+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year1}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_1_" value="${price1}"></td>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year6)></td>
+    <assign def_price6= toolbox.numberToCurLocale(prices["6"], "0")>
+    <td><if def_price6><call draw_label(def_price6+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year6}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_6_" value="${price6}"></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year2)></td>
+    <assign def_price2= toolbox.numberToCurLocale(prices["2"], "0")>
+    <td><if def_price2><call draw_label(def_price2+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year2}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_2_" value="${price2}"></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year7)></td>
+    <assign def_price7= toolbox.numberToCurLocale(prices["7"], "0")>
+    <td><if def_price7><call draw_label(def_price7+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year7}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_7_" value="${price7}"></td>
+
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year3)></td>
+    <assign def_price3= toolbox.numberToCurLocale(prices["3"], "0")>
+    <td><if def_price3><call draw_label(def_price3+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year3}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_3_" value="${price3}"></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year8)></td>
+    <assign def_price8= toolbox.numberToCurLocale(prices["8"], "0")>
+    <td><if def_price8><call draw_label(def_price8+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year8}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_8_" value="${price8}"></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year4)></td>
+    <assign def_price4= toolbox.numberToCurLocale(prices["4"], "0")>
+    <td><if def_price4><call draw_label(def_price4+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year4}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_4_" value="${price4}"></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year9)></td>
+    <assign def_price9= toolbox.numberToCurLocale(prices["9"], "0")>
+    <td><if def_price9><call draw_label(def_price9+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year9}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_9_" value="${price9}"></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year5)></td>
+    <assign def_price5= toolbox.numberToCurLocale(prices["5"], "0")>
+    <td><if def_price5><call draw_label(def_price5+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year5}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_5_" value="${price5}"></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year10)></td>
+    <assign def_price10= toolbox.numberToCurLocale(prices["10"], "0")>
+    <td><if def_price10><call draw_label(def_price10+ " " + cursym)><else>&nbsp;</if></td>
+    <td><input type="text" size="5" label="${lang.planwizard.regrar_year10}" check="vPriceOpt" name="_SETUP_PRICE_TLD_${tld}_10_" value="${price10}"></td>
+  </tr>
+</function>
+
+<function mem(name)><if request[name]><input type="hidden" name="${name}" value="${request[name]}"></if></function>
+
+<!-- END ./control/plan_editor/reseller_srs.html -->
+
+

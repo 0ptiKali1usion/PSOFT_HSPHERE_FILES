@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/eeman/add_group.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.deleteServerGroup(request.id)>
+<if result.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete, lang.label.group, ""))>
+  <assign res = session.addMessage(result.msg)>
+  <include request.stemplate>
+</if>
+<!--  END ./submit/eeman/add_group.sbm  -->

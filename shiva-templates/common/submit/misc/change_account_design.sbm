@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/admin/settings/change_account_design.sbm -->
+<assign design_id = request.design_id>
+<if design_id>
+  <assign result = account.change_design(design_id)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(
+	lang.msg.design_failed_change, design_id))>
+    <assign failure = "1">
+  </if>
+<else>
+  <assign failure = "1">
+</if>
+
+<if !failure>
+  <assign res = design.refreshCurrent()>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/settings/change_account_design.sbm -->

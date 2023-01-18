@@ -1,0 +1,12 @@
+<!-- BEGIN ./submit/account/suspend.sbm  -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.suspendAccount(request.user, request.aid, request.description)>
+<if result.status != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <assign res=session.addMessage(
+    toolbox.compose(lang.msg.account_suspended,request.aid))>
+  <include request.stemplate>
+</if>
+<!-- END ./submit/account/suspend.sbm  -->

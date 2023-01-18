@@ -1,0 +1,49 @@
+<yafv s_hsphere>
+<if account.getChild("reseller_su")>
+<assign mm=account.getChild("registrar_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/registrar/Enom.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.rid><input type="hidden" name="rid" value="${request.rid}"></if>
+
+<call draw_table_header("2", lang.admin.registrar.enom)>
+
+
+<if registrar>
+<assign vdescription=registrar.description>
+<assign vserver=registrar.server>
+<assign vport=registrar.port>
+<assign vpath=registrar.path>
+<assign vusername=registrar.username>
+<assign vpassword=registrar.password>
+<else>
+<assign vdescription=lang.admin.registrar.enom>
+<assign vserver="resellertest.enom.com">
+<assign vport="80">
+<assign vpath="/interface.asp">
+<assign vusername="">
+<assign vpassword="">
+</if>
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="description" value="${vdescription}"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.server)></td><td><input type="text" name="server" value="${vserver}"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.port)></td><td><input type="text" name="port" value="${vport}" check="vIntegerRequired"></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.protocol)></td><td><select name="protocol"><option value="http"<if registrar && registrar.protocol == "http"> SELECTED</if>>HTTP</option><option value="https"<if registrar && registrar.protocol == "https"> SELECTED</if>>HTTPS</option></select></td></tr>
+<tr ><td><call draw_label(lang.admin.registrar.path)></td><td><input type="text" name="path" value="${vpath}"></td></tr>
+<tr ><td><call draw_label(lang.label.login)></td><td><input type="text" name="username" value="${vusername}"></td></tr>
+<tr ><td><call draw_label(lang.label.password)></td><td><input type="password" name="password" value="${vpassword}"></td></tr>
+<!--registrar_text -->
+<assign regrar_text = toolbox.html_encode(settings.enom_text)>
+
+<tr ><td><call draw_label(lang.admin.registrar.text)></td><td><textarea rows="10" cols="40" name="enom_text">${regrar_text}</textarea></td></tr>
+
+<include "control/admin/registrar/common_params.html">
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>

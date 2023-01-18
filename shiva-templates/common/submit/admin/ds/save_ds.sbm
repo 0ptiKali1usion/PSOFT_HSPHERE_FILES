@@ -1,0 +1,90 @@
+<!-- BEGIN ./submit/admin/ds/save_ds.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign ds = ds_manager.getDServer(request.ds_id)>
+
+<assign result=yafv.checkall(
+	yafv.common.s_admin.vIPAddrOpt(lang.admin.ds.ds_ip,request.ds_ip),
+	yafv.common.s_admin.vHT_URL(lang.admin.ds.ds_r_reboot_url,request.ds_reboot_url),
+	yafv.common.s_admin.vStringReq(lang.admin.ds.ds_internal_id,request.ds_internal_id),
+	yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_login,request.ds_su_login),
+	yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_passwd,request.ds_su_passwd)
+)>
+<if result.status != "OK">
+  <assign failure="1">
+  <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+</if>
+
+<if ds.state_code == "1">
+    <assign result1=yafv.checkall(
+	yafv.common.s_admin.vStringReq(lang.admin.ds.ds_name,request.ds_name)
+    )>
+  <if result1.status != "OK">
+    <assign failure="1">
+    <list result1.msgs as msg><assign r=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if !ds.template>
+  <assign result2 = yafv.checkall(
+	   yafv.common.s_admin.vPriceReq(lang.admin.ds.ds_price_setup,request.ds_setup),
+	   yafv.common.s_admin.vPriceReq(lang.admin.ds.ds_price_recurrent,request.ds_recurrent)
+
+  )>
+  <if result2.status != "OK">
+      <assign failure="1">
+      <list result2.msgs as msg><assign r=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if ds.state_code == "1" && !ds.template>
+  <assign result3 = yafv.checkall(
+           yafv.common.s_admin.vStringReq(lang.admin.ds.os_name,request.ds_os),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.cpu,request.ds_cpu),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.ram,request.ds_ram),
+           yafv.common.s_admin.vStringReq(lang.admin.ds.storage,request.ds_storage)
+  )>
+  <if result3.status != "OK">
+      <assign failure="1">
+      <list result3.msgs as msg><assign r=session.addMessage(msg)></list>
+  </if>
+</if>
+
+<if !failure>
+  <assign res=ds.save(
+	request.ds_name, 
+        request.ds_ip,
+        request.ds_reboot_url,
+        request.ds_internal_id, 
+        request.ds_su_login,
+        request.ds_su_passwd,
+        request.ds_setup, 
+        request.ds_recurrent, 
+        request.ds_os, 
+        request.ds_cpu, 
+        request.ds_ram, 
+        request.ds_storage)>
+  <if res.status != "OK">
+    <assign failure="1">
+    <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+  </if>
+</if>
+
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <assign f_ds_name = toolbox.html_encode(request.ds_name)> 
+  <assign f_ds_ip = toolbox.html_encode(request.ds_ip)>
+  <assign f_ds_reboot_url = toolbox.html_encode(request.ds_reboot_url)>
+  <assign f_ds_internal_id = toolbox.html_encode(request.ds_internal_id)> 
+  <assign f_ds_su_login = toolbox.html_encode(request.ds_su_login)>
+  <assign f_ds_su_passwd = toolbox.html_encode(request.ds_su_passwd)>
+  <assign f_ds_setup = toolbox.html_encode(request.ds_setup)>
+  <assign f_ds_recurrent = toolbox.html_encode(request.ds_recurrent)>
+  <assign f_ds_os = toolbox.html_encode(request.ds_os)>
+  <assign f_ds_cpu = toolbox.html_encode(request.ds_cpu)>
+  <assign f_ds_ram = toolbox.html_encode(request.ds_ram)>
+  <assign f_ds_storage = toolbox.html_encode(request.ds_storage)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/ds/save_ds.sbm  -->

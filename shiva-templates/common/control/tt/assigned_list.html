@@ -1,0 +1,45 @@
+<!-- BEGIN ./control/tt/assigned_list.html  -->
+<include "control/tt/ttfunctions.fn">
+<tr bgcolor="${HEADER_COLOR}">
+  <td class="control_header_align_center"><call draw_header(lang.tt.id)></td>
+  <td class="control_header_align_center"><call draw_header(lang.label.title)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.priority)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.created)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.lastmod)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.type)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.state)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.close)></td>
+</tr>
+
+<assign size = "0">
+<list ttadmin.tickets as ttid>
+<assign ticket=ttadmin.getTicket(ttid)>
+<assign size = toolbox.add(size, "1")>
+<if ticket.state == "2" || ticket.state == "3" || ticket.state == "4" || ticket.state == "5" || ticket.state == "6" || ticket.state == "7" >
+<tr>
+  <assign answered = ticket.isAnswered>
+  <td class="control_align_center"><if !answered><call draw_label_bold(ticket.id)>
+                                                <else><call draw_label(ticket.id)></if></td> 
+  <td class="control_align_center"><if !answered><call display_ticket_link_bold(ticket)>
+                                   <else><call display_ticket_link(ticket)></if></td>
+  <td class="control_align_center"><if !answered><call draw_label_bold(ticket.priority)>
+                                                <else><call draw_label(ticket.priority)></if></td>
+  <td class="control_align_center"><if !answered><call draw_label_bold(ticket.created)>
+                                                <else><call draw_label(ticket.created)></if></td>
+  <td class="control_align_center"><if !answered><call draw_label_bold(ticket.lastmod)>
+                                                <else><call draw_label(ticket.lastmod)></if> </td>
+  <td class="control_align_center"><if !answered><call draw_label_bold(ticket.rDesc)>
+                                                <else><call draw_label(ticket.rDesc)></if></td>
+  <td class="control_align_center"><if !answered><call show_ticket_state_bold(ticket.state)>
+                                                <else><call show_ticket_state(ticket.state)></if></td>
+  <td class="control_align_center"><if !answered><call draw_link_bold(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_close.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.admin.close)>
+                                   <else><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_close.sbm"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.admin.close)></if></td>
+</tr>
+</if>
+</list>
+<tr><td colspan="8">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=tt/tt_mass_action_gr.html&"+"&stemplate="+stemplate+"&ftemplate="+ftemplate+"&size="+size+"&inPanel=1", lang.search.massaction)>
+<call draw_link(config.CLIENT_CP_URL+"/report.csv?template_name=control/tt/export_tt.csv"+"&_content_type=csv", lang.search.export)>&nbsp;
+</td></tr>
+
+<!-- END ./control/tt/assigned_list.html  -->

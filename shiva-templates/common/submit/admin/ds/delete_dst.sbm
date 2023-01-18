@@ -1,0 +1,12 @@
+<!-- BEGIN submit/admin/ds/delete_dst.sbm -->
+<assign ds_manager=account.getChild("ds_manager")>
+<assign result = ds_manager.delDedicatedServerTemplate(request.dst_id)>
+<if result.status == "OK">
+    <include request.stemplate>
+<else>
+    <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+    <include request.ftemplate>
+</if>
+
+<!-- END submit/admin/ds/delete_dst.sbm -->
+

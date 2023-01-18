@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/sshnotifications.sbm -->
+
+<assign reseller_su = account.getChild("reseller_su")>
+<assign admin = account.getChild("admin")>
+
+<assign success="true">
+
+<if reseller_su>
+<if request.act=="enable">
+<assign res=admin.setSettingsValue("sshnotifications", "1")>
+<if res.status!="OK"><assign success="false"></if>
+</if>
+<if request.act=="disable">
+<assign res=admin.setSettingsValue("sshnotifications", "0")>
+<if res.status!="OK"><assign success="false"></if>
+</if>
+<if success == "true">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(res.msg)>
+<include request.ftemplate>
+</if>
+<else>
+<include request.stemplate>
+</if>
+
+<!-- END ./submit/admin/sshnotifications.sbm -->

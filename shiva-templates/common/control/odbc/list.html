@@ -1,0 +1,48 @@
+<!-- BEGIN ./control/odbc/list.html  -->
+<assign unixuser=account.getChild("unixuser")>
+<assign odbc = unixuser.getChild("odbc")>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("", lang.odbc.list.service)>
+
+
+<tr><td   class="control_align_center" >
+<if odbc>
+<call disable(unixuser, odbc)><call draw_label(lang.odbc.list.service)>
+<else>
+<call enable(unixuser, "odbc")><call draw_label(lang.odbc.list.service)>
+</if>
+</td>
+</tr>
+
+<if odbc>
+<assign dsn_list=odbc.getChildren("dsn_record")>
+<if dsn_list>
+<tr>
+    <td class="control_header"><call draw_header(lang.odbc.list.header)></td>
+</tr>
+<list dsn_list as dsn>
+<tr>
+    <td   class="control_align_center" NOWRAP><call draw_label(dsn.DSN+" ("+dsn["driver-name"]+")")> <call draw_edit(config.CLIENT_CP_URL+"?rid="+dsn+"&template_name=odbc/edit_dsn.html"+"&stemplate="+template+"&ftemplate="+template, lang.odbc.list.edit)> <call disableNew(odbc, dsn)>
+</td>
+</tr>
+</list>  
+</if>
+
+<tr>
+ <td class="control_header"><call draw_header(lang.odbc.list.avdrivers)></td>
+</tr>
+<list odbc.getDriversList() as driver_name>
+<tr>
+  <td  class="control_align_center" NOWRAP>
+<call draw_label(driver_name)> <call addNewWizard(odbc, "dsn_record", "odbc/create_dsn.html&driver_name="+toolbox.url_escape(driver_name), lang.odbc.list.add)>
+  </td>
+</tr>
+</list>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/odbc/list.html  -->

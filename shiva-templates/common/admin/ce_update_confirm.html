@@ -1,0 +1,11 @@
+<!-- BEGIN ./admin/ce_update_confirm.html  -->
+<if request.restore_template || !request.next_template>
+  <assign template="admin/ce_update_confirm.html">
+  <include "functions">
+  <call draw_menu("settings-custom-emails")>
+  <include "control/admin/ce_update_confirm.html">
+  <call bottom()>
+<else>
+  <include request.next_template>
+</if>
+<!--  END ./admin/ce_update_confirm.html  -->

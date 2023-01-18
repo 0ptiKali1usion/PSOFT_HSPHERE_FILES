@@ -1,0 +1,30 @@
+<include "functions">
+<assign template="signup/tt_admin.html">
+<include "control/signup/signup_function.html">
+<assign title=lang.admin.ttadmin.title>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0">
+<tr>
+<td colspan="2">
+&nbsp;
+</td>
+</tr>
+<tr>
+<td colspan="2" ><call draw_spacer("2", "100")>
+<call draw_label(lang.admin.ttadmin.text)>
+</td>
+</tr> 
+    <form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/tt_admin.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <if user && (request.admin_signup=="")>
+        <assign ftemplate="submit/signup/begin.sbm">
+    <else>
+        <assign ftemplate="submit/signup/login.sbm">
+    </if>
+    <include "control/signup/tt_admin.html">
+    <call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">

@@ -1,0 +1,7 @@
+<center> stripsinglequotes </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Enable or disable stripping single quotes (referred to in the spamcontrol manual as the feature that may cause unpredictable results). 
+<br>Default: 0 (disabled)
+<br>
+

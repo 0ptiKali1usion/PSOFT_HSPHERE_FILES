@@ -1,0 +1,20 @@
+<!-- BEGIN ./adnsmanager/set_i_ssl_usage.sbm  -->
+<assign manager = account.getChild("adnsmanager")>
+<assign result = manager.setISSLUsagePermit(request.mode, request.zone_id)>
+<if result.status=="OK">
+  <assign success="1">
+</if>
+<if success=="1">
+    <if request.mode=="1">
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_enabled, lang.label.ssl_support, ""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_disabled, lang.label.ssl_support, ""))>
+    </if>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/set_i_ssl_usage.sbm  -->

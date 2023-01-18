@@ -1,0 +1,31 @@
+<!--- DS PREVIEW START -->
+<assign ds = account.getResource(request.ds_id)>
+<call draw_table_header("2", toolbox.compose(ds.name, lang.accprev.ds_info))>
+<tr>
+<td><call draw_label(lang.ds.os_name)></td><td><call draw_label(ds.os)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.cpu)></td><td><call draw_label(ds.cpu)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.ram)></td><td><call draw_label(ds.ram)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.storage)></td><td><call draw_label(ds.storage)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.ip)></td><td><call draw_label(ds.ip)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.reboot_url)></td><td><call draw_label(ds.rebootURL)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.su)></td><td><call draw_label(ds.su)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.ds.su_passwd)></td><td><call draw_label(ds.su_passwd)></td>
+</tr>
+
+<call draw_table_footer()>
+<!--- DS PREVIEW END -->
+

@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/admin/wizards/dstprices.html.in -->
+<yafv s_wizard>
+<include "control/admin/plan_function.html">
+
+<call draw_tooltip()>
+
+<assign billman = account.getChild("billman")>
+<if !admin><assign admin = account.getChild("admin")></if>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_wizard" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.template_name}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="old_special" value="${specialName}">
+<!-- VARS FROM PREV STEP -->
+<include "submit/admin/wizards/create_store_form.html">
+<!-- VARS FROM PREV STEP -->
+<if user.reseller_id != "1">
+   <assign fcolspan="4">
+<else>
+   <assign fcolspan="3">
+</if>
+
+<call draw_table_header(fcolspan, lang.planwizard.dstprices.header)>
+<tr>
+  <td colspan="${fcolspan}"><call draw_label(lang.planwizard.dstprices.descr)></td>
+</tr>
+<if user.reseller_id != "1">
+  <if !admin.isResourceDisabled("allow_own_ds")>
+    <tr>
+      <td colspan="${fcolspan}" class="control_header"><call draw_header(lang.planwizard.your_dstprices.header)></td>
+    </tr>
+    <call draw_user_plan_dst_prices(user.reseller_id)>
+  </if>
+  <tr>
+    <td colspan="${fcolspan}" class="control_header"><call draw_header(lang.planwizard.admin_dstprices.header)></td>
+  </tr>
+</if>
+<call draw_user_plan_dst_prices("1")>
+
+<tr>
+  <td colspan="${fcolspan}" class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/wizards/dstprices.html.in -->

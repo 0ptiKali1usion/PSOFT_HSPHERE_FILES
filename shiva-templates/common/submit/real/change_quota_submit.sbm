@@ -1,0 +1,41 @@
+<!-- BEGIN ./submit/real/change_quota_submit.sbm  -->
+<assign result=yafv.common.s_unixuser.vQuota(lang.label.quota, request.size)> 
+<if result.status == "OK">
+  <assign u=account.getResource(request.rid)>
+  <assign quota=u.getChild("winquota")>
+  <if quota>
+   <if toolbox.gt(quota.usedMb,request.size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.msg.failed_set_smallquota, request.size, quota.usedMb))>
+       <assign failure="1">
+   <else>
+       <assign result=quota.delete>
+       <if result.status=="OK">
+          <assign result=u.addChild("winquota","",request.size)>
+          <if result.status!="OK">
+             <assign failure="1">
+             <assign res=session.addMessage(result.msg)>
+          </if>
+       <else>
+          <assign failure="1">
+          <assign res=session.addMessage(result.msg)>
+       </if>
+   </if>
+  <else>
+    <assign result=u.addChild("winquota","",request.size)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if failure>
+    <assign vsize=toolbox.html_encode(request.size)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!--  END ./submit/real/change_quota_submit.sbm  -->

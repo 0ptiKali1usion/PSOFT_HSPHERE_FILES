@@ -1,0 +1,47 @@
+<!--begin control/search/usage_details.html-->
+<html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<if settings.cp_agent><assign cp_descr = settings.cp_agent><else><assign cp_descr = "H-SPHERE"></if>
+<TITLE>${cp_descr} ${user.login} (${account.plan.description})</TITLE>
+<yafv>
+<call define_css()>
+</HEAD>
+<body>
+    <assign detalizator=utils.diskusagedetails>
+    <assign su=account.getChild("reseller_su")>
+    <if su>
+        <assign detailslist=detalizator.getAdminDetails(request.account_id, request.sc_r_from, request.sc_r_to)>
+    <else>
+        <assign is_resel_admin=account.getChild("admin")>
+        <if is_resel_admin>
+            <assign detailslist=detalizator.getReselDetails(request.account_id, request.sc_r_from, request.sc_r_to)>
+        <else>
+            <assign detailslist=detalizator.getDetails(request.sc_r_from, request.sc_r_to)>
+        </if>
+    </if>
+    <if request.sc_r_from>
+        <assign start_date=request.sc_r_from>
+    <else>
+        <assign start_date="the beginning">
+    </if>
+    <if request.sc_r_to>
+        <assign end_date=request.sc_r_to>
+    <else>
+        <assign end_date="now">
+    </if>
+    <call draw_table_header("2", toolbox.compose(lang.admin.search_usage_detailed, request.account_id, start_date, end_date))>
+    <tr>
+        <td class="control_header"><call draw_header("Description")></td>
+        <td class="control_header"><call draw_header("Used (Mb)")></td>
+    </tr>
+    <list detailslist as item>
+        <tr>
+            <td><call draw_label(item.description)></td>
+            <td><call draw_label(item.usage)></td>
+        </tr>
+    </list>
+    <call draw_table_footer()>
+</body>
+</html>
+<!--end control/search/usage_details.html-->

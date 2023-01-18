@@ -1,0 +1,14 @@
+<!-- BEGIN ./misc/add_admin_account.html.in  -->
+<include "functions">
+<assign reseller = account.getChild("reseller")>
+<if !reseller.admin_account>
+<assign template="misc/add_admin_account.html">
+<call draw_menu("reseller_info-aa")>
+<include "control/misc/add_admin_account.html">
+<else>
+<assign template="misc/adm_account_login.html">
+<call draw_menu("reseller_info-aa")>
+<include "control/misc/adm_account_login.html">
+</if>
+<call bottom()>
+<!-- END ./misc/add_admin_account.html.in  -->

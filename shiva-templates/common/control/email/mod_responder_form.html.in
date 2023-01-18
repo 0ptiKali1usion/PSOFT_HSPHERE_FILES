@@ -1,0 +1,58 @@
+<!-- BEGIN ./email/mod_responder_form.html.in  -->
+<assign responder = account.getResource(request.uid)>
+<call draw_tooltip()>
+<yafv s_email>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_mod_responder" check! accept-charset="UTF-8">
+ <input type="hidden" name="template_name" value="submit/email/mod_responder_save.sbm">
+ <input type="hidden" name="rid" value="${request.rid}">
+ <input type="hidden" name="uid" value="${request.uid}">
+ <input type="hidden" name="stemplate" value="${request.stemplate}">
+ <input type="hidden" name="ftemplate" value="${template}">
+ <input type="hidden" name="md_id" value="${request.md_id}">
+ <input type="hidden" name="mo_id" value="${request.mo_id}">
+ <input type="hidden" name="sc_page" value="${request.sc_page}">
+
+
+
+
+
+<call draw_table_header("3", lang.email.modresponderform.header +responder.fullemail+"</b>")>
+
+
+<if ! config.IRIS_USER>
+<tr>
+	<td width="5%"  class="control_align_center"><call draw_tt_link(responder,"")></td>
+	<td width="35%" ><call draw_label(lang.email.modresponderform.send)></td>
+	<if !vforeign><assign vforeign=toolbox.html_encode(responder.foreign)></if>
+	<td><input type="text" name="foreign" value="${vforeign}" label="${lang.email.modresponderform.send}" check="vEmailOpt"></td>
+</tr>
+</if>
+
+<tr>
+	<td width="5%"  class="control_align_center">&nbsp;</td>
+	<td width="35%" ><call draw_label(lang.email.modresponderform.subject)></td>
+	<if !vsubject><assign vsubject=toolbox.html_encode(responder.subject)></if>
+	<td><input type="text" name="subject" value="${vsubject}" label="${lang.email.modresponderform.subject}" check="vString"></td>
+</tr>
+
+<tr>
+	<td  colspan=3><call draw_label(lang.email.modresponderform.msg)></td>
+</tr>
+
+<tr>
+	<td  colspan=3>&nbsp;
+	<if !vmessage><assign vmessage=toolbox.html_encode(responder.message)></if>
+	<textarea rows="10" cols="68" name="message">${vmessage}</textarea>
+	</td>
+</tr>
+
+<tr>
+	<td class="control_align_center" colspan=3><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/mod_responder_form.html.in  -->

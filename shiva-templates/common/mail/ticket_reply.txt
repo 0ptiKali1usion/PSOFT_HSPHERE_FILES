@@ -1,0 +1,31 @@
+======== CUT HERE =========
+Your support request was answered:
+
+Created: ${root.created}
+Last Mod: ${root.lastmod}
+<if root.answered>Answered: ${root.lastanswered}</if>
+<if root.assigned>Assigned To:
+${root.assigned.name}(${root.assigned.description})</if>
+<compress>
+<list root.messages as m>
+<if (m.type=="0") && !wasQ>
+   <assign wasQ="1"><if !message1><assign message1=m><else><assign
+message2=m></if>
+</if>
+<if (m.type!="0") && !wasA>
+   <assign wasA="1"><if !message1><assign message1=m><else><assign
+message2=m></if>
+</if>
+</list>
+</compress>
+
+[${message1.created}]
+<if message1.type=="0">Q<else>A</if>: ${root.excludeText(message1.message)}
+-------------------------------------------------------
+
+<if message2>[${message2.created}]
+<if message2.type=="0">Q<else>A</if>: ${root.excludeText(message2.message)}
+-------------------------------------------------------
+</if>
+<if root.assigned>${root.assigned.signature}</if>
+

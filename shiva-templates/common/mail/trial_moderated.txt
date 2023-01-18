@@ -1,0 +1,10 @@
+${lang.massmail.header(ci.first_name, ci.last_name)}
+ 
+${lang.massmail.trial_text1(plan.description)}
+
+<if settings.support>${lang.massmail.welcome_support}
+${settings.support}</if>
+
+${lang.massmail.welcome_closing}
+
+${settings.name}

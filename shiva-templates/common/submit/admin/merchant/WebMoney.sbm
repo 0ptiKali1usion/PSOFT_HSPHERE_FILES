@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/admin/merchant/WebMoney.sbm -->
+<assign admin = account.getChild("admin")>
+<assign mm=account.getChild("merchant_manager")>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<if request.testmode!=""><assign testmode="TRUE"><else><assign testmode=""></if>
+
+<if admin>
+  <assign res = mm.webprocessorparams("WebMoney","wmid",request.wmid, "secretkey", request.secretkey, "testmode", testmode, "enabled", enabled)>
+</if>
+<if res.status=="OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(res.msg)>
+<include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/merchant/WebMoney.sbm -->

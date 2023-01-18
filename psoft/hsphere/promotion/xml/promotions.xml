@@ -1,0 +1,50 @@
+<!DOCTYPE config [
+ <!ELEMENT config (promotions, calculators)>
+ <!ELEMENT promotions (promo+)>
+
+ <!ELEMENT promo (description?, params?)>
+ <!ELEMENT description (#PCDATA)>
+
+ <!ELEMENT calculators (calc+)>
+ <!ELEMENT calc (description?, params?)>
+
+ <!ELEMENT params (param+)>
+ <!ELEMENT param (#PCDATA)>
+
+ <!ATTLIST promo id CDATA #REQUIRED>
+ <!ATTLIST promo description CDATA #REQUIRED>
+ <!ATTLIST promo class CDATA #REQUIRED>
+ <!ATTLIST promo itype CDATA "AUTO">
+ <!ATTLIST promo add_template CDATA "">
+ <!ATTLIST promo edit_template CDATA "">
+
+ <!ATTLIST calc id CDATA #REQUIRED>
+ <!ATTLIST calc description CDATA #REQUIRED>
+ <!ATTLIST calc class CDATA #REQUIRED>
+ <!ATTLIST calc itype CDATA "AUTO">
+ <!ATTLIST calc add_template CDATA "">
+ <!ATTLIST calc edit_template CDATA "">
+
+ <!ATTLIST param label CDATA #REQUIRED>
+ <!ATTLIST param name CDATA #REQUIRED>
+]>
+<config>
+    <promotions>
+	<promo id="1" description="Contunuous"
+	    add_template="" edit_template=""
+	    class="psoft.hsphere.promotion.SimplePromo" itype="AUTO">
+	    <description>This tipe of promotion is always valid</description>
+	</promo>
+    </promotions>
+    <calculators>
+	<calc id="1" description="Fixed percent discount" add_template=""
+	    edit_template=""
+	    class="psoft.hsphere.promotion.calc.PercentDiscountCalc" itype="AUTO">
+	    <params>
+		<param label="admin.promo.calculators.percent"
+		    name="discount_percent"/>
+	    </params>
+	</calc>
+    </calculators>
+</config>
+

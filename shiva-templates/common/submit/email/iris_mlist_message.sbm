@@ -1,0 +1,54 @@
+<!-- BEGIN ./email/iris_mlist_message.sbm  -->
+<assign maillist = account.getResource(request.uid)>
+<if request.text_value!="" || request.mode=="delete">
+    <assign result = maillist.updateIrisMessage(request.mail_domain, request.mail_list, request.text_name, request.text_value, request.mode)>
+    <if result.status=="OK">
+	<if request.mode=="add">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_added, lang.label.mail_list_message, ""))>
+	<else>
+	    <if request.mode=="edit">
+		<assign res=session.addMessage(toolbox.compose(
+		    lang.msg.name_res_changed, lang.label.mail_list_message, ""))>
+	    <else>
+		<assign res=session.addMessage(toolbox.compose(
+		    lang.msg.name_res_deleted, lang.label.mail_list_message, ""))>
+	    </if>	
+	</if>
+    <else>
+	<assign failure = "1">
+	<if request.mode=="add">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_add, lang.label.mail_list_message, ""))>
+	<else>
+	    <if request.mode=="edit">	
+		<assign res=session.addMessage(toolbox.compose(
+		    lang.msg.name_res_failed_change, lang.label.mail_list_message, ""))>
+	    <else>
+		<assign res=session.addMessage(toolbox.compose(
+                    lang.msg.name_res_failed_delete, lang.label.mail_list_message, ""))>
+	    </if>
+	</if>
+	<assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+  <if request.mode=="edit"> 
+    <assign result = maillist.updateIrisMessage(request.mail_domain, request.mail_list, request.text_name, request.text_value, "delete")>
+    <if result.status=="OK">
+      <assign res=session.addMessage(toolbox.compose(
+              lang.msg.name_res_deleted, lang.label.mail_list_message, ""))>
+    <else>
+      <assign failure = "1">
+      <assign res=session.addMessage(toolbox.compose(
+              lang.msg.name_res_failed_delete, lang.label.mail_list_message, ""))>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+</if>
+<if !failure>
+    <include request.stemplate>
+<else>
+    <assign vtext_value = toolbox.html_encode(request.text_value)>
+    <include request.ftemplate>
+</if>
+<!--  END ./email/iris_mlist_message.sbm  -->

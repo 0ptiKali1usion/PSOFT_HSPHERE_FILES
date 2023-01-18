@@ -1,0 +1,32 @@
+<!-- BEGIN ./submit/ds/change_res_bandwidth_check.sbm  -->
+<assign result= yafv.common.s_ds.vTrafficLimit(lang.ds.changebandwidth.limit, request.size)>
+<if result.status == "OK">
+  <assign bandwidth = account.getChild("r_ds_bandwidth")>
+  <!--assign rtype = account.plan.getResourceType("r_ds_bandwidth")-->
+  <if bandwidth>
+    <comment><!--ESTIMATE CHANGE --></comment>
+    <assign price = bandwidth.estimateChange(request.size)>
+    <if price.status == "ERROR">
+	<assign failure = "1">
+	<assign res = session.addMessage(lang.msg.misc_res_failed_change)>
+	<assign res = session.addMessage(price.msg)>
+    </if>
+  <else>
+    <assign price = account.estimateCreate("r_ds_bandwidth", "", request.size)>
+  </if>
+<else>
+  <assign failure = "1">
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if !failure>
+  <if toolbox.eq(price.total, "0") != "1">
+    <include "billing/add_confirm.html">
+  <else>
+    <include request.next_template>
+  </if>
+<else>
+  <assign vsize = toolbox.html_encode(request.size)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/ds/change_res_bandwidth_check.sbm  -->

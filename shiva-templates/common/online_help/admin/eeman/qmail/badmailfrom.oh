@@ -1,0 +1,7 @@
+<center> badmailfrom </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of sender addresses whose emails will be rejected. A line in badmailfrom may be of the form @host, meaning every address at host.
+<br>Default: the badmailfrom file is absent (all sender addresses are allowed).
+<br>
+

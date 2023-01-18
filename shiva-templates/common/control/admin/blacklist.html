@@ -1,0 +1,31 @@
+<!-- BEGIN ./common/control/admin/blacklist.html -->
+<call draw_tooltip()>
+<assign admin=account.getChild("admin")>
+
+<if admin>
+
+<assign guard=admin.getSignupGuard()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", header)>
+
+<tr ><td colspan="2"><call draw_label(description)></td></tr>
+<tr><td>
+<input type=hidden name="list_type" value="${list_type}">
+<textarea name=blacklist rows=15 cols=40><list guard.getBlackList(list_type) as entry>${entry}; </list></textarea>
+</td>
+<td valign="top">
+<input type="hidden" name="template_name" value="submit/admin/blacklist.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="admin/signup_guard.html">
+<input type="submit"><br>
+<input type="reset" value="${lang.button.reset}">
+</td></tr>
+</form>
+
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/blacklist.html -->

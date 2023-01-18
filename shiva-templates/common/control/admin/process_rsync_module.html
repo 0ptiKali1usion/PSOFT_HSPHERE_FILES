@@ -1,0 +1,60 @@
+<!-- BEGIN ./control/admin/process_rsync_module.html  -->
+<assign reseller_su=account.getChild("reseller_su")>
+<if reseller_su>
+<assign module = reseller_su.getContentMoveItem(request.cmi_id)>
+<call draw_tooltip()>
+<form name="f_process_rsync" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+
+
+<call draw_table_header("2", lang.label.contentmove.process_rsync_module)>
+
+
+<tr>
+    <td><call draw_label(lang.label.contentmove.src_server)></td>
+    <td><call draw_label(module.srcServer.name)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.target_server)></td>
+    <td><call draw_label(module.targetServer.name)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.path)></td>
+    <td><call draw_label(module.srcPath)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.started)></td>
+    <td><call draw_label(module.started)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.finished)></td>
+    <td><call draw_label(module.finished)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.force)></td>
+    <td><input name="force" type="checkbox"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.label.contentmove.launch_rsync)></td>
+    <td><input name="launch" type="checkbox" CHECKED value="true"></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="submit/admin/process_rsync_module.sbm">
+  <input type="hidden" name="cmi_id" value="${request.cmi_id}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <compress>
+  <list params as sc_param>
+     <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+        <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+     </if>
+  </list>
+  </compress>
+  <input type="submit" "${lang.button.submit}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/process_rsync_module.html  -->

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE params [
+  <!ELEMENT params ((select|radiogroup|param)*)>
+  <!ELEMENT param (#PCDATA)>
+  <!ELEMENT radiogroup (param+)>
+  <!ELEMENT select (param+)>
+      
+  <!ATTLIST param name CDATA #REQUIRED>
+  <!ATTLIST param type CDATA #REQUIRED>
+  <!ATTLIST param delim CDATA #IMPLIED>
+  <!ATTLIST param pattern CDATA #IMPLIED>
+  <!ATTLIST param defaultvalue  CDATA  #REQUIRED>
+  <!ATTLIST param description  CDATA  #REQUIRED>
+  <!ATTLIST param help CDATA  #IMPLIED>
+  <!ATTLIST param min CDATA  #IMPLIED>
+  <!ATTLIST param max CDATA  #IMPLIED>
+  <!ATTLIST radiogroup name CDATA  #REQUIRED>
+  <!ATTLIST select name CDATA  #REQUIRED>
+  <!ATTLIST select help CDATA  #IMPLIED>
+]>
+
+<params>
+
+<param name="tcpsessioncount" type="int" defaultvalue="40" description="eeman.qmail.params.tcpsessioncount" help="admin-eeman-qmail-tcpsessioncount"/>
+<param name="concurrencyremote" type="int" max="500" defaultvalue="100" description="eeman.qmail.params.concurrencyremote" help="admin-eeman-qmail-concurrencyremote"/>
+<param name="concurrencylocal" type="int" max="500" defaultvalue="50" description="eeman.qmail.params.concurrencylocal" help="admin-eeman-qmail-concurrencylocal"/>
+<param name="databytes" type="int" defaultvalue="0" description="eeman.qmail.params.databytes" help="admin-eeman-qmail-databytes"/>
+<param name="queuelifetime" type="int" defaultvalue="604800" description="eeman.qmail.params.queuelifetime" help="admin-eeman-qmail-queuelifetime"/>
+<param name="maxrecipients" type="int" defaultvalue="0" description="eeman.qmail.params.maxrecipients" help="admin-eeman-qmail-maxrecipients"/>
+<param name="timeoutsmtpd" type="int" defaultvalue="1200" description="eeman.qmail.params.timeoutsmtpd" help="admin-eeman-qmail-timeoutsmtpd"/>
+
+<param name="newline" type="check" defaultvalue="0" description="eeman.qmail.params.newline" help="admin-eeman-qmail-newline"/>
+<param name="stripsinglequotes" type="check" defaultvalue="0" description="eeman.qmail.params.stripsinglequotes" help="admin-eeman-qmail-stripsinglequotes"/>
+<param name="lowercase" type="check" defaultvalue="0" description="eeman.qmail.params.lowercase" help="admin-eeman-qmail-lowercase"/>
+
+<param name="badmailfrom" type="patternslist" pattern="^([a-zA-Z0-9\\*\\!\\-\\.]*)(@([a-zA-Z0-9\\*\\!\\-]+(\.[a-zA-Z0-9\\*\\!\\-]+)+))?$" defaultvalue="" description="eeman.qmail.params.badmailfrom" help="admin-eeman-qmail-badmailfrom"/>
+<param name="badmailpatterns" type="list" delim=" " defaultvalue="" description="eeman.qmail.params.badmailpatterns" help="admin-eeman-qmail-badmailpatterns"/>
+<param name="badhelo" type="list" delim=" " defaultvalue="" description="eeman.qmail.params.badhelo" help="admin-eeman-qmail-badhelo"/>
+<param name="badmailfrom-unknown" type="patternslist" pattern="^([a-zA-Z0-9\\*\\!\\-\\.]*)(@([a-zA-Z0-9\\*\\!\\-]+(\.[a-zA-Z0-9\\*\\!\\-]+)+))?$" defaultvalue="" description="eeman.qmail.params.badmailfrom-unknown" help="admin-eeman-qmail-badmailfrom-unknown"/>
+<param name="badrcptto" type="patternslist" pattern="^([a-zA-Z0-9\\*\\!\\-\\.]*)(@([a-zA-Z0-9\\*\\!\\-]+(\.[a-zA-Z0-9\\*\\!\\-]+)+))?$" defaultvalue="" description="eeman.qmail.params.badrcptto" help="admin-eeman-qmail-badrcptto"/>
+<param name="badrcptpatterns" type="list" delim=" " defaultvalue="" description="eeman.qmail.params.badrcptpatterns" help="admin-eeman-qmail-badrcptpatterns"/>
+<param name="blackholedsender" type="list" delim=" " defaultvalue="" description="eeman.qmail.params.blackholedsender" help="admin-eeman-qmail-blackholedsender"/>
+<param name="relayclients" type="iplist" defaultvalue="" description="eeman.qmail.params.relayclients" help="admin-eeman-qmail-relayclients"/>
+<param name="relaydomains" type="domainslist" delim=":" defaultvalue="" description="eeman.qmail.params.relaydomains" help="admin-eeman-qmail-relaydomains"/>
+<param name="relaymailfrom" type="emailslist" defaultvalue="" description="eeman.qmail.params.relaymailfrom" help="admin-eeman-qmail-relaymailfrom"/>
+<param name="nomfdnscheck" type="domainslist" defaultvalue="" description="eeman.qmail.params.nomfdnscheck" help="admin-eeman-qmail-nomfdnscheck"/>
+<param name="rblhosts" type="domainslist" defaultvalue="" description="eeman.qmail.params.rblhosts" help="admin-eeman-qmail-rblhosts"/>
+
+<param name="quitasap" type="check" defaultvalue="0" description="eeman.qmail.params.quitasap" help="admin-eeman-qmail-quitasap"/>
+<param name="tarpitcount" type="int" defaultvalue="0" description="eeman.qmail.params.tarpitcount" help="admin-eeman-qmail-tarpitcount"/>
+<param name="tarpitdelay" type="int" defaultvalue="5" description="eeman.qmail.params.tarpitdelay" help="admin-eeman-qmail-tarpitdelay"/>
+<param name="userchk" type="check" defaultvalue="0" description="eeman.qmail.params.userchk" help="admin-eeman-qmail-userchk"/>
+<param name="uquotachk" type="check" defaultvalue="0" description="eeman.qmail.params.uquotachk" help="admin-eeman-qmail-uquotachk"/>
+<param name="mfdnscheck" type="check" defaultvalue="0" description="eeman.qmail.params.mfdnscheck" help="admin-eeman-qmail-mfdnscheck"/>
+<param name="smdcheck" type="check" defaultvalue="0" description="eeman.qmail.params.smdcheck" help="admin-eeman-qmail-smdcheck"/>
+<param name="rcptdnscheck" type="check" defaultvalue="0" description="eeman.qmail.params.rcptdnschecks" help="admin-eeman-qmail-rcptdnschecks"/>
+<param name="authsender" type="check" defaultvalue="0" description="eeman.qmail.params.authsender" help="admin-eeman-qmail-authsender"/>
+<param name="splithorizon" type="check" defaultvalue="0" description="eeman.qmail.params.splithorizon" help="admin-eeman-qmail-splithorizon"/>
+<param name="helodnscheck" type="check" defaultvalue="0" description="eeman.qmail.params.helodnscheck" help="admin-eeman-qmail-helodnscheck"/>
+<param name="spamglobal" type="check" defaultvalue="0" description="eeman.qmail.params.spamglobal" help="admin-eeman-qmail-spamglobal"/>
+<param name="clamglobal" type="check" defaultvalue="0" description="eeman.qmail.params.clamglobal" help="admin-eeman-qmail-clamglobal"/>
+<param name="periplimit" type="int" defaultvalue="20" description="eeman.qmail.params.periplimit" help="admin-eeman-qmail-periplimit"/>
+<param name="noathost" type="check" defaultvalue="0" description="eeman.qmail.params.noathost" help="admin-eeman-qmail-noathost"/>
+<param name="outgoingip" type="ipparam" defaultvalue="" description="eeman.qmail.params.outgoingip" help="admin-eeman-qmail-outgoingip"/>
+<param name="localtime" type="check" defaultvalue="0" description="eeman.qmail.params.localtime" help="admin-eeman-qmail-localtime"/>
+<!--radiogroup name="smtpauth_popbeforesmtp">
+<param name="smtpauth" type="check" defaultvalue="1" description="eeman.qmail.params.smtpauth" help="admin-eeman-qmail-smtpauth"/>
+<param name="popbeforesmtp" type="check" defaultvalue="0" description="eeman.qmail.params.popbeforesmtp" help="admin-eeman-qmail-popbeforesmtp"/>
+</radiogroup-->
+<param name="bouncefrom" type="edit" defaultvalue="MAILER-DAEMON" description="eeman.qmail.params.bouncefrom" help="admin-eeman-qmail-bouncefrom"/>
+<param name="bouncehost" type="edit" defaultvalue="bouncehost" description="eeman.qmail.params.bouncehost" help="admin-eeman-qmail-bouncehost"/>
+<param name="doublebouncehost" type="edit" defaultvalue="doublebouncehost" description="eeman.qmail.params.doublebouncehost" help="admin-eeman-qmail-doublebouncehost"/>
+<param name="doublebounceto" type="edit" defaultvalue="postmaster" description="eeman.qmail.params.doublebounceto" help="admin-eeman-qmail-doublebounceto"/>
+<param name="bouncesubject" type="edit" defaultvalue="" description="eeman.qmail.params.bouncesubject" help="admin-eeman-qmail-bouncesubject"/>
+<param name="bouncemessage" type="text" defaultvalue="" description="eeman.qmail.params.bouncemessage" help="admin-eeman-qmail-bouncemessage"/>
+<param name="doublebouncesubject" type="edit" defaultvalue=" " description="eeman.qmail.params.doublebouncesubject" help="admin-eeman-qmail-doublebouncesubject"/>
+<param name="doublebouncemessage" type="text" defaultvalue="" description="eeman.qmail.params.doublebouncemessage" help="admin-eeman-qmail-doublebouncemessage"/>
+<param name="smtpauth" type="check" defaultvalue="1" description="eeman.qmail.params.smtpauth" help="admin-eeman-qmail-smtpauth"/>
+<param name="popbeforesmtp" type="check" defaultvalue="0" description="eeman.qmail.params.popbeforesmtp" help="admin-eeman-qmail-popbeforesmtp"/>
+<param name="opensmtptimeout" type="int" defaultvalue="180" description="eeman.qmail.params.opensmtptimeout" help="admin-eeman-qmail-opensmtptimeout"/>
+<select name="spfbehavior" help="admin-eeman-qmail-spfbehavior">
+<param name="spfbehavior_0" type="check" defaultvalue="1" description="eeman.qmail.params.spfbehavior_0"/>
+<param name="spfbehavior_1" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_1"/>
+<param name="spfbehavior_2" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_2"/>
+<param name="spfbehavior_3" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_3"/>
+<param name="spfbehavior_4" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_4"/>
+<param name="spfbehavior_5" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_5"/>
+<param name="spfbehavior_6" type="check" defaultvalue="0" description="eeman.qmail.params.spfbehavior_6"/>
+</select>
+<param name="spfrules" type="edit" defaultvalue="" description="eeman.qmail.params.spfrules" help="admin-eeman-qmail-spfrules"/>
+<param name="spfguess" type="edit" defaultvalue="" description="eeman.qmail.params.spfguess" help="admin-eeman-qmail-spfguess"/>
+<param name="spfexp" type="edit" defaultvalue="" description="eeman.qmail.params.spfexp" help="admin-eeman-qmail-spfexp"/>
+<param name="srs" type="check" defaultvalue="0" description="eeman.qmail.params.srs" help="admin-eeman-qmail-srs"/>
+<param name="badurls" type="check" defaultvalue="0" description="eeman.qmail.params.badurls" help="admin-eeman-qmail-badurls"/>
+<param name="maxsascore" type="int" defaultvalue="100000" description="eeman.qmail.params.maxsascore" help="admin-eeman-qmail-maxsascore"/>
+<param name="samsgsize" type="int" defaultvalue="256000" description="eeman.qmail.params.samsgsize" help="admin-eeman-qmail-samsgsize"/>
+<param name="sanetcheck" type="check" defaultvalue="0" description="eeman.qmail.params.sanetcheck" help="admin-eeman-qmail-sanetcheck"/>
+<param name="satimeout" type="int" defaultvalue="600" description="eeman.qmail.params.satimeout" help="admin-eeman-qmail-satimeout"/>
+<param name="spamdchildren" type="int" defaultvalue="10" description="eeman.qmail.params.spamdchildren" help="admin-eeman-qmail-spamdchildre
+n"/>
+<param name="urlscnt" type="int" defaultvalue="5" description="eeman.qmail.params.urlscnt" help="admin-eeman-qmail-urlscnt"/>
+</params>
+

@@ -1,0 +1,21 @@
+<!--  BEGIN ./adnsmanager/mail_ssl_repost.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+<assign mail_ssl = mail_manager.mail_ssl>
+
+<assign success="0">
+<if mail_ssl>
+  <assign result = mail_ssl.repostCertificates()>
+  <if result.status == "OK">
+    <assign success="1">
+  </if>
+</if>
+
+<if success=="1">
+    <assign res=session.addMessage("Certificates have been reposted successfully")>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/mail_ssl_repost.sbm  -->

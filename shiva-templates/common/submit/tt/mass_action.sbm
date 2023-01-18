@@ -1,0 +1,39 @@
+<!-- BEGIN ./commont/submit/tt/mass_action.sbm  -->
+<assign ttadmin = account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+
+<assign report = viewer.getAdvReportById(request.arid)>
+<if report.status=="OK">
+  <assign report_ok="1">
+<else>
+<assign report_ok="0">
+  ${session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))}
+</if>
+
+<assign rows="0">
+<if report_ok=="1">
+  <list report.all() as entry>
+     <switch request.maction>
+     <case "close">
+        <assign result=ttadmin.getTicket(entry.id).close()>
+	<assign result=ttadmin.getTicket(entry.id).setstate("9")>
+	<break>
+     <case "delete">
+        <assign result=ttadmin.getTicket(entry.id).delete()>
+	<break>
+     <case "assign">
+        <assign result=ttadmin.getTicket(entry.id).assign(request.admin_id)>
+	<break>
+     </switch>
+     <if result.status=="OK"><assign rows = toolbox.add(rows, "1")></if>
+  </list>
+  <assign res = session.addMessage(toolbox.compose(lang.tt.adminmass.success, rows))>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./common/submit/tt/mass_action.sbm  -->

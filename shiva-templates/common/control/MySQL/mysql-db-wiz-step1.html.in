@@ -1,0 +1,49 @@
+<!-- BEGIN ./control/MySQL/mysql-db-wiz-step1.html -->
+<assign mysql = account.getChild("MySQL")>
+<if !mysql><assign mysql = account.addChild("MySQL", "")>
+   <if mysql.status!="OK">
+        <assign res = session.addMessage(mysql.msg)>
+   </if>
+</if>
+<call draw_tooltip()>
+<yafv s_mysql>
+<assign suffix=mysql.prefix>
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_databases" check="DB_Name" accept-charset="UTF-8">
+<if request.dtemplate><input type="hidden" name="dtemplate" value="${request.dtemplate}"></if>
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="next_template" value="submit/MySQL/add_database.sbm">
+<input type="hidden" name="stemplate" value="MySQL/mysql-db-wiz-step2.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="MySQLDatabase">
+<input type="hidden" name="mod" value="">
+<input type="hidden" name="rid" value="${account.id}">
+<input type="hidden" name="suffix" value="${suffix}">
+
+
+
+<call draw_table_header("3", lang.mysql.wiz1.header)>
+
+
+<tr>
+<td   colspan=3><call draw_label(lang.mysql.wiz1.text)></td>
+</tr>
+<tr>
+    <td  width="1%">&nbsp;</td>
+    <td><call draw_label(lang.mysql.wiz1.dbname)></td>
+    <td>
+        <call draw_label_bold(suffix)><input type="text" name="db_name" label="${lang.mysql.wiz1.dbname}" check="vMySQLCombDbName(this,suffix)">
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.mysql.wiz1.dbdescr)></td>
+    <td><input type="text" name="db_description"></td>
+</tr>
+<tr>
+    <td  class="control_align_center" ><assign res=account.getChild("MySQL")><if res><call draw_tt_link(res,"")><else><call draw_tt_link(account.id,"")></if></td>
+    <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.next}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/MySQL/mysql-db-wiz-step1.html  -->

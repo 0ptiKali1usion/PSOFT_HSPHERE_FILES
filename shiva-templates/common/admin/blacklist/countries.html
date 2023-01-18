@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/admin/blacklist/countries.html -->
+<assign template="admin/blacklist/countries.html">
+<include "functions">
+<call draw_menu("signup_guard")>
+<assign header=lang.signup.guard.countries.header>
+<assign description=lang.signup.guard.countries.desc>
+<assign list_type="5">
+<include "control/admin/blacklist.html">
+<call bottom()>
+<!-- END ./common/admin/blacklist/countries.html -->

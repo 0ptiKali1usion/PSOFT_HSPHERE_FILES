@@ -1,0 +1,165 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+    <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+    <service name="AdminServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.AdminServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:UserInfo" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.UserInfo"/>
+        <beanMapping qname="myNS:ContactInfo" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.ContactInfo"/>
+	<beanMapping qname="myNS:PaymentInfo" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.PaymentInfo"/>
+        <beanMapping qname="myNS:NamedParameter" xmlns:myNS="urn:AdminServices"
+            languageSpecificType="java:psoft.hsphere.axis.NamedParameter"/>
+    </service>
+
+    <service name="UserServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.UserServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:NamedParameter" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.NamedParameter"/>
+        <beanMapping qname="myNS:UserInfo" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.UserInfo"/>
+        <beanMapping qname="myNS:ContactInfo" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.ContactInfo"/>
+	<beanMapping qname="myNS:PaymentInfo" xmlns:myNS="urn:UserServices"
+            languageSpecificType="java:psoft.hsphere.axis.PaymentInfo"/>
+    </service>
+
+    <service name="PostgreSQLServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.PostgreSQLServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:PostgreSQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:PostgreSQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+    </service>
+
+    <service name="MySQLServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.MySQLServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:MySQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:MySQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+    </service>
+
+    <service name="DomainServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.DomainServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:DomainServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:DomainServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:ContactInfo" xmlns:myNS="urn:DomainServices"
+            languageSpecificType="java:psoft.hsphere.axis.ContactInfo"/>
+    </service>
+
+    <service name="MSSQLServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.MSSQLServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:MSSQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:MSSQLServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+    </service>
+
+    <service name="FtpServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.FtpServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:FtpServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:FtpServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+    </service>
+
+    <service name="UserFtpServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.UserFtpServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:UserFtpServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:UserFtpServices"
+           languageSpecificType="java:psoft.hsphere.axis.Role"/>
+   </service>
+
+   <service name="MailServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.MailServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:MailServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:MailServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+	<beanMapping qname="myNS:NamedParameter" xmlns:myNS="urn:MailServices"
+	    languageSpecificType="java:psoft.hsphere.axis.NamedParameter"/>
+    </service>
+
+    <service name="WebServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.WebServices"/>
+	<parameter name="allowedMethods" value="*"/>
+	<beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:WebServices"
+	    languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+	<beanMapping qname="myNS:Role" xmlns:myNS="urn:WebServices"
+	    languageSpecificType="java:psoft.hsphere.axis.Role"/>
+	<beanMapping qname="myNS:NamedParameter" xmlns:myNS="urn:WebServices"
+	    languageSpecificType="java:psoft.hsphere.axis.NamedParameter"/>
+    </service>
+
+    <service name="SupportServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.SupportServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:SupportServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:SupportServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:TicketInfo" xmlns:myNS="urn:SupportServices"
+            languageSpecificType="java:psoft.hsphere.axis.TicketInfo"/>
+    </service>
+
+    <service name="DNSServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.DNSServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:DNSServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:DNSServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:DNSRecordInfo" xmlns:myNS="urn:DNSServices"
+            languageSpecificType="java:psoft.hsphere.axis.DNSRecordInfo"/>
+    </service>
+
+    <service name="PGPServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.PGPServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:PGPServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:PGPServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+        <beanMapping qname="myNS:PGPKeysInfo" xmlns:myNS="urn:PGPServices"
+            languageSpecificType="java:psoft.hsphere.axis.PGPKeysInfo"/>
+    </service>
+
+
+    <service name="MigrationServices" provider="java:RPC">
+        <parameter name="className" value="psoft.hsphere.axis.MigrationServices"/>
+        <parameter name="allowedMethods" value="*"/>
+        <beanMapping qname="myNS:AuthToken" xmlns:myNS="urn:MigrationServices"
+            languageSpecificType="java:psoft.hsphere.axis.AuthToken"/>
+        <beanMapping qname="myNS:Role" xmlns:myNS="urn:MigrationServices"
+            languageSpecificType="java:psoft.hsphere.axis.Role"/>
+    </service>
+
+   <transport name="http">
+ 	<requestFlow>
+	<handler type="URLMapper"/>
+	</requestFlow>
+   </transport>
+
+</deployment>

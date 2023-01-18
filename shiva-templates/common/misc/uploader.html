@@ -1,0 +1,20 @@
+<!-- BEGIN ./uploader.html  -->
+<HTML>
+<head>
+<SCRIPT LANGUAGE="JavaScript"><!--
+   function Retval() {
+     <list retvals as retval>
+        self.opener.document.${request.target_form}.${retval.name}.value='${retval.value}';
+        //alert(self.opener.document.${request.target_form}.${retval.name}.value);
+     </list>
+     <if request.process=="1">self.opener.document.${request.target_form}.submit();</if>
+     //window.close();
+     return true;
+   }
+//--></script>
+</head>
+<body onLoad="Retval(); window.close();">
+Wait please ...
+</body>
+</HTML>
+<!--  END ./uploader.html  -->

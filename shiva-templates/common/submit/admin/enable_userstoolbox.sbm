@@ -1,0 +1,15 @@
+<!-- BEGIN ./common/submit/admin/enable_userstoolbox.sbm -->
+<assign admin=account.getChild("admin")>
+<if request.state=="on">
+<assign res=admin.setSettingsValue("userstoolbox", "on")>
+<else>
+<assign res=admin.setSettingsValue("userstoolbox", "off")>
+</if>
+
+<if res.status=="OK">
+<include request.stemplate>
+<else>
+<assign result=session.addMessage(res.msg)>
+<include request.ftemplate>
+</if>
+<!-- END ./common/submit/admin/enable_userstoolbox.sbm -->

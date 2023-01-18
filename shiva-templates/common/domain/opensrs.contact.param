@@ -1,0 +1,36 @@
+cookie
+${cookie}
+type
+<if type!="billing_info">owner<else>billing</if><assign tmp=srs.parent.getChild(type)>
+first_name
+${tmp.first_name}
+last_name
+${tmp.last_name}
+org_name
+${tmp.org_name}
+address1
+${tmp.address1}
+address2
+${tmp.address2}
+address3
+${tmp.address3}
+city
+${tmp.city}
+state
+${tmp.state}
+country
+${tmp.country}
+postal_code
+${tmp.postal_code}
+phone
+${tmp.phone}
+fax
+${tmp.fax}
+email
+${tmp.email}
+affect_admin
+0
+affect_tech
+0
+<if type!="billing_info">affect_billing<else>affect_owner</if>
+${affect}

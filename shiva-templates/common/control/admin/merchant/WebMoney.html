@@ -1,0 +1,34 @@
+<!-- BEGIN ./commont/control/admin/merchant/WebMoney.html -->
+<call draw_tooltip()>
+<assign mm=account.getChild("merchant_manager")>
+
+<if mm>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/WebMoney.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+
+
+<call draw_table_header("2", lang.label.webmoney)>
+
+<tr ><td><call draw_label(lang.admin.webmoney.purseid)></td><td><input type="text" name="wmid" value="${settings.WebMoney_wmid}"></td></tr>
+
+<tr ><td><call draw_label(lang.admin.webmoney.sekretkey)></td><td><input type="password" name="secretkey" value="${settings.WebMoney_secretkey}"></td></tr>
+
+<if settings.WebMoney_testmode == "TRUE"><assign vtestmode="CHECKED"><else><assign vtestmode=""></if>
+<tr ><td colspan="2"><input type=checkbox name="testmode" ${vtestmode}><call draw_label(lang.admin.epayment.test)></td></tr>
+
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/admin/merchant/WebMoney.html -->

@@ -1,0 +1,4 @@
+<center>Make a Trouble Ticket</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The Trouble Tickets feature is a means to provide communication between you and the technical administrator. Virtually, every form contains a link to the TT from where you can report on your problem. The Trouble Ticket form includes the <i>Title</i> field where you specify the nature of your problem, the <i>E-Mail</i> field where you enter your E-mail address. It is required if you want to receive an email confirmation that your trouble ticket was received by the technical administrator. Check the <i>disable e-mail confirmation</i> box if you don't want to receive the email confirmation of your ticket answered. The form also contains the field where you can describe your problem in detail.

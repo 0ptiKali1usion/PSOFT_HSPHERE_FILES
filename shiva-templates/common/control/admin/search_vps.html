@@ -1,0 +1,99 @@
+<!-- BEGIN ./control/admin/search_vps.html  -->
+<assign admin=account.getChild("admin")>
+<assign reseller_su=account.getChild("reseller_su")>
+
+<call draw_tooltip()>
+<if admin>
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_vps_header)>
+
+<tr>
+<td><call draw_label(lang.vps.label.hostname)></td>
+<td><input type="text" name="sc_vpshostname"></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.search_ds_ip)></td>
+<td><input type="text" name="sc_ip"></td>
+</tr>
+
+<if reseller_su>
+<tr>
+<td><call draw_label(lang.label.reseller)></td>
+<td>
+<select name="sc_reseller_id" size="1" onChange="javascript:printPlans(this.options[this.options.selectedIndex].value)">
+  <option value="">${lang.label.any}
+  <list reseller_su.resellers as reseller>
+  <option value="${reseller.id}">${reseller.name} (${reseller.url})</option>
+  </list>
+</select>
+ </td>
+</tr>
+</if>
+
+<tr>
+<td><call draw_label(lang.label.user)></td>
+<td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+
+<tr><td><call draw_label(lang.label.plan)></td>
+<td>
+  <select name="sc_plan" size="1">
+    <option value="">${lang.label.any}
+    <if !reseller_su>
+        <list admin.plans as plan>
+            <if !plan.deleted && (plan.values["_CREATED_BY_"] == "vps")>
+                <option value="${plan.id}">${plan.description}</option>
+            </if>
+        </list>
+    </if>
+  </select>
+</td>
+</tr>
+
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/vps_search.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<script language="javascript">
+    adminPlans = new Array();
+    <assign count="1">
+    <list admin.plans as plan>
+        <if !plan.deleted && (plan.values["_CREATED_BY_"] == "vps")>
+            adminPlans[${count}] = new Array("${plan.id}", "${plan.description}");
+            <assign count=toolbox.add(count, "1")>
+        </if>
+    </list>
+
+    function printPlans(resId) {
+	if (resId!="1") {
+            for ( i = window.document.f_search.sc_plan.options.length-1; i>=0; i--) {
+                if (window.document.f_search.sc_plan.options[i].value!="") {
+                    window.document.f_search.sc_plan.options[i]=null;
+                }
+            }
+        } else {
+            for (i=1; i<adminPlans.length; i++) {
+	        nop=new Option();
+                nop.value = adminPlans[i][0];
+                nop.text = adminPlans[i][1];
+                window.document.f_search.sc_plan.options[i] = nop;
+	    }
+        }
+    }
+
+</script>
+<!-- END ./control/admin/search_vps.html  -->

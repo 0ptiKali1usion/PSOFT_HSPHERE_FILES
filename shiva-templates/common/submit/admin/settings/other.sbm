@@ -1,0 +1,9 @@
+<!-- BEGIN ./submit/admin/settings/other.sbm -->
+<assign admin = account.getChild("admin")>
+<call savel("privacy")>
+<call savel("support")>
+<call savel("sales")>
+<call savel("check")>
+<include request.stemplate>
+<function savel(name)><assign result=admin.setSettingsLargeValue(name, request[name])></function>
+<!-- END ./submit/admin/settings/other.sbm -->

@@ -1,0 +1,97 @@
+<!-- BEGIN ./MySQL/adm_database2.html  -->
+<call draw_tooltip()>
+<yafv s_mysql>
+
+<assign mysql=account.getChild("MySQL")>
+
+<if !database>
+ <if !request.db_id>
+  <assign database = account.getResource(request.rid)>
+ <else>
+  <assign database = account.getResource(request.db_id)>
+ </if>
+</if>
+
+
+
+
+<call draw_table_header("2", lang.mysql.admdb.header)>
+
+
+<tr>
+<td><call draw_label(lang.label.hostname)></td>
+<td><call draw_label(mysql.host.name+" ("+toolbox.int2ext(mysql.host.ip)+")")>&nbsp;</td>
+</tr>
+ 
+<tr>
+<td><call draw_label(lang.mysql.admdb.port)></td>
+<td><call draw_label("3306")>&nbsp;</td>
+</tr>
+<tr>
+<td><call draw_label(lang.mysql.dbname)></td>
+<td><call draw_label(database.db_name)>&nbsp;
+<if database.locked_by == "">
+  <assign databases = mysql.getChildren("MySQLDatabase")>
+  <if request.dtemplate>
+    <assign final_template=request.dtemplate>
+  <else>
+    <assign final_template="MySQL/databases.html">
+  </if>
+  <call disableNWJump(mysql,database, final_template)>
+    <else>
+        <call draw_label("("+lang.mysql.already_locked_by+" "+toolbox.getResourceDescription(database.locked_by.type_id)+")")>
+    </if>
+</td>
+</tr>
+<tr>
+<td><call draw_label("phpMyAdmin")></td>
+
+<if mysql.phpmyadminhost>
+<td><call draw_tlink("http://"+mysql.phpmyadminhost+"/phpMyAdmin/index.php","_BLANK", lang.mysql.admdb.myadmincp)>
+<else>
+<td><call draw_tlink("/phpMyAdmin/index.php","_BLANK", lang.mysql.admdb.myadmincp)>
+</if>
+<call draw_label(lang.mysql.admdb.dbauser)></td>
+</tr>
+<if account.plan.isResourceAvailable("mysqldb_quota")>
+<assign quota=database.getChild("mysqldb_quota")>
+<tr>
+<td><call draw_label(lang.label.quota)></td>
+<td>
+    <call draw_label(toolbox.compose(lang.mysql.admdb.used, quota.usedMb, quota.limitMb))>
+
+    <call draw_change(config.CLIENT_CP_URL+"?template_name=MySQL/change_db_quota.html"+"&db_id="+database+"&stemplate="+template+"&ftemplate="+template, lang.mysql.admdb.changequota)></td>
+</tr>
+</if>
+
+
+<tr >
+<td valign="middle" ><call draw_label(lang.mysql.admdb.users)>&nbsp;</td>
+<if (account.plan.values["_EMULATION_MODE"] == "1") || (config.EMULATION_MODE == "TRUE")>
+      <td><call draw_important_label(lang.label.demo_restrictions)></td>
+<else>
+   <assign users = database.getUsers()>
+   <if users.status!="ERROR">
+      <td>
+      <if users>
+         <list users as m_user>
+            <call draw_label(m_user.name)>&nbsp;
+            <if (m_user.locked_by!="") && (database.locked_by == m_user.locked_by)>
+               <call draw_label("("+lang.mysql.already_locked_by+" "+toolbox.getResourceDescription(database.locked_by.type_id)+")")><br>
+            <else>
+               <call draw_edit(config.CLIENT_CP_URL+"?template_name=MySQL/adm_privileges.html"+"&db_id="+database+"&user_id="+m_user+"&stemplate="+template+"&ftemplate="+template, lang.mysql.admdb.editpriv)>
+               <call draw_change(config.CLIENT_CP_URL+"?template_name=MySQL/change_user_pswd.html"+"&db_id="+database+"&user_id="+m_user+"&stemplate="+template+"&ftemplate="+template, lang.mysql.admdb.changepsw)>
+               <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/MySQL/delete_user.sbm&db_id="+database+"&user_id="+m_user+"&stemplate="+template+"&ftemplate="+template, lang.label.delete)>
+               <br>
+            </if>
+         </list>
+      </if>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=MySQL/add_user.html&db_id="+database+"&stemplate="+template+"&ftemplate="+template, lang.mysql.admdb.adduser)>
+      </td>
+   <else>
+     <td><call draw_important_label(lang.mysql.admdb.unable)></td>
+   </if>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./MySQL/adm_database2.html  -->

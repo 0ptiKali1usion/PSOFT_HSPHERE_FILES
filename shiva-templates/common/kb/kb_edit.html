@@ -1,0 +1,13 @@
+<!-- BEGIN ./kb/kb_edit.html  -->
+<assign template="kb/kb_edit.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if request.inPanel != "0">
+<call top_tt()>
+<call ticket_menu("kb-edit")>
+<else>
+<call draw_menu("kb-admin")>
+</if>
+<include "control/kb/kb_edit.html">
+<call bottom()>
+<!--  END ./kb/kb_edit.html  -->

@@ -1,0 +1,133 @@
+<!-- BEGIN ./control/tt/choose_acc.html  -->
+<include "functions">
+
+<assign su=account.getChild("su")>
+<assign reseller_su=account.getChild("reseller_su")>
+<assign recreation_tool=account.plan.areResourcesAvailable("recreation_manager")>
+<assign tick=ttadmin.getTicket(request.ttid)>
+
+<if !recreation_tool>
+    <if account.plan.isResourceAvailable("recreation_manager")>
+        <assign recreation_tool=account.addChild("recreation_manager","")>
+	<if recreation_tool.status!="OK">
+             <assign recreation_tool="">
+        </if>
+    </if>
+</if>
+
+
+<if !su>
+    <if account.plan.isResourceAvailable("su")>
+	<assign su=account.addChild("su","")>
+	<if su.status!="OK">
+	    <assign su="">
+	</if>
+    </if>
+</if>
+<assign billman=account.getChild("billman")>
+<assign admin=account.getChild("admin")>
+<if !admin>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer=account.getChild("reportviewer")>
+</if>
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("usersearch")>
+  <assign result = report(request.sc_account_id,
+			request.sc_plan,
+			request.sc_payment,
+			request.sc_email,
+			request.sc_username,
+			request.sc_r_from,
+			request.sc_r_to,
+			request.sc_bci_email,
+			request.sc_suspended)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_payment="+toolbox.url_escape(request.sc_payment)+
+ "&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_email="+toolbox.url_escape(request.sc_email)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.sc_account_id)+
+ "&sc_r_from="+toolbox.url_escape(request.sc_r_from)+
+ "&sc_r_to="+toolbox.url_escape(request.sc_r_to)+
+ "&sc_bci_email="+toolbox.url_escape(request.sc_bci_email)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_table_header("8", lang.tt.account.choose)>
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.credit, "credit")></td>
+  <td class="control_header"><call draw_header(lang.tt.choose)>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+    <td nowrap>
+        <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)><if entry.suspended !=""><br><call draw_label_bold("suspended "+entry.suspended)></if>
+    </td>
+    <td>
+	<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)>
+  </td>
+  <td><call draw_label(entry.created("SHORT"))></td>
+  <td><call draw_label(entry.plan)></td>
+  <td><call draw_label(entry.email)></td>
+  <td class="control_align_right"><call draw_label(entry.balance)></td>
+  <td class="control_align_right"><call draw_label(entry.credit)></td>
+  <td class="control_align_center">
+     <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/change_acc.sbm&stemplate=tt/admin_edit.html"+"&ttid="+request.ttid+"&aid="+entry.accountId, lang.tt.choose)>
+  </td>
+</tr>
+</list>
+<tr>
+<td colspan="8">
+<table class="inner_control" width="100%">
+<tr>
+<td>
+<call advReportNav(report)>
+</td>
+<td class="inner_control_align_right">
+ <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html"+"&ttid="+request.ttid, lang.button.back)>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/tt/choose_acc.html  -->

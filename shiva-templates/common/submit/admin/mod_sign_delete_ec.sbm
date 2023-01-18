@@ -1,0 +1,16 @@
+<!-- BEGIN ./submit/admin/mod_sign_delete_ec.sbm  -->
+<assign signup = account.getChild("signupadm")>
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign bi=tmpAcc.bi>
+<assign result=bi.updateExemptionCode("")>
+<if result.status != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign fail = "1">
+</if>
+<if !fail>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/admin/mod_sign_delete_ec.sbm  -->
+

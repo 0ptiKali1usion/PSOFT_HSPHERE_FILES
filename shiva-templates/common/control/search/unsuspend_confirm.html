@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/search/unsuspend_confirm.html  -->
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/account/resume.sbm">
+<input type="hidden" name="aid" value="${request.aid}">
+<input type="hidden" name="user" value="${request.user}">
+<if request.stemplate><input type="hidden" name="stemplate" value="${request.stemplate}"><else><input type="hidden" name="stemplate" value="admin/search.html"></if>
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param.name}" value="${sc_param.value}">
+ </if>
+</list>
+</compress>
+
+
+
+
+
+<call draw_table_header("2", lang.search.unsuspendconfirm.header)>
+
+
+<tr>
+  <td colspan="2"  class="control_align_center"><call draw_label(lang.search.unsuspendconfirm.info)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.search.unsuspendconfirm.reason)></td>
+   <td><select name="reason" size="1"><option value="1">${lang.search.unsuspendconfirm.paid}<option value="2">${lang.search.unsuspendconfirm.loyal}<option value="3">${lang.search.unsuspendconfirm.other}</select></td>
+</tr>
+<tr>
+<td colspan="2"  class="control_align_center"><call draw_label(lang.search.unsuspendconfirm.text)></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center"><textarea name="description" cols=40 rows=10></textarea></td>
+</tr>
+<tr>
+<td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/search/unsuspend_confirm.html  -->

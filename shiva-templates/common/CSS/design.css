@@ -1,0 +1,333 @@
+/* BEGIN /common/CSS/design.css */
+<if RTL_DIRECTION == "1">
+  <assign css_direction = "direction: rtl;">
+  <assign css_text_align_left = "text-align: right;">
+  <assign css_text_align_right = "text-align: left;">
+<else>
+  <assign css_direction = "">
+  <assign css_text_align_left = "text-align: left;">
+  <assign css_text_align_right = "text-align: right;">
+</if>
+BODY {
+    background-color: ${BG_COLOR};
+    margin-height: 0;
+    margin-width: 0;
+    margin-left: 0;
+    margin-top: 0;
+    ${css_direction}
+}
+TABLE.control {
+    border-collapse: collapse;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.control TD {
+    border: 1px solid ${BORDER_COLOR};
+    padding: 3;
+    spacing: 1;
+    background-color: ${LIGHT_STRIP};
+    ${css_text_align_left}
+}
+TABLE.control TD.control_header {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+}
+TD.control_header A {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: underline;
+}
+TD.control_header A: hover {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: underline;
+}
+TABLE.control TD.control_header_align_right {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+    ${css_text_align_right}
+}
+TABLE.control TD.control_header_align_center {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+    text-align: center;
+}
+TABLE.control TD.control_header_align_left {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+    text-align: left;
+}
+TABLE.control TD.control_align_center {
+    text-align: center;
+}
+TABLE.control TD.control_align_right {
+    ${css_text_align_right}
+}
+TABLE.control TD.control_tooltip {
+    height:31;
+    vertical-align: middle;
+}
+TABLE.inner_control {
+    border-collapse: collapse;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.inner_control TD {
+    border: 0px;
+    padding: 3;
+    spacing: 1;
+    background-color: ${LIGHT_STRIP};
+    ${css_text_align_left}
+}
+TABLE.inner_control TD.inner_control_align_right {
+    ${css_text_align_right}
+}
+TABLE.inner_control TD.inner_control_align_center {
+    text-align: center;
+}
+
+TABLE.inner_control_grid {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.inner_control_grid TD {
+    border: 1px solid ${BORDER_COLOR};
+    padding: 3;
+    spacing: 1;
+    background-color: ${LIGHT_STRIP};
+    ${css_text_align_left}
+}
+TABLE.inner_control_grid TD.inner_control_grid_header {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+}
+TABLE.inner_control_grid TD.inner_control_grid_align_right {
+    ${css_text_align_right}
+}
+TABLE.inner_control_grid TD.inner_control_grid_align_center {
+    text-align: center;
+}
+TABLE.diagram {
+    border-collapse: collapse;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.diagram TD {
+    border: 0;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.warn_invoice {
+    border-collapse: collapse;
+    width: 70%;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.warn_invoice TD {
+    border: 1px solid ${BORDER_COLOR};
+    padding: 3;
+    spacing: 1;
+    background-color: ${LIGHT_STRIP};
+    ${css_text_align_left}
+}
+TABLE.warn_invoice TD.warn_invoice_align_right {
+    ${css_text_align_right}
+}
+TABLE.warn_invoice TD.warn_invoice_align_center {
+    text-align: center;
+}
+TABLE.warn_invoice TD.warn_invoice_header {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+}
+TABLE.warn_invoice TD.warn_invoice_header_align_right {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+    ${css_text_align_right}
+}
+TABLE.warn_invoice TD.warn_invoice_header_align_center {
+    background-color: ${HEADER_COLOR};
+    padding: 5;
+    text-align: center;
+}
+FONT.link_font {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+}
+FONT.label_font {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+}
+FONT.quick_header {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+}
+FONT.quick_icon {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+}
+A {
+    color: ${LINK_COLOR};
+    text-decoration: none;
+}
+A:hover {
+    color: ${LINK_COLOR};
+    text-decoration: underline;
+}
+
+TABLE.inner_control_header {
+    border-collapse: collapse;
+    padding: 3;
+    spacing: 0;
+}
+TABLE.inner_control_header TD {
+    background-color: ${HEADER_COLOR};
+    padding: 3;
+    border: 0;
+}
+TABLE.inner_control_header A {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: none;
+}
+TABLE.inner_control_header A: hover {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: underline;
+}
+TABLE.inner_control_header TD.inner_control_header_align_right {
+    background-color: ${HEADER_COLOR};
+    padding: 3;
+    ${css_text_align_right}
+    border: 0;
+}
+TABLE.inner_control_header TD.inner_control_header_align_center {
+    background-color: ${HEADER_COLOR};
+    padding: 3;
+    text-align: center;
+    border: 0;
+}
+
+TABLE.inner_header {
+    border-collapse: collapse;
+    padding: 0;
+    spacing: 0;
+}
+TABLE.inner_header td {
+    background-color: ${HEADER_COLOR};
+    border: 0;
+}
+TABLE.inner_header TD.inner_links {
+    ${css_text_align_right}
+    background-color: ${HEADER_COLOR};
+}
+TD.inner_links A {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: underline;
+}
+TD.inner_links A: hover {
+    color: ${HEADER_TEXT_COLOR};
+    text-decoration: underline;
+}
+
+BODY.signup_body {
+    background-color: ${MENU_COLOR1};
+    text-color: ${TEXT_COLOR};
+    margin-height: 0;
+    margin-width: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    ${css_direction}
+}
+
+textarea {
+    font-family: courier, fixed, monospace;
+}
+
+DIV.leftMenu {
+    position: relative;
+}
+
+DIV.leftMenu TD {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    font-weight: normal;
+    color: ${TEXT_COLOR};
+    text-decoration: none;
+}
+
+DIV.leftMenu A {
+    display:block;
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    font-weight: normal;
+    color: ${TEXT_COLOR};
+    text-decoration: none;
+}
+
+DIV.leftMenu A:hover {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    font-weight: normal;
+    color: ${TEXT_COLOR};
+    text-decoration: underline;
+}
+
+<if isMenuDefined>
+TD.menuLeftItem {
+    background-color: ${DARK_STRIP};
+    padding: 2;
+}
+
+TD.menuLeftActiveItem {
+    background-color: ${LIGHT_STRIP};
+    padding: 2;
+}
+
+TD.menuLeftBlank {
+    background-color: ${DARK_STRIP};
+    width: 10000;
+    height: 1;
+}
+TD.menuLeftBlank IMG {
+    width: 1;
+    height: 1;
+}
+
+TD.menuLeftSeparator {
+    background-color: ${BORDER_COLOR};
+    background-repeat: repeat;
+    width: 1;
+    height: 1;
+}
+TD.menuLeftSeparator IMG {
+    width: 1;
+    height: 1;
+}
+
+TD.menuLeftColor1 {
+    background-color: ${MENU_COLOR1};
+    font-size: 10pt;
+    padding: 2;
+}
+
+TD.menuLeftColor2 {
+    background-color: ${MENU_COLOR2};
+    font-size: 10pt;
+    padding: 2;
+}
+
+TD.menuLeftColor3 {
+    background-color: ${MENU_COLOR3};
+    font-size: 10pt;
+    padding: 2;
+}
+
+TD.menuLeftColor4 {
+    background-color: ${MENU_COLOR4};
+    font-size: 10pt;
+    padding: 2;
+}
+</if>
+/* END /common/CSS/design.css */

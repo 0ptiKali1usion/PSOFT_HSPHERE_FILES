@@ -1,0 +1,16 @@
+<!-- BEGIN ./dns/add_mail_service.sbm  -->
+<assign domain=account.getResource(request.rid)>
+<assign result=domain.addChild("mail_service", "signup")>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.label.mail_service,""))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./dns/add_mail_service.sbm  -->

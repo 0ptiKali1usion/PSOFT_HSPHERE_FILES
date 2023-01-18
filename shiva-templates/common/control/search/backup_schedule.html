@@ -1,0 +1,98 @@
+<!-- BEGIN ./control/search/backup_schedule.html  -->
+
+<assign viewer=account.getChild("reportviewer")>
+<assign report_ok="">
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("backup_schedule")>
+  <assign result = report(
+			request.sc_from,
+			request.sc_to,
+			request.sc_username,
+			request.sc_account_id,
+			request.sc_plan,
+			request.sc_task_status,
+			request.sc_task_type,
+		   )>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<!--${step} ${page}-->
+<assign sc_params="&sc_from="+toolbox.url_escape(request.sc_from)+
+ "&sc_to="+toolbox.url_escape(request.sc_to)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_account_id="+toolbox.url_escape(request.sc_account_id)+
+ "&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_task_status="+toolbox.url_escape(request.sc_task_status)+
+ "&sc_task_type="+toolbox.url_escape(request.sc_task_type)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+
+<call draw_tooltip()>
+
+<call draw_table_header("10", lang.backup.schedule_report.header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "account_id")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.ds.backup_service.task.scheduled, "task_scheduled")></td>
+  <td class="control_header"><call advReportLabel(report, lang.ds.backup_service.task.processed, "task_processed")></td>
+  <td class="control_header"><call advReportLabel(report, lang.ds.backup_service.task.status, "task_status")></td>
+  <td class="control_header"><call advReportLabel(report, lang.backup.task.type.label, "task_type")></td>
+  <td class="control_header"><call advReportLabel(report, lang.backup.task.object_type.label, "task_object")></td>
+  <td class="control_header"><call advReportLabel(report, lang.backup.task.object_name.label, "task_object_name")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.balance, "balance")></td>
+  <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<assign entries = report.page()>
+<list entries as entry>
+<tr>
+  <td class="control_align_right">
+	<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.account_id, "PREVIEW", entry.account_id)>
+  </td>
+    <td nowrap align = "right">
+        <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.account_id,"USER_INFO",entry.username)>
+    </td>
+  <td class="control_align_center"><call draw_label(entry.task_scheduled)></td>
+  <td class="control_align_center"><call draw_label(entry.task_processed)></td>
+  <td class="control_align_center"><call draw_label(entry.task_status)></td>
+  <td class="control_align_center"><call draw_label(entry.task_type)></td>
+  <td><call draw_label(entry.task_object)></td>
+  <td><call draw_label(entry.task_object_name)></td>
+  <td class="control_align_right"><call draw_label(toolbox.currency(entry.balance))></td>
+  <td>
+      <if entry.task_status_id == "1"><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/change_backup_task_state.sbm&state=3"+"&task_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&cur_menu="+cur_menu+sc_params, "cj_start", lang.backup.task.hint.mark_as_completed)>&nbsp;
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/admin/change_backup_task_state.sbm&state=4"+"&task_id="+entry.id+"&stemplate="+template+"&ftemplate="+template+"&cur_menu="+cur_menu+sc_params, "cj_cancel", lang.backup.task.hint.cancel)><else>&nbsp;</if></td>
+</tr>
+</list>
+<tr><td colspan="10"><call advReportNav(report)></td></tr>
+</if>
+<call draw_table_footer()>
+
+<function reportLink(start, label)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name="+template+"&cid="+report.id+"&cur_menu="+cur_menu+sc_params+"&start="+toolbox.url_escape(start),label)>
+</function>
+<!--  END ./control/search/backup_schedule.html  -->

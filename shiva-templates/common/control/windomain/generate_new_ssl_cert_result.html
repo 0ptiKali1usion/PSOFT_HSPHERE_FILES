@@ -1,0 +1,69 @@
+<!-- BEGIN ./domain/generate_new_ssl_cert_result.html  -->
+<call draw_tooltip()>
+<form name="ext" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/windomain/add_ssl_submit.sbm">
+<input type="hidden" name="site_name" value="${request.site}">
+
+<call draw_table_header("", lang.domain.addssl.header)>
+
+<tr>
+ <td><call draw_label(lang.domain.sslcertresult.text)>
+ </td>
+</tr>
+<tr>
+ <td class="control_header">
+   <call draw_header(lang.domain.generatenewsslcert.options)>
+ </td>
+</tr>
+<tr >
+ <td>
+   <if forced == "1"><assign vchecked="CHECKED"><else><assign vchecked=""></if>
+   <call draw_label(lang.windomain.force)>
+   <input name="forced" type="checkbox" ${vchecked} value="1"><br>
+   <call draw_label(lang.windomain.key)>
+   <input name="need128" type="checkbox" ${vchecked} value="1">
+ </td>
+</tr>
+
+<tr>
+ <td class="control_header">
+   <call draw_header(lang.domain.sslcertresult.signrequest)>
+ </td>
+</tr>
+<tr>
+ <td>
+   <textarea name="req" rows="10" cols="64" nowrap>${ssl.req}</textarea>
+ </td>
+</tr>
+<tr>
+ <td class="control_header">
+   <call draw_header(lang.domain.sslcertresult.key)>
+ </td>
+</tr>
+<tr>
+ <td>
+   <textarea name="key" rows="10" cols="64" nowrap>${ssl.key}</textarea>
+ </td>
+</tr>
+<tr>
+ <td class="control_header">
+    <call draw_header(lang.domain.sslcertresult.temp)>
+ </td>
+</tr>
+<tr>
+ <td>
+   <textarea name="file" rows="10" cols="64" nowrap>${ssl.file}</textarea>
+ </td>
+</tr>
+<tr>
+  <td  class="control_align_center">
+    <input type="submit" vlue="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/generate_new_ssl_cert_result.html  -->

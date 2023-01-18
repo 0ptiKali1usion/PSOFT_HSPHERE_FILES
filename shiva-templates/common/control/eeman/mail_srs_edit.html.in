@@ -1,0 +1,24 @@
+<!-- BEGIN ./adnsmanager/mail_srs_edit.html  -->
+<call draw_tooltip()>
+
+<yafv s_eeman>
+
+<form name="srs_edit" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/eeman/mail_srs_edit.sbm">
+
+<call draw_table_header("2", lang.eeman.mail_srs.settings)>
+<tr >
+  <td><call draw_label(lang.eeman.mail_srs.max_age)><call draw_help("admin-eeman-mserver-srs_maxage","")></td>
+  <td><input type="text" name="f_age" check="vIntegerRequired" value=${request.srs_age}><call draw_label(lang.admin.settings.days)>
+  </td>
+</tr>
+<tr>
+  <td colspan="2" class="control_align_center" >
+  <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<!--  END ./adnsmanager/mail_srs_edit.html  -->

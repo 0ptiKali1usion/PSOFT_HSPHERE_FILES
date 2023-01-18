@@ -1,0 +1,36 @@
+<!-- BEGIN ./control/admin/registar/view_simple.html  -->
+<call draw_tooltip()>
+<assign billman = account.getChild("billman")>
+
+<if billman>
+
+
+
+
+<call draw_table_header("2", lang.admin.registrar.header)>
+
+
+
+<tr >
+    <td><call draw_label(lang.admin.view.active)></td>
+    <td>
+    <assign mms = toolbox.getActiveTLDs()>
+    <list mms as tld>
+    <assign rprices = billman.getResellerTLDPrices(tld)>
+    <if rprices.size != "0">
+       <assign registrar=toolbox.getRegistrarInfo(tld)>
+       <call draw_label(tld)>&nbsp;<call draw_label(registrar.description)>
+       <call draw_link(config.CLIENT_CP_URL+"?rid="+registrar.id+"&tld="+tld+"&template_name=admin/registrar/prices.html&stemplate="+template, lang.admin.registrar.prices)>
+       <br>
+    </if>
+    </list>
+    <if !mms>&nbsp;</if>
+    </td>
+</tr>
+
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/registrar/view_simple.html  -->

@@ -1,0 +1,50 @@
+<!-- BEGIN ./winftp/ftp.html  -->
+<function displayDomain(domain)>
+<tr>
+   <td  class="control_align_center" width="1%" nowrap><call draw_tt_help(domain,"user-ftp-domainname","")></td>
+   <td><call draw_label(domain.name)></td>
+   <td    valign="middle"><assign ftp_vhost=domain.getChild("ftp_vhost_anonymous")><assign ip=domain.getChild("ip")>
+<if ip.shared=="1">
+<call draw_off()><call draw_label(lang.winftp.ftp.ipnotification)>
+<else> 
+<if ftp_vhost><call disable(domain, ftp_vhost)><call draw_edit(config.CLIENT_CP_URL+"?template_name=winftp/ftp_vhost.html&rid="+ftp_vhost+"&stemplate="+template+"&ftemplate="+template+"&dtemplate="+template,lang.winftp.ftp.altedit)>
+<else>
+<call enableWizard(domain, "ftp_vhost_anonymous", "winftp/ftp_vhost_add_form.html")>
+</if>
+</if>
+</td>
+</tr>
+<list domain.getChildren("subdomain") as subdomain>
+<call displayDomain(subdomain)>
+</list>
+</function>
+
+<call draw_tooltip()>
+<assign domainManager = account.getChild( "unixuser" )>
+
+
+
+<call draw_table_header("3", lang.domain.editincluded.ftp)>
+
+<tr>
+   <td class="control_header_align_center" width="1%" nowrap><call draw_TT_header()></td>
+   <td class="control_header"  width="39%" nowrap><call draw_header(lang.label.dname)></td>
+   <td class="control_header"  width="60%" nowrap><call draw_header(lang.winftp.ftp.hanonymftp)></td>
+</tr>
+
+<list domainManager.getChildren("domain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("service_domain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("3ldomain") as domain>
+<call displayDomain(domain)>
+</list>
+<list domainManager.getChildren("nodomain") as domain>
+<call displayDomain(domain)>
+</list> 
+
+<call draw_table_footer()>
+
+<!--  END ./winftp/ftp.html  -->

@@ -1,0 +1,13 @@
+<!-- BEGIN ./adnsmanager/del_mail_ssl.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+
+<assign result = mail_manager.disableMailSSL()>
+<if result.status =="OK">
+  <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_disabled, lang.label.ssl_support, ""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/del_mail_ssl.sbm  -->

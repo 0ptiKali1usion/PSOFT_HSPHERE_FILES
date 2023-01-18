@@ -1,0 +1,83 @@
+<!-- BEGIN ./ftp/change_traffic.html.in  -->
+<call draw_tooltip()>
+
+<yafv s_ftp>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_traffic" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<switch request.traffic_type>
+<case "1"><input type="hidden" name="type" value="http_traffic"><break>
+<case "2"><input type="hidden" name="type" value="ftp_user_traffic"><break>
+<case "3"><input type="hidden" name="type" value="ftp_traffic"><break>
+<case "4"><input type="hidden" name="type" value="real_server_traffic"><break>
+<case "5"><input type="hidden" name="type" value="mail_traffic"><break>
+<case "-1"><input type="hidden" name="type" value="reseller_traffic"><break>
+<default><input type="hidden" name="type" value="traffic"><break>
+</switch>
+<input type="hidden" name="rid_parent" value="${request.rid_parent}">
+<input type="hidden" name="traffic_type" value="${request.traffic_type}">
+
+<input type="hidden" name="next_template" value="submit/ftp/change_traffic_submit.sbm">
+<input type="hidden" name="template_name" value="submit/ftp/change_traffic_check.sbm">
+
+
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+
+
+
+
+<call draw_table_header("2", lang.ftp.changetraffic.header)>
+
+
+<tr>
+<switch request.traffic_type>
+<case "1">
+<input type="hidden" name="traffic" value="http_traffic">
+<assign traffic=account.getResource(request.rid_parent).getChild("http_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.httplimit)></td>
+<break>
+<case "2">
+<input type="hidden" name="traffic" value="ftp_user_traffic">
+<assign traffic=account.getResource(request.rid_parent).getChild("ftp_user_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.ftplimit)></td>
+<break>
+<case "3">
+<input type="hidden" name="traffic" value="ftp_traffic">
+<assign traffic=account.getResource(request.rid_parent).getChild("ftp_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.anonftplimit)></td>
+<break>
+<case "4">
+<input type="hidden" name="traffic" value="real_server_traffic">
+<assign traffic=account.getResource(request.rid_parent).getChild("real_server_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.rslimit)></td>
+<break>
+<case "5">
+<input type="hidden" name="traffic" value="mail_traffic">
+<assign traffic=account.getResource(request.rid_parent).getChild("mail_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.maillimit)></td>
+<break>
+<case "-1">
+<input type="hidden" name="traffic" value="reseller_traffic">
+    <assign traffic=account.getResource(request.rid_parent).getChild("reseller_traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.reseller)></td>
+<break>
+
+<default>
+    <assign traffic=account.getChild("traffic")>
+    <td><call draw_label(lang.ftp.changetraffic.sumlimit)></td>
+</switch>
+    <td>
+    <if ! vsize><assign vsize=traffic.size></if> 
+    <input type="text" name="size" size="5" value="${vsize}" label="${lang.ftp.changetraffic.sumlimit}" check="vTrafficLimit"><call draw_label(" GB")></td>
+ </tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;<input type="submit" value="${lang.ftp.changetraffic.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/change_traffic.html.in  -->

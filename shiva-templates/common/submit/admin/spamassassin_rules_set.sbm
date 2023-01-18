@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/admin/spamassassin_rules_set.sbm -->
+
+<assign sa_man=account.getChild("spamassassin_manager")>
+<list params as param>
+  <if toolbox.startsWith(param.name, "i_") == "1">
+    <if trusted_rulesets>
+      <assign trusted_rulesets=trusted_rulesets+",">
+    </if>
+    <assign trusted_rulesets=trusted_rulesets+toolbox.substring(param.name,"2")>
+  </if>
+</list>
+<assign result=sa_man.addRulesCron(request.ms_id,trusted_rulesets,request.mail_address)>
+<if result.status=="OK">
+  <if request.state=="edit">
+    <assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_updated,lang.admin.spamassassin.rules_du_jour.config,""))>
+  <else>
+    <assign res=session.addMessage(
+            toolbox.compose(lang.msg.name_res_added,lang.admin.spamassassin.rules_du_jour,""))>
+  </if>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/spamassassin_rules_set.sbm -->

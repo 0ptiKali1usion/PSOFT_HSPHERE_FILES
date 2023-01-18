@@ -1,0 +1,59 @@
+<!--BEGIN: common/msexchange/compare_plans.html -->
+<include "functions">
+<call START_PAGE("msexchange/compare_plans.html", "he-users")>
+<call draw_tooltip()>
+<call draw_table_header("2", lang.misc.compareway.header)>
+<assign bizorg = account.getResource(request.bizorgid)>
+<form name="f_compare_ord_plans" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="bizorgid" value="${bizorg}">
+<input type="hidden" name="template_name" value="msexchange/compare_plans.html">
+<input type="hidden" name="compare" value="on">
+<if !request.compare>
+<list bizorg.availablePlans as plan>
+<tr><td colspan="2">
+<input type="checkbox" name="${plan.type}" value="1">&nbsp;<call draw_label(plan.settings.name)>
+</td></tr>
+</list>
+<tr>
+  <td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+<else>
+<list bizorg.availablePlans as plan>
+<if request[plan.type]>
+    <tr>
+    <td><call draw_label(plan.settings.name)></td>
+    <td>
+    <table class="inner_control_grid">
+    <tr>
+    <td class="inner_control_grid_header" width="30%"><call draw_label(lang.label.msexchange.feature)></td>
+    <td class="inner_control_grid_header" width="50%"><call draw_label(lang.label.msexchange.feature_desc)></td>
+    </tr>
+
+    <list plan.settings.featuresSet as feature>
+    <tr>
+      <td><call draw_label(feature.name)></td>
+    <td>
+    <if feature.key=="OwaSegment">
+      <list plan.settings.getOwaSegmentDescr(feature.value) as prop>
+      <call draw_label(prop)><br>
+      </list>
+    <else>
+      <if feature.description><call draw_label(feature.description)><br><else>&nbsp;</if>
+      <if feature.value><call draw_label(feature.value)><br></if>
+    </if>
+    </td>
+
+    </tr>
+    </list>
+    </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+</if>
+</list>
+</if>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/compare_plans.html -->

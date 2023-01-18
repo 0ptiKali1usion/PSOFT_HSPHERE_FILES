@@ -1,0 +1,27 @@
+<!-- BEGIN ./control/mailman/del_recipients_warn.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+<assign email_manager = account.getChild("admin").email_manager>
+<if email_manager>
+<assign group = email_manager.getGroup(request.group_id)>
+<call draw_table_header("", lang.admin.delrecipientswarn.header)>
+<tr>
+<td class="control_align_center"><call draw_label(lang.admin.delrecipientswarn.deltext(lang[group]))></td>
+</tr>
+<tr>
+<td>
+<form name="plan_delete_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/mailman/removeall.sbm">
+<input type="hidden" name="type" value="${request.group_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.plan_delete_confirm.submit()", lang.admin.del_recipients.yes)><br>
+<call draw_link("javascript:history.go(-1)", lang.admin.del_recipients.no)>
+</center>
+</td>
+</tr>
+<call draw_table_footer()>
+<else>&nbsp;
+</if>
+<!--  END ./control/mailman/del_recipients_warn.html  -->

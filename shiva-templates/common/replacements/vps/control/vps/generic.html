@@ -1,0 +1,48 @@
+<!-- BEGIN control/vps/generic.html  -->
+
+<assign vps = account.getChild("vps")>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("3", "")>
+
+<tr>
+ <td width="5%" class="control_header_align_center"><call draw_TT_header()></td>
+ <td width="30%" class="control_header"><call draw_header(lang.label.parameter)></td>
+ <td width="65%" class="control_header"><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+   <td><call draw_tt_help(account.id,"user-ai_quick-plan","Click to get help")></td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)></td></tr>
+<tr>
+   <td><call draw_tt_help("","user-ai_quick-username","")></td>
+   <td><call draw_label(lang.unixuser.generic.acclogin)></td>
+   <td><call draw_label(account.login)></td>
+</tr>
+
+<assign quota = vps.getChild("quota")>
+<tr>
+   <td     nowrap><call draw_tt_help(quota,"user-ai_pref-quota","")></td>
+   <td><call draw_label(lang.label.quota)></td>
+   <td><if quota.limitFiles != "unlimited"><call draw_label(toolbox.compose(lang.unixuser.limit_quota, quota.used, quota.limit, quota.usedFiles, quota.limitFiles))><else><call draw_label(toolbox.compose(lang.unixuser.unlimited_quota, quota.used, quota.limit, quota.usedFiles))></if><call draw_change(config.CLIENT_CP_URL+"?stemplate="+template+"&template_name=vps/change_quota.html"+"&rid="+vps, lang.label.changequota)></td>
+</tr> 
+
+<assign traffic = account.getChild("traffic")>
+<if traffic><assign res=traffic.reload></if>
+<tr>
+  <td    nowrap><call draw_tt_help(traffic,"user-ai_pref-totaltraffic","")></td>
+  <td><call draw_label(lang.label.sumtraffic)></td>
+  <td><call draw_label(toolbox.compose(lang.unixuser.traffic, traffic.text_traffic, traffic.size))><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+vps+"&ftemplate="+template+"&stemplate="+template, lang.label.changetraffic)></td>
+</tr>
+<tr>
+   <td><call draw_tt_help("","user-ai_pref-hostname","")></td>
+   <td><call draw_label(lang.label.hostname)></td>
+   <td><call draw_label(vps.vpsHostName)></td>
+</tr>
+
+
+<call draw_table_footer()>
+<!--  END control/vps/generic.html  -->

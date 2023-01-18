@@ -1,0 +1,5 @@
+<center> srs </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Sender Permitted From (SPF, http://spf.pobox.com/) is a mechanism for preventing sender forgery in SMTP transactions, thus allowing domain owners control over who may send mail from their domain. The Sender Rewriting Scheme (SRS, http://www.annarres.org/projects/srs, http://spf.pobox.com/srs.html) is a mechanism for rewriting sender addresses when a mail is forwarded in such a way that mail forwarding continues to work in an SPF compliant world. When you add SRS, then srs qmail parameters will be included on all mail servers, also base64 secret key used in the SRS address cipher will be generated. You can include mailSRS cron in the Background Job Manager to regenerate secret key every month. 
+<br>

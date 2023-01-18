@@ -1,0 +1,23 @@
+<!-- BEGIN ./submit/admin/assign_promo.sbm -->
+
+<assign billman = account.getChild("billman")>
+
+<if billman>
+  <assign admin = account.getChild("admin")>
+  <assign plan = admin.getPlan(request.plan_id)>
+  <assign promo = billman.getPromo(request.new_promo)>
+  <assign result = plan.addPromo(request.new_promo)>
+  <if result.status != "OK">
+    <assign failure="1">
+    <assign res = session.addMessage(result.msg)>
+  </if>
+</if>
+
+<if !failure>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/assign_promo.sbm -->
+

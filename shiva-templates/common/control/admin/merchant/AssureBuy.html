@@ -1,0 +1,59 @@
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/AssureBuy.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+<call draw_table_header("2", lang.AssureBuy)>
+<if merchant>
+<assign vTITLE=merchant.TITLE>
+<assign vserver=merchant.server>
+<assign vport=merchant.port>
+<assign vpath=merchant.path>
+<assign vuser_id=merchant.user_id>
+<assign vpassword=merchant.password>
+<assign vcurrency=merchant.currency>
+<assign vavslevel=merchant.avslevel>
+<if merchant.testmode=="on"><assign vtestmode="CHECKED"><else><assign vtestmode=""></if>
+<else>
+<assign vTITLE="AssureBuy">
+<assign vserver="gateway.assurebuy.com">
+<assign vport="443">
+<assign vpath="ics_gateway.exe">
+<assign vuser_id="">
+<assign vpassword="">
+<assign vcurrency="">
+<assign vavslevel="N">
+<assign vtestmode="">
+</if>
+<tr><td><call draw_label(lang.label.title)></td><td><input type="text" name="TITLE" value="${vTITLE}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="${vserver}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="${vport}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.path)></td><td><input type="text" name="path" value="${vpath}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.user_id)></td><td><input type="text" name="user_id" value="${vuser_id}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.password)></td><td><input type="password" name="password" value="${vpassword}"></td></tr>
+<tr>
+<td><call draw_label(lang.admin.epayment.currency)></td><td><select name="currency"><list toolbox.getCurrencies() as curr><option value="${curr.code}" <if curr.code==vcurrency>SELECTED</if>>${curr.name}</list></select></td></tr>
+<if vavslevel=="F"><assign F_selected="SELECTED"></if>
+<if vavslevel=="M"><assign M_selected="SELECTED"></if>
+<if vavslevel=="L"><assign L_selected="SELECTED"></if>
+<if vavslevel=="N"><assign N_selected="SELECTED"></if>
+<tr>
+<td><call draw_label(lang.admin.epayment.avslevel)></td>
+<td>
+<select name="avslevel">
+<option value="F" ${F_selected}>${lang.admin.signio.avsfull}
+<option value="M" ${M_selected}>${lang.admin.signio.avsmedium}
+<option value="L" ${L_selected}>${lang.admin.signio.avslight}
+<option value="N" ${N_selected}>${lang.admin.signio.avsnone}
+</select>
+</td>
+</tr>
+<tr ><td colspan="2">
+<input type="checkbox" name="testmode" ${vtestmode}>
+<call draw_label(lang.admin.epayment.testmode)>
+</td></tr>
+<tr ><td colspan=2 class=control_align_center><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+<call draw_table_footer()>
+</form>

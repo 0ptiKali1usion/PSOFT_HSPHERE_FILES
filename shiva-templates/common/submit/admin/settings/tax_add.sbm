@@ -1,0 +1,35 @@
+<!-- BEGIN ./submit/admin/settings/tax_add.sbm -->
+<assign billman=account.getChild("billman")>
+<if billman>
+<assign result = yafv.checkall(
+ yafv.common.s_admin.vPercentReq(lang.admin.taxes.percent, request.percent),
+ yafv.common.s_admin.vStringReq(lang.admin.taxes.description, request.descr),
+ yafv.common.s_admin.vTaxState(lang.admin.taxes.state, request.state, request.state2)
+)>
+<if result.status == "OK">
+    <if request.state == "NA">
+	<assign state = request.state2>
+    <else>
+        <assign state = request.state>
+    </if>
+    <assign result = billman.addTax(toolbox.numberToUSLocale(request.percent), request.descr, request.country, state, request.outsideCountry, request.outsideState)>
+    <if result.status != "OK">
+	<assign res=session.addMessage(result.msg)>
+    <else>
+	<assign success="1">
+    </if>
+<else>
+  <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<else>
+  <assign res=session.addMessage(msg.admin_ad_taxes)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign percent=request.percent>
+    <assign descr=request.descr>
+    <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/settings/tax_add.sbm -->
+

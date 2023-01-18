@@ -1,0 +1,23 @@
+<!-- BEGIN ./control/PGSQL/change_db_dscr.html.in  -->
+<call draw_tooltip()>
+<assign pgsql = account.getChild("pgsql")>
+<assign database = account.getResource(request.db_id)>
+<yafv s_pgsql>
+<form action="${config.CLIENT_CP_URL}" name="f_dscr_database" method="POST" check! accept-charset="UTF-8">
+ 
+<input type="hidden" name="template_name" value="submit/PGSQL/change_db_dscr.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="db_id" value="${request.db_id}">
+<call draw_table_header("2", lang.pgsql.chdbdscr.db(database.db_name))>
+<tr>
+<td><call draw_label(lang.pgsql.chdbdscr.newdscr)></td>
+<td><input type="text" name="db_descr" value="${database.db_description}"></td>
+</tr>
+
+<tr>
+    <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.change}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/PGSQL/change_db_dscr.html.in  --> 

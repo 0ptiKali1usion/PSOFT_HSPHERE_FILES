@@ -1,0 +1,86 @@
+<!-- BEGIN ./control/eeman/mserver_params.html  -->
+<assign eeman=account.getChild("eeman")>
+
+<if eeman>
+<yafv s_eeman>
+<script language="JavaScript">
+  function __checkAuthParams(form) {
+    var res = "";
+    if (form['smtpauth'] && (form['smtpauth'].type == 'checkbox')) {
+      res = form['smtpauth'].checked ? "1" : "0";
+    }
+    if ((res != "1") && form['popbeforesmtp'] && (form['popbeforesmtp'].type == 'checkbox')) {
+      res = form['popbeforesmtp'].checked ? "1" : "0";
+    }
+    if (res == "0") {
+      alert("${lang.eeman.qmail.not_chosen_protocol_error}");
+      return false;
+    } else {
+      return true;
+    }
+  }
+</script>
+
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="pserverparams" onSubmit="return checkForm(this,true) && __checkAuthParams(this)" accept-charset="UTF-8">
+<script language="javascript"><!--
+ hasCF=true; (curForm=document.forms['pserverparams']).wbv=true;
+//-->
+</script>
+
+<assign lserver=eeman.getLserver(request.rid)>
+<call draw_table_header("2", toolbox.compose(lang.eeman.qmail_server_params,lserver.name))>
+
+<tr>
+  <td colspan="2" class="control_align_center">
+    <call draw_important_label(lang.eeman.mservers.warn)>
+  </td>
+</tr>
+<assign params = eeman.getMailServerParamsList(request.rid)>
+<list params as param>
+<if param.param_name == "smtpauth">
+<tr>
+  <td colspan="2" class="control_header">
+    <call draw_header(lang.label.protocol)>
+  </td>
+</tr>
+</if>
+<if param.param_name=="bouncefrom">
+<tr>
+  <td colspan="2" class="control_header">
+    <call draw_header(lang.eeman.params.bounce_message_cust)>
+  </td>
+</tr>
+</if>
+<if param.param_name=="spfbehavior">
+<tr>
+  <td colspan="2" class="control_header">
+    <call draw_header(lang.eeman.qmail.spf_srs)>
+  </td>
+</tr>
+</if>
+<if param.param_name=="badurls">
+<tr>
+  <td colspan="2" class="control_header">
+    <call draw_header(lang.eeman.qmail.spamassassin)>
+  </td>
+</tr>
+</if>
+<assign tmpl = "control/eeman/pserver_incl/" + param.param_template>
+<include tmpl>
+</list>
+<tr>
+  <td colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/eeman/mserver_params_edit.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${request.rid}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;<call draw_tooltip()></if>
+<!--  END ./control/eeman/mserver_params.html  -->

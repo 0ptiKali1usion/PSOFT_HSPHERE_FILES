@@ -1,0 +1,9 @@
+<td><call draw_label(Name)></td>
+<td>&nbsp;
+    <select name="${Name}">
+         <list Select as opt>
+           <option <if Value == opt> SELECTED</if> value="${opt}"><call draw_label(opt)></option>
+         </list>
+    </select>
+</td>                                                                                                      
+<td><call draw_label(Description)></td>

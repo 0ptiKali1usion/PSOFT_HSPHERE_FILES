@@ -1,0 +1,27 @@
+<!-- BEGIN ./submit/misc/add_check_restore_default_rec.sbm  -->
+<assign domain = account.getResource(request.rid)>
+<if (domain.type=="domain_alias") || (domain.type=="3ldomain_alias")>
+	<assign records_number = "1">
+<else>
+	<assign records_number = domain.getChildDomainsNumber()>
+</if>
+<if (request.type == "a_record")>
+	<assign records_number = toolbox.mul(records_number,"2") >
+</if>
+<assign price = domain.estimateCreateCopies(request.type, records_number, request.mod)>
+<if price.status!="ERROR">
+  <if price.free=="0">
+    <include "billing/add_confirm.html">
+  <else>
+    <if request.next_template=="">
+      <include "submit/misc/add.sbm">
+    <else>
+      <include request.next_template>
+    </if>
+  </if>
+<else>
+  <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  <assign res = session.addMessage(price.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/misc/add_check_restore_default_rec.sbm  -->

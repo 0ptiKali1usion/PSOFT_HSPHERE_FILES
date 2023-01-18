@@ -1,0 +1,60 @@
+<!-- BEGIN ./control/PGSQL/databases.html.in  -->
+
+<assign pgsql=account.getChild("pgsql")>
+<call draw_tooltip()>
+
+<yafv s_pgsql>
+
+
+
+
+<call prepare_table_header("3", lang.pgsql.db.settings)>
+<call add_table_header_help("user-pgsql-dblist_h","")>
+<call draw_table_header_prepared()>
+
+<tr>
+<assign host=pgsql.host>
+<td colspan="3"><call draw_label(lang.pgsql.db.text)></td>
+</tr>
+<tr>
+<td nowrap WIDTH="1%" class="control_align_center"><call draw_help("user-pgsql-hostname","")></td>
+<td><call draw_label(lang.label.hostname)></td>
+<td><call draw_label(pgsql.host.name+" ("+toolbox.int2ext(pgsql.host.ip)+")")></td>
+</tr>
+
+<tr>
+<td nowrap WIDTH="1%" class="control_align_center"><call draw_help("user-pgsql-port","")></td>
+<td><call draw_label(lang.label.port_number)></td>
+<td><call draw_label("5432")></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<if pgsql>
+<assign databases=pgsql.getChildren("pgsqldatabase")>
+<call prepare_table_header("5", lang.pgsql.db.header)>
+<call add_table_header_help("user-pgsql-dblist_h","")>
+<call draw_table_header_prepared()>
+
+<tr>
+    <td nowrap WIDTH="1%" class="control_header">&nbsp;</td>
+    <td class="control_header"><call draw_header(lang.label.database_name)></td>
+    <td class="control_header"><call draw_header(lang.pgsql.eddb.dbdescr)></td>
+    <td class="control_header"><call draw_header(lang.pgsql.db.dbowner)></td>
+    <td class="control_header"><call draw_header(lang.label.control)></td>
+</tr>
+<list databases as database>
+<tr>
+    <td nowrap WIDTH="1%" class="control_align_center"><call draw_tt_link(database, template_name)></td>
+    <td><call draw_link(config.CLIENT_CP_URL+"?template_name=PGSQL/edit_database.html"+"&db_id="+database,database.db_name)></td>
+    <td><call draw_label(database.db_description)></td>
+    <td><call draw_label(database.db_owner)></td>
+    <td nowrap WIDTH="1%"><call draw_edit(config.CLIENT_CP_URL+"?template_name=PGSQL/edit_database.html"+"&db_id="+database, lang.pgsql.db.edit)><call disableNewWarn(pgsql,database)></td>
+</tr>
+</list>
+</if>
+<tr>
+  <td colspan="5" class="control_align_right"><call draw_add(config.CLIENT_CP_URL+"?template_name=PGSQL/add_database.html"+"&stemplate="+template+"&ftemplate="+template, lang.pgsql.db.add)></td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./control/PGSQL/databases.html.in  -->

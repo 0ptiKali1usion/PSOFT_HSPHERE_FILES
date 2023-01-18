@@ -1,0 +1,26 @@
+<!-- BEGIN: ./msexchange/change_user.sbm -->
+<assign bizuser=account.getResource(request.rid)>
+<assign result=bizuser.setParams(
+    			     request.description,
+    			     request.displayName,
+                             request.givenName,
+                             request.middleName,
+                             request.sn,
+                             request.initials,
+			     request.physicalDeliveryOfficeName,
+			     request.telephoneNumber,
+			     request.street,
+			     request.postOfficeBox,
+			     request.city,
+			     request.state,
+			     request.country)>
+<if !result>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.label.settings,""))>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_changed,lang.label.settings,""))>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/change_user.sbm -->

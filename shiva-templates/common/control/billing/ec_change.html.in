@@ -1,0 +1,42 @@
+<!-- BEGIN ./billing/ec_change.html.in  -->
+<call draw_tooltip()>
+<assign bi = account.bi>
+
+<if bi>
+
+<yafv s_billing>
+<form action="${config.CLIENT_CP_URL}" name="f_binfo_view" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/billing/ec_change.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+
+
+
+<call draw_table_header("2", lang.billing.newbilling.header)>
+
+
+
+<tr>
+  <td colspan=2   ><call draw_label(lang.billing.change_ec_user_warning_susp)><br><call draw_label(lang.billing.change_ec_user_warning_skip)></td>
+</tr>
+
+<if !vexemption_code><assign vexemption_code = bi.exemption_code></if>
+<tr>
+<td  valign="top" width="50%"><call draw_label(lang.bci.exemption_code)></td>
+<td    valign="middle"><input type="text" name="_bi_exemption_code" value="${vexemption_code}" check="vExemptionCodeReq"></td>
+</tr>
+
+<tr>
+<td  valign="top"><call draw_label(lang.billing.change_ec.suspend)></td>
+<td    valign="middle"><input type="checkbox" name="suspend" value="true"></td>
+</tr>
+
+<tr><td  class="control_align_center" colspan="2"  nowrap><input type="submit" value="${lang.button.save}"></td></tr>
+
+
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./billing/ec_change.html.in  -->

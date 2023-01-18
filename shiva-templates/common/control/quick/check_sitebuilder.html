@@ -1,0 +1,85 @@
+<!-- BEGIN ./ftp/ftp_vhost.html  -->
+<call draw_tooltip()>
+<assign unix_user=account.getChild("unixuser")>
+<form method="POST" action="${config.PATH_SITE_STUDIO}" target="_blank" name="SBLauncher" accept-charset="UTF-8">
+<input type="hidden" name="action" value="useraction">
+<input type="hidden" name="useraction" value="login">
+<input type="hidden" name="requestURL" value="${config.SITE_STUDIO_CLASS}">
+<input type="hidden" name="login" value="">
+<input type="hidden" name="password" value="${unix_user.password}">
+<input name="email" type="hidden" value="">
+<input name="url" type="hidden" value="">
+ 
+<input name="real_login" type="hidden" value="${unix_user.login}">
+<input name="dir" type="hidden" value="">
+<input name="server" type="hidden" value="">
+ 
+<input name="port" type="hidden" value="21">
+</form>
+<script language="javascript">
+     function launchSiteBuilder( login, domain, url, dir, server) {
+	window.document.SBLauncher.login.value=login;
+	window.document.SBLauncher.email.value="webmaster@"+domain;
+	window.document.SBLauncher.url.value="http://"+url+"/";
+	window.document.SBLauncher.dir.value=dir;
+	window.document.SBLauncher.server.value=server;
+	window.document.SBLauncher.submit();
+     }
+</script>
+
+
+
+
+<call draw_table_header("3", lang.quick.checksitebuilder.header)>
+
+
+<assign hostings =  account.findAllChildren("hosting")>
+<if !hostings>
+<tr >
+<td colspan="3" ><call draw_label(lang.quick.checksitebuilder.noanydomain)></td>
+</tr>
+<else>
+<list account.findAllChildren("hosting") as hosting>
+<assign sitestudio=hosting.getChild("sitestudio")>
+<tr>
+<assign ip=hosting.parent.getChild("ip")>
+
+<!--new version -->
+<if ip>
+  <if ip.shared == "1">
+    <assign instant_alias = hosting.getChild("idomain_alias")>
+    <if instant_alias>
+      <assign tmp_url=instant_alias.alias>
+    <else>
+      <assign tmp_url=hosting.parent.name>
+    </if>
+  <else>
+    <assign tmp_url=toolbox.int2ext(ip.ip)>
+  </if>
+<else>
+  <assign tmp_url="no-ip-address">
+</if>
+<!--end of new version -->
+<assign login=hosting.parent.id>
+<assign domain=hosting.parent.name>
+<if unix_user.host.platform_type=="win2k">
+  <if unix_user.host.ftp_type == "ServU">
+     <assign dir="/"+hosting.local_dir+"/">
+  <else>
+     <assign dir="/"+unix_user.login+"/"+hosting.local_dir+"/">
+  </if>
+<else>
+<assign dir="/"+hosting.local_dir+"/">
+</if>
+<assign server = unix_user.host.name>
+<td><call draw_label(domain)></td>
+<td  class="control_align_center"><call onoff(hosting, "sitestudio")></td>
+<td  width="20%"  class="control_align_center">
+<if sitestudio><if account.isDemo><a href="#"  onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=misc/show_demo.html&header=${quick.quickview.altsitestudio}&image=ss_demo','SiteStudio','resizable=no,scrollbars=no,status=no,width=800,height=600'); if (chw != null) chw.focus(); return false"><else><a href="#" onClick="javascript:launchSiteBuilder('${login}', '${domain}', '${tmp_url}', '${dir}', '${server}');return false;"></if><call draw_image_align_alt("llaunch", "absmiddle", lang.quick.checksitebuilder.launch)></a><else>&nbsp;</if>
+</td>
+</tr>
+</list>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./ftp/ftp_vhost.html  -->

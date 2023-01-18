@@ -1,0 +1,24 @@
+<!-- BEGIN ./control/eeman/lserver_options/userhome.html.in  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_option2" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/unixhome_setting_check.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="user_homedir">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.unix_homedir)></td>
+  <td>
+    <if !vhomedir><assign vhomedir = optManipulator.getOption(lserverId)></if>
+    <call draw_label_bold(lserver.unix_user_home_prefix)><input type="text" name="value" value="${vhomedir}" label="${lang.label.home_dir}" check="vHomeDir">
+    &nbsp;<input type="submit" value="${lang.button.set}">
+  </td>
+</tr>
+
+</form>
+<!-- END ./control/eeman/lserver_options/userhome.html.in  -->

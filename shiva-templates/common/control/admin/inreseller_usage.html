@@ -1,0 +1,93 @@
+<!-- BEGIN ./control/admin/inreseller_usage.html  -->
+<assign admin=account.getChild("admin")>
+<assign reseller_su=account.getChild("reseller_su")>
+<call draw_tooltip()>
+<if reseller_su>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_inres_usage_header)>
+
+<tr><td><call draw_label(lang.label.plan)></td>
+<td>
+<select name="sc_plan" size="1">
+<option value="">${lang.label.any}
+<list admin.plans as plan>
+<if !plan.deleted>
+<option value="${plan.id}">${plan.description}
+</if>
+</list>
+</select>
+ </td>
+</tr>
+<tr><td><call draw_label(lang.admin.usagetype)></td>
+ <td>
+<select name="sc_utype" size="1">
+<option value="">${lang.label.any}
+<option value="1">${lang.quick.usage.webserver}
+<option value="3">${lang.quick.usage.mailserver}
+<option value="5">${lang.quick.usage.winserver}
+<option value="4">${lang.quick.usage.mysqlserver}
+<option value="18">${lang.quick.usage.pgsqlserver}
+<option value="15">${lang.quick.usage.mssqlserver}
+</select>
+ </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.label.reseller)></td>
+  <td>
+    <select name="sc_reseller" size="1">
+    <option value="%">${lang.label.any}
+    <list reseller_su.resellers as reseller>
+    <option value="${reseller.id}">${reseller.name} (${reseller.url})
+    </list>
+    </select>
+  </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.username)></td>
+ <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.admin.accid)></td>
+ <td><input type="text" name="sc_account_id"><br><call draw_label(lang.label.fill_account_id)></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.email)></td>
+ <td><input type="text" name="sc_email"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.show_user_details)></td>
+ <td><input type="checkbox" name="sc_detail"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.show_admin_account)></td>
+ <td><input type="checkbox" name="sc_admin"></td>
+</tr>
+<tr>
+ <td  colspan="2" class="control_align_center"><call draw_label_bold(lang.admin.usageperiod)></td>
+ </tr>
+<tr>
+ <td><call draw_label(lang.label.from)></td>
+ <td><input type="text" name="sc_r_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","sc_r_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td><input type="text" name="sc_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_to","")></td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("10")>
+</td>
+</tr>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/inreseller_usage.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.submit}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/inreseller_usage.html  -->

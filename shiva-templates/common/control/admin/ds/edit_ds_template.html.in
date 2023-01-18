@@ -1,0 +1,40 @@
+<!-- BEGIN ./control/admin/ds/edit_ds_template.html.in  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager","")>
+</if>
+<call draw_tooltip()>
+<if ds_manager>
+<assign dst=ds_manager.getDSTemplate(request.dst_id)>
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/save_ds_template.sbm">
+<input type="hidden" name="dst_id" value="${dst.id}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<call draw_table_header("2", lang.admin.ds.edit_ds_template_h)>
+<tr>
+    <if f_dst_name><assign dst_name=f_dst_name><else><assign dst_name=dst.name></if>
+    <td><call draw_label(lang.admin.ds.template_name)></td><td><input type="text" name="name" value="${dst_name}" check="vStringReq"></td>
+</tr>
+<tr>
+    <if f_dst_os><assign dst_os=f_dst_os><else><assign dst_os=dst.os></if>
+    <td><call draw_label(lang.admin.ds.os_name)></td><td><input type="text" name="os" value="${dst_os}" check="vStringReq"></td>
+</tr>
+<tr>
+    <if f_dst_cpu><assign dst_cpu=f_dst_cpu><else><assign dst_cpu=dst.cpu></if>
+    <td><call draw_label(lang.admin.ds.cpu)></td><td><input type="text" name="cpu" value="${dst_cpu}" check="vStringReq"></td>
+</tr>
+<tr>
+    <if f_dst_ram><assign dst_ram=f_dst_ram><else><assign dst_ram=dst.ram></if>
+    <td><call draw_label(lang.admin.ds.ram)></td><td><input type="text" name="ram" value="${dst_ram}" check="vStringReq"></td>
+</tr>
+<tr>
+    <if f_dst_storage><assign dst_storage=f_dst_storage><else><assign dst_storage=dst.storage></if>
+    <td><call draw_label(lang.admin.ds.storage)></td><td><input type="text" name="storage" value="${dst_storage}" check="vStringReq"></td>
+</tr>
+<tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/edit_ds_template.html.in  -->

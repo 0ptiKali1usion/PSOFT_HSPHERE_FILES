@@ -1,0 +1,37 @@
+<!-- BEGIN: common/migrator/migration_main.html -->
+<include "functions">
+<call START_PAGE("migrator/migration_main.html", "migration")>
+<call draw_tooltip()>
+<call draw_table_header("1", lang.label.import_users)>
+<tr><td>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=migrator/wizard.html&mtype=raq", lang.label.raq_migration)>
+<br>
+<call draw_label(lang.label.raq_migration_desc)>
+</td></tr>
+<tr><td>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=migrator/wizard.html&mtype=cpanel", lang.label.cpanel_migration)>
+<br>
+<call draw_label(lang.label.cpanel_migration_desc)>
+</td></tr>
+
+<call draw_table_footer()>
+
+<assign mgr=obj.raq4_migrator>
+<assign jobs=mgr.getJobs()>
+<call draw_table_header("2", lang.quick.quickview.background_alive)>
+<tr>
+<td colspan="2">
+<if jobs>
+<list jobs as job>
+<assign job_lbl = job.job_id + " " + job.domain + " "  + job.step + " " + job.state>
+<if job.mtype == "raq"><call draw_link(config.CLIENT_CP_URL+"?template_name=migrator/process.html&job_id="+job.job_id+"&mtype=raq", job_lbl)><br></if>
+<if job.mtype == "cpanel"><call draw_link(config.CLIENT_CP_URL+"?template_name=migrator/process.html&job_id="+job.job_id+"&mtype=cpanel", job_lbl)><br></if>
+</list>
+<else><call draw_label(lang.label.none)></if>
+</td>
+</tr>
+
+
+<call draw_table_footer()>
+<call END_PAGE()>
+<!-- END: common/migrator/migration_main.html -->

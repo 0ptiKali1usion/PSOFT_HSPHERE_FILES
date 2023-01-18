@@ -1,0 +1,5 @@
+<center>Shell Access</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+This feature is available only for unix accounts and allows you to access and operate your system through Shell. As Shell provides more extensive abilities than FTP (such as running sripts etc.) and requires the knowledge of Unix Shell commands which is not very common for odinary users, it is disabled by default. To enable the Shell Access, you have to get the admin permission.
+

@@ -1,0 +1,44 @@
+<!-- BEGIN ./dns/add_cip.html.in  -->
+<yafv s_dns>
+<call draw_tooltip()>
+<assign domain=account.getResource(request.rid)>
+<form name="f_add_cmail_service"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/dns/add_cmail_submit.sbm">
+
+
+
+
+
+<call draw_table_header("5", lang.dns.addcmailservice.header)>
+
+
+
+<tr>
+    <td  colspan="5"  ><call draw_label("$ORIGIN "+domain.name)></td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.dns.name)></td>
+   <td><call draw_label(lang.dns.class)></td>
+   <td><call draw_label(lang.dns.type)></td>
+   <td    colspan="2" ><call draw_label(lang.dns.data)></td>
+</tr>
+
+<tr>
+   <td    nowrap><input type="text" name="dname" value="${vdname}" label="${lang.dns.name}" check="vCustomMXName"></td>
+   <td><call draw_label("IN")></td>
+   <td><call draw_label("MX")></td>
+   <td    nowrap><input type="text" name="dpriority" value="${vdpriority}" size="2" maxlength="2" label="${lang.dns.type}" check="vPriority"></td>
+   <td    nowrap><input type="text" name="dmail_server" value="${vdmail_server}" label="${lang.dns.data}" check="vDomain_Name"></td>
+</tr>
+<tr>
+   <td colspan="5"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+<!--  END ./dns/add_cip.html.in  -->

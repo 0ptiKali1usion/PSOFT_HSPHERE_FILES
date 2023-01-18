@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/misc/delete.sbm  -->
+<assign r=account.getResource(request.did)>
+<assign stype=r.type>
+<assign result=r.delete>
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/misc/delete.sbm  -->

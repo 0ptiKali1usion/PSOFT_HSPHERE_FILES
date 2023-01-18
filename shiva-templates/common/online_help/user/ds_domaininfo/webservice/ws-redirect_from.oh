@@ -1,0 +1,10 @@
+<center>Redirect From</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	The location on your site visitors will be redirected from.  For instance, if you enter<br>
+http://www.example.com/<i>customers/index.html</i><br>
+your visitors will be redirected as soon as they hit this page.<br>
+You can also redirect visitors from any place inside a directory by specifying the directory name:<br>
+http://www.example.com/<i>customers</i><br>
+If you leave the <i>Redirect from</i> field empty,  visitors will be redirected from any location in the site.
+

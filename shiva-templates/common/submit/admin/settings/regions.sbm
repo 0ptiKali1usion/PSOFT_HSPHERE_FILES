@@ -1,0 +1,43 @@
+<!-- BEGIN ./submit/misc/regions.sbm -->
+<assign result = yafv.checkall(
+  yafv.common.s_admin.vStringReq(lang.admin.regions.decsep, request["_decsep_"]),
+  yafv.common.s_admin.vStringReq(lang.admin.regions.groupsep, request["_groupsep_"]))>
+
+<if result.status=="OK">
+  <assign res = toolbox.checkCurrencyPattern(request["_currformat_"], request["_decsep_"], request["_groupsep_"], request["_cursym_"])>
+  <if res == "1">
+    <assign admin = account.getChild("admin")>
+    <call save("oldlang",request["_oldlang_"])>
+    <call save("decsep",request["_decsep_"])>
+    <call save("digit",request["_digit_"])>
+    <call save("groupsep",request["_groupsep_"])>
+    <call save("minus",request["_minus_"])>
+    <call save("nan",request["_nan_"])>
+    <call save("perc",request["_perc_"])>
+    <call save("permill",request["_permill_"])>
+    <call save("zero",request["_zero_"])>
+    <call save("cursym",request["_cursym_"])>
+    <call save("curcode",request["_curcode_"])>
+    <call save("intcursym",request["_intcursym_"])>
+    <call save("shortdate",request["_shortdate_"])>
+    <call save("meddate",request["_meddate_"])>
+    <call save("longdate",request["_longdate_"])>
+    <call save("fulldate",request["_fulldate_"])>
+    <call save("currformat",request["_currformat_"])>
+  <else>
+    <assign res1 = session.addMessage(lang.msg.regions.inv_format)>
+    <assign failure = "1">
+  </if>
+<else>
+  <list result.msgs as msg><assign res1 = session.addMessage(msg)></list>
+  <assign failure = "1">
+</if>
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+<!-- END ./submit/misc/regions.sbm -->

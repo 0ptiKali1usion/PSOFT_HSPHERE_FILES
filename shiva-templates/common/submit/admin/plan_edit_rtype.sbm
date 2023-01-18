@@ -1,0 +1,25 @@
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<list request.did as did>
+<assign result=plan.disableResource(did)>
+<if result.status!="OK">
+  <assign unssucess="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_disable,lang.label.resource,did))>
+  <assign res=session.addMessage(result.msg)>
+</if> 
+</list>
+<list request.eid as eid>
+<assign result=plan.enableResource(eid)>
+<if result.status!="OK">
+  <assign unsucess="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_enable,lang.label.resource,eid))>
+  <assign res=session.addMessage(result.msg)>
+</if>  
+</list>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>  

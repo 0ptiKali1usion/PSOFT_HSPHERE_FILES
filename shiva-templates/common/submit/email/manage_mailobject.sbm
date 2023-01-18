@@ -1,0 +1,575 @@
+<!-- BEGIN ./submit/email/manage_mailobject.sbm  -->
+
+<assign md_id=account.getResource(request.md_id)>
+<assign email=request.local+"@"+md_id.name>
+<if request.mailbox>
+  <assign mailbox=account.getResource(request.mailbox)>
+</if>
+<if request.antispam>
+   <assign antispam=account.getResource(request.antispam)>
+</if>
+<if request.antivirus>
+   <assign antivirus=account.getResource(request.antivirus)>
+</if>
+<if request.alias>
+   <assign alias=account.getResource(request.alias)>
+</if>
+<if request.responder>
+   <assign responder=account.getResource(request.responder)>
+</if>
+<if request.forward>
+   <assign forward=account.getResource(request.forward)>
+</if>
+<assign err_shown="0">
+  <if request.drop_aliased_by>
+    <assign drop_aliased_by=request.drop_aliased_by>
+  </if>
+  <if request.change_del_aliased_by>
+    <assign change_del_aliased_by=request.change_del_aliased_by>
+  </if>
+  <if drop_aliased_by>
+    <list md_id.getAliasedByAsList(drop_aliased_by) as d_aliased>
+      <assign rid=md_id.getMailAliasByName(d_aliased)>
+      <if rid>
+        <assign aliased=account.getResource(rid)>
+        <if aliased.subs_cnt=="1">
+          <assign result=aliased.delete>
+          <if result.status=="OK">
+            <assign del="1">
+            <assign success="1">
+            <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_deleted,lang.label.mail_alias,d_aliased+"@"+md_id.name))>
+          <else>
+            <assign failure="1">
+            <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_delete,lang.label.mail_alias,d_aliased+"@"+md_id.name))>
+            <assign res=session.addMessage(result.msg)>
+          </if>
+	</if>
+      </if>
+    </list>
+  </if> 
+  <if change_del_aliased_by>
+    <list md_id.getAliasedByAsList(change_del_aliased_by) as c_aliased_by>
+      <assign rid=md_id.getMailAliasByName(c_aliased_by)>
+      <if rid>
+	<assign aliased_by=account.getResource(rid)>
+	<assign result=aliased_by.changeOneForeign("del",request.local)>
+	<if result.status=="OK">
+	  <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_changed,lang.label.mail_alias,c_aliased_by+"@"+md_id.name))>
+	<else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_changed,lang.label.mail_alias,c_aliased_by+"@"+md_id.name))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if> 
+    </list>
+  </if>
+
+  <if !del_all>
+    <assign del_all=request.del_all>
+  </if>
+  <if (!request.i_antivirus || del_all) && antivirus>
+    <assign result=antivirus.delete>
+    <if result.status=="OK">
+      <assign success="1">
+      <assign del="1">
+      <assign antivirus="">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted,lang.label.antivirus,email))>
+    <else>
+      <assign failure="1">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete,lang.label.antivirus,email))>
+    </if>
+  </if>
+
+  <if (!request.i_antispam || del_all) && antispam>
+    <assign result=antispam.delete>
+    <if result.status=="OK">
+      <assign success="1">
+      <assign del="1">
+      <assign antispam="">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted,lang.label.antispam,email))>
+    <else>
+      <assign failure="1">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete,lang.label.antispam,email))>
+    </if>
+  </if>
+
+  <if mailbox && !request.i_mailbox>
+      <assign result=mailbox.delete>
+      <if result.status=="OK">
+        <assign success="1">
+        <assign del="1">
+        <assign mailbox="">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted,lang.label.mail_box,email))>
+      <else>
+        <assign failure="1">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete,lang.label.mail_box,email))>
+      </if>
+  </if>
+
+  <if aliasSubscribers>
+    <assign aliasSubs=aliasSubscribers>
+  <else>
+    <assign aliasSubs=request.aliasSubscribers>
+  </if>
+  <if aliasSubs==""><assign alias_del="1"></if>
+
+  <if (!request.i_alias && alias) || (request.i_alias && alias_del)>
+    <assign result=alias.delete>
+    <if result.status=="OK">
+      <assign del="1">
+      <assign alias="">
+      <assign success="1">
+      <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_deleted,lang.label.mail_alias,email))>
+    <else>
+      <assign failure="1">
+      <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_delete,lang.label.mail_alias,email))>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+
+
+  <if responder && !request.i_responder>
+      <assign result=responder.delete>
+      <if result.status=="OK">
+        <assign del="1">
+        <assign success="1">
+        <assign responder="">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted,lang.label.mail_autoresponder,email))>
+      <else>
+        <assign failure="1">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete,lang.label.mail_autoresponder,email))>
+      </if>
+  </if>
+
+  <if del_forward || request.del_forward>
+    <assign fwd_del="1">
+  </if>
+
+  <if fwd_del && !request.subscribers>
+    <assign result=forward.delete>
+    <if result.status=="OK">
+      <assign success="1">
+      <assign del="1">
+      <assign forward="">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_deleted,lang.label.mail_forward,email))>
+    <else>
+      <assign failure="1">
+      <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_delete,lang.label.mail_forward,email))>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+
+
+  <if request.i_mailbox>
+    <if !mailbox>
+      <assign result=md_id.addChild("mailbox","",request.local,request.password,request.description)>
+      <assign mailbox=result>
+      <assign mo_id=mailbox>
+      <if result.status=="OK">
+	<assign success="1">
+	<assign name=request.local>
+	<assign mailType="mail_object">
+	<assign res=session.addMessage(toolbox.compose(
+		    lang.msg.name_res_added,lang.label.mail_box,email))>
+      <else>
+	<assign failure="1">
+      </if>
+    </if> 
+    <if !failure>
+      <if request.discard>
+	<if !request.mailbox || mailbox.discard_incomm_mail=="disabled">
+	  <assign result=mailbox.discardMail("enable")>
+	  <if result.status=="OK">
+	    <assign success="1">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_enabled,lang.label.mail_discard,email))>
+	  <else>
+	    <assign failure="1">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_enable,lang.label.mail_discard,email))>
+	  </if>
+	</if>
+      <else>
+	<if request.mailbox && mailbox.discard_incomm_mail=="enabled">
+	  <assign result=mailbox.discardMail("disable")>
+	  <if result.status=="OK">
+	    <assign success="1">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_disabled,lang.label.mail_discard,email))>
+	  <else>
+	    <assign failure="1">
+	    <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_disable,lang.label.mail_discard,email))>
+	  </if>
+        </if>
+      </if>
+      <if mo_id!=mailbox && request.password && request.password!=mailbox.password>
+	<assign result=mailbox.updatePassword(request.password)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_changed,lang.label.password,email))>
+	<else>
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_change,lang.label.password,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>
+	
+      <if mo_id!=mailbox && request.local!="postmaster" && request.description!=mailbox.description>
+	<assign result=mailbox.changeDescription(request.description)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_changed,lang.label.descr,email))>
+	<else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_change,lang.label.descr,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_add,lang.label.mail_box,email))>
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+
+  <if request.i_alias>
+    <if !alias && !alias_del>
+      <assign result=md_id.addChild("mailbox_alias","",request.local,aliasSubs)>
+      <if result.status=="OK">
+	<assign alias=result>
+	<assign mo_id=alias>
+	<assign name=request.local>
+	<assign mailType="mail_object">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_added,lang.label.mail_alias,email))>
+      <else>
+	<assign failure="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_failed_add,lang.label.mail_alias,email))>
+	<assign res=session.addMessage(result.msg)>
+      </if>
+    <else>
+      <assign old_foreign_type=toolbox.html_encode(alias.foreign)+";">
+      <if (aliasSubs!=alias.foreign) && (aliasSubs!=old_foreign_type) && !alias_del>
+	<assign result=alias.changeForeign(aliasSubs)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_changed,lang.label.mail_alias,email))>
+	<else>
+	  <assign failure="1">
+  	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_change,lang.label.mail_alias,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>
+    </if>
+  </if>
+  
+  <if request.i_responder>
+    <if !request.include_incoming>
+	<assign include_incoming="0">
+    <else>
+	<assign include_incoming=request.include_incoming>
+    </if>	
+    <if !new_responder_atts>
+      <assign new_responder_atts=request.new_responder_atts>
+    </if>
+    <if !responder>
+      <assign result=md_id.addChild("responder","",request.local,"",request.subject,request.message,request.subject,include_incoming,new_responder_atts)>
+      <if result.status=="OK">
+	<assign responder=result>
+	<assign mo_id=responder>
+	<assign name=request.local>
+	<assign mailType="mail_object">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_added,lang.label.mail_autoresponder,email))>
+      <else>
+	<assign failure="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_failed_add,lang.label.mail_autoresponder,email))>
+      </if>
+    <else>
+      <if request.subject!=responder.subject || toolbox.html_encode(request.message)!=responder.message || 
+	  request.respForeign!=responder.foreign || include_incoming!=responder.include_incoming>
+	<assign result=responder.updateResponder(request.respForeign,request.subject,request.message,include_incoming)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_changed,lang.label.mail_autoresponder,email))>
+	<else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_change,lang.label.mail_autoresponder,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>
+      <list responder.getAttachments() as att>
+	<if request["att_"+att.name]>
+	  <if !r_atts>
+            <assign r_atts=att.name>
+	    <assign r_atts_message=att.name>
+          <else>
+	    <assign r_atts=r_atts+"/"+att.name>
+	    <assign r_atts_message=r_atts_message+","+att.name>	    
+	  </if>
+	</if>
+      </list>
+      <if r_atts>
+	<assign result=responder.removeAttachments(r_atts)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_some_res_deleted,lang.label.attachment_s,r_atts_message))>
+	<else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_delete,lang.label.attachment_s,r_atts_message))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>
+      <assign new_responder_atts="">
+      <list request.new_responder_atts as att>
+	<if att!="NA">
+	  <if new_responder_atts>
+	    <assign new_responder_atts=new_responder_atts+"/"+att>
+	  <else>
+	    <assign new_responder_atts=att>
+	  </if>
+	</if>
+      </list>	
+      <if new_responder_atts>
+	<assign result=responder.addAttachments(new_responder_atts)>
+	<if result.status=="OK">
+	  <assign success="1">
+	  <assign res=session.addMessage(toolbox.compose(
+              lang.msg.name_some_res_added,lang.label.attachment_s,""))>
+	<else>
+	  <assign failure="1">
+	  <assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_failed_add,lang.label.attachment_s,""))>
+	  <assign res=session.addMessage(result.msg)>
+	</if>
+      </if>	
+    </if>
+  </if>
+  <if request.i_forward && request.subscribers>
+    <if !forward>
+      <assign result=md_id.addChild("mail_forward","",request.local,request.subscribers)>
+      <if result.status=="OK">
+	<assign mo_id=result>
+	<assign forward=result>
+	<assign name=request.local>
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_added,lang.label.mail_forward,email))>
+      <else>
+	<assign failure="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_failed_add,lang.label.mail_forward,email))>
+	<assign res=session.addMessage(result.msg)>
+      </if>
+    <else>
+      <assign result=forward.batchSubscribe(request.subscribers)>
+      <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_some_res_added,lang.label.forward_subscriber,request.subscribers))>
+      <else>
+	<assign res=session.addMessage(result.msg)>
+      </if>
+    </if>
+  </if>	
+  <if forward>
+    <list forward.subscribers as email>
+      <if request[email]>
+	<if !r_subs>
+	  <assign r_subs=email>
+	<else>
+	  <assign r_subs=r_subs+";"+email>
+	</if>
+      </if>
+    </list>
+    <if r_subs>
+      <assign result=forward.removeSubscribers(r_subs)>
+      <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_some_res_deleted,lang.label.forward_subscriber,r_subs))>
+      <else>
+	<assign failure="1">
+	<assign res=session.addMessage(toolbox.compose(
+	    lang.msg.name_res_failed_delete,lang.label.forward_subscriber,r_subs))>
+	<assign res=session.addMessage(result.msg)>
+      </if>
+    </if>
+  </if>
+
+  <if request.new_aliased_by>
+    <assign new_aliased_by=request.new_aliased_by>
+  </if>
+  <if request.change_new_aliased_by>
+    <assign change_new_aliased_by=request.change_new_aliased_by>
+  </if>
+
+  <if request.aliased_by>
+    <if new_aliased_by>
+      <list md_id.getAliasedByAsList(new_aliased_by) as new_aliased>
+	<assign result=md_id.addChild("mailbox_alias","",new_aliased,request.local)>
+        <if result.status=="OK">
+          <if !mo_id>
+            <assign mo_id=mailbox>
+            <assign name=request.local>
+            <assign mailType="mail_object">
+            <assign success="1">
+          </if>
+          <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_added,
+		lang.label.mail_alias,new_aliased+"@"+md_id.name))>
+        <else>
+          <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,
+		lang.label.mail_alias,new_aliased+"@"+md_id.name))>
+          <list result.msgs as msg>
+            <assign res=session.addMessage(msg)>
+          </list>
+        </if>
+      </list>
+    </if>
+    <if change_new_aliased_by>
+      <list md_id.getAliasedByAsList(change_new_aliased_by) as change_new_aliased>
+	<assign rid=md_id.getMailAliasByName(change_new_aliased)>
+        <assign aliased=account.getResource(rid)>
+        <assign result=aliased.changeOneForeign("add",request.local)>
+        <if result.status=="OK">
+          <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_changed,
+		lang.label.mail_alias,change_new_aliased+"@"+md_id.name))>
+        <else>
+          <assign failure="1">
+          <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_change,
+		lang.label.mail_alias,change_new_aliased+"@"+md_id.name))>
+          <assign res=session.addMessage(result.msg)>
+        </if>
+      </list>
+    </if>	
+  </if>
+
+  <if request.i_antivirus && !del_all && !antivirus>
+      <assign result=md_id.addChild("antivirus","",request.local)>
+      <assign antivirus=result>
+      <assign mo_id=antivirus>
+      <if result.status=="OK">
+        <assign success="1">
+        <assign mailType="mail_object">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_added,lang.label.antivirus,email))>
+      <else>
+        <assign failure="1">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_add,lang.label.antivirus,email))>
+        <assign res=session.addMessage(result.msg)>
+      </if>
+  </if>
+
+  <if request.i_antispam && !del_all && !antispam>
+      <assign result=md_id.addChild("antispam","",request.local)>
+      <assign antispam=result>
+      <assign mo_id=antispam>
+      <if result.status=="OK">
+        <assign success="1">
+        <assign mailType="mail_object">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_added,lang.label.antispam,email))>
+      <else>
+        <assign failure="1">
+        <assign res=session.addMessage(toolbox.compose(
+            lang.msg.name_res_failed_add,lang.label.antispam,email))>
+        <assign res=session.addMessage(result.msg)>
+      </if>
+  </if>
+
+  <if request.catchall && !del_all>
+    <if md_id.catchAll!=request.local>
+      <assign result=md_id.setCatchAll(request.local)>
+      <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_set,lang.label.mail_catch_all,email))>
+      <else>
+	<assign failure="1">
+	<list result.msgs as msg>
+	  <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_set,lang.label.mail_catch_all,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</list>
+      </if>
+    </if>
+  <else>
+    <if md_id.catchAll==request.local>
+      <assign result=md_id.disableCatchAll()>
+      <if result.status=="OK">
+	<assign success="1">
+	<assign res=session.addMessage(toolbox.compose(
+	      lang.msg.name_res_disabled,lang.label.mail_catch_all,email))>
+      <else>
+	<assign failure="1">
+	<list result.msgs as msg>
+	  <assign res=session.addMessage(toolbox.compose(
+		lang.msg.name_res_failed_disable,lang.label.mail_catch_all,email))>
+	  <assign res=session.addMessage(result.msg)>
+	</list>
+      </if>
+    </if>
+  </if>
+<if success || !failure>
+  <include request.stemplate>
+<else>
+  <assign vcatchall=toolbox.html_encode(request.catchall)>
+  <assign vlocal=toolbox.html_encode(request.local)>
+  <assign vi_mailbox=toolbox.html_encode(request.i_mailbox)>
+  <assign vdescription=toolbox.html_encode(request.description)>
+  <assign vpassword=toolbox.html_encode(request.password)>
+  <assign vpassword2=toolbox.html_encode(request.password2)>
+  <assign vdiscard=toolbox.html_encode(request.discard)>
+  <assign vantispam=toolbox.html_encode(request.antispam)>
+  <assign vantivirus=toolbox.html_encode(request.antivirus)>
+  <assign valiased_by=toolbox.html_encode(request.aliased_by)>
+  <assign vi_forward=toolbox.html_encode(request.i_forward)>
+  <assign vsubscribers=toolbox.html_encode(request.subscribers)>
+  <if request.forward>
+    <assign subs_hash=toolbox.new_hash>
+    <assign forward=account.getResource(request.forward)>
+    <list forward.subscribers as email>
+      <assign r=subs_hash.put(email,toolbox.html_encode(request[email]))>
+    </list>
+  </if>
+  <assign vi_alias=toolbox.html_encode(request.i_alias)>
+  <assign vi_responder=toolbox.html_encode(request.i_responder)>
+  <assign vrespForeign=toolbox.html_encode(request.respForeign)>
+  <assign vsubject=toolbox.html_encode(request.subject)>
+  <assign vmessage=toolbox.html_encode(request.message)>
+  <assign vinclude_incoming=toolbox.html_encode(include_incoming)>
+  <include request.ftemplate>
+</if>
+
+<!--  END ./submit/email/manage_mailobject.sbm  -->

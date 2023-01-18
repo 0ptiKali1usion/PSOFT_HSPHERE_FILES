@@ -1,0 +1,4 @@
+<!-- BEGIN ./commont/submit/tt/customjob_addnote.sbm -->
+<assign result=account.customjobs.addNote(request.job_id, request.note, "1")>
+    <include request.stemplate>
+<!-- END ./commont/submit/tt/customjob_addnote.sbm -->

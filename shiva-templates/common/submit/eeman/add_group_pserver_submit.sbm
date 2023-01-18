@@ -1,0 +1,11 @@
+<!-- BEGIN ./submit/eeman/add_group_pserver_submit.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver=eeman.getPserver(request.rid)>
+<assign result=pserver.addGroup(request.group)>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res = sessin.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/eeman/add_group_pserver_submit.sbm  -->

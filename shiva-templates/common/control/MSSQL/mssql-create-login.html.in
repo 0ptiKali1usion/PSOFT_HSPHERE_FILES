@@ -1,0 +1,62 @@
+<!-- BEGIN ./control/MSSQL/mssql-create-login.html -->
+<assign mssql=account.getChild("MSSQL")>
+<if !mssql>
+  <assign mssql=account.addChild("MSSQL", "")>
+</if>
+<if mssql.status!="OK">
+  <assign res=session.addMessage(mssql.msg)>
+</if>
+<call draw_tooltip()>
+<yafv s_mssql>
+<assign suffix=mssql.prefix>
+
+<form action=${config.CLIENT_CP_URL} method="POST" name="f_logins" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+<input type="hidden" name="next_template" value="submit/MSSQL/add_login.sbm">
+
+<if request.dtemplate>
+  <assign final_template=request.dtemplate>
+  <input type="hidden" name="dtemplate" value="${final_template}">
+<else>
+  <assign final_template="MSSQL/logins.html">
+</if>
+<input type="hidden" name="stemplate" value="${final_template}">
+<input type="hidden" name="ftemplate" value="MSSQL/mssql-create-login.html">
+<input type="hidden" name="type" value="MSSQLLogin">
+<input type="hidden" name="mod" value="">
+<input type="hidden" name="rid" value="${account.id}">
+<input type="hidden" name="suffix" value="${suffix}">
+
+
+
+
+<call draw_table_header("3", lang.mssql.addlogin.header)>
+
+
+
+<tr>
+    <td  width="1%">&nbsp;</td>
+    <td><call draw_label(lang.label.login)></td>
+    <td>
+        <call draw_label_bold(suffix)><input type="text" name="login_name" label="${lang.label.login}" check="vMSSQLCombLogin(this, suffix)">
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.label.password)></td>
+    <td><input type="password" name="login_password" check="vPassword1(this, login_name)" label="${lang.label.password}"></td>
+</tr>
+   <tr>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.label.confirm_psw)></td>
+    <td><input type="password" name="login_password1" check="vPassword2(login_password,this)" label="lang.label.confirm_psw"></td>
+   </tr>
+<tr>
+    <td  class="control_align_center" ><assign res=account.getChild("MSSQL")><if res><call draw_tt_link(res,"")><else><call draw_tt_link(account.id,"")></if></td>
+    <td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./control/MSSQL/mssql-create-login.html  -->

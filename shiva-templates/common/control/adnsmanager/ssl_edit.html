@@ -1,0 +1,103 @@
+<!-- BEGIN ./adnsmanager/ssl_edit.html  -->
+<call draw_tooltip()>
+<assign manager=account.getChild("adnsmanager")>
+
+<if manager>
+
+<assign zone=manager.getZone(request.zone_id)>
+
+
+
+
+
+<call draw_table_header("2", lang.domain.ssledit.header)>
+
+
+<tr>
+  <td    width="20%">
+    <call draw_label_bold(lang.label.dname)>
+  </td>
+  <td>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=adnsmanager/list.html", zone.name)>
+  </td>
+</tr>
+<tr>
+   <td>
+      <call draw_label_bold(lang.label.shared_ip_tag)>
+   </td>
+   <td>
+      <call draw_label(zone.sslIpTag)>
+   </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instprev)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="zone_id" value="${zone.id}">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert">
+    <call draw_label_bold(lang.adnsmanager.installed)><br>
+    <list zone.installedServers() as server>
+	<call draw_label(server.name)><br>
+    </list><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.instnew)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="zone_id" value="${zone.id}">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="key">
+    <call draw_label_bold(lang.adnsmanager.allservers)><br>
+    <list manager.getWebServers() as server>
+	<call draw_label(server.name)><br>
+    </list><br>
+    <call draw_label_bold(lang.domain.ssledit.key)><br>
+    <textarea name="key" rows="10" cols="64" nowrap></textarea><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td>
+    <call draw_label_bold(lang.domain.ssledit.auth)>
+  </td>
+  <td>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="zone_id" value="${zone.id}">
+    <input type="hidden" name="template_name" value="submit/adnsmanager/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="ca_cert">
+    <call draw_label_bold(lang.adnsmanager.installed)><br>
+    <list zone.installedServers() as server>
+	<assign ca_zones = server.sharedSSLCaZones>
+	<call draw_label(server.name)>&nbsp;<if ca_zones.contains(zone.id)=="1"><call draw_label(lang.adnsmanager.status.installed)><assign inst="1"></if><br>
+    </list>
+    <if inst=="1"><call draw_link(config.CLIENT_CP_URL+"?zone_id="+zone.id+"&template_name=submit/adnsmanager/ssl_edit_submit.sbm&type=u_cert&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/ssl_edit.html  -->

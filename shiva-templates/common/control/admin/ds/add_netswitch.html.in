@@ -1,0 +1,57 @@
+<!-- BEGIN ./control/admin/ds/add_netswitch.html  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager","")>
+</if>
+<call draw_tooltip()>
+<if ds_manager>
+<assign mrtg_lservers = ds_manager.getMrtgLServersList()>
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/add_netswitch.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<if request.stemplate>
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+<else>
+  <input type="hidden" name="stemplate" value="${template}">
+</if>
+<call draw_table_header("2", lang.admin.netswitch_add_h)>
+<if mrtg_lservers && mrtg_lservers.size != "0">
+  <tr>
+    <td width="50%"><call draw_label(lang.admin.netswitch.device)></td>
+    <td><input type="text" name="device" value="${v_device}" check="vDomainOrIP"></td>
+  </tr>
+  <if !v_com_name><assign v_com_name = "public"></if>
+  <tr>
+    <td><call draw_label(lang.admin.netswitch.com_name)></td>
+    <td><input type="text" name="com_name" value="${v_com_name}" check="vNetswitchComName"></td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.admin.netswitch.description)></td>
+    <td><input type="text" name="description" value="${v_description}" check="vStringReq"></td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.admin.netswitch.web_url)></td>
+    <td><input type="text" name="web_url" value="${v_web_url}" check="vHttpResURL"></td>
+  </tr>
+  <tr>
+    <td><call draw_label(lang.admin.netswitch.mrtg_host)></td>
+    <assign selected = " SELECTED">
+    <td>
+    <select name="mrtg_host">
+    <list mrtg_lservers as lserver>
+      <option value="${lserver.id}"${selected}>${lserver.name}</option>
+      <assign selected = "">
+    </list>
+    </select>
+    </td>
+  </tr>
+  <tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></tr>
+<else>
+  <tr><td colspan="2"><call draw_label(lang.admin.netswitch.no_mrtg_hosts)></td></tr>
+</if>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/add_netswitch.html  -->

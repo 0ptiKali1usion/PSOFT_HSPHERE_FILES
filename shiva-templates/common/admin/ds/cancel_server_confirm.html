@@ -1,0 +1,15 @@
+<!-- BEGIN ./admin/ds/cancel_server_confirm.html -->
+<assign template="admin/ds/cancel_server_confirm.html">
+<assign schedule = request.schedule>
+<if (schedule == "period_end") || ((schedule == "date") && (request.date != ""))>
+<include "functions">
+<call draw_menu("ds_server-manage")>
+<include "control/admin/ds/cancel_server_confirm.html">
+<call bottom()>
+<else><if schedule == "discard">
+<include "admin/ds/discard_cancel_confirm.html">
+<else>
+<assign res = session.addMessage(lang.admin.ds.cancel_wrong_params_mes)>
+<include request.ftemplate>
+</if></if>
+<!--  END ./admin/ds/cancel_server_confirm.html -->

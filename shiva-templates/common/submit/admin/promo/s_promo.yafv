@@ -1,0 +1,6 @@
+include common.s_hsphere.yafv: vName, vDescription, vPromokode, vPercentReq, vComboPromocode(String, boolean);
+
+//reference pc_discount_percent => vPercentReq; 
+/* The obsolete 'reference' construction is not supported any longer.
+ * If necessary, rewrite the correspondent client-side templates using syntax: check="${val_regexp}"
+ */

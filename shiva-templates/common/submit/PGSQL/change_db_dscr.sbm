@@ -1,0 +1,13 @@
+<!-- BEGIN submit/PGSQL/change_db_dscr.sbm  -->
+  <assign database=account.getResource(request.db_id)>
+
+  <if database.changeDatabaseDescription(request.db_descr)>
+     <assign res = session.addMessage(toolbox.compose(
+       lang.msg.name_res_changed, lang.pgsql.database_description, ""))>
+     <include request.stemplate>
+  <else>     
+     <assign res = session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_change, lang.pgsql.database_description, ""))>
+     <include request.ftemplate>
+  </if>     
+<!--  END submit/PGSQL/change_db_dscr.sbm  --> 

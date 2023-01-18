@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Verisign.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PARTNER", request.partner, "AVS", request.avs, "LOGIN", request.login, "VENDOR", request.vendor, "PASSWORD", request.password, "CERT_PATH", request.certpath,"CLASS_NAME", "psoft.epayment.Verisign", "TEMPLATE", "admin/merchant/Verisign.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PARTNER", request.partner, "AVS", request.avs, "LOGIN", request.login, "VENDOR", request.vendor, "PASSWORD", request.password, "CERT_PATH", request.certpath, "CLASS_NAME", "psoft.epayment.Verisign", "TEMPLATE", "admin/merchant/Verisign.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Verisign.sbm -->

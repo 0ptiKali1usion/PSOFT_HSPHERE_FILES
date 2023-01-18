@@ -1,0 +1,13 @@
+${lang.massmail.new_account_header(ci.first_name, ci.last_name)}
+
+${lang.massmail.thanks_for_choosing_company(settings.name)}
+
+${lang.massmail.new_account_signup_plan(plan.description)}
+
+${lang.massmail.new_account_verify_bi}
+<if bi.exemption_code>${lang.massmail.new_account_verify_ec}</if>
+
+${lang.massmail.new_account_bi_notification}
+
+${lang.massmail.new_account_support}
+${settings.support}

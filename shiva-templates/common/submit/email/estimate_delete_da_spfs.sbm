@@ -1,0 +1,25 @@
+<!-- BEGIN ./email/estimate_delete_da_spfs.sbm  -->
+<assign mail_service=account.getResource(request.mail_service)>
+<assign dids=mail_service.getSPFOfDomainAliases()>
+<if toolbox.gt(dids.size,"0")=="1">
+  <assign estimateDeleteMass=mail_service.estimateDeleteMass>
+  <list dids as did>
+    <assign res=estimateDeleteMass(did)> 
+  </list>
+  <assign price=estimateDeleteMass()>
+  <if price.status!="ERROR">
+    <if price.free=="0">
+      <include "billing/delete_confirm_mass.html">
+    <else>
+      <include "submit/email/delete_da_spfs.sbm">
+    </if>
+  <else>
+    <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+    <assign res=session.addMessage(price.msg)>
+    <include request.ftemplate>
+  </if>
+<else>
+  <assign res=session.addMessage(lang.email.mail_domain_alias_absent)>
+  <include request.stemplate>
+</if>
+<!--  END ./email/estimate_delete_da_spfs.sbm  -->

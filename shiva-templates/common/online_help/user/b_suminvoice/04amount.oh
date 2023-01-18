@@ -1,0 +1,6 @@
+<center>Amount</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+The total amount of money charged for bought/used resources at a time. The sum is charged only when it exceeds your credit limit - for users who pay by credit cards and check-pay users whose balance exceeds the credit limit.<br>
+E.g.: Although $10 for bought resources will be displayed in the chart the sum won't be charged if your credit limit is $15. Purchasing additional $10 resources you'll exceed your credit limit and therefore $20 will be charged and the bill closed.<br>
+Click <i>Online Invoice</i> in the <i>Billing</i> menu to find out what your credit limit is.

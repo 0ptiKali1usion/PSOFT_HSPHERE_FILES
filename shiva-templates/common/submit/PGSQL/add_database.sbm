@@ -1,0 +1,32 @@
+<!-- BEGIN ./PGSQL/add_database.sbm  -->
+<assign check=yafv.common.s_pgsql.vPSQLCombDbName(lang.label.database_name,request.db_name, request.suffix)>
+<assign user = account.getResource(request.db_owner)>
+<if check.status=="OK">
+  <assign pgsql = account.getChild("pgsql")>
+  <assign exist = pgsql.isDatabaseExist(request.db_name)>
+    <if exist>
+      <assign res = session.addMessage(toolbox.compose(
+           lang.msg.name_res_exists,lang.label.database,request.db_name))>
+    <else>	
+      <assign result = pgsql.addChild("pgsqldatabase","",request.db_name,request.db_description,user.name)>
+      <if result.status=="OK">
+	<assign res = session.addMessage(toolbox.compose(
+		lang.msg.name_res_created,lang.label.database,request.db_name))>
+	<assign success="1">
+      <else>
+	<assign res = session.addMessage(toolbox.compose(
+                lang.msg.name_res_failed_create,lang.label.database,request.db_name))>
+	<assign res = session.addMessage(result.msg)>
+      </if>
+    </if>
+<else>
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+  <assign cdb_id=result>	
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./PGSQL/add_database.sbm  -->

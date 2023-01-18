@@ -1,0 +1,13 @@
+<!-- BEGIN ./adnsmanager/add_mail_ssl_submit.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+<assign success="0">
+
+<assign result = mail_manager.enableMailSSL(request.zone_id, request.key, request.file)>
+<assign res=session.addMessage(result.msg)>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./adnsmanager/add_mail_ssl_submit.sbm  -->

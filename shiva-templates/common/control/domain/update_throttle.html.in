@@ -1,0 +1,94 @@
+<!-- BEGIN ./domain/update_throttle.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign policy_type = "None">
+<if request.uid>
+  <assign throttle=account.getResource(request.uid)>
+  <assign policy_type = throttle.policy>
+</if>
+
+<switch policy_type>
+<case "None"><assign none_sel="SELECTED"><break>
+<case "Concurrent"><assign conc_sel="SELECTED"><break>
+<case "Document"><assign doc_sel="SELECTED"><break>
+<case "Idle"><assign idle_sel="SELECTED"><break>
+<case "Original"><assign orig_sel="SELECTED"><break>
+<case "Random"><assign rand_sel="SELECTED"><break>
+<case "Request"><assign req_sel="SELECTED"><break>
+<case "Speed"><assign speed_sel="SELECTED"><break>
+<case "Volume"><assign vol_sel="SELECTED"><break>
+<default><assign none_sel="SELECTED"><break>
+</switch>
+
+<form name="f_update_throttle"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="uid" value="${request.uid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="domain/update_throttle1.html">
+
+
+
+
+
+
+<call draw_table_header("3", lang.domain.update_throttle.header)>
+
+
+<if throttle>
+<tr >
+<td>&nbsp;</td>
+<td colspan="2">
+<call draw_label_bold(lang.domain.update_throttle.current)><br>
+<call draw_label(lang.domain.update_throttle.policy+": "+throttle.policy)><br>
+<switch throttle.policy>
+<case "Concurrent">
+<case "Document">
+<case "Request">
+  <call draw_label(lang.domain.update_throttle.limit+": "+throttle.limit)><br>
+  <call draw_label(lang.domain.update_throttle.interval+": "+throttle.interval+throttle.intervalUn)><br>
+  <break>
+<case "Random">
+  <call draw_label(lang.domain.update_throttle.rand+": "+throttle.limit)><br>
+  <call draw_label(lang.domain.update_throttle.interval+": "+throttle.interval+throttle.intervalUn)><br>
+  <break>
+<case "Original">
+<case "Speed">
+<case "Volume">
+  <call draw_label(lang.domain.update_throttle.size+": "+throttle.limit+throttle.limitUn)><br>
+  <call draw_label(lang.domain.update_throttle.interval+": "+throttle.interval+throttle.intervalUn)><br>
+  <break>
+<case "Idle">
+  <call draw_label(lang.domain.update_throttle.idle+": "+throttle.interval)><br>
+  <break>
+</switch>
+</td>
+</tr>
+<tr><td colspan=3  class="control_header"><call draw_header(lang.domain.update_throttle.change)></td></tr>
+</if>
+
+<tr >
+<td valign="top" width="3%"   nowrap><call draw_tt_help(throttle,"user-ds_domaininfo-throttle","")></td>
+<td><call draw_label(lang.domain.update_throttle.policy)></td>
+<td class="control_align_center">
+<select name="policy">
+<option value="None" ${none_sel}>None</option>
+<option value="Concurrent" ${conc_sel}>Concurrent</option>
+<option value="Document" ${doc_sel}>Document</option>
+<option value="Idle" ${idle_sel}>Idle</option>
+<option value="Original" ${orig_sel}>Original</option>
+<option value="Random" ${rand_sel}>Random</option>
+<option value="Request" ${req_sel}>Request</option>
+<option value="Speed" ${speed_sel}>Speed</option>
+<option value="Volume" ${vol_sel}>Volume</option>
+</select>
+</td>
+</tr>
+<tr >
+<td colspan="3" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/update_throttle.html.in  -->

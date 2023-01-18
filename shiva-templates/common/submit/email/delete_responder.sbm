@@ -1,0 +1,20 @@
+<!-- BEGIN ./email/delete_responder.sbm  -->
+<assign resource= account.getResource( request.did )>
+<assign result= resource.delete>
+<assign md_id=request.rid>
+<assign mo_id=request.mb_id>
+<if result.status == "OK" >
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted, lang.label.mail_autoresponder, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_failed_delete, lang.label.mail_autoresponder, ""))>
+    <assign res = session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>   
+<!--  END ./email/delete_responder.sbm  -->

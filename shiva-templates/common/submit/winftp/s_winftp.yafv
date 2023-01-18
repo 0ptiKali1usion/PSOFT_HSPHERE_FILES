@@ -1,0 +1,2 @@
+regexp vServerName= ".+", fail=yafv.vServerName.fail ;
+

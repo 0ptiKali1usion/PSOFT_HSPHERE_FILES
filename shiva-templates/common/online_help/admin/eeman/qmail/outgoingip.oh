@@ -1,0 +1,6 @@
+<center> outgoingip </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br> Assign one of your network IPs for sending outgoing mail. If this value is not empty, all your mail is sent from the specified IP, not from your actual mail server IP. Use this control when your mail server IP is added to a spam blacklist, and mail from your domain is rejected.
+<br>Default: the outgoingip file is absent.
+<br>

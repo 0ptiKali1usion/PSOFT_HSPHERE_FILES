@@ -1,0 +1,15 @@
+<!-- BEGIN ./SiteStudio/submit/remove.sbm -->
+<assign resource = account.getResource(request.did)>
+<assign result = resource.delete>
+<if result.status == "OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_deleted, lang.label.account, ""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete, lang.label.account, ""))>
+  <assign res = result.msg>
+</if>
+<include request.stemplate>
+<!-- END ./SiteStudio/submit/remove.sbm -->

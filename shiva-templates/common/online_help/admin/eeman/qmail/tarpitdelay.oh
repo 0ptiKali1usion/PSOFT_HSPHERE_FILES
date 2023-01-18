@@ -1,0 +1,7 @@
+<center> tarpitdelay </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Tarpitdelay is the time in seconds of delay to be introduced after each subsequent RCPT TO. 
+<br>Default: 5.
+<br>
+

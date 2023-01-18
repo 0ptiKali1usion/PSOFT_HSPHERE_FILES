@@ -1,0 +1,13 @@
+<center>Billing Type</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+   <i>Paid</i>: with this option, the plan will require check or credit card signups.  No trial hosting will be allowed.<br>
+  <br>
+  <i>Trial</i>: select this option to allow users to try out the system <i>without paying</i> for the services during the trial period.
+  <br>
+   However, if they like the system and decide to become pay users, they are charged for the resources they have used during the trial period. <br>
+  <i>Duration</i>: days the account can be used for free.  Once this trial period ends, the account is suspended.<br>
+  <i>*Credit limit</i>: disallows users to create more pay and free resources after the credit limit has been reached. This won't, however, suspend the account. <br>
+  <br>
+  <i>Without Billing</i>: this option entirely disables billing for this plan, including charges, invoices or price calculation. Select this option for the System Plan (your own company' site) or for free users.</p>

@@ -1,0 +1,9 @@
+<center>Redirect Status</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Redirect Status tells visitor's browser about the nature of the redirect:<br>
+<i>Permanent</i> &nbsp; returns a permanent redirect status (301) indicating that the resource has moved permanently.<br>
+<i>Temporary</i> &nbsp; returns a temporary redirect status (302). This is the default and indicates to the client that the resource has moved temporarily.<br>
+<i>See other</i> &nbsp; returns a "See Other" status (303) indicating that the resource has been replaced.<br>
+<i>Gone</i> &nbsp; &nbsp; will cause a visitor's browser display "The requested resource is no longer available on this server and there is no forwarding address. Please remove all references to this resource." message when trying to go to the 'to' URL.
+

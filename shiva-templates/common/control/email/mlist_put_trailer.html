@@ -1,0 +1,33 @@
+<!-- BEGIN ./email/mlist_add_trailer.html -->
+<assign mdomain = account.getResource(request.rid)>
+<assign mlist = account.getResource(request.uid)>
+<if mlist.trailer><assign vtrailer = mlist.get_trailer()></if>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" name="f_mlist_trailer" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("3", lang.email.mlist_trailer_h(mlist.email+"@"+mdomain.name))>
+
+<tr>
+  <td colspan="3"><call draw_label(lang.email.mlist_trailer_msg)></td>
+</tr>
+<tr>
+  <td colspan="3"><textarea rows=10 cols=68 name="trailer">${vtrailer}</textarea>
+</td>
+</tr>
+<tr>
+  <td class="control_align_center" colspan="3">
+    <input type="hidden" name="template_name" value="submit/email/mlist_put_trailer.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${mdomain}">
+    <input type="hidden" name="uid" value="${mlist}">
+    <input type="hidden" name="md_id" value="${mdomain}">
+    <input type="hidden" name="mo_id" value="${mlist}">
+    <input type="hidden" name="sc_page" value="${request.sc_page}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/mlist_add_trailer.html  -->

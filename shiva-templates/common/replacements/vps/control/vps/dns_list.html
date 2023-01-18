@@ -1,0 +1,25 @@
+<!-- BEGIN ./control/vps/dns_list.html  -->
+<assign vps=account.getChild("vps")>
+<assign domain=vps.getChild("domain")>
+<call draw_tooltip()>
+
+<call draw_table_header("6", toolbox.compose(lang.vps.dns_zone_list.header,vps.vpsHostName))>
+
+<assign dns_zone = vps.dns_zone>
+<if dns_zone>
+  <tr><td class="control_align_center">
+    <call draw_edit(config.CLIENT_CP_URL+"?template_name=/dns/list.html"+"&rid="+domain, lang.domain.editincluded.editdns)>
+  </td></tr>
+<else>
+  <if account.plan.isResourceAvailable("domain")>
+    <tr><td class="control_align_center"><call draw_label(toolbox.compose(lang.vps.dns_zone_was_not_added,vps.vpsHostName))></td></tr>
+    <tr><td class="control_align_center"><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/vps/add_dns_zone.sbm&rid="+vps+"&stemplate="+template + "&ftemplate="+template, "add", lang.vps.dsn_zone_add.tip)></td></tr>
+  <else>
+    <tr>
+        <td><call draw_label(lang.vps.cannot_add_dns_zone)></td>
+    </tr>
+  </if>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/vps/dns_list.html  -->

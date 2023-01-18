@@ -1,0 +1,71 @@
+<!-- BEGIN ./common/control/admin/merchant/NetBilling.html -->
+<assign mm=account.getChild("merchant_manager")>
+<if merchant>
+<assign vtitle = merchant.TITLE>
+<assign vprotocol = merchant.PROTOCOL>
+<assign vserver = merchant.SERVER>
+<assign vaccount = merchant.ACCOUNT>
+<assign vsitetag = merchant.SITETAG>
+<assign vemailaddr = merchant.EMAILADDR>
+<else>
+<assign vtitle = lang.admin.epayment.netbilling>
+<assign vprotocol = "HTTPS">
+<assign vserver = "secure.netbilling.com">
+<assign vaccount = "">
+<assign vsitetag = "">
+<assign vemailaddr = "">
+</if>
+
+<if vprotocol == "HTTP"><assign http_sel = "SELECTED"><else><assign https_sel = "SELECTED"></if>
+
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/NetBilling.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+
+<call draw_table_header("2", lang.admin.epayment.netbilling)>
+
+
+
+<tr >
+<td><call draw_label(lang.label.title)></td>
+<td><input type="text" name="title" value="${vtitle}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.epayment.protocol)></td>
+<td>
+<select name="protocol">
+<option value="http" ${http_sel}>http</option>
+<option value="https" ${https_sel}>https</option>
+</select>
+</td>
+</tr>
+
+<tr >
+<td><call draw_label(lang.admin.epayment.server)></td>
+<td><input type="text" name="server" value="${vserver}"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.epayment.account)></td>
+<td><input type="text" name="account" value="${vaccount}"></td>
+</tr>
+<tr ><td>
+<call draw_label(lang.admin.epayment.sitetag)></td>
+<td><input type="text" name="sitetag" value="${vsitetag}"></td>
+</tr>
+<tr ><td>
+<call draw_label(lang.admin.epayment.voidnotificationemail)></td>
+<td><input type="text" name="emailaddr" value="${vemailaddr}"></td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./common/control/admin/merchant/NetBilling.html -->

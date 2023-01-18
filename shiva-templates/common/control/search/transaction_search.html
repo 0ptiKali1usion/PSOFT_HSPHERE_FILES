@@ -1,0 +1,98 @@
+<!-- BEGIN ./control/search/transaction_search.html  -->
+<assign billman=account.getChild("billman")>
+<if !billman>
+  <assign res = session.addMessage(lang.search.permissionsmsg)>
+<else>
+  <assign viewer = account.getChild("reportviewer")>
+</if>
+
+<if request.arid>
+  <assign report = viewer.getAdvReportById(request.arid)>
+  <if report.status == "OK">
+    <call advReportInit(report)>
+    <if request.search_step><assign step = request.search_step>
+    <else><assign step = request.sc_step>
+    </if>
+    <assign report_ok="1">
+  </if>
+</if>
+<if !report_ok>
+  <assign report = viewer.getAdvReport("moneytransaction")>
+  <assign result = report(request.sc_account, request.sc_username, request.sc_plan, request.sc_created_before, request.sc_created_after,request.sc_only_live)>
+  <if result.status != "OK">
+    <assign res = session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))>
+  <else>
+    <if request.search_step><assign step = request.search_step>
+    <else>
+      <if request.sc_step><assign step = request.sc_step>
+      <else><assign step="10">
+      </if>
+    </if>
+    <assign res = report.setStep(step)>
+    <if request.sc_page><assign page = request.sc_page><else><assign page = "1"></if>
+    <assign res = report.setPage(page)>
+    <call advReportInit(report)>
+    <assign report_ok="1">
+  </if>
+</if>
+<assign sc_params="&sc_account="+toolbox.url_escape(request.sc_account)+
+ "&sc_username="+toolbox.url_escape(request.sc_username)+
+ "&sc_plan="+toolbox.url_escape(request.sc_plan)+
+ "&sc_created_before="+toolbox.url_escape(request.sc_created_before)+
+ "&sc_created_after="+toolbox.url_escape(request.sc_created_after)+
+ "&sc_only_live="+toolbox.url_escape(request.sc_only_live)+
+ "&sc_step="+toolbox.url_escape(step)+
+ "&sc_page="+toolbox.url_escape(report.currentPage)>
+<call draw_tooltip()>
+
+<assign colspan="14">
+<call draw_table_header(colspan, lang.admin.montrans.header)>
+
+<if report_ok=="1">
+<tr>
+  <td class="control_header"><call advReportLabel(report, lang.label.username, "username")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.accid, "accountId")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.domain, "domain")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.plan, "plan")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.bp, "period")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.charged, "created")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.setup, "setup")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.regdomain, "reg_domain")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.recurrent, "recurrent")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.usage, "usage")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.refund, "refund")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.transactionsearch.charge, "charge")></td>
+  <td class="control_header"><call advReportLabel(report, lang.search.type, "type")></td>
+  <td class="control_header"><call advReportLabel(report, lang.label.email, "email")></td>
+</tr>  
+
+<assign entries = report.page()>
+<list entries as entry>
+<tr >
+<if entry.username><assign username=entry.username><else><assign username=lang.search.delusr></if>
+<td>
+<call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/user_preview.html&aid="+entry.accountId,"USER_INFO",entry.username)>
+</td>
+<td class="control_align_right"><call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+entry.accountId, "PREVIEW", entry.accountId)></td>
+<td><call draw_label(entry.domain)></td>
+<td><call draw_label(entry.plan)></td>
+<td><call draw_label(entry.period)></td>
+<td class="control_align_right"><call draw_label(entry.created)></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.setup))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.reg_domain))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.recurrent))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.usage))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.refund))></td>
+<td class="control_align_right"><call draw_label(toolbox.currency(entry.charge))></td>
+<td><call draw_label(entry.type)></td>
+<td class="control_align_center"><call draw_link("mailto:"+entry.email,entry.email)></td>
+</tr>
+</list>
+<tr ><td colspan="14">
+<call advReportNav(report)><a href="${config.CLIENT_CP_URL}/report.csv?template_name=control/search/transaction_search.csv&arid=${report.id}&_content_type=csv">${lang.search.export}</a>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=mailman/massmail.html&arid="+report.id+"&curr_menu_id="+GLOBAL_ACTIVE_ITEM+"&start="+toolbox.url_escape(start)+"&next_template="+template, lang.search.massmail)>
+</td></tr>
+</if>
+<call draw_table_footer()>
+
+<!--  END ./control/search/transaction_search.html  -->

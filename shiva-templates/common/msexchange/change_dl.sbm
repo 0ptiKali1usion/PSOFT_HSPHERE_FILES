@@ -1,0 +1,13 @@
+<!-- BEGIN: ./msexchange/change_dl.sbm -->
+<assign dl=account.getResource(request.rid)>
+<assign result=dl.changeSettings(request.managedBy)>
+<if !result>
+      <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_changed,lang.msexchange_dl,""))>
+    <else>
+      <assign res=session.addMessage(toolbox.compose(
+        lang.msg.name_res_failed_change,lang.msexchange_dl,""))>
+      <assign res=session.addMessage(result.msg)>
+</if>
+<include request.stemplate>
+<!-- END: ./msexchange/change_dl.sbm -->

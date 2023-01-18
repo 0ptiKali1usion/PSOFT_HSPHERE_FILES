@@ -1,0 +1,15 @@
+<!-- BEGIN ./tt/user_view.html  -->
+<assign template="tt/user_view.html">
+<include "functions">
+<include "control/tt/ttfunctions.fn">
+<if account.getChild("ttadmin") && request.inPanel != "0">
+<call top_tt()>
+<call ticket_menu("user-view")>
+<else><if account.suspended>
+<call draw_blank_menu()>
+<else>
+<call draw_menu("acct-prefs-tt")>
+</if></if>
+<include "control/tt/user_view.html">
+<call bottom()>
+<!--  END ./tt/user_view.html  -->

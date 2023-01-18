@@ -1,0 +1,33 @@
+<!-- BEGIN ./common/replacements/ds/signup/compare_dsts.htm -->
+<include "functions">
+<assign template="signup/dst.html">
+<assign title=lang.ds.signup.dst_comparision>
+<include "control/signup/signup_function.html">
+<include "signup/signup_top.html">
+
+<call draw_table_header("7", lang.ds.compare_header)>
+<tr>
+<td class="control_header"><call draw_header(lang.ds.name)></td>
+<td class="control_header"><call draw_header(lang.ds.os_name)></td>
+<td class="control_header"><call draw_header(lang.ds.cpu)></td>
+<td class="control_header"><call draw_header(lang.ds.ram)></td>
+<td class="control_header"><call draw_header(lang.ds.storage)></td>
+<td class="control_header"><call draw_header(lang.ds.setup_fee)></td>
+<td class="control_header"><call draw_header(lang.ds.recurrent_fee)></td>
+</tr>
+<list dst_info as info>
+    <tr>
+      <td><call draw_label(info.dst.name)></td>
+      <td><call draw_label(info.dst.os)></td>
+      <td><call draw_label(info.dst.cpu)></td>
+      <td><call draw_label(info.dst.ram)></td>
+      <td><call draw_label(info.dst.storage)></td>
+      <td><call draw_label(toolbox.currency(info.setup))></td>
+      <td><call draw_label(toolbox.currency(info.recurrent))></td>
+    </tr>
+</list>
+<tr>
+<td colspan="7" class="control_align_center"><a href="#" onClick="javascript:window.opener.focus();window.close()"><call draw_label(lang.common_signup_signup_ok_button)></td>
+</tr>
+<call draw_table_footer()>
+<!-- END ./common/replacements/ds/signup/compare_dsts.htm-->

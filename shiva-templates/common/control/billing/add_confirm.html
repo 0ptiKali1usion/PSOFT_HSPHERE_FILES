@@ -1,0 +1,42 @@
+<!-- BEGIN ./control/billing/add_confirm.html  -->
+
+<form name="add_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<compress>
+  <list params as param>
+    <if param.name != "template_name" && param.name != "next_template">
+      <input type="hidden" name="${param.name}" value="${toolbox.html_encode(param.value)}">
+    </if>
+  </list>
+</compress>
+<if request.next_template>
+  <input type="hidden" name="template_name" value="${request.next_template}">
+<else>
+  <input type="hidden" name="template_name" value="submit/misc/add.sbm">
+</if>
+<assign sRT=account.plan.getResourceType(request.type)>
+<if sRT.status!="ERROR">
+    <assign stype = sRT.description>
+<else>
+    <assign stype = billing.unknown_type>
+</if>
+<if request.next_template=="">
+  <assign next_template="submit/misc/add.sbm">
+<else>
+  <assign next_template=request.next_template>
+</if>
+<assign message=toolbox.compose(lang.billing.add_msg1,stype)>
+<if price.setup && price.setup!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(price.setup))>
+</if>
+<if price.recurrent && price.recurrent!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg3,toolbox.currency(price.recurrent))>
+</if>
+<if price.recurrentAll && price.recurrentAll!="0">
+  <assign message=message+toolbox.compose(lang.billing.add_msg4,toolbox.currency(price.recurrentAll))>
+</if>
+<if price.refund && price.refund!="0">
+  <assign message=message+toolbox.compose(lang.billing.edit_msg1,toolbox.currency(price.refund))>
+</if>
+<call draw_warn_invoice_with_charge_info(message,price,"","","add_confirm")>
+</form>
+<!--  END ./control/billing/add_confirm.html  -->

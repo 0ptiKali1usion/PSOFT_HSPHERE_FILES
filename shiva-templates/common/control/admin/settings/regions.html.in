@@ -1,0 +1,248 @@
+<!-- BEGIN ./control/admin/settings/regions.html -->
+<call draw_tooltip()>
+<yafv s_admin>
+
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<assign lang_code = settings["lang"]>
+<assign old_lang_code = settings["oldlang"]>
+<if lang_code==old_lang_code><assign sts="1"><else><assign sts="0"></if>
+<if sts=="1"><assign cur_sym = settings["cursym"]></if>
+<if (!cur_sym)||(sts!="1")><assign cur_sym = toolbox.getLocalizedCurSym(lang_code)></if>
+
+<if sts=="1"><assign curcode = settings["curcode"]></if>
+<if (!curcode)||(sts!="1")><assign curcode = toolbox.getLocalizedInternationalCurSym(lang_code)></if>
+
+<if sts=="1"><assign cur_sep = settings["cursep"]></if>
+<if (!cur_sep)||(sts!="1")><assign cur_sep = toolbox.getLocalizedCurDecSeparator(lang_code)></if>
+<if sts=="1"><assign dec_sep = settings["decsep"]></if>
+<if (!dec_sep)||(sts!="1")><assign dec_sep = toolbox.getLocalizedDecSeparator(lang_code)></if>
+<if sts=="1"><assign digit = settings["digit"]></if>
+<if (!digit)||(sts!="1")><assign digit = toolbox.getLocalizedDigit(lang_code)></if>
+<if sts=="1"><assign group_sep = settings["groupsep"]></if>
+<if (!group_sep)||(sts!="1")><assign group_sep = toolbox.getLocalizedGroupingSeparator(lang_code)></if>
+<if sts=="1"><assign minus = settings["minus"]></if>
+<if (!minus)||(sts!="1")><assign minus = toolbox.getLocalizedMinusSign(lang_code)></if>
+<if sts=="1"><assign nan = settings["nan"]></if>
+<if (!nan)||(sts!="1")><assign nan = toolbox.getLocalizedNaN(lang_code)></if>
+<if sts=="1"><assign perc = settings["perc"]></if>
+<if (!perc)||(sts!="1")><assign perc = toolbox.getLocalizedPercent(lang_code)></if>
+<if sts=="1"><assign per_mill = settings["permill"]></if>
+<if (!per_mill)||(sts!="1")><assign per_mill = toolbox.getLocalizedPerMill(lang_code)></if>
+<if sts=="1"><assign zero = settings["zero"]></if>
+<if (!zero)||(sts!="1")><assign zero = toolbox.getLocalizedZero(lang_code)></if>
+<if sts=="1"><assign short_date = settings["shortdate"]></if>
+<if (!short_date)||(sts!="1")><assign short_date = toolbox.getLocalizedShortDate(lang_code)></if>
+<if sts=="1"><assign med_date = settings["meddate"]></if>
+<if (!med_date)||(sts!="1")><assign med_date = toolbox.getLocalizedMediumDate(lang_code)></if>
+<if sts=="1"><assign long_date = settings["longdate"]></if>
+<if (!long_date)||(sts!="1")><assign long_date = toolbox.getLocalizedLongDate(lang_code)></if>
+<if sts=="1"><assign full_date = settings["fulldate"]></if>
+<if (!full_date)||(sts!="1")><assign full_date = toolbox.getLocalizedFullDate(lang_code)></if>
+<if sts=="1"><assign curr_format = settings["currformat"]></if>
+<if (!curr_format)||(sts!="1")><assign curr_format = toolbox.getLocalizedPattern(lang_code)></if>
+
+
+<form name="f_langs" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8" check!>
+
+<call draw_table_header("4", lang.admin.regions.header)>
+
+<tr>
+<td class="control_header_align_center" colspan="2"><call draw_header(lang.admin.regions.money)></td>
+<td class="control_header_align_center" colspan="2"><call draw_header(lang.admin.regions.dates)></td>
+</tr>
+<tr >
+<td width="25%"><call draw_label(lang.admin.regions.cursym)></td>
+<td><input type="text" name="_cursym_" value="${cur_sym}" size="3"></td>
+<td><call draw_label(lang.admin.regions.shortdate)></td>
+<td><input type="text" name="_shortdate_" value="${short_date}" size="20"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.regions.intcursym)></td>
+<td><select name="_curcode_"><call buildCurrencies(curcode)></select></td>
+<td><call draw_label(lang.admin.regions.meddate)></td>
+<td><input type="text" name="_meddate_" value="${med_date}" size="20"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.regions.decsep)></td>
+<td><input type="text" name="_decsep_" value="${dec_sep}" size="1" label="${lang.admin.regions.decsep}" check="vStringReq"></td>
+<td><call draw_label(lang.admin.regions.longdate)></td>
+<td><input type="text" name="_longdate_" value="${long_date}" size="20"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.regions.groupsep)></td>
+<td><input type="text" name="_groupsep_" value="${group_sep}" size="1" label="${lang.admin.regions.groupsep}" check="vStringReq"></td>
+<td><call draw_label(lang.admin.regions.fulldate)></td>
+<td><input type="text" name="_fulldate_" value="${full_date}" size="20"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.regions.curpattern)></td>
+<td><input type="text" name="_currformat_" value="${curr_format}" label="${lang.admin.regions.curpattern}" check="vCurrencyPattern"></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr >
+<td><call draw_label(lang.admin.regions.cursample)></td>
+<td><call draw_label(toolbox.currency("1234567.890"))>&nbsp;&nbsp;&nbsp;<call draw_label(toolbox.currency("-123456.78"))></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+<td colspan="4">
+<p><call draw_label(lang.admin.regions.warn)>
+</td>
+</tr>
+<tr>
+<td colspan="4">
+<p><call draw_label_bold(lang.admin.regions.dt_patterns_header)><br>
+<call draw_label(lang.admin.regions.dt_patterns_text1)><br>
+<call draw_label(lang.admin.regions.dt_patterns_text2)><p>
+<table class="inner_control_grid">
+<tr>
+  <td class="inner_control_grid_header"><call draw_header(lang.admin.regions.dt_patterns_letter)></td>
+  <td class="inner_control_grid_header"><call draw_header(lang.admin.regions.dt_patterns_component)></td>
+  <td class="inner_control_grid_header"><call draw_header(lang.admin.regions.dt_patterns_presentation)></td>
+  <td class="inner_control_grid_header"><call draw_header(lang.admin.regions.dt_patterns_example)></td>
+</tr>
+<tr>
+<td><call draw_label("G")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_era)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt)></td>
+<td><call draw_label("AD")></td>
+</tr>
+<tr>
+<td><call draw_label("y")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_y)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_y)></td>
+<td><call draw_label("1996; 96")></td>
+</tr>
+<tr>
+<td><call draw_label("M")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_m_y)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_m)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt_xmpl3)></td>
+</tr>
+<tr>
+<td><call draw_label("w")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_w_y)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("27")></td>
+</tr>
+<tr>
+<td><call draw_label("W")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_w_m)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("2")></td>
+</tr>
+<tr>
+<td><call draw_label("D")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_d_y)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("187")></td>
+</tr>
+<tr>
+<td><call draw_label("d")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_d_m)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("10")></td>
+</tr>
+<tr>
+<td><call draw_label("F")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_d_w_m)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("2")></td>
+</tr>
+<tr>
+<td><call draw_label("E")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_d_w)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt_xmpl1)></td>
+</tr>
+<tr>
+<td><call draw_label("a")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_am_pm_marker)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt)></td>
+<td><call draw_label("PM")></td>
+</tr>
+<tr>
+<td><call draw_label("H")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_h_d0)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("0")></td>
+</tr>
+<tr>
+<td><call draw_label("k")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_h_d1)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("24")></td>
+</tr>
+<tr>
+<td><call draw_label("K")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_h_am0)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("0")></td>
+</tr>
+<tr>
+<td><call draw_label("h")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_h_am1)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("12")></td>
+</tr>
+<tr>
+<td><call draw_label("m")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_m_h)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("30")></td>
+</tr>
+<tr>
+<td><call draw_label("s")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_s_m)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("55")></td>
+</tr>
+<tr>
+<td><call draw_label("S")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_ms)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_number)></td>
+<td><call draw_label("978")></td>
+</tr>
+<tr>
+<td><call draw_label("z")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_tz)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_gtz)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_txt_xmpl2)></td>
+</tr>
+<tr>
+<td><call draw_label("Z")></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_tz)></td>
+<td><call draw_label(lang.admin.regions.dt_patterns_rfc_tz)></td>
+<td><call draw_label("-0800")></td>
+</tr>
+</table><br>
+<call draw_label(lang.admin.regions.dt_patterns_text3)><br>
+<ul>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_txt)><p></li>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_number)><p></li>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_year1)><p>
+</li>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_month)><p></li>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_tz1)><p>
+</li>
+<li><call draw_label(lang.admin.regions.dt_patterns_text_rfc_tz1)><p>
+</li>
+</ul>
+</td>
+</tr>
+<tr><td class="control_align_center" colspan="4">
+  <input type="hidden" name="template_name" value="submit/admin/settings/regions.sbm">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="_oldlang_" value="${lang_code}">
+  <input type="submit" value="${lang.button.submit}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/regions.html -->
+

@@ -1,0 +1,5 @@
+include common.s_hsphere.yafv: vStringReq, vStringOptional, vIPAddr, vHT_URL,
+	vPriceReq, vMDYDate, vIPMask, vIPAddrOpt, vIPMaskOpt, vHttpResURL,
+	vNetswitchComName, vTrafficLimit,
+	vDayHour, vHourMin, vDomainOrIP(string),
+	vNetswitchPortOpt(string, string), vNetswitchPortReq(string, string);

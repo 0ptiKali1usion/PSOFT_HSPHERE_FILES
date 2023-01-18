@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/ds/reboot_request.sbm  -->
+<assign result = obj.user_requests.dsRebootRequest(request.ds_id, request.period, request.day, request.time)>
+<if result.status == "OK">
+  <assign res = session.addMessage(lang.ds.reboot_request_sent)>
+<else>
+  <assign res = session.addMessage(result.msg)>
+  <assign failure = "1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/ds/reboot_request.sbm  -->

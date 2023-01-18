@@ -1,0 +1,186 @@
+<!-- BEGIN ./control/admin/settings/notifications.html.in -->
+<script language="javascript">
+  function checkDel() {
+    if (!document.f_not.is_warning.checked) {
+      document.f_not.not_term.value = "";
+    }
+    if (!document.f_not.is_susp_not.checked) {
+      document.f_not.warn_susp_term1.value = "";
+      document.f_not.warn_susp_term2.value = "";
+    }
+    if (!document.f_not.is_susp_reason.checked) {
+      document.f_not.susp_term.value = "";
+    }
+    if (!document.f_not.is_del_not.checked) {
+      document.f_not.warn_del_term1.value = "";
+      document.f_not.warn_del_term2.value = "";
+    }
+    if (!document.f_not.is_del_reason.checked) {
+      document.f_not.del_term.value = "";
+    }
+    if (document.f_not.is_del_reason.checked &&
+        document.f_not.del_term.value == "") {
+      alert("${lang.yafv.del.empty}");
+      document.f_not.is_del_reason.checked = false;
+    }
+    if (document.f_not.is_susp_reason.checked &&
+        document.f_not.susp_term.value == "") {
+      alert("${lang.yafv.susp.empty}");
+      document.f_not.is_susp_reason.checked = false;
+    }
+    if (document.f_not.is_del_reason.checked
+      && !document.f_not.is_warning.checked
+      && !document.f_not.is_susp_not.checked
+      && !document.f_not.is_susp_reason.checked
+      && !document.f_not.is_del_not.checked) {
+      alert("${lang.yafv.del.warn}");
+      document.f_not.del_term.value = "";
+      document.f_not.is_del_reason.checked = false;
+    }
+  }
+</script>
+
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+<if admin>
+<yafv s_admin>
+<assign not_term = settings["not_term"]>
+<assign warn_susp_term1 = settings["warn_susp_term1"]>
+<assign warn_susp_term2 = settings["warn_susp_term2"]>
+<assign susp_term = settings["susp_term"]>
+<assign warn_del_term1 = settings["warn_del_term1"]>
+<assign warn_del_term2 = settings["warn_del_term2"]>
+<assign del_term = settings["del_term"]>
+<if settings["is_warning"]=="true">
+  <assign is_warning = "CHECKED">
+<else>
+  <assign is_warning = "">
+</if>
+<if settings["is_susp_not"]=="true">
+  <assign is_susp_not = "CHECKED">
+<else>
+  <assign is_susp_not = "">
+</if>
+<if settings["is_susp_reason"]=="true">
+  <assign is_susp_reason = "CHECKED">
+<else>
+  <assign is_susp_reason = "">
+</if>
+<if settings["is_del_not"]=="true">
+  <assign is_del_not = "CHECKED">
+<else>
+  <assign is_del_not = "">
+</if>
+<if settings["is_del_reason"]=="true">
+  <assign is_del_reason = "CHECKED">
+<else>
+  <assign is_del_reason = "">
+</if>
+
+<call draw_table_header("3", lang.admin.settings.notifications)>
+
+<form name="f_not" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/notifications.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<tr>
+<td>
+<call draw_label(lang.admin.settings.warning)>
+</td>
+<td>
+<call draw_label(lang.admin.settings.term.notify)>&nbsp;
+<input type="text" name="not_term" size="5" value="${not_term}" check="vPeriodDependent(this, is_warning)" label="${lang.admin.settins.debtors.not_term}">
+<call draw_label(lang.admin.settings.days)>
+</td>
+<td width="1%" nowrap class="control_align_center">
+<input type="checkbox" name="is_warning" value="true" ${is_warning} onchange="javascript:checkDel();" onClick="checkForm(this.form,false)">
+<if is_warning>
+<assign tag = "DEBT_WARN_NOTIFICATION">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale, lang.ce[tag].desc)>
+</if>
+</td>
+</tr>
+<tr>
+<td>
+<call draw_label(lang.admin.settings.susp_not)>
+</td>
+<td>
+<call draw_label(lang.admin.settings.term.susp_warn)>&nbsp;
+<input type="text" name="warn_susp_term1" size="5" value="${warn_susp_term1}" check="vPeriodDependent(this, is_susp_not)" label="${lang.admin.settins.debtors.warn_susp_term1}">
+<call draw_label(lang.admin.settings.term.warn_another)>&nbsp;
+<input type="text" name="warn_susp_term2" size="5" value="${warn_susp_term2}" check="vPeriodDependent(this, is_susp_not)" label="${lang.admin.settins.debtors.warn_susp_term2}">
+<call draw_label(lang.admin.settings.days)>
+</td>
+<td width="1%" nowrap class="control_align_center">
+<input type="checkbox" name="is_susp_not" value="true" ${is_susp_not} onchange="javascript:checkDel();" onClick="checkForm(this.form,false)">
+<if is_susp_not>
+<assign tag = "DEBT_SUSP_NOT">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale, lang.ce[tag].desc)>
+</if>
+</td>
+</tr>
+<tr>
+<td>
+<call draw_label(lang.admin.settings.susp_reason)>
+</td>
+<td>
+<call draw_label(lang.admin.settings.term.susp)>&nbsp;
+<input type="text" name="susp_term" size="5" value="${susp_term}" check="vPeriodDependent(this, is_susp_reason)" label="${lang.admin.settins.debtors.susp_term}">
+<call draw_label(lang.admin.settings.days)>
+</td>
+<td width="1%" nowrap class="control_align_center">
+<input type="checkbox" name="is_susp_reason" value="true" ${is_susp_reason} onchange="javascript:checkDel();" onClick="checkForm(this.form,false)">
+<if is_susp_reason>
+<assign tag = "DEBT_SUSP_REASON">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale, lang.ce[tag].desc)>
+</if>
+</td>
+</tr>
+<tr>
+<td>
+<call draw_label(lang.admin.settings.del_not)>
+</td>
+<td>
+<call draw_label(lang.admin.settings.term.del_warn)>&nbsp;
+<input type="text" name="warn_del_term1" size="5" value="${warn_del_term1}" check="vPeriodDependent(this, is_del_not)" label="${lang.admin.settins.debtors.warn_del_term1}">
+<call draw_label(lang.admin.settings.term.warn_another)>&nbsp;
+<input type="text" name="warn_del_term2" size="5" value="${warn_del_term2}" check="vPeriodDependent(this, is_del_not)" label="${lang.admin.settins.debtors.warn_del_term2}">
+<call draw_label(lang.admin.settings.days)>
+</td>
+<td width="1%" nowrap class="control_align_center">
+<input type="checkbox" name="is_del_not" value="true" ${is_del_not} onchange="javascript:checkDel();" onClick="checkForm(this.form,false)">
+<if is_del_not>
+<assign tag = "DEBT_DEL_NOT">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale, lang.ce[tag].desc)>
+</if>
+</td>
+</tr>
+<tr>
+<td>
+<call draw_label(lang.admin.settings.del_reason)>
+</td>
+<td>
+<call draw_label(lang.admin.settings.term.del)>&nbsp;
+<input type="text" name="del_term" size="5" value="${del_term}" check="vPeriodDependent(this, is_del_reason)" label="${lang.admin.settins.debtors.del_term}">
+<call draw_label(lang.admin.settings.days)>
+</td>
+<td width="1%" nowrap class="control_align_center">
+<input type="checkbox" name="is_del_reason" value="true" ${is_del_reason} onchange="javascript:checkDel();" onClick="checkForm(this.form,false)">
+<if is_del_reason>
+<assign tag = "DEBT_DEL_REASON">
+<call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/edit_custom_email.html&tag="+tag+"&locale="+locale, lang.ce[tag].desc)>
+</if>
+</td>
+</tr>
+<tr >
+<td class="control_align_center" colspan="3"><input type="submit" value="${lang.button.save}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/notifications.html.in -->
+

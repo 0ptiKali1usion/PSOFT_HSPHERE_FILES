@@ -1,0 +1,46 @@
+<!-- BEGIN ./email/update_quota_form.html.in  -->
+<assign template="email/update_quota_form.html">
+<call draw_tooltip()>
+<assign mailbox = account.getResource(request.mid)>
+<assign quota = mailbox.getChild("mail_quota")>
+<if !quota><assign vquota="0"></if>
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" name="f_update_quota"  method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="next_template" value="submit/email/update_quota_save.sbm">
+<input type="hidden" name="template_name" value="submit/email/change_quota_check.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="mid" value="${request.mid}">
+<input type="hidden" name="md_id" value="${request.rid}">
+<input type="hidden" name="mo_id" value="${request.mid}">
+<input type="hidden" name="sc_page" value="${request.sc_page}">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+<input type="hidden" name="mailbox" value="${request.mailbox}">
+<input type="hidden" name="forward" value="${request.forward}">
+<input type="hidden" name="alias" value="${request.alias}">
+<input type="hidden" name="responder" value="${request.responder}">
+<input type="hidden" name="name" value="${request.name}">
+<input type="hidden" name="sortField" value="${request.sortField}">
+<input type="hidden" name="sortDirection" value="${request.sortDirection}">
+<input type="hidden" name="mailType" value="mail_object">
+<input type="hidden" name="type" value="mail_quota">
+
+
+
+
+<call draw_table_header("3", toolbox.compose(lang.email.updatequotaform.header, mailbox.fullemail))>
+
+<tr>
+<td width="1"><call draw_tt_link(mailbox,"")></td>
+<td><call draw_label(lang.label.quota)></td>
+<if !vquota><assign vquota=quota.limitMb></if>
+<td><input type="text" name="quota" value="${vquota}" label="${lang.label.quota}" check="vMailQuota" value="${quota.limitMb}">&nbsp;<call draw_label("MB")></td>
+</tr>
+<tr>
+<td  colspan=3 class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/update_quota_form.html.in  -->

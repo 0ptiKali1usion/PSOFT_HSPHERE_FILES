@@ -1,0 +1,5 @@
+<!-- BEGIN ./common/submit/admin/merchant/drop_encryption.sbm -->
+<assign admin=account.getChild("admin")>
+<assign result=admin.dropEncryptionCreditCards()>
+<include request.stemplate>
+<!-- END ./common/submit/admin/merchant/drop_encryption.sbm -->

@@ -1,0 +1,59 @@
+<!-- BEGIN ./control/admin/merchant/PayPalMerchantGateway.sbm -->
+<call draw_js("/common/JS/attachment.js")>
+
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form name="frmPayPalMGmain" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/PayPalMerchantGateway.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+<call draw_table_header("2", lang.admin.epayment.paypalmerchantgateway)>
+<if merchant>
+<assign vTITLE=merchant.TITLE>
+<assign vdescription="lang.admin.epayment.paypalmerchantgateway">
+<assign vcurrency=merchant.currency>
+<assign vapiUserName=merchant.apiUserName>
+<assign vapiPassword=merchant.apiPassword>
+<assign vcertificateFile=merchant.mg_upload_file_cert>
+<assign vprivateKeyPassword=merchant.privateKeyPassword>
+<assign mid=request.mid>
+<else>
+<assign vTITLE="Pay Pal">
+<assign vdescription="lang.admin.epayment.paypalmerchantgateway">
+<assign vcurrency="">
+<assign vapiUserName="">
+<assign vapiPassword="">
+<assign vcertificateFile="">
+<assign vprivateKeyPassword="">
+<assign mid="">
+</if>
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="TITLE" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.paypalmerchantgateway}</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.currency)></td><td><select name="currency"><list toolbox.getCurrencies() as curr><option value="${curr.code}" <if curr.code==vcurrency>SELECTED</if>>${curr.name}</list></select></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.paypal_apiUserName)></td><td><input type="text" name="apiUserName" value="${vapiUserName}"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.paypal_apiPassword)></td><td><input type="password" name="apiPassword" value="${vapiPassword}"></td></tr>
+
+<SCRIPT language="Javascript"><!--
+  function addOption(frmName, attsField, value, text) {
+    sel = document.forms[frmName];
+    sel.elements[attsField].value = value.split('|')[0];
+    sel.elements["file_cert_data"].value = text;
+  }
+//--></SCRIPT>
+
+<tr><td><call draw_label(lang.admin.epayment.paypal_certificateFile)></td>
+<td><input type="text" style="background-color: transparent; border: none;color: black;" name="certificateFile0" disabled value="${vcertificateFile}" size="40">
+	<br><input type="button" value="${lang.admin.epayment.button.upload_new_certificate}" onclick="javascript:addAttachments('frmPayPalMGmain','certificateFile0','${config.UPLOADER_URL}','${lang.label.add_attachment}','${lang.tt.select_uploaded_file}');"></td></tr>
+
+
+<input type="hidden" name="file_cert_data" value="${vcertificateFile}">
+
+<tr><td><call draw_label(lang.admin.epayment.paypal_privateKeyPassword)></td><td><input type="password" name="privateKeyPassword" value="${vprivateKeyPassword}"></td></tr>
+<if merchant && merchant.testmode=="on"><assign vtestmode="CHECKED"><else><assign vtestmode=""></if>
+<tr ><td><call draw_label(lang.admin.epayment.test)></td><td><input type=checkbox name="testmode" ${vtestmode}></td></tr>
+<tr ><td colspan=2 class=control_align_center><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+<call draw_table_footer()>
+</form>
+
+<!-- END ./control/admin/merchant/PayPalMerchantGateway.sbm -->

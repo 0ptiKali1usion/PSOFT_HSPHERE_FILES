@@ -1,0 +1,7 @@
+include common.s_hsphere.yafv: vIPAddr, vIPAddrOpt, vIPMask, vIPMaskOpt, vIPTag, vIPTagOpt, vDescription, vAlias, vIntegerRequired, vIPPart, vLocalDir, vNetworkDevice, vIPSubnet;
+
+regexp vDomainName= "([a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]\.)+[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9]", maxlength="255", fail=yafv.vDomainName.fail;
+
+regexp vHomeDir =   "\.{3,}|\.*[\w\+\-][\w.\+\-]*", fail=yafv.vHomeDir.fail;
+
+regexp vWinPathWithSlash = "[A-Za-z]:(([\/\\\w]+)[^\\]*)+",  fail=yafv.vWinPath.fail;

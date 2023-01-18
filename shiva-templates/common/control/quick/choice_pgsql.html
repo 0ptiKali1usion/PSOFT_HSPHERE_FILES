@@ -1,0 +1,86 @@
+<!-- BEGIN ./quick/control/choice_pgsql.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+<assign platform_type = unixuser.host.platform_type>
+
+<assign pgsql=account.getChild("pgsql")>
+<call draw_tooltip()>
+
+<!--Table with pgsql data -->
+<if pgsql>
+<call prepare_table_header("2", lang.label.pgsql)>
+<call add_table_header_help("user-pgsql-dblist_h","")>
+<call draw_table_header_prepared()>
+<assign host=pgsql.host>
+<tr >
+<td><call draw_label(lang.label.hostname)>&nbsp;<call draw_help("user-pgsql-hostname","")></td>
+<td><call draw_label(pgsql.host.name+" ("+toolbox.int2ext(pgsql.host.ip)+")")></td>
+</tr>
+<tr >
+<td><call draw_label(lang.label.port_number)>&nbsp;<call draw_help("user-pgsql-port","")></td>
+<td><call draw_label("5432")></td>
+</tr>
+<call draw_table_footer()>
+</if>
+<!--End of table with pgsql data -->
+&nbsp;
+<!--Table with databases -->
+<assign users = pgsql.findChildren("pgsqluser")>
+<if pgsql && users>
+<call prepare_table_header("5", lang.pgsql.db.header)>
+<call add_table_header_help("user-pgsql-dblist_h","")>
+<call draw_table_header_prepared()>
+
+<assign databases=pgsql.getChildren("pgsqldatabase")>
+<tr >
+    <td>&nbsp;</td>
+    <td><call draw_label_bold(lang.label.database_name)></td>
+    <td><call draw_label_bold(lang.pgsql.eddb.dbdescr)></td>
+    <td><call draw_label_bold(lang.pgsql.db.dbowner)></td>
+    <td   width="1%"><call draw_label_bold(lang.label.control)></td>
+</tr>
+<list databases as database>
+<tr >
+    <td width="1%" class="control_align_center"><call draw_tt_link(database, template_name)></td>
+    <td><call draw_link(config.CLIENT_CP_URL+"?template_name=PGSQL/edit_database.html"+"&db_id="+database+"&dtemplate="+dtemplate,database.db_name)></td>
+    <td class="control_align_center" ><call draw_label(database.db_description)></td>
+    <td class="control_align_center" ><call draw_label(database.db_owner)></td>
+    <td width="10%" nowrap><call draw_edit(config.CLIENT_CP_URL+"?template_name=PGSQL/edit_database.html"+"&db_id="+database+"&dtemplate="+dtemplate, lang.pgsql.db.edit)><call disableNewWarn(pgsql,database)></td>
+</tr>
+</list>
+<tr>
+  <td colspan="5" class="control_align_center"><call draw_label_bold(lang.label.adddb)><call draw_add(config.CLIENT_CP_URL+"?template_name=PGSQL/add_database.html"+"&stemplate="+template+"&ftemplate="+template+"&dtemplate="+dtemplate, lang.pgsql.db.add)></td>
+</tr>
+<call draw_table_footer()>
+</if>
+<!--End of table with databases -->
+&nbsp;
+<!--Table with users -->
+<call prepare_table_header("2", lang.pgsql.users.header)>
+<call add_table_header_help("user-pgsql-usermanag","")>
+<call draw_table_header_prepared()>
+
+<if pgsql && users>
+<tr >
+  <td colspan="2"><call draw_label(lang.pgsql.users.text)></td>
+</tr>
+<tr >
+<td><call draw_label_bold(lang.label.user)></td>
+<td><call draw_label_bold(lang.label.control)></td>
+</tr>
+<list users as user>
+<tr >
+<td><call draw_label(user.name)></td>
+<td width="10%" nowrap><call draw_change(config.CLIENT_CP_URL+"?template_name=PGSQL/change_user_pswd.html"+"&db_id="+database+"&user_id="+user+"&stemplate="+template+"&ftemplate="+template,lang.pgsql.users.changepsw)><if !user.isDBOwner()><call disableNewWarn(pgsql,user)></if></td>
+</tr>
+</list>
+</if>
+<tr >
+<td colspan="2" class="control_align_center"><call draw_label_bold(lang.pgsql.users.user)><call draw_add(config.CLIENT_CP_URL+"?template_name=PGSQL/add_user.html"+"&dtemplate="+dtemplate, lang.pgsql.users.adduser)></td>
+</tr>
+<call draw_table_footer()>
+<!--End of table with users -->
+
+<!-- END ./quick/control/choice_pgsql.html  -->
+

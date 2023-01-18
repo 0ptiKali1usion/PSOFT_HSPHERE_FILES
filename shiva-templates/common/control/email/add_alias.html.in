@@ -1,0 +1,45 @@
+<!-- BEGIN ./email/add_alias.html.in  -->
+<assign mail_domain = account.getResource( request.rid )>
+<call draw_tooltip()>
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" name="f_aliases" method="POST" check! accept-charset="UTF-8">
+<call draw_table_header("3", lang.email.addalias.header)>
+
+<tr>
+  <td>
+    <input type="hidden" name="template_name" value="submit/email/create_alias.sbm">
+    <input type="hidden" name="rid" value="${mail_domain}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="md_id" value="${mail_domain}">
+    <input type="hidden" name="sc_page" value="${request.sc_page}">
+    &nbsp;
+  </td>
+  <td><call draw_label(lang.email.local_adr)></td>
+  <td><input type="text" name="local" value="${local}"  label="${lang.email.local_adr}" check="vLocalEmail"><call draw_label("@"+mail_domain.name)></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><call draw_label(lang.email.addalias.mbox)></td>
+  <td>
+<select name="foreign">
+<list mail_domain.getChildren("mailbox")  as mailbox>
+<if vforeign==mailbox.email><assign v_sel = "SELECTED"><else><assign v_sel = ""></if>
+<option ${v_sel} value="${mailbox.email}">${mailbox.email}</option>
+</list>
+</select><call draw_label("@"+mail_domain.name)>
+</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><call draw_label(lang.label.comment)></td>
+  <td><input type="text" name="description" value="${description}"></td>
+</tr>
+<tr>
+  <td class="control_align_center" ><call draw_tt_link(mail_domain,"")></td>
+  <td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/add_alias.html.in  -->

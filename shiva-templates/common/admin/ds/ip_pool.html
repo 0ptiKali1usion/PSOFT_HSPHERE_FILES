@@ -1,0 +1,22 @@
+<!-- BEGIN ./admin/ds/ip_pool.html  -->
+<include "functions">
+<assign template="admin/ds/ip_pool.html">
+<if request.mode == "standalone">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=${charset}">
+<call define_css()>
+</HEAD>
+<BODY>
+<else>
+<call draw_menu("ds_ip_pool")>
+</if>
+<include "control/admin/ds/ip_pool.html">
+<if request.mode == "standalone">
+</BODY>
+</HTML>
+<else>
+<call bottom()>
+</if>
+<!-- END ./admin/ds/ip_pool.html -->
+

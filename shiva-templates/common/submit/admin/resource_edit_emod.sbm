@@ -1,0 +1,27 @@
+<compress><assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<list request.names as name>
+    <if name>
+	<assign mod=rtype.mods[name]>
+    <else>
+	<assign mod=rtype.modDefault>
+    </if>
+    <if mod>
+	<if request["mod_"+name]=="0">
+	    <assign result=mod.enable()>
+	<else>
+	    <assign result=mod.disable()>
+	</if>
+	<if result.status!="OK">
+           <assign unsuccess="1">
+           <assign res=session.addMessage(result.msg)>
+        </if>
+    </if>
+</list>
+</compress>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

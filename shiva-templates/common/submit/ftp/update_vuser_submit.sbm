@@ -1,0 +1,21 @@
+<!-- BEGIN ./ftp/update_vuser_submit.sbm  -->
+<assign result=yafv.checkall(
+	yafv.common.s_ftp.vPassword(lang.label.password, request.password),
+        yafv.common.s_ftp.vPassword2(lang.label.password2, request.password, request.password2)
+)>
+<if result.status=="OK">
+  <assign result=account.getResource(request.uid).update(request.password)>
+  <if result.status!="OK">
+    <assign failure="1">
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+    <assign failure="1">
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if !failure>
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+<!--  END ./ftp/update_vuser_submit.sbm  -->

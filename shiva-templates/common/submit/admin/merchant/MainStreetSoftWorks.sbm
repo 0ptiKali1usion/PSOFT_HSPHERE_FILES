@@ -1,0 +1,10 @@
+<!-- BEGIN ./admin/merchant/MainStreetSoftWorks.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "USERNAME", request.username, "PASSWD", request.password,  "SERVER", request.server, "PORT", request.port, "TIMEOUT", request.timeout, "CERTFILE", request.certpath, "CLASS_NAME", "psoft.epayment.MainStreetSoftWorks", "TEMPLATE", "admin/merchant/MainStreetSoftWorks.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "USERNAME", request.username, "PASSWD", request.password, "SERVER", request.server, "PORT", request.port, "TIMEOUT", request.timeout, "CERTFILE", request.certpath, "CLASS_NAME", "psoft.epayment.MainStreetSoftWorks", "TEMPLATE", "admin/merchant/MainStreetSoftWorks.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+
+<!-- END ./admin/merchant/MainStreetSoftWorks.sbm -->

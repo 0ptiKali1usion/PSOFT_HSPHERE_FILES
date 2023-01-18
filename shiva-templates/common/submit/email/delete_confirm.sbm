@@ -1,0 +1,15 @@
+<!-- BEGIN ./email/delete_confirm.sbm  -->
+<assign resource= account.getResource( request.did )>
+<assign price = account.getResource(request.did).estimateDelete()>
+<if price.status!="ERROR">
+  <if (price.free=="0") || (request.warn=="1")>
+    <include "billing/mail_delete_confirm.html">
+  <else>
+    <include request.dtemplate>
+  </if>
+<else>
+  <assign res = session.addMessage(lang.msg.misc_res_failed_delete)>
+  <assign res = session.addMessage(price.msg)> 
+  <include request.ftemplate>
+</if>
+<!--  END ./email/delete_confirm.sbm  -->

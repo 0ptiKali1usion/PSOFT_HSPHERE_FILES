@@ -1,0 +1,30 @@
+<!-- BEGIN ./submit/tt/new_tt_save.sbm  -->
+<assign result=yafv.checkall(
+yafv.common.s_tt.vStringReq(lang.label.name, request.name))>
+<if result.status=="OK">
+   <assign ttadm=account.getChild("ttadmin")>
+   	<if request.flagnew><assign flag1 = "1"><else><assign flag1 = "0"></if>
+   	<if request.flagclose><assign flag2 = "1"><else><assign flag2 = "0"></if>	
+   	<assign result = ttadm.createQueue(request.name, "", flag1, flag2, request.newresp, request.closeresp, "0", request.email)>
+   	<if result.status=="OK">
+      	    <assign success="1">
+   	<else>
+      	    <assign res=session.addMessage(result.msg)>
+   	</if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+  <include "tt/config_tt.html">
+<else>
+    <assign vemail=toolbox.html_encode(request.email)>
+    <assign vname=toolbox.html_encode(request.name)>
+    <assign vautonew=toolbox.html_encode(request.autonew)>
+    <assign vautoclose=toolbox.html_encode(request.autoclose)>    
+    <assign vsndnew=toolbox.html_encode(request.flagnew)>
+    <assign vsndclose=toolbox.html_encode(request.flagclose)>    
+    <include "tt/new_queue_form.html">        
+</if>
+
+<!--  END ./submit/tt/new_tt_save.sbm  -->

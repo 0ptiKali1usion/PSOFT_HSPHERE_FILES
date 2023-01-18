@@ -1,0 +1,16 @@
+<center>Instant Access Domain Alias</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; Allows users to access their domains from the Internet using provider's domain name. 
+<br>
+  You can use instant domain alias for the first several days after the domain name is registered, but isn't yet available. 
+<br>
+  Domains with dedicated IP do not need this feature, as they are accessible at their IP address.
+<br>
+To enable such instant access, click the OFF button to turn it ON next to the <i>Instant access domain alias</i> field. 
+The name of the alias appears.
+  <br>
+  An example of an Instant Access Domain Alias would be the following:<br>
+  u728.d6.providersdomain.com, where:<br>
+  u728 is the code of the user, and<br>
+  d6 is the code of the box where the site is located. <br>
+

@@ -1,0 +1,39 @@
+<?xml encoding="UTF-8"?>
+  <!ELEMENT config (type+, plan+)>
+  <!ELEMENT type (#PCDATA)>
+  <!ELEMENT plan (access*, value+, resource+)>
+  <!ELEMENT access (#PCDATA)>
+  <!ELEMENT value (#PCDATA)>
+  <!ELEMENT resource (value*, mod*)>
+  <!ELEMENT mod (initvalue*, initresource*)>
+  <!ELEMENT initvalue (#PCDATA)>
+  <!ELEMENT initresource (#PCDATA)>
+
+  <!ATTLIST type id CDATA #REQUIRED>
+  <!ATTLIST type name CDATA #REQUIRED>
+  <!ATTLIST type price CDATA "">
+  <!ATTLIST type rprice CDATA "">
+  <!ATTLIST type required CDATA "0">
+  <!ATTLIST type priority CDATA "0">
+  <!ATTLIST plan id CDATA #REQUIRED>
+  <!ATTLIST plan disabled CDATA "0">
+  <!ATTLIST plan description CDATA #REQUIRED>
+  <!ATTLIST plan billable CDATA "1">
+  <!ATTLIST plan cinfo CDATA "1">
+  <!ATTLIST plan reseller_id CDATA "1">
+  <!ATTLIST plan deleted CDATA "0">
+  <!ATTLIST value name CDATA #REQUIRED>
+  <!ATTLIST resource name CDATA #REQUIRED>
+  <!ATTLIST resource class CDATA #REQUIRED>
+  <!ATTLIST resource disabled CDATA "0">
+  <!ATTLIST mod name CDATA "">
+  <!ATTLIST mod disabled CDATA "0">
+
+  <!-- type in initvalue can be "static"|"field"|"absolute"|"relative"|"hostgroup" -->
+  <!ATTLIST initvalue type CDATA "static">
+
+  <!ATTLIST initvalue label CDATA "no label">
+  <!ATTLIST initresource name CDATA #REQUIRED>
+<!-- attribute was #REQUIRED, but missing somewhere in config.xml, bug ? -->
+  <!ATTLIST initresource mod CDATA "">
+  <!ATTLIST initresource disabled CDATA "0">

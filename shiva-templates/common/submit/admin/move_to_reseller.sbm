@@ -1,0 +1,17 @@
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+   <assign result = reseller_su.moveUserToReseller(request.user_id, request.reseller_id)>
+   <if result.status!="OK">
+     <assign res=session.addMessage(result.msg)>
+     <assign failure="1">
+   </if>
+<else>
+   <assign res=session.addMessage(lang.admin.not_authorized)>
+   <assign failure="1">
+</if>
+<if !failure>
+   <include request.stemplate> 
+<else>
+   <include request.ftemplate>
+</if>
+

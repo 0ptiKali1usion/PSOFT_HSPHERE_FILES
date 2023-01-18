@@ -1,0 +1,22 @@
+<!-- BEGIN: common/migrator/new_job.html -->
+<include "functions">
+<call START_PAGE("migrator/new_job.html", "migration")>
+<call draw_tooltip()>
+<assign mtype=request.mtype>
+<if mtype=="raq">
+<assign mgr=obj.raq4_migrator>
+</if>
+<if mtype=="cpanel">
+<assign mgr=obj.cpanel_migrator>
+</if>
+<assign result=mgr.start()>
+
+<call draw_table_header("2", lang.label.import_users)>
+<tr><td colspan="2">
+<call draw_label(lang.label.import_started(result.job_id))><br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=migrator/process.html&job_id="+result.job_id+"&mtype="+mtype, result.job_id)>
+</td></tr>
+<call draw_table_footer()>
+
+<call END_PAGE()>
+<!-- END: common/migrator/new_job.html -->

@@ -1,0 +1,35 @@
+<!-- BEGIN ./vps/change_hardcpulimit.html.in  -->
+<yafv s_vps>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.vps.changehardcpulimit.header)>
+
+<tr>
+    <td><call draw_label(lang.vps.changememlimit.newquota)></td>
+<td>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_hardcpulimit" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="template_name" value="submit/vps/change_hardcpulimit_check.sbm">
+<input type="hidden" name="next_template" value="submit/vps/change_hardcpulimit.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="vps_hardcpu_limit">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<if ! vsize>
+<assign vps=account.getChild("vps")>
+<assign quota = vps.getChild("vps_hardcpu_limit")>
+<assign vsize=quota.limit>
+</if>
+<input type="text" name="size"  label="${lang.label.quota}" check="vQuota" size="5" value="${vsize}"></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>
+    <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./vps/change_hardcpulimit.html.in  -->

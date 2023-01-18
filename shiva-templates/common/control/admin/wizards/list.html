@@ -1,0 +1,43 @@
+<!-- BEGIN ./control/admin/wizards/list.html  -->
+<call draw_tooltip()>
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign isReseller=admin.isReseller()>
+
+<call draw_table_header("2", lang.admin.planwizs.header)>
+
+<list admin.getWizards().wizard as wizard>
+<assign wiz=admin.getWizard(wizard("name"))>
+<assign isConfigured="1">
+<list wiz.depends["*"] as dep>
+<switch dep.node_name>
+<case "platform">
+<if admin.isResourceDisabled(dep)><assign isConfigured=""></if>
+<break>
+<case "LogicalGroup">
+<if !admin.thereAreAvailableGroups(dep)><assign isConfigured=""></if>
+<break>
+<case "resource">
+<if admin.isResourceDisabled(dep)><assign isConfigured=""></if>
+<break>
+</switch>
+</list>
+<if !wizard("masterAdminOnly") || !isReseller>
+<call draw_wizard_line(isConfigured, !isReseller, config.CLIENT_CP_URL+"?template_name=admin/wizards/create.html&wizard="+wizard("name"),wizard("description"))>
+</if>
+</list>
+<call draw_wizard_line(!isReseller, "", config.CLIENT_CP_URL+"?template_name=plan_wizard/reseller.html", "admin.planwizs.resellerwiz")>
+
+<call draw_table_footer()>
+
+<function draw_wizard_line(isConfigured, isAlwaysDrawable, wizardURL, label)>
+<if isConfigured || isAlwaysDrawable>
+  <tr >
+  <td width="85%"><call draw_label(lang[label])></td>
+  <td width="15%" class="control_align_center"><if isConfigured><call draw_select(wizardURL, lang[label])><else><call draw_label(lang.planwizard.support_unavailable)></if></td>
+</tr>
+</if>
+</function>
+
+</if>
+<!--  END ./control/admin/wizards/list.html  -->

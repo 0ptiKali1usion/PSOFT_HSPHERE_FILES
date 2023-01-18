@@ -1,0 +1,79 @@
+<assign admin=account.getChild("admin")>
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+
+
+<call draw_table_header("2", lang.admin.search_del_header)>
+
+
+<tr><td><call draw_label(lang.label.ptype)></td>
+<assign processors = toolbox.getGateways().processors.processor>
+ <td><select name="payment" size="1">
+  <option value="%">${lang.label.any}
+  <option value="CC">${lang.label.cc}
+  <option value="Check">${lang.label.check}
+  <option value="none">${lang.label.none}
+  <option value="Trial">${lang.label.trial}
+  <list processors as processor>
+  <assign processorname=processor("name")>
+  <assign bildescription=lang[processor("description")]>
+  <option value=${processorname}>${bildescription}
+  </list>
+</select>
+</td></tr>
+<tr><td><call draw_label(lang.label.plan)></td>
+ <td>
+<select name="plan" size="1">
+<option value="%">Any
+<list admin.plans as plan>
+<option value="${plan.id}">${plan.description}
+</list>
+</select>
+</td></tr>
+<tr><td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id" size="8">
+</td></tr>
+<tr><td><call draw_label(lang.label.email)></td>
+ <td><input type="text" name="email">
+</td></tr>
+<tr>
+ <td><call draw_label(lang.admin.mailtype)></td>
+ <td><input type="radio" name="sc_bci_email" value="ci" checked><call draw_label(lang.admin.ci)>&nbsp;&nbsp;<input type="radio" name="sc_bci_email" value="bi"><call draw_label(lang.admin.bi)></td>
+</tr>
+<tr><td  colspan="2" class="control_align_center"><call draw_label_bold(lang.admin.regdate)></td></tr>
+<tr>
+ <td><call draw_label(lang.label.from)></td>
+ <td><input type="text" name="r_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","r_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td><input type="text" name="r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","r_to","")></td>
+</tr>
+<tr><td  colspan="2" class="control_align_center"><call draw_label_bold(lang.admin.searchdel.del)></td></tr>
+<tr>
+ <td><call draw_label(lang.label.from)></td>
+ <td><input type="text" name="d_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","d_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td><input type="text" name="d_to" size="10" value="">&nbsp;<call draw_calendar("f_search","d_to","")></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+</td>
+</tr>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/deleted_accounts.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+</if>

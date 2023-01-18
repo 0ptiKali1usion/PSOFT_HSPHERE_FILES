@@ -1,0 +1,49 @@
+<!-- BEGIN ./vps/change_filelimit.sbm  -->
+<if size==""><assign size=request.size></if>
+<if rid==""><assign rid=request.rid></if>
+<assign result=yafv.common.s_vps.vQuota(lang.vps.filelimit.label, size)>
+<if result.status == "OK">
+  <assign vps=account.getResource(rid)>
+  <assign filelimit=vps.getChild("vps_file_limit")>
+  <assign filelimits=vps.findChildren("vps_file_limit")>
+  <if filelimit>
+   <if toolbox.gt(filelimit.used,size)=="1">
+       <assign res=session.addMessage(toolbox.compose(
+         lang.vps.msg.failed_set_smallfilelimit, size, filelimit.used))>
+       <assign failure="1">
+   <else>
+          ${toolbox.setBillingNote(lang.vps.billingnote.change_filelimit(filelimit.limit, size))}
+	     <list filelimits as filelimit>
+	     	<assign result=filelimit.delete>
+       	     	<if result.status!="OK">
+		  <assign failure="1">
+		  <assign res=session.addMessage(result.msg)>
+	      	</if>
+	     </list>
+          <assign new_filelimit=vps.addChild("vps_file_limit","",size)>
+          <if new_filelimit.status!="OK">
+	     <assign failure="1">
+	     <assign res=session.addMessage(result.msg)>
+          </if>
+	  
+   </if>
+  <else>
+    <assign result=vps.addChild("vps_file_limit","",size)>
+    <if result.status!="OK">
+      <assign failure="1">
+      <assign res=session.addMessage(result.msg)>
+    </if>
+  </if>
+<else>
+   <assign failure="1">
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if silent=="">
+    <if failure>
+    	<assign vsize=toolbox.html_encode(request.size)>
+    	<include request.ftemplate>
+    <else>
+    	<include request.stemplate>
+    </if>
+</if>
+<!--  END ./vps/change_filelimit.sbm  -->

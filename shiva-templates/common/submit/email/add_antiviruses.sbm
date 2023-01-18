@@ -1,0 +1,19 @@
+<!-- BEGIN ./submit/email/add_antiviruses.sbm  -->
+
+<assign mail_domain=account.getResource(request.md_id)>
+<assign result=mail_domain.addAntiVirusResources(request.range)>
+<if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_created, lang.label.antiviruses, ""))>
+<else>
+    <assign res=session.addMessage(toolbox.compose(
+          lang.msg.name_res_failed_create, lang.label.antiviruses, ""))>
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./submit/email/add_antiviruses.sbm  -->

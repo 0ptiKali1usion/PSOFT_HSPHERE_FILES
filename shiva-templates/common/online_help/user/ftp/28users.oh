@@ -1,0 +1,4 @@
+<center>Authorized Virtual FTP Users</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+List of the guest users authorized to use your FTP directory. To add guest users who will be authorized to use your FTP directory click the <i>Add</i> icon. All users should have their own logins and passwords.To change password for a specific guest user, click this <i>user's name</i> link or the <i>Change</i> icon. 

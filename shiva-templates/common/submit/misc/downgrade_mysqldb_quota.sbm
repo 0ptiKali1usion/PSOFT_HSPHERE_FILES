@@ -1,0 +1,17 @@
+<if account.plan.isResourceAvailable("mysqldb_quota")>
+<assign rtype = plans[plan_id].getResourceType("mysqldb_quota")>
+<assign free_new=rtype.values["_FREE_UNITS_"+periodId]>
+<if free_new=="">    
+     <assign free_new=rtype.values["_FREE_UNITS_"]>
+</if>
+<assign mydbs=account.findAllChildren("MySQLDatabase")>
+<list mydbs as db_id>
+    <assign old_quota=db_id.getChild("mysqldb_quota")>
+    <assign r_quota=toolbox.max(toolbox.ceil(old_quota.usedMb),free_new)>
+    <if toolbox.eq(old_quota.limitMb,r_quota)!="1">
+    	<assign silent="1">
+	<!--${db_id} ${silent} ${r_quota}-->
+    	<include "submit/MySQL/change_db_quota.sbm">
+    </if>
+</list>
+</if>

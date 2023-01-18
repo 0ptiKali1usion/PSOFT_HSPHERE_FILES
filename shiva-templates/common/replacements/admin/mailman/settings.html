@@ -1,0 +1,13 @@
+<!-- BEGIN ./mailman/settings.html  -->
+<assign check_admin_ci = yafv.checkall(
+ yafv.common.s_admin.vPhoneCountry(lang.bci.phone, settings.phone, settings.country),
+ yafv.common.s_admin.vFaxCountry(lang.bci.phone, settings.fax, settings.country))>
+<if check_admin_ci.status != "OK">
+  <assign res = session.addMessage(lang.admin.info.ci_data_incorrect)>
+</if>
+<assign template="mailman/settings.html">
+<include "functions">
+<call draw_menu("mailman-list")>
+<include "control/mailman/settings.html">
+<call bottom()>
+<!--  END ./mailman/settings.html  -->

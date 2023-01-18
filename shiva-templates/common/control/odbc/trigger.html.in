@@ -1,0 +1,11 @@
+<td><call draw_label(Name)></td>
+<if Value == "0">
+    <assign vchecked1="">
+    <assign vchecked2="CHECKED">
+<else>
+   <assign vchecked1="CHECKED">
+   <assign vchecked2="">
+</if>
+<td    NOWRAP >&nbsp;<input type="radio" name="${Name}" value="1" ${vchecked1}><call draw_label("on")><br>
+&nbsp;<input type="radio" name="${Name}" value="0" ${vchecked2}><call draw_label("off")></td>
+<td><call draw_label(Description)></td>

@@ -1,0 +1,14 @@
+<assign result=yafv.checkall(
+    yafv.common.s_signup.vDomain_Name(lang.vps.hostname, request.vpshostname),
+    yafv.common.s_signup.vPassword1(lang.label.password, request.root_passwd, "root"),
+    yafv.common.s_signup.vPassword2(lang.label.password2, request.root_passwd, request.root_passwd2)
+    )>
+<if (result.status!="OK") || (request.back!="")>
+    <list result.msgs as msg>
+        <assign res=session.addMessage(msg)>
+    </list>
+    <assign vpshostname=toolbox.html_encode(request.vpshostname)>
+    <include "signup/vps.html">
+<else>
+    <include "signup/end.html">
+</if>

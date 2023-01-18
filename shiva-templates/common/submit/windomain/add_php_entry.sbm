@@ -1,0 +1,24 @@
+<!-- BEGIN ./windomain/add_php_entry.sbm  -->
+<assign result=yafv.checkall(
+    yafv.common.s_windomain.vfileExt(lang.label.file_ext, request.ext))>
+<if result.status=="OK">
+  <assign hosting=account.getResource(request.rid)>
+  <assign php=hosting.getChild("php3")>
+  <assign result=php.addChild("php3entry", "", request.ext, request.mime)>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.php_ext_added,request.mime,request.ext))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vext=toolbox.html_encode(request.ext)>
+    <include request.ftemplate>
+</if>
+<!--  END ./windomain/add_php_entry.sbm  -->

@@ -1,0 +1,23 @@
+<!-- BEGIN ./eeman/tp_problem_solved.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign tp = eeman.getTransferProcess(request.tp_id)>
+<if tp>
+  <assign res=tp.clearTT(request.hdr_id)>
+  <if res.status!="OK">
+    <assign failure="1">
+  </if>
+<else>
+  <assign failure="1">
+</if>
+
+<if !failure>
+   <if tp.errorsDetected>
+     <include request.stemplate>
+   <else>
+     <include request.next_template>
+   </if>
+<else>
+   <assign res=session.addMessage(result.msg)>
+   <include request.ftemplate>
+</if>
+<!--  END ./eeman/tp_problem_solved.sbm  -->

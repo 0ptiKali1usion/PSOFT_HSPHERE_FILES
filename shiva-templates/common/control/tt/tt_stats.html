@@ -1,0 +1,51 @@
+<!-- BEGIN ./control/tt/tt_stats.html  -->
+<call draw_tooltip()>
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+
+
+<if request.arid><assign report = viewer.getAdvReportById(request.arid)>
+<call advReportInit(report)>
+<assign report_ok="1">
+<else>
+
+<assign report = viewer.getAdvReport("ttstatistics")>
+<assign result = report()>
+<if result.status != "OK"><assign report_ok="0">${session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))}<else><assign report_ok="1"><assign res = report.setStep(step)></if>
+
+<include "control/tt/ttfunctions.fn">
+
+<call gain_sc_params(report.currentPage)>
+
+<call draw_table_header(2, lang.tt.statistics)>
+<tr>
+  <td><call draw_label_bold(lang.tt.all.report)> </td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_all)> </td>
+</tr>
+<tr>
+  <td><call draw_label_bold(lang.tt.unassigned.report)></td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_unassigned)></td>
+</tr> 
+<tr>
+  <td><call draw_label_bold(lang.tt.today.report)></td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_today)></td>
+</tr>
+<tr>
+  <td><call draw_label_bold(lang.tt.yesterday.report)></td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_yesterday)></td>
+</tr> 
+<tr>
+  <td><call draw_label_bold(lang.tt.week.report)></td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_week)></td>
+</tr>
+<tr>
+  <td><call draw_label_bold(lang.tt.month.report)></td>
+  <td align="center" width="15%"><call draw_label_bold(report.count_month)></td>
+</tr>
+<call draw_table_footer()>
+</if>
+<!--  END ./control/tt/tt_stats.html  -->

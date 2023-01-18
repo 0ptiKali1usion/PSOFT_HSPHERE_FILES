@@ -1,0 +1,6 @@
+<center> opensmtptimeout </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Allows to set open relay lifetime, in minutes, after POP-before-SMTP authentication.
+<br>Default: 180
+<br>

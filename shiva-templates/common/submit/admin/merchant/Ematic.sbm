@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/Ematic.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "USERNAME", request.login, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.Ematic", "TEMPLATE", "admin/merchant/Ematic.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "PATH", request.path, "USERNAME", request.login, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.Ematic", "TEMPLATE", "admin/merchant/Ematic.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/Ematic.sbm -->

@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/admin/mod_sign_dump.sbm -->
+<assign signup = account.getChild("signupadm")>
+<assign result = signup.dumpFakeData(request.rid)>
+<if result.status=="OK"> 
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_deleted,lang.label.request,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_delete,lang.label.request,""))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/mod_sign_dump.sbm -->

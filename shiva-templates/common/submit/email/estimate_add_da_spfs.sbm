@@ -1,0 +1,25 @@
+<!-- BEGIN ./email/estimate_add_da_spfs.sbm  -->
+<assign amount=account.getResource(request.mail_service).estimateNewDomainAliasSPFAmount()>
+<if amount=="0">
+  <assign stype=account.plan.getResourceType("spf").description>
+  <assign res=session.addMessage(toolbox.compose(lang.email.decline_mass_create,add_range,stype))>
+  <include request.ftemplate>
+<else>
+  <if amount=="1">
+    <assign price=account.getResource(request.md_id).estimateCreate("spf","")>
+  <else>
+    <assign price=account.getResource(request.md_id).estimateCreateCopies("spf",amount,"")>
+  </if>
+  <if price.status!="ERROR">
+    <if price.free=="0">
+      <include "billing/add_da_spfs.html">
+    <else>	
+      <include "email/update_spf.html">
+    </if>
+  <else>
+    <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+    <assign res=session.addMessage(price.msg)>
+    <include request.ftemplate>
+  </if>
+</if>
+<!--  END ./email/estimate_add_da_spfs.sbm  -->

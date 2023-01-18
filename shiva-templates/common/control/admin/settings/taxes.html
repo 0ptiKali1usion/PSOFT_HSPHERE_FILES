@@ -1,0 +1,59 @@
+<!-- BEGIN ./control/admin/settings/taxes.html -->
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+<if admin>
+
+<call draw_table_header("4", lang.admin.settings.taxes.header)>
+
+<tr>
+<td class="control_header" ><call draw_header(lang.admin.settings.taxes.description)></td>
+<td class="control_header" ><call draw_header(lang.admin.settings.taxes.region)></td>
+<td class="control_header" ><call draw_header(lang.admin.settings.taxes.percent)></td>
+<td class="control_header" ><call draw_header(lang.admin.settings.taxes.controls)></td>
+</tr>
+
+<if toolbox.taxes>
+<list toolbox.taxes.KEYS as tax_id>
+<assign tax=toolbox.taxes[tax_id]>
+<!--${tax_id}-${toolbox.taxes[tax_id].descrition}-${tax.id}-->
+<if !tax.deleted>
+<tr >
+    <td   width="60%"><call draw_label(tax.description)></td>
+    <td   widht="20%"><switch tax.flag><case "0"><call draw_label(lang.label.any)><break>
+<case "1"><call draw_label(tax.country)><break>
+<case "2"><call draw_label(tax.country+"/"+tax.state)><break>
+<case "3"><call draw_label(lang.label.outside+" "+tax.country)><break>
+<case "4"><call draw_label(tax.country+"/"+lang.label.outside+" "+tax.state)><break></switch>
+</td>
+    <td class="control_align_right" width="10%" NOWRAP><call draw_label(tax.percent+" %")></td>
+    <td class="control_align_center" width="10%" NOWRAP><call draw_delete(config.CLIENT_CP_URL+"?tax_id="+tax.id+"&template_name=submit/admin/settings/tax_delete.sbm&stemplate="+template+"&ftemplate="+template, lang.admin.taxes.del)></td>
+</tr>
+</if>
+</list>
+</if>
+<tr >
+<td class="control_align_center" colspan="4"><call draw_add(config.CLIENT_CP_URL+"?template_name=admin/settings/tax_add.html&stemplate="+template+"&ftemplate="+template, lang.admin.taxes.add)></td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+<form name="f_tax_options" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/tax_options.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("2", lang.admin.settings.taxes.optional_h)>
+
+<if settings.allow_tax_exemption == "1"><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+<tr>
+<td  width="60%"><call draw_label(lang.admin.settings.taxes.allow_tax_exempt)></td>
+<td  valign="middle">
+  <input type="checkbox" name="allow_tax_exemption" value="1" ${vchecked}>&nbsp;
+  <input type="submit" name="submit" value="${lang.button.submit}">
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/admin/settings/taxes.html -->

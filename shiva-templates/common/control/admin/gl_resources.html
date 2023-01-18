@@ -1,0 +1,170 @@
+<!-- BEGIN ./control/admin/gl_resources.html  -->
+<function addJsDependent(dep_name, collection)>
+  <compress>
+  <assign gl_or_list = "">
+  <list collection as and_set>
+    <assign gl_and_list = "">
+    <list and_set as req_res>
+      <if gl_and_list != ""><assign gl_and_list = gl_and_list + ", '" + req_res.name + "'">
+      <else><assign gl_and_list = "new Array('" + req_res.name + "'">
+      </if>
+    </list>
+    <if gl_and_list != "">
+      <if gl_or_list != ""><assign gl_or_list = gl_or_list + ", " + gl_and_list + ")">
+      <else><assign gl_or_list = "new Array(" + gl_and_list + ")">
+      </if>
+    </if>
+  </list>
+  </compress>
+  <if gl_or_list != "">
+    <script language="javascript">dependentRes["${dep_name}"] = ${gl_or_list});</script>
+  <else>
+    <script language="javascript">dependentRes["${dep_name}"] = null;</script>
+  </if>
+</function>
+
+<function showGlRequiredList(collection)>
+  <compress>
+  <assign gl_or_list = "">
+  <list collection as and_set>
+    <assign gl_and_list = "">
+    <list and_set as object>
+      <if object.label != "">
+         <assign label = lang[object.label]>
+      <else>
+         <assign label = object.description>
+      </if>
+      <if gl_and_list != ""><assign gl_and_list = gl_and_list + ", " + label>
+      <else><assign gl_and_list = label>
+      </if>
+    </list>
+    <if gl_or_list != ""><assign gl_or_list = gl_or_list + "; " + gl_and_list>
+    <else><assign gl_or_list = gl_and_list>
+    </if>
+  </list>
+  </compress>
+  <if gl_or_list != ""><call draw_label(lang.admin.gl_resources_requires(gl_or_list))></if>
+</function>
+
+<call draw_tooltip()>
+
+<assign admin = account.getChild("admin")>
+<if admin>
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/gl_resources.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<call draw_table_header("2", lang.admin.globals_h)>
+
+<script language="javascript">
+  var dependentRes = new Array();
+
+  function checkAllDependent(form) {
+    var elements = form.elements;
+    for (var ei = 0; ei < elements.length; ei++) {
+      var thisBox = elements[ei];
+      if ((thisBox.type == "checkbox") && (thisBox.name != null)
+		&& (dependentRes[thisBox.name] != null)) {
+        var collection = dependentRes[thisBox.name];
+        if (collection != null) {
+	  var resetThis = true;
+	  for (var oi = 0; resetThis && (oi < collection.length); oi++) {
+	    resetThis = false;
+	    var andSet = collection[oi];
+	    for (var ai = 0; ai < andSet.length; ai++) {
+	      var elem = form.elements[andSet[ai]];
+	      if ((elem != null) && !elem.checked) {
+		resetThis = true;
+		break;
+	      }
+	    }
+	  }
+	  if (resetThis) thisBox.checked = false;
+        }
+      }
+    }
+  }
+</script>
+
+<list admin.global_sections as section>
+  <if (section.show == "*") || (section.show == "globals")>
+    <if section.label>
+      <tr><td class="control_header" colspan="2"><call draw_header(lang[section.label])></td></tr>
+    </if>
+    <if section.description>
+      <tr><td colspan="2"><call draw_label(lang[section.description])></td></tr>
+    </if>
+    <list section.objects as object>
+      <assign glCollection = admin.getGlobalDependences(object.name)>
+      <call addJsDependent(object.name, glCollection)>
+      <assign name = object.name>
+      <assign dis_status = admin.isResourceDisabled(name)>
+      <if object.show_as_radio == "1">
+        <if dis_status == "3">
+          <tr>
+          <td><call draw_label(lang[object.label])>&nbsp;<call draw_label(lang.admin.gl_unavailable)></td>
+          <td><if !browser.complies("Netscape_-4.99")><input type="radio" name="${name}" value="" DISABLED><else>&nbsp;</if></td>
+          </tr>
+        <else>
+          <if dis_status == ""><assign vchecked1 = "CHECKED"><assign vchecked2 = ""><else><assign vchecked1 = ""><assign vchecked2 = "CHECKED"></if>
+          <tr>
+          <td><call draw_label(lang[object.label_enabled])></td>
+          <td><input type="radio" name="${name}" value="1" ${vchecked1}></td>
+          </tr>
+          <tr>
+          <td><call draw_label(lang[object.label_disabled])</td>
+          <td><input type="radio" name="${name}" value="" ${vchecked2}></td>
+          </tr>
+        </if>
+      <else>
+        <if object.label != "">
+          <assign label = lang[object.label]>
+        <else>
+          <assign label = object.description>
+        </if>
+        <if dis_status == "3">
+          <tr>
+          <td><call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)></td>
+          <td><if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED><else>&nbsp;</if></td>
+          </tr>
+        <else>
+          <if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+          <tr>
+          <td><call draw_label(label)><if glCollection><call showGlRequiredList(glCollection)></if></td>
+          <td><input type="checkbox" name="${name}" value="1" ${vchecked} onClick="checkAllDependent(this.form)"></td>
+          </tr>
+        </if>
+      </if>
+    </list>
+    <list section.sets as set>
+      <assign set_name = set.name>
+      <list set.available_keys as key>
+        <assign dis_status = admin.isSetKeyDisabled(set_name, key)>
+        <assign label = set.getKeyDescription(key)>
+        <assign name = set.prefix + key >
+        <if dis_status == "3">
+          <tr>
+          <td><call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)></td>
+          <td><if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED><else>&nbsp;</if></td>
+          </tr>
+        <else>
+          <if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+          <tr>
+          <td><call draw_label(label)></td>
+          <td><input type="checkbox" name="${name}" value="1" ${vchecked}></td>
+          </tr>
+        </if>
+      </list>
+    </list>
+  </if>
+</list>
+
+<tr>
+<td  class="control_align_center" colspan="2"><input type="submit" name="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</if>
+
+<!--  END ./control/admin/gl_resources.html  -->

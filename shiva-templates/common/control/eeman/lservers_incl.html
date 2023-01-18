@@ -1,0 +1,42 @@
+<!-- BEGIN ./control/eeman/lservers_incl.html  -->
+<if eeman>
+
+<if !has_header>
+<tr><td class="control_header" colspan="4"><call draw_header(lang.eeman.lserversincl.header)></td></tr>
+</if>
+<list lservers as lserver>
+<tr>
+  <td colspan="2" nowrap>
+  <call draw_label(lserver.id)> - 
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/lserver_edit.html&rid="+lserver.id, lserver.name)>
+  </td>
+  <td>
+  <call draw_label(lserver.desc)> 
+  <call draw_label("("+eeman.groupMap[lserver.group]+")")> - 
+  <assign pserver = eeman.getPserver(lserver.pserver)>
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html"+"&rid="+pserver.id,pserver.name)>
+	  <if !lserver.installed>
+      <call draw_popup_note_i("attention", "warning", lang.eeman.service_notinstalled_warn(eeman.groupMap[lserver.group]))>
+	 </if>
+  </td>
+  <td width="5%" nowrap>
+    <call draw_state(lserver.signup=="1", config.CLIENT_CP_URL+"?template_name=submit/eeman/disable_signup.sbm&rid="+lserver.id+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/eeman/enable_signup.sbm&rid="+lserver.id+"&stemplate="+template+"&ftemplate="+template)>
+    <if lserver.infos.used == "0">
+      <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/eeman/del_lserver.sbm&rid="+lserver.id+"&stemplate=eeman/list.html"+"&ftemplate="+template, lang.eeman.lserveredit.remove)>
+    </if>
+  </td>
+</tr>
+</list>
+<tr>
+  <td colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/add_lserver.html", lang.eeman.lserversincl.add)></td>
+  <td colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/eeman/lservers_reload.sbm&stemplate="+template+"&ftemplate="+template, lang.eeman.lserversincl.apply)></td>
+</tr>
+<tr>
+  <td colspan="4">
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/eeman/generate_cust_recs.sbm&ftemplate="+
+        template+"&stemplate="+template+"&action=all",
+        lang.eeman.lserversincl.regen_all_sys_dns_recs)></td>
+</tr>
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/lservers_incl.html  -->

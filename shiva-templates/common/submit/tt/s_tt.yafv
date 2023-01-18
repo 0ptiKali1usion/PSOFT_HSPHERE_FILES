@@ -1,0 +1,1 @@
+include common.s_hsphere.yafv: vEmail, vStringReq, vTTMail(string, boolean), vName; 

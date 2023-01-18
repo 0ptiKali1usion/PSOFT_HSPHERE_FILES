@@ -1,0 +1,30 @@
+<!-- BEGIN ./dns/add_ctxt_submit.sbm  -->
+<assign rid=request.rid>
+<assign check=yafv.checkall(
+  yafv.common.s_dns.vCustomTXTName(lang.label.domain.name,request.dname), 
+  yafv.common.s_dns.vTTL(lang.dns.ttl,request.ttl),
+  yafv.common.s_dns.vDNSTXTRecord(lang.dns.data,request.data))>
+<if check.status=="OK">
+  <assign domain=account.getResource(request.rid)>
+  <assign dns_zone = domain.dns_zone>
+  <if request.dname><assign fname = request.dname+"."+domain.name><else><assign fname = domain.name></if>
+  <assign result=dns_zone.addChild("cust_dns_record", "", fname,"TXT",request.ttl,request.data)>
+  <if result.status=="OK">
+    <assign success="1">
+    <assign res=session.addMessage(toolbox.compose(
+	lang.msg.name_res_added,lang.dns.txt_record,""))>
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+ <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdata=request.data>
+    <assign vdname=request.dname>
+    <assign vttl=request.dmask>
+    <include request.ftemplate>
+</if>
+<!--  END ./dns/add_ctxt_submit.sbm  -->

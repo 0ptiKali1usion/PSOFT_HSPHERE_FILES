@@ -1,0 +1,11 @@
+<center>MIVA Empresa Engine</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Allow your customers to use miva script. Reuqired to use Miva Merchant Shopping cart.<br>
+<br>
+Check the <i>Include</i> box to make this  resource available under the plan.<br>
+Check the <i>Activated</i> box to make it ready for usage immediately on the signup.<br><br>
+When including Miva Empresa, make sure CGI and CGI bin resources are also included for the plan.<br><br>
+
+Later you can define setup fee for creation and recurrent fee for using this resource.
+

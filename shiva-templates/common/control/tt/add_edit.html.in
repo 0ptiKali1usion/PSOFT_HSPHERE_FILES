@@ -1,0 +1,102 @@
+<!-- BEGIN ./control/tt/add_edit.html  -->
+<call draw_tooltip()>
+
+<yafv s_tt>
+<yavf s_admin>
+<include "control/tt/ttfunctions.fn">
+<call setTTAdmin()>
+
+<if ttadmin>
+  <assign ticket=ttadmin.getTicket(request.ttid)>
+  <if request.ntemplate>
+    <assign stemplate = request.ntemplate>
+  <else>
+    <if request.stemplate>
+      <assign stemplate = request.stemplate>
+    <else>
+      <assign stemplate = template>
+    </if>
+  </if>
+<call gain_sc_params("")>
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+  <assign resellers = reseller_su.resellers>
+  <list resellers as reseller>
+    <if reseller.id == request.sc_reseller>
+      <assign ticket = reseller_su.getTicket(reseller.id, request.ttid)>
+    </if>
+  </list>
+</if>
+
+<SCRIPT language="Javascript">
+<!--
+  function uploadFile() {
+    uploader=window.open("","uploader","resizable=yes,scrollbars=yes,width=120,height=120");
+    with (uploader.document) {
+      open("text/html");
+      //open();
+      write("<html><"+"body onLoad='window.focus();opener.doUpload();'>Wait please ...</body></html>");
+      close();
+    }
+  }
+
+  function doUpload() {
+    document.upload.submit();
+  }
+
+  function addOption( text, value) {
+    nop=new Option();
+    nop.value = text;
+    nop.text = value;
+    nop.selected = true;
+    sel = document.forms['tt'].elements['att_cid'];
+    sel.options[sel.options.length] = nop;
+  }[M l3
+
+  function addNotes(fromField, intoField) {
+    intoField.value = fromField.value;
+  }
+//-->
+</SCRIPT>
+
+<h3 align=center> ${lang.tt.infoadd} <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.maininfo)>  
+ <if (ticket.assigned.id != ttadmin.id) || (ticket.closed)> / <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_assign.sbm&ntemplate="+stemplate+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id+sc_params, lang.tt.admin.pickup)><else>&nbsp;</if>)
+ <font color="${design.color("important_color")}">
+  <if (ticket.assigned.id == "")> <br>  ${lang.tt.info.nassign} </if></font>
+ </h3>
+
+<call draw_table_header("3", lang.tt.adminedit.header+toolbox.html_encode(ticket.title))>
+
+<if ticket>
+<if account.plan.getResourceType("ttadmin").getValue("_ASSIGN_TT") == "TRUE">
+    <form action="${config.CLIENT_CP_URL}" method="POST" name="main" onSubmit="javascript:addNotes(document.forms['tt'].elements['note'], this.elements['note'])" check! accept-charset="UTF-8">
+    <tr>
+      <td class="control_header" width="55%" align = "left"><call draw_header(lang.tt.title)></td>
+      <td class="control_header" width="30%" align = "left"><call draw_header(lang.tt.email)></td>
+      <td valign="center" class="control_align_center" rowspan="2" width="20%" nowrap>
+          <input type="submit" value="change">
+      </td>
+    </tr>
+    <tr>
+      <td width="55%" nowrap><input type="text" name="title" value="${ticket.title}" size="40%"></td>
+       <td width="30%" nowrap>
+         <call draw_sc_form_params()>
+         <assign flags = "1">
+         <input type="text" name="email" value="${ticket.email}" check="vEmail">
+         <if ticket.flags == "1"><assign v_sel = "CHECKED"><else><assign v_sel = ""></if>
+         <input type="checkbox" name="flags" onClick="checkForm(this.form)" value="1" ${v_sel}><call draw_label(lang.tt.web)>
+         <input type="hidden" name="template_name" value="submit/tt/change_add.sbm">
+         <input type="hidden" name="stemplate" value="${stemplate}">
+         <input type="hidden" name="ftemplate" value="${template}">
+         <input type="hidden" name="ttid" value="${request.ttid}">
+         <input type="hidden" name="note" value="">
+       </td>
+    </tr>
+    </form>
+</if>
+<call draw_table_footer()>
+</if>
+
+<else>&nbsp;</if>
+<!--  END ./control/tt/add_edit.html  -->

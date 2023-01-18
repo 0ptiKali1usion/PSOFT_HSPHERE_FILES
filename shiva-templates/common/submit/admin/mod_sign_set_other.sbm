@@ -1,0 +1,123 @@
+<!-- BEGIN ./submit/admin/mod_sign_set_other.sbm  -->
+<assign mod=request.mod>
+<assign planCreatedBy=request.planCreatedBy>
+
+<switch planCreatedBy>
+
+<case "vps">
+  <assign check=yafv.common.s_signup.vDomain_Name(lang.vps.hostname, request["vpshostname"])>
+<break>
+
+<default>
+ <if mod=="opensrs">
+  <assign check=yafv.checkall(
+    yafv.common.s_signup.vSinglename(lang.label.last_name,request["srs_billing_last_name"]),
+    yafv.common.s_signup.vAddress(lang.label.address,request["srs_billing_address1"]),
+    yafv.common.s_signup.vCity(lang.label.city,request["srs_billing_city"]),
+    yafv.common.s_signup.vState(lang.label.state,request["srs_billing_state"]),
+    yafv.common.s_signup.vPostal_Code(lang.label.postal_code,request["srs_billing_postal_code"]),
+    yafv.common.s_signup.vCountry(lang.label.country,request["srs_billing_country"]),
+    yafv.common.s_signup.vPhone(lang.label.phone,request["srs_billing_phone"]),
+    yafv.common.s_signup.vFax(lang.label.fax,request["srs_billing_fax"]),
+    yafv.common.s_signup.vEmail(lang.label.email,request["srs_billing_email"]),
+    yafv.common.s_signup.vSinglename(lang.label.last_name,request["srs_owner_last_name"]),
+    yafv.common.s_signup.vAddress(lang.label.address,request["srs_owner_address1"]),
+    yafv.common.s_signup.vCity(lang.label.city,request["srs_owner_city"]),
+    yafv.common.s_signup.vState(lang.label.state,request["srs_owner_state"]),
+    yafv.common.s_signup.vPostal_Code(lang.label.postal_code,request["srs_owner_postal_code"]),
+    yafv.common.s_signup.vCountry(lang.label.country,request["srs_owner_country"]),
+    yafv.common.s_signup.vPhone(lang.label.phone,request["srs_owner_phone"]),
+    yafv.common.s_signup.vFax(lang.label.fax,request["srs_owner_fax"]),
+    yafv.common.s_signup.vEmail(lang.label.email,request["srs_owner_email"]),
+    yafv.common.s_signup.vSubDomain(lang.label.domain,request["domain"]),
+    yafv.common.s_signup.vOrganization(lang.label.company, request["srs_billing_org_name"]), 
+    yafv.common.s_signup.vOrganization(lang.label.company, request["srs_owner_org_name"]))>
+ <else>
+  <assign check=yafv.common.s_signup.vDomain_Name(lang.label.domain, request["domain_name"])>
+ </if>
+<break>
+</switch>
+
+<if check.status=="OK">
+  <assign signup = account.getChild("signupadm")>
+  <assign admin=account.getChild("admin")>
+  <assign tmpAcc = signup.createTempAccount(request.rid)>
+
+  <switch planCreatedBy>
+
+  <case "vps">
+    <assign result=signup.setNewOtherParams(request.rid, null, planCreatedBy, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, request["vpshostname"] )>
+  <break>
+
+  <default>
+    <if mod=="opensrs">
+        <assign result=signup.setNewOtherParams(request.rid, mod, null, request["srs_billing_first_name"], request["srs_billing_last_name"], request["srs_billing_org_name"], request["srs_billing_address1"], request["srs_billing_address2"], request["srs_billing_address3"], request["srs_billing_city"], request["srs_billing_state"], request["srs_billing_postal_code"], request["srs_billing_country"], request["srs_billing_phone"], request["srs_billing_email"], request["srs_owner_first_name"], request["srs_owner_last_name"], request["srs_owner_org_name"], request["srs_owner_address1"], request["srs_owner_address2"], request["srs_owner_address3"], request["srs_owner_city"], request["srs_owner_state"], request["srs_owner_postal_code"], request["srs_owner_country"], request["srs_owner_phone"], request["srs_owner_email"],request["domain"] + request["ext"],request["domain"], request["ext"], request["srs_billing_fax"], request["srs_owner_fax"], null )>
+    <else>
+        <assign result=signup.setNewOtherParams(request.rid, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, request["domain_name"],null, null, null, null, null )>
+    </if>
+  <break>
+  </switch>
+
+
+  <if result.status=="OK">
+    <assign success = "1">
+  <else>
+    <assign res=session.addMessage(result.msg)>
+  </if>
+<else>
+  <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+
+<switch planCreatedBy>
+
+<case "vps">
+    <assign vpshostname = toolbox.html_encode(request.vpshostname)>
+<break>
+
+<default>
+
+  <assign domain_name = toolbox.html_encode(request.domain_name)>
+
+  <if mod=="opensrs">
+    <assign domain = toolbox.html_encode(request.domain)>
+    <assign ext = toolbox.html_encode(request.ext)>
+
+    <assign srs_billing_first_name = toolbox.html_encode(request.srs_billing_first_name)>
+    <assign srs_billing_last_name = toolbox.html_encode(request.srs_billing_last_name)>
+    <assign srs_billing_address1 = toolbox.html_encode(request.srs_billing_address1)>
+    <assign srs_billing_address2 = toolbox.html_encode(request.srs_billing_address2)>
+    <assign srs_billing_address3 = toolbox.html_encode(request.srs_billing_address3)>
+    <assign srs_billing_city = toolbox.html_encode(request.srs_billing_city)>
+    <assign srs_billing_state = toolbox.html_encode(request.srs_billing_state)>
+    <assign srs_billing_postal_code = toolbox.html_encode(request.srs_billing_postal_code)>
+    <assign srs_billing_country = toolbox.html_encode(request.srs_billing_country)>
+    <assign srs_billing_phone = toolbox.html_encode(request.srs_billing_phone)>
+    <assign srs_billing_email = toolbox.html_encode(request.srs_billing_email)>
+    <assign srs_billing_fax = toolbox.html_encode(request.srs_billing_fax)>
+    <assign srs_billing_org_name = toolbox.html_encode(request.srs_billing_org_name)>
+
+    <assign srs_owner_first_name = toolbox.html_encode(request.srs_owner_first_name)>
+    <assign srs_owner_last_name = toolbox.html_encode(request.srs_owner_last_name)>
+    <assign srs_owner_address1 = toolbox.html_encode(request.srs_owner_address1)>
+    <assign srs_owner_address2 = toolbox.html_encode(request.srs_owner_address2)>
+    <assign srs_owner_city = toolbox.html_encode(request.srs_owner_city)>
+    <assign srs_owner_state = toolbox.html_encode(request.srs_owner_state)>
+    <assign srs_owner_postal_code = toolbox.html_encode(request.srs_owner_postal_code)>
+    <assign srs_owner_country = toolbox.html_encode(request.srs_owner_country)>
+    <assign srs_owner_phone = toolbox.html_encode(request.srs_owner_phone)>
+    <assign srs_owner_email = toolbox.html_encode(request.srs_owner_email)>
+    <assign srs_owner_fax = toolbox.html_encode(request.srs_owner_fax)>
+    <assign srs_owner_org_name = toolbox.html_encode(request.srs_owner_org_name)>
+  </if>
+    <include request.ftemplate>
+
+<break>
+</switch>
+
+</if>
+<!--  END ./submit/admin/mod_sign_set_other.sbm  -->
+

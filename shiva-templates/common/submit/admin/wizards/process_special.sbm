@@ -1,0 +1,20 @@
+<!-- BEGIN: ./submit/admin/wizards/process_special.sbm -->
+  <assign oldSpecial=request.old_special>
+  <assign processNextSpecial="1">
+  <assign specialName="">
+
+  <list wizard.special["*"] as special>
+     <if processNextSpecial>
+	    <assign specialName=special.field("name")>
+	    <assign resname = toolbox.substring(special.node_name, "4")>
+      <if oldSpecial=="">
+        <if request[specialName] == special.field.include("ifvalue") && request["i_"+resname]>
+  	       <assign  processNextSpecial="">
+           <include special.field.include("name")>
+        </if>
+      <else>
+          <if oldSpecial==specialName><assign oldSpecial=""></if>
+      </if>
+     </if>
+  </list>
+<!-- END:  ./submit/admin/wizards/process_special.sbm -->

@@ -1,0 +1,38 @@
+<!-- BEGIN  ./windomain/add_asp_secured_license.html.in  -->
+<yafv s_windomain>
+<call draw_tooltip()>
+<if !vbelowdir><assign vbelowdir="below_off"></if>
+
+<form name="f_add_asp_secured_license"  action="${config.CLIENT_CP_URL}" method="post" check!" accept-charset="UTF-8">
+
+
+
+<call prepare_table_header("2", lang.windomain.webservice.asp_secured_license.setup)>
+<call add_table_header_help("user-ds_domaininfo-redirect-h","")>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td colspan="2"   >
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/windomain/add_asp_secured_license.sbm">
+   <call draw_label(lang.windomain.webservice.asp_secured_license.buy.step1)>
+   <call draw_link("http://www.asp-programmers.com/purchase-license.asp", "Click here")>
+   <call draw_label(lang.windomain.webservice.asp_secured_license.buy.step2)>   
+   </td>
+</tr>
+
+<tr>
+   <td><call draw_label(lang.windomain.webservice.asp_secured_license.orderid)></td>
+   <td><input type="text" name="lic_orderid" size="20" check="vIntegerRequired"></td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center" >&nbsp;<input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<!--  END ./windomain/add_asp_secured_license.html.in  -->

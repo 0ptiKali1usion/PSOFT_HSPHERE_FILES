@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/PayPalMerchantGateway.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if  request.mid>
+<assign result=mm.update(request.mid, "TITLE", request.TITLE, "currency", request.currency, "apiUserName", request.apiUserName, "apiPassword", request.apiPassword, "privateKeyPassword", request.privateKeyPassword, "testmode", request.testmode, "mg_upload_file_cert", request.file_cert_data, "CLASS_NAME", "psoft.epayment.PayPal", "TEMPLATE", "admin/merchant/PayPalMerchantGateway.html")>
+<else>
+<assign result=mm.new("TITLE", request.TITLE, "currency", request.currency, "apiUserName", request.apiUserName, "apiPassword", request.apiPassword, "privateKeyPassword", request.privateKeyPassword, "testmode", request.testmode, "mg_upload_file_cert", request.file_cert_data, "CLASS_NAME", "psoft.epayment.PayPal", "TEMPLATE", "admin/merchant/PayPalMerchantGateway.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/PayPalMerchantGateway.sbm -->

@@ -1,0 +1,16 @@
+<!-- BEGIN ./domain/add_ssl_submit.html  -->
+<assign hosting=account.getResource(request.rid)>
+<if hosting.server=="IIS">
+    <assign result=hosting.addChild("ssl", "", "0", "0", request.key, request.file, request.site_name)>
+<else>
+    <assign result=hosting.addChild("ssl", "", request.key, request.file, request.site_name)>
+</if>
+<if result.status=="OK">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.ssl_support,""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/add_ssl_submit.html  -->

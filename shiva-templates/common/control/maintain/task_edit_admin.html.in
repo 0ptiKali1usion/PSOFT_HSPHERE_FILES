@@ -1,0 +1,143 @@
+<assign maintain = account.getChild("maintainAdmin")>
+<assign task = maintain.getTask(request.task_id)>
+<assign user_type="maintainAdmin">
+<assign ai=maintain.getAccountInfo(task.account_id)>
+<if task.message !="">
+<font size=+1 color="#FF0000"><b>${task.message}<b></font>
+</if>
+
+<yafv s_maintain>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_task_edit" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="maintain/change_task.html">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<table>
+<tr>
+<td align=left>User name</td>
+<td align=right>${ai.ci.name} </td>
+</tr>
+<tr>
+<td align=left>E-mail:</td>
+<td align=right>${ai.ci.email} </td>
+</tr>
+<tr>
+<td align=left>Plan description:</td>
+<td align=right>${ai.plan_description} </td>
+</tr>
+<tr>
+<td colspan=2><a href="${config.CLIENT_CP_URL}?template_name=maintain/user_info.html&template=${template}&task_id=${request.task_id}&account_id=${task.account_id}">More info</a></td>
+</tr>
+</table>
+<table>
+<tr>
+<td>
+<table border=2 bordercolor="#D8E2EB"   class="formlight" >
+<tr><th colspan="2">Task</th></tr>
+<tr>
+   <td colspan=2><b>Task description</b></td>
+</tr>
+<tr>
+   <td colspan=2 bgcolor="#FFFFFF"  >
+	<pre>
+	<b>${task.task_description}</b>
+	</pre>
+   </td>
+</tr>
+<tr>
+	<td align=right><b>Last modification</b></td>
+	<td align=left bgcolor="#FFFFFF">${task.lastmod}</td>
+</tr>
+<tr>
+	<td align=right><b>Created</b></td>
+	<td align=left bgcolor="#FFFFFF">${task.created}</td>
+</tr>
+<tr>
+	<td align=right><b>Max hours</b></td>
+	<if !vmax_hours><assign vmax_hours=${task.max_hours}></if>
+	<td align=left><input name=new_max_hours type=text value="${vmax_hours}"  label="Max Hours" check="vHours">
+	<a href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_hours.sbm&stemplate=${template}&ftemplate=${template}&change=MAX_HOURS&new_hours=" onClick="this.href=this.href+escape(new_max_hours.value)"><b>[Change]</b></a></td>
+</tr>
+<tr>
+	<td align=right><b>Hours</b></td>
+	<if !vmax_hours><assign vhours=${task.hours}></if>
+	<td align=left><input name=new_hours type=text value="${vhours}"  label="Hours" check="vHours">
+	<a href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_hours.sbm&stemplate=${template}&ftemplate=${template}&change=HOURS&new_hours=" onClick="this.href=this.href+escape(new_hours.value)"><b>[Change]</b></a></td>
+</tr>
+<if task.closed == "">
+<if task.state != "Supplied">
+<tr>
+<td colspan =2>
+<table>
+<tr>
+	<td><a name="dest" href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_state.sbm&stemplate=${template}&ftemplate=${template}&change_state=ENDWORK"><b>[End work]</b></a></td>
+	<td><a name="dest" href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_state.sbm&stemplate=${template}&ftemplate=${template}&change_state=REVOKE"><b>[Revoke]</b></a></td>
+	<td><a name="dest" href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_state.sbm&template=${template}&change_state=SUPLIED"><b>[Suplied]</b></a></td>
+</tr>
+</table>
+</td>
+</tr>
+<else>
+<tr>
+	<td colspan=2 align=left><a name="dest" href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/change_state.sbm&template=${template}&
+change_state=INWORK"><b>[In work]</b></a></td>
+</tr>
+</if>
+<else>
+<tr>
+<td align=right><b>Task is closed</b></td><td align=left>${task.closed}</td>
+</tr>
+</if>
+<if task.accepted != null>
+<tr>
+	<td align=right><b>Admin(email)</b></td>
+	<td align=left bgcolor="#FFFFFF">${task.admin_name}(<a href=mailto:"${task.admin_email}">${task.admin_email}</a>)</td>
+</tr>
+<tr>
+	<td align=right><b>Accepted</b></td>
+	<td align=left bgcolor="#FFFFFF">${task.accepted}</td>
+</tr>
+<tr>
+	<td align=right><b>Date end of Work</b></td>
+	<td align=left bgcolor="#FFFFFF">${task.where_end}</td>
+</tr>
+</if>
+
+<tr>
+   <td><b>New</b></td>
+   <td align=right>
+	<table>	
+	<tr>
+	<td><a name="dest" href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/add_question.sbm&user_type=${user_type}&stemplate=${template}&ftemplate=${template}&answ_quest=" onClick="this.href=this.href+escape(new_question.value)"><b>[Add Question]</b></a></td> 
+	<td><a href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=submit/maintain/add_answer.sbm&stemplate=${template}&ftemplate=${template}&user_type=${user_type}&answ_quest="  onClick="this.href=this.href+escape(new_question.value)"><b>[Add Answer]</b></a></td> 
+        <td><a href="${config.CLIENT_CP_URL}?task_id=${task.id}&template_name=${template}&template=${template}"><b>[Reload]</b></a></td>     
+	</tr>	
+	</table>	
+   </td>
+</tr>
+<tr>
+   <td colspan=2>
+	<textarea name="new_question" cols=50 rows=3></textarea>
+   </td>
+</tr>
+<tr>
+<td align=left colspan=2><a href="${config.CLIENT_CP_URL}?&template_name=maintain/admin_list_task.html&stemplate=${template}&contract_id=${task.contract_id}">&lt;&lt;back</a></td>
+</tr>
+</table>
+</form>
+<table>
+<tr>
+   <td><b>Question/Answer</b></td>
+</tr>
+<tr>
+   <td >
+	<pre>
+	<b>${task.question}</b>
+	</pre>
+   </td>
+</tr>
+
+</table>
+</td>
+</tr>
+</table>

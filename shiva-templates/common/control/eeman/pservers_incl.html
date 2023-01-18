@@ -1,0 +1,59 @@
+<!-- BEGIN ./control/eeman/pservers_incl.html  -->
+<if eeman>
+
+<if !has_header>
+<tr>
+  <td colspan="4" class="control_header"><call draw_header(lang.eeman.pserversincl.header)></td>
+</tr>
+</if>
+
+<assign loadbal="">
+<list pservers as pserver>
+<if pserver.lbParentId !="" && loadbal=="">
+	<tr>
+	   <td colspan="4">
+	   	<call draw_header(lang.eeman.loadbalserver.servers)>
+	   </td>
+	</tr>
+	<assign loadbal="1">
+</if>
+<tr>
+  <if loadbal == "1" && cur_lbParentId == pserver.lbParentId>
+  	<td width="4%">&nbsp</td>
+  	<assign colspan1 = "1">
+  <else>
+  	<assign colspan1 = "2">
+  </if>
+  <td colspan=${colspan1} nowrap>
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/pserver_edit.html"+"&rid="+pserver.id,pserver.name)>
+  </td>
+  <td><call draw_label(pserver.ip1+" ["+pserver.mask1+"] "+ pserver.ip2+" ["+pserver.mask2+"] "+pserver.pstatus)><br>
+    <list pserver.getGroups() as group>
+      <call draw_label("["+eeman.groupMap[group]+"]")>
+    </list>
+  </td>
+  <td width="5%" nowrap valign="middle">
+    <assign si = pserver.server_info>
+    <if pserver.get_server_info=="1">	
+      <if si>
+        <call draw_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "lupa", "")>
+      <else>
+        <call draw_palink(config.CLIENT_CP_URL+"?template_name=servmon/server_info.html&server_id="+pserver.id, "attention", "")>
+      </if>
+    </if>
+    <if pserver.hasParams()>
+            <call draw_palink(config.CLIENT_CP_URL+"?template_name=eeman/pserver_params.html&rid="+pserver.id, "ps_params", "")>
+    </if>
+  </td>
+</tr>
+    <if loadbal == "1">
+    	<assign cur_lbParentId = pserver.lbParentId>
+    </if>
+</list>
+<tr>
+  <td colspan="4"><call draw_link(config.CLIENT_CP_URL+"?template_name=eeman/add_pserver.html", lang.eeman.pserversincl.add)></td>
+</tr>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/eeman/pservers_incl.html  -->

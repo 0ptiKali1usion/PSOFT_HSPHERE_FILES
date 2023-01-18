@@ -1,0 +1,17 @@
+<!-- BEGIN ./common/control/tt/download.html -->
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+<list ticket.messages as message><list message.attachments as at><if at.id==request.at_id><assign location = config.DOWNLOAD_URI + "?id=" + at.download_key></if></list></list>
+<HTML>
+<HEAD>
+<if location><meta HTTP-EQUIV="refresh" CONTENT="0; URL=${location}"></if>
+</HEAD>
+<center>
+<br><br>
+<if location><a href="${location}">${lang.tt.download}</a>
+<else>${lang.tt.unable_download}
+</if>
+</center>
+</HTML>
+<!-- END ./common/control/tt/download.html -->
+

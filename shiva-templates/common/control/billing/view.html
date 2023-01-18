@@ -1,0 +1,280 @@
+<!-- BEGIN ./billing/view.html  -->
+<call draw_tooltip()>
+<function setBilDescription(processors, bil_inf)>
+<assign desc="">
+<if bil_inf.type=="CC">
+  <assign desc=bil_inf.pi.info>
+<else>
+  <if bil_inf.type=="Check">
+     <assign desc=lang.label.check>
+  <else>
+     <list processors as processor>
+       <if processor("name")==bil_inf.type><assign desc=lang[processor("description")]></if>
+     </list>
+     <if desc==""><assign desc=lang.label.check></if>
+  </if>
+</if>
+</function>
+
+<assign bi = account.bi>
+<assign bil_infos = user.billing_infos>
+<assign processors = toolbox.getGateways().processors.processor>
+
+<assign bildescription="">
+<assign processorname="">
+<assign servletname="">
+
+<if bi.type!="TRIAL">
+<if bil_infos.size != "0">
+  <if bi.type=="CC">
+    <assign bildescription=bi.pi.info>
+  <else>
+    <if bi.type=="Check">
+      <assign bildescription=lang.label.check>
+    <else>
+      <list processors as processor>
+        <if processor("name")==bi.type>
+          <assign bildescription=lang[processor("description")]>
+          <assign processorname=processor("name")>
+          <assign servletname=processor("servlet")>
+        </if>
+      </list>
+    </if>
+  </if>
+</if>
+</if>
+
+<assign header_text = lang.billing.view.header>
+<if bildescription>
+<assign header_text = header_text + " " + bi.first_name+" "+bi.last_name+" "+"("+bildescription+")">
+</if>
+<call prepare_table_header("3", header_text)>
+<call add_table_header_help("user-b_bilinfo-bprofile-h","")>
+<call draw_table_header_prepared()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_billing_view" accept-charset="UTF-8">
+<tr>
+  <td width="21"><call draw_tt_help(account.id,"","")></td>
+  <td width="30%"><call draw_label(lang.billing.view.edit_profile)></td>
+  <td    valign="middle">
+    <input type="hidden" name="template_name" value="${new_billing}">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <assign selectList = "">
+    <if toolbox.canUseCC()>
+      <assign selectList = selectList + "<option value=\"CC\">" + lang.label.cc + "</option>">
+    </if>
+    <if settings.checks_disabled=="">
+      <assign selectList = selectList + "<option value=\"Check\">" + lang.label.check + "</option>">
+    </if>
+    <list processors as processor><assign processorname = processor("name")>
+      <if settings[processorname + "_enabled"] == "1">
+        <assign selectList = selectList + "<option value=\"" + processorname + "\">" + lang[processor("description")] + "</option>">
+      </if>
+    </list>
+    <if selectList == "">
+	<call draw_important_label(lang.signup.payinfo.paytype_warn)>
+    <else>
+	<select name="type" size="1">
+	${selectList}
+	</select>
+	<input type="submit" value="${lang.button.edit}">
+    </if>
+  </td>
+</tr>
+</form>
+<tr>
+<td><call draw_tt_help(account.id,"user-b_bilinfo-mailinvoice","")></td>
+<td><call draw_label(lang.billing.view.receive_invoice)></td>
+<td>
+<!-- ${account.receive_invoice} -->
+<call draw_state(account.receive_invoice, config.CLIENT_CP_URL+"?template_name=submit/billing/turn_receive_invoice.sbm"+"&state=off"+"&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/billing/turn_receive_invoice.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template)>
+</td>
+</tr>
+
+<if account.bi.type=="TRIAL">
+<tr>
+    <td width="21">&nbsp;</td>
+    <td colspan="2"><call draw_important_label(toolbox.compose(lang.billing.view.trial, account.trial_time_left))></td>
+</tr>
+<else>
+
+<if bil_infos.size != "1">
+<tr>
+   <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+   <td width="21"  class="control_align_center" ><call draw_tt_help(account.id,"user-b_bilinfo-changebilprof","")></td>
+   <td width="30%"><call draw_label(lang.billing.view.change)></td>
+   <td nowrap>
+
+   <if !account.suspended>
+     <input type="hidden" name="template_name" value="submit/billing/change_info.sbm">
+   <else>
+     <input type="hidden" name="template_name" value="submit/suspended/change_billing_info.sbm">
+   </if>
+   <input type="hidden" name="stemplate" value="${template}">
+   <input type="hidden" name="ftemplate" value="${template}">
+       <select name="bi_id">
+         <list bil_infos as bil_inf>
+         <call setBilDescription(processors, bil_inf)>
+         <if bil_inf.bi_id==bi.bi_id><assign vselected="SELECTED"><else><assign vselected=""></if>
+         <option value="${bil_inf.bi_id}" ${vselected}>
+            <call draw_label(bil_inf.first_name+" "+bil_info.last_name+" "+"("+desc+")")>
+         </option>
+         </list>
+       </select>
+       <input type="submit" value="${lang.billing.view.submchange}">
+   </td>
+</form>
+</tr>
+<!-- bi.bi_id = ${bi.bi_id} -->
+<tr>
+   <form action="${config.CLIENT_CP_URL}" method="POST" onSubmit="return confirm('${lang.billing.view.ondelete}')" accept-charset="UTF-8">
+   <td width="21" class="control_align_center" ><call draw_tt_help(account.id,"user-b_bilinfo-changebilprof","")></td>
+   <td width="30%"><call draw_label(lang.billing.view.delete)></td>
+   <td nowrap>
+
+   <input type="hidden" name="template_name" value="submit/billing/delete_info.sbm">
+   <input type="hidden" name="stemplate" value="${template}">
+   <input type="hidden" name="ftemplate" value="${template}">
+       <select name="bi_id">
+         <list bil_infos as bil_inf>
+         <call setBilDescription(processors, bil_inf)>
+         <if bi.bi_id != bil_inf.bi_id>
+         <option value="${bil_inf.bi_id}">
+           <call draw_label(bil_inf.first_name+" "+bil_info.last_name+" "+"("+desc+")")>
+         </option>
+         </if>
+         </list>
+       </select> <input type="submit" value="${lang.billing.view.submdelete}">
+   </td>
+</form>
+</tr>
+</if>
+
+<tr>
+   <td><call draw_tt_help(account.id,"user-ai_quick-plan","Click to get help")></td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)></td></tr>
+<tr>
+   <td width="21"><call draw_tt_help(account.id,"user-b_bilinfo-bilperiod","")></td>
+   <td width="30%"><call draw_label(lang.label.bp)></td>
+   <td><call draw_label(account.plan.values["_PERIOD_SIZE_"+account.periodId]+"&nbsp;"+account.plan.values["_PERIOD_TYPE_"+account.periodId])><call draw_change(config.CLIENT_CP_URL+"?template_name=billing/change_period.html&stemplate="+template+"&ftemplate="+template, lang.billing.view.changeperiod)></td>
+</tr>
+</if>
+<call draw_table_footer()>
+
+<if account.bi.type != "TRIAL">
+&nbsp;
+<call draw_table_header("3", lang.label.bi)>
+
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.fname)></td>
+   <td><call draw_label(bi.name)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.lname)></td>
+   <td><call draw_label(bi.last_name)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.company)></td>
+   <td><call draw_label(bi.company)></td>
+</tr>
+<tr >
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.adr1)></td>
+   <td><call draw_label(bi.address1)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.adr2)></td>
+   <td><call draw_label(bi.address2)>&nbsp;</td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.city)></td>
+   <td><call draw_label(bi.city)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.state)></td>
+   <td><call draw_label(bi.state)></td>
+</tr>
+<if bi.state2>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label("State 2")></td>
+   <td><call draw_label(bi.state2)></td>
+</tr>
+</if>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.pcode)></td>
+   <td><call draw_label(bi.postal_code)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.country)></td>
+   <td><call draw_label(lang[toolbox.countries[bi.country]])></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.phone)></td>
+   <td><call draw_label(bi.phone)></td>
+</tr>
+<tr>
+   <td width="21">&nbsp;</td>
+   <td width="30%"><call draw_label(lang.bci.email)></td>
+   <td><call draw_label(bi.email)></td>
+</tr>
+
+<if settings.allow_tax_exemption == "1" || bi.exemption_code>
+  <tr>
+  <td width="21">&nbsp;</td>
+  <td><call draw_label(lang.bci.exemption_code)></td>
+  <td>
+  <if bi.exemption_code>
+    <call draw_label(bi.exemption_code)>
+    <if bi.taxExemptionApproved()>
+      <call draw_label_bold(lang.admin.billman.approved)>
+    <else><assign tax_exemption_rejected = bi.taxExemptionRejected()>
+      <if tax_exemption_rejected><call draw_label_bold(lang.admin.billman.rejected)><else><call draw_important_label(lang.admin.billman.notapproved)></if>
+    </if>
+    &nbsp;
+    <if !account.suspended>
+      <call draw_edit(config.CLIENT_CP_URL+"?template_name=billing/ec_action_confirm.html&act=edit&next_template=billing/ec_change.html&ftemplate="+template+"&stemplate="+template, "")>
+      <call draw_delete(config.CLIENT_CP_URL+"?template_name=billing/ec_action_confirm.html&act=del&next_template=submit/billing/ec_delete.sbm&ftemplate="+template+"&stemplate="+template, "")>
+    <else>
+      <call draw_edit(config.CLIENT_CP_URL+"?template_name=suspended/ec_change.html&ftemplate="+template+"&stemplate="+template, "")>
+      <call draw_delete(config.CLIENT_CP_URL+"?template_name=suspended/ec_action_confirm.html&act=del&next_template=submit/suspended/ec_delete.sbm&ftemplate="+template+"&stemplate="+template, "")>
+    </if>
+  <else>
+    <call draw_label(lang.bci.not_accessible)>&nbsp;
+    <if !account.suspended>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=billing/ec_action_confirm.html&act=add&next_template=billing/ec_change.html&ftemplate="+template+"&stemplate="+template, "")>
+    <else>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=suspended/ec_change.html&ftemplate="+template+"&stemplate="+template, "")>
+    </if>
+  </if>
+  </td>
+  </tr>
+</if>
+
+<assign pi=bi.pi>
+<if bi.type=="CC">
+  <include "control/billing/pi.CC">
+<else>
+  <if bi.type=="Check">
+     <include "control/billing/pi.Check">
+  <else>
+     <if bi.type != "NONE">
+     <include "control/billing/pi.WebProcessor">
+     </if>
+  </if>
+</if>
+
+<call draw_table_footer()>
+</if>
+<!--  END ./billing/view.html  -->

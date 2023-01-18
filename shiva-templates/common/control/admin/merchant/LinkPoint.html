@@ -1,0 +1,41 @@
+<!-- BEGIN ./common/control/admin/merchant/LinkPoint.html (LinkPoint v3.01)-->
+<assign mm=account.getChild("merchant_manager")>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/LinkPoint.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+<call draw_table_header("2", lang.admin.epayment.linkpoint)>
+<if request.mid><input type="hidden" name="mid" value="${request.mid}"></if>
+<tr><td><call draw_label(lang.label.title)></td><td><input type="text" name="title" value="<if merchant>${merchant.TITLE}<else>${lang.admin.epayment.linkpoint}</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.clearlink.config)></td><td><input type="text" name="config_file" value="<if merchant>${merchant.CONFIG_FILE}</if>"></td></tr>
+<if merchant>
+<tr>
+<td><call draw_label(lang.admin.payflow.certpath)></td>
+<assign base="/hsphere/local/home/cpanel/shiva/psoft_config/linkpoint/">
+<td><call draw_label(base+request.mid+"_cert.p12")></td>
+</tr>
+</if>
+<tr><td><call draw_label(lang.admin.epayment.server)></td><td><input type="text" name="server" value="<if merchant>${merchant.SERVER}<else>secure.linkpt.net</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.port)></td><td><input type="text" name="port" value="<if merchant>${merchant.PORT}<else>1129</if>"></td></tr>
+<tr><td><call draw_label(lang.label.password)></td><td><input type="password" name="passwd" value="<if merchant>${merchant.PASSWD}</if>"></td></tr>
+<tr><td><call draw_label(lang.admin.epayment.avs)></td>
+<if merchant><assign vavs=merchant.AVS><else><assign vavs="N"></if>
+<td>
+<if vavs=="F"><assign avs_full="SELECTED"><else><assign avs_full=""></if>
+<if vavs=="M"><assign avs_medium="SELECTED"><else><assign avs_medium=""></if>
+<if vavs=="L"><assign avs_low="SELECTED"><else><assign avs_low=""></if>
+<if vavs=="N"><assign avs_none="SELECTED"><else><assign avs_none=""></if>
+<select name="avs">
+<option value="F" ${avs_full}>${lang.admin.signio.avsfull}
+<option value="M" ${avs_medium}>${lang.admin.signio.avsmedium}
+<option value="L" ${avs_low}>${lang.admin.signio.avslight}
+<option value="N" ${avs_none}>${lang.admin.signio.avsnone}
+</select>
+</td></tr>
+<tr><td><call draw_label(lang.admin.epayment.test)></td><td><select name="mode"><option>FALSE<option<if merchant && merchant.MODE=="TRUE"> selected</if>>TRUE</select></td></tr>
+<tr><td colspan="2" class="control_align_center"><input type="submit"> <input type="reset" value="${lang.button.reset}"></td></tr>
+</form>
+<call draw_table_footer()>
+

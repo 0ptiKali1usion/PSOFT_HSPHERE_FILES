@@ -1,0 +1,100 @@
+<!-- BEGIN ./control/admin/spamassassin_rules.html.in  -->
+<call draw_tooltip()>
+<yafv s_admin>
+
+<assign sa_man=account.getChild("spamassassin_manager")>
+<form action="${config.CLIENT_CP_URL}" name="f_spamassassin_rules"  method="POST" check!  accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/spamassassin_rules_set.sbm">
+<input type="hidden" name="end_template" value="${request.end_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="admin/spamassassin_manager.html">
+<input type="hidden" name="state" value="${request.state}">
+<input type="hidden" name="ms_id" value="${request.ms_id}">
+<input type="hidden" name="sa_man" value="${request.sa_man}">
+
+<call draw_table_header("2",lang.admin.spamassassin.rules_du_jour.config)>
+<if request.state=="edit">
+  <assign vsets=sa_man.getRulesCronParam(request.ms_id,"sets")>
+  <assign hash=toolbox.new_hash>
+  <list toolbox.tokenizer(vsets," ") as tokName>
+    <assign r=hash.put(tokName,"CHECKED")>
+  </list>
+</if>
+<tr>
+<td valign="top"><br><call draw_label(lang.admin.spamassassin.rules_du_jour.rules)><call draw_help("admin-spamassassin-rules-trusted","")><br><call draw_label(lang.admin.spamassassin.rules_du_jour.warn)><br>
+<call draw_link("http://www.rulesemporium.com/rules.htm", lang.admin.spamassassin.rules_du_jour.learn_about)>
+</td>
+<td>
+<input type="checkbox" name="i_ANTIDRUG" ${hash["ANTIDRUG"]}><call draw_label("ANTIDRUG")><br>
+<input type="checkbox" name="i_BLACKLIST" ${hash["BLACKLIST"]}><call draw_label("BLACKLIST (!!)")><br>
+<input type="checkbox" name="i_BLACKLIST_URI" ${hash["BLACKLIST_URI"]}><call draw_label("BLACKLIST_URI (!!)")><br>
+<input type="checkbox" name="i_BOGUSVIRUS" ${hash["BOGUSVIRUS"]}><call draw_label("BOGUSVIRUS (!)")><br>
+<input type="checkbox" name="i_RANDOMVAL" ${hash["RANDOMVAL"]}><call draw_label("RANDOMVAL")><br>
+<input type="checkbox" name="i_SARE_ADULT" ${hash["SARE_ADULT"]}><call draw_label("SARE_ADULT")><br>
+<input type="checkbox" name="i_SARE_BAYES_POISON_NXM" ${hash["SARE_BAYES_POISON_NXM"]}><call draw_label("SARE_BAYES_POISON_NXM")><br>
+<input type="checkbox" name="i_SARE_BML" ${hash["SARE_BML"]}><call draw_label("SARE_BML")><br>
+<input type="checkbox" name="i_SARE_BML_PRE25X" ${hash["SARE_BML_PRE25X"]}><call draw_label("SARE_BML_PRE25X")><br>
+<input type="checkbox" name="i_SARE_EVILNUMBERS0" <if request.state=="add">CHECKED<else>${hash["SARE_EVILNUMBERS0"]}</if>><call draw_label("SARE_EVILNUMBERS0")><br>
+<input type="checkbox" name="i_SARE_EVILNUMBERS1" ${hash["SARE_EVILNUMBERS1"]}><call draw_label("SARE_EVILNUMBERS1")><br>
+<input type="checkbox" name="i_SARE_EVILNUMBERS2" ${hash["SARE_EVILNUMBERS2"]}><call draw_label("SARE_EVILNUMBERS2")><br>
+<input type="checkbox" name="i_SARE_FRAUD" ${hash["SARE_FRAUD"]}><call draw_label("SARE_FRAUD")><br>
+<input type="checkbox" name="i_SARE_FRAUD_PRE25X" ${hash["SARE_FRAUD_PRE25X"]}><call draw_label("SARE_FRAUD_PRE25X")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ" ${hash["SARE_GENLSUBJ"]}><call draw_label("SARE_GENLSUBJ (!)")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ0" ${hash["SARE_GENLSUBJ0"]}><call draw_label("SARE_GENLSUBJ0 (!)")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ1" ${hash["SARE_GENLSUBJ1"]}><call draw_label("SARE_GENLSUBJ1 (!)")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ2" ${hash["SARE_GENLSUBJ2"]}><call draw_label("SARE_GENLSUBJ2 (!)")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ3" ${hash["SARE_GENLSUBJ3"]}><call draw_label("SARE_GENLSUBJ3 (!)")><br>
+<input type="checkbox" name="i_SARE_GENLSUBJ_ENG" ${hash["SARE_GENLSUBJ_ENG"]}><call draw_label("SARE_GENLSUBJ_ENG")><br>
+<input type="checkbox" name="i_SARE_HEADER" ${hash["SARE_HEADER"]}><call draw_label("SARE_HEADER (!)")><br>
+<input type="checkbox" name="i_SARE_HEADER0" ${hash["SARE_HEADER0"]}><call draw_label("SARE_HEADER0")><br>
+<input type="checkbox" name="i_SARE_HEADER1" ${hash["SARE_HEADER1"]}><call draw_label("SARE_HEADER1")><br>
+<input type="checkbox" name="i_SARE_HEADER2" ${hash["SARE_HEADER2"]}><call draw_label("SARE_HEADER2")><br>
+<input type="checkbox" name="i_SARE_HEADER3" ${hash["SARE_HEADER3"]}><call draw_label("SARE_HEADER3")><br>
+<input type="checkbox" name="i_SARE_HEADER_ENG" ${hash["SARE_HEADER_ENG"]}><call draw_label("SARE_HEADER_ENG")><br>
+<input type="checkbox" name="i_SARE_HIGHRISK" ${hash["SARE_HIGHRISK"]}><call draw_label("SARE_HIGHRISK")><br>
+<input type="checkbox" name="i_SARE_HTML" ${hash["SARE_HTML"]}><call draw_label("SARE_HTML (!)")><br>
+<input type="checkbox" name="i_SARE_HTML0" ${hash["SARE_HTML0"]}><call draw_label("SARE_HTML0")><br>
+<input type="checkbox" name="i_SARE_HTML1" ${hash["SARE_HTML1"]}><call draw_label("SARE_HTML1")><br>
+<input type="checkbox" name="i_SARE_HTML2" ${hash["SARE_HTML2"]}><call draw_label("SARE_HTML2")><br>
+<input type="checkbox" name="i_SARE_HTML3" ${hash["SARE_HTML3"]}><call draw_label("SARE_HTML3")><br>
+<input type="checkbox" name="i_SARE_HTML4" ${hash["SARE_HTML4"]}><call draw_label("SARE_HTML4")><br>
+<input type="checkbox" name="i_SARE_HTML_ENG" ${hash["SARE_HTML_ENG"]}><call draw_label("SARE_HTML_ENG")><br>
+<input type="checkbox" name="i_SARE_OBFU" ${hash["SARE_OBFU"]}><call draw_label("SARE_OBFU (!)")><br>
+<input type="checkbox" name="i_SARE_OBFU0" ${hash["SARE_OBFU0"]}><call draw_label("SARE_OBFU0")><br>
+<input type="checkbox" name="i_SARE_OBFU1" ${hash["SARE_OBFU1"]}><call draw_label("SARE_OBFU1 (!)")><br>
+<input type="checkbox" name="i_SARE_OBFU2" ${hash["SARE_OBFU2"]}><call draw_label("SARE_OBFU2")><br>
+<input type="checkbox" name="i_SARE_OBFU3" ${hash["SARE_OBFU3"]}><call draw_label("SARE_OBFU3")><br>
+<input type="checkbox" name="i_SARE_OEM" ${hash["SARE_OEM"]}><call draw_label("SARE_OEM")><br>
+<input type="checkbox" name="i_SARE_RANDOM" <if request.state=="add">CHECKED<else>${hash["SARE_RANDOM"]}</if>><call draw_label("SARE_RANDOM")><br>
+<input type="checkbox" name="i_SARE_REDIRECT" ${hash["SARE_REDIRECT"]}><call draw_label("SARE_REDIRECT")><br>
+<input type="checkbox" name="i_SARE_REDIRECT_POST300" ${hash["SARE_REDIRECT_POST300"]}><call draw_label("SARE_REDIRECT_POST300")><br>
+<input type="checkbox" name="i_SARE_SPAMCOP_TOP200" ${hash["SARE_SPAMCOP_TOP200"]}><call draw_label("SARE_SPAMCOP_TOP200")><br>
+<input type="checkbox" name="i_SARE_SPECIFIC" ${hash["SARE_SPECIFIC"]}><call draw_label("SARE_SPECIFIC (!)")><br>
+<input type="checkbox" name="i_SARE_SPOOF" ${hash["SARE_SPOOF"]}><call draw_label("SARE_SPOOF")><br>
+<input type="checkbox" name="i_SARE_STOCKS" ${hash["SARE_STOCKS"]}><call draw_label("SARE_STOCKS")><br>
+<input type="checkbox" name="i_SARE_UNSUB" ${hash["SARE_UNSUB"]}><call draw_label("SARE_UNSUB")><br>
+<input type="checkbox" name="i_SARE_URI" ${hash["SARE_URI"]}><call draw_label("SARE_URI")><br>
+<input type="checkbox" name="i_SARE_URI1" ${hash["SARE_URI1"]}><call draw_label("SARE_URI1")><br>
+<input type="checkbox" name="i_SARE_URI3" ${hash["SARE_URI3"]}><call draw_label("SARE_URI3")><br>
+<input type="checkbox" name="i_SARE_URI_ENG" ${hash["SARE_URI_ENG"]}><call draw_label("SARE_URI_ENG")><br>
+<input type="checkbox" name="i_SARE_WHITELIST" ${hash["SARE_WHITELIST"]}><call draw_label("SARE_WHITELIST")><br>
+<input type="checkbox" name="i_SARE_WHITELIST_PRE30" ${hash["SARE_WHITELIST_PRE30"]}><call draw_label("SARE_WHITELIST_PRE30")><br>
+<input type="checkbox" name="i_SARE_WHITELIST_RCVD" ${hash["SARE_WHITELIST_RCVD"]}><call draw_label("SARE_WHITELIST_RCVD")><br>
+<input type="checkbox" name="i_TRIPWIRE" <if request.state=="add">CHECKED<else>${hash["TRIPWIRE"]}</if>><call draw_label("TRIPWIRE")><br>
+<input type="checkbox" name="i_ZMI_GERMAN" ${hash["ZMI_GERMAN"]}><call draw_label("ZMI_GERMAN")>
+</td>
+</tr>
+<if request.state=="edit">
+  <assign vemail=sa_man.getRulesCronParam(request.ms_id,"email")>
+</if>
+<tr>
+<td><call draw_label(lang.label.email)><call draw_help("admin-spamassassin-rules-email","")></td>
+<td><input type="text" name="mail_address" value="${vemail}" check="vEmailOpt"></td>
+</tr>
+<tr>
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/spamassassin_rules.html.in  -->

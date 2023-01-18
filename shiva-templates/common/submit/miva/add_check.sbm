@@ -1,0 +1,65 @@
+<!-- BEGIN ./submit/miva/add_check.sbm  -->
+<assign notfree="0">
+<assign type="miva">
+<assign hosting=account.getResource(request.rid)>
+<assign cgidir=hosting.getChild("cgidir")>
+<assign empresa=hosting.getChild("empresa")>
+<assign miva_price = hosting.estimateCreate("miva", "")>
+
+<if miva_price.status!="ERROR">
+  <if miva_price.free=="0">
+    <assign notfree="1">
+    <assign setup=miva_price.setup>
+    <assign recurrent=miva_price.recurrent>
+    <assign recurrentAll=miva_price.recurrentAll>
+  </if>
+  <if !cgidir>
+    <assign cgidir_price = account.getResource(request.rid).estimateCreate("cgidir", "")>
+    <if cgidir_price.status!="ERROR">
+      <if cgidir_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup,cgidir_price.setup)>
+         <assign recurrent=toolbox.add(recurrent,cgidir_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll,cgidir_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.cgi_dir,""))>
+      <assign res = session.addMessage(cgidir_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+
+  <if !empresa>
+    <assign empresa_price = account.getResource(request.rid).estimateCreate("empresa", "")>
+    <if empresa_price.status!="ERROR">
+      <if empresa_price.free=="0">
+         <assign notfree="1">
+         <assign setup=toolbox.add(setup,empresa_price.setup)>
+         <assign recurrent=toolbox.add(recurrent,empresa_price.recurrent)>
+         <assign recurrentAll=toolbox.add(recurrentAll,empresa_price.recurrentAll)>
+      </if>
+    <else>
+      <assign res = session.addMessage(toolbox.compose(
+	lang.msg.name_res_failed_add,lang.label.empresa,""))>
+      <assign res = session.addMessage(empresa_price.msg)>
+      <assign failure="1">
+    </if>
+  </if>
+
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.miva,""))>
+  <assign res = session.addMessage(miva_price.msg)>
+  <assign failure="1">
+</if>
+<if failure != "1">
+  <if notfree=="1">
+    <include "billing/miva_add_confirm.html">
+  <else>
+    <include "submit/miva/add.sbm">
+  </if>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/miva/add_check.sbm  -->

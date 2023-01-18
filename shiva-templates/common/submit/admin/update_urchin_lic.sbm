@@ -1,0 +1,10 @@
+<assign lic_man = account.getChild("urchin_lic_manager")>
+<assign result = lic_man.updateLicense(request.f_l_server,request.l_server_id,request.lic_id,request.f_ser_num,request.f_lic_code,request.f_lic_size,request.lic_used)>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_updated,lang.license,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>

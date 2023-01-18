@@ -1,0 +1,30 @@
+<!-- BEGIN control/dns/restore_default_rec_confirm.html  -->
+<assign domain=account.getResource(request.rid)>
+
+<call draw_tooltip()>
+
+<form name="change_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<call draw_table_header("", lang.dns.restore_default_rec_warn.header)>
+
+<tr>
+<td><call draw_label(lang.dns.restore_default_rec_warn.message)><br>
+<center>
+<call draw_link("javascript:document.change_confirm.submit()", lang.billing.del_yes)><br>
+<call draw_link("javascript:history.go(-1)", toolbox.compose(lang.billing.del_no, stype))>
+</center>
+<compress>
+<list params as param>
+<if param.name != "template_name">
+<input type="hidden" name="${param.name}" value="${param.value}">
+</if>
+</list>
+</compress>
+
+<input type="hidden" name="template_name" value="submit/misc/add_check_restore_default_rec.sbm">	
+
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END control/dns/restore_default_rec_confirm.html  -->

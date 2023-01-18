@@ -1,0 +1,14 @@
+<!-- BEGIN ./submit/domain/add_webservice.html  -->
+<assign domain=account.getResource(request.rid)>
+<if domain.getChild("hosting")>
+    <include request.stemplate>
+<else>
+    <assign result=domain.addChild("hosting", "")>
+    <if result.status=="OK">
+	<include request.stemplate>
+    <else>
+	<assign res=session.addMessage(result.msg)>
+	<include request.ftemplate>
+    </if>
+</if>
+<!--  END ./submit/domain/add_webservice.html  -->

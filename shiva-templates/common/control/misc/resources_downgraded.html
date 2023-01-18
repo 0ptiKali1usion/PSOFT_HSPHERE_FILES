@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/misc/resources_downgraded.html -->
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.misc.downgraded_res)>
+
+<tr>
+  <td class="control_header">
+	<call draw_header(lang.label.plan)>
+  </td>
+  <td class="control_header">
+	<call draw_header(account.plan.description)>
+  </td>
+</tr>
+
+<tr>
+  <td     colspan="2">
+<if !session.msg>
+<call draw_label(lang.misc.resourcesdowngraded.success)>
+<else>
+<call draw_label(lang.misc.resourcesdowngraded.errors)>
+</if>
+</td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_center">
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/misc/changeplan2.sbm"+"&stemplate="+request.stemplate+"&ftemplate="+template+"&plan_id="+request.plan_id+"&period_id="+request.period_id+"&downgraded="+downgraded, lang.misc.resourcesdowngraded.yes)><br>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=design/generic.html", lang.misc.resourcesdowngraded.no)><br>
+</td></tr>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!-- END ./control/misc/resources_downgraded.html -->

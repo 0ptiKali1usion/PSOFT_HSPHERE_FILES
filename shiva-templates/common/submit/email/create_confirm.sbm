@@ -1,0 +1,37 @@
+<!-- BEGIN ./email/create_confirm.sbm  -->
+<switch request.rtype>
+<case "1">
+<assign stemplate="email/list2.html">
+<assign type="mailbox">
+<break>
+<case "2">
+<assign stemplate="email/list2.html">
+<assign type="mail_forward">
+<break>
+<case "3">
+<assign stemplate="email/list2.html">
+<assign type="mailbox_alias">
+<break>
+<case "4">
+<assign stemplate="email/list2.html">
+<assign type="mailing_list">
+<break>
+<case "5">
+<assign stemplate="email/list2.html">
+<assign type="responder">
+<break>
+</switch> 
+<assign price = account.getResource(request.rid).estimateCreate(type, "")>
+
+<if price.status!="ERROR">
+  <if price.free=="0">
+    <include "billing/mail_add_confirm.html">
+  <else>
+    <include "control/email/load_control.html">
+  </if>
+<else>
+  <assign res = session.addMessage(lang.msg.misc_res_failed_add)>
+  <assign res = session.addMessage(price.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./email/create_confirm.sbm  -->

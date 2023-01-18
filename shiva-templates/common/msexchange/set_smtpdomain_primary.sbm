@@ -1,0 +1,13 @@
+<assign bizorg = account.getChild("bizorg")>
+<assign result = bizorg.setPrimaryDomain(request.rid)>
+<if result.status=="OK">
+	    <assign res=session.addMessage(lang.label.msexchange.smtp_domain_primary_has_set)>
+            <assign success="1">
+<else>
+            <assign res=session.addMessage(result.msg)>
+</if>
+<if success == "1">
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>

@@ -1,0 +1,75 @@
+<!-- BEGIN ./common/control/kb/admin.html -->
+<call draw_tooltip()>
+<assign kb_man=account.getChild("ttadmin").kb_manager>
+
+<if kb_man>
+
+<SCRIPT language="Javascript"><!--
+   function uploadFile() {
+        uploader=window.open("","uploader","resizable=yes,scrollbars=yes,width=120,height=120");
+        with (uploader.document) {
+           open("text/html");
+           //open();
+           write("<html><"+"body onLoad='window.focus();opener.doUpload();'>Wait please ...</body></html>");
+           close();
+        }
+   }
+   function doUpload() {
+        document.upload.submit();
+   }
+//--></SCRIPT>
+
+
+
+
+
+<call draw_table_header("2", lang.kb.existing_kb)>
+
+
+<tr>
+<td colspan="2">
+<list kb_man.listKB() as kb><call draw_label(kb.value)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=kb/kb_edit.html&id="+kb.name+"&stemplate="+template+"&ftemplate="+template+"&inPanel="+inPanel, lang.button.edit)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/kb/delete_kb.sbm&id="+kb.name+"&stemplate="+template+"&ftemplate="+template, lang.button.delete)>
+
+<call draw_link(config.CLIENT_CP_URL+"?template_name=submit/kb/fix_kb.sbm&id="+kb.name+"&stemplate="+template+"&ftemplate="+template, lang.button.fix)>
+
+<a href="${config.CLIENT_CP_URL}?template_name=kb/download.html&id=${kb.name}" target="_blank"><call draw_label(lang.button.export)></a>
+<br></list>
+<form name="kbimport" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="kb_cid">
+<input type="hidden" name="template_name" value="submit/kb/importkb.sbm">
+<input type="hidden" name="stemplate" value="${template}">		
+</form>
+
+</td>
+</tr>
+<tr><td colspan=2 class="control_header" ><call draw_header(lang.kb.create_kb)></td>
+</tr>
+<tr >
+<td colspan="2">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/kb/create_kb.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<call draw_label(lang.label.name)> <input type="text" name="name"> <input type="submit" value="${lang.button.create}" name="f_sbm">
+</form>
+</td>
+</tr>
+<tr><td colspan=2 class="control_header"><call draw_header(lang.kb.import_kb)></td>
+</tr>
+<tr >
+<td colspan="2">
+<form name="upload" action="${config.UPLOADER_URL}" method="POST" ENCTYPE="multipart/form-data" target="uploader" accept-charset="UTF-8">
+<input type="hidden" name="target_form" value="kbimport">
+<input name="kb" type="file" size="25">
+<input name="process" type="hidden" value="1">
+<input type="submit" name="upload" value="Upload" onClick="uploadFile();return true;">
+</form>
+</td></tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!-- END ./common/control/kb/admin.html -->

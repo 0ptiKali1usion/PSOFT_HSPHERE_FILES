@@ -1,0 +1,3 @@
+getAppEnabled a
+enable a
+disableAll a

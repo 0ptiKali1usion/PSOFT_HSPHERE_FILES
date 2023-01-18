@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE dependences [
+  <!ELEMENT dependences (resource+)>
+  <!ELEMENT resource (requires+ | variant+)>
+  <!ELEMENT variant (requires+)>
+  <!ELEMENT requires EMPTY>
+
+  <!ATTLIST resource name CDATA #REQUIRED>
+  <!ATTLIST requires name CDATA #REQUIRED>
+  <!ATTLIST requires relation (parent) #IMPLIED>
+]>
+
+<dependences>
+    <resource name="miva"><requires name="empresa"/></resource>
+    <resource name="oscommerce"><requires name="MySQL"/></resource>
+    <resource name="miva_lic_manager"><requires name="miva"/></resource>
+    <resource name="urchin_lic_manager"><requires name="urchin"/></resource>
+    <resource name="MySQLDatabase"><requires name="MySQL"/></resource>
+    <resource name="MySQLUser"><requires name="MySQL"/></resource>
+    <resource name="mysqldb_quota"><requires name="MySQL"/></resource>
+    <resource name="MSSQLLogin"><requires name="MSSQL"/></resource>
+    <resource name="MSSQLDatabase"><requires name="MSSQL"/></resource>
+    <resource name="MSSQLUser"><requires name="MSSQL"/></resource>
+    <resource name="MSSQLQuota"><requires name="MSSQL"/></resource>
+    <resource name="pgsqldatabase"><requires name="pgsql"/></resource>
+    <resource name="pgsqluser"><requires name="pgsql"/></resource>
+    <resource name="pgsqldb_quota"><requires name="pgsql"/></resource>
+    <resource name="real_user"><requires name="realserver_user"/></resource>
+    <resource name="real_server_traffic"><requires name="realserver_user"/></resource>
+    <resource name="winquota"><requires name="realserver_user"/></resource>
+    <resource name="cfentry"><requires name="cf" relation="parent"/></resource>
+    <resource name="mnogosearch"><requires name="MySQL"/></resource>
+    <resource name="phpbb">
+	<requires name="php"/>
+	<requires name="MySQL"/>
+    </resource>
+    <resource name="asp_secured"><requires name="asp" relation="parent"/></resource>
+    <resource name="sshresource"><requires name="sshmanager"/></resource>
+    <resource name="vps_ip"><requires name="vps"/></resource>
+    <resource name="vps_mem_limit"><requires name="vps"/></resource>
+    <resource name="vps_proc_limit"><requires name="vps"/></resource>
+    <resource name="vps_traffic"><requires name="vps"/></resource>
+    <resource name="vps_rss_limit"><requires name="vps"/></resource>
+    <resource name="vps_file_limit"><requires name="vps"/></resource>
+    <resource name="vps_tcp_limit"><requires name="vps"/></resource>
+    <resource name="vps_hardcpu_limit"><requires name="vps"/></resource>
+    <resource name="vps_server_details"><requires name="vps"/></resource>
+    <resource name="kanoodlemanager"><requires name="kanoodle"/></resource>
+    <resource name="ds_custom_build"><requires name="ds_enable"/></resource>
+    <resource name="ds_manager"><requires name="ds_enable"/></resource>
+    <resource name="ds_reboot_enable"><requires name="ds_enable"/></resource>
+    <resource name="ds_backup_enable"><requires name="ds_enable"/></resource>
+    <resource name="backup"><requires name="ds_backup_enable"/></resource>
+    <resource name="reseller_backup"><requires name="ds_backup_enable"/></resource>
+    <resource name="allow_ds_resell"><requires name="ds_enable"/></resource>
+    <resource name="allow_own_ds"><requires name="ds_enable"/></resource>
+    <resource name="ds"><requires name="ds_enable"/></resource>
+    <resource name="ds_bandwidth"><requires name="ds"/></resource>
+    <resource name="ds_ip_range"><requires name="ds_enable"/></resource>
+    <resource name="cf_dsn_record">
+	<requires name="odbc"/>
+	<requires name="cf"/>
+    </resource>
+    <resource name="sharedssl"><requires name="sharedssl_enable"/></resource>
+
+<!-- Just an example with "OR":
+    a resource requires resource1 and resource2 and ... etc
+	OR resource3 and resource4 and ... etc
+	OR ... etc.
+
+    <resource name="hosting">
+	<variant>
+	    <requires name="domain" relation="parent"/>
+	</variant>
+	<variant>
+	    <requires name="parked_domain" relation="parent"/>
+	</variant>
+	<variant>
+	    <requires name="3ldomain" relation="parent"/>
+	</variant>
+    </resource>
+-->
+</dependences>
+

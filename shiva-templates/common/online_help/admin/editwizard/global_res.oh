@@ -1,0 +1,7 @@
+<center> Global Resources </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+<br>Disabling resources for resellers works like disabling resources in end users' plans: new customers won't be able to use them; existing users won't be able to add them, but these resources will still be available to the users that already use them. 
+<br>To confirm changes in reseller plans, go through Plan Edit Wizards and submit the changes without changing the prices.
+

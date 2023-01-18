@@ -1,0 +1,25 @@
+<!-- BEGIN ./domain/add_urchin4_submit.html  -->
+<assign hosting=account.getResource(request.rid)>
+<assign urchin4=hosting.getChild("urchin4")>
+<assign trans=hosting.getChild("transferlog")>
+<if !trans>
+    <assign trans=hosting.addChild("transferlog","simple")>
+</if>
+<if !urchin4>
+    <assign result=trans.addChild("urchin4","")>
+<else>
+    <assign result="OK">
+</if>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res = session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.urchin4,""))>
+<else>
+  <assign res = session.addMessage(result.msg)>
+</if>
+<if success>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!--  END ./domain/add_urchin4_submit.html  -->

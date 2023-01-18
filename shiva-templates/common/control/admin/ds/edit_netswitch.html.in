@@ -1,0 +1,96 @@
+<!-- BEGIN ./control/admin/ds/edit_netswitch.html  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager","")>
+</if>
+<call draw_tooltip()>
+
+<if ds_manager>
+
+<call draw_table_header("2", lang.admin.netswitch_edit_h)>
+
+<assign ns = ds_manager.getNetSwitch(request.ns_id)>
+<if ns && (ns.status == "OK")>
+
+<form name="f_params" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="ns_id" value="${request.ns_id}">
+<input type="hidden" name="template_name" value="submit/admin/ds/edit_netswitch.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<if request.stemplate>
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+<else>
+  <input type="hidden" name="stemplate" value="${template}">
+</if>
+<if !v_device><assign v_device = ns.device></if>
+<if !v_com_name><assign v_com_name = ns.com_name></if>
+<if !v_description><assign v_description = ns.description></if>
+<if !v_web_url><assign v_web_url = ns.web_url></if>
+<if !v_mrtg_host><assign v_mrtg_host = ns.mrtg_host_id></if>
+
+<tr><td colspan="2"><call draw_label(lang.admin.netswitch_edit_note)></td></tr>
+
+<tr>
+    <td width="40%"><call draw_label(lang.admin.netswitch.device)></td>
+    <td><input type="text" name="device" value="${v_device}" check="vStringReq"></td>
+</tr>
+<if !v_com_name><assign v_com_name = "public"></if>
+<tr>
+    <td><call draw_label(lang.admin.netswitch.com_name)></td>
+    <td><input type="text" name="com_name" value="${v_com_name}" check="vNetswitchComName"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.netswitch.description)></td>
+    <td><input type="text" name="description" value="${v_description}" check="vStringReq"></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.netswitch.web_url)></td>
+    <td><input type="text" name="web_url" value="${v_web_url}" check="vHttpResURL"></td>
+</tr>
+<assign mrtg_lservers = ds_manager.getMrtgLServersList()>
+<if mrtg_lservers.size != "0">
+  <tr>
+    <td><call draw_label(lang.admin.netswitch.mrtg_host)></td>
+    <if toolbox.eq(ns.used_ports, "0") == "1">
+      <td>
+      <select name="mrtg_host">
+      <if !v_mrtg_host><assign v_mrtg_host = ns.mrtg_host_id></if>
+      <list mrtg_lservers as lserver>
+	<if !v_mrtg_host><assign v_mrtg_host = lserver.id></if>
+	<if v_mrtg_host == lserver.id><assign selected = " SELECTED"><else><assign selected = ""></if>
+	<option value="${lserver.id}"${selected}>${lserver.name}</option>
+      </list>
+      </select>
+      </td>
+    <else>
+      <assign mrtgServer = "">
+      <assign mrtg_server_id = ns.mrtg_host_id>
+      <list mrtg_lservers as lserver><if mrtg_server_id == lserver.id><assign mrtgServer = lserver><assign res = mrtg_lservers.stop></if></list>
+      <if mrtgServer>
+        <td>
+          <call draw_label_bold(mrtgServer.name)><br>
+          <call draw_label_small(lang.admin.netswitch.cannot_change_mrtg_host_n)>
+          <input type="hidden" name="mrtg_host" value="${mrtg_server_id}">
+        </td>
+      <else>
+        <td>
+          <call draw_important_label(lang.admin.netswitch.invalid_mrtg_host_mes(mrtg_server_id))>
+          <assign problemDetected = "1">
+        </td>
+      </if>
+    </if>
+  </tr>
+  <if !problemDetected>
+    <tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></tr>
+  </if>
+<else>
+  <tr><td colspan="2"><call draw_important_label(lang.admin.netswitch.no_mrtg_hosts)></td></tr>
+</if>
+
+<else>
+    <tr><td colspan="5"><call draw_label(lang.admin.gl_no_section_items)></td></tr>
+</if>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/ds/edit_netswitch.html  -->

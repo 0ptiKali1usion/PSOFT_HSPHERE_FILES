@@ -1,0 +1,52 @@
+<!-- BEGIN ./common/control/admin/merchant/2CheckOut.html -->
+<assign mm=account.getChild("merchant_manager")>
+<yafv s_admin>
+<call draw_tooltip()>
+<assign mm=account.getChild("merchant_manager")>
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/AddIP.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="gateway" value="2CheckOut">
+
+<call draw_table_header("2", lang.admin.tocheckout.header)>
+<tr >
+  <td><call draw_label(lang.admin.tocheckout.ips)></td>
+  <td>
+  <assign ips = mm.getAllowedIPsList("2CheckOut")>
+  <list ips as ip>
+  <call draw_label(ip)>
+  <call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/RemIP.sbm&ip="+ip+"&gateway=2CheckOut&stemplate="+template+"&ftemplate="+template, lang.admin.plans.del)>
+  <br>
+  </list>
+  <input type="text" name="newip" value="" check="vAllowedIpAddr">
+  <input type="submit" value="${lang.button.add}">
+  </td>
+</tr>
+</form>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/merchant/2CheckOut.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+<tr >
+  <td><call draw_label(lang.admin.tocheckout.id)></td>
+  <assign tocheckoutid = settings["2CheckOut_ID"]>
+  <td><input type="text" name="id" value = "${tocheckoutid}" check="vPositiveIntReq"></td>
+</tr>
+
+<if request.enabled == "1"><assign venabled="CHECKED"><else><assign venabled=""></if>
+<if settings["2CheckOut_Use_Authorize"] == "1"><assign vauthorize="CHECKED"><else><assign vauthorize=""></if>
+<if settings["2CheckOut_demo"] == "1"><assign vdemo="CHECKED"><else><assign vdemo=""></if>
+<if settings["2CheckOut_v2_support"] == "1"><assign vv2_support="CHECKED"><else><assign vv2_support=""></if>
+<tr ><td colspan="2"><input type=checkbox name="use_authorize" ${vauthorize}><call draw_label(lang.admin.tocheckout.useAuthorize)></td></tr>
+<tr ><td colspan="2"><input type=checkbox name="demo" ${vdemo}><call draw_label(lang.admin.epayment.test)></td></tr>
+<tr ><td colspan="2"><input type=checkbox name="v2_support" ${vv2_support}><call draw_label(lang.admin.epayment.v2_support)></td></tr>
+<tr ><td colspan="2"><input type=checkbox name="enabled" ${venabled}><call draw_label(lang.admin.view.submact)></td></tr>
+
+<tr ><td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./common/control/admin/merchant/2CheckOut.html -->

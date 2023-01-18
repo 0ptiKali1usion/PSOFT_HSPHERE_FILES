@@ -1,0 +1,25 @@
+<!-- BEGIN ./commont/submit/tt/admin_assign.sbm  -->
+<assign template="tt/admin_assign.sbm">
+<assign ttadmin = account.getChild("ttadmin")>
+<assign ticket=ttadmin.getTicket(request.ttid)>
+
+<list ttadmin.admin_list as adm>
+  <if adm.id == ttadmin.id>
+    <assign str_ttadmin = adm.name>
+  </if>
+</list>
+<if !str_ttadmin><assign str_ttadmin = lang.label.unknown_admin></if>
+<assign system_note = lang.tt.admin_picked_by(str_ttadmin)>
+<assign result = ticket.addReply("", system_note, "")>
+<if request.force>
+<assign result = ticket.assign(ttadmin.id, request.force)>
+<else>
+<assign result = ticket.assign(ttadmin.id)>
+</if>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./common/submit/tt/admin_assign.sbm  -->

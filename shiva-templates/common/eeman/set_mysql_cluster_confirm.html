@@ -1,0 +1,11 @@
+<!-- BEGIN ./eeman/set_mysql_cluster_confirm.html -->
+<assign template="eeman/set_mysql_cluster_confirm.html">
+<include "functions">
+<if request.useXML == "true">
+    <call draw_blank_menu()>
+<else>
+    <call draw_menu("e.manager-l.servers")>
+</if>
+<include "control/eeman/set_mysql_cluster_confirm.html">
+<call bottom()>
+<!--  END ./eeman/set_mysql_cluster_confirm.html  -->

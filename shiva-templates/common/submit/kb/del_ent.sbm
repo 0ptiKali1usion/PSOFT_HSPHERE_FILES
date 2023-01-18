@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/del_ent.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.getKB(request.id).removeEntry(request.eid)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.stemplate>
+<else>
+        <assign res="Success deleting entry">
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/del_ent.sbm -->

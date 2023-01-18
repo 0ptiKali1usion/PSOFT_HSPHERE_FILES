@@ -1,0 +1,50 @@
+<!-- BEGIN ./control/admin/settings/license.html -->
+<call draw_tooltip()>
+
+<assign reseller_su = account.getChild("reseller_su")>
+
+<if reseller_su>
+<form name="f_license" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/settings/license.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+
+
+
+<call draw_table_header("2", lang.admin.license.header)>
+
+
+<call disp("Company", "COMPANY")>
+<call disp("Name", "NAME")>
+<call disp("Issued", "ISSUED")>
+<call disp("Issued By", "ISSUER")>
+<call disp("Product", "PRODUCT")>
+<call disp("Version", "VERSION")>
+<call disp("License", "LICENSE")>
+<call disp("Accounts", "ACCOUNTS")>
+<call disp("License Key", "LICENSE_KEY")>
+<call disp("Certificate", "CERTIFICATE")>
+<if license.valid == "0">
+<tr >
+<th colspan="2">
+<font color="${design.color("error_color")}">${lang.admin.invalid_lic}</font>
+</td>
+</tr>
+</if>
+<tr >
+<td colspan="2"><call draw_label(lang.admin.license.lc)><br>
+<textarea name="license" rows="10" cols="60">${toolbox.html_encode(settings.license)}</textarea>
+</tr></tr>
+<tr ><td  colspan="2" class="control_align_right"><input type="reset" value="${lang.button.reset}">&nbsp;<input type="submit" value="${lang.button.save}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+
+<function disp(label, key)>
+<tr >
+<td><call draw_label(label)></td>
+<td><call draw_label(license[key])></td>
+</tr>
+</function>
+<!-- END ./control/admin/settings/license.html -->

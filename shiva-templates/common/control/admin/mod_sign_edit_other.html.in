@@ -1,0 +1,266 @@
+<!-- BEGIN ./admin/mod_sign_edit_other.html  -->
+<assign signup = account.getChild("signupadm")>
+<assign admin=account.getChild("admin")>
+<if admin>
+
+<list signup.getFakeRequest(request.rid) as pair>
+<if pair.name=="plan_id"><assign planId=pair.value></if>
+<if pair.name=="_bp"><assign bpId=pair.value></if>
+</list>
+
+<assign tmpAcc = signup.createTempAccount(request.rid)>
+<assign tmpOther = tmpAcc.other>
+<assign tmpbi = tmpAcc.bi>
+<assign tmpci = tmpAcc.ci>
+<call draw_tooltip()>
+
+<assign ci=tmpAcc.ci>
+<assign bi=tmpAcc.bi>
+
+<yafv s_signup>
+<form action="${config.CLIENT_CP_URL}" name="f_otherinfo_view" method="POST" check! accept-charset="UTF-8">
+
+<assign planCreatedBy=plans[planId].values["_CREATED_BY_"]>
+
+<list tmpOther.params_list as params>
+  <if params.name=="_mod"><assign mod = params.value></if>
+
+<switch planCreatedBy>
+
+<case "vps">
+  <if !v_vpshostname && (params.name=="vpshostname")><assign v_vpshostname = params.value></if>
+<break>
+
+<default>
+  <if !domain_name && (params.name=="domain_name")><assign domain_name = params.value></if>
+
+  <if !ext && (params.name=="ext")><assign ext  = params.value></if>
+  <if !domain && (params.name=="domain")><assign domain = params.value></if>
+
+  <if !srs_billing_email && (params.name=="_srs_billing_email")><assign srs_billing_email = params.value></if>
+  <if !srs_billing_city && (params.name=="_srs_billing_city")><assign srs_billing_city = params.value></if>
+  <if !srs_billing_address2 && (params.name=="_srs_billing_address2")><assign srs_billing_address2 = params.value></if>
+  <if !srs_billing_address1 && (params.name=="_srs_billing_address1")><assign srs_billing_address1 = params.value></if>
+  <if !srs_billing_phone && (params.name=="_srs_billing_phone")><assign srs_billing_phone = params.value></if>
+  <if !srs_billing_state && (params.name=="_srs_billing_state")><assign srs_billing_state = params.value></if>
+  <if !srs_billing_first_name && (params.name=="_srs_billing_first_name")><assign srs_billing_first_name = params.value></if>
+  <if !srs_billing_country && (params.name=="_srs_billing_country")><assign srs_billing_country = params.value></if>
+  <if !srs_billing_org_name && (params.name=="_srs_billing_org_name")><assign srs_billing_org_name = params.value></if>
+  <if !srs_billing_postal_code && (params.name=="_srs_billing_postal_code")><assign srs_billing_postal_code = params.value></if>
+  <if !srs_billing_last_name && (params.name=="_srs_billing_last_name")><assign srs_billing_last_name = params.value></if>
+  <if !srs_billing_fax && (params.name=="_srs_billing_fax")><assign srs_billing_fax = params.value></if>
+
+  <if !srs_owner_email && (params.name=="_srs_owner_email")><assign srs_owner_email = params.value></if>
+  <if !srs_owner_country && (params.name=="_srs_owner_country")><assign srs_owner_country = params.value></if>
+  <if !srs_owner_first_name && (params.name=="_srs_owner_first_name")><assign srs_owner_first_name = params.value></if>
+  <if !srs_owner_org_name && (params.name=="_srs_owner_org_name")><assign srs_owner_org_name = params.value></if>
+  <if !srs_owner_phone && (params.name=="_srs_owner_phone")><assign srs_owner_phone = params.value></if>
+  <if !srs_owner_last_name && (params.name=="_srs_owner_last_name")><assign srs_owner_last_name = params.value></if>
+  <if !srs_owner_address3 && (params.name=="_srs_owner_address3")><assign srs_owner_address3 = params.value></if>
+  <if !srs_owner_address2 && (params.name=="_srs_owner_address2")><assign srs_owner_address2 = params.value></if>
+  <if !srs_owner_address1 && (params.name=="_srs_owner_address1")><assign srs_owner_address1 = params.value></if>
+  <if !srs_owner_city && (params.name=="_srs_owner_city")><assign srs_owner_city = params.value></if>
+  <if !srs_owner_postal_code && (params.name=="_srs_owner_postal_code")><assign srs_owner_postal_code = params.value></if>
+  <if !srs_owner_state && (params.name=="_srs_owner_state")><assign srs_owner_state = params.value></if>
+  <if !srs_owner_fax && (params.name=="_srs_owner_fax")><assign srs_owner_fax = params.value></if>
+<break>
+</switch>
+</list>
+
+<input type="hidden" name="template_name" value="submit/admin/mod_sign_set_other.sbm">
+<input type="hidden" name="stemplate" value="admin/mod_sign_view.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="planid" value="${planId}">
+<input type="hidden" name="mod" value="${mod}">
+<input type="hidden" name="login" value="${request.login}">
+<input type="hidden" name="planCreatedBy" value="${planCreatedBy}">
+
+<call draw_table_header("2", lang.search.userinfo.other(account.ci.first_name+" "+ci.last_name, tmpAcc.plan.description))>
+<switch planCreatedBy>
+<case "vps">
+ <tr>
+   <td><call draw_label(lang.vps.hostname)></td>
+   <td><input name="vpshostname" size=30 value="${v_vpshostname}" check="vDomain_Name"></td>
+ </tr>
+<tr>
+  <td  class="control_align_center" colspan="2"  nowrap><input type="submit" value="${lang.button.save}"></td>
+</tr>
+<break>
+<default>
+<if mod=="opensrs">
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td><call draw_label("www.")><input name="domain" size=15 value="${domain}" check="vSubDomain">
+  <assign tlds = toolbox.getActiveTLDs()>
+  <select name="ext">
+  <list tlds as tld1>
+    <assign tld_to_compare = "."+tld1>
+    <if ext==tld_to_compare><assign v_sel = "SELECTED"><else><assign v_sel = ""></if>
+    <option value=".${tld1}" ${v_sel}>${tld1}</option>
+  </list>
+  </select>
+</td>
+</tr>
+<tr>
+  <td class="control_header" colspan="2"><call draw_header(lang.admin.edit_other_binfo)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.bci.fname)></td>
+  <td><input name="srs_billing_first_name" size=15 value="${srs_billing_first_name}" check="vSinglename"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.lname)></td>
+  <td><input name="srs_billing_last_name" size=15 value="${srs_billing_last_name}" check="vSinglename"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.company)></td>
+  <td><input name="srs_billing_org_name" size=30 value="${srs_billing_org_name}" check="vOrganization(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr1)></td>
+  <td><input name="srs_billing_address1" size=30 value="${srs_billing_address1}" check="vAddress(this,flag_use_contact_info)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr2)></td>
+  <td><input name="srs_billing_address2" size=30 value="${srs_billing_address2}"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr3)></td>
+  <td><input name="srs_billing_address3" size=30 value="${srs_billing_address3}"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.city)></td>
+  <td><input name="srs_billing_city" size=15 value="${srs_billing_city}" check="vCity(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.state)></td>
+  <td>
+  <select name="srs_billing_state" size="1">
+    <call buildStates(srs_billing_state)>
+  </select>
+</td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.country)></td>
+  <td>
+  <SELECT NAME="srs_billing_country">
+    <call buildCountries(srs_billing_country)>
+  </SELECT>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.pcode)></td>
+  <td><input name="srs_billing_postal_code" size=15 value="${srs_billing_postal_code}" check="vPostal_Code(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.phone)></td>
+  <td><input name="srs_billing_phone" size=20 value="${srs_billing_phone}" check="vPhone(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.fax)></td>
+  <td><input name="srs_billing_fax" size=20 value="${srs_billing_fax}" check="vFax(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.email)></td>
+  <td><input name="srs_billing_email" size=30 value="${srs_billing_email}" check="vEmail(this)"></td>
+</tr>
+
+
+<tr>
+  <td class="control_header" colspan="2"><call draw_header(lang.admin.edit_other_oinfo)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.bci.fname)></td>
+  <td><input name="srs_owner_first_name" size=15 value="${srs_owner_first_name}" check="vSinglename"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.lname)></td>
+  <td><input name="srs_owner_last_name" size=15 value="${srs_owner_last_name}" check="vSinglename"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.company)></td>
+  <td><input name="srs_owner_org_name" size=30 value="${srs_owner_org_name}"
+check="vOrganization(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr1)></td>
+  <td><input name="srs_owner_address1" size=30 value="${srs_owner_address1}"
+check="vAddress(this,flag_use_contact_info)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr2)></td>
+  <td><input name="srs_owner_address2" size=30 value="${srs_owner_address2}"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.adr3)></td>
+  <td><input name="srs_owner_address3" size=30 value="${srs_owner_address3}"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.city)></td>
+  <td><input name="srs_owner_city" size=15 value="${srs_owner_city}" check="vCity(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.state)></td>
+  <td>
+  <select name="srs_owner_state" size="1">
+    <call buildStates(srs_owner_state)>
+  </select>
+</td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.country)></td>
+  <td>
+  <SELECT NAME="srs_owner_country">
+    <call buildCountries(srs_owner_country)>
+  </SELECT>
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.pcode)></td>
+  <td><input name="srs_owner_postal_code" size=15 value="${srs_owner_postal_code}" check="vPostal_Code(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.phone)></td>
+  <td><input name="srs_owner_phone" size=20 value="${srs_owner_phone}" check="vPhone(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.fax)></td>
+  <td><input name="srs_owner_fax" size=20 value="${srs_owner_fax}" check="vFax(this)"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.bci.email)></td>
+  <td><input name="srs_owner_email" size=30 value="${srs_owner_email}" check="vEmail(this)"></td>
+</tr>
+<tr>
+  <td  class="control_align_center" colspan="2"  nowrap><input type="submit" value="${lang.button.save}"></td>
+</tr>
+<else>
+<assign currentPlan=plans[planId]>
+<if  currentPlan.areResourcesAvailable("domain")
+  || currentPlan.areResourcesAvailable("subdomain")
+  || currentPlan.areResourcesAvailable("nodomain")
+  || currentPlan.areResourcesAvailable("service_domain")
+  || currentPlan.areResourcesAvailable("3ldomain")
+  || currentPlan.areResourcesAvailable("parked_domain")>
+<tr>
+    <td><call draw_label(lang.label.domain)></td>
+    <td><input name="domain_name" size=15 value="${domain_name}" check="vDomain_Name"></td>
+</tr>
+<tr>
+  <td  class="control_align_center" colspan="2"  nowrap><input type="submit" value="${lang.button.save}"></td>
+</tr>
+<else>
+<tr>
+  <td colspan="2"><call draw_label(lang.admin.edit_other_noinfo_avail)></td>
+</tr>
+</if>
+</if>
+<break>
+</switch>
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./admin/mod_sign_edit_other.html  -->

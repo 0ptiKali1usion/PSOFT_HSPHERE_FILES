@@ -1,0 +1,15 @@
+<!-- BEGIN ./common/submit/admin/enable_sitetoolbox.sbm -->
+<assign sitetoolbox = account.getChild("sitetoolboxmanager")>
+<if !sitetoolbox>
+<assign res=account.addChild("sitetoolboxmanager", "", request.referralid, request.toolbox_url)>
+<else>
+<assign res=sitetoolbox.editProp(request.referralid, request.toolbox_url)>
+</if>
+
+<if res.status=="OK">
+<include request.stemplate>
+<else>
+<assign result=session.addMessage(res.msg)>
+<include request.ftemplate>
+</if>
+<!-- END ./common/submit/admin/enable_sitetoolbox.sbm -->

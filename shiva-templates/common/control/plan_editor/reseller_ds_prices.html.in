@@ -1,0 +1,24 @@
+<!-- BEGIN control/plan_editor/reseller_ds_prices -->
+<yafv s_wizard>
+<include "control/admin/plan_function.html">
+
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_wizard" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/plan_editor/reseller_ds_prices.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="current_special" value="${template}">
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate" && param.name != "current_special">
+      <input type="hidden" name="${param["name"]}" value="${param["value"]}">
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+<call draw_reseller_plan_dstprices()>
+</form>
+
+<!-- END control/plan_editor/reseller_ds_prices -->

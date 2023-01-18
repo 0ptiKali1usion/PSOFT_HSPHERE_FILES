@@ -1,0 +1,31 @@
+<include "functions">
+<assign template="signup/begin.html">
+<include "control/signup/signup_function.html">
+<if settings.welcome_message>
+  <assign title=settings["welcome_message"]>
+<else>
+  <assign title=lang[html_help["welcome_message"]["tip"]]>
+</if>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<assign plan=plans[request.plan_id]>
+<table>
+<tr>
+<td colspan="2">
+<p  ><br><call draw_label(lang.common_signup_begin_subscribe(plan.description))></p>
+</td>
+</tr>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/signup/begin.sbm">
+    <assign excludeFields=excludeFields+"template_name;"> 
+    <assign disable_back="1">
+    <input type="hidden" name="_mod" value="signup">
+    <assign excludeFields=excludeFields+"_mod;">
+    <if (user) && (request.admin_signup!="")>
+        <input type="hidden" name="seller_id" value="${account.id.id}">
+        <assign excludeFields=excludeFields+"template_name;"> 
+    </if>
+<call genHiddenField(excludeFields)>
+</form>
+</table>
+<include "signup/signup_bottom.html">

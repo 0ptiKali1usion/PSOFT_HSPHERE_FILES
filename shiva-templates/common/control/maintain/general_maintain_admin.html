@@ -1,0 +1,22 @@
+<assign gmainAdmin=account.getChild("generalMaintainAdmin")>
+<assign result=gmainAdmin.reload()>
+<H2>Contrats</H2>
+<table BORDER CELLPADDING=2 >
+<tr>
+   <td><b>Contract</b></td>
+   <td><b>Company</b></td>
+   <td><b>Description</b></td>
+   <td><b>Count admins</b></td>
+   <td><b>Count Maintainers</b></td>
+</tr>
+<list gmainAdmin.contracts as contract>
+<tr>
+   <td>${contract.contract_id}</td>
+   <td>${contract.company}</td>
+   <td>${contract.description}</td>
+   <td>${contract.count_admins}</td>
+   <td>${contract.count_maintainers}</td>
+   <td><a href="${config.CLIENT_CP_URL}?contract_id=${contract.contract_id}&template_name=maintain/gadmin_contract_edit.html&stemplate=${template}&ftemplate=${template}&page=INFO"><b>[EDIT]</b></a></td>
+</tr>
+</list>
+</table>

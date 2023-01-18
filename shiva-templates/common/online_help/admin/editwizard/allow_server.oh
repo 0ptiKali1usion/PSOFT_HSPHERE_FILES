@@ -1,0 +1,10 @@
+<center> Allow Server Groups </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+Allow/disallow your resellers to include server groups in their plans by checking/unchecking the box next to the server.
+<br><i>Important:</i> Disallowed server groups will become unavailable for resellers' end user signup. Existing customers won't be affected.
+<br><i>Note:</i> Disabling <b>web server</b> group you will automatically enable/disable the Unix platform.
+<br>And, respectively disabling <b>win server</b> group or <b>wiboxes</b> will automatically enable/disable Windows platform.
+<br>Other server groups are independent and can be used seperately from platforms.
+

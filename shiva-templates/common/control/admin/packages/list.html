@@ -1,0 +1,26 @@
+<!-- BEGIN ./control/admin/packages/list.html  -->
+<call draw_tooltip()>
+
+<assign su = account.getChild("reseller_su")>
+
+<if su>
+<call draw_table_header("4", "Packages")>
+<tr>
+  <td class="control_header"><call draw_header(lang.admin.packages.pkg_name)></td>
+  <td class="control_header"><call draw_header(lang.admin.packages.pkg_version)></td>
+  <td class="control_header"><call draw_header(lang.admin.packages.pkg_vendor)></td>
+  <td class="control_header"><call draw_header(lang.admin.packages.pkg_desrc_short)></td>
+</tr>
+<list su.pkgs as pkg>
+<tr>
+  <td><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/packages/package.html&id="+pkg.id+"&pkg_name="+pkg.name+"&stemplate="+template+"&ftemplate="+template, pkg.name)></td>
+  <td><call draw_label(pkg.version+" "+ pkg.build)></td>
+  <td><call draw_label(pkg.vendor)></td>
+  <td><call draw_label(pkg.description)></td>
+</tr>
+</list>
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/packages/list.html  -->

@@ -1,0 +1,2 @@
+<if result=="OK">${lang.massmail.sshnotification_enable(account.ci.first_name, account.ci.last_name)}<else><if result=="REFUSED">${lang.massmail.sshnotification_refuse(account.ci.first_name, account.ci.last_name)}<else><if result=="DISABLED">${lang.massmail.sshnotification_disable(account.ci.first_name, account.ci.last_name)}</if></if></if>
+<if settings.support>${lang.massmail.sshnotification_support(settings.support)}</if>

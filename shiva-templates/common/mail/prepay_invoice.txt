@@ -1,0 +1,24 @@
+${lang.massmail.prepay_invoice_header(account.ci.first_name, account.ci.last_name)}
+${lang.massmail.prepay_invoice_plan} ${plan.description}
+<assign invoice = account.estimateOpenPeriod(account.plan.id,account.plan.period_id)>
+<if account.bi.type=="Check">${toolbox.compose(lang.massmail.prepay_invoice_warn,account.exhaustion_date)}</if>
+<if invoice>                                  ${lang.massmail.prepay_invoice_invoice}
+<list invoice.entries as entry>
+${entry.type}       ${entry.description}	${toolbox.currency(entry.amount)}</list>
+
+<assign new_invoice=toolbox.calculateTaxes(invoice.total)><assign taxes=new_invoice.taxes><if taxes.KEYS.size!="0">SUBTOTAL:${toolbox.currency(new_invoice.sub_total)}<list taxes.KEYS as tax_id>
+${toolbox.taxes[tax_id].description}(${toolbox.numberToCurLocale(toolbox.taxes[tax_id].percent, "false")} %): ${toolbox.currency(taxes[tax_id])}</list></if>
+${lang.massmail.prepay_invoice_total}
+${toolbox.currency(new_invoice.total)}</if>
+
+${lang.massmail.prepay_invoice_pay}
+
+<if account.bi.type!="CC">
+<if toolbox.lt(account.bill.balance, "0") == "1"><assign in_value=toolbox.sub("0", account.bill.balance)>
+<if account.bi.type=="Check">${lang.massmail.invoice_check} ${settings.check}<else>${lang.massmail.url} ${toolbox.getPaymentLink(request["_bi_type"], in_value, "acc-", account.id, account.description)}</if>
+</if>
+
+${lang.massmail.prepay_invoice_contact}
+
+${settings.support}
+</if>

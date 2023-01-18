@@ -1,0 +1,15 @@
+<!-- BEGIN ./eeman/assign_device.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result = eeman.assignDevice(request.server_id, request.addr, request.device)>
+<if result.status!="OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign failure="1">
+</if>
+<if failure>
+  <assign vmask=toolbox.html_encode(request.mask)>
+  <assign vgateway=toolbox.html_encode(request.name)>
+  <include request.ftemplate>
+<else>
+ <include request.stemplate>
+</if>
+<!--  END ./eeman/assign_device.sbm  -->

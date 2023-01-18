@@ -1,0 +1,18 @@
+<!-- BEGIN ./control/msexchange/change_plan_confirm.html  -->
+<include "functions">
+<call START_PAGE("msexchange/change_plan_confirm", "he-users")>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_change_plan_confirm" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="i_bizuser_plan" value="${request.i_bizuser_plan}">
+<assign bizuser=account.getResource(request.rid)>
+<assign bizorg =account.getChild("bizorg")>
+<assign del_message=toolbox.compose(lang.billing.del_msg1, bizuser.plan.description)>
+<assign add_message=toolbox.compose(lang.billing.add_msg1, bizorg.getPlanByType(request.i_bizuser_plan).description)>
+<call draw_warn_invoice_with_charge_info(add_message,add_price,del_message,del_price,"f_change_plan_confirm")>
+</form>
+<call END_PAGE()>
+<!--  END ./control/msexchange/change_plan_confirm.html  -->

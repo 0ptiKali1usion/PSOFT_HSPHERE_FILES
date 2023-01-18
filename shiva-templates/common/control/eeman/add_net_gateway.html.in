@@ -1,0 +1,33 @@
+<!-- BEGIN ./control/eeman/gateways.html  -->
+<call draw_tooltip()>
+<assign reseller_su=account.getChild("reseller_su")>
+<assign eeman=account.getChild("eeman")>
+<if eeman>
+<yafv s_eeman>
+<call draw_table_header("2", lang.label.eeman.add_gateway)>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="l_server" check! accept-charset="UTF-8">
+<tr>
+<td>
+<input type="hidden" name="template_name" value="submit/eeman/add_net_gateway.sbm">
+<input type="hidden" name="stemplate" value="eeman/gateways.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<call draw_label(lang.label.eeman.subnet_address)></td>
+<td><input type="text" name="addr" value="${vaddr}" check="vIPSubnet"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.eeman.net_gateway)></td>
+<td><input type="text" name="gateway" value="${vgateway}" check="vIPAddr"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.eeman.net_mask)></td>
+<td><input type="text" name="mask" value="${vmask}" check="vIPMask"></td>
+</tr>
+<tr>
+<tr>
+<td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.add}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+</if>
+
+<!-- END ./eeman/gateways.html  -->

@@ -1,0 +1,46 @@
+<!-- BEGIN ./control/admin/move_to_reseller.html  -->
+<assign admin=account.getChild("admin")>
+<assign reseller_su=account.getChild("reseller_su")>
+<call draw_tooltip()>
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+
+
+<call draw_table_header("2", lang.admin.moving_heading)>
+
+<tr >
+<td colspan="2"><call draw_label(lang.admin.move_to_reseller_warn)></td>
+</td>
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+    <td><call draw_label(request.user)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.currently_belongs)></td>
+    <td><call draw_label(request.res_descr)></td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.move_to_reseller)></td>
+    <td><select name="reseller_id" size="1"><list reseller_su.resellers as reseller><if reseller.id != request.crid><option value="${reseller.id}">${reseller.name} (${reseller.url})</option></if></list></select> </td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="submit/admin/move_to_reseller.sbm">
+  <input type="hidden" name="user_id" value="${request.user_id}">
+  <input type="hidden" name="ftemplate" value="${request.ftemplate}">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="cur_menu" value="${request.cur_menu}">
+    <input type="hidden" name="start" value="${request.start}">
+    <compress>
+    <list params as sc_param>
+      <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+        <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+      </if>
+    </list>
+    </compress>
+  <input type="submit" "${lang.button.submit}">
+</td></tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/admin/move_to_reseller.html  -->

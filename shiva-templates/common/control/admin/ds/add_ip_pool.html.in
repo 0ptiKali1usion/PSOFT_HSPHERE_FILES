@@ -1,0 +1,30 @@
+<!-- BEGIN ./control/admin/ds/add_ip_pool.html.in  -->
+<yafv s_ds>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" name="f_add_ip_pool" method="POST" check! accept-charset="UTF-8">
+<call draw_table_header("2", lang.admin.ds.ip.add.header)>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip.from)></td>
+  <td>
+    <input type="hidden" name="template_name" value="submit/admin/ds/add_ip_pool.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="text" size="15" maxlength="15" name="from" value="${f_from}" label="From" check="vIPAddr">
+  </td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip.to)></td>
+  <td><input type="text" size="15" maxlength="15" name="to" value="${f_to}" label="${lang.label.to}" check="vIPAddrOpt"><call draw_label(lang.admin.ds.ip.add_several.tip)></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.mask.label)></td>
+  <td><input type="text" size="15" maxlength="15" name="mask" value="${f_mask}" label="${lang.admin.ds.ip_pool.mask.label}" check="vIPMask"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.ds.ip_pool.gw.label)></td>
+  <td><input type="text" size="15" maxlength="15" name="gw" value="${f_gw}" label="${lang.admin.ds.ip_pool.gw.label}" check="vIPAddr"></td>
+</tr>
+<tr><td colspan="2" class="control_align_center"><input type="submit"></td></tr>
+<call draw_table_footer()>
+</form>
+<!--  END ./control/admin/ds/add_ip_pool.html.in  -->

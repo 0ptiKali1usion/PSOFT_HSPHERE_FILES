@@ -1,0 +1,68 @@
+<!-- BEGIN ./common/control/admin/merchant/CCEncryption.html -->
+
+<assign admin=account.getChild("admin")>
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+<assign mm = account.getChild("merchant_manager")>
+
+<if !mm><assign mm = account.addChild("merchant_manager", "")></if>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("2", lang.admin.CCEncryption.header)>
+
+
+
+<assign stat = admin.encryptionStatus()>
+<tr >
+<td width="85%"><call draw_label(lang.admin.CCEncryption.flag)></td>
+<td>
+<if stat=="1" || stat=="3">
+<call draw_state(stat=="3", config.CLIENT_CP_URL+"?template_name=admin/merchant/CCEncryptWizardOff.html&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=admin/merchant/CCEncryptWizardOn.html&step=1&ftemplate="+template)>
+<else>
+<if stat=="2"><call draw_label(lang.admin.CCEncryption.encryption)></if>
+<if stat=="4"><call draw_label(lang.admin.CCEncryption.decryption)></if>
+</if>
+</td>
+</tr>
+
+
+<if (stat=="2" || stat=="3" || stat=="4") && !admin.isPrivateKeyLoaded() && admin.isPublicKeyLoaded()>
+<tr ><td colspan=2><include "control/admin/merchant/PrivateKeyPost.html"></td></tr>
+</if>
+
+<if (stat=="2" || stat=="3" || stat=="4") && !admin.isPublicKeyLoaded()>
+<tr ><td colspan=2>
+<assign errorMessage=admin.getPublicKeyLoadingErrorMessage()>
+<call draw_label(lang.admin.CCEncryption.no_public_key(errorMessage))>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=admin/merchant/CCEncryptDropEncryption.html&stemplate="+template, lang.admin.CCEncryption.disable_link)>
+</td></tr>
+</if>
+
+<if (stat=="2" || stat=="3" || stat=="4") && !admin.isPrivateKeyLoaded()>
+<tr ><td colspan=2>
+<call draw_label(lang.admin.CCEncryption.no_private_key)>
+<call draw_link(config.CLIENT_CP_URL+"?template_name=admin/merchant/CCEncryptDropEncryption.html&stemplate="+template, lang.admin.CCEncryption.disable_link)>
+</td></tr>
+</if>
+
+<if admin.isPublicKeyLoaded() && admin.isPrivateKeyLoaded()>
+<tr >
+<td><call draw_label(lang.admin.CCEncryption.privateKeyLoaded)></td>
+<td>
+<form method="POST" action="${config.CLIENT_CP_URL}" name="f_clear_private_key" accept-charset="UTF-8">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/admin/merchant/clear_private_key.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="submit" value="${lang.admin.CCEncryption.unload}">
+</form>
+</td>
+</if>
+
+
+<call draw_table_footer()>
+</if>
+
+<!-- END ./common/control/admin/merchant/CCEncryption.html -->
+

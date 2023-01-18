@@ -1,0 +1,15 @@
+<if request.dst_id=="">
+  <assign res = session.addMessage(lang.ds.signup.dst_not_chosen_err)>
+  <include "signup/dst.html">
+<else><if request.back=="1">
+  <include "signup/dst.html">
+<else>
+  <if request.dst_id == "NONE">
+    <assign mod = "">
+  <else>
+    <assign mod = "signup">
+  </if>
+  <assign mod_defined_ = "1">
+  <assign res = params.addHash("name", "_mod", "value", mod)>
+  <include "signup/end.html">
+</if></if>

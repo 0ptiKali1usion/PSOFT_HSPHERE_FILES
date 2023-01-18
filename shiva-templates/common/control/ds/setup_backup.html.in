@@ -1,0 +1,256 @@
+<!-- BEGIN ./control/ds/setup_backup.html.in -->
+<call draw_tooltip()>
+<yafv s_hsphere>
+<assign ds = account.getResource(request.ds_id)>
+<if request.backup_id>
+  <assign backup = account.getResource(request.backup_id)>
+  <if backup>
+    <assign c_regular_basis = backup.regular_basis_id>
+    <assign c_hour = backup.hour>
+    <assign c_min = backup.min>
+    <assign c_day_of_week = backup.day_of_week>
+    <assign c_day_of_month = backup.day_of_month>
+  </if>
+</if>
+<form name="f_setup_backup" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<if backup>
+  <input type="hidden" name="template_name" value="submit/ds/change_backup_confirm.sbm">
+  <input type="hidden" name="next_template" value="submit/ds/change_backup.sbm">
+<else>
+  <input type="hidden" name="template_name" value="submit/ds/setup_backup_confirm.sbm">
+  <input type="hidden" name="next_template" value="submit/ds/setup_backup.sbm">
+</if>
+<input type="hidden" name="type" value="backup">
+<input type="hidden" name="mod" value="">
+<input type="hidden" name="rid" value="${request.ds_id}">
+<input type="hidden" name="ds_id" value="${request.ds_id}">
+
+<if backup>
+  <input type="hidden" name="stemplate" value="ds/backup_service.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+<else>
+  <input type="hidden" name="stemplate" value="ds/edit_server.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+</if>
+<input type="hidden" name="performer_id" value="${ds.reseller_id}">
+
+<if backup>
+  <call draw_table_header("2", toolbox.compose(lang.ds_backup_change_header,ds.name))>
+<else>
+  <call draw_table_header("2", toolbox.compose(lang.ds_backup_setup_header,ds.name))>
+</if>
+<tr>
+<td width="1%" nowrap>&nbsp;</td>
+<td>
+  <table class="inner_control" width="100%">
+  <tr>
+    <td>&nbsp;</td>
+    <td><input type="radio" name="period" value="1" onClick="checkForm(this.form)" <if !c_regular_basis || (c_regular_basis == "1")>CHECKED</if>><call draw_label(lang.ds.day)></td>
+    <td>
+        <if c_regular_basis == "1">
+          <assign v_day_hour = c_hour>
+          <assign v_day_min = c_min>
+        </if>
+        <input type="text" name="day_time_hour" size="2" maxlength="2" value="${v_day_hour}" check="vCheckPeriodHours('1', period, this)">&nbsp;
+        <input type="text" name="day_time_min" size="2" maxlength="2" value="${v_day_min}" check="vCheckPeriodMins('1', period, this)">&nbsp;
+        <call draw_label(lang.ds.time)></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td nowrap><input type="radio" name="period" value="2" onClick="checkForm(this.form)" <if c_regular_basis == "2">CHECKED</if>><call draw_label(lang.ds.week)></td>
+    <td nowrap>
+      <if c_regular_basis == "2">
+        <switch c_day_of_week>
+          <case "1">
+            <assign v_selected_1="SELECTED">
+            <break>
+           <case "2">
+            <assign v_selected_2="SELECTED">
+            <break>
+           <case "3">
+            <assign v_selected_3="SELECTED">
+            <break>
+           <case "4">
+            <assign v_selected_4="SELECTED">
+            <break>
+           <case "5">
+            <assign v_selected_5="SELECTED">
+            <break>
+           <case "6">
+            <assign v_selected_6="SELECTED">
+            <break>
+           <case "7">
+            <assign v_selected_7="SELECTED">
+            <break>
+       </switch>
+       <assign v_week_hour = c_hour>
+       <assign v_week_min = c_min>
+      </if>
+      <select name="day_of_week">
+        <option value="1" ${v_selected_1}>${lang.ds.day_of_week1}
+        <option value="2" ${v_selected_2}>${lang.ds.day_of_week2}
+        <option value="3" ${v_selected_3}>${lang.ds.day_of_week3}
+        <option value="4" ${v_selected_4}>${lang.ds.day_of_week4}
+        <option value="5" ${v_selected_5}>${lang.ds.day_of_week5}
+        <option value="6" ${v_selected_6}>${lang.ds.day_of_week6}
+        <option value="7" ${v_selected_7}>${lang.ds.day_of_week7}
+      </select>&nbsp;
+      <call draw_label(lang.ds.day1)>&nbsp;
+      <input type="text" name="week_time_hour" size="2" maxlength="2" value="${v_week_hour}" check="vCheckPeriodHours('2', period, this)">&nbsp;
+      <input type="text" name="week_time_min" size="2" maxlength="2" value="${v_week_min}" check="vCheckPeriodMins('2', period, this)" >&nbsp;
+      <call draw_label(lang.ds.time)>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td nowrap><input type="radio" name="period" value="3" onClick="checkForm(this.form)" <if c_regular_basis == "3">CHECKED </if>><call draw_label(lang.ds.month)></td>
+    <td nowrap>
+      <if c_regular_basis == "3">
+        <assign v_month_hour = c_hour>
+        <assign v_month_min = c_min>
+        <switch c_day_of_month>
+          <case "1">
+            <assign v_day_month_1="SELECTED">
+            <break>  
+          <case "2">
+            <assign v_day_month_2="SELECTED">
+            <break>  
+          <case "3">
+            <assign v_day_month_3="SELECTED">
+            <break>  
+          <case "4">
+            <assign v_day_month_4="SELECTED">
+            <break>  
+          <case "5">
+            <assign v_day_month_5="SELECTED">
+            <break>  
+          <case "6">
+            <assign v_day_month_6="SELECTED">
+            <break>  
+          <case "7">
+            <assign v_day_month_7="SELECTED">
+            <break>  
+          <case "8">
+            <assign v_day_month_8="SELECTED">
+            <break>  
+          <case "9">
+            <assign v_day_month_9="SELECTED">
+            <break>  
+          <case "10">
+            <assign v_day_month_10="SELECTED">
+            <break>  
+          <case "11">
+            <assign v_day_month_11="SELECTED">
+            <break>  
+          <case "12">
+            <assign v_day_month_12="SELECTED">
+            <break>  
+          <case "13">
+            <assign v_day_month_13="SELECTED">
+            <break>  
+          <case "14">
+            <assign v_day_month_14="SELECTED">
+            <break>  
+          <case "15">
+            <assign v_day_month_15="SELECTED">
+            <break>  
+          <case "16">
+            <assign v_day_month_16="SELECTED">
+            <break>  
+          <case "17">
+            <assign v_day_month_17="SELECTED">
+            <break>  
+          <case "18">
+            <assign v_day_month_18="SELECTED">
+            <break>  
+          <case "19">
+            <assign v_day_month_19="SELECTED">
+            <break>  
+          <case "20">
+            <assign v_day_month_20="SELECTED">
+            <break>  
+          <case "21">
+            <assign v_day_month_21="SELECTED">
+            <break>  
+          <case "22">
+            <assign v_day_month_22="SELECTED">
+            <break>  
+          <case "23">
+            <assign v_day_month_23="SELECTED">
+            <break>  
+          <case "24">
+            <assign v_day_month_24="SELECTED">
+            <break>  
+          <case "25">
+            <assign v_day_month_25="SELECTED">
+            <break>  
+          <case "26">
+            <assign v_day_month_26="SELECTED">
+            <break>  
+          <case "27">
+            <assign v_day_month_27="SELECTED">
+            <break>  
+          <case "28">
+            <assign v_day_month_28="SELECTED">
+            <break>  
+          <case "29">
+            <assign v_day_month_29="SELECTED">
+            <break>  
+          <case "30">
+            <assign v_day_month_30="SELECTED">
+            <break>  
+          <case "31">
+            <assign v_day_month_31="SELECTED">
+            <break>  
+        </switch>
+      </if>
+      <select name="day_of_month">
+        <option value="1" ${v_day_month_1}>01
+        <option value="2" ${v_day_month_2}>02
+        <option value="3" ${v_day_month_3}>03
+        <option value="4" ${v_day_month_4}>04
+        <option value="5" ${v_day_month_5}>05
+        <option value="6" ${v_day_month_6}>06
+        <option value="7" ${v_day_month_7}>07
+        <option value="8" ${v_day_month_8}>08
+        <option value="9" ${v_day_month_9}>09
+        <option value="10" ${v_day_month_10}>10
+        <option value="11" ${v_day_month_11}>11
+        <option value="12" ${v_day_month_12}>12
+        <option value="13" ${v_day_month_13}>13
+        <option value="14" ${v_day_month_14}>14
+        <option value="15" ${v_day_month_15}>15
+        <option value="16" ${v_day_month_16}>16
+        <option value="17" ${v_day_month_17}>17
+        <option value="18" ${v_day_month_18}>18
+        <option value="19" ${v_day_month_19}>19
+        <option value="20" ${v_day_month_20}>20
+        <option value="21" ${v_day_month_21}>21
+        <option value="22" ${v_day_month_22}>22
+        <option value="23" ${v_day_month_23}>23
+        <option value="24" ${v_day_month_24}>24
+        <option value="25" ${v_day_month_25}>25
+        <option value="26" ${v_day_month_26}>26
+        <option value="27" ${v_day_month_27}>27
+        <option value="28" ${v_day_month_28}>28
+        <option value="29" ${v_day_month_29}>29
+        <option value="30" ${v_day_month_30}>30
+        <option value="31" ${v_day_month_31}>31
+      </select>&nbsp;
+      <call draw_label(lang.ds.day1)>&nbsp;
+      <input type="text" name="month_time_hour" size="2" maxlength="2" value="${v_month_hour}" check="vCheckPeriodHours('3', period, this)">&nbsp;
+      <input type="text" name="month_time_min" size="2" maxlength="2" value="${v_month_min}" check="vCheckPeriodMins('3', period, this)">&nbsp;
+      <call draw_label(lang.ds.time)>
+    </td>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<tr>
+  <td width="1%" nowrap><call draw_tt_help(domain,help_id,"")></td>
+  <td class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/ds/setup_backup.html.in -->

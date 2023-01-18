@@ -1,0 +1,46 @@
+<!-- BEGIN ./design/mail_passw.html.in  -->
+
+<include "functions">
+<call draw_blank_menu()>
+<call draw_tooltip()>
+<yafv s_login>
+
+<form action="${config.CP_URI}" name="f_login" method="POST" check! accept-charset="UTF-8">
+
+<input type="hidden" name="action" value="change_mbox_password">
+<input type="hidden" name="ftemplate" value="design/mail_passw.html">
+
+<call draw_table_header("2", lang.design.mailpasswd.title)>
+
+<tr>
+   <td><call draw_label(lang.design.mailpasswd.box)></td>
+   <td    nowrap><input name="mbox" type="text" check="vEmail" value="${request.mbox}" size="40">
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.oldpsw)></td>
+   <td    nowrap><input type="password" name="old_password" check="vStringPassword">
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.password)></td>
+   <td    nowrap><input name="password" type="password" check="vMailPassword">
+   </td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.password2)></td>
+   <td    nowrap><input name="password2" type="password" check="vPassword2(password, this)">
+   </td>
+</tr>
+
+<tr>
+   <td colspan="2"  class="control_align_center">
+	<input type="submit" name="action" value="${lang.button.change}">
+   </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<call bottom()>
+
+<!--  END ./design/mail_passw.html.in  -->

@@ -1,0 +1,95 @@
+<!-- BEGIN ./email/iris_mlist_messages_edit.html -->
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" name="f_mlist_message" method="POST" accept-charset="UTF-8">
+
+
+<call draw_table_header("3", request.mail_list+"@"+request.mail_domain)>
+
+<tr>
+  <td class="control_header" colspan="3"><call draw_header(request.title_sh)>&nbsp;&nbsp;<call draw_label(request.title)></td>
+</tr>
+
+<tr>
+<td class="control_header" colspan="3"><call draw_header(lang.email.mlist_variable.header)></td>
+</tr>
+
+<tr>
+  <td><call draw_label("$ADDR")></td>
+  <td><call draw_label(lang.email.mlist_variable.addr)></td>
+</tr>
+<tr>
+  <td><call draw_label("$ADMINADDR")></td>
+  <td><call draw_label(lang.email.mlist_variable.adminaddr)></td>
+</tr>
+<tr>
+  <td><call draw_label("$CONFIRM")></td>
+  <td><call draw_label(lang.email.mlist_variable.confirm)></td>
+</tr>
+<tr>
+  <td><call draw_label("$DIVIDER")></td>
+  <td><call draw_label(lang.email.mlist_variable.divider)></td>
+</tr>
+<tr>
+  <td><call draw_label("$HELPADDR")></td>
+  <td><call draw_label(lang.email.mlist_variable.helpaddr)></td>
+</tr>
+<tr>
+  <td><call draw_label("$HOSTNAME")></td>
+  <td><call draw_label(lang.email.mlist_variable.hostname)></td>
+</tr>
+<tr>
+  <td><call draw_label("$INTRODUCTION")></td>
+  <td><call draw_label(lang.email.mlist_variable.introduction)></td>
+</tr>
+<tr>
+  <td><call draw_label("$NAME")></td>
+  <td><call draw_label(lang.email.mlist_variable.name)></td>
+</tr>
+<tr>
+  <td><call draw_label("$OWNERADDR")></td>
+  <td><call draw_label(lang.email.mlist_variable.owneraddr)></td>
+</tr>
+<tr>
+  <td><call draw_label("$PROGRAM")></td>
+  <td><call draw_label(lang.email.mlist_variable.program)></td>
+</tr>
+<tr>
+  <td><call draw_label("$RECIPIENT")></td>
+  <td><call draw_label(lang.email.mlist_variable.recipient)></td>
+</tr>
+<tr>
+  <td><call draw_label("$REQUESTADDR")></td>
+  <td><call draw_label(lang.email.mlist_variable.requestaddr)></td>
+</tr>
+<tr>
+  <td><call draw_label("$SENDER")></td>
+  <td><call draw_label(lang.email.mlist_variable.sender)></td>
+</tr>
+<tr>
+  <td><call draw_label("$VERSION")></td>
+  <td><call draw_label(lang.email.mlist_variable.version)></td>
+</tr>
+
+<tr>
+<td colspan="3">
+  <input type="hidden" name="template_name" value="submit/email/iris_mlist_message.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="text_name" value="${request.text_name}">
+  <input type="hidden" name="uid" value="${request.uid}">
+  <input type="hidden" name="rid" value="${request.rid}">
+  <input type="hidden" name="mode" value="${request.mode}">
+  <input type="hidden" name="mail_domain" value="${request.mail_domain}">
+  <input type="hidden" name="mail_list" value="${request.mail_list}">
+  <input type="hidden" name="sc_page" value="${request.sc_page}">
+  <textarea rows="10" cols="68" name="text_value">${request.text_value}</textarea>
+</td>
+</tr>
+<tr>
+    <td class="control_align_center" colspan="3"><input type="submit" value="${lang.button.submit}">
+</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./email/iris_mlist_messages_edit.html  -->

@@ -1,0 +1,29 @@
+<!-- BEGIN ./submit/eeman/del_loadbalserver.sbm  -->
+<assign eeman = account.getChild("eeman")>
+
+<if eeman>
+
+ <if request.rid>
+   <assign pserver=eeman.getLoadBalServer(request.rid)>
+ <else>
+   <assign pserver=result>
+ </if>
+
+ <if pserver.hasChild != "0" >
+     <assign res=session.addMessage(
+     	lang.eeman.loadbalserver.has_child(pserver.name))>
+     <include request.ftemplate>
+ <else>
+     <assign result = pserver.deleteLoadBalancedPServer()>
+
+     <if result.status=="OK">
+        <include request.stemplate>
+     <else>
+        <assign res=session.addMessage(
+  	  lang.eeman.loadbalserver.delete_failed(pserver.name))>
+	<include request.ftemplate>
+     </if>
+
+  </if>
+</if>
+<!--  END ./submit/eeman/del_loadbalserver.sbm  -->

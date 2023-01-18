@@ -1,0 +1,40 @@
+<!-- BEGIN ./winuser/change_quota.html.in  -->
+<yafv s_winuser>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.unixuser.changequota.header)>
+
+
+<tr>
+    <td><call draw_label(lang.unixuser.changequota.newquota)></td>
+<td>
+
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_change_quota" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="template_name" value="submit/winuser/change_quota_check.sbm">
+<input type="hidden" name="next_template" value="submit/winuser/change_quota_submit.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="type" value="quota">
+<input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+
+<if ! vsize>
+<assign u=account.getChild("unixuser")>
+<assign quota = u.getChild("quota")>
+<assign vsize=quota.limitMb>
+</if>
+<input type="text" name="size"  label="${lang.label.quota}" check="vQuota" size="5" value="${vsize}">&nbsp;<call draw_label(lang.unixuser.changequota.mb)></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>
+    <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!--  END ./winuser/change_quota.html.in  -->

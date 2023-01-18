@@ -1,0 +1,17 @@
+<!-- BEGIN ./windomain/add_ssi.sbm  -->
+<assign hosting=account.getResource(request.rid)>
+<assign result=hosting.addChild("ssi", "")>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_enabled,lang.label.ssi,request.ext))>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/add_ssi.sbm  -->

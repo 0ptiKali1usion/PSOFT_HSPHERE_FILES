@@ -1,0 +1,155 @@
+<!-- BEGIN ./control/admin/monthly_churn_rate.html  -->
+<assign billman=account.getChild("billman")>
+
+<call draw_tooltip()>
+<if billman>
+
+
+<call draw_table_header("5", lang.admin.monthlyrate.info)>
+<form name="MonthlyRate" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8"> 
+
+<tr>
+<td colspan="5" class="control_header_align_center">
+  <call draw_header(lang.admin.monthlyrate.header)>
+  <input type="hidden" name="template_name" value="admin/monthly_churn_rate.html">
+  <font color="${design.color("header_text_color")}">
+    <select name="endMonth" size="1">
+        <option value="01" >${lang.admin.monthlyrate.month1}</option>
+        <option value="02" SELECTED >${lang.admin.monthlyrate.month2}</option>
+        <option value="03" >${lang.admin.monthlyrate.month3}</option>
+        <option value="04" >${lang.admin.monthlyrate.month4}</option>
+        <option value="05" >${lang.admin.monthlyrate.month5}</option>
+        <option value="06" >${lang.admin.monthlyrate.month6}</option>
+        <option value="07" >${lang.admin.monthlyrate.month7}</option>
+        <option value="08" >${lang.admin.monthlyrate.month8}</option>
+        <option value="09" >${lang.admin.monthlyrate.month9}</option>
+        <option value="10" >${lang.admin.monthlyrate.month10}</option>
+        <option value="11" >${lang.admin.monthlyrate.month11}</option>
+        <option value="12" >${lang.admin.monthlyrate.month12}</option>
+    </select>
+ 
+    <select name="endYear" size="1">
+        <option value="2000" SELECTED>2000</option>
+        <option value="2001" >2001</option>
+        <option value="2002" >2002</option>
+        <option value="2003" >2003</option>
+        <option value="2004" >2004</option>
+        <option value="2005" >2005</option>
+        <option value="2006" >2006</option>
+        <option value="2007" >2007</option>
+    </select>
+    &nbsp;<input type="submit" value="${lang.admin.monthlyrate.submget}">
+  </font>
+</td>
+</tr>  
+
+</form>
+
+<assign total_begin = "0">
+<assign total_accounts = "0">
+<assign total_go_out = "0">
+<assign total_end = "0">
+<if (request.endMonth!="") && (request.endYear!="")>
+    <assign groups = billman.getMothlyChurnRate( request.endYear,request.endMonth).groups >
+<else>
+    <assign groups = billman.getMothlyChurnRate( "0", "0").groups >
+</if>
+<list groups as group >
+<tr>
+<td class="control_header_align_center" nowrap ><if group.group_id=="0"><call draw_header(lang.admin.monthlyrate.ungrouped)><else><if group.name><call draw_header(group.name)><else>&nbsp;</if></if></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrate.init)></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrate.signup)></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrate.goaway)></td>
+<td class="control_header_align_center" nowrap><call draw_header(lang.admin.monthlyrate.closing)></td>
+</tr>
+<assign group_begin = "0">
+<assign group_accounts = "0">
+<assign group_go_out = "0">
+<assign group_end = "0">
+
+
+
+<assign been_there = "0">
+<list group.plans as plan> 
+<assign been_there = "1">
+    <tr>
+    <td    nowrap>&nbsp;&nbsp;<call draw_label(plan.description)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.begin_amount)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.accounts)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.go_out)></td>
+<td  class="control_align_center" nowrap><call draw_label(plan.end_amount)></td>
+    </tr>
+<assign total_begin = toolbox.add(total_begin, plan.begin_amount)>
+<assign total_accounts = toolbox.add(total_accounts, plan.accounts)>
+<assign total_go_out = toolbox.add(total_go_out, plan.go_out)> 
+<assign total_end = toolbox.add(total_end, plan.end_amount)>
+
+<assign group_begin = toolbox.add(group_begin, plan.begin_amount)>
+<assign group_accounts = toolbox.add(group_accounts, plan.accounts)>
+<assign group_go_out = toolbox.add(group_go_out, plan.go_out)> 
+<assign group_end = toolbox.add(group_end, plan.end_amount)>
+
+</list>
+<if been_there == "1">
+  <tr>
+    <td  class="control_align_right" nowrap><call draw_label_bold(lang.admin.monthlyrate.subtotal)></td>
+    <td  class="control_align_center" nowrap><call draw_label_bold(group_begin)></td>
+    <td  class="control_align_center" nowrap><call draw_label_bold(group_accounts)></td>
+    <td  class="control_align_center" nowrap><call draw_label_bold(group_go_out)></td>
+    <td  class="control_align_center" nowrap><call draw_label_bold(group_end)></td>
+  </tr> 
+</if>
+</list>
+  <tr>
+    <td class="control_header"  nowrap><call draw_header(lang.label.total)></td>
+    <td class="control_header_align_center" nowrap><call draw_header(total_begin)></td>
+    <td class="control_header_align_center" nowrap><call draw_header(total_accounts)></td>
+    <td class="control_header_align_center" nowrap><call draw_header(total_go_out)></td>
+    <td class="control_header_align_center" nowrap><call draw_header(total_end)></td>
+</tr>
+
+<call draw_table_footer()>
+<script language="javascript">
+<if request.endMonth>
+sendedMonth = ${request.endMonth};
+<else>
+sendedMonth = "";
+</if>
+<if request.endYear>
+sendedYear = ${request.endYear};
+<else>
+sendedYear = "";
+</if>
+
+today = new Date();
+todayMonth=today.getMonth();
+todayYear=today.getYear();
+if(todayYear < 1000) {
+   todayYear = todayYear + 1900;
+}
+
+if(sendedMonth==""){
+    document.forms[0].endMonth[todayMonth].selected=true;
+} else {
+    document.forms[0].endMonth[sendedMonth-1].selected=true;
+}
+for ( i=window.document.MonthlyRate.endYear.options.length; i>=0; i--) {
+     window.document.MonthlyRate.endYear.options[i]=null;
+}
+j=0;
+for(i = 2000; i<= todayYear; i++) {
+   nop=new Option();
+   nop.text = i;
+   nop.value = i; 
+   window.document.MonthlyRate.endYear.options[j++] = nop;
+}
+
+if(sendedYear==""){
+    document.forms[0].endYear[todayYear-2000].selected=true;
+} else {
+    sendedYear = sendedYear - 2000;
+    document.forms[0].endYear[sendedYear].selected=true;
+}
+</script>
+</if>
+<!-- END ./control/admin/monthly_churn_rate.html  -->

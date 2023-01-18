@@ -1,0 +1,29 @@
+<!-- BEGIN ./submin/eeman/set_mysql_cluster_setting.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<if (request.rid != "") && (request.name != "")>
+    <assign optManipulator = obj.lserveroptions.getManipulator(request.name, request.useXML)>
+    <assign result=optManipulator.setOption(request.rid, request.value)>
+    <if result.status == "OK">
+        <if request.useXML == "false">
+            <assign lserver=eeman.getLserver(request.rid)>
+            <assign resh=lserver.setMySQLHost(request.value)>
+            <if resh.status == "OK">
+                <assign successful = "1">
+            <else>
+                <list resh.msgs as msg><assign res = session.addMessage(msg)></list>
+            </if>
+        <else>
+            <assign successful = "1">
+        </if>
+    <else>
+	<list result.msgs as msg><assign res = session.addMessage(msg)></list>
+    </if>
+</if>
+<if successful>
+    <assign res = session.addMessage(lang.msg.settings_updated)>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+
+<!-- END ./submin/eeman/set_mysql_cluster_setting.sbm  -->

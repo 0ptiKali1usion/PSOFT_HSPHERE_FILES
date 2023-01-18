@@ -1,0 +1,75 @@
+<!-- BEGIN ./control/admin/deposit.html  -->
+<call draw_tooltip()>
+<assign billman = account.getChild("billman")>
+
+<if billman>
+
+<if aid==""><assign aid=request.aid></if>
+<yafv s_admin>
+<form name="f_deposit" action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/add_payment.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="aid" value="${aid}">
+<input type="hidden" name="cur_menu" value="${cur_menu}">
+<input type="hidden" name="search_step" value="${request.search_step}">
+<input type="hidden" name="start" value="${request.start}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.admin.deposit.header)>
+
+<tr>	<td><call draw_label(lang.label.amount)></td>
+<td>
+		<input type="text" name="amount" value="${amount}" label="${lang.label.amount}" check="vAmount">
+	</td>
+</tr>
+<tr>
+	<td><call draw_label(lang.label.descr)></td>
+	<td>
+		<select name="text" size="1">
+		<option value="CHECK" SELECTED>CHECK
+		<option value="MANUAL CC">MANUAL CC CHARGE
+		<option value="PROMOTION">PROMOTION
+		<option value="OTHER">OTHER
+		</select>
+	</td>
+</tr>
+<tr>
+	<td><call draw_label(lang.admin.id)></td>
+	<td>
+		<input type="text" name="id" value="${id}">
+	</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.custom_billing.include_taxes)></td>
+<td><input type="checkbox" name="taxes" value="1"></td>
+</tr>
+
+<tr>
+	<td  colspan="2">
+		<call draw_label(lang.label.comment)>
+	</td>
+</tr>
+<tr>
+	<td  colspan="2">
+		<textarea name="desc" rows="5" cols="40">${desc}</textarea>
+	</td>
+</tr>
+<tr>
+	<td  colspan="2" class="control_align_center">
+		<input type="submit" value="${lang.button.submit}">
+	</td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/deposit.html  -->

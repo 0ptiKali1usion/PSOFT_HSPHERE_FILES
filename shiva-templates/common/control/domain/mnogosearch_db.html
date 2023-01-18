@@ -1,0 +1,55 @@
+<!-- BEGIN ./control/domain/mnogosearch_db.html -->
+
+<assign mysql=account.getChild("MySQL")>
+<if !mysql><assign mysql = account.addChild("MySQL", "")>
+    <if mysql.status != "OK"><assign res=session.addMessage(mysql.msg)></if>
+</if>
+<call draw_tooltip()>
+<if request.parent_template><assign parent_template=request.parent_template><else><assign parent_template=request.stemplate></if>
+<if request.type><assign resource_name=request.type><else><assign resource_name=request.resource_name></if>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_oscommerce" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/MySQL/add_db_user.sbm">
+<input type="hidden" name="parent_template" value="${parent_template}">
+<input type="hidden" name="stemplate" value="submit/MySQL/add_db_user.sbm">
+<input type="hidden" name="submit_template" value="submit/domain/add_mnogosearch.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="resource_name" value="${resource_name}">
+
+
+
+<if mysql>
+<assign databases=mysql.getChildren("MySQLDatabase")>
+
+<call draw_table_header("2", lang.mysql.users.header)>
+
+<tr>
+    <td class="control_header"><call draw_header(lang.mysql.dbs.header)></td>
+    <td class="control_header"><call draw_header(lang.mysql.users.header)></td>
+</tr>
+<tr>
+    <td  width="50%">
+    <select name="db_id" size="1">
+    <option value="NEW">New database</option>
+    <list databases as database>
+    <if database.locked_by == ""><option value="${database}">${database.db_name} (${database.db_description})</option></if>
+    </list>
+    </select>
+    </td>
+<assign db_users = mysql.getChildren("MySQLUser")>
+    <td  width="50%">
+    <select name="user_id" size="1">
+    <option value="NEW">New user</option>
+    <list db_users as db_user>
+    <if !db_user.locked_by><option value="${db_user}">${db_user.name}</option></if>
+    </list>
+    </select>
+</td>
+<tr>
+    <td  colspan="2" class="control_align_right"><input type="submit" value="NEXT"></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/domain/mnogosearch_db.html  -->

@@ -1,0 +1,29 @@
+<!-- BEGIN ./domain/add_awstats_submit.sbm  -->
+<assign trans=account.getResource(request.rid).getChild("transferlog")>
+<if !trans>
+    <assign trans=account.getResource(request.rid).addChild("transferlog","simple")>
+</if>
+<assign cgi_resources=account.getResource(request.rid).getChildren("cgi")>
+<list cgi_resources as cgi>
+   <if cgi.ext == ".pl">
+	<assign cgi_pl = "1">
+   </if>
+</list>
+
+<if !cgi_pl>
+    <assign trans=account.getResource(request.rid).addChild("cgi", "", ".pl", "Perl")>
+</if>
+<assign result=trans.addChild("awstats", "")>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res = session.addMessage(toolbox.compose(
+      lang.msg.name_res_added,lang.label.awstats,""))>
+<else>
+  <assign res = session.addMessage(result.msg)>
+</if>
+<if success>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!--  END ./domain/add_awstats_submit.sbm  -->

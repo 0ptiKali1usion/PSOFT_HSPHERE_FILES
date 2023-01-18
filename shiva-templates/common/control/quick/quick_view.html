@@ -1,0 +1,231 @@
+<!-- BEGIN ./quick/quick_view.html  -->
+<include "control/quick/quick.fn">
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.label.statistics)>
+
+<tr>
+<assign unixuser=account.getChild("unixuser")>
+<if unixuser><assign platform_type=unixuser.host.platform_type></if>
+
+<if account.plan.values["_CREATED_BY_"] == "mailonly"><assign isMailOnly = "1"></if>
+<if account.plan.values["_CREATED_BY_"] == "msexchange"><assign isMailOnly = "1"></if>
+
+<td  width="50%">
+<b><call draw_label(lang.label.plan)></b>&nbsp;<call draw_label(account.plan.description)><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)><call draw_help("user-ai_quick-plan","")><br>
+
+<if account.plan.b_info != "0">
+<b><call draw_label(lang.label.bp)></b>&nbsp;<call draw_label(account.plan.values["_PERIOD_SIZE_"+account.periodId]+"&nbsp;"+account.plan.values["_PERIOD_TYPE_"+account.periodId])>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=billing/change_period.html&stemplate="+template+"&ftemplate="+template, lang.quick.quickview.changebp)>
+<call draw_help("user-ai_quick-billingperiod","")>
+<br>
+</if>
+
+<b><call draw_label(lang.quick.quickview.user)></b>&nbsp;<call draw_label(user.login)><call draw_help("user-ai_quick-username","")>
+<if unixuser><br><b><call draw_label(lang.label.ftplogin)></b>&nbsp;<call draw_label(unixuser.login)><call draw_help("user-ai_quick-ftplogin","")></if>
+</td>
+
+<assign transfer_domains=account.findAllChildren("domain")>
+<assign nodomains=account.findAllChildren("nodomain")>
+<assign third_domains=account.findAllChildren("3ldomain")>
+<assign service_domains=account.findAllChildren("service_domain")>
+<assign parked_domains=account.findAllChildren("parked_domain")>
+<td  valign="top" nowrap>
+<if transfer_domains || nodomains || third_domains || service_domains || parked_domains>
+<call draw_label_bold(lang.quick.quickview.domains)><call draw_help("user-ai_quick-domainname","")><br>
+<assign count="0">
+<list transfer_domains as domain>
+    <assign count=toolbox.add(count,"1")>
+    <if toolbox.le(count,"2")=="1">
+	<if platform_type == "win2k">
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain,domain.name)>
+	
+	<else>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)>
+	</if>
+        <if !isMailOnly><call draw_preview("http://"+domain.name+"/", lang.quick.quickview.viewsite)></if><br>
+    </if>
+</list>
+<list nodomains as domain>
+    <assign count=toolbox.add(count,"1")>
+    <if toolbox.le(count,"2")=="1">
+	<if platform_type == "win2k">
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain,domain.name)>
+	<else>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)>
+	</if>
+        <if !isMailOnly><call draw_preview("http://"+domain.name+"/", lang.quick.quickview.viewsite)></if><br>
+    </if>
+</list>
+<list third_domains as domain>
+    <assign count=toolbox.add(count,"1")>
+    <if toolbox.le(count,"2")=="1">
+	<if platform_type == "win2k">
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain,domain.name)>
+	<else>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)>
+	</if>
+        <if !isMailOnly><call draw_preview("http://"+domain.name+"/", lang.quick.quickview.viewsite)></if><br>
+    </if>
+</list>
+<list service_domains as domain>
+    <assign count=toolbox.add(count,"1")>
+    <if toolbox.le(count,"2")=="1">
+	<if platform_type == "win2k">
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain,domain.name)>
+	<else>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)>
+	</if>
+	<if !isMailOnly><call draw_preview("http://"+domain.name+"/", lang.quick.quickview.viewsite)></if><br>
+    </if>
+</list>
+<list parked_domains as domain>
+    <assign count=toolbox.add(count,"1")>
+    <if toolbox.le(count,"2")=="1">
+	<if platform_type == "win2k">
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=windomain/edit.html&rid="+domain,domain.name)>
+	<else>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name=domain/edit.html&rid="+domain,domain.name)>
+	</if>
+	<if !isMailOnly><call draw_preview("http://"+domain.name+"/", lang.quick.quickview.viewsite)></if><br>
+    </if>
+</list>
+
+<if toolbox.gt(count,"2")=="1">
+  <call draw_link(config.CLIENT_CP_URL+"?template_name=quick/choice_domain.html", lang.quick.quickview.more)>
+</if>
+<else>
+ &nbsp;
+</if>
+</td>
+</tr>
+
+<if account.plan.isResourceAvailable("reseller_traffic")>
+  <assign res_traffic_avail= "1">
+  <assign res_traffic = account.getChild("reseller_traffic")>
+  <if res_traffic>
+    <assign res = res_traffic.reload>
+    <assign res_limit=toolbox.mul(res_traffic.size,"1024")>
+  </if>
+<else><if account.plan.isResourceAvailable("traffic")>
+  <assign traffic_avail= "1">
+  <assign traffic = account.getChild("traffic")>
+  <assign res = traffic.reload()>
+  <assign limit=toolbox.mul(traffic.size,"1024")>
+</if></if>
+<if account.plan.isResourceAvailable("summary_quota")>
+  <assign quota=account.getChild("summary_quota")>
+  <assign summary_quota_avail = "1">
+  <if account.plan.isResourceAvailable("reseller")>
+    <assign showQuotaDetails = "">
+  <else>
+    <assign showQuotaDetails = "1">
+  </if>
+<else><if account.plan.isResourceAvailable("quota")>
+  <assign quota=account.findChild("quota")>
+  <assign quota_avail = "1">
+</if></if>
+<if traffic_avail || res_traffic_avail || quota_avail || summary_quota_avail>
+<tr>
+  <td    valign="top" width="50%">
+  <if traffic_avail>
+    <call draw_label_bold(lang.label.traffic)><call draw_help("user-ai_quick-totaltraffic","")>
+    <if traffic>
+      <br>
+      <call draw_load_diagram(traffic.traffic, limit, "90", "70%")>
+      <call draw_label(lang.quick.quickview.used_traffic(traffic.start_date, traffic.text_traffic, traffic.size))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&stemplate=quick/quick_view.html&ftemplate="+template, lang.label.changetraffic)>
+      <assign limit=toolbox.mul(traffic.size,"1024")>
+      <assign traffic_details = "1">
+    <else>
+      &nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&stemplate=quick/quick_view.html&ftemplate="+template, lang.label.changetraffic)>
+    </if>
+  <else><if res_traffic_avail>
+    <call draw_label_bold(lang.nomenu.restraffic)>
+    <if res_traffic>
+      <br>
+      <call draw_load_diagram(res_traffic.traffic, res_limit, "90", "95%")>
+      <call draw_label(toolbox.compose(lang.quick.quickview.usedtraffic, res_traffic.text_traffic, res_traffic.size))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+account.id+"&ftemplate="+template+"&stemplate="+template+"&traffic_type=-1", lang.label.changetraffic)>
+      <assign traffic_details = "1">
+    <else>
+      &nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+account.id+"&ftemplate="+template+"&stemplate="+template+"&traffic_type=-1", lang.label.changetraffic)>
+    </if>
+  <else>
+    &nbsp;
+  </if></if>
+  </td>
+  <td     valign="top">
+  <if quota_avail>
+    <call draw_label_bold(lang.label.quota)>
+    <if quota>
+      <br>
+      <call draw_load_diagram(quota.usedMb, quota.limitMb, "90", "70%")>
+      <call draw_label(toolbox.compose(lang.quick.quickview.usedquota, quota.usedMb, quota.limitMb))>
+      <call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, quota.start_date))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=unixuser/change_quotaftp.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changequota)>
+    <else>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=unixuser/change_quotaftp.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changequota)>
+    </if>
+  <else><if summary_quota_avail>
+    <call draw_label_bold(lang.label.disk_usage)><call draw_help("user-ai_quick-disk_usage","")>
+    <if quota>
+      <br>
+      <call draw_load_diagram(quota.usedMb, quota.limitMb, "90", "70%")>
+      <call draw_label(lang.quick.quickview.average_usage(quota.start_date, quota.usedMb, quota.limitMb))>
+      <call draw_change(config.CLIENT_CP_URL+"?template_name=unixuser/change_disk_usage.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changedisk_usage)>
+      <br>
+      <call draw_label(lang.quick.quickview.last_day_usage(quota.lastDayUsedMb))>
+      <if showQuotaDetails>
+        <assign dk_usage_details = "1">
+      </if>
+    <else>
+      <call draw_add(config.CLIENT_CP_URL+"?template_name=unixuser/change_disk_usage.html&stemplate=quick/quick_view.html&ftemplate="+template+"&rid="+unixuser, lang.label.changedisk_usage)>
+    </if>
+  <else>
+    &nbsp;
+  </if></if>
+  
+  </td>
+</tr>
+<if dk_usage_details || traffic_details>
+<tr>
+  <td valign="top">
+    <if traffic_details>
+      <call draw_label_bold(lang.quick.quickview.trafficdetails)>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=quick/traffic_details.html","lupa", lang.quick.quickview.viewtd)>
+    <else>&nbsp;
+    </if>
+  </td>
+  <td     valign="top">
+    <if dk_usage_details>
+      <call draw_label_bold(lang.quick.quickview.dk_usage_details)>
+      <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=search/usage_details.html&account_id=${account.id.id}&sc_r_from=${quota.short_start_date}','Details','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false">
+          <call draw_image_align_alt("lupa", "absmiddle", lang.admin.search_usage_detail_info)>
+      </a>
+    <else>&nbsp;
+    </if>
+  </td>
+</tr>
+</if>
+<tr>
+  <td    colspan="2">
+    <call draw_diagram_legend()>
+  </td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+
+<br>
+<br>
+<call draw_table_header("", lang.label.qa)>
+
+<tr>
+<td width="100%" style="padding:5">
+<call draw_icon_table()>
+</td>
+</tr>
+
+<call draw_table_footer()>
+<!--  END ./quick/quick_view.html  -->

@@ -1,0 +1,205 @@
+<!-- BEGIN ./domain/order.html  -->
+<assign tld = request.tld>
+<assign domainManager = account.getChild("unixuser")>
+<if !domainManager><assign domainManager = account.id></if>
+<if request.profile_domain && request.profile_domain!="NEW">
+<assign tmp = account.getResource(request.profile_domain)>
+<assign contact_info=tmp.getChild("contact_info")>
+<assign billing_info=tmp.getChild("billing_info")>
+  <else>
+<assign contact_info=account.ci>
+<assign billing_info=account.bi>
+</if>
+
+<if !srs_owner_first_name><assign srs_owner_first_name=contact_info.first_name></if>
+<if !srs_owner_last_name><assign srs_owner_last_name=contact_info.last_name></if>
+<if !srs_owner_org_name><assign srs_owner_org_name=contact_info.org_name></if>
+<if !srs_owner_address1><assign srs_owner_address1=contact_info.address1></if>
+<if !srs_owner_address2><assign srs_owner_address2=contact_info.address2></if>
+<if !srs_owner_address3><assign srs_owner_address3=contact_info.address3></if>
+<if !srs_owner_city><assign srs_owner_city=contact_info.city></if>
+<if !srs_owner_state><assign srs_owner_state=contact_info.state></if>
+<if !srs_owner_country><assign srs_owner_country=contact_info.country></if>
+<if !srs_owner_postal_code><assign srs_owner_postal_code=contact_info.postal_code></if>
+<if !srs_owner_phone><assign srs_owner_phone=contact_info.phone></if>
+<if !srs_owner_fax><assign srs_owner_fax=contact_info.fax></if>
+<if !srs_owner_email><assign srs_owner_email=contact_info.email></if>
+
+<if !srs_billing_first_name><assign srs_billing_first_name=billing_info.first_name></if>
+<if !srs_billing_last_name><assign srs_billing_last_name=billing_info.last_name></if>
+<if !srs_billing_org_name><assign srs_billing_org_name=billing_info.org_name></if>
+<if !srs_billing_address1><assign srs_billing_address1=billing_info.address1></if>
+<if !srs_billing_address2><assign srs_billing_address2=billing_info.address2></if>
+<if !srs_billing_address3><assign srs_billing_address3=billing_info.address3></if>
+<if !srs_billing_city><assign srs_billing_city=billing_info.city></if>
+<if !srs_billing_state><assign srs_billing_state=billing_info.state></if>
+<if !srs_billing_country><assign srs_billing_country=billing_info.country></if>
+<if !srs_billing_postal_code><assign srs_billing_postal_code=contact_info.postal_code></if>
+<if !srs_billing_phone><assign srs_billing_phone=contact_info.phone></if>
+<if !srs_billing_fax><assign srs_billing_fax=contact_info.fax></if>
+<if !srs_billing_email><assign srs_billing_email=contact_info.email></if>
+
+<call draw_tooltip()>
+<yafv s_domain>
+<form name="f_order" acton="${config.CLIENT_CP_URL}" method="POST" check! onSubmit="changeMod()" accept-charset="UTF-8">
+      <input type="hidden" name="ftemplate" value="${template}">
+      <input type="hidden" name="stemplate" value="${request.stemplate}">
+<!--      <input type="hidden" name="template_name" value="submit/domain/order_result.sbm"> -->
+      <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+      <input type="hidden" name="domain_name" value="${request.domain_name}">
+      <input type="hidden" name="next_template" value="submit/domain/order_domain_transfer.sbm">
+      <input type="hidden" name="type" value="domain">
+      <input type="hidden" name="rid" value="${domainManager}">
+      <input type="hidden" name="mod" value="dtransfer">
+      <input type="hidden" name="tld" value="${tld}">
+      <if SESSION_PLATFORM == "mail_only">
+      <input type="hidden" name="password" value="${account.password}">
+      </if>
+<assign billviewer = account.getChild("billviewer")>
+<assign price = billviewer.getDomainTransferPrice(tld)>
+
+<call draw_table_header("2", lang.domain.order.header)>
+<tr>
+<td><call draw_label(lang.label.domain)>&nbsp;<call draw_label_bold(request.domain_name)></td>
+<td><call draw_label_bold(lang.label.domain_transfer)></td>
+</TR>
+<TR>
+	<td COLSPAN="2" class="control_header"><call draw_header(lang.label.ci)></td>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.fname)></td>
+	<TD><input name="_srs_owner_first_name" size=15 value="${srs_owner_first_name}" label="${lang.bci.fname}" check="vSinglename"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.lname)></td>
+	<TD><input name="_srs_owner_last_name" size=15 value="${srs_owner_last_name}" label="${lang.bci.lname}" check="vSinglename"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.company)></td>
+	<TD><input name="_srs_owner_org_name" size=30 value="${srs_owner_org_name}" label="${lang.bci.company}" check="vOrganization"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr1)></td>
+	<TD><input name="_srs_owner_address1" size=30 value="${srs_owner_address1}" label="${lang.bci.adr1}" check="vAddress"></TD>
+</TR>
+<TR>
+	<TD><call draw_label(lang.bci.adr2)></TD>
+	<TD><input name="_srs_owner_address2" size=30 value="${srs_owner_address2}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr3)></td>
+	<TD><input name="_srs_owner_address3" size=30 value="${srs_owner_address3}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.city)></td>
+	<TD><input name="_srs_owner_city" size=15 value="${srs_owner_city}" label="${lang.bci.city}" check="vCity"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.state)></td>
+	<TD><input name="_srs_owner_state" size=15 label="${lang.bci.state}" value="${srs_owner_state}" check="vState"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.country)></td>
+	<TD>
+	    <SELECT NAME="_srs_owner_country" onChange="checkForm(this.form)">
+		<call buildCountries(srs_owner_country)>
+	    </SELECT>
+	</TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.pcode)></td>
+	<TD><input name="_srs_owner_postal_code" label="${lang.bci.pcode}" size=15 value="${srs_owner_postal_code}" check="vPostal_Code"></TD>
+</TR>
+<TR>
+	<td    valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></td>
+	<TD    valign="top"><input name="_srs_owner_phone" label="${lang.bci.phone}" size=20 value="${srs_owner_phone}" check="vPhoneOSRS(this, _srs_owner_country, tld)"><br><call draw_label(lang.bci.country_phone_examples)></TD>
+</TR>
+<TR>
+	<TD    valign="top"><call draw_label(lang.bci.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+	<TD    valign="top"><input name="_srs_owner_fax" label="${lang.bci.fax}" size=20 value="${srs_owner_fax}" check="vFaxOSRS(this, _srs_owner_country, tld)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.email)></td>
+	<TD><input name="_srs_owner_email" label="${lang.bci.email}" size=30 value="${srs_owner_email}" check="vEmail"></TD>
+</TR>
+<TR><td COLSPAN=2 class="control_header"><call draw_header(lang.label.bi)></td></TR>
+<if flag_use_contact_info=="1">
+    <assign checked_ci="CHECKED">
+</if>
+
+<TR>
+	<TD COLSPAN=2    ><call draw_label(lang.domain.order.sameci)> <input type=checkbox name="flag_use_contact_info" value="1" onClick="changeMod();checkForm(this.form,false)" ${checked_ci}></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.fname)></td>
+	<TD><input name="_srs_billing_first_name" size=15 value="${srs_billing_first_name}" label="${lang.bci.fname}" check="vBiName(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.lname)></td>
+	<TD><input name="_srs_billing_last_name" size=15 value="${srs_billing_last_name}" label="${lang.bci.lname}" check="vBiName(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.company)></td>
+	<TD><input name="_srs_billing_org_name" size=30 value="${srs_billing_org_name}" label="${lang.bci.company}" check="vBiOrganization(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr1)></td>
+	<TD><input name="_srs_billing_address1" size=30 value="${srs_billing_address1}" label="${lang.bci.adr1}" check="vBiAddress(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<TD><call draw_label(lang.bci.adr2)></TD>
+	<TD><input name="_srs_billing_address2" size=30 value="${srs_billing_address2}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.adr3)></td>
+	<TD><input name="_srs_billing_address3" size=30 value="${srs_billing_address3}"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.city)></td>
+	<TD><input name="_srs_billing_city" size=15 value="${srs_billing_city}" label="${lang.bci.city}" check="vBiCity(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.state)></td>
+	<TD><input name="_srs_billing_state" size=15 value="${srs_billing_state}" label="${lang.bci.state}" check="vBiState(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.country)></td>
+	<TD>
+ 	    <SELECT NAME="_srs_billing_country" onChange="checkForm(this.form)">
+		<call buildCountries(srs_billing_country)>
+	    </SELECT>
+	</TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.pcode)></td>
+	<TD><input name="_srs_billing_postal_code" size=15 value="${srs_billing_postal_code}" label="${lang.bci.pcode}" check="vBiPostal_Code(this,flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td    valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></td>
+	<TD    valign="top"><input name="_srs_billing_phone" size=20 value="${srs_billing_phone}" label="${lang.bci.phone}" check="vBiPhoneOSRS(this, _srs_billing_country, tld, flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<TD    valign="top"><call draw_label(lang.bci.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+	<TD    valign="top"><input name="_srs_billing_fax" size=20 value="${srs_billing_fax}" label="${lang.bci.fax}" check="vBiFaxOSRS(this, _srs_billing_country, tld, flag_use_contact_info)"></TD>
+</TR>
+<TR>
+	<td><call draw_label(lang.bci.email)></td>
+	<TD><input name="_srs_billing_email" size=30 value="${srs_billing_email}" label="${lang.bci.email}" check="vBiEmail(this,flag_use_contact_info)"></TD>
+</TR>
+
+<tr>
+  <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<script language="javascript">
+  function changeMod() {
+    if (document.f_order.flag_use_contact_info.checked) {
+       document.f_order.mod.value="dtr_mix";
+    } else {
+       document.f_order.mod.value="dtransfer";
+    }
+  }
+</script>
+<!--  END ./domain/order.html  -->

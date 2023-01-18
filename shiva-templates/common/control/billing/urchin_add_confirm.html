@@ -1,0 +1,23 @@
+<!-- BEGIN ./control/billing/urchin_add_confirm.html  -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_urchin" accept-charset="UTF-8">
+
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="template_name" value="submit/domain/add_urchin_submit.sbm">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+
+<assign stype=account.plan.getResourceType(type).description>
+<assign message=toolbox.compose(lang.billing.add_msg1, stype)>
+<if setup!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg2,stype,toolbox.currency(setup))>
+</if>
+<if recurrent!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg3,toolbox.currency(recurrent))>
+</if>
+<if recurrentAll!="0">
+  <assign message=message+" "+toolbox.compose(lang.billing.add_msg4,toolbox.currency(recurrentAll))>
+</if>
+<call draw_warn_invoice_with_charge_info(message,urchin_price,"","","f_add_urchin")>
+</form>
+<!--  END ./control/billing/urchin_add_confirm.html  -->

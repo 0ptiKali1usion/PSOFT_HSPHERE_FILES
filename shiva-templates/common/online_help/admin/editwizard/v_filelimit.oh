@@ -1,0 +1,8 @@
+<center>VPS files limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	File Limit is the maximum number of file handlers opened inside a VPS server.<br>
+<br>
+<i>File Limit</i> cannot be exceeded. No new files will be opened if the number of opened file handlers reaches <i>File Limit</i>.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Minimal VPS installation requires ~150-200 opened file handlers allowed.</i>

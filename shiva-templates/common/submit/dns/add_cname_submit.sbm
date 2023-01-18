@@ -1,0 +1,31 @@
+<!-- BEGIN ./domain/add_cname_submit.html  -->
+<assign rid=request.rid>
+<assign domain=account.getResource(request.rid)>
+<assign dns_zone = domain.dns_zone>
+
+<assign check=yafv.checkall(
+  yafv.common.s_dns.vCustomCName(lang.dns.name,request.name),
+  yafv.common.s_dns.vTTL(lang.dns.ttl,request.ttl),
+  yafv.common.s_dns.vTransferDomainName(lang.dns.data,request.data) )>
+<if check.status=="OK">
+<assign result=dns_zone.addChild("cust_dns_record", "", request.name+"."+domain.name,"CNAME",request.ttl,request.data)>
+<if result.status=="OK">
+  <assign success="1">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_added,lang.dns.cname_record,"") )>
+<else>
+  <assign res=session.addMessage(result.msg)>
+</if>
+<else>
+<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdata=request.data>
+    <assign vname=request.name>
+    <assign vttl=request.ttl>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/add_cname_submit.html  -->

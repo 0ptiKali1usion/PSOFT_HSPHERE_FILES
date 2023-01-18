@@ -1,0 +1,99 @@
+<!-- BEGIN ./admin/resource_edit.html  -->
+<assign admin = account.getChild("admin")> 
+
+<if admin>
+
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<call draw_tooltip()>
+
+<call prepare_table_header("2", lang.admin.resedit.header(rtype.description))>
+  <if plan.b_info!="0">
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit_price.html&stemplate=admin/plan_edit.html", lang.admin.resedit.price)>
+</if>
+<if SHOW_RES_ADV=="1">
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&r_id="+request.r_id+"&template_name=admin/resource_edit_adv.html&stemplate=admin/plan_edit.html", lang.admin.resedit.adv)>
+</if>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td  colspan="2"><call draw_label_bold(lang.admin.resedit.genvals)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+  <td><call draw_label(lang.admin.resedit.max)></td>
+  <td>
+    <input type="hidden" name="template_name" value="submit/admin/resource_edit_gval.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="plan_id" value="${plan.id}">
+    <input type="hidden" name="r_id" value="${rtype.type}">
+    <input type="text" name="_MAX" value="${toolbox.numberToCurLocale(rtype.values["_MAX"],"false")}"></td>
+</tr>
+<!-- Under construction V.K. 06/19/01
+<tr>
+  <td><call draw_label("Removable")></td>
+  <td><input type="radio" name="_REMOVABLE" value="1"<if rtype.values["_REMOVABLE"]!="0"> CHECKED</if>>Yes <input type="radio" name="_REMOVABLE" value="0"<if rtype.values["_REMOVABLE"]=="0"> CHECKED</if>>No</td>
+</tr>
+<tr>
+  <td><call draw_label("Addable")></td>
+  <td><input type="radio" name="_ADDABLE" value="1"<if rtype.values["_ADDABLE"]!="0"> CHECKED</if>>Yes <input type="radio" name="_ADDABLE" value="0"<if rtype.values["_ADDABLE"]=="0"> CHECKED</if>>No</td>
+</tr>
+-->
+<tr>
+  <td  colspan="2" class="control_align_center"><if !plan.deleted><input type="submit" value="${lang.button.submit}"><else>&nbsp;</if></td>
+</tr>
+</form>
+
+<tr>
+  <td  colspan="2"><call draw_label_bold(lang.admin.resedit.custvals)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/admin/resource_edit_cval.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="plan_id" value="${plan.id}">
+    <input type="hidden" name="r_id" value="${rtype.type}">
+
+<list rtype.valueKeys as key>
+<if key && toolbox.startsWith(key, "_")=="0">
+<tr>
+  <td><call draw_label(key)></td>
+  <td>
+    <input type="hidden" name="names" value="${key}"><input type="text" name="${key}" value="${rtype.values[key]}"></td>
+</tr></if></list>
+<tr>
+  <td  colspan="2" class="control_align_center">
+<input type="hidden" name="names" value="${names}">
+<if !plan.deleted><input type="submit" value="${lang.button.submit}"><else>&nbsp;</if></td>
+</tr>
+</form>
+
+<if !plan.deleted>
+<tr>
+  <td  colspan="2"><call draw_label_bold(lang.admin.resedit.add)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+  <td><call draw_label(lang.admin.resedit.name)></td>
+  <td>
+    <input type="hidden" name="template_name" value="submit/admin/resource_edit_aval.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="plan_id" value="${plan.id}">
+    <input type="hidden" name="r_id" value="${rtype.type}">
+    <input type="text" name="name"></td>
+</tr>
+<tr>
+  <td><call draw_label(lang.admin.resedit.value)></td>
+  <td><input type="text" name="value"></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</form>
+</if>
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./admin/resource_edit.html  -->

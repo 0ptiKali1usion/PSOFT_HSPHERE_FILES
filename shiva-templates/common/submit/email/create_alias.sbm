@@ -1,0 +1,32 @@
+<!-- BEGIN ./email/create_alias.sbm  -->
+<assign result = yafv.checkall(
+    yafv.common.s_email.vLocalEmail(lang.email.local_name, request.local),
+    yafv.common.s_email.vLocalEmail(lang.email.foreign_email, request.foreign)
+)>
+<if result.status == "OK"> 
+    <assign rid = account.getResource(request.rid)>
+    <assign result = rid.addChild("mailbox_alias", "", request.local, request.foreign, request.description)>
+    <if result.status == "OK">
+        <assign success = "1">
+	<assign mo_id = result>
+        <assign res = session.addMessage(toolbox.compose(
+          lang.msg.name_res_added, lang.label.mail_alias, ""))>
+    <else>
+	<assign res = session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_add, lang.label.mail_alias, ""))>
+	<assign res = session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg>
+	<assign res = session.addMessage(msg)>
+    </list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vlocal = toolbox.html_encode(request.local)>
+    <assign vforeign = toolbox.html_encode(request.foreign)>
+    <assign vdescription = toolbox.html_encode(request.description)>
+    <include request.ftemplate>
+</if>
+<!--  END ./email/create_alias.sbm  -->

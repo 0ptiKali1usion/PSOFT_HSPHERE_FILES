@@ -1,0 +1,87 @@
+<!-- BEGIN ./submit/order_info.html.in  -->
+<assign tld = toolbox.getTLDByExt(request.ext)>
+<TR>
+	<TD ><call draw_label(lang.bci.fname)></TD>
+	<TD ><input name="_tld_" type="hidden" value="${toolbox.getTLDByExt(request.ext)}"><input name="_srs_billing_first_name" size=15 value="${srs_billing_first_name}" check="vSinglename(this)" label="${lang.bci.fname}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_first_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.lname)></TD>
+	<TD ><input name="_srs_billing_last_name" size=15 value="${srs_billing_last_name}" check="vSinglename(this)" label="${lang.bci.lname}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_last_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.company)></TD>
+	<TD ><input name="_srs_billing_org_name" size=30 value="${srs_billing_org_name}" check="vOrganization(this)" label="${lang.bci.company}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_org_name;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr1)></TD>
+	<TD ><input name="_srs_billing_address1" size=30 value="${srs_billing_address1}" check="vAddress(this,flag_use_contact_info)" label="${lang.bci.adr1}"></TD>
+<assign excludeFields=excludeFields+"_tld_;">
+<assign excludeFields=excludeFields+"_srs_billing_address1;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr2)></TD>
+	<TD ><input name="_srs_billing_address2" size=30 value="${srs_billing_address2}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_address2;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.adr3)></TD>
+	<TD ><input name="_srs_billing_address3" size=30 value="${srs_billing_address3}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_address3;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.city)></TD>
+	<TD ><input name="_srs_billing_city" size=15 value="${srs_billing_city}" check="vCity(this)" label="${lang.bci.city}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_city;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.state)></TD>
+	<TD >
+   <select name="_srs_billing_state" size="1">
+	<call buildStates(srs_billing_state)>
+   </select>
+</TD>
+<assign excludeFields=excludeFields+"_srs_billing_state;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.country)></TD>
+	<TD >
+	   <SELECT NAME="_srs_billing_country" onChange="checkForm(this.form)">
+		<call buildCountries(srs_billing_country)>	
+	   </SELECT>
+	</TD>
+<assign excludeFields=excludeFields+"_srs_billing_country;">
+</TR>
+<TR>
+	<TD ><call draw_label(lang.bci.pcode)></TD>
+	<TD ><input name="_srs_billing_postal_code" size=15 value="${srs_billing_postal_code}" check="vPostal_Code(this)" label="${lang.bci.pcode}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_postal_code;">
+</TR>
+<TR>
+        <TD valign="top"><call draw_label(lang.bci.phone)>&nbsp;<call draw_help("misc-ci_country_phone", "")><br><call draw_label(lang.bci.country_phone_tip)></TD>
+        <TD valign="top"><input name="_srs_billing_phone" size=20 value="${srs_billing_phone}" check="vPhoneOSRS(this, _srs_billing_country, _tld_)" label="${lang.bci.phone}"><br><call draw_label(lang.bci.country_phone_examples)></TD>
+<assign excludeFields=excludeFields+"_srs_billing_phone;">
+</TR>
+<switch tld>
+  <case "cn">
+  <case "com.cn">
+  <case "net.cn">
+  <case "de">
+    <assign faxValidation = "vFaxOSRSReq">
+    <break>
+  <default>
+    <assign faxValidation = "vFaxOSRS">
+</switch>
+<TR>
+        <TD valign="top"><call draw_label(lang.label.fax)>&nbsp;<call draw_help("misc-ci_country_phone", "")></TD>
+        <TD valign="top"><input name="_srs_billing_fax" size=20 value="${srs_billing_fax}" check="${faxValidation}(this, _srs_billing_country, _tld_)" label="${lang.label.fax}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_fax;">
+</TR>
+<TR>
+        <TD ><call draw_label(lang.bci.email)></TD>
+        <TD ><input name="_srs_billing_email" size=30 value="${srs_billing_email}" check="vEmail(this)" label="${lang.bci.email}"></TD>
+<assign excludeFields=excludeFields+"_srs_billing_email;">
+</TR> 
+<!--  END ./submit/order_info.html.in  -->

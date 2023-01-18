@@ -1,0 +1,17 @@
+<!-- BEGIN ./submit/admin/ds/assign_ds.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+
+<assign result = ds_manager.addChildToAccount(request.account_id, "", request.dedicated_server_id, request.state_id)>
+
+<if result.status!="OK">
+   <assign res=session.addMessage(result.msg)>
+   <assign failure = "1">
+</if>
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+
+<!-- END ./submit/admin/ds/assign_ds.sbm  -->

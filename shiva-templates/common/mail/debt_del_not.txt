@@ -1,0 +1,18 @@
+Dear ${account.ci.first_name} ${account.ci.last_name},
+
+Your account will be deleted on ${delete_date}, due to the fact that as of
+${current_date} your account has an outstanding balance of ${toolbox.displayBalance(bill.balance)}.
+Your failure to make payment on your account may prompt us to take legal action
+to collect the account immediately.
+
+Account details:
+Login:      ${account.login}
+Account ID: #${account.id.id}
+Plan:       ${account.plan.description}
+Balance:    ${toolbox.displayBalance(bill.balance)}
+
+If you have any questions, don't hesitate to contact us.
+
+Regards,
+Support Team
+${settings.TT_EMAIL}

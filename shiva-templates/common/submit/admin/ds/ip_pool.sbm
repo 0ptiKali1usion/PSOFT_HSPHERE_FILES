@@ -1,0 +1,8 @@
+<!-- BEGIN ./submit/admin/ds/ip_pool.sbm  -->
+<!-- FIXME serverside validation to be implemented -->
+<if failure>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/ip_pool.sbm  -->

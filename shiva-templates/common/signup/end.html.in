@@ -1,0 +1,97 @@
+<!-- BEGIN ./signup/end.html.in -->
+<include "functions">
+<assign template="signup/end.html">
+<include "control/signup/signup_function.html">
+<if !session.msg>
+  <assign title=lang.common_signup_end_title>
+<else>
+  <assign title=lang.common_signup_end_fail>
+  <assign error_disabled="true">
+</if>
+<include "signup/signup_top.html">
+
+<assign processors = toolbox.getGateways().processors.processor>
+
+<table border="0">
+<tr>
+  <td>
+<if !session.msg>
+  <if request["_bi_type"]=="Check">
+    <call draw_label(toolbox.compose(lang.common_signup_end_account, plans[request.plan_id].description))><br>
+  <else>
+    <call draw_label(toolbox.compose(lang.common_signup_end_patient, plans[request.plan_id].description))><br>
+  </if>
+  <if new_user.plan.b_info != "0">
+    <if request["_bi_type"]=="Check">
+        <p><call draw_label(lang.common_signup_end_details)></p>
+      <else>
+        <if request["_bi_type"]=="CC">
+          <p><call draw_label(lang.common_signup_end_cccharges)></p>
+        <else>
+          <if request["_bi_type"]=="TRIAL">
+            <p><call draw_label(lang.common_signup_end_moderated)></p>
+          <else>
+             <list processors as processor>
+               <if processor("name")==request["_bi_type"]>
+                 <assign bildescription=lang[processor("description")]>
+                 <assign processorname=processor("name")>
+                 <assign servletname=processor("servlet")>
+               </if>
+             </list>
+             <p><call draw_label(toolbox.compose(lang.common_signup_end_webprocessorcharges), bildescription)></p>
+          </if>
+        </if>
+    </if>
+  </if>
+<center>
+<if !mod><assign mod=request["_mod"]></if>
+<if new_user.plan.b_info != "0">
+  <if request["_bi_exemption_code"]>
+    <call draw_invoice_separate_taxes(mod)>
+  <else>
+    <call draw_invoice(mod)>
+  </if>
+</if>
+<br>
+<call draw_label(lang.label.signup_ip(new_user.REMOTE_ADDR, toolbox.date))>
+<else>
+<call error()>
+</if>
+</center>
+<yafv s_signup>
+<!-- new_user.plan.b_info ${new_user.plan.b_info}-->
+<!-- new_user.plan.c_info ${new_user.plan.c_info}-->
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/end.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <switch request.type_domain>
+    <case "transfer_new_misc_domain">
+	<!-- transfer_new_misc_domain -->
+	<assign ftemplate="submit/signup/new_domain.sbm">
+    <break>
+    <case "without_domain">
+	<!-- without_domain -->
+	<assign ftemplate="submit/signup/begin_domain.sbm">
+    <break>
+    <case "empty_domain">
+	<!-- without_domain -->
+	<assign ftemplate="submit/signup/begin_domain.sbm">
+    <break>
+
+    <case "service_domain">
+	<!-- service_domain -->
+	<assign ftemplate="submit/signup/service_domain.sbm">
+    <break>
+    <case "3ldomain">
+	<!-- 3ldomain -->
+	<assign ftemplate="submit/signup/3ldomain.sbm">
+    <break>
+    </switch>
+    <assign excludeFields=excludeFields+"template_name;">
+    <call genHiddenField(excludeFields)>
+</form>
+    </td>
+</tr>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END ./signup/end.html.in -->

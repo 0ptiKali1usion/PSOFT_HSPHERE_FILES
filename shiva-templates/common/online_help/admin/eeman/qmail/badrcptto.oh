@@ -1,0 +1,7 @@
+<center> badrcptto </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of recepient addresses for which all mail is blocked. A line in badrecipient may be of the form @host, meaning every address at the host. 
+<br>Default: the badrcptto file is absent (no recepient addresses are blocked)
+<br>
+

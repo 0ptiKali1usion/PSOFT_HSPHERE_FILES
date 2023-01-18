@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<PlanWizard name="windowsreal" description="planeditor.res_win_rs">
+  <DefaultName>Windows RealServer I</DefaultName>
+    <depends>
+        <platform>windows_platform</platform>
+        <LogicalGroup>windows_real</LogicalGroup>
+    </depends>
+  <DefaultValues>
+    <value name="_template">real/rmserver.html</value>
+    <value name="menuId">real</value>
+    <value name="_TEMPLATES_DIR">real/</value>
+  </DefaultValues>
+
+  <categories>
+     <category>
+       <resource name="account" required="1" class="psoft.hsphere.Account" />
+       <resource name="realserver_user" required="1" noprice="1" class="psoft.hsphere.resource.WinUserResource"/>
+       <resource name="billviewer" required="1" noprice="1" class="psoft.hsphere.resource.BillViewer" />
+       <resource name="ftp_user_traffic" required="1" noprice="1" class="psoft.hsphere.resource.Traffic" />
+       <resource name="real_server_traffic" required="1" noprice="1" class="psoft.hsphere.resource.Traffic" />
+       <resource name="traffic" required="1" unit="GB" class="psoft.hsphere.resource.Traffic"/>
+       <resource name="tt" required="1" noprice="1" class="psoft.hsphere.resource.tt.TroubleTicket" />
+       <resource name="custom_billing" required="1" noprice="1" class="psoft.hsphere.resource.CustomizableBillingResource"/>
+       <resource name="real_user" required="1" fields="1" class="psoft.hsphere.resource.RealServerUser">
+           <field type="textbox" name="max_conn" label="planeditor.max_connections" value="10"
+                planvalue="MAX_CONN"
+                size="4" check="vPriceReq"/>
+       </resource>
+       <resource name="winquota" required="1" unit="MB" class="psoft.hsphere.resource.WinQuota"/>
+       <LogicalGroup name="windows_real" type="windows_real" help="admin-editwizard-o_lsgwin_real"/>
+     </category>
+  </categories>
+
+  <options demomode="1" billable="1"/>
+
+  <resources>
+   <res_account>
+        <mod>
+            <initresource name="realserver_user" mod="_PARENT_"/>
+            <initresource name="traffic"/>
+            <initresource name="billviewer"/>
+        </mod>
+    </res_account>
+
+   <res_realserver_user>
+       <mod>
+           <initvalue type="hostgroup" label="Windows Real Server">windows_real</initvalue>
+           <initvalue type="field" label="Login">login</initvalue>
+           <initvalue type="field" label="Group">login</initvalue>
+           <initvalue type="static" label="Home Directory">/hsphere/local/home</initvalue>
+           <initvalue type="field" label="Password">password</initvalue>
+           <initresource name="winquota"/>
+           <initresource name="ftp_user_traffic"/>
+           <initresource name="real_server_traffic"/>
+       </mod>
+       <mod name="signup">
+           <initvalue type="hostgroup" label="Unix Real Server">unix_real</initvalue>
+           <initvalue type="field" label="Login">login</initvalue>
+           <initvalue type="field" label="Group">login</initvalue>
+           <initvalue type="static" label="Home Directory">/hsphere/local/home</initvalue>
+           <initvalue type="field" label="Password">password</initvalue>
+           <initresource name="winquota"/>
+           <initresource name="ftp_user_traffic"/>
+           <initresource name="real_server_traffic"/>
+           <initresource name="real_user" mod="signup"/>
+       </mod>
+   </res_realserver_user>
+
+   <res_traffic>
+       <mod>
+          <initvalue type="plan_free"/>
+       </mod>
+   </res_traffic>
+
+   <res_winquota>
+       <mod><initvalue type="plan_free"/></mod>
+   </res_winquota>
+
+
+   <res_ftp_user_traffic>
+          <mod>
+              <initvalue type="static">1</initvalue>
+              <initvalue type="static">2</initvalue>
+          </mod>
+   </res_ftp_user_traffic>
+
+   <res_real_server_traffic>
+      <mod>
+          <initvalue type="static">1</initvalue>
+          <initvalue type="static">4</initvalue>
+      </mod>
+   </res_real_server_traffic>
+
+   <res_real_user>
+       <mod name="signup">
+        <initvalue type="static">1</initvalue>
+        <initvalue type="plan_value">MAX_CONN</initvalue>
+       </mod>
+       <values>
+           <value name="MAX_CONN">#max_conn</value>
+       </values>
+   </res_real_user>
+
+
+  </resources>
+
+
+</PlanWizard>
+

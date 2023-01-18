@@ -1,0 +1,14 @@
+<!-- BEGIN ./add_ip.sbm  -->
+<assign vps=account.getResource(request.rid)>
+<assign result = vps.addChild("vps_ip", "")>
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <assign res = session.addMessage(result.msg)>
+</if>
+<if success=="1">
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./add_ip.sbm  -->

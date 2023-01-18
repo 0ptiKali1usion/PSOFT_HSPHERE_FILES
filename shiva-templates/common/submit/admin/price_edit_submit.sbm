@@ -1,0 +1,133 @@
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<assign counter=toolbox.counter("0", periods)>
+<assign onc=toolbox.counter()>
+<list onc as c>
+<if counter==periods>
+    <assign res=c.stop>
+<else>
+    <assign name="_FREE_UNITS_"+counter>
+    <assign result=yafv.common.s_admin.vUnits(
+	toolbox.compose(lang.msg.period_free_units,counter), request[name])>
+    <if result.status=="OK">
+        <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+        <if result.status!="OK">
+	    <assign unsuccess="1">
+            <assign res=session.addMessage(result.msg)>
+        </if>
+    <else>
+        <assign unsuccess="1">
+        <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+
+    <assign name="_REFUND_PRICE_"+counter>
+    <assign result=yafv.common.s_admin.vPercent(
+        toolbox.compose(lang.msg.period_refund_percentage,counter), request[name])>
+    <if result.status=="OK">
+        <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+        <if result.status!="OK">
+	    <assign unsuccess="1">
+	    <assign res=session.addMessage(result.msg)>
+        </if>
+        <if request[name]><assign refund_flag="true"></if>
+    <else>
+        <assign unsuccess="1">
+        <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+
+    <assign name="_SETUP_PRICE_"+counter>
+    <assign result=yafv.common.s_admin.vPrice(
+        toolbox.compose(lang.msg.period_setup_fee,counter), request[name])>
+    <if result.status=="OK">
+        <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+        <if result.status!="OK">
+	    <assign unsuccess="1">
+            <assign res=session.addMessage(result.msg)>
+        </if>
+        <if request[name]><assign setup_flag="true"></if>
+    <else>
+        <assign unsuccess="1">
+        <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+
+    <assign name="_USAGE_PRICE_"+counter>
+    <assign result=yafv.common.s_admin.vPrice(
+	toolbox.compose(lang.msg.period_usage_fee,counter), request.template)>
+    <if result.status=="OK">
+        <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+        <if result.status!="OK">
+	    <assign unsuccess="1">
+    	    <assign res=session.addMessage(result.msg)>
+        </if>
+	<if request[name]><assign usage_flag="true"></if>
+    <else>
+        <assign unsuccess="1">
+        <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+
+    <assign name="_UNIT_PRICE_"+counter>
+    <assign result=yafv.common.s_admin.vPrice(
+	toolbox.compose(lang.msg.period_unit_fee,counter), request.template)>
+    <if result.status=="OK">
+	<assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+	<if result.status!="OK">
+	    <assign unsuccess="1">
+    	    <assign res=session.addMessage(result.msg)>
+        </if>
+	<if request[name]><assign unit_flag="true"><assign refund_flag="true"></if>
+    <else>
+	<assign unsuccess="1">
+	<list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    </if>
+<assign res=counter.next>
+</if>
+</list>
+
+<if setup_flag>
+  <if request.r_id == "opensrs">
+    <assign result=rtype.putValue("_SETUP_CALC","psoft.hsphere.calc.RegistrationSetupCalc")>
+  <else>
+    <assign result=rtype.putValue("_SETUP_CALC","psoft.hsphere.calc.StandardSetupCalc")>
+  </if>
+<else>
+    <assign result=rtype.putValue("_SETUP_CALC","")>
+</if>
+<if result.status!="OK">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if usage_flag>
+    <assign result=rtype.putValue("_USAGE_CALC","psoft.hsphere.calc.StandardUsageCalc")>
+<else>
+    <assign result=rtype.putValue("_USAGE_CALC","")>
+</if>
+<if result.status!="OK">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if refund_flag>
+    <assign result=rtype.putValue("_REFUND_CALC", "psoft.hsphere.calc.StandardRefundCalc")>
+<else>
+    <assign result=rtype.putValue("_REFUND_CALC","")>
+</if>
+<if result.status!="OK">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if unit_flag>
+    <assign result=rtype.putValue("_RECURRENT_CALC","psoft.hsphere.calc.StandardCalc")>
+<else>
+    <assign result=rtype.putValue("_RECURRENT_CALC","")>
+</if>
+<if result.status!="OK">
+    <assign unsuccess="1">
+    <assign res=session.addMessage(result.msg)>
+</if>
+<if unsuccess>
+    <include request.ftemplate>
+<else>
+    <if request.edit_done>
+      <include request.ftemplate>
+    <else>
+      <include request.stemplate>
+    </if>
+</if>

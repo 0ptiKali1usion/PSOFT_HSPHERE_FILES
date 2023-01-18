@@ -1,0 +1,4 @@
+<center>Transfer HTTP Traffic</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Every user plan has a default traffic limit, exceeding which implies charges per each extra gigabyte of traffic. Per-gigabyte charges are usually higher, so it is wise to set your transfer limit to the level you are expecting to have. To change your plan's default traffic, click on the limit value. In the window that appears, enter your expected HTTP payment interval traffic. The traffic that goes beyond this limit will be charged at a higher excess rate. HTTP traffic is calculated separately from FTP traffic, but works according to the same pattern and is included in the <i>total traffic</i>.

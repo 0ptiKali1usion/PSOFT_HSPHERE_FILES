@@ -1,0 +1,13 @@
+<!-- BEGIN ./common/admin/signup.html -->
+<assign check_admin_ci = yafv.checkall(
+ yafv.common.s_admin.vPhoneCountry(lang.bci.phone, settings.phone, settings.country),
+ yafv.common.s_admin.vFaxCountry(lang.bci.phone, settings.fax, settings.country))>
+<if check_admin_ci.status != "OK">
+  <assign res = session.addMessage(lang.admin.info.ci_data_incorrect)>
+</if>
+<assign template="admin/signup.html">
+<include "functions">
+<call draw_menu("signup-signup")>
+<include "control/admin/signup.html">
+<call bottom()>
+<!-- END ./common/admin/signup.html -->

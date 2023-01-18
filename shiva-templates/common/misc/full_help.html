@@ -1,0 +1,32 @@
+<assign full_text = lang[html_help[request.topic_id]["full"]]>
+<if full_text>
+<include "functions">
+<HTML>
+<HEAD>
+<assign title=lang[html_help[request.topic_id]["title"]]>
+<TITLE>${title}</TITLE>
+</HEAD>
+<BODY  TEXT="${design.color("text_color")}" BGCOLOR="${design.color("bgcolor")}" MARGINHEIGHT="5" MARGINWIDTH="5">
+<TABLE WIDTH="100%" HEIGHT="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR><TD valign="top">
+<font face="Verdana" size="2" color="${design.color("text_color")}">
+<br>
+<center>
+${title}<br>
+</center>
+<hr>
+${full_text}
+<br>
+<hr>
+<br>
+</font>
+<assign see_also_lst=html_help[request.topic_id]["seealso"]>
+<list see_also_lst as see>
+ <assign see_title=lang[html_help[see]["title"]]>
+ <call draw_link(config.CLIENT_CP_URL+"?template_name=misc/full_help.html&topic_id="+see,see_title)>&nbsp;&nbsp;&nbsp;
+</list>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>
+</if>

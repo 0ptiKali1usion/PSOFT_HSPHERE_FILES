@@ -1,0 +1,49 @@
+<!-- BEGIN ./email/mailing_lists2_incl.html  -->
+<tr>
+ <td><call draw_label(lang.email.mlists2incl.header)></td>
+ <td><call draw_label(mlist.email)>
+ <if config.IRIS_USER>
+    <call draw_edit_emu_check(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/iris_mod_mlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.edit)>
+ <else>
+    <call draw_edit_emu_check(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/mod_mlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.edit)>
+ </if>
+ </td>      
+</tr>
+<tr>
+ <td><call draw_label(lang.label.descr)></td>
+ <td><call draw_label(mlist.description)></td>
+</tr>
+
+
+<tr>
+ <td><call draw_label(lang.email.mlists2incl.subscrs)></td>
+ <td><assign list=account.getResource(mlist).list()><if !list><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/manage_mlist_form.html"+"&stemplate="+template+"&sc_page1="+toolbox.url_escape(report.currentPage)+"&md_id="+mail_domain, lang.email.mlists2incl.add)><else><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_mlist_form.html"+"&stemplate="+template+"&sc_page1="+toolbox.url_escape(report.currentPage)+"&md_id="+mail_domain, lang.email.mlists2incl.editsubscr)>&nbsp;<call draw_label("["+list.size+"]")></if></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.email.mlists2incl.moderators)></td>
+ <td><assign list=account.getResource(mlist).listMod()><if !list><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_modlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.addmoderator)><else><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&template_name=email/manage_modlist_form.html"+"&stemplate="+template+sc_params, lang.email.mlists2incl.editmodlist)>&nbsp;<call draw_label("["+list.size+"]")></if></td>
+</tr>
+<if config.IRIS_USER>
+  <tr>
+    <td><call draw_label(lang.email.mlists2incl.messages)></td>
+    <td><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/iris_mlist_messages.html"+"&stemplate="+template+sc_params, lang.email.mlist_message_edit)></td>
+  </tr> 	
+<else>
+  <tr>
+    <td><call draw_label(lang.email.mlists2incl.trailer)><call draw_help("user-mailinfo-mlist_trailer", "")></td>
+    <if mlist.trailer>
+	<td><call draw_edit(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/mlist_put_trailer.html"+"&stemplate="+template+sc_params, lang.email.mlist_trailer_alt_edit)><call draw_delete(config.CLIENT_CP_URL+"?rid="+mail_domain+"&uid="+mlist+"&mo_id="+mlist+"&template_name=submit/email/mlist_put_trailer.sbm"+"&stemplate="+template+"&ftemplate="+template+sc_params, lang.email.mlist_trailer_alt_del)></td>
+    <else>
+	<td><call draw_add(config.CLIENT_CP_URL+"?rid="+mail_domain+ "&uid="+mlist+"&template_name=email/mlist_put_trailer.html"+"&stemplate="+template+sc_params, lang.email.mlist_trailer_alt_add)></td>
+    </if>
+  </tr>
+</if>
+<tr>
+ <td><call draw_label(lang.label.del)></td>
+ <td><call draw_delete(onfig.CLIENT_CP_URL+"?did="+mlist+"&dtemplate=submit/email/delete_mlist.sbm&template_name=submit/email/delete_confirm.sbm"+"&stemplate="+template+"&ftemplate="+template+"&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1&del=1"+sc_params, lang.label.delete)></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.email.mlists2incl.tt)></td>
+ <td><call draw_tt_link(mlist,"")></td>
+</tr>
+<!--  END ./email/mailing_lists2_incl.html  -->

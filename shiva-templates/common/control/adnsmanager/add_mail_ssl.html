@@ -1,0 +1,41 @@
+<!-- BEGIN ./adnsmanager/add_mail_ssl.html  -->
+<call draw_tooltip()>
+<assign eeman = account.getChild("eeman")>
+<assign mail_manager = eeman.mail_manager>
+
+<if mail_manager>
+
+<form name="ext" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="zone_id" value="${request.zone_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/adnsmanager/add_mail_ssl_submit.sbm">
+
+<call draw_table_header("", lang.adnsmanager.new_mail_ssl_header)>
+<tr >
+ <td width="100%"><call draw_link(config.CLIENT_CP_URL+"?template_name=adnsmanager/generate_new_mail_ssl_cert.html"+"&zone_id="+request.zone_id+"&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.addssl.generate)></td>
+</tr>
+<tr>
+   <td class="control_header"><call draw_header(lang.domain.addssl.key)></td>
+</tr>
+<tr>
+   <td>
+   <textarea name="key" rows="10" cols="64">${vkey}</textarea></td>
+</tr>
+<tr>
+   <td class="control_header"><call draw_header(lang.domain.addssl.sertificate)></td>
+</tr>
+<tr>
+   <td>
+   <textarea name="file" rows="10" cols="64">${vfile}</textarea></td>
+</tr>
+<tr>
+  <td  class="control_align_center" >
+  <input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!--  END ./adnsmanager/add_mail_ssl.html  -->

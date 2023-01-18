@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/admin/group_plan_add.sbm -->
+<assign cmp_groups = account.getChild("cmp_groups")>
+<assign adder=cmp_groups.createGroup>
+${adder(request.name)}
+<list request.plan_id as plan_id><assign res=adder(plan_id)></list>
+<assign result = adder()>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_add,lang.label.plan_group,request.name))>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/group_plan_add.sbm -->

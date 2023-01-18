@@ -1,0 +1,58 @@
+<!-- BEGIN ./control/misc/changeplan.html -->
+
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.misc.changeplan.header)>
+
+<tr>
+  <td class="control_header">
+	<call draw_header(lang.label.plan)>
+  </td>
+  <td class="control_header">
+	<call draw_header(account.plan.description)>
+  </td>
+</tr>
+
+<if account.bi.type=="TRIAL">
+<tr>
+  <td     colspan="2">
+<call draw_label(lang.misc.changeplan.payed)>
+  </td>
+</tr>
+<else>
+<tr>
+  <td     colspan="2">
+<if account.compatiblePlans()>
+  <call draw_label(lang.misc.changeplan.text)>
+</if>
+<br>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/misc/changeplan.sbm">
+<if request.stemplate != ""><input type="hidden" name="stemplate" value="${request.stemplate}">
+<else><input type="hidden" name="stemplate" value="${template}">
+</if>
+<input type="hidden" name="ftemplate" value="${template}">
+
+<if account.compatiblePlans()>
+    <call draw_label(lang.misc.changeplan.switch)>
+    <select name="plan_id" size="1">
+    <list account.compatiblePlans() as plan_id>
+	<if account.plan.values["_CREATED_BY_"] == plans[plan_id].values["_CREATED_BY_"]>
+    	    <option value="${plan_id}">${plans[plan_id].description}
+	</if>
+    </list>
+    </select>
+    <input type="submit" value="${lang.misc.changeplan.submit}">
+<else>
+    <call draw_label(lang.misc.changeplan.noplan)>
+</if>
+</form>
+  </td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!-- END ./control/misc/changeplan.html -->

@@ -1,0 +1,86 @@
+<!-- BEGIN ./common/submit/signup/pay_info.sbm -->
+<!-- Eto pay_info.sbm-->
+<compress>
+<function copyCiToBi()>
+     <assign bi_first_name=toolbox.html_encode(request["_ci_first_name"])>
+     <assign bi_last_name=toolbox.html_encode(request["_ci_last_name"])>
+     <assign bi_company=toolbox.html_encode(request["_ci_company"])>
+     <assign bi_address1=toolbox.html_encode(request["_ci_address1"])>
+     <assign bi_address2=toolbox.html_encode(request["_ci_address2"])>
+     <assign bi_city=toolbox.html_encode(request["_ci_city"])>
+     <assign bi_state=request["_ci_state"]>
+     <assign bi_state2=request["_ci_state2"]>
+     <assign bi_postal_code=toolbox.html_encode(request["_ci_postal_code"])>
+     <assign bi_country=request["_ci_country"]>
+     <assign bi_phone=toolbox.html_encode(request["_ci_phone"])>
+     <assign bi_email=toolbox.html_encode(request["_ci_email"])>
+</function>
+<function setBi()>
+     <assign res=params.addHash("name","_bi_first_name","value",bi_first_name)>
+     <assign res=params.addHash("name","_bi_last_name","value",bi_last_name)>
+     <assign res=params.addHash("name","_bi_company","value",bi_company)>
+     <assign res=params.addHash("name","_bi_address1","value",bi_address1)>
+     <assign res=params.addHash("name","_bi_address2","value",bi_address2)>
+     <assign res=params.addHash("name","_bi_state","value",bi_state)>
+     <assign res=params.addHash("name","_bi_state2","value",bi_state2)>
+     <assign res=params.addHash("name","_bi_city","value",bi_city)>
+     <assign res=params.addHash("name","_bi_postal_code","value",bi_postal_code)>
+     <assign res=params.addHash("name","_bi_country","value",bi_country)>
+     <assign res=params.addHash("name","_bi_phone","value",bi_phone)>
+     <assign res=params.addHash("name","_bi_email","value",bi_email)>
+</function>
+<function copyBi(bi)>
+     <assign res=params.addHash("name","_bi_first_name","value",bi.first_name)>
+     <assign res=params.addHash("name","_bi_last_name","value",bi.last_name)>
+     <assign res=params.addHash("name","_bi_company","value",bi.company)>
+     <assign res=params.addHash("name","_bi_address1","value",bi.address1)>
+     <assign res=params.addHash("name","_bi_address2","value",bi.address2)>
+     <assign res=params.addHash("name","_bi_state","value",bi.state)>
+     <assign res=params.addHash("name","_bi_state2","value",bi.state2)>
+     <assign res=params.addHash("name","_bi_city","value",bi.city)>
+     <assign res=params.addHash("name","_bi_postal_code","value",bi.postal_code)>
+     <assign res=params.addHash("name","_bi_country","value",bi.country)>
+     <assign res=params.addHash("name","_bi_phone","value",bi.phone)>
+     <assign res=params.addHash("name","_bi_email","value",bi.email)>
+</function>
+</compress>
+
+<if !request.back>
+  <if request["_bi_type"]=="">
+    <assign res=session.addMessage(lang.signup.payinfo.paytype_warn)>
+    <include "signup/pay_info.html">
+  <else>
+   <if request["_bi_type"]!="TRIAL" && request["_bi_type"]!="PayPal" && request["_bi_type"]!="WorldPay"  && request["_bi_type"]!="2CheckOut" && request["_bi_type"]!="GestPay">
+     <if request.use_bi_id!="">
+       <if (user) && (request.admin_signup=="")>
+
+         <assign bi=user.getBillingInfo(request.use_bi_id)>
+         <call copyBi(bi)>
+         <assign domainaction="begin">
+         <include "signup/vps.html">
+       <else>
+         <include "signup/login.html">
+       </if>
+     <else>
+       <call copyCiToBi()>
+       <if request["_bi_useci"]!="">
+         <call setBi()>
+         <include "signup/bi_info_cc.html">
+       <else>
+         <include "signup/bi_info.html">
+       </if>
+     </if>
+   <else>
+    <if (request["_bi_type"]=="PayPal") || (request["_bi_type"]=="WorldPay") || (request["_bi_type"]=="2CheckOut") || (request["_bi_type"]=="GestPay")><call copyCiToBi()><call setBi()></if>
+     <if (user) && (request.admin_signup=="")>
+       <assign domainaction="begin">
+       <include "signup/domains.html">
+     <else>
+       <include "signup/login.html">
+     </if>
+   </if>
+  </if>
+<else>
+   <include "signup/pay_info.html">
+</if>
+<!-- END ./common/submit/signup/pay_info.sbm -->

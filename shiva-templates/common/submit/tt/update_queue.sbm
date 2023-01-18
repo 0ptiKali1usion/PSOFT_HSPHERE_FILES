@@ -1,0 +1,20 @@
+<!-- BEGIN ./submit/tt/update_queue.sbm  -->
+<assign result=yafv.checkall(
+yafv.common.s_tt.vStringReq(lang.label.name, request.name))>
+<if result.status=="OK">
+   <assign ttadm=account.getChild("ttadmin")>
+   <assign queue=ttadm.getQueue(request.quid)>
+   	<if request.flagnew><assign flag1 = "1"><else><assign flag1 = "0"></if>
+   	<if request.flagclose><assign flag2 = "1"><else><assign flag2 = "0"></if>	
+   	<assign result = queue.update(request.name, "", flag1, flag2, request.newresp, request.closeresp, queue.undelete, request.email)>
+   	<if result.status=="OK">
+      	    <assign success="1">
+   	<else>
+      	    <assign res=session.addMessage(result.msg)>
+   	</if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<include "tt/update_queue.html">
+
+<!--  END ./submit/tt/update_queue.sbm  -->

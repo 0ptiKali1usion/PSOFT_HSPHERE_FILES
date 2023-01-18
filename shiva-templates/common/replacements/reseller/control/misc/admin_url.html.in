@@ -1,0 +1,34 @@
+<!-- BEGIN ./misc/admin_url.html  -->
+<yafv s_misc>
+<call draw_tooltip()>
+
+<assign reseller = account.getChild("reseller")>
+<if !reseller_url><assign reseller_url=reseller.URL></if>
+<if !reseller_protocol><assign reseller_protocol=reseller.protocol></if>
+<if !reseller_port><assign reseller_port=reseller.port></if>
+<form name="f_set_url_cgi"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+ 
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/misc/change_reseller_url.sbm">
+<input type="hidden" name="set_default" value="0">
+
+<call draw_table_header("2", lang.reseller.admurl.header)>
+<tr>
+<td><call draw_label(lang.reseller.admurl.url)></td>
+<td nowrap>
+   <select name="reseller_protocol">
+	<option>http://
+	<option <if reseller_protocol == "https://">SELECTED</if>>https://
+   </select>
+   <input type="text" name="reseller_url" value="${reseller_url}" check="vDomain_Name" label="${lang.reseller.admurl.url}">
+   <call draw_label(":")>
+   <input type="text" name="reseller_port" value="${reseller_port}" check="vPort" label="${lang.reseller.admurl.port}" size="4" maxlength="5">
+</td>
+</tr>
+<tr >
+<td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.change}">&nbsp;<input type="submit" value="${lang.button.default}" onClick="javascript:document.forms['f_set_url_cgi'].elements['set_default'].value='1';return true;"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./misc/admin_url.html  -->

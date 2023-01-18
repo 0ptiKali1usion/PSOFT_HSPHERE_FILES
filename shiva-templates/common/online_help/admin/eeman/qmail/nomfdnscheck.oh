@@ -1,0 +1,9 @@
+<center> nomfdnscheck </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>List of domain names that aren't checked for existence. 
+The list has the same format as for relaymailfrom.
+Default: the nomfdnscheck file is absent (if mfdnscheck is enabled, 
+all domains are checked for existence).
+<br>
+

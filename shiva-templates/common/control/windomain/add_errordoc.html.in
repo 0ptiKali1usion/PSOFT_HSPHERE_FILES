@@ -1,0 +1,94 @@
+<!-- BEGIN ./windomain/add_errordoc.html.in  -->
+<yafv s_windomain>
+<call draw_tooltip()>
+<!-- create list of allowed HTTP codes -->
+<assign errors=toolbox.new_list>
+<assign res=errors.addHash("code", "400", "subcode", "", "name", lang["label.errordoc.400"])>
+<assign res=errors.addHash("code", "401", "subcode", "1", "name", lang["label.errordoc.401.1"])>
+<assign res=errors.addHash("code", "401", "subcode", "2", "name", lang["label.errordoc.401.2"])>
+<assign res=errors.addHash("code", "401", "subcode", "3", "name", lang["label.errordoc.401.3"])>
+<assign res=errors.addHash("code", "401", "subcode", "4", "name", lang["label.errordoc.401.4"])>
+<assign res=errors.addHash("code", "401", "subcode", "5", "name", lang["label.errordoc.401.5"])>
+<assign res=errors.addHash("code", "401", "subcode", "7", "name", lang["label.errordoc.401.7"])>
+<assign res=errors.addHash("code", "403", "subcode", "1", "name", lang["label.errordoc.403.1"])>
+<assign res=errors.addHash("code", "403", "subcode", "2", "name", lang["label.errordoc.403.2"])>
+<assign res=errors.addHash("code", "403", "subcode", "3", "name", lang["label.errordoc.403.3"])>
+<assign res=errors.addHash("code", "403", "subcode", "4", "name", lang["label.errordoc.403.4"])>
+<assign res=errors.addHash("code", "403", "subcode", "5", "name", lang["label.errordoc.403.5"])>
+<assign res=errors.addHash("code", "403", "subcode", "6", "name", lang["label.errordoc.403.6"])>
+<assign res=errors.addHash("code", "403", "subcode", "7", "name", lang["label.errordoc.403.7"])>
+<assign res=errors.addHash("code", "403", "subcode", "8", "name", lang["label.errordoc.403.8"])>
+<assign res=errors.addHash("code", "403", "subcode", "9", "name", lang["label.errordoc.403.9"])>
+<assign res=errors.addHash("code", "403", "subcode", "10", "name", lang["label.errordoc.403.10"])>
+<assign res=errors.addHash("code", "403", "subcode", "11", "name", lang["label.errordoc.403.11"])>
+<assign res=errors.addHash("code", "403", "subcode", "12", "name", lang["label.errordoc.403.12"])>
+<assign res=errors.addHash("code", "403", "subcode", "13", "name", lang["label.errordoc.403.13"])>
+<assign res=errors.addHash("code", "403", "subcode", "15", "name", lang["label.errordoc.403.15"])>
+<assign res=errors.addHash("code", "403", "subcode", "16", "name", lang["label.errordoc.403.16"])>
+<assign res=errors.addHash("code", "403", "subcode", "17", "name", lang["label.errordoc.403.17"])>
+<assign res=errors.addHash("code", "403", "subcode", "18", "name", lang["label.errordoc.403.18"])>
+<assign res=errors.addHash("code", "403", "subcode", "19", "name", lang["label.errordoc.403.19"])>
+<assign res=errors.addHash("code", "403", "subcode", "20", "name", lang["label.errordoc.403.20"])>
+<assign res=errors.addHash("code", "404", "subcode", "", "name", lang["label.errordoc.404"])>
+<assign res=errors.addHash("code", "404", "subcode", "2", "name", lang["label.errordoc.404.2"])>
+<assign res=errors.addHash("code", "404", "subcode", "3", "name", lang["label.errordoc.404.3"])>
+<assign res=errors.addHash("code", "405", "subcode", "", "name", lang["label.errordoc.405"])>
+<assign res=errors.addHash("code", "406", "subcode", "", "name", lang["label.errordoc.406"])>
+<assign res=errors.addHash("code", "407", "subcode", "", "name", lang["label.errordoc.407"])>
+<assign res=errors.addHash("code", "412", "subcode", "", "name", lang["label.errordoc.412"])>
+<assign res=errors.addHash("code", "414", "subcode", "", "name", lang["label.errordoc.414"])>
+<assign res=errors.addHash("code", "500", "subcode", "12", "name", lang["label.errordoc.500.12"])>
+<assign res=errors.addHash("code", "500", "subcode", "13", "name", lang["label.errordoc.500.13"])>
+<assign res=errors.addHash("code", "500", "subcode", "15", "name", lang["label.errordoc.500.15"])>
+<assign res=errors.addHash("code", "500", "subcode", "16", "name", lang["label.errordoc.500.16"])>
+<assign res=errors.addHash("code", "500", "subcode", "17", "name", lang["label.errordoc.500.17"])>
+<assign res=errors.addHash("code", "500", "subcode", "18", "name", lang["label.errordoc.500.18"])>
+<assign res=errors.addHash("code", "500", "subcode", "19", "name", lang["label.errordoc.500.19"])>
+
+<form name="f_add_error"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/windomain/add_errordoc_submit.sbm">
+
+<call draw_table_header("2", lang.domain.adderrordoc.header)>
+
+<if !vcode><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+<tr>
+   <td><call draw_label(lang.domain.adderrordoc.doc_code)></td>
+   <td>
+       <select name="code">
+       <list errors as error>
+         <if vcode && (error.code == vcode)><assign vselected = "SELECTED"></if>
+         <if error.subcode>
+             <option value="${error.code}.${error.subcode}" ${vselected}>${error.code}.${error.subcode}|${error.name}
+         <else>
+             <option value="${error.code}" ${vselected}>${error.code}|${error.name}
+         </if>
+         <assign vselected = "">
+       </list>
+       </select><br>
+       <call draw_important_label(lang.label.errordoc.compat_warn)>
+   </td>
+</tr>
+<if vmtype == "URL"><assign vchecked1 = ""><assign vchecked2 = "CHECKED"><else><assign vchecked1 = "CHECKED"><assign vchecked2 = ""></if>
+<tr>
+   <td><call draw_label("Choose the document type")></td>
+   <td    nowrap><input type="radio" name="mtype" value="FILE" onChange="checkForm(this.form,false)" ${vchecked1}>FILE&nbsp;&nbsp;<input type="radio" name="mtype" value="URL" onChange="checkForm(this.form,false)" ${vchecked2}>URL</td>
+</tr>
+<tr>
+   <td><call draw_label(lang.windomain.adderrordoc.path)></td>
+   <td    nowrap><input type="text" name="msg" size="48" value="${vmsg}" label="${lang.domain.adderrordoc.message_url}" check="vWinURLPath(this, mtype)"></td>
+</tr>
+
+<tr>
+   <td colspan="2"><call draw_label(lang.windomain.adderrordoc.html_note)></td>
+</tr>
+
+<tr>
+   <td  colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./windomain/add_errordoc.html.in  -->

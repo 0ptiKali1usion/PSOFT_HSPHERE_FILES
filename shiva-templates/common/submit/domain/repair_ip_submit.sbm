@@ -1,0 +1,10 @@
+<!-- BEGIN ./domain/repair_ip_submit.sbm  -->
+<assign u=account.getResource(request.rid)>
+  <assign ip2=u.addChild("ip",request.ip_type)>
+  <if ip2.status=="OK">
+     <assign result=ip2.reconfig()>
+  <else>
+     <assign result=session.addMessage(ip2.msg)>
+  </if>
+<include request.stemplate>
+<!--  END ./domain/repair_ip_submit.sbm  -->

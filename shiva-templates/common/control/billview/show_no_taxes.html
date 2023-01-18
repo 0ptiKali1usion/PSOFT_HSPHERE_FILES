@@ -1,0 +1,103 @@
+<!-- BEGIN ./common/control/billview/show_no_taxes.html  -->
+
+<call draw_table_header("5", "")>
+
+<tr>
+<td colspan="5">
+<table width="100%" class="inner_control"><tr><td>
+<if bill.closed>
+  <call draw_header(lang.billview.show.closed_statement_header(bill.desc_short, bill.opened("MEDIUM"), bill.closed("MEDIUM")))>
+<else>
+  <call draw_header(lang.billview.show.open_statement_header(bill.desc_short, bill.opened("MEDIUM")))>
+</if>
+<if account.suspended=="1"><assign path="suspended"><else><assign path="sumbill"></if>
+</td><td class="control_align_right">
+<if admin_preview == "1">&nbsp;<else><a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=${path}/invoice.html&bill_id=${bill.id}&account_id=${account.id.id}','_blank','resizable=yes,scrollbars=yes,status=yes,menubar=yes,toolbar=yes,width=600,height=600'); if (chw != null) chw.focus(); return false" ><call draw_image_align_alt("print", "absmiddle", label)></a></if>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr >
+	<td class="control_align_center" valign="bottom" width="5%"><call draw_label_bold(lang.label.accid)></td>
+        <td class="control_align_center" valign="bottom"><call draw_label_bold(lang.label.plan)></td>
+	<td class="control_align_center" valign="bottom" width="5%"><call draw_label_bold(lang.billview.b_balance)></td>
+	<td class="control_align_center" valign="bottom" width="5%"><call draw_label_bold(lang.billview.changes)></td>
+	<td class="control_align_center" valign="bottom" width="5%"><call draw_label_bold(lang.billview.e_balance)></td>
+</tr>
+<tr >
+	<td  class="control_align_center" valign="bottom"><call draw_label(account.id.id)></td>
+	<td  class="control_align_center" valign="bottom"><call draw_label(account.plan.description)></td>
+	<td   class="control_align_right" valign="bottom" nowrap><call draw_label(toolbox.displayBalance(bill.start_balance))></td>
+	<td   class="control_align_right" valign="bottom" nowrap><call draw_label(toolbox.displayBalance(bill.change))></td>
+	<td   class="control_align_right" valign="bottom" nowrap><if bill.end_balance><call draw_label(toolbox.displayBalance(bill.end_balance))><else><call draw_label(toolbox.displayBalance(bill.balance))></if></td>
+</tr>
+<tr>
+<td colspan="5" class="control_header"><if bill.closed><call draw_header(lang.billview.show.closed_statement_activity(account.plan.description, bill.opened("MEDIUM"), bill.closed("MEDIUM")))><else><call draw_header(lang.billview.show.open_statement_activity(account.plan.description, bill.opened("MEDIUM")))></if></td>
+</tr>
+<tr >
+	<td class="control_align_center"><call draw_label_bold(lang.billview.show.date)></td>
+	<td class="control_align_center"><call draw_label_bold(lang.label.descr)></td>
+	<td class="control_align_center"><call draw_label_bold(lang.label.debits)></td>
+	<td class="control_align_center"><call draw_label_bold(lang.label.credits)></td>
+	<td class="control_align_center"><call draw_label_bold(lang.label.balances)></td>
+
+</tr>
+<list bill.entries as entry>
+<if !(entry.amount=="0.0" || entry.amount=="-0.0")>
+ <compress>
+ <if entry.canceled>
+   <assign color=billing_cancelled_color>
+ <else>
+   <if (entry.type=="5") || (entry.type=="6") || (entry.type=="8") || (entry.type=="11")>
+      <assign color=billing_charged_color>
+   </if>
+ </if>
+ </compress>
+<tr >
+        <td class="control_align_center" style="background-color: ${color};" nowrap><call draw_colored_label(entry.date("TS_SHORT"), billing_text_color)></td>
+        <td style="background-color: ${color};"><call draw_colored_label(toolbox.formatForHTML(entry.description), billing_text_color)>
+	<if (entry.type=="12") || (entry.type=="13") || (entry.type=="14") || (entry.type=="15")>
+	<if admin_preview!="1">
+	<if account.suspended!="1">
+        <call draw_palink(config.CLIENT_CP_URL+"?template_name=billview/reseller_billview.html&entry_id="+entry.id+"&bill_id="+bill.id,"detail", lang.billview.show.detail)>
+	<else>
+        <call draw_palink(config.CLIENT_CP_URL+"?template_name=suspended/reseller_billview.html&entry_id="+entry.id+"&bill_id="+bill.id,"detail",lang.billview.show.detail)>
+	</if>
+	<else>
+        <call draw_palink(config.CLIENT_CP_URL+"?template_name=account_preview/view.html&display_template=reseller_billview.html&entry_id="+entry.id+"&bill_id="+bill.id+"&aid="+account.id.id,"detail",lang.billview.show.detail)>
+        </if>
+        </if>
+           <call draw_colored_note(entry.note, billing_text_color)>
+	</td>
+        <td class="control_align_right" style="background-color: ${color};"><if entry.is_credit>&nbsp;<else><call draw_colored_label(toolbox.currency(entry.amount), billing_text_color)></if></td>
+        <td class="control_align_right" style="background-color: ${color};"><if entry.is_credit><call draw_colored_label(toolbox.currency(entry.amount), billing_text_color)><else>&nbsp;</if></td>
+        <td class="control_align_right" style="background-color: ${color};" nowrap><call draw_colored_label(toolbox.displayBalance(entry.balance), billing_text_color)></td>
+</tr>
+<if color == billing_light_strip><assign color = billing_dark_strip><else><assign color = billing_light_strip></if>
+</if>
+</list>
+
+<tr>
+<if bill.closed>
+<td colspan="2" class="control_header"><call draw_header(lang.billview.show.statement_footer(bill.closed("MEDIUM")))></td><td class="control_header_align_right"><call draw_header(toolbox.currency(bill.debits))></td><td class="control_header_align_right"><call draw_header(toolbox.currency(bill.credits))></td><td class="control_header_align_right" nowrap><call draw_header(toolbox.displayBalance(bill.end_balance))></td>
+<else>
+<td colspan="2" class="control_header"><call draw_header(lang.billview.show.statement_footer(toolbox.now("MEDIUM")))></td><td class="control_header_align_right"><call draw_header(toolbox.currency(bill.debits))></td><td class="control_header_align_right"><call draw_header(toolbox.currency(bill.credits))></td><td class="control_header_align_right" nowrap><call draw_header(toolbox.displayBalance(bill.balance))></td>
+</if>
+</tr>
+
+<tr>
+  <td colspan="5">
+      <table class="inner_control" width="10">
+        <tr>
+        <td nowrap><table class="inner_control"><tr><td width="1" height="1" style="background-color: ${billing_charged_color}; border: 0; padding:0; spacing:0;"><call draw_image_alt("decolor",lang.billview.show.charged)></td></tr></table></td>
+        <td nowrap><call draw_colored_label(lang.sumbill.show.charged, design.color("header_text_color"))></td>
+        <td nowrap><table class="inner_control"><tr><td width="1" height="1"  style="background-color: ${billing_cancelled_color}; border: 0; padding:0; spacing:0;"><call draw_image_alt("decolor",lang.billview.show.canceled)></td></tr></table></td>
+        <td nowrap><call draw_colored_label(lang.sumbill.show.canceled, design.color("header_text_color"))></td>
+        </tr>
+      </table>
+  </td>
+</tr>
+<call draw_table_footer()>
+<!--  END ./common/control/billview/show_no_taxes.html  -->

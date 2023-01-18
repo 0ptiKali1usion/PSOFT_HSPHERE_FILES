@@ -1,0 +1,60 @@
+<!-- BEGIN ./control/MySQL/adm_privileges.  -->
+
+<assign database=account.getResource(request.db_id)>
+<assign m_user=account.getResource(request.user_id)>
+<assign result=m_user.loadUserPrivilegesOn(database.db_name)>
+<assign privileges = result.getDatabasePrivileges()>
+
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/MySQL/adm_privileges.sbm">
+<input type="hidden" name="user_id" value="${m_user}">
+<input type="hidden" name="db_name" value="${database.db_name}">
+<input type="hidden" name="db_id" value="${request.db_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="MySQL/adm_privileges.html">
+
+
+
+<call draw_table_header("3", lang.mysql.admpriv.header)>
+
+
+<tr>
+    <td  width="1%">&nbsp;</td>
+	<td><call draw_label(lang.mysql.admpriv.curuser)></td>
+	<td><call draw_label(m_user.name)></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+	<td><call draw_label(lang.mysql.admpriv.editpriv)></td>
+	<td><call draw_label(database.db_name)></td>
+</tr>
+<tr>
+    <td class="control_header_align_center" ><call draw_TT_header()></td>
+    <td colspan="2" class="control_header"><call draw_header("Edit privileges")></td>
+</tr>
+
+
+
+<tr>
+	<td>&nbsp;</td>
+    <td   class="control_align_center"><call draw_label(lang.mysql.admpriv.privname)></td>
+	<td   class="control_align_center"><call draw_label(lang.mysql.admpriv.curstatus)></td>
+</tr>
+<list privileges as privilege>
+<tr>
+	<td>&nbsp;</td>
+    <td   class="control_align_center"><call draw_label(privilege.name_priv)></td>
+	<td   class="control_align_center"><input type="checkbox" name="dbPrivileges" value="${privilege.name_priv}" ${privilege.value}></td>
+</tr>
+</list>
+<tr>
+    <td  class="control_align_center" ><call draw_tt_link(account.getChild("MySQL"),"")></td>
+	<td   colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/submit/MySQL/adm_privileges.sbm  -->

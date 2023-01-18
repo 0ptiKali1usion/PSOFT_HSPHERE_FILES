@@ -1,0 +1,19 @@
+<!-- BEGIN ./ftp/ftp.html  -->
+<assign template="ftp/ftp.html">
+<list account.findAllChildren("ip") as ip>
+<assign count=toolbox.add(count,"1")>
+    <if (ip.shared!="1")>
+        <assign ftp = ip.parent.findChild("ftp_vhost")>
+    </if>
+</list>
+<!--Count dedic ${count} -->
+<if (count=="1") && (ftp!="")>
+<assign final_template = template>
+<include "ftp/ftp_vhost.html">
+<else>
+<include "functions">
+<call draw_menu("ftp_user-ftp")>
+<include "control/ftp/ftp.html">
+<call bottom()>
+</if>
+<!--  END ./ftp/ftp.html  -->

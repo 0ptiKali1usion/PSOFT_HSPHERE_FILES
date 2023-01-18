@@ -1,0 +1,52 @@
+<!-- BEGIN ./quick/choice_ssl.html -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+
+<function draw_hosting(hosting)>
+<assign platform_type = hosting.server>
+<tr>
+  <td><call draw_label(hosting.parent.name)></td>
+  <if hasssl=="1">
+    <td  width="20%" nowrap><call draw_ssl(hosting, platform_type, template, hosting.parent.getChild("ip") )></td>
+  </if>
+  <if hassharedssl=="1">
+    <td  width="20%" nowrap><call draw_sharedssl(hosting, platform_type)></td>
+  </if>
+</tr>
+</function>
+
+<call draw_tooltip()>
+
+<assign colspan="1">
+<if account.plan.isResourceAvailable("ssl")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hasssl="1">
+</if>
+<if account.plan.isResourceAvailable("sharedssl")>
+  <assign colspan=toolbox.add(colspan, "1")>
+  <assign hassharedssl = "1">
+</if>
+
+
+
+
+<call draw_table_header(colspan, lang.quick.choicessl.header)>
+
+
+<tr>
+  <td><call draw_label_bold(lang.label.domain)></td>
+  <if hasssl=="1">
+    <td><call draw_label_bold(lang.quick.choicessl.edit)></td>
+  </if>
+  <if hassharedssl=="1">
+    <td><call draw_label_bold(lang.quick.choicessl.editshared)></td>
+  </if>
+</tr>
+<list account.findAllChildren("hosting") as hosting>
+<call draw_hosting(hosting)>
+</list>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choice_ssl.html  -->

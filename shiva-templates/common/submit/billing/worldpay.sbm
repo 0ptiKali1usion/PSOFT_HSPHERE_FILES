@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="${design.color("bgcolor")}">
+<assign tmp_action = "https://select.worldpay.com/wcc/purchase">
+<FORM name="login" action="${tmp_action}" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="instId" value="${values.INSTALLATION_ID}">
+    <input type="hidden" name="accId1" value="${values.ACCOUNT_ID}">
+    <input type="hidden" name="desc" value="${description}">
+    <input type="hidden" name="cartId" value="${cartId}">
+    <input type="hidden" name="testMode" value="${values.TEST_MODE}">
+    <input type="hidden" name="currency" value="${values.CURRENCY}">
+    <input type="hidden" name="MC_return" value="${ok_url}">
+    <if values.USE_CUSTOM_PAGE == "1">
+      <input type="hidden" name="resultFile" value="${values.CUSTOM_PAGE_NAME}">
+    </if>
+    <input type="hidden" name="amount" value="${amount}">
+</FORM>
+
+<SCRIPT language="javascript">
+ window.document.forms['login'].submit();
+</SCRIPT>
+</BODY>
+</HTML>

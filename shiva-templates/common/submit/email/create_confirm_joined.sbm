@@ -1,0 +1,110 @@
+<!-- BEGIN ./email/create_confirm_joined.sbm  -->
+
+<if !request.i_mailbox && !request.i_forward && !request.i_alias && !request.i_responder>
+  <assign res=session.addMessage(lang.email.add_select)>
+  <assign failure="1">
+<else>
+  <assign result=yafv.checkall(yafv.common.s_email.vMBoxName(lang.email.local_name,request.local),
+	yafv.common.s_email.vPasswordDep(lang.label.password,request.password,request.i_mailbox),
+	yafv.common.s_email.vSubscribersDep(lang.label.suscribers,request.subscribers,request.i_forward)
+  )>
+  <if result.status!="OK">
+    <assign failure="1">
+  <else>
+    <list toolbox.tokenizer(request.val_chosen," ") as val>
+      <assign aliasSubscribers=aliasSubscribers+val+";">
+    </list>
+    <if request.i_alias && !aliasSubscribers>
+      <assign failure="1">
+      <assign res=session.addMessage(lang.yafv.vChooseAlias.fail)>
+    </if>
+    <assign md_id=account.getResource(request.md_id)>
+    <if request.i_mailbox && request.aliased_by>
+        <list md_id.getAliasedByAsList(request.aliased_by) as aliased>
+          <if aliased==request.local>
+	    <assign failure="1">
+	    <assign res=session.addMessage(lang.msg.alias_by_same_as_mailbox)>
+          </if>
+        </list>
+    </if>
+  </if>
+</if>
+
+<if !failure>
+  <if request.aliased_by>
+    <assign new_aliased_by="">
+    <assign change_new_aliased_by="">
+    <list md_id.getAliasedByAsList(request.aliased_by) as aliased_by>
+      <if md_id.existChildMailAlias(aliased_by)=="0">
+	<if new_aliased_by=="">
+	  <assign new_aliased_by=aliased_by>
+	<else>
+	  <assign new_aliased_by=new_aliased_by+","+aliased_by>
+	</if>
+      <else>
+	<if change_new_aliased_by=="">
+	  <assign change_new_aliased_by=aliased_by>
+	<else>
+	  <assign change_new_aliased_by=change_new_aliased_by+","+aliased_by>
+	</if>
+      </if>      
+    </list>
+  </if>
+  <assign new_responder_atts="">
+  <list request.new_responder_atts as att>
+    <if att!="NA">
+      <if !new_responder_atts>
+        <assign new_responder_atts=att>
+      <else>
+        <assign new_responder_atts=new_responder_atts+"/"+att>
+      </if>
+    </if>
+  </list>
+  <assign price=account.getResource(request.md_id).estimateCreateMailObjects(request.i_mailbox,request.i_forward,request.i_alias,request.i_responder,request.i_antispam,request.i_antivirus,new_aliased_by)>
+  <if price.status!="ERROR">
+    <if price.free=="0">
+      <include "billing/mail_add_confirm_joined.html">
+    <else>
+      <include "submit/email/create_mailobject.sbm">
+    </if>
+  <else>
+    <assign res=session.addMessage(lang.msg.misc_res_failed_add)>
+    <assign res=session.addMessage(price.msg)>
+    <include request.ftemplate>
+  </if>
+<else>
+  <list result.msgs as msg>
+    <assign res=session.addMessage(msg)>
+  </list>
+  <assign vcatchall=toolbox.html_encode(request.catchall)>
+  <assign vlocal=toolbox.html_encode(request.local)>
+  <if request.i_mailbox>
+    <assign vi_mailbox=toolbox.html_encode(request.i_mailbox)>
+    <assign vdescription=toolbox.html_encode(request.description)>
+    <assign vpassword=toolbox.html_encode(request.password)>
+    <assign vdiscard=toolbox.html_encode(request.discard)>
+    <assign valiased_by=toolbox.html_encode(request.aliased_by)>
+  </if>
+  <if request.i_forward>
+    <assign vi_forward=toolbox.html_encode(request.i_forward)>
+    <assign vsubscribers=toolbox.html_encode(request.subscribers)>
+  </if>
+  <if request.i_alias>
+    <assign vi_alias=toolbox.html_encode(request.i_alias)>
+  </if>
+  <if request.i_responder>
+    <assign vi_responder=toolbox.html_encode(request.i_responder)>
+    <assign vsubject=toolbox.html_encode(request.subject)>
+    <assign vmessage=toolbox.html_encode(request.message)>
+    <assign vinclude_incoming=toolbox.html_encode(request.include_incoming)>
+    <assign vnew_responder_atts=toolbox.html_encode(request.new_responder_atts)>
+  </if>
+  <if request.i_antispam>
+    <assign vi_antispam=toolbox.html_encode(request.i_antispam)>
+  </if>
+  <if request.i_antivirus>
+    <assign vi_antivirus=toolbox.html_encode(request.i_antivirus)>
+  </if>
+  <include request.ftemplate>
+</if>
+<!--  END ./email/create_confirm_joined.sbm  -->

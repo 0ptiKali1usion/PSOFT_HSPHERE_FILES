@@ -1,0 +1,96 @@
+<!-- BEGIN ./common/control/real/rmserver.html.in  -->
+<assign rmserver=account.getChild("realserver_user")>
+<assign rmuser=rmserver.getChild("real_user")>
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.real.rmserver.header)>
+
+<if rmserver.status=="OK">
+<tr>
+    <td>${lang.real.rmserver.server}</td>
+    <td>http://${rmserver.host.name}:8080/ramgen/~${rmserver.login}/&nbsp;<call draw_launch("http://"+rmserver.host.name+":8080/ramgen/~"+rmserver.login+"/", lang.real.rmserver.launch)>
+</td>
+</tr>
+<tr>
+    <td>${lang.real.rmserver.ftp}</td>
+    <td>${rmserver.host.name}&nbsp;</td>
+</tr>
+<tr>
+    <td>${lang.label.ftplogin}</td>
+    <td>${rmserver.login}&nbsp;</td>
+</tr>
+<tr>
+    <td>${lang.real.rmserver.ftppsw}</td>
+    <td>&nbsp;&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=unixuser/change.html"+"&rid="+rmserver+"&stemplate="+template, lang.label.changepassword)></td>
+</tr>
+<assign quota = rmserver.getChild("winquota")>
+<tr>
+   <td><call draw_label(lang.label.quota)></td>
+   <td>&nbsp;&nbsp;<if quota.limitFiles != "unlimited"><call draw_label(toolbox.compose(lang.real.rmserver.limit_used, quota.usedMb, quota.limitMb, quota.usedFiles, quota.limitFiles))><else><call draw_label(toolbox.compose(lang.real.rmserver.unlimited_used, quota.usedMb, quota.limitMb, quota.usedFiles))></if><call draw_change(config.CLIENT_CP_URL+"?template_name=real/change_quota.html"+"&rid="+rmserver+"&stemplate="+template+"&qouta_rid="+quota, lang.label.changequota)></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.label.group)></td>
+   <td>&nbsp;&nbsp;${rmserver.group}</td>
+</tr>
+<if SESSION_PLATFORM != "win2k">
+<tr>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td>&nbsp;&nbsp;${rmserver.dir}</td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("ftp_user_traffic")>
+<assign ftp_user_traffic = rmserver.getChild("ftp_user_traffic")>
+<assign res=ftp_user_traffic.reload>
+<tr>
+        <td width="20%"    >${lang.real.rmserver.transferftp}</td>
+        <td><call draw_label(toolbox.compose(lang.label.traffic.used, ftp_user_traffic.text_traffic))>&nbsp;<call draw_label(toolbox.compose(lang.quick.trafficdetails.summarydate, ftp_user_traffic.start_date))></td>
+</tr>
+<if account.plan.isResourceAvailable("real_server_traffic")>
+<assign rmserver_traffic = rmserver.getChild("real_server_traffic")>
+<assign res=rmserver_traffic.reload>
+<tr>
+        <td width="20%"    >${lang.real.rmserver.transferrm}</td>
+        <td><call draw_label(toolbox.compose(lang.label.traffic.used, rmserver_traffic.text_traffic))></td>
+</tr>
+</if>
+<!--------------------------------
+<tr>
+        <td  colspan="2"   ><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/real/delete_rmserver.sbm"+"&stemplate="+template+"&ftemplate="+template,"DISABLE Real Media Server")> </td>
+</tr>
+--------------------------------->
+</if> 
+</if>
+
+
+<yafv s_real>
+<form action="${config.CLIENT_CP_URL}" method="post" name="f_enable_rmserver" check! accept-charset="UTF-8">
+<tr>
+    <td>${lang.real.rmserver.mincon}</td>
+    <td>
+    <if ! vmin_con><assign vmin_con=rmuser.min_con></if>
+        <input type="hidden" name="template_name" value="submit/real/change_rmserver.sbm">
+        <input type="hidden" name="stemplate" value="${template}">
+        <input type="hidden" name="ftemplate" value="${template}">
+        <input type="text" name="min_con" size="5" value="${vmin_con}" label="${lang.real.rmserver.mincon}" check="vConnection">&nbsp;</td>
+</tr>
+<tr>
+    <td>${lang.real.rmserver.maxcon}</td>
+    <td>
+    <if ! vmax_con><assign vmax_con=rmuser.max_con></if>
+    <input type="text" name="max_con" size="5" value="${vmax_con}" label="${lang.real.rmserver.maxcon}" check="vConnection">&nbsp;</td>
+ </tr>
+<tr>
+<if rmserver>
+    <td>&nbsp;</td>
+		<td>&nbsp;
+		<input type="submit" value="${lang.button.change}"></td>
+<else>
+    <td>&nbsp;</td>
+		<td>&nbsp;
+		<input type="submit" value="${lang.real.rmserver.submenable}"></td>
+</if>
+</tr>
+</form>
+
+<call draw_table_footer()>
+<!-- END ./common/control/real/rmserver.html.in  -->

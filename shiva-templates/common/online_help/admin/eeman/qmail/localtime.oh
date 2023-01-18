@@ -1,0 +1,7 @@
+<center> localtime </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Include local time in the header of the message.
+<br>Default: 0 (not include).
+<br>
+

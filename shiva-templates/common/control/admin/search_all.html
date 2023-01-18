@@ -1,0 +1,90 @@
+<!-- BEGIN ./control/admin/search.html  -->
+<assign admin=account.getChild("admin")>
+<assign reseller_su=account.getChild("reseller_su")>
+<call draw_tooltip()>
+<if reseller_su>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_res_header)>
+
+<tr><td><call draw_label(lang.label.reseller)></td>
+<td>
+<select name="sc_reseller" size="1">
+<option value="%">Any
+<list reseller_su.resellers as reseller>
+<option value="${reseller.id}">${reseller.name} (${reseller.url})
+</list>
+</select>
+ </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.username)></td>
+ <td><input type="text" name="sc_username"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.accid)></td>
+ <td><input type="text" name="sc_account_id"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.email)></td>
+ <td><input type="text" name="sc_email"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.admin.mailtype)></td>
+ <td><input type="radio" name="sc_bci_email" value="ci" checked><call draw_label(lang.admin.ci)>&nbsp;&nbsp;<input type="radio" name="sc_bci_email" value="bi"><call draw_label(lang.admin.bi)></td>
+</tr>
+<tr>
+ <td  colspan="2" class="control_align_center"><call draw_label_bold(lang.admin.regdate)></td>
+ </tr>
+<tr>
+ <td><call draw_label(lang.label.from)></td>
+ <td><input type="text" name="sc_r_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","sc_r_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td><input type="text" name="sc_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_to","")></td>
+</tr>
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="search/accounts_all.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+&nbsp;
+
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<call draw_table_header("2", lang.admin.domains_header)>
+
+<tr>
+ <td><call draw_label(lang.admin.mailtype)></td>
+ <td><input type="radio" name="sc_bci_email" value="ci" checked><call draw_label(lang.admin.ci)>&nbsp;&nbsp;<input type="radio" name="sc_bci_email" value="bi"><call draw_label(lang.admin.bi)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.label.dname)></td>
+  <td><input type="text" name="sc_domain"></td>
+</tr>
+<tr>
+  <td>
+    <call draw_label(lang.label.entries)>
+  </td>
+  <td><call searchStepBox("")></td>
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="search/domains_all.html">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="submit" value="${lang.button.search}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/search.html  -->

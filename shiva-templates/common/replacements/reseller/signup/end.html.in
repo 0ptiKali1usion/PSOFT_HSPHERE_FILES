@@ -1,0 +1,47 @@
+<include "functions">
+<assign template="signup/end.html">
+<include "control/signup/signup_function.html">
+<if !session.msg>
+    <assign title=lang.label.thanks>
+<else>
+    <assign title=lang.label.reg_failed>
+    <assign error_disabled="true">
+</if>
+<include "signup/signup_top.html">
+<table border="0">
+<tr>
+    <td>
+<if !session.msg>
+<if request["_bi_type"]=="Check">
+<call draw_label(toolbox.compose(lang.label.signup_end_text_check, plans[request.plan_id].description))>
+<else>
+<call draw_label(toolbox.compose(lang.label.signup_end_text_else, plans[request.plan_id].description))>
+</if>
+<center>
+<if !mod><assign mod=request["_mod"]></if>
+<call draw_invoice(mod)>
+</center>
+<else>
+<call error()>
+</if>
+</p> 	
+<yafv s_signup>
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/signup/end.sbm">
+    <assign excludeFields=excludeFields+"template_name;">
+    <if user && (request.admin_signup=="")>
+	<if request["_bi_type"]!="TRIAL">
+	    <assign ftemplate="submit/signup/bi_info_cc.sbm">
+	<else>
+            <assign ftemplate="submit/signup/pay_info.sbm">
+	</if> 
+    <else>
+	<assign ftemplate="submit/signup/login.sbm">
+    </if>
+    <assign excludeFields=excludeFields+"template_name;">
+    <call genHiddenField(excludeFields)>
+</form>
+    </td>
+</tr>
+</table>
+<include "signup/signup_bottom.html">

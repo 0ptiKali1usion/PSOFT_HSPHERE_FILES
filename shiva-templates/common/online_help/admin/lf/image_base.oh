@@ -1,0 +1,8 @@
+<center>Base Image Path</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;Here you can change H-Sphere standard base image path to that of your own. To do this, do the following:<br> 
+1) Copy all the standard images (usually the IMAGES directory) to your custom location. If you are a reseller, try to get these images from your hosting company.<br>
+2) Once you have copied the images, replace some (or all) of them with your custom ones preserving their sizes.<br>
+3) Specify your custom location in the <i>Base Image Directory or URL</i> field. This location must be either a fully qualified URL of your host or a directory path relative to the CP Web Server Document Root.<br>
+4) If you made a mistake and your images didn't show, just clear the <i>Base Image Directory or URL</i> field, and click <i>Submit</i>. The original path will be restored.<br>
+</hr> 

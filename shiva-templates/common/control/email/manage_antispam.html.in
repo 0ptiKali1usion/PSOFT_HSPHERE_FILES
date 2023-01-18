@@ -1,0 +1,131 @@
+<!-- BEGIN ./control/email/manage_antispam.html.in  -->
+
+<call draw_tooltip()>
+<assign mdomain=account.getResource(request.md_id)>
+<assign mobject=account.getResource(request.mid)>
+<yafv s_email>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_manage_spamcheck" check! accept-charset="UTF-8">
+
+  <call draw_table_header("2",lang.email.antispam.edit_prefs+" "+request.email)>
+
+  <input type="hidden" name="template_name" value="submit/email/manage_antispam.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="md_id" value="${request.md_id}">
+  <input type="hidden" name="mid" value="${request.mid}">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="sc_page" value="${request.sc_page}">
+  <input type="hidden" name="type" value="${request.type}">
+
+<tr>
+<if vvalues>
+  <assign spamLevel=vspamLevel>
+<else>
+  <assign spamLevel=mobject.spamLevel>
+</if>
+<td><call draw_label_bold(lang.email.antispam.level)>
+<select name="spamLevel">
+<if spamLevel==""><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="default"><call draw_label(lang.email.antispam.system_value)></option>
+<if spamLevel=="very_aggressive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="very_aggressive"><call draw_label(lang.email.antispam.very_aggressive)></option>
+<if spamLevel=="aggressive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="aggressive"><call draw_label(lang.email.antispam.aggressive)></option>
+<if spamLevel=="normal"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="normal"><call draw_label(lang.email.antispam.normal)></option>
+<if spamLevel=="relaxed"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="relaxed"><call draw_label(lang.email.antispam.relaxed)></option>
+<if spamLevel=="permissive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="permissive"><call draw_label(lang.email.antispam.permissive)></option>
+</select>
+</td>
+
+<td width="60%">
+  <if mdomain!=mobject && mobject.useMdomainPrefs!="1">
+    <call draw_label(lang.email.antispam.set_mdomain_prefs)>&nbsp;<input type="submit" name="set_mdomain_prefs" value="${lang.button.set}">
+  </if>
+</td>
+</tr>
+
+<if vvalues>
+  <assign spam_processing_val=vspam_processing>
+  <assign move_to_val=vmove_to>
+<else>
+  <assign spam_processing_val=mobject.spamProcessing>
+  <if toolbox.consists(spam_processing_val,"@")=="1">
+    <assign move_to_val=spam_processing_val>
+  </if>
+</if>
+<tr>
+<td colspan="2">
+<call draw_label_bold(lang.email.antispam.processing)>&nbsp;
+<input type="radio" name="spam_processing" value="mark" onClick="checkForm(this.form)" <if spam_processing_val=="mark">CHECKED</if>><call draw_label(lang.email.antispam.mark)>&nbsp;&nbsp;
+<input type="radio" name="spam_processing" value="remove" onClick="checkForm(this.form)" <if spam_processing_val=="remove">CHECKED</if>><call draw_label(lang.label.remove)>&nbsp;&nbsp;
+<input type="radio" name="spam_processing" value="move" onClick="checkForm(this.form)" <if move_to_val>CHECKED</if>><call draw_label(lang.label.move_to)>
+<input type="text" name="move_to" value="${move_to_val}" check="vMailProcessing(move_to,spam_processing)">
+</td>
+</tr>
+
+<if vvalues>
+  <assign spamMaxScore=vspamMaxScore>
+<else>
+  <assign spamMaxScore=mobject.spamMaxScore>
+</if>
+<tr>
+<td colspan="2">
+<call draw_label_bold(lang.email.antispam.max_score)><call draw_help("user-mailinfo-antispam_maxscore","")>
+<select name="spamMaxScore">
+<if spamMaxScore=="" || spamMaxScore=="undefined"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="undefined"><call draw_label(lang.email.antispam.undefined)></option>
+<if spamMaxScore=="very_aggressive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="very_aggressive"><call draw_label(lang.email.antispam.very_aggressive)></option>
+<if spamMaxScore=="aggressive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="aggressive"><call draw_label(lang.email.antispam.aggressive)></option>
+<if spamMaxScore=="strict"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="strict"><call draw_label(lang.email.antispam.strict)></option>
+<if spamMaxScore=="moderate"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="moderate"><call draw_label(lang.email.antispam.moderate)></option>
+<if spamMaxScore=="neutral"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="neutral"><call draw_label(lang.email.antispam.neutral)></option>
+<if spamMaxScore=="permissive"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="permissive"><call draw_label(lang.email.antispam.permissive)></option>
+<if spamMaxScore=="loose"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="loose"><call draw_label(lang.email.antispam.loose)></option>
+<if spamMaxScore=="very_loose"><assign v_sel="SELECTED"><else><assign v_sel=""></if>
+<option ${v_sel} value="very_loose"><call draw_label(lang.email.antispam.very_loose)></option>
+</select>
+</td>
+</tr>
+
+<tr>
+<td class="control_align_center"><call draw_label_bold(lang.email.antispam.whitelist)></td>
+<td class="control_align_center"><call draw_label_bold(lang.email.antispam.blacklist)></td>
+</tr>
+
+<if vvalues>
+  <assign whiteList=vwhiteList>
+  <assign blackList=vblackList>
+<else>
+  <assign whiteList=mobject.whiteList>
+  <assign blackList=mobject.blackList>
+</if>
+<tr>
+<td class="control_align_center"><textarea rows="10" cols="35" name="whiteList" check="vEmailsMask(whiteList)">${whiteList}</textarea></td>
+<td class="control_align_center"><textarea rows="10" cols="35" name="blackList" check="vEmailsMask(blackList)">${blackList}</textarea></td>
+</tr>
+<tr>
+  <td colspan="2"><call draw_label(lang.email.antispam.add_list_note)></td>
+</tr>
+
+<if request.type=="mbox" && mobject.useMdomainPrefs=="1">
+<tr>
+  <td colspan="2"><call draw_colored_note(lang.email.antispam.note,"red")></td>
+</tr>
+</if>
+
+<tr>
+  <td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+<call draw_table_footer()>
+</form>
+<!-- END ./control/email/manage_antispam.html.in  -->

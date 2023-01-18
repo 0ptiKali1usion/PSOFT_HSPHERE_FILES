@@ -1,0 +1,15 @@
+<!-- BEGIN ./submit/admin/merchant/GestPay.sbm -->
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign mm=account.getChild("merchant_manager")>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<assign res = mm.webprocessorparams("GestPay","LOGIN", request.login,"LANGUAGE", request.language,"CURRENCY", request.currency, "enabled", enabled)>
+<if res.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(res.msg)>
+ <include request.ftemplate>
+</if>
+</if>
+<!-- END ./submit/admin/merchant/Gestpay.sbm -->
+

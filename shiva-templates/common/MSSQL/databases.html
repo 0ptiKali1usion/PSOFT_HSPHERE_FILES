@@ -1,0 +1,18 @@
+<!-- BEGIN ./MSSQL/databases.html -->
+<include "functions">
+<assign mssql=account.getChild("MSSQL")>
+<assign logins=account.findAllChildren("MSSQLLogin")>
+<assign databases=account.findAllChildren("MSSQLDatabase")>
+<if logins>
+    <if databases>
+      <assign template="MSSQL/databases.html">
+      <call draw_menu("mssql-dbs")>
+      <include "control/MSSQL/databases.html">
+      <call bottom()>
+    <else>
+      <include "MSSQL/mssql-create-database.html">
+   </if>
+<else>
+    <include "MSSQL/mssql-create-login.html">
+</if>
+<!--  END ./MSSQL/databases.html -->

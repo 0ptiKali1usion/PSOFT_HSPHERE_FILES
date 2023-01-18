@@ -1,0 +1,4 @@
+<center> Domain Transfer </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	This allows users to transfer their OpenSRS domains from other servers to your H-Sphere server with automatic update of the domain info in the OpenSRS registry.  Currently, this feature is supported only with OpenSRS.<br>

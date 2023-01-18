@@ -1,0 +1,22 @@
+<!-- BEGIN ./windomain/list.html -->
+<assign template="windomain/list.html">
+<include "functions">
+<call draw_menu("domain-list")>
+<assign num=toolbox.add(num,account.findAllChildren("domain").size)>
+<if num=="1"><assign tmp_domain=account.findAllChildren("domain")["0"]></if>
+<assign num=toolbox.add(num,account.findAllChildren("3ldomain").size)>
+<if (num=="1") && (tmp_domain=="")><assign tmp_domain=account.findAllChildren("3ldomain")["0"]></if>
+<assign num=toolbox.add(num,account.findAllChildren("nodomain").size)>
+<if (num=="1") && (tmp_domain=="")><assign tmp_domain=account.findAllChildren("nodomain")["0"]></if>
+<assign num=toolbox.add(num,account.findAllChildren("service_domain").size)>
+<if (num=="1") && (tmp_domain=="")><assign tmp_domain=account.findAllChildren("service_domain")["0"]></if>
+<assign num=toolbox.add(num,account.findAllChildren("parked_domain").size)>
+<if (num=="1") && (tmp_domain=="")><assign tmp_domain=account.findAllChildren("parked_domain")["0"]></if>
+<if num == "1">
+<assign domain=tmp_domain>  
+<include "control/domain/edit_included.html">
+<else>
+<include "control/domain/list.html">
+</if> 
+<call bottom()>
+<!--  END ./windomain/list.html -->

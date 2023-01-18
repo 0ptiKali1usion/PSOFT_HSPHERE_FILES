@@ -1,0 +1,56 @@
+<!-- BEGIN ./submit/plan_editor/reseller_navigate.sbm -->
+<!-- CURRENT_SPECIAL=${request.current_special} -->
+<switch request.current_special>
+   <case "plan_editor/reseller.html">
+       <if !request.leave_osrs_prices>
+          <assign page_to_display="plan_editor/reseller_srs.html">
+       <else>
+          <if !request.leave_domain_transfer_prices>
+             <assign page_to_display="plan_editor/reseller_domain_transfer.html">
+          <else>
+             <if request.allow_ds_resell>
+                 <if request.leave_prices>
+                    <assign page_to_display="submit/plan_editor/reseller_final.sbm">
+                 <else>
+                    <if !request.leave_ds_prices>
+                       <assign page_to_display="plan_editor/reseller_ds_prices.html"> 
+                    <else>
+                       <assign page_to_display="plan_editor/reseller2.html">
+                    </if>
+                 </if>
+             <else>
+               <if request.leave_prices>
+                    <assign page_to_display="submit/plan_editor/reseller_final.sbm">
+               <else>
+                    <assign page_to_display="plan_editor/reseller2.html">
+               </if>
+             </if>
+          </if>    
+       </if>
+       <break>
+   <case "plan_editor/reseller_srs.html">
+       <if !request.leave_domain_transfer_prices>
+           <assign page_to_display="plan_editor/reseller_domain_transfer.html">
+       <else>
+           <if request.allow_ds_resell>
+               <assign page_to_display="plan_editor/reseller_ds_prices.html">
+           <else>
+               <assign page_to_display="plan_editor/reseller2.html">
+           </if>
+       </if>
+       <break>
+   <case "plan_editor/reseller_domain_transfer.html">
+       <if request.allow_ds_resell>
+           <assign page_to_display="plan_editor/reseller_ds_prices.html">
+       <else>
+           <assign page_to_display="plan_editor/reseller2.html">
+       </if>
+       <break>
+   <case "plan_editor/reseller_ds_prices.html">
+       <assign page_to_display="plan_editor/reseller2.html">
+       <break>
+   <default>
+       <assign page_to_display="${template}">
+       <break>
+</switch>
+<!-- END ./submit/plan_editor/reseller_navigate.sbm -->

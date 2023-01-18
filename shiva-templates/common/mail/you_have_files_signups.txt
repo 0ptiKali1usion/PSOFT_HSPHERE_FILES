@@ -1,0 +1,11 @@
+${lang.massmail.fsignup_header}
+
+${lang.massmail.fsignup_text(failed_signups_q)}
+
+<list accounts as account>
+${lang.massmail.fsignup_user} - ${account.uname}
+${lang.massmail.fsignup_plan} - ${account.pname}
+${lang.massmail.fsignup_domain} - ${account.dname}
+
+</list>
+${lang.massmail.fsignup_look}

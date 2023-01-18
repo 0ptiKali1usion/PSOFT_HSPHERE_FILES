@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/msexchange/add_user_confirm.html  -->
+<include "functions">
+<call START_PAGE("msexchange/change_plan_confirm", "he-users")>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_user_confirm" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="rid" value="${request.rid}">
+
+<input type="hidden" name="principalName" value="${request.principalName}">
+<input type="hidden" name="password" value="${request.password}">
+<input type="hidden" name="description" value="${request.description}">
+<input type="hidden" name="i_bizuser_admin" value="${request.i_bizuser_admin}">
+<input type="hidden" name="i_bizuser_plan" value="${request.i_bizuser_plan}">
+<input type="hidden" name="displayName" value="${request.displayName}">
+<input type="hidden" name="givenName" value="${request.givenName}">
+<input type="hidden" name="middleName" value="${request.middleName}">
+<input type="hidden" name="sn" value="${request.sn}">
+<input type="hidden" name="initials" value="${request.initials}">
+<input type="hidden" name="physicalDeliveryOfficeName" value="${request.physicalDeliveryOfficeName}">
+<input type="hidden" name="telephoneNumber" value="${request.telephoneNumber}">
+<input type="hidden" name="street" value="${request.street}">
+<input type="hidden" name="postOfficeBox" value="${request.postOfficeBox}">
+<input type="hidden" name="city" value="${request.city}">
+<input type="hidden" name="state" value="${request.state}">
+<input type="hidden" name="country" value="${request.country}">
+
+<assign bizorg =account.getChild("bizorg")>
+
+<assign stype = account.plan.getResourceType("bizuser").description>
+<assign stype = stype + ", " + account.plan.getResourceType(request.i_bizuser_plan).description>
+<assign add_message=toolbox.compose(lang.billing.add_msg1, stype)>
+<call draw_warn_invoice_with_charge_info(add_message,add_price,"","","f_add_user_confirm")>
+</form>
+<call END_PAGE()>
+<!--  END ./control/msexchange/add_user_confirm.html  -->

@@ -1,0 +1,170 @@
+<!-- BEGIN ./control/admin/registrar/Custom.html.in  -->
+<script language="javascript">
+function selectItem(list, text) {
+    var boxLength = list.length;
+    var index;
+    var val;
+    if (boxLength > 0) {
+        index = list.selectedIndex;
+        val = list.options[index].text;
+        text.value = val;
+    }
+}
+
+function selectAll() {
+    var boxLength = document.custom_registrar_opt.tlditem.length;
+    var i;
+    var val;
+    if (boxLength > 0) {
+        for(i=0; i<boxLength; i++) {
+            document.custom_registrar_opt.tlditem.options[i].selected=true;
+        }
+    }
+    boxLength = document.custom_registrar_opt.cc.length;
+    if (boxLength > 0) {
+        for(i=0; i<boxLength; i++) {
+            document.custom_registrar_opt.cc.options[i].selected=true;
+        }
+    }
+}
+
+function addTld(list, text) {
+    var tld_name = text.value;
+    var boxLength = list.length;
+    var currentItem;
+    var i;
+    var isNew = true;
+
+    for (i=0; i<boxLength; i++) {
+        currentItem = list.options[i].text;
+        if (currentItem==tld_name) {
+            isNew=false;
+            break;
+        }
+    }
+
+    if (isNew) {
+        if (tld_name!=null && tld_name!="" && tld_name.charAt(0)!=".") {
+            newoption = new Option(tld_name, tld_name, false, false);
+            list.options[boxLength] = newoption;
+        }
+    }
+
+    list.selectedIndex=-1;
+    text.value="";
+}
+
+function deleteTld(list, text) {
+    var tld_name = text.value;
+    var boxLength = list.length;
+    var i;
+    var currentItem;
+
+    for (i=0; i<boxLength; i++) {
+        currentItem = list.options[i].text;
+        if (currentItem==tld_name) {
+            list.options[i]=null;
+            break;
+        }
+    }
+    list.selectedIndex=-1;
+    text.value = "";
+}
+</script>
+
+<yafv s_admin>
+<if account.getChild("reseller_su")>
+<assign mm=account.getChild("registrar_manager")>
+<assign admin = account.getChild("admin")>
+
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" name="custom_registrar_opt" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/registrar/Custom.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+
+
+<if request.rid>
+    <input type="hidden" name="rid" value="${request.rid}">
+    <assign registrar=mm.get(request.rid)>
+</if>
+
+<call draw_table_header("2", lang.admin.registrar.custom)>
+
+
+<tr ><td><call draw_label(lang.label.title)></td><td><input type="text" name="description" value="<if registrar>${registrar.description}<else>${lang.admin.registrar.custom}</if>"></td></tr>
+<if registrar.lookup_script!="">
+    <assign script_value=registrar.lookup_script>
+<else>
+    <assign script_value="custom_reg">
+</if>
+<tr ><td><call draw_label(lang.admin.registrar.lookup)></td><td><input type="text" name="lookup_script" value="${script_value}" check="vLocalFileName"></td></tr>
+<tr>
+    <td><call draw_label(lang.admin.registrar.custom.mailto)></td>
+    <td>
+        <list registrar.mailto as mailto>
+            <if mailto=="tts">
+                <assign tts_enabled="1">
+            <else>
+                <assign mailto_value=mailto>
+            </if>
+
+        </list>
+        <if registrar>
+            <input type="checkbox" name="tts" value="1" <if tts_enabled=="1">checked</if>><call draw_label(lang.admin.registrar.custom.mailto.tts)><br>
+            <input type="checkbox" name="email_checked" value="1" onChange="checkForm(this.form)" <if mailto_value!="">checked</if>>
+            <input type=text name="email" value="${mailto_value}" check="vRegInfoEmail(this, email_checked)"><br>
+        <else>
+            <input type="checkbox" name="tts" value="1" checked><call draw_label(lang.admin.registrar.custom.mailto.tts)><br>
+            <input type="checkbox" name="email_checked" value="1" onChange="checkForm(this.form)">
+            <input type=text name="email" value="" check="vRegInfoEmail(this, email_checked)"><br>
+        </if>
+        <call draw_label(lang.admin.registrar.cc)><br>
+        <select multiple name="cc" style="width:145;" size="5" onclick="selectItem(this, document.custom_registrar_opt.cc_value)">
+            <if registrar>
+                <list registrar.cc as ccs>
+                    <option value=${ccs}><call draw_label(ccs)><br>
+                </list>
+            </if>
+        </select><br>
+        <i><call draw_label(lang.admin.registrar.e_mail)></i><input type="edit" style="width:110" name="cc_value" value="">
+        <input type="button" name="cc_add" value="Add" onclick="javascript:addTld(document.custom_registrar_opt.cc, document.custom_registrar_opt.cc_value); checkForm(this.form);">
+        <input type="button" name="cc_delete" value="Delete" onclick="javascript:deleteTld(document.custom_registrar_opt.cc, document.custom_registrar_opt.cc_value); checkForm(this.form);">
+    </td>
+</tr>
+<tr>
+    <td><call draw_label(lang.admin.registrar.supported_tld)></td>
+    <td>
+        <select multiple name="tlditem" style="width:145;" size="5" onclick="selectItem(this, document.custom_registrar_opt.tld_value)">
+            <if registrar>
+                <list registrar.tlds as tld>
+                    <option value=${tld}><call draw_label(tld)><br>
+                </list>
+            </if>
+        </select><br>
+        <i><call draw_label(lang.admin.registrar.user_domain)></i><input type="edit" style="width:45" name="tld_value" value="">
+        <input type="button" name="tld_add" value="Add" onclick="javascript:addTld(document.custom_registrar_opt.tlditem, document.custom_registrar_opt.tld_value); checkForm(this.form);">
+        <input type="button" name="tld_delete" value="Delete" onclick="javascript:deleteTld(document.custom_registrar_opt.tlditem, document.custom_registrar_opt.tld_value); checkForm(this.form);">
+    </td>
+</tr>
+
+<!--registrar_text -->
+<assign regrar_text = toolbox.html_encode(settings.registrar_text)>
+
+<if !regrar_text><assign regrar_text = toolbox.html_encode(lang.admin.registrar.regrar_text)></if>
+
+
+<tr ><td><call draw_label(lang.admin.registrar.text)></td><td><textarea rows="10" cols="40" name="registrar_text">${regrar_text}</textarea></td></tr>
+
+<include "control/admin/registrar/common_params.html">
+<tr >
+    <td colspan="2" class="control_align_center">
+        <input type="submit" value="Submit" onclick="javascript:checkForm(this, false); selectAll();">
+        <input type="reset" value="${lang.button.reset}">
+    </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+</if>
+<!-- END ./control/admin/registrar/Custom.html.in  -->

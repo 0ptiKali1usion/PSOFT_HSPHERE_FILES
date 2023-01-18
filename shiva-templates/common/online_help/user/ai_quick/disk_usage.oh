@@ -1,0 +1,8 @@
+<center>Summary Disk Usage</center>
+<hr>
+<p>Your control panel shows two amounts - the average for the current disk usage cycle and the last registered disk usage.</p>
+
+<p>Every 24 hours all servers (web, mail, MySQL, etc.) are scanned, and all actually used disk space is summarized to make up your Summary Disk Usage.  The resulting amount shows in your control panel as Last Day's Usage.</p>
+
+<p>For billing purposes, the system also monitors your average disk usage for the disk usage cycle.  From the beginning of this cycle, summary readings of each daily scan are added up, and the cumulative amount is divided by the number of days elapsed since the cycle starting date.  The resulting average is displayed in your control panel as Average usage.</p>
+

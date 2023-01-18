@@ -1,0 +1,46 @@
+<!-- BEGIN ./domain/add_domain_alias.html.in  -->
+<yafv s_domain>
+<call draw_tooltip()>
+
+<assign domain = account.getResource(request.rid)>
+<form name="f_add_cgi"  action="${config.CLIENT_CP_URL}" method="post" check! accept-charset="UTF-8">
+
+<input type="hidden" name="aid" value="${request.aid}">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/domain/add_domain_alias.sbm">
+
+
+
+
+<call draw_table_header("2", lang.domain.adddomainalias.header)>
+
+<tr>
+   <td><call draw_label(toolbox.compose(lang.domain.adddomainalias.alias, domain.name))>
+</td>
+   <td><call draw_label("www.")><input type="text" name="alias" value="${alias}" label="${toolbox.compose(lang.domain.adddomainalias.alias, domain.name)}" check="vTransferDomainName"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.domain.adddomainalias.dns)></td>
+   <td><input type="checkbox" name="dns" checked></td>
+</tr>
+
+<if domain.mail_service && account.plan.isResourceAvailable("mail_domain_alias")>
+<if account.plan.type == "mailonly">
+   <input type="hidden" name="mail_domain_alias" value="1">
+<else>
+<tr>
+   <td><call draw_label(lang.domain.addmaildomainalias.header)></td>
+   <td><input type="checkbox" name="mail_domain_alias"></td>
+</tr>
+</if>
+</if>
+
+<tr>
+   <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</tr>   
+
+<call draw_table_footer()>
+</form>
+<!--  END ./domain/add_domain_alias.html.in  -->

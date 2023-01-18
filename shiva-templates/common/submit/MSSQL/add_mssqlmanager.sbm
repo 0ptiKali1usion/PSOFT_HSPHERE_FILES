@@ -1,0 +1,41 @@
+<!-- BEGIN ./submit/MSSQL/add_mssqlmanager.sbm  -->
+<assign hosting=account.getResource(request.rid)>
+<assign asp=hosting.getChild("asp")>
+<assign asp_net=hosting.getChild("asp_net")>
+
+<assign success = "true">
+
+<if !asp>
+  <assign res=hosting.addChild("asp","")>
+  <if res.status!="OK">
+    <assign result = session.addMessage(res.msg)>
+    <assign success="false">
+  </if>
+</if>
+
+<if !asp_net>
+  <assign res=hosting.addChild("asp_net","")>
+  <if res.status!="OK">
+    <assign result = session.addMessage(res.msg)>
+    <assign success="false">
+  </if>
+</if>
+
+<if !mssqlmanager>
+  <assign res = hosting.addChild("mssqlmanager", "")>
+  <if res.status!="OK">
+    <assign result = session.addMessage(res.msg)>
+    <assign success="false">
+  </if>
+<else>
+  <assign result=session.addMessage(toolbox.compose(lang.msg.name_res_exists, lang.mssql.databases.mssqlmanager, ""))>
+  <assign success="false">
+</if>
+
+
+<if success=="true">
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+<!--  END ./submit/MSSQL/add_mssqlmanager.sbm  -->

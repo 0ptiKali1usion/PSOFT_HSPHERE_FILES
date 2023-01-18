@@ -1,0 +1,77 @@
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign rtype = plan.getResourceType(request.r_id)>
+<assign reseller_su = account.getChild("reseller_su")>
+
+
+<list reseller_su.priced_types as priced_type>
+<assign typeName = toolbox.getTypeName(priced_type)>
+<assign result=yafv.common.s_admin.vUnits(lang.label.free_units, request["_FREE_UNITS_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+<assign result=yafv.common.s_admin.vPrice(lang.label.setup_price, request["_SETUP_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+<assign result=yafv.common.s_admin.vPrice(lang.label.usage_price, request["_USAGE_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+<assign result=yafv.common.s_admin.vPrice(lang.label.recurr_price, request["_UNIT_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+<assign result=yafv.common.s_admin.vPercent(lang.label.refund_perc, request["_REFUND_PRICE_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+<assign result=yafv.common.s_admin.vUnits(lang.label.max_units, request["_MAX_"+typeName+"_"])>
+<if result.status != "OK"><assign failure="1"><assign mess=session.addMessage(result.msg)></if>
+
+</list>
+
+<if !failure>
+<list reseller_su.priced_types as priced_type>
+<assign typeName = toolbox.getTypeName(priced_type)>
+<assign res=rtype.putValue("_FREE_UNITS_"+typeName+"_",request["_FREE_UNITS_"+typeName+"_"])>
+<assign res=rtype.putValue("_SETUP_PRICE_"+typeName+"_",request["_SETUP_PRICE_"+typeName+"_"])>
+<if request["_SETUP_PRICE_"+typeName+"_"]>
+   <assign res=rtype.putValue("_SETUP_CALC_"+typeName, "psoft.hsphere.calc.ResellerSetupCalc")>
+<else>
+   <assign res=rtype.putValue("_SETUP_CALC_"+typeName, "")>
+</if>
+<assign res=rtype.putValue("_USAGE_PRICE_"+typeName+"_",request["_USAGE_PRICE_"+typeName+"_"])>
+<if request["_USAGE_PRICE_"+typeName+"_"]>
+   <assign res=rtype.putValue("_USAGE_CALC_"+typeName, "psoft.hsphere.calc.ResellerUsageCalc")>
+<else>
+   <assign res=rtype.putValue("_USAGE_CALC_"+typeName, "")>
+</if>
+<assign res=rtype.putValue("_UNIT_PRICE_"+typeName+"_",request["_UNIT_PRICE_"+typeName+"_"])>
+<assign res=rtype.putValue("_REFUND_PRICE_"+typeName+"_",request["_REFUND_PRICE_"+typeName+"_"])>
+<if request["_UNIT_PRICE_"+typeName+"_"] || request["_REFUND_PRICE_"+typeName+"_"]>
+    <assign res=rtype.putValue("_REFUND_CALC_"+typeName, "psoft.hsphere.calc.ResellerRefundCalc")>
+</if>
+<if request["_UNIT_PRICE_"+typeName+"_"]>
+    <assign res=rtype.putValue("_RECURRENT_CALC_"+typeName, "psoft.hsphere.calc.ResellerCalc")>
+<else>
+    <assign res=rtype.putValue("_RECURRENT_CALC_"+typeName, "")>
+</if>
+<if !request["_UNIT_PRICE_"+typeName+"_"] && !request["_REFUND_PRICE_"+typeName+"_"]>
+    <assign res=rtype.putValue("_REFUND_CALC_"+typeName, "")>
+</if>
+<assign res=rtype.putValue("_MAX_"+typeName+"_",request["_MAX_"+typeName+"_"])>
+</list>
+</if>
+
+<if !failure>
+ <assign result = reseller_su.reloadResellerPrices(plan.id)>
+ <if result.status != "OK">
+  <assign failure="1">
+  <assign r = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_reload,lang.label.reseller_prices,""))>
+  <assign r=session.addMessage(result.msg)>
+ </if>
+</if>
+
+<if !failure>
+  <assign r =  session.addMessage(lang.msg.prices_set_successfully)>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>

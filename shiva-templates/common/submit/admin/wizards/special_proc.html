@@ -1,0 +1,10 @@
+<!-- BEGIN ./submit/admin/wizards/special_proc.html -->
+<assign admin=account.getChild("admin")>
+<assign wizard=admin.getWizard(request.wizard)>
+
+<input type="hidden" name="template_name" value="submit/plan_wizard/create.sbm">
+<input type="hidden" name="stemplate" value="submit/admin/wizards/create2.html">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="old_special" name="${specialName}">
+<include "submit/admin/wizards/create_store_form.html">
+<!-- END ./submit/admin/wizards/special_proc.html -->

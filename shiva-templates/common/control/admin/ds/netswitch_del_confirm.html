@@ -1,0 +1,32 @@
+<!-- BEGIN ./control/admin/ds/netswitch_del_confirm.html  -->
+<call draw_tooltip()>
+<assign ds_manager = account.getChild("ds_manager")>
+
+<if ds_manager>
+
+<assign ns = ds_manager.getNetSwitch(request.ns_id)>
+
+<call draw_table_header("", lang.admin.netswitch_del_confirm_h)>
+
+<tr>
+<td class="control_align_center"><call draw_label(lang.admin.netswitch_del_conf_mes(ns.description, ns.id))></td>
+</tr>
+<tr>
+<td>
+<form name="del_confirm" action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/del_netswitch.sbm">
+<input type="hidden" name="ns_id" value="${request.ns_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<center>
+<call draw_link("javascript:document.forms['del_confirm'].submit()", lang.admin.netswitch_del.yes_conf)><br>
+<call draw_link("javascript:history.go(-1)", lang.admin.netswitch_del.no_conf)>
+</center>
+</td>
+</tr>
+
+<call draw_table_footer()>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/admin/ds/netswitch_del_confirm -->

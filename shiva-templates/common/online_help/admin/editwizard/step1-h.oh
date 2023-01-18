@@ -1,0 +1,13 @@
+<center> Plan Edit Wizard (adding resources into the plan)</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	On this step you are prompted to decide which resources will be available under the plan.
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		Check the<i> Include </i>box to make the resource available under the plan.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		Check the <i>Activated</i> box to make the resource enabled immediately on the signup. If the <i>Activated</i> box is left blank, a user won't be charged for this resource on the signup, however he will be able to 'activate' and use the resource at any time later. A user  is charged at the moment he activates the resource included.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+		When you are through with adding resources to the plan, click the <i>Next</i> button at the bottom,  to move to the next step where you define amount of resource units users can create for free, setup fee for resource creation, recurrent fee for using the resource and quotas for resource limitation.
+
+	

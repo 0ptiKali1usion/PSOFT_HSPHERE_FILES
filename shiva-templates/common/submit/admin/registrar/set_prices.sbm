@@ -1,0 +1,10 @@
+<!-- BEGIN submit/admin/registrar/set_prices.sbm -->
+<assign billman=account.getChild("billman")>
+<assign result = billman.setTLDPrices(request.tld, toolbox.numberToUSLocale(request.price1), toolbox.numberToUSLocale(request.price2), toolbox.numberToUSLocale(request.price3), toolbox.numberToUSLocale(request.price4), toolbox.numberToUSLocale(request.price5), toolbox.numberToUSLocale(request.price6), toolbox.numberToUSLocale(request.price7), toolbox.numberToUSLocale(request.price8), toolbox.numberToUSLocale(request.price9), toolbox.numberToUSLocale(request.price10), toolbox.numberToUSLocale(request["price-1"]))>
+<if result.status!="OK">
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END submit/admin/registrar/set_prices.sbm -->

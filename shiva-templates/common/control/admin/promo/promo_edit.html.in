@@ -1,0 +1,145 @@
+<!-- BEGIN ./control/admin/promo/promo_edit.html -->
+<yafv s_promo>
+<call draw_tooltip()>
+
+<assign billman = account.getChild("billman")>
+<if billman>
+  <assign promo = billman.getPromo(request.promo_id)>
+  <form  action="${config.CLIENT_CP_URL}" name="f_edit_promo"  method="post" accept-charset="UTF-8" check!>
+  <input type="hidden" name="template_name" value="submit/admin/promo/save_promo.sbm">
+  <input type="hidden" name="stemplate" value="${request.stemplate}">
+  <input type="hidden" name="ftemplate" value="${request.ftemplate}">
+  <input type="hidden" name="promo_id" value="${promo.id}">
+
+  <assign validator_node = promo.validator_node>
+  <assign calc_node = promo.calc_node>
+
+  <call draw_table_header("2", lang.admin.promo.promo_config)>
+    <tr>
+      <td><call draw_label(lang.admin.promo.promo_name)></td>
+      <td><input name="promo_name" type="text" value="${promo.name}" size="50" check="vName"></td>
+    </tr>
+    <tr>
+      <td><call draw_label(lang.admin.promo.promo_bill_descr)></td>
+      <td><input name="promo_bill_descr" type="text" value="${promo.billing_description}" size="50" check="vDescription"></td>
+    </tr>
+    <tr>
+      <td><call draw_label(lang.admin.promo.promo_code)></td>
+      <if promo.is_codeless><assign v_code_less="CHECKED"><else><assign v_code_less=""></if>
+      <td><input name="promo_code" type="text" size="20" value="${promo.code}" size="20" check="vComboPromocode(this, code_less)">&nbsp;<input type="checkbox" name="code_less" ${v_code_less} onChange="checkForm(this.form)"><call draw_label(lang.admin.promo.code_less)></td>
+    </tr>
+
+    <tr>
+      <td><call draw_label(lang.admin.promo.affected_charges)></td>
+      <td>
+         <input type="checkbox" name="i_setup" <if promo.setup>CHECKED</if>><call draw_label(lang.admin.promo.i_setup)><br>
+         <input type="checkbox" name="i_recurrent" <if promo.recurrent>CHECKED</if>><call draw_label(lang.admin.promo.i_recurrent)><br>
+         <input type="checkbox" name="i_usage" <if promo.usage>CHECKED</if>><call draw_label(lang.admin.promo.i_usage)><br>
+      </td>
+    </tr>
+    <if validator_node.params || calc_node.params>
+      <if validator_node.params>
+        <if validator_node("itype")=="AUTO">
+          <list validator_node.params["*"] as param>
+            <assign label=param("label")>
+            <assign name=param("name")>
+            <assign param_validator=param("validation")>
+            <assign param_message=param("validation_message")>
+            <if param_validator>
+                <if param_validator != "none">
+                        <assign defined__referencedFunction = "1">
+                        <assign field_validator = "ON">
+                        <script>
+                                checkFN['pv_${name}']='_vpv_${name}';
+                                var __vpv_${name}=${param_validator};
+                                function vpv_${name}(fieldvalue) {
+                                    return validate(__vpv_${name}, fieldvalue);
+                                }
+                                existingVF['_vpv_${name}']=true;
+                                function _vpv_${name}(field) {
+                                    setStates("","${param_message}");
+                                    if (field == null) return V_INCOMPLETE;
+                                    return vpv_${name}(field.value);
+                                }
+                        </script>
+                <else>
+                        <assign field_validator = "OFF">
+                </if>
+            <else>
+                <assign defined__referencedFunction = "">
+                <assign field_validator = "ON">
+            </if>
+            <tr>
+              <assign val = promo.validator_data[name]>
+              <td><call draw_label(lang[label])></td>
+	      <if (field_validator == "ON") && (name == "discount_percent")>
+                <td><input type="text" name="pv_${name}" value="${val}" check="vPercentReq"></td>
+              <else>
+                <td><input type="text" name="pv_${name}" value="${val}"></td>
+              </if>
+            </tr>
+          </list>
+        <else>
+          <assign pt_add_template=validator_node("edit_template")>
+          <include pt_add_template>
+        </if>
+      </if>
+
+        <assign param_validator="">
+        <assign param_message="">
+
+      <if calc_node.params>
+        <if calc_node("itype")=="AUTO">
+          <list calc_node.params["*"] as param>
+            <assign label=param("label")>
+            <assign name=param("name")>
+            <assign param_validator=param("validation")>
+            <assign param_message=param("validation_message")>
+            <if param_validator>
+                <if param_validator != "none">
+                        <assign defined__referencedFunction = "1">
+                        <assign field_validator = "ON">
+                        <script>
+                                checkFN['pc_${name}']='_vpc_${name}';
+                                var __vpc_${name}=${param_validator};
+                                function vpc_${name}(fieldvalue) {
+                                    return validate(__vpc_${name}, fieldvalue);
+                                }
+                                existingVF['_vpc_${name}']=true;
+                                function _vpc_${name}(field) {
+                                    setStates("","${param_message}");
+                                    if (field == null) return V_INCOMPLETE;
+                                    return vpc_${name}(field.value);
+                                }
+                        </script>
+                <else>
+                        <assign field_validator = "OFF">
+                </if>
+           <else>
+                <assign defined__referencedFunction = "">
+                <assign field_validator = "ON">
+           </if>
+
+            <tr>
+              <assign val = promo.calc_data[name]>
+              <td><call draw_label(lang[label])></td>
+	        <if (field_validator == "ON") && (name == "discount_percent")>
+                      <td><input type="text" name="pc_${name}" value="${val}" check="vPercentReq"></td>
+                <else>
+                      <td><input type="text" name="pc_${name}" value="${val}"></td>
+                </if>
+            </tr>
+          </list>
+        <else>
+          <assign pc_add_template=calc_node("edit_template")>
+          <include pc_add_template>
+        </if>
+      </if>
+    </if>
+    <tr>
+      <td colspan="2"  class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+    </tr>
+  <call draw_table_footer()>
+  </form>
+</if>
+<!-- END ./control/admin/promo/promo_edit.html -->

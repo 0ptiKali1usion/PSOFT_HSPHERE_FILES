@@ -1,0 +1,82 @@
+<if !POPUPNOTE_INCLUDED><assign POPUPNOTE_INCLUDED="1">
+<!-- Popup Note definitions -->
+<style type="text/css"><!--
+DIV.noteLayer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 200;
+    height: 100;
+    visibility: hidden;
+}
+
+TABLE.noteTable {
+    border-collapse: collapse;
+    width: 100%;
+    spacing: 0;
+    border: 1px solid ${BORDER_COLOR};
+}
+
+TABLE.noteTable TD {
+    font-family: Verdana, sans-serif;
+    font-size: 8pt;
+    text-align: top;
+    color: ${design.color("hint_text_color")};
+    background-color: ${design.color("hint_color")};
+    padding: 3;
+    border: 0;
+}
+
+TABLE.noteTable TD.noteClose {
+    vertical-align: top;
+    text-align: right;
+    width: 1px;
+    padding: 1;
+}
+
+A.noteLinkLabel {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+A.noteLinkImg {
+    text-decoration: none;
+    border: 0;
+}
+-->
+</style>
+
+<call include_browser_detection()>
+<call draw_js("/common/JS/popup_note.js")>
+
+<function draw_popup_note_l(label, content)>
+  <call _new_note_id()>
+  <a href="javascript:void(0);" id="a_${note_id}" class="noteLinkLabel" onClick="switchNote('${note_id}');" onMouseOver="quickNoteOn('${note_id}');" onMouseOut="quickNoteOff('${note_id}');">${label}</a>
+  <call _place_note_content(content)>
+</function>
+
+<function draw_popup_note_i(image, alt, content)>
+  <call _new_note_id()>
+  <a href="javascript:void(0);" id="a_${note_id}" class="noteLinkImg" onClick="switchNote('${note_id}');" onMouseOver="quickNoteOn('${note_id}');" onMouseOut="quickNoteOff('${note_id}');"><call draw_image_alt(image, alt)></a>
+  <call _place_note_content(content)>
+</function>
+
+<function _new_note_id()>
+  <if __note_id == ""><assign __note_id = "0"><else><assign __note_id = toolbox.add(__note_id, "1")></if>
+  <assign note_id = "__note_" + __note_id>
+</function>
+
+<function _place_note_content(content)>
+  <DIV id="l_${note_id}" class="noteLayer">
+    <TABLE class="noteTable">
+    <TR>
+	<TD>${content}</TD>
+	<TD class="noteClose"><A href="javascript:void(0);" onClick="closeNote('${note_id}')"><call draw_image_alt("close_small", lang.functions.clk_to_close)></A></TD>
+    </TR>
+    </TABLE>
+  </DIV>
+</function>
+<!-- End of Popup Note definitions -->
+</if>

@@ -1,0 +1,27 @@
+<!-- BEGIN ./control/account_preview/notes.html  -->
+<assign notes=account.getChild("ttadmin").getAccountNotes(request.account_id)>
+<call draw_table_header("2", lang.label.notes)>
+<list notes as note>
+<tr >
+<td colspan="2"><call draw_label(toolbox.formatForHTML(note.note))></td>
+</tr>
+<tr>
+<td class="control_header"><call draw_label_small(note.created("TS_MEDIUM"))></td>
+<td class="control_header"><call draw_label_small(note.created_by)></td>
+</tr>
+</list>
+<tr >
+<td colspan="2">
+<form action="config.CLIENT_CP_URL" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/account_preview/notes.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="account_id" value="${request.account_id}">
+<textarea name="note" rows="5" cols="60"></textarea>
+<br>
+<input type="submit" value="${lang.button.add_note}">
+</form>
+</td>
+</tr>
+<call draw_table_footer()>
+<!--  END ./control/account_preview/notes.html  -->

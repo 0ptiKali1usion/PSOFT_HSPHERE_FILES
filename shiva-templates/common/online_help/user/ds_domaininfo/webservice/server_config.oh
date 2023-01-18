@@ -1,0 +1,10 @@
+<center> Server Configuration </center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+  Any changes you make to this page will take effect <b>only</b> after you restart the apache web server.
+<br>
+To restart it, just click the <i>Apply</i> link. If no changes have been made, Server Configuration will show as <i>OK</i>.
+<br><i>OK</i> means your domain settings and available services conform with the 
+server configuration.  
+	</p>

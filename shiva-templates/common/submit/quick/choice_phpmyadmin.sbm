@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/quick/choice_phpmyadmin.sbm -->
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+<assign myuser=account.getResource(request.db_user)>
+<assign mysql=account.getChild("MySQL")>
+
+<if mysql.phpmyadminhost>
+<form name="phpadmin" action="http://${mysql.phpmyadminhost}/phpMyAdmin/index.php" method="post" accept-charset="UTF-8">
+<input type="hidden" name="pma_username" value="${myuser.name}">
+<input type="hidden" name="pma_password" value="${myuser.password}">
+<input type="hidden" name="pma_servername" value="${myuser.parent.host.ip}">
+</form>
+<script language="javascript">
+document.phpadmin.submit();
+</script>
+</if>
+</body>
+</html>
+<!-- END ./submit/quick/choice_phpmyadmin.sbm -->

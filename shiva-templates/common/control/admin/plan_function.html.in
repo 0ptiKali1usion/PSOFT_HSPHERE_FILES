@@ -1,0 +1,894 @@
+<!-- BEGIN control/admin/plan_function.html  -->
+<if !admin><assign admin = account.getChild("admin")></if>
+
+<function draw_plan_unavailable_table()>
+  <call draw_table_header("", "")>
+  <tr>
+    <td class="control_align_center">&nbsp;<br><call draw_label_bold(lang.admin.planwizs.unavailable)><br>&nbsp;</td>
+  </tr>
+  <call draw_table_footer()>
+</function>
+
+<function select_ls_group(group_type, select_name, ivalue, oh_id)>
+  <if admin>
+    <assign group_list = admin.getAvailableServerGroups(group_type)>
+    <tr>
+      <td>
+	<call draw_label(toolbox.compose(lang.eeman.lserver_group_type, lang.eeman[group_type + "_lsg"]))>
+	<if oh_id>&nbsp;<call draw_help(oh_id,"")></if>
+      </td>
+      <td>
+	<assign invalid_lsg = "">
+	<assign dv_so = "">
+	<if ivalue>
+	  <assign dis_status = admin.isSetKeyDisabled("server_groups", ivalue)>
+	  <if !dis_status>
+	    <assign dv_so = ivalue>
+	  <else>
+	    <assign invalid_lsg = ivalue>
+	  </if>
+	</if>
+	<if toolbox.gt(group_list.size, "1")=="1">
+	  <select name="${select_name}">
+	  <if request[select_name]>
+	    <assign dv_so = request[select_name]>
+	  </if>
+	  <if dv_so><assign vselected = ""><else><assign vselected = "SELECTED"></if>
+	  <list group_list as group>
+	    <if dv_so == group.id><assign vselected = "SELECTED"></if>
+	    <option value="${group.id}" ${vselected}>${group.name}</option>
+	    <assign vselected = "">
+	  </list>
+	  </select>
+	<else>
+	  <assign group="">
+	  <list group_list as simple_group><assign group = simple_group></list>
+	  <if group>
+	    <call draw_label_bold(group.name)>
+	    <input type="hidden" name="${select_name}" value="${group.id}">
+	  <else>
+	    <b><call draw_important_label(lang.eeman.no_signup_defined_group)></b>
+	  </if>
+	</if>
+	<if invalid_lsg>
+	  <br><call draw_important_label(lang.eeman.was_invalid_lsg)>
+	</if>
+     </td>
+    </tr>
+  </if>
+</function>
+
+<function prepare_global_section_scripts()>
+<if gss__prepared != "1">
+
+  <script language="javascript">
+    var dependentRes = new Array();
+
+    function checkAllDependent(form) {
+      var elements = form.elements;
+      for (var ei = 0; ei < elements.length; ei++) {
+	var thisBox = elements[ei];
+	if ((thisBox.type == "checkbox") && (thisBox.name != null)
+		&& (dependentRes[thisBox.name] != null)) {
+	  var collection = dependentRes[thisBox.name];
+	  if (collection != null) {
+	    var resetThis = true;
+	    for (var oi = 0; resetThis && (oi < collection.length); oi++) {
+	      resetThis = false;
+	      var andSet = collection[oi];
+	      for (var ai = 0; ai < andSet.length; ai++) {
+	        var elem = form.elements[andSet[ai]];
+	        if ((elem != null) && !elem.checked) {
+		  resetThis = true;
+		  break;
+	        }
+	      }
+	    }
+	    if (resetThis) thisBox.checked = false;
+	  }
+	}
+      }
+    }
+
+    var group_prefix = "${admin.getGlobalSet("server_groups").prefix}";
+    var groupPlatform = new Array();
+
+    function updateLSGStatus(platform, form, status) {
+      var elements = form.elements;
+      var gp_disp = group_prefix.length;
+      for (i = 0; i < elements.length; i++) {
+	var eName = elements[i].name;
+	if ((eName.indexOf(group_prefix) == 0) && (groupPlatform[eName.substring(gp_disp)] == platform)) {
+	  elements[i].checked = status;
+	}
+      }
+    }
+
+    function updatePlatformStatus(platform, form) {
+      if (platform != '') {
+	var elements = form.elements;
+	var peIndex = -1;
+	var wereChecked = false;
+	var gp_disp = group_prefix.length;
+	for (i = 0; i < elements.length; i++) {
+	  var eName = elements[i].name;
+	  if (eName == platform) {
+	    peIndex = i;
+	  } else if ((eName.indexOf(group_prefix) == 0) && (groupPlatform[eName.substring(gp_disp)] == platform)) {
+	    if (elements[i].checked == 1) {
+	      wereChecked = true;
+	      if (peIndex != -1) {
+		break;
+	      }
+	    }
+	  }
+	}
+	if ((peIndex != -1) && (elements[peIndex].checked != wereChecked)) {
+	  elements[peIndex].checked = wereChecked;
+	}
+      }
+    }
+  </script>
+  <assign gss__prepared = "1">
+</if>
+</function>
+
+<function addJsDependent(dep_name, collection)>
+  <compress>
+  <assign gl_or_list = "">
+  <list collection as and_set>
+    <assign gl_and_list = "">
+    <list and_set as req_res>
+      <if gl_and_list != ""><assign gl_and_list = gl_and_list + ", '" + req_res.name + "'">
+      <else><assign gl_and_list = "new Array('" + req_res.name + "'">
+      </if>
+    </list>
+    <if gl_and_list != "">
+      <if gl_or_list != ""><assign gl_or_list = gl_or_list + ", " + gl_and_list + ")">
+      <else><assign gl_or_list = "new Array(" + gl_and_list + ")">
+      </if>
+    </if>
+  </list>
+  </compress>
+  <if gl_or_list != "">
+    <script language="javascript">dependentRes["${dep_name}"] = ${gl_or_list});</script>
+  <else>
+    <script language="javascript">dependentRes["${dep_name}"] = null;</script>
+  </if>
+</function>
+
+<function addJsGroupPlatform(group, platform)>
+  <script language="javascript">groupPlatform["${group}"] = "${platform}";</script>
+</function>
+
+<function showGlRequiredList(collection)>
+  <compress>
+  <assign gl_or_list = "">
+  <list collection as and_set>
+    <assign gl_and_list = "">
+    <list and_set as object>
+      <if object.label != "">
+	 <assign label = lang[object.label]>
+      <else>
+	 <assign label = object.description>
+      </if>
+      <if gl_and_list != ""><assign gl_and_list = gl_and_list + ", " + label>
+      <else><assign gl_and_list = label>
+      </if>
+    </list>
+    <if gl_or_list != ""><assign gl_or_list = gl_or_list + "; " + gl_and_list>
+    <else><assign gl_or_list = gl_and_list>
+    </if>
+  </list>
+  </compress>
+  <if gl_or_list != ""><call draw_label(lang.admin.gl_resources_requires(gl_or_list))></if>
+</function>
+
+<function draw_global_sections()>
+  <call prepare_global_section_scripts()>
+  <list admin.global_sections as section>
+    <if (section.show == "*") || (section.show == "plans")>
+      <assign help_id = section.online_help>
+      <tr>
+      <td><call draw_label(lang[section.label])><if help_id != "">&nbsp;<call draw_help(help_id, "")></if></td>
+      <td>
+      <list section.objects as object>
+	<assign glCollection = admin.getGlobalDependences(object.name)>
+	<call addJsDependent(object.name, glCollection)>
+	<assign name = object.name>
+	<if !plan><assign dis_status = admin.isResourceDisabled(name)><else><assign dis_status = admin.isResourceDisabledPlan(name, plan.id)></if>
+	<if object.show_as_radio == "1">
+	  <if dis_status == "3">
+	    <if !browser.complies("Netscape_-4.99")><input type="radio" name="${name}" value="" DISABLED></if>&nbsp;
+	    <call draw_label(lang[object.label])>&nbsp;<call draw_label(lang.admin.gl_unavailable)>
+	  <else><if dis_status == "2">
+	    <input type="radio" name="${name}" value="" CHECKED>&nbsp;<call draw_label(lang[object.label_disabled])>
+	  <else>
+	    <if dis_status == ""><assign vchecked1 = "CHECKED"><assign vchecked2 = ""><else><assign vchecked1 = ""><assign vchecked2 = "CHECKED"></if>
+	    <input type="radio" name="${name}" value="1" ${vchecked1}>&nbsp;<call draw_label(lang[object.label_enabled])>
+	    <br>
+	    <input type="radio" name="${name}" value="" ${vchecked2}>&nbsp;<call draw_label(lang[object.label_disabled])>
+	  </if></if>
+	<else>
+	  <if object.label != "">
+	    <assign label = lang[object.label]>
+	  <else>
+	    <assign label = object.description>
+	  </if>
+	  <if (dis_status == "3") || (dis_status == "2")>
+	    <if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED></if>&nbsp;
+	    <if dis_status == "2">
+		<call draw_label(lang.planeditor.resel.resource_disabled_entirely(label))>
+	    <else>
+		<call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)>
+	    </if>
+	  <else>
+	    <if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+	    <if section.id == "platforms">
+	      <input type="checkbox" name="${name}" value="1" ${vchecked} onClick="updateLSGStatus('${name}', this.form, this.checked)">&nbsp;
+	      <call draw_label(label)>
+	    <else>
+	      <input type="checkbox" name="${name}" value="1" ${vchecked} onClick="checkAllDependent(this.form)">&nbsp;
+	      <call draw_label(label)><if glCollection><call showGlRequiredList(glCollection)></if>
+	    </if>
+	  </if>
+	</if>
+	<br>
+      </list>
+      <if section.sets.size != "0">
+	<assign section_drawn = "">
+	<list section.sets as set>
+	  <assign set_name = set.name>
+	  <list set.enabled_keys as key>
+	    <if !plan><assign dis_status = admin.isSetKeyDisabled(set_name, key)><else><assign dis_status = admin.isSetKeyDisabledPlan(set_name, key, plan.id)></if>
+	    <assign label = set.getKeyDescription(key)>
+	    <assign name = set.prefix + key >
+	    <if (dis_status == "3") || (dis_status == "2")>
+	      <if !browser.complies("Netscape_-4.99")><input type="checkbox" name="${name}" value="" DISABLED></if>&nbsp;
+	      <if dis_status == "2">
+		<call draw_label(lang.planeditor.resel.resource_disabled_entirely(label))>
+	      <else>
+		<call draw_label(label)>&nbsp;<call draw_label(lang.admin.gl_unavailable)>
+	      </if>
+	    <else>
+	      <if set_name == "server_groups">
+		<assign lsg_platform = set.getPlatform(key)>
+		<call addJsGroupPlatform(key, lsg_platform)>
+		<if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+		<input type="checkbox" name="${name}" value="1" ${vchecked} onClick="updatePlatformStatus('${lsg_platform}', this.form)">&nbsp;
+		<call draw_label(label)>
+	      <else>
+		<if dis_status == ""><assign vchecked = "CHECKED"><else><assign vchecked = ""></if>
+		<input type="checkbox" name="${name}" value="1" ${vchecked}>&nbsp;
+		<call draw_label(label)>
+	      </if>
+	    </if>
+	    <assign section_drawn = "1">
+	    <br>
+	  </list>
+	</list>
+	<if section_drawn == ""><call draw_label(lang.admin.gl_no_section_items)></if>
+      </if>
+      </td>
+      </tr>
+    </if>
+  </list>
+</function>
+
+<function draw_domain_transfer_prices()>
+<assign tlds = toolbox.getActiveTLDs()>
+<assign rtype=plan.getResourceType("domain_transfer")>
+<assign colspan="3">
+<call draw_table_header(colspan, lang.planwizard.domain_transfer_prices_header)>
+
+<tr>
+  <td><call draw_label(lang.admin.registrar.tld)></td>
+  <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+  <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+</tr>
+
+<list tlds as tld>
+<assign transfer_price = billman.getDefaultTransferPrice(tld)>
+<if failure>
+  <assign price  = toolbox.html_encode(oldValues["_TRANSFER_"+tld])>
+<else>
+  <assign price  = toolbox.numberToCurLocale(rtype.values["_TRANSFER_"+tld],"false")>
+</if>
+
+<tr><td><call draw_label("."+tld)></td>
+<td><if transfer_price><call draw_label(toolbox.currency(transfer_price))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+<td><input type="text" size="5" label="${lang.price}" check="vPriceOpt" name="_TRANSFER_${tld}" value="${price}"></td></tr>
+</list>
+
+<tr>
+  <td colspan="${colspan}" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+<call draw_table_footer()>
+</function>
+
+<function draw_osrs_prices()>
+<assign tlds = toolbox.getActiveTLDs()>
+<list tlds as tld>
+  <if user.reseller_id != "1">
+     <assign rprices = billman.getResellerTLDPrices(tld)>
+     <if rprices.size != "0">
+	<call draw_tld_prices(tld)>
+     </if>
+  <else>
+     <call draw_tld_prices(tld)>
+  </if>
+</list>
+</function>
+
+<function draw_tld_prices(tld)>
+  <assign registrar = toolbox.getRegistrarInfo(tld)>
+  <assign prices = billman.getTLDPrices(tld)>
+  <assign rtype=plan.getResourceType("opensrs")>
+  <tr><if user.reseller_id != "1"><td colspan="9" class="control_header"><else><td colspan="7" class="control_header"></if><call draw_header("."+tld)></td>
+  </tr>
+<if failure>
+  <assign price1  = toolbox.html_encode(oldValues["_TLD_"+tld+"_1"])>
+  <assign price2  = toolbox.html_encode(oldValues["_TLD_"+tld+"_2"])>
+  <assign price3  = toolbox.html_encode(oldValues["_TLD_"+tld+"_3"])>
+  <assign price4  = toolbox.html_encode(oldValues["_TLD_"+tld+"_4"])>
+  <assign price5  = toolbox.html_encode(oldValues["_TLD_"+tld+"_5"])>
+  <assign price6  = toolbox.html_encode(oldValues["_TLD_"+tld+"_6"])>
+  <assign price7  = toolbox.html_encode(oldValues["_TLD_"+tld+"_7"])>
+  <assign price8  = toolbox.html_encode(oldValues["_TLD_"+tld+"_8"])>
+  <assign price9  = toolbox.html_encode(oldValues["_TLD_"+tld+"_9"])>
+  <assign price10 = toolbox.html_encode(oldValues["_TLD_"+tld+"_10"])>
+<else>
+  <assign price1  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_1"],"false")>
+  <assign price2  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_2"],"false")>
+  <assign price3  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_3"],"false")>
+  <assign price4  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_4"],"false")>
+  <assign price5  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_5"],"false")>
+  <assign price6  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_6"],"false")>
+  <assign price7  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_7"],"false")>
+  <assign price8  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_8"],"false")>
+  <assign price9  = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_9"],"false")>
+  <assign price10 = toolbox.numberToCurLocale(rtype.values["_TLD_"+tld+"_10"],"false")>
+</if>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year1)></td>
+    <assign def_price1= toolbox.numberToCurLocale(prices["1"], "0")>
+    <if user.reseller_id != "1">
+	<td><if rprices["1"]><call draw_label(toolbox.currency(rprices["1"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <td><if def_price1><call draw_label(def_price1+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+       <td><input type="text" size="5" label="${lang.planwizard.regrar_year1}" check="vPriceOpt" name="_TLD_${tld}_1" value="${price1}"></td>
+    <else>
+       <td><if rprices["1"]><input type="text" size="5" label="${lang.planwizard.regrar_year1}" check="vPriceOpt" name="_TLD_${tld}_1" value="${price1}"><else>&nbsp;</if></td>
+    </if>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year6)></td>
+    <assign def_price6= toolbox.numberToCurLocale(prices["6"], "0")>
+    <if user.reseller_id != "1">
+	<td><if rprices["6"]><call draw_label(toolbox.currency(rprices["6"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <td><if def_price6><call draw_label(def_price6+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+       <td><input type="text" size="5" label="${lang.planwizard.regrar_year6}" check="vPriceOpt" name="_TLD_${tld}_6" value="${price6}"></td>
+    <else>
+       <td><if rprices["6"]><input type="text" size="5" label="${lang.planwizard.regrar_year6}" check="vPriceOpt" name="_TLD_${tld}_6" value="${price6}"><else>&nbsp;</if></td>
+    </if>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year2)></td>
+    <assign def_price2= toolbox.numberToCurLocale(prices["2"], "0")>
+    <if user.reseller_id != "1">
+	<td><if rprices["2"]><call draw_label(toolbox.currency(rprices["2"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <td><if def_price2><call draw_label(def_price2+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year2}" check="vPriceOpt" name="_TLD_${tld}_2" value="${price2}"></td>
+    <else>
+	<td><if rprices["2"]><input type="text" size="5" label="${lang.planwizard.regrar_year2}" check="vPriceOpt" name="_TLD_${tld}_2" value="${price2}"><else>&nbsp;</if></td>
+    </if>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year7)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["7"]><call draw_label(toolbox.currency(rprices["7"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price7= toolbox.numberToCurLocale(prices["7"], "0")>
+    <td><if def_price7><call draw_label(def_price7+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+       <td><input type="text" size="5" label="${lang.planwizard.regrar_year7}" check="vPriceOpt" name="_TLD_${tld}_7" value="${price7}"></td>
+    <else>
+       <td><if rprices["7"]><input type="text" size="5" label="${lang.planwizard.regrar_year7}" check="vPriceOpt" name="_TLD_${tld}_7" value="${price7}"><else>&nbsp;</if></td>
+    </if>
+
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year3)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["3"]><call draw_label(toolbox.currency(rprices["3"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price3= toolbox.numberToCurLocale(prices["3"], "0")>
+    <td><if def_price3><call draw_label(def_price3+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year3}" check="vPriceOpt" name="_TLD_${tld}_3" value="${price3}"></td>
+    <else>
+	<td><if rprices["3"]><input type="text" size="5" label="${lang.planwizard.regrar_year3}" check="vPriceOpt" name="_TLD_${tld}_3" value="${price3}"><else>&nbsp;</if></td>
+    </if>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year8)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["8"]><call draw_label(toolbox.currency(rprices["8"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price8= toolbox.numberToCurLocale(prices["8"], "0")>
+    <td><if def_price8><call draw_label(def_price8+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year8}" check="vPriceOpt" name="_TLD_${tld}_8" value="${price8}"></td>
+    <else>
+	<td><if rprices["8"]><input type="text" size="5" label="${lang.planwizard.regrar_year8}" check="vPriceOpt" name="_TLD_${tld}_8" value="${price8}"><else>&nbsp;</if></td>
+    </if>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year4)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["4"]><call draw_label(toolbox.currency(rprices["4"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price4= toolbox.numberToCurLocale(prices["4"], "0")>
+    <td><if def_price4><call draw_label(def_price4+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year4}" check="vPriceOpt" name="_TLD_${tld}_4" value="${price4}"></td>
+    <else>
+	<td><if rprices["4"]><input type="text" size="5" label="${lang.planwizard.regrar_year4}" check="vPriceOpt" name="_TLD_${tld}_4" value="${price4}"><else>&nbsp;</if></td>
+    </if>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year9)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["9"]><call draw_label(toolbox.currency(rprices["9"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price9= toolbox.numberToCurLocale(prices["9"], "0")>
+    <td><if def_price9><call draw_label(def_price9+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year9}" check="vPriceOpt" name="_TLD_${tld}_9" value="${price9}"></td>
+    <else>
+	<td><if rprices["9"]><input type="text" size="5" label="${lang.planwizard.regrar_year9}" check="vPriceOpt" name="_TLD_${tld}_9" value="${price9}"><else>&nbsp;</if></td>
+    </if>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year5)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["5"]><call draw_label(toolbox.currency(rprices["5"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price5= toolbox.numberToCurLocale(prices["5"], "0")>
+    <td><if def_price5><call draw_label(def_price5+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+       <td><input type="text" size="5" label="${lang.planwizard.regrar_year5}" check="vPriceOpt" name="_TLD_${tld}_5" value="${price5}"></td>
+    <else>
+       <td><if rprices["5"]><input type="text" size="5" label="${lang.planwizard.regrar_year5}" check="vPriceOpt" name="_TLD_${tld}_5" value="${price5}"><else>&nbsp;</if></td>
+    </if>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year10)></td>
+    <if user.reseller_id != "1">
+	<td><if rprices["10"]><call draw_label(toolbox.currency(rprices["10"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price10= toolbox.numberToCurLocale(prices["10"], "0")>
+    <td><if def_price10><call draw_label(def_price10+ " " + cursym)><else>&nbsp;</if></td>
+    <if user.reseller_id == "1">
+	<td><input type="text" size="5" label="${lang.planwizard.regrar_year10}" check="vPriceOpt" name="_TLD_${tld}_10" value="${price10}"></td>
+    <else>
+	<td><if rprices["10"]><input type="text" size="5" label="${lang.planwizard.regrar_year10}" check="vPriceOpt" name="_TLD_${tld}_10" value="${price10}"><else>&nbsp;</if></td>
+    </if>
+  </tr>
+</function>
+
+
+<function draw_wizard_osrs_prices()>
+<if user.reseller_id != "1">
+  <assign colspan = "9">
+<else>
+  <assign colspan = "7">
+</if>
+<call draw_table_header(colspan, lang.planwizard.regrar_header)>
+
+<tr>
+  <td><call draw_label(lang.planwizard.regrar_duration)></td>
+  <if user.reseller_id != "1"><td><call draw_label(lang.admin.registrar.rprice)></td></if>
+  <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+  <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td><call draw_label(lang.planwizard.regrar_duration)></td>
+  <if user.reseller_id != "1"><td><call draw_label(lang.admin.registrar.rprice)></td></if>
+  <td><call draw_label(lang.planwizard.regrar_defprice)></td>
+  <td><call draw_label(lang.planwizard.regrar_custprice)></td>
+</tr>
+<assign tlds = toolbox.getActiveTLDs()>
+<list tlds as tld>
+  <if user.reseller_id != "1">
+     <assign rprices = billman.getResellerTLDPrices(tld)>
+     <if rprices.size != "0">
+	<call draw_wizard_tld_prices(tld)>
+     </if>
+  <else>
+     <call draw_wizard_tld_prices(tld)>
+  </if>
+</list>
+<tr>
+  <td colspan="${colspan}" class="control_align_right">
+     <input type="submit" value="${lang.button.next}">
+  </td>
+</tr>
+<call draw_table_footer()>
+</function>
+
+<function draw_wizard_tld_prices(tld)>
+<if user.reseller_id != "1">
+  <assign colspan = "9">
+<else>
+  <assign colspan = "7">
+</if>
+<assign registrar = toolbox.getRegistrarInfo(tld)>
+<assign prices = billman.getTLDPrices(tld)>
+<tr>
+  <td colspan="${colspan}" class="control_header"><call draw_header("."+tld)></td>
+</tr>
+<!-- TLD PRICES GETTING -->
+<if failure>
+  <assign price1  = toolbox.html_encode(oldValues["_TLD_"+tld+"_1"])>
+  <assign price2  = toolbox.html_encode(oldValues["_TLD_"+tld+"_2"])>
+  <assign price3  = toolbox.html_encode(oldValues["_TLD_"+tld+"_3"])>
+  <assign price4  = toolbox.html_encode(oldValues["_TLD_"+tld+"_4"])>
+  <assign price5  = toolbox.html_encode(oldValues["_TLD_"+tld+"_5"])>
+  <assign price6  = toolbox.html_encode(oldValues["_TLD_"+tld+"_6"])>
+  <assign price7  = toolbox.html_encode(oldValues["_TLD_"+tld+"_7"])>
+  <assign price8  = toolbox.html_encode(oldValues["_TLD_"+tld+"_8"])>
+  <assign price9  = toolbox.html_encode(oldValues["_TLD_"+tld+"_9"])>
+  <assign price10 = toolbox.html_encode(oldValues["_TLD_"+tld+"_10"])>
+<else>
+  <if plan>
+     <assign rt = plan.getResourceType("opensrs")>
+     <assign price1  = rt.values["_TLD_"+tld+"_1"]>
+     <assign price2  = rt.values["_TLD_"+tld+"_2"]>
+     <assign price3  = rt.values["_TLD_"+tld+"_3"]>
+     <assign price4  = rt.values["_TLD_"+tld+"_4"]>
+     <assign price5  = rt.values["_TLD_"+tld+"_5"]>
+     <assign price6  = rt.values["_TLD_"+tld+"_6"]>
+     <assign price7  = rt.values["_TLD_"+tld+"_7"]>
+     <assign price8  = rt.values["_TLD_"+tld+"_8"]>
+     <assign price9  = rt.values["_TLD_"+tld+"_9"]>
+     <assign price10 = rt.values["_TLD_"+tld+"_10"]>
+  <else>
+     <assign price1  = "">
+     <assign price2  = "">
+     <assign price3  = "">
+     <assign price4  = "">
+     <assign price5  = "">
+     <assign price6  = "">
+     <assign price7  = "">
+     <assign price8  = "">
+     <assign price9  = "">
+     <assign price10 = "">
+ </if>
+</if>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year1)></td>
+    <assign def_price1= toolbox.numberToCurLocale(prices["1"], "0")>
+    <if user.reseller_id != "1">
+       <td><if rprices["1"]><call draw_label(toolbox.currency(rprices["1"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <td><if def_price1><call draw_label(def_price1+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["1"]><input type="text" size="5" label="${lang.planwizard.regrar_year1}" check="vPriceOpt" name="_TLD_${tld}_1" value="${price1}"><else>&nbsp;</if></td>
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year6)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["6"]><call draw_label(toolbox.currency(rprices["6"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price6= toolbox.numberToCurLocale(prices["6"], "0")>
+    <td><if def_price6><call draw_label(def_price6+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["6"]><input type="text" size="5" label="${lang.planwizard.regrar_year6}" check="vPriceOpt" name="_TLD_${tld}_6" value="${price6}"><else>&nbsp;</if></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year2)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["2"]><call draw_label(toolbox.currency(rprices["2"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price2= toolbox.numberToCurLocale(prices["2"], "0")>
+    <td><if def_price2><call draw_label(def_price2+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["2"]><input type="text" size="5" label="${lang.planwizard.regrar_year2}" check="vPriceOpt" name="_TLD_${tld}_2" value="${price2}"><else>&nbsp;</if></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year7)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["7"]><call draw_label(toolbox.currency(rprices["7"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price7= toolbox.numberToCurLocale(prices["7"], "0")>
+    <td><if def_price7><call draw_label(def_price7+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["7"]><input type="text" size="5" label="${lang.planwizard.regrar_year7}" check="vPriceOpt" name="_TLD_${tld}_7" value="${price7}"><else></if></td>
+
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year3)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["3"]><call draw_label(toolbox.currency(rprices["3"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price3= toolbox.numberToCurLocale(prices["3"], "0")>
+    <td><if def_price3><call draw_label(def_price3+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["3"]><input type="text" size="5" label="${lang.planwizard.regrar_year3}" check="vPriceOpt" name="_TLD_${tld}_3" value="${price3}"><else>&nbsp;</if></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year8)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["8"]><call draw_label(toolbox.currency(rprices["8"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price8= toolbox.numberToCurLocale(prices["8"], "0")>
+    <td><if def_price8><call draw_label(def_price8+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["8"]><input type="text" size="5" label="${lang.planwizard.regrar_year8}" check="vPriceOpt" name="_TLD_${tld}_8" value="${price8}"><else>&nbsp;</if></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year4)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["4"]><call draw_label(toolbox.currency(rprices["4"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price4= toolbox.numberToCurLocale(prices["4"], "0")>
+    <td><if def_price4><call draw_label(def_price4+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["4"]><input type="text" size="5" label="${lang.planwizard.regrar_year4}" check="vPriceOpt" name="_TLD_${tld}_4" value="${price4}"><else>&nbsp;</if></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year9)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["9"]><call draw_label(toolbox.currency(rprices["9"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price9= toolbox.numberToCurLocale(prices["9"], "0")>
+    <td><if def_price9><call draw_label(def_price9+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["9"]><input type="text" size="5" label="${lang.planwizard.regrar_year9}" check="vPriceOpt" name="_TLD_${tld}_9" value="${price9}"><else>&nbsp;</if></td>
+  </tr>
+  <tr >
+    <td><call draw_label(lang.planwizard.regrar_year5)></td>
+    <if user.reseller_id != "1">
+       <td><if rprices["5"]><call draw_label(toolbox.currency(rprices["5"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <assign def_price5= toolbox.numberToCurLocale(prices["5"], "0")>
+    <td><if def_price5><call draw_label(def_price5+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["5"]><input type="text" size="5" label="${lang.planwizard.regrar_year5}" check="vPriceOpt" name="_TLD_${tld}_5" value="${price5}"><else>&nbsp;</if></td>
+
+    <td>&nbsp;</td>
+    <td><call draw_label(lang.planwizard.regrar_year10)></td>
+    <assign def_price10= toolbox.numberToCurLocale(prices["10"], "0")>
+    <if user.reseller_id != "1">
+       <td><if rprices["10"]><call draw_label(toolbox.currency(rprices["10"], "0"))><else><call draw_label(lang.admin.registrar.priceunassigned)></if></td>
+    </if>
+    <td><if def_price10><call draw_label(def_price10+ " " + cursym)><else>&nbsp;</if></td>
+    <td><if user.reseller_id == "1" || rprices["10"]><input type="text" size="5" label="${lang.planwizard.regrar_year10}" check="vPriceOpt" name="_TLD_${tld}_10" value="${price10}"><else>&nbsp;</if></td>
+  </tr>
+</function>
+
+<function checkParamForBP(param__name, billing__period)><compress>
+  <if (toolbox.startsWith(param__name, "_") == "1" 
+	|| toolbox.startsWith(param__name, "u_") == "1"
+	|| toolbox.startsWith(param__name, "m_") == "1"
+	|| toolbox.startsWith(param__name, "s_") == "1"
+	|| toolbox.startsWith(param__name, "f_") == "1")
+      && (toolbox.endsWith(param__name, "_" + billing__period) == "1") 
+      && (toolbox.consists(param__name, "TLD") == "0")
+      && (toolbox.consists(param__name, "_DST") == "0")>
+    <assign isParamForBP = "1">
+  <else>
+    <assign isParamForBP = "">
+  </if>
+</compress></function>
+
+<function draw_reseller_plan_dstprices()>
+  <assign dsman = account.getChild("ds_manager")>
+  <assign dst_gs=admin.getGlobalSet("ds_templates")>
+  <assign cursym = toolbox.getCurrencySymbol()>
+  <if request.plan_id>
+    <assign plan = admin.getPlan(request.plan_id)>
+    <assign rtype=plan.getResourceType("reseller")>
+  </if>
+  <call draw_table_header("3", lang.planwizard.dstprices.header)>
+  <tr><td colspan="3"><call draw_label(lang.admin.priceedit.default)></td></tr>
+  <assign ds_templates = dsman.templates>
+  <list dst_gs.enabled_keys as key>
+   <assign dst = dsman.getDSTemplate(key)>
+    <if rtype>
+      <!-- RTNAME=${rtype.description} NAME=${dst.name} PV=${rtype.values[dst_gs.prefix + dst.id]} -->
+	<!-- _SETUP_PRICE_DST_ID -->
+	<!-- _RECURRENT_CALC_DST_ID -->
+      <if plan.values["_GLB_" + dst_gs.prefix + dst.id] == "1">
+	 <assign dst_included="CHECKED">
+	 <if !failed>
+	   <assign dst_setup = rtype.values["_SETUP_PRICE_"+dst_gs.prefix + dst.id+"_"]>
+	   <assign dst_recurrent = rtype.values["_UNIT_PRICE_"+dst_gs.prefix + dst.id+"_"]>
+	 <else>
+	   <assign dst_setup = v_dst_setup>
+	   <assign dst_recurrent = v_dst_recurrent>
+	 </if>
+      <else>
+	<assign dst_setup = "">
+	<assign dst_recurrent = "">
+	<assign dst_included="">
+      </if>
+    </if>
+    <tr>
+      <td width="5%" align="center"><input type="checkbox" name="${dst_gs.prefix}${dst.id}" value="1" ${dst_included}></td>
+      <td width="40%"><call draw_label(dst.name)></td>
+      <td width="55%">
+	<call draw_label(lang.planeditor.setup)>&nbsp;<input type="text" name="_SETUP_PRICE_${dst_gs.prefix}${dst.id}_" size="5" value="${dst_setup}" label="(${lang.planeditor.setup})" check="vDSTPrice(this, ${dst_gs.prefix}${dst.id})">&nbsp;<call draw_label(cursym)>&nbsp;
+	<call draw_label(lang.planeditor.monthly)>&nbsp;<input type="text" name="_UNIT_PRICE_${dst_gs.prefix}${dst.id}_" size="5" value="${dst_recurrent}" label="(${lang.planeditor.monthly})" check="vDSTPrice(this, ${dst_gs.prefix}${dst.id})">&nbsp;<call draw_label(cursym)>
+      </td>
+    </tr>
+  </list>
+    <tr>
+    <td colspan="3" class="control_align_right">
+      <input type="submit" value="${lang.button.next}">
+    </td>
+  </tr>
+
+  <call draw_table_footer()>
+</function>
+
+<function draw_user_plan_dst_prices(curResellerId)>
+  <assign TMP_PREF = "_tmp">
+  <assign templatesDetected_ = "">
+  <assign dst_gs=admin.getGlobalSet("ds_templates")>
+  <assign dsman = account.getChild("ds_manager")>
+  <assign cursym = toolbox.getCurrencySymbol()>
+  <if request.plan_id>
+    <assign plan = admin.getPlan(request.plan_id)>
+    <assign rtype=plan.getResourceType("ds")>
+  </if>
+  <!-- rt_name=${rt_name} plan=${plan.description} -->
+  <if (user.reseller_id == "1")>
+    <assign showAdminPrices = "">
+    <assign showAdminPricesTD = "">
+    <assign colSpan = "3">
+  <else>
+    <if curResellerId == "1">
+      <assign showAdminPrices = "1"><comment>Resellable templates</comment>
+    <else>
+      <assign showAdminPrices = "">
+    </if>
+    <assign showAdminPricesTD = "1">
+    <assign colSpan = "4">
+  </if>
+
+  <assign dsTemplates = dsman.templates>
+  <list dsTemplates as dst>
+   <!-- dst=${dst.name}-->
+   <assign templName = dst_gs.prefix + dst.id>
+   <if dst.reseller_id == curResellerId>
+    <if !templatesDetected_>
+      <if showAdminPrices>
+	<tr>
+	<td colspan="3"><call draw_label(lang.admin.priceedit.default)></td>
+	<td class="control_header"><call draw_header(lang.planwizard.admin_dstprices.admin_prices)></td>
+	</tr>
+      <else>
+	<tr><td colspan="${colSpan}"><call draw_label(lang.admin.priceedit.default)></td></tr>
+      </if>
+      <assign templatesDetected_ = "1">
+    </if>
+    <if rtype>
+      <!-- RTNAME=${rtype.description} NAME=${dst.name} PV=${rtype.values[templName]} -->
+      <if rtype.values[templName] == "1">
+	 <assign iValue = "1">
+	 <assign dst_included="CHECKED">
+      <else>
+	<assign dst_setup = "">
+	<assign dst_recurrent = "">
+	<assign iValue = "">
+	<assign dst_included="">
+      </if>
+    </if>
+    <if !failed>
+	<assign dst_setup = rtype.values[templName + "_SETUP_PRICE_"]>
+	<assign dst_recurrent = rtype.values[templName + "_REC_PRICE_"]>
+    <else>
+	<assign dst_setup = v_dst_setup>
+	<assign dst_recurrent = v_dst_recurrent>
+    </if>
+    <tr>
+      <td width="5%" align="center">
+        <input type="hidden" name="${templName}" value="${iValue}">
+        <input type="checkbox" value="" ${dst_included} onClick="javascript:this.form.elements['${templName}'].value=this.checked ? '1' : ''">
+      </td>
+      <td width="30%"><call draw_label(dst.name)></td>
+      <if showAdminPricesTD && !showAdminPrices><assign priceTdSpan = "colspan=\"2\""><else><assign priceTdSpan = ""></if>
+      <td nowrap ${priceTdSpan}>
+	<call draw_label(lang.planeditor.setup)>&nbsp;<input type="text" name="${templName}_SETUP_PRICE_" size="5" value="${dst_setup}" label="(${lang.planeditor.setup})" check="vPriceOpt">&nbsp;<call draw_label(cursym)>&nbsp;
+	<call draw_label(lang.planeditor.monthly)>&nbsp;<input type="text" name="${templName}_REC_PRICE_" size="5" value="${dst_recurrent}" label="(${lang.planeditor.monthly})" check="vPriceOpt">&nbsp;<call draw_label(cursym)>&nbsp;
+      </td>
+      <if showAdminPrices>
+        <if dst.reseller_id == "1">
+	  <assign rprice = billman.getResellerDSPrices(dst.id, "")>
+	  <td nowrap>
+	    <call draw_label(lang.planeditor.setup)>&nbsp;<call draw_label(toolbox.currency(rprice.setup))>&nbsp;
+	    <call draw_label(lang.planeditor.monthly)>&nbsp;<call draw_label(toolbox.currency(rprice.recurrent))>
+	  </td>
+	<else>
+	  <td>&nbsp;</td>
+	</if>
+      </if>
+    </tr>
+   </if>
+  </list>
+
+  <if plan && templatesDetected_>
+    <assign periods=plan.values["_PERIOD_TYPES"]>
+    <assign counter=toolbox.counter("0", periods)>
+    <assign onc=toolbox.counter()>
+    <if showAdminPricesTD><assign priceTdSpan = "colspan=\"2\""><else><assign priceTdSpan = ""></if>
+    <list onc as c>
+      <if counter==periods>
+	<assign res=c.stop>
+      <else>
+	<tr>
+	  <td class="control_header" colspan="${colSpan}">
+	    <call draw_header(toolbox.numberToCurLocale(plan.values["_PERIOD_SIZE_"+counter],"false"))>&nbsp;
+	    <call draw_header(plan.values["_PERIOD_TYPE_"+counter])>
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="2"><call draw_label(lang.planeditor.setup_disc)></td>
+	  <if plan.values["_PERIOD_SETUP_DISC_"+counter]>
+	    <assign setup_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_SETUP_DISC_"+counter],"false")>
+	  <else>
+	    <assign setup_disc="0">
+	  </if>
+	  <td ${priceTdSpan}><call draw_label(setup_disc + "%")></td>
+	</tr>
+	<tr>
+	  <td colspan="2"><call draw_label(lang.planeditor.usage_disc)></td>
+	  <if plan.values["_PERIOD_USAGE_DISC_"+counter]>
+	    <assign usage_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_USAGE_DISC_"+counter],"false")>
+	  <else>
+	    <assign usage_disc="0">
+	  </if>
+	  <td ${priceTdSpan}><call draw_label(usage_disc + "%")></td>
+	</tr>
+	<tr>
+	  <td colspan="2"><call draw_label(lang.planeditor.price_disc)></td>
+	  <if plan.values["_PERIOD_UNIT_DISC_"+counter]>
+	    <assign price_disc=toolbox.numberToCurLocale(plan.values["_PERIOD_UNIT_DISC_"+counter],"false")>
+	  <else>
+	    <assign price_disc="0">
+	  </if>
+	  <td ${priceTdSpan}><call draw_label(price_disc + "%")></td>
+	</tr>
+	<list dsTemplates as dst>
+         <if dst.reseller_id == curResellerId>
+	   <assign templName = dst_gs.prefix + dst.id>
+           <if (user.reseller_id != "1") && (dst.reseller_id != curResellerId)>
+             <assign rprice = billman.getResellerDSPrices(dst.id, counter)>
+           </if>
+	   <assign dst_setup = rtype.values[templName + "_SETUP_PRICE_" + counter]>
+	   <assign dst_recurrent = rtype.values[templName + "_REC_PRICE_" + counter]>
+	   <tr>
+              <td colspan="2"><call draw_label(dst.name)></td>
+	      <td ${priceTdSpan}>
+		<call draw_label(lang.planeditor.setup)>&nbsp;
+		<input type="text" name="${templName}_SETUP_PRICE_${counter}" size="5" value="${dst_setup}" label="(${lang.planeditor.setup})" check="vPriceOpt">&nbsp;<call draw_label(cursym)>&nbsp;
+                <call draw_label(lang.planeditor.monthly)>&nbsp;
+		<input type="text" name="${templName}_REC_PRICE_${counter}" size="5" value="${dst_recurrent}" label="(${lang.planeditor.monthly})" check="vPriceOpt">&nbsp;<call draw_label(cursym)>
+	      </td>
+	      <comment><!--
+                <td>
+                 <call draw_label(lang.planeditor.setup)>&nbsp;<call draw_label(toolbox.currency(rprice.setup))>&nbsp;
+                 <call draw_label(lang.planeditor.monthly)>&nbsp;<call draw_label(toolbox.currency(rprice.recurrent))>
+                </td>
+              --></comment>
+	   </tr>
+         </if>
+	</list>
+	<assign res=counter.next>
+      </if>
+    </list>
+  </if>
+
+  <if !templatesDetected_><comment>NO AVAILABLE DS TEMPLATES</comment>
+    <tr><td colspan="${colSpan}"><call draw_label(lang.admin.gl_no_section_items)></td></tr>
+  </if>
+
+</function>
+
+<!-- END control/admin/plan_function.html  -->

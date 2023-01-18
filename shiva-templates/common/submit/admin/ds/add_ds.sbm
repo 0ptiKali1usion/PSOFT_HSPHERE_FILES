@@ -1,0 +1,93 @@
+<!-- BEGIN ./submit/admin/ds/add_ds.sbm  -->
+<assign ds_manager=account.getChild("ds_manager")>
+
+<if request.dst_id>
+  <assign result=yafv.checkall(
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_name,request.ds_name),
+      yafv.common.s_ds.vNetswitchPortOpt(lang.admin.ds.netswitch_port, request.ns_id, request.ns_port),
+      yafv.common.s_admin.vHT_URL(lang.admin.ds.ds_r_reboot_url,request.ds_reboot_url),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_internal_id,request.ds_internal_id),
+      yafv.common.s_admin.vIPAddr(lang.admin.ds.ds_ip, request.main_ip),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_login,request.ds_su_login),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_passwd,request.ds_su_passwd)
+  )>
+<else>
+  <assign result=yafv.checkall(
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_name,request.ds_name),
+      yafv.common.s_ds.vNetswitchPortOpt(lang.admin.ds.netswitch_port, request.ns_id, request.ns_port),
+      yafv.common.s_admin.vHT_URL(lang.admin.ds.ds_r_reboot_url,request.ds_reboot_url),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_internal_id,request.ds_internal_id),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_login,request.ds_su_login),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ds_su_passwd,request.ds_su_passwd),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.os_name,request.ds_os),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.cpu,request.ds_cpu),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.ram,request.ds_ram),
+      yafv.common.s_admin.vIPAddr(lang.admin.ds.ds_ip, request.main_ip),
+      yafv.common.s_admin.vStringReq(lang.admin.ds.storage,request.ds_storage),
+      yafv.common.s_admin.vPriceReq(lang.admin.ds.ds_price_setup,request.ds_setup),
+      yafv.common.s_admin.vPriceReq(lang.admin.ds.ds_price_recurrent,request.ds_recurrent)
+  )>
+</if>
+<if result.status == "OK">
+  <assign ds = ds_manager.addDServer(
+	request.ds_name, 
+	request.ds_reboot_url,
+        request.ds_internal_id, 
+        request.ds_su_login,
+        request.ds_su_passwd,
+        request.ds_setup,
+        request.ds_recurrent, 
+        request.ds_os,
+        request.ds_cpu, 
+        request.ds_ram,
+        request.ds_storage,
+	request.main_ip,
+        request.dst_id
+  )>
+  <if ds.status == "OK">
+    <if request.ds_ip>
+      <assign res = ds_manager.assignPrimaryIp(ds.id, request.ds_ip)>
+      <if res.status != "OK">
+        <assign r = session.addMessage(lang.admin.ds.server_added_with_errors)>
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        <assign error_detected = "1">
+      </if>
+    </if>
+    <if request.ns_id>
+      <assign res = ds_manager.addNetInterface(ds.id, request.ns_id, request.ns_port, "")>
+      <if res.status != "OK">
+        <if !error_detected>
+	  <assign r = session.addMessage(lang.admin.ds.server_added_with_errors)>
+          <assign error_detected = "1">
+        </if>
+        <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+      </if>
+    </if>
+  <else>
+    <list ds.msgs as msg><assign r=session.addMessage(msg)></list>
+    <assign failure="1">
+  </if>
+<else>
+  <list result.msgs as msg><assign r=session.addMessage(msg)></list>
+  <assign failure="1">
+</if>
+<if failure>
+    <assign f_ds_name = toolbox.html_encode(request.ds_name)> 
+    <assign v_ns_id = toolbox.html_encode(request.ns_id)>
+    <assign v_ns_port = toolbox.html_encode(request.ns_port)>
+    <assign f_ds_reboot_url = toolbox.html_encode(request.ds_reboot_url)>
+    <assign f_ds_internal_id = toolbox.html_encode(request.ds_internal_id)> 
+    <assign f_ds_su_login = toolbox.html_encode(request.ds_su_login)>
+    <assign f_ds_su_passwd = toolbox.html_encode(request.ds_su_passwd)>
+    <assign f_ds_setup = toolbox.html_encode(request.ds_setup)>
+    <assign f_ds_recurrent = toolbox.html_encode(request.ds_recurrent)>
+    <assign f_ds_os = toolbox.html_encode(request.ds_os)>
+    <assign f_ds_cpu = toolbox.html_encode(request.ds_cpu)>
+    <assign f_ds_ram = toolbox.html_encode(request.ds_ram)>
+    <assign f_ds_storage = toolbox.html_encode(request.ds_storage)>
+    <assign f_ds_main_ip = toolbox.html_encode(request.main_ip)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>
+<!-- END ./submit/admin/ds/add_ds.sbm  -->

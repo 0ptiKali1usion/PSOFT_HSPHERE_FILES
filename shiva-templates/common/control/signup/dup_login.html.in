@@ -1,0 +1,7 @@
+<!-- BEGIN ./signup/dup_login.html.in  -->
+<tr>
+<td><call draw_label(lang.label.username)></td>
+<td><input type="text" name="login" value="${login}" check="vUsername" label="${lang.label.username}"></td>
+<assign excludeFields=excludeFields+"login;">
+</tr>
+<!--  END ./signup/dup_login.html.in  -->

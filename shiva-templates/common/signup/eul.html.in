@@ -1,0 +1,33 @@
+<!-- BEGIN common/signup/eul.html.in -->
+<assign template="signup/eul.html">
+<include "functions">
+<include "control/signup/signup_function.html">
+<assign title=lang.signup.eul_eula>
+<include "signup/signup_top.html">
+<yafv s_signup>
+<table border="0" width="100%">
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+  <td colspan="2" align="center">
+    <font face="Verdana" size="2">
+      <textarea  cols="58" rows="23" readonly wrap="virtual">
+<if settings.eula>${settings.eula}<else><include "signup/eul.txt"></if>
+      </textarea>
+    </font>
+  </td>
+</tr>
+<tr>
+    <td colspan="2" align="center">
+        <input type="hidden" name="template_name" value="submit/signup/eul.sbm">
+        <assign excludeFields=excludeFields+"template_name;">
+	<input type="radio" name="_eul_accept" value="1"><call draw_label(lang.signup.accept)>
+	<input type="radio" name="_eul_accept" value="0"><call draw_label(lang.signup.decline)>
+        <assign ftemplate="signup/begin.html">
+        <assign excludeFields=excludeFields+"_eul_accept;">
+        <call genHiddenField(excludeFields)>
+    </td>
+</tr>
+</form>
+</table>
+<include "signup/signup_bottom.html">
+<!-- END common/signup/eul.html.in -->

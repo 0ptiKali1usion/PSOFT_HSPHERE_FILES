@@ -1,0 +1,24 @@
+<include "functions">
+<assign template="signup/signup_ok.html">
+<include "control/signup/signup_function.html">
+<assign title=lang.common_signup_signup_ok_title>
+<include "signup/signup_top.html">
+<table border="0">
+<tr>
+    <td colspan="2"><call draw_label(toolbox.compose(lang.common_signup_signup_ok_text, request.login))></td>
+</tr>
+<tr>
+    <td colspan="2" ><call draw_spacer("2", "100")>
+    </td>
+</tr> 
+<tr>
+<td colspan="2" align="center" height="80%" valign="bottom">
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+	<input type="button" value="${lang.common_signup_signup_ok_button}" onClick="javascript:window.close()">
+	<assign disable_next="1">
+	<assign disable_back="1">
+</form>
+</td>
+</tr>
+</table>
+<include "signup/signup_bottom.html">

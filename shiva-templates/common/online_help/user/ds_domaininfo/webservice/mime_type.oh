@@ -1,0 +1,11 @@
+<center> MIME Type </center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+   MIME is "Short for Multipurpose Internet Mail Extensions&quot;, a specification for formatting non-ASCII messages so that they can be sent over the Internet.  
+<br>
+  MIME allows e-mail clients to send and receive graphics, audio, and video files via the Internet mail system. In addition, MIME supports messages in character sets other than ASCII. 
+There are many predefined MIME types, such as GIF graphics files and PostScript files. <br>
+  Web browsers also support various MIME types. This enables the browser to display or output files that are not in HTML format. 
+ <br>
+  In addition, you can also define your own MIME types. To do so, click the<i> Add MIME Type</i> icon. New <i>MIME Type page</i> will appear.

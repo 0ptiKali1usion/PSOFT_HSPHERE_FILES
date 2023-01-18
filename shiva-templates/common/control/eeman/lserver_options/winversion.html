@@ -1,0 +1,31 @@
+<!-- BEGIN ./control/eeman/lserver_options/winversion.html  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_win_version" method="POST" check!  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="win_version">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.win_version)></td>
+  <td>
+    <assign win_version=optManipulator.getOption(lserverId)>
+    <if !win_version>
+        <assign win_version=lserver.win_default_version>
+    </if>
+    <select name="value">
+        <if win_version == "2000"><assign win2000 = "SELECTED"></if>
+        <if win_version == "2003"><assign win2003 = "SELECTED"></if>
+        <option value="2000" ${win2000}><call draw_label(lang.eeman.lserveredit.options.win2000)>
+        <option value="2003" ${win2003}><call draw_label(lang.eeman.lserveredit.options.win2003)>
+    </select>
+    &nbsp;<input type="submit" value="${lang.button.set}">
+  </td>
+</tr>
+</form>
+<!-- END ./control/eeman/lserver_options/winversion.html  -->

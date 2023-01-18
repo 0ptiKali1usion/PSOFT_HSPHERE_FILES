@@ -1,0 +1,24 @@
+<!-- BEGIN ./control/billing/add_antispams.html -->
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_antispams" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="${request.next_template}">
+<input type="hidden" name="next_template" value="${request.next_template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="md_id" value="${request.md_id}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+<input type="hidden" name="range" value="${request.range}">
+
+<assign stype=account.plan.getResourceType("antispam").description>
+<if request.range=="mailbox">
+  <assign add_range=lang.email.mailboxes>
+<else>
+  <assign add_range=lang.email.mailresources>
+</if>
+<if request.md_id>
+  <assign add_source=lang.label.mail_domain>
+<else>
+  <assign add_source=lang.label.account>
+</if>
+<assign message=toolbox.compose(lang.billing.add_msg5,stype,number,add_range,add_source)>
+<call draw_warn_invoice_with_charge_info(message,price,"","","f_add_antispams")>
+</form>
+<!--  END ./control/billing/add_antiispams.html  -->

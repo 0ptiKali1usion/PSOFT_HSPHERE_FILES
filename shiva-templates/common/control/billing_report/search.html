@@ -1,0 +1,38 @@
+<!-- BEGIN ./control/billing_report/search.html -->
+<call draw_tooltip()>
+
+<assign report=account.getChild("daily_report")>
+<if !report><assign report = account.addChild("daily_report", "")></if>
+
+<if report.status != "ERROR">
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+
+
+
+<call draw_table_header("2", lang.billingreport.search.header)>
+
+
+<tr>
+ <td  width="40%"><call draw_label(lang.label.from)></td>
+ <td><input type="text" name="r_from" size="10" value="${report.defaultDate()}">&nbsp;<call draw_calendar("f_search","r_from","")></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.label.to)></td>
+ <td><input type="text" name="r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","r_to","")></td>
+</tr>
+<tr>
+ <td colspan="2" class="control_align_center" >
+  <input type="hidden" name="template_name" value="billing_report/view.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+ </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<else>&nbsp;
+</if>
+<!-- END ./control/billing_report/search.html -->

@@ -1,0 +1,48 @@
+<!-- BEGIN ./common/control/tt/display_tt.html -->
+<assign last_question="">
+<assign counter = "0">
+<list ticket.messages as message>
+  <if ttadmin || message.message> 
+  <tr>
+    <td class="control_header">
+      <i><call draw_header("[" + message.created + "]")></i>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <if message.type=="0" && (message.HTMLmessage!="")>
+        <call draw_label_bold("Q:")>&nbsp;<i><call draw_label(message.HTMLmessage)></i>
+        <if message.HasEncryptedParts == "true">
+          <a href="#" onClick="chw=window.open('${config.CLIENT_CP_URL}?template_name=tt/show_decrypted.html&ticket_id=${ticket.id}&sc_reseller=${request.sc_reseller}&messagenum=${counter}','TroubleTicket','resizable=yes,scrollbars=yes,status=no,width=450,height=500'); if (chw != null) chw.focus(); return false">
+            <call draw_label("Click here to access encrypted information")>
+          </a>
+        </if>
+        <assign counter = toolbox.add(counter, "1")>
+        <if last_question == "">
+          <assign last_question=message.message>
+        </if>
+      </if>
+      <if (message.type=="1") && (message.HTMLmessage!="")>
+        <call draw_label_bold("A:")>&nbsp;<call draw_label(message.HTMLmessage)>
+      </if>
+      <if ttadmin && message.note>
+        <i><call draw_label_small("note:")></i>&nbsp;<call draw_colored_note(message.HTMLnote, TEXT_COLOR)>
+      </if>
+      <list message.attachments as at>
+        <if at.exists>
+          <a href="${config.CLIENT_CP_URL}?template_name=tt/download.html&at_id=${at.id}&ttid=${ticket.id}" target="_blank">
+        </if>
+        <if at.name>
+          <i><call draw_label_small(at.name)></i>
+        <else>
+          <i><call draw_label_small("["+lang.tt.unknown+"]")></i>
+        </if>
+        <if at.exists>
+          </a>
+        </if>
+      </list>
+    </td>
+  </tr>
+  </if>
+</list>
+<!-- END ./common/control/tt/display_tt.html -->

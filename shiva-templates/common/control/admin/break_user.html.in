@@ -1,0 +1,46 @@
+<!-- BEGIN .control/admin/break_user.html.in  -->
+<call draw_tooltip()>
+
+<assign reseller_su=account.getChild("reseller_su")>
+<if reseller_su>
+<yafv s_admin>
+<form name="f_break_user" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.search.break_user)>
+<tr>
+<td><call draw_label("New User name")></td>
+<td><input type="text" name="login" value="" check="vUsername" label="${lang.label.username}"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.password)></td>
+<td><input type="password" name="p1" value="" label="${lang.label.password}" check="vPassword1(this, login)"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.confirm_psw)></td>
+<td><input type="password" name="p2" value="" label="${lang.label.confirm_psw}" check="vPassword2(p1,p2)"></td>
+</tr>
+<tr>
+  <td  colspan="2" class="control_align_center">
+    <input type="hidden" name="template_name" value="submit/admin/break_user.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="admin/break_user.html">
+    <input type="hidden" name="aid" value="${request.aid}">
+    <input type="hidden" name="cur_menu" value="${request.cur_menu}">
+    <input type="hidden" name="start" value="${request.start}">
+    <compress>
+    <list params as sc_param>
+      <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+        <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+      </if>
+    </list>
+    </compress>
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!-- END .control/admin/break_user.html.in  -->

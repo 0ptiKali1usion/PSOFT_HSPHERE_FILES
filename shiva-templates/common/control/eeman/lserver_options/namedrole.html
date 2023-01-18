@@ -1,0 +1,33 @@
+<!-- BEGIN ./control/eeman/lserver_options/namedrole.html  -->
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_role" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="named_role">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.named_role)></td>
+  <td>
+    <assign named_role=optManipulator.getOption(lserverId)>
+    <select name="value">
+        <if (named_role == "master")><assign master="SELECTED"></if>
+        <if (named_role == "slave1")><assign slave1="SELECTED"></if>
+        <if (named_role == "slave2")><assign slave2="SELECTED"></if>
+	<if (named_role == "")><assign na=""></if>
+        <option value="" ${na}><call draw_label(lang.eeman.lserveredit.options.na)>
+        <option value="master" ${master}><call draw_label(lang.eeman.lserveredit.options.master)>
+        <option value="slave1" ${slave1}><call draw_label(lang.eeman.lserveredit.options.slave1)>
+        <option value="slave2" ${slave2}><call draw_label(lang.eeman.lserveredit.options.slave2)>
+    </select>
+    &nbsp;&nbsp;<input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+</form>
+<!-- END ./control/eeman/lserver_options/namedrole.html  -->

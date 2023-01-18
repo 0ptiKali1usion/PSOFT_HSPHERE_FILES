@@ -1,0 +1,40 @@
+<!-- BEGIN ./MSSQL/add_database.sbm  -->
+
+<assign check=yafv.common.s_mssql.vDB_Name(lang.label.database_name,request.db_name)>
+<if check.status=="OK">
+    <assign mssql = account.getChild("MSSQL")>
+    <if mssql>
+	<assign dbms = mssql.isDatabaseExist(request.db_name)>
+	<if dbms>
+	    <if dbms.status=="OK">
+	       <assign res=session.addMessage(toolbox.compose(
+		 lang.msg.name_res_exists,lang.label.database,request.db_name))>
+	    <else>
+		<assign res=session.addMessage(dbms.msg)>
+	    </if>
+	<else>
+	    <assign login = account.getResource(request.login)>
+	    <assign database = login.addChild("MSSQLDatabase", "")>
+ 
+	    <if database.status=="OK">
+		<assign res=session.addMessage(toolbox.compose(
+                    lang.msg.name_res_created,lang.label.database,request.db_name))>
+		<assign success="1">
+	    <else>
+		<assign res=session.addMessage(toolbox.compose(
+		  lang.msg.name_res_failed_create,lang.label.database,request.db_name))>
+	    </if>
+	</if>
+    </if>
+    <if success>
+	<include request.stemplate>
+    <else>
+	<include request.ftemplate>
+    </if>
+<else>
+    <list check.msgs as msg>
+	<assign res=session.addMessage(msg)>
+    </list>
+    <include request.ftemplate>
+</if>
+<!--  END ./MSSQL/add_database.sbm  -->

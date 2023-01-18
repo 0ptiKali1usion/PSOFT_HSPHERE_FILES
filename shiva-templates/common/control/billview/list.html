@@ -1,0 +1,48 @@
+<!-- BEGIN ./billview/list.html  -->
+<assign billviewer = account.getChild("billviewer")>
+<if !billviewer><assign billviewer = account.addChild("billviewer", "")></if>
+<call draw_tooltip()>
+
+<call draw_table_header("3", lang.billview.list.header)>
+
+<tr>
+    <td colspan="3">
+    <table class="inner_control" width="100%">
+	<tr>
+	<td width="50%" class="control_align_center"><call draw_help("user-b_invoice-creditlimit","")>&nbsp;<call draw_label_bold(lang.billview.list.credit)>&nbsp;
+	    <call draw_label(toolbox.currency(account.bill.credit))></td>
+	<td class="control_align_center"><call draw_help("user-b_invoice-balance","")>&nbsp;<call draw_label_bold(lang.billview.list.balance)>&nbsp;
+	    <call draw_label(toolbox.displayBalance(account.bill.balance))></td>
+	</tr>
+    </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="3"  class="control_align_center" nowrap="true"><call draw_label_bold(lang.billview.list.periodbegin)>&nbsp;<call draw_label(account.p_begin)>&nbsp;<call draw_label_bold(lang.billview.list.periodend)>&nbsp;<call draw_label(account.p_end)>&nbsp;<call draw_help("user-b_bilinfo-bilperiod","")></td>
+</tr>
+<tr>
+    <td colspan="3" class="control_header"><call draw_header(lang.billview.list.bills)>&nbsp;<call draw_help("user-b_suminvoice-bills","")></td>
+</tr>
+<tr>
+    <td ><call draw_label_bold(lang.label.plan)>&nbsp;<call draw_help("user-ai_quick-plan","")></td>
+    <td ><call draw_label_bold(lang.label.descr)>&nbsp;<call draw_help("user-b_suminvoice-description","")></td>
+    <td width="20%"><call draw_label_bold(lang.label.total)></td>
+</tr>
+<list billviewer.list() as bill>
+<assign bill_from = bill.from("short")>
+<if bill.to><assign bill_to = bill.to("short")><else><assign bill_to = lang.billview.list.opened></if>
+<if bill.amount><assign bill_amount = bill.amount><else><assign bill_amount = billviewer.view(bill.id).amount></if>
+<assign bill_plan = bill.desc_plan>
+<if bill_plan><assign bill_description = bill.desc_short><else><assign bill_description = bill.description></if>
+<tr>
+    <td><call draw_label(bill_plan)></td>
+    <td>
+	<call draw_link(config.CLIENT_CP_URL+"?template_name="+show_template+"&bill_id="+bill.id, bill_description)>&nbsp;
+	<call draw_label(lang.billview.list.from_to(bill_from, bill_to))>
+    </td>
+    <td class="control_align_right" ><call draw_label(toolbox.currency(bill_amount))></td>
+</tr>
+</list>
+
+<call draw_table_footer()>
+<!--  END ./billview/list.html  -->

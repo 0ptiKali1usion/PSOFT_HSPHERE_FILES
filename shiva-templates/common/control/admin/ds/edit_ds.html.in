@@ -1,0 +1,262 @@
+<!-- BEGIN ./admin/ds/edit_ds.html.html  -->
+<yafv s_ds>
+<assign ds_manager=account.getChild("ds_manager")>
+<if !ds_manager && account.plan.areResourcesAvailable("ds_manager")>
+    <assign ds_manager = account.addChild("ds_manager")>
+</if>
+<call draw_tooltip()>
+<if ds_manager>
+<assign ds = ds_manager.getDServer(request.ds_id)>
+
+<form name="f_ds_edit" method="POST" action="${config.CLIENT_CP_URL}" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/admin/ds/save_ds.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ds_id" value="${request.ds_id}">
+<call draw_table_header("2", lang.admin.ds.edit_title)>
+<tr>
+  <td width="40%"><call draw_label(lang.admin.ds.edit_id)></td>
+  <td><call draw_label(ds.id)></td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.ds.ds_name)></td>
+  <td>
+    <if ds.state_id=="1" && ds.reseller_id == user.reseller_id>
+      <if f_ds_name><assign ds_name=f_ds_name><else><assign ds_name=ds.name></if>
+      <input name="ds_name" value="${ds_name}" check="vStringReq">
+    <else>
+      <call draw_label(ds.name)>
+    </if>
+  </td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.ds.edit_template)></td>
+  <td>
+    <if ds.template>
+      <call draw_label(ds.template.name)>
+    <else>
+      <call draw_label(lang.admin.ds.no_template)>
+    </if>
+  </td>
+</tr>
+<!-- STATE_CODE = ${ds.state} -->
+<tr>
+  <td><call draw_label(lang.admin.ds.os_name)></td>
+  <td>
+    <if ds.template>
+      <call draw_label(ds.template.os)>
+    <else>
+      <if ds.state_id=="1" && ds.reseller_id == user.reseller_id>
+        <if f_ds_os><assign ds_os = f_ds_os><else><assign ds_os=ds.os></if>
+        <input type="text" name="ds_os" value="${ds_os}"  check="vStringReq">
+      <else>
+        <call draw_label(ds.os)>
+      </if>
+    </if>
+  </td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.ds.cpu)></td>
+  <td>
+    <if ds.template>
+      <call draw_label(ds.template.cpu)>
+    <else>
+      <if ds.state_id=="1" && ds.reseller_id == user.reseller_id>
+        <if f_ds_cpu><assign ds_cpu=f_ds_cpu><else><assign ds_cpu=ds.cpu></if>
+        <input type="text" name="ds_cpu" value="${ds_cpu}"  check="vStringReq">
+      <else>
+        <call draw_label(ds.cpu)>
+      </if>
+    </if>
+  </td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.ds.ram)></td>
+  <td>
+    <if ds.template>
+      <call draw_label(ds.template.ram)>
+    <else>
+      <if ds.state_id=="1" && ds.reseller_id == user.reseller_id>
+        <if f_ds_ram><assign ds_ram=f_ds_ram><else><assign ds_ram=ds.ram></if>
+        <input type="text" name="ds_ram" value="${ds_ram}"  check="vStringReq">
+      <else>
+        <call draw_label(ds.ram)>
+      </if>
+    </if>
+  </td>
+</tr>
+
+<tr>
+  <td><call draw_label(lang.admin.ds.storage)></td>
+  <td>
+    <if ds.template>
+      <call draw_label(ds.template.storage)>
+    <else>
+      <if ds.state_id=="1" && ds.reseller_id == user.reseller_id>
+        <if f_ds_storage><assign ds_storage=f_ds_storage><else><assign ds_storage=ds.storage></if>
+        <input type="text" name="ds_storage" value="${ds_storage}"  check="vStringReq">
+      <else>
+        <call draw_label(ds.storage)>
+      </if>
+    </if>
+  </td>
+</tr>
+
+<tr>
+  <assign sc_params = "">
+  <if request.sc_status != ""><assign sc_params = sc_params + "&sc_status="+toolbox.url_escape(request.sc_status)></if>
+  <if request.sc_template != ""><assign sc_params = sc_params + "&sc_template="+toolbox.url_escape(request.sc_template)></if>
+  <if request.sc_os != ""><assign sc_params = sc_params + "&sc_os="+toolbox.url_escape(request.sc_os)></if>
+  <if request.sc_cpu != ""><assign sc_params = sc_params + "&sc_cpu="+toolbox.url_escape(request.sc_cpu)></if>
+  <if request.sc_ip != ""><assign sc_params = sc_params + "&sc_ip="+toolbox.url_escape(request.sc_ip)></if>
+  <if request.sc_int_id != ""><assign sc_params = sc_params + "&sc_int_id="+toolbox.url_escape(request.sc_int_id)></if>
+  <if request.sc_r_from != ""><assign sc_params = sc_params + "&sc_r_from="+toolbox.url_escape(request.sc_r_from)></if>
+  <if request.sc_r_to != ""><assign sc_params = sc_params + "&sc_r_to="+toolbox.url_escape(request.sc_r_to)></if>
+  <if request.sc_u_from != ""><assign sc_params = sc_params + "&sc_u_from="+toolbox.url_escape(request.sc_u_from)></if>
+  <if request.sc_u_to != ""><assign sc_params = sc_params + "&sc_u_to="+toolbox.url_escape(request.sc_u_to)></if>
+  <if request.sc_username != ""><assign sc_params = sc_params + "&sc_username="+toolbox.url_escape(request.sc_username)></if>
+  <if request.sc_step != ""><assign sc_params = sc_params + "&sc_step="+toolbox.url_escape(request.step)></if>
+  <if request.sc_page != ""><assign sc_params = sc_params + "&sc_page="+toolbox.url_escape(request.sc_page)></if>
+  
+  <if request.account_id>
+    <assign account_id=toolbox.url_escape(request.account_id)>
+  </if>
+  <assign ds_status = ds.state>
+  <td><call draw_label(lang.admin.ds.status_title)></td>
+  <td>
+    <call draw_label(lang.admin.ds.status[ds_status])>&nbsp;
+    <if ds.reseller_id == user.reseller_id>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/change_ds_status.html&stemplate=admin/ds/manage.html&ftemplate="+template+"&account_id="+account_id+"&dedicated_server_id="+ds.id+sc_params, "ch_state", lang.admin.ds.change_status)>
+    </if>
+    <if (ds_status == "IN_USE") || (ds_status == "ON_HOLD")>
+	<assign takenByInfo = ds.taken_by>
+	<if takenByInfo.taken><BR><call draw_label(lang.admin.ds_manage_taken(takenByInfo.taken))>&nbsp;<call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/cancel_server.html&stemplate=" + template + "&ftemplate=" + template+"&ds_id="+ds.id+sc_params, "ds_cancel", lang.ds.cancel_server)></if>
+	<if takenByInfo.cancellation><BR><call draw_label(lang.admin.ds_manage_cancellation(takenByInfo.cancellation("MEDIUM")))>&nbsp;<call draw_palink(config.CLIENT_CP_URL+"?template_name=admin/ds/discard_cancel_confirm.html&stemplate=" + template + "&ftemplate=" + template+"&ds_id="+ds.id+sc_params, "undo_ds_cancel", lang.ds.discard_cancellation)></if>
+	<if takenByInfo.account_id><BR><call draw_label(lang.admin.ds_manage_account_id(takenByInfo.account_id))></if>
+	<if takenByInfo.reseller><BR><call draw_label(lang.admin.ds_manage_reseller(takenByInfo.reseller))></if>
+    </if>
+  </td>
+</tr>
+
+
+<tr>
+<td><call draw_label(lang.ds.main_ip)></td>
+<td><input type="text" name="ds_ip" value="${ds.ip}" size="15" maxlength="15" check="vIPAddr"></td>
+</tr>
+
+<if ds.state_id == "2">
+  <assign ranges = obj.subnet_manager.getRangesByDS(ds.id)>
+  <tr>
+    <td><call draw_label(lang.ds.extra_ips)></td>
+    <td><list ranges as range><call draw_label(range.descr)><call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/ds_ip_pool/unassign_range.sbm" + "&ds_id="+ds.id + "&subnet_id=" +range.subnet_id +"&range_id=" + range.id + "&stemplate="+template + "&ftemplate="+template,"delete",lang.admin.ds.ip.unassign.label)><br></list>
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=submit/ds_ip_pool/assign_range_nav.sbm&stemplate="+template + "&ftemplate="+template+"&account_id="+account_id+"&ds_id="+ds.id, "assign", lang.button.assign)>   
+    </td>
+  </tr>
+</if>
+
+<assign netinterfaces = ds.getNetInterfaces()>
+<assign netswitches = ds_manager.netSwitchList()>
+<tr>
+<td><call draw_label(lang.admin.ds.netswitch_interface)></td>
+<if netswitches && (netswitches.size != "0")>
+<td>
+<list netinterfaces as ni>
+  <nobr>
+  <if ni.description><call draw_label(ni.description)><else><call draw_label(ni.target)></if>
+  &nbsp<call draw_edit(config.CLIENT_CP_URL+"?ni_id="+ni.id+"&template_name=admin/ds/edit_ds_netinterface.html&stemplate="+template+"&ftemplate="+template+"&ds_id="+ds.id, lang.admin.ds.netinterface_edit_btn)>
+  &nbsp<call draw_delete(config.CLIENT_CP_URL+"?ni_id="+ni.id+"&template_name=admin/ds/netinterface_del_confirm.html&stemplate="+template+"&ftemplate="+template+"&ds_id="+ds.id, lang.admin.ds.netinterface_del_btn)>
+  </nobr>
+  <br>
+</list>
+<call draw_add(config.CLIENT_CP_URL+"?template_name=admin/ds/add_ds_netinterface.html&ds_id="+ds.id+"&ftemplate="+template+"&stemplate="+template, "")>
+</td>
+<else>
+<td><call draw_important_label(lang.admin.ds.ns_notconfigured)></td>
+</if>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.ds.ds_r_reboot_url)></td>
+<if ds.reseller_id == user.reseller_id>
+  <if !f_ds_reboot_url><assign f_ds_reboot_url = ds.rebootURL></if>
+  <td><input type="text" name="ds_reboot_url" value="${f_ds_reboot_url}" check="vHT_URL"></td>
+<else>
+  <td><call draw_label(ds.rebootURL)></td>
+</if>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.ds.ds_internal_id)></td>
+<if ds.reseller_id == user.reseller_id>
+  <if !f_ds_internal_id><assign f_ds_internal_id = ds.internalId></if>
+  <td><input type="text" name="ds_internal_id" value="${f_ds_internal_id}" check="vStringReq"></td>
+<else>
+  <td><call draw_label(ds.internal_id)></td>
+</if>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.ds.ds_su_login)></td>
+<if ds.reseller_id == user.reseller_id>
+  <if !f_ds_su_login><assign f_ds_su_login = ds.su></if>
+  <td><input type="text" name="ds_su_login" value="${f_ds_su_login}" check="vStringReq"></td>
+<else>
+  <td><call draw_label(ds.su)></td>
+</if>
+</tr>
+
+<tr>
+<td><call draw_label(lang.admin.ds.ds_su_passwd)></td>
+<if ds.reseller_id == user.reseller_id>
+  <if !f_ds_su_passwd><assign f_ds_su_passwd = ds.su_passwd></if>
+  <td><input type="text" name="ds_su_passwd" value="${f_ds_su_passwd}" check="vStringReq"></td>
+<else>
+  <td><call draw_label(ds.su_passwd)></td>
+</if>
+</tr>
+
+<if !ds.template>
+  <if !f_ds_setup><assign f_ds_setup = ds.setup></if>
+  <tr>
+    <td><call draw_label(lang.admin.ds.ds_price_setup)></td>
+    <if ds.reseller_id == user.reseller_id>
+    <td><input type="text" name="ds_setup" value="${f_ds_setup}" check="vPriceReq"></td>
+    <else>
+    <td><call draw_label(ds.setup)></td>
+    </if>
+  </tr>
+
+  <tr>
+    <td><call draw_label(lang.admin.ds.ds_price_recurrent)></td>
+    <if ds.reseller_id == user.reseller_id>
+      <if !f_ds_recurrent><assign f_ds_recurrent = ds.recurrent></if>
+      <td><input type="text" name="ds_recurrent" value="${f_ds_recurrent}" check="vPriceReq"></td>
+    <else>
+      <td><call draw_label(ds.recurrent)></td>
+    </if>
+  </tr>
+</if>
+
+<if ds.reseller_id == user.reseller_id>
+<tr><td class="control_align_center" colspan="2"><input type="submit" value="${lang.button.submit}"></td></tr>
+</if>
+<call draw_table_footer()>
+</form>
+</if>
+
+<SCRIPT language="Javascript"><!--
+  function primaryIPAssignScreen(uplFormName, targFormName, fileFieldName) {
+    var assigner=window.open("${config.CLIENT_CP_URL}?template_name=admin/ds/select_ip.html&mode=standalone&sc_ip_type=1002&uploader_form=" + uplFormName + "&target_form=" + targFormName + "&file_field=" + fileFieldName,"Assign default dedicated server IP", "resizable=yes,scrollbars=no,width=640,height=550");
+    assigner.focus();
+  }
+
+  function raiseIPAssignScreen(ds_id) {
+    var assigner=window.open("${config.CLIENT_CP_URL}?template_name=admin/ds/ip_pool.html&mode=standalone&sc_ip_type=1002&next_template=submit/admin/ds/add_extra_dsip.sbm&ds_id=" + ds_id + "&stemplate=${template}&ftemplate=${template}","Assign additional dedicated server IP", "resizable=yes,scrollbars=no,width=640,height=550");
+    assigner.focus();
+  }
+//--></SCRIPT>
+<!-- END ./admin/ds/edit_ds.html.html  -->

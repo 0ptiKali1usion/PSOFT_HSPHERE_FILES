@@ -1,0 +1,97 @@
+<!-- BEGIN ./plan_editor/reseller2.html.in  -->
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign reseller_su=account.getChild("reseller_su")>
+
+<call draw_tooltip()>
+<yafv s_wizard>
+<form action="${config.CLIENT_CP_URL}" name="f_reseller" method="POST" check! accept-charset="UTF-8">
+<if request.periods>
+<input type="hidden" name="stemplate" value="plan_editor/reseller3.html">
+<else>
+<input type="hidden" name="stemplate" value="admin/plans.html">
+</if>
+<input type="hidden" name="template_name" value="submit/plan_editor/reseller2.sbm">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<!-- VALUES COLLECTION -->
+<list params as param>
+<compress>
+  <if param.name != "template_name" && param.name != "stemplate" && param.name !="ftemplate" && param.name != "period_id" && param.name != "current_special">
+      <input type="hidden" name="${param["name"]}" value="${param["value"]}">
+  </if>
+</compress>
+</list>
+<!-- END OF VALUES COLLECTION -->
+
+
+
+<call draw_table_header("7", toolbox.compose(lang.planeditor.header, lang.planeditor.res_reseller, "2", request.steps))>
+
+<tr >
+  <td><call draw_label(lang.planeditor.plan_name)></td>
+  <td colspan="6"><call draw_label(plan.description)></td>
+</tr>
+<tr >
+<td colspan="7"><call draw_label(lang.planeditor.reseller2.text)></td>
+</tr>
+<tr>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.resource)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.free)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.setup)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.recurr)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.usage)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.refund)></td>
+<td class="control_header"><call draw_header(lang.planeditor.reseller2.max)></td>
+</tr>
+<list reseller_su.priced_types as priced_type>
+<call resource_price(priced_type)>
+</list>
+<tr >
+<if request.periods>
+ <td colspan="7" class="control_align_right"><input type="submit" value="${lang.button.next}"></td>
+<else>
+ <td colspan="7" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td>
+</if>
+</tr>
+
+<call draw_table_footer()>
+
+</form>
+
+
+<function resource_price(rTypeId)>
+<assign priceType = toolbox.getResellerResourcePriceType(rTypeId)>
+<assign typeName = toolbox.getTypeName(rTypeId)>
+<assign rtype = plan.getResourceType("reseller")>
+<if priceType && (!admin.isResourceDisabledByReq(typeName)) && (typeName != "traffic" || !request.i_reseller_traffic)>
+<tr >
+<td nowrap><call draw_label(toolbox.getResourceDescription(rTypeId))>&nbsp;<call draw_existing_help("r__" + typeName, "")></td>
+<compress>
+<if failure>
+<assign v_free=toolbox.html_encode(oldValues["_FREE_UNITS_"+typeName+"_"])>
+<assign v_setup=toolbox.html_encode(oldValues["_SETUP_PRICE_"+typeName+"_"])>
+<assign v_recurr=toolbox.html_encode(oldValues["_UNIT_PRICE_"+typeName+"_"])>
+<assign v_usage=toolbox.html_encode(oldValues["_USAGE_PRICE_"+typeName+"_"])>
+<assign v_refund=toolbox.html_encode(oldValues["_REFUND_PRICE_"+typeName+"_"])>
+<assign v_max=toolbox.html_encode(oldValues["_MAX_"+typeName+"_"])>
+</if>
+</compress>
+<td nowrap><if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1"><if !failure><assign v_free = toolbox.numberToCurLocale(rtype.values["_FREE_UNITS_"+typeName+"_"],"false")></if><input type="text" name="_FREE_UNITS_${typeName}_" value="${v_free}" size="6" check="vPriceOpt"><else>&nbsp;</if></td>
+ 
+<td nowrap><if toolbox.consists(priceType,"S")=="1"><if !failure><assign v_setup = toolbox.numberToCurLocale(rtype.values["_SETUP_PRICE_"+typeName+"_"],"false")></if><input type="text" name="_SETUP_PRICE_${typeName}_" value="${v_setup}" size="6" check="vPriceOpt"><else>&nbsp;</if></td>
+ 
+<td nowrap><if toolbox.consists(priceType,"R")=="1"><if !failure><assign v_recurr = toolbox.numberToCurLocale(rtype.values["_UNIT_PRICE_"+typeName+"_"],"false")></if><input type="text" name="_UNIT_PRICE_${typeName}_" size="6" value="${v_recurr}" check="vPriceOpt"><else>&nbsp;</if></td>
+ 
+<td nowrap><if toolbox.consists(priceType,"U")=="1"><if !failure><assign v_usage = toolbox.numberToCurLocale(rtype.values["_USAGE_PRICE_"+typeName+"_"],"false")></if><input type="text" name="_USAGE_PRICE_${typeName}_" value="${v_usage}" size="6" check="vPriceOpt"><else>&nbsp;</if></td>
+ 
+<td nowrap><if !failure><assign v_refund = toolbox.numberToCurLocale(rtype.values["_REFUND_PRICE_"+typeName+"_"],"false")></if><input type="text" name="_REFUND_PRICE_${typeName}_" value="${v_refund}" size="6" check="vPercentOpt"></td>
+ 
+<td nowrap><if !failure><assign v_max = toolbox.numberToCurLocale(rtype.values["_MAX_"+typeName+"_"],"false")></if><input type="text" name="_MAX_${typeName}_" value="${v_max}" size="6" value="${v_max}" check="vPriceOpt"></td>
+ 
+</tr>
+</if>
+</function>
+
+
+<!-- END ./plan_editor/reseller2.html.in  -->

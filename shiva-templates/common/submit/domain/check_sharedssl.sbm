@@ -1,0 +1,30 @@
+<!-- BEGIN ./domain/check_sharedssl.sbm  -->
+<assign hosting = account.getResource(request.rid)>
+<assign domain = hosting.parent>
+<assign ip = domain.getChild("ip")>
+<if (domain.type == "3ldomain") && (domain.zone.allow_ssl == "1") && (ip.shared == "0" || domain.zone.sslIpTag == ip.tag)>
+   <assign name = domain.name>
+   <include "submit/domain/add_sharedssl.sbm">
+<else>
+   <assign aliases = domain.getChildren("3ldomain_alias")>
+   <list aliases as sslalias>
+   <if sslalias.zone.allow_ssl == "1"><assign alias=sslalias></if>
+   </list>
+   <if alias && (alias.zone.allow_ssl == "1") && (ip.shared == "0" || alias.zone.sslIpTag == ip.tag)>
+      <assign name = alias.name>
+      <include "submit/domain/add_sharedssl.sbm">
+   <else>
+      <if ip.shared == "0">
+         <assign sslzones = toolbox.ssl_zones>
+      <else>
+         <assign sslzones = toolbox.getSSLZoneByTag(ip.tag)>
+      </if>
+      <if !sslzones>
+        <assign res=session.addMessage(lang.msg.domain_shared_ssl_unavailable)>
+        <include request.ftemplate>
+      <else>
+        <include "domain/add_3ldomain_alias.html">
+      </if>
+   </if>
+</if>
+<!--  END ./domain/check_sharedssl.sbm  -->

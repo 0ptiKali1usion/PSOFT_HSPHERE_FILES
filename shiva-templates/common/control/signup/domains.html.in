@@ -1,0 +1,337 @@
+<!-- BEGIN ./control/signup/domains.html.in  -->
+<tr>
+<td  colspan="2">
+<form name="login" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<switch domainaction>
+<case "begin">
+  <input type="hidden" name="template_name" value="submit/signup/begin_domain.sbm">
+  <if request.use_bi_id!="">
+    <assign ftemplate="submit/signup/pay_info.sbm">
+  <else>
+    <if user && (request.admin_signup=="")>
+       <assign ftemplate="submit/signup/bi_info_cc.sbm">
+    <else>
+       <assign ftemplate="submit/signup/login.sbm">
+    </if>
+  </if>
+  <assign excludeFields=excludeFields+"_mod;">
+
+  <table cellpadding="7">
+
+  <if new_user.plan.isResourceAvailable("opensrs")>
+    <assign tlds = toolbox.getActiveTLDs()>
+    <if tlds && tlds.size != "0">
+      <list tlds as tld>
+          <assign years = toolbox.getYearsByTLDAndPlan(tld, new_user.plan.id)>
+          <!-- TLD ${tld} configured years ${years.size} -->
+          <if years.size != "0">
+              <assign allow_domain_registration = "true">
+          </if>
+      </list>
+    </if>
+  </if>
+
+  <if new_user.plan.isResourceAvailable("domain_transfer")>
+    <assign allow_domain_transfer = "true">
+  </if>
+
+  <if allow_domain_registration == "true">
+    <if request["_bi_type"]!="TRIAL">
+    <tr valign="top">
+	  <td>
+	  <if request.type_domain=="new_opensrs_domain">
+        <input TYPE="radio" VALUE="new_opensrs_domain" NAME="type_domain" CHECKED> &nbsp;
+      <else>
+        <input TYPE="radio" VALUE="new_opensrs_domain" NAME="type_domain"> &nbsp;
+      </if>
+	  </td>
+	  <td>
+	<call draw_label(lang.signup.domains.newsrs)><br>
+	  </td>
+	  <td>
+		<call draw_label(lang.common_signup_domains_opensrs)>
+	  </td>
+	</tr>
+    <else>
+      <br>&nbsp;&nbsp;<call draw_label_bold(lang.signup.domains.srsnotav)>
+      <br>
+    </if>
+  </if>
+
+  <if allow_domain_transfer>
+    <if request["_bi_type"]!="TRIAL">
+    <tr valign="top">
+	  <td>
+	  <if request.type_domain=="domain_transfer">
+        <input TYPE="radio" VALUE="domain_transfer" NAME="type_domain" CHECKED> &nbsp;
+      <else>
+        <input TYPE="radio" VALUE="domain_transfer" NAME="type_domain"> &nbsp;
+      </if>
+	  </td>
+	  <td>
+	<call draw_label(lang.signup.domains.reg_domain_transfer)><br>
+	  </td>
+	  <td>
+		<call draw_label(lang.common_signup_domain_transfer)>
+	  </td>
+	</tr>
+    <else>
+      <br>&nbsp;&nbsp;<call draw_label_bold(lang.signup.domains.domain_transfer_notav)>
+      <br>
+    </if>
+  </if>
+
+  <if new_user.plan.isResourceAvailable("domain")>
+    <tr valign="top">
+	  <td>
+    <if request.type_domain=="transfer_new_misc_domain">
+      <input TYPE="radio" VALUE="transfer_new_misc_domain" NAME="type_domain" CHECKED> &nbsp;
+    <else>
+      <input TYPE="radio" VALUE="transfer_new_misc_domain" NAME="type_domain"> &nbsp;
+    </if>
+	  </td>
+	  <td>
+      <call draw_label(lang.signup.domains.transfer)>
+	  </td>
+	  <td>
+		<call draw_label(lang.common_signup_domains_transfer)>
+	  </td>
+	</tr>
+    <if ("1"=="0") && (!new_user.plan.isResourceAvailable("unixuser")) 
+		&& (new_user.plan.isResourceAvailable("mail_service"))><!--
+      <if request.type_domain=="no_zone_domain">
+        <input TYPE="radio" VALUE="no_zone_domain" NAME="type_domain" CHECKED>
+      <else>
+        <input TYPE="radio" VALUE="no_zone_domain" NAME="type_domain">
+      </if>
+      ${lang.signup.domains.no_zone}<br> -->
+    </if>
+  </if>
+
+  <if new_user.plan.isResourceAvailable("3ldomain") && new_user.hosted_zones>
+    <tr valign="top">
+	  <td>
+    <if request.type_domain=="3ldomain">
+      <input type="radio" value="3ldomain" name="type_domain" checked> &nbsp;
+    <else>
+      <input type="radio" value="3ldomain" name="type_domain"> &nbsp;
+    </if>
+	</td>
+	<td>
+	<call draw_label(lang.signup.domains.thirdlevel)>
+	</td>
+	  <td>
+		<call draw_label(lang.common_signup_domains_thirdlevel)>
+	  </td>
+	</tr>
+  </if>
+  
+  <if new_user.plan.isResourceAvailable("service_domain") && new_user.free_zones>
+    <tr valign="top">
+	  <td>
+    <if request.type_domain=="service_domain">
+      <input type="radio" value="service_domain" name="type_domain" checked> &nbsp;
+    <else>
+      <input type="radio" value="service_domain" name="type_domain"> &nbsp;
+    </if>
+	</td>
+	<td>
+      <call draw_label(lang.signup.domains.service)>
+ 	</td>
+	<td>
+		<call draw_label(lang.common_signup_domains_service)>
+	  </td>
+	</tr>
+ </if> 
+  
+  <if ("0" == "1") && (new_user.plan.isResourceAvailable("parked_domain"))>
+    <tr valign="top">
+	  <td>
+    <if request.type_domain=="parked_domain">
+      <input type="radio" value="parked_domain" name="type_domain" checked> &nbsp;
+    <else>
+      <input type="radio" value="parked_domain" name="type_domain"> &nbsp;
+    </if>
+	</td>
+	<td>
+      <call draw_label(lang.signup.domains.parked)>
+	</td>
+	<td>
+		<call draw_label(lang.common_signup_domains_parking)>
+	  </td>
+	</tr>
+  </if> 
+
+  <if new_user.plan.isResourceAvailable("nodomain")>
+    <tr valign="top">
+	  <td>
+    <if request.type_domain=="without_domain">
+      <input TYPE="radio" VALUE="without_domain" NAME="type_domain" CHECKED> &nbsp;
+    <else>
+      <input TYPE="radio" VALUE="without_domain" NAME="type_domain"> &nbsp;
+    </if>
+	</td>
+	<td>
+	<call draw_label(lang.signup.domains.nodomain)>
+	</td>
+	  <td>
+		<call draw_label(lang.common_signup_nodomains)>
+	  </td>
+	</tr>
+  </if>
+
+<!-- Signup with empty domain is available for all hosting plans but "E-Mail only" -->
+  <if new_user.plan.values["_CREATED_BY_"] != "mailonly" &&
+      new_user.plan.values["_CREATED_BY_"] != "msexchange">
+    <tr valign="top">
+    <td>
+       <if request.type_domain=="empty_domain">
+          <input type="radio" value="empty_domain" name="type_domain" checked> &nbsp;
+       <else>
+          <input type="radio" value="empty_domain" name="type_domain"> &nbsp;
+       </if>
+    </td>
+    <td>
+       <call draw_label(lang.signup.domains.empty)>
+    </td>
+    <td>
+	<call draw_label(lang.common_signup_empty)>
+    </td>
+    </tr>
+  </if>
+  </table>
+
+  <script language="javascript"><!--
+    function checkDomainChoosing(cform) {
+	var result = true;
+	var ce=cform.elements;
+	var i=ce.length;
+	while (--i >= 0) {
+	    if (ce[i].name == "type_domain") {
+		if (ce[i].checked) {
+		    return true;
+		} else {
+		    result = false;
+		}
+	    }
+	}
+	if (!result) alert("${lang.msg.signup_undetermined_domin_type}");
+	return result;
+    } 
+    //-->
+  </script>
+  <assign v__checkMethod = "checkDomainChoosing(document.forms['login'])">
+  <assign excludeFields = excludeFields+"type_domain;">
+<break>
+
+<case "domain_transfer">
+  <input type="hidden" name="template_name" value="submit/signup/domain_transfer.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+  <call draw_label("www.")><input name="domain" type="text" value="${request.domain}" check="vSubDomain" label="${lang.label.domain}"><call draw_label_bold(".")>
+  <assign tlds = toolbox.getActiveTransferPricedTLDs(new_user.plan.id)>
+  <assign vext = request.ext>
+  <if vext == ""><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+  <select name="ext">
+  <list tlds as tld>
+    <assign ext1 = "." + tld>
+    <if vext == ext1><assign vselected = "SELECTED"></if>
+    <option value="${ext1}" ${vselected}>${tld}</option>
+    <assign vselected = "">
+  </list>
+  </select>
+  <assign excludeFields=excludeFields+"domain;">
+  <assign excludeFields=excludeFields+"ext;">
+  <assign excludeFields=excludeFields+"domain_name;">
+  <br>
+<break>
+
+<case "new_osrs_domain">
+  <input type="hidden" name="template_name" value="submit/signup/new_osrs_domain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+
+  <call draw_label("www.")><input name="domain" type="text" value="${request.domain}" check="vSubDomain" label="${lang.label.domain}"><call draw_label_bold(".")>
+  <assign tlds = toolbox.getActivePricedTLDs(new_user.plan.id)>
+  <assign vext = request.ext>
+  <if vext == ""><assign vselected = "SELECTED"><else><assign vselected = ""></if>
+  <select name="ext">
+  <list tlds as tld>
+    <assign ext1 = "." + tld>
+    <if vext == ext1><assign vselected = "SELECTED"></if>
+    <option value="${ext1}" ${vselected}>${tld}</option>
+    <assign vselected = "">
+  </list>
+  </select>
+  <assign excludeFields=excludeFields+"domain;">
+  <assign excludeFields=excludeFields+"ext;">
+  <assign excludeFields=excludeFields+"domain_name;">
+  <br>
+<break>
+
+<case "new_domain">
+  <input type="hidden" name="template_name" value="submit/signup/new_domain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+
+  <call draw_label("www.")><input name="domain_name" type="text" value="${request.domain_name}" check="vDomain_Name" label="${lang.label.domain}">
+  <assign excludeFields=excludeFields+"domain_name;">
+  <br>
+<break>
+
+<case "order_info">
+  <include "control/submit/signup/order_info.sbm">
+<break>
+
+<case "3ldomain">
+  <input type="hidden" name="template_name" value="submit/signup/3ldomain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+  <if !domain><assign domain=request.login></if>
+  <input label="${lang.label.domain}" name="domain" type="text" value="${domain}" check="v3LDomainName">
+  <select name="domain_type" size=1>
+  <assign selected="SELECTED">
+  <list new_user.hosted_zones as zone>
+    <option VALUE="${zone.name}" ${selected}>
+	${zone.name}
+    </option>	
+    <assign selected="">
+  </list>
+  </select>
+  <assign excludeFields=excludeFields+"domain;">
+  <assign excludeFields=excludeFields+"domain_type;">
+<break>
+
+<case "service_domain">
+  <input type="hidden" name="template_name" value="submit/signup/service_domain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+  <call draw_label("www.")>
+  <select name="domain_name" size=1>
+  <assign selected="SELECTED">
+  <list new_user.free_zones as zone>
+    <option VALUE="${zone.name}" ${selected}>
+	${zone.name}
+    </option>	
+    <assign selected="">
+  </list>
+  </select>
+  <assign excludeFields=excludeFields+"domain_name;">
+  <br>
+<break>
+
+<case "no_zone_domain"><!--
+  <input type="hidden" name="template_name" value="submit/signup/no_zone_domain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm">
+  <call draw_label("www.")><input name="domain_name" type="text" value="${request.domain_name}" check="vDomain_Name" label="${lang.label.domain}">
+  <assign excludeFields=excludeFields+"domain_name;">
+  <br> -->
+<break>
+
+<case "parked_domain"><!--
+  <input type="hidden" name="template_name" value="submit/signup/parked_domain.sbm">
+  <assign ftemplate="submit/signup/begin_domain.sbm"> -->
+<break>
+</switch>
+<assign excludeFields=excludeFields+"template_name;">
+<call genHiddenField(excludeFields)>
+
+</form>
+</td>
+</tr>
+<!--  END ./control/signup/domains.html.in  -->

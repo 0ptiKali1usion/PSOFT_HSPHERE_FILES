@@ -1,0 +1,22 @@
+<assign result=yafv.common.s_admin.vAmount(lang.label.amount,request.amount)>
+<if result.status=="OK"> 
+   <assign billman=account.getChild("billman")>
+   <assign result=billman.enlargeCredit( request.aid, toolbox.numberToUSLocale(request.amount))>
+    <if result.status=="OK">   
+      <assign res=session.addMessage(lang.msg.credit_enlarged)>
+    <else>
+      <assign res=session.addMessage(lang.msg.credit_failed_enlarge)>
+      <assign res=session.addMessage(result.msg)>
+      <assign unsuccess="1">
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign unsuccess="1">
+</if>
+<if unsuccess>
+    <assign amount=toolbox.html_encode(request.amount)>
+    <assign id=toolbox.html_encode(request.id)>
+    <include request.ftemplate>
+<else>
+    <include request.stemplate>
+</if>

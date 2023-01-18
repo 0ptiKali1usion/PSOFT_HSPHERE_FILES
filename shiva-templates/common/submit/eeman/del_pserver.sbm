@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/eeman/del_pserver.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign pserver=eeman.getLoadBalServer(request.rid)>
+
+<if pserver.lbParentId != "">
+  <assign res=session.addMessage(lang.eeman.loadbalserver.cant_del_pserver(pserver.name))>
+  <include request.ftemplate>
+<else>
+<assign result=pserver.delete()>
+<if result.status == "OK">
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+
+</if>
+<!--  END ./submit/eeman/delplserver.sbm  -->

@@ -1,0 +1,25 @@
+<!--BEGIN  submit/adnsmanager/change_url_ssl.sbm -->
+
+<assign reseller = account.getChild("reseller")>
+<assign eeman = account.getChild("reseller_eeman")>
+<assign ssl_id = eeman.isSSLEnabled>
+<assign res_ssl = eeman.getResellerSSL(ssl_id)>
+<!--res_ssl.server_alias =  ${res_ssl.server_alias} -->
+<!--res_ssl.port = ${res_ssl.port} -->
+
+<assign res = eeman.changeURL(res_ssl.server_alias, "https://", res_ssl.port)>
+<if res.status!="OK">
+  <assign failure="1">
+  <assign err=session.addMessage(toolbox.compose(
+       lang.msg.name_res_failed_change, lang.reseller.url, ""))>
+  <assign err=session.addMessage(res.msg)>
+</if>
+
+<if !failure>
+<include request.stemplate>
+<else>
+<include request.ftemplate>
+</if>
+
+
+<!--END  submit/adnsmanager/change_url_ssl.sbm -->

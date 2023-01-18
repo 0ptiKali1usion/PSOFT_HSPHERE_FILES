@@ -1,0 +1,9 @@
+<center>RLimitNPROC</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Restrict  the number of the processes run simultaneously.<br>
+<br>
+ <i>Resouce Limit</i> is applied to user CGI scripts and  SSI exec commands, but not any processes forked off from the Apache parent such as piped logs.<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Process limits control the number of processes per user. </i><br>
+Check the <i>Include</i> box to make this resource available under the plan.

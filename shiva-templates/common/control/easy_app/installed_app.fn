@@ -1,0 +1,56 @@
+<!-- BEGIN control/easy_app/installed_app.fn -->
+<function draw_upgradable_apps(easyapp, type, version)>
+<assign installed=easyapp.getInstalledApps(type)>
+<if installed>
+<list installed as app>
+<if app.version!=version>
+<tr><td>${app.vhost.parent.name}${app.path} (${app.version})
+<call draw_ptlink("http://"+app.vhost.parent.name+app.path, "_blank", "lupa")>
+</td><td>
+<if app.upgradable == 1>
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=easy_app/upgrade.html&eid="+app.id+
+                  "&stype="+type+"&typename="+easyapp.type,
+        "upgrade", lang.functions.action_remove)>
+<else>
+<call draw_label(lang.app.manual_upgrade)>
+</if>
+</td></tr>
+</if>
+</list>
+</if>
+</function>
+
+<function draw_installed_apps(easyapp, type)>
+<call draw_header(lang.easyapp.installed_apps)><br>
+<assign installed=easyapp.getInstalledApps(type)>
+<if installed>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<list installed as app>
+<tr><td>${app.vhost.parent.name}${app.path} (${app.version})
+<call draw_ptlink("http://"+app.vhost.parent.name+app.path, "_blank", "lupa")>
+</td><td>
+<if app.version==version>
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=easy_app/change.html&eid="+app.id+
+                  "&stype="+type+"&typename="+easyapp.type,
+        "edit", lang.functions.action_edit)>
+<else>
+<if app.upgradable == 1>
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=easy_app/upgrade.html&eid="+app.id+
+                  "&stype="+type+"&typename="+easyapp.type,
+        "upgrade", lang.functions.action_upgrade)>
+<else>
+<call draw_label(lang.app.manual_upgrade)>
+</if>
+</if>
+</td><td>
+<call draw_palink(config.CLIENT_CP_URL+"?template_name=easy_app/remove.html&eid="+app.id+
+                  "&stype="+type+"&typename="+easyapp.type,
+        "del", lang.functions.action_remove)>
+</td></tr>
+</list>
+</table>
+<else>
+<call draw_label(lang.label.none)>
+</if>
+</function>
+<!-- END control/easy_app/installed_app.fn -->

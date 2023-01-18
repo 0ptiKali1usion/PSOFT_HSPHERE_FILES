@@ -1,0 +1,13 @@
+<!-- BEGIN ./submit/billing/ec_delete.sbm  -->
+<assign result = account.updateExemptionCode("", "")>
+<if result.status != "OK">
+  <assign res=session.addMessage(result.msg)>
+  <assign fail = "1">
+</if>
+<if !fail>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!--  END ./submit/billing/ec_delete.sbm  -->
+

@@ -1,0 +1,19 @@
+<!-- BEGIN ./submit/admin/settings/change_sitem.sbm -->
+<assign admin = account.getChild("admin")>
+<if request.siname>
+  <assign result=admin.setSettingsValue(request.siname, request.sivalue)>
+  <if result.status != "OK">
+     <assign res=session.addMessage(result.msg)>
+     <assign failure="1">
+  </if>
+<else>
+   <assign failure="1">
+   <assign res=session.addMessage(lang.admin.chargelog.failed)>
+</if>
+
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<!-- END ./submit/admin/settings/change_sitem.sbm -->

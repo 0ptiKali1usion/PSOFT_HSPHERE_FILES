@@ -1,0 +1,18 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+ 
+${lang.massmail.suspend_text}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.suspend_reason}
+${reason}
+ 
+${lang.massmail.suspend_data}
+${lang.massmail.suspend_view}
+${user.CP_URL}
+
+${lang.massmail.suspend_warn}
+
+${lang.massmail.suspend_contact}
+${settings.support}

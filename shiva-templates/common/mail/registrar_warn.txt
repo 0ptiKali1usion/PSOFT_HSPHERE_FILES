@@ -1,0 +1,14 @@
+${lang.massmail.header(account.ci.first_name, account.ci.last_name)}
+${lang.massmail.login(account.login)}
+${lang.massmail.account(account.id.id)}
+${lang.massmail.plan(account.plan.description)}
+
+${lang.massmail.registrar_warn_text(osrs.domain_name, osrs.expire_date)}
+
+<if !osrs.isAutoRenew>
+${lang.massmail.registrar_warn_manual}
+<else>
+${lang.massmail.registrar_warn_auto}
+</if>
+
+${lang.massmail.registrar_warn_support(settings.support)}

@@ -1,0 +1,37 @@
+<!-- BEGIN ./control/admin/sitetoolbox.html  -->
+<assign toolboxmanager = account.getChild("sitetoolboxmanager")>
+<assign acc = account.id>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", lang.admin.sitetoolbox)>
+
+  
+
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox)></td>
+<td>
+<if toolboxmanager>
+<call disable(acc, toolboxmanager)><call draw_edit(config.CLIENT_CP_URL+"?template_name=admin/sitetoolbox_config.html&refid="+toolboxmanager.getRefId()+"&toolbox_url=" + toolboxmanager.getUrl() + "&stemplate="+template+"&ftemplate="+template, lang.admin.sitetoolbox)>
+<else>
+<call enableWizard(acc, "sitetoolboxmanager", "/admin/sitetoolbox_config.html")>
+</if>
+</td>
+</tr>
+
+<if toolboxmanager>
+<tr >
+<td><call draw_label(lang.admin.sitetoolbox.users_on)></td>
+<td><call draw_state(settings.userstoolbox=="on", config.CLIENT_CP_URL+"?template_name=submit/admin/enable_userstoolbox.sbm&state=off&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/admin/enable_userstoolbox.sbm&state=on&stemplate="+template+"&ftemplate="+template)></td>
+</tr>
+<else>
+<tr ><td colspan="2"><call draw_link(config.CLIENT_CP_URL+"?template_name=admin/registration_form.html&stemplate="+template+"&ftemplate="+template, lang.admin.sitetoolbox_form)></td></tr>
+</if>
+
+
+
+<call draw_table_footer()>
+
+<!-- END ./control/admin/sitetoolbox.html  -->

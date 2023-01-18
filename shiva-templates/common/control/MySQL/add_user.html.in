@@ -1,0 +1,101 @@
+<call draw_tooltip()>
+<yafv s_mysql>
+<assign mysql = account.getChild("MySQL")>
+<if !mysql><assign mysql = account.addChild("MySQL", "")>
+   <if mysql.status!="OK">
+        <assign res = session.addMessage(mysql.msg)>
+   </if>
+</if>
+<assign suffix=mysql.prefix>
+<if !database>
+ <if !request.db_id>
+  <assign database = account.getResource(request.rid)>
+ <else>
+  <assign database = account.getResource(request.db_id)>
+ </if>
+</if>
+
+
+
+
+<call draw_table_header("4", lang.mysql.adduser.header +" "+ database.db_name)>
+
+
+<tr>
+    <td><call draw_label(lang.label.username)></td>
+    <td  colspan="3">
+    <form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_new_user" check! accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/misc/add_check.sbm">
+    <input type="hidden" name="next_template" value="submit/MySQL/add_new_user.sbm">
+    <input type="hidden" name="db_id" value="${request.db_id}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="cur_menuid" value="${GLOBAL_ACTIVE_ITEM}">
+    <input type="hidden" name="type" value="MySQLUser">
+    <input type="hidden" name="rid" value="${mysql}">
+    <input type="hidden" name="mod" value="">
+    <input type="hidden" name="suffix" value="${suffix}">
+    <call draw_label_bold(suffix)><input type="text" name="user_name" size="15" check="vMySQLCombLogin(this, suffix)"></td>
+   </tr>
+   <tr>
+    <td><call draw_label(lang.label.password)></td>
+    <td  colspan="3"><input type="password" name="user_password" size="15" check="vPassword1(this, user_name)" label="${lang.label.password}"></td>
+   </tr>
+   <tr>
+    <td><call draw_label(lang.label.confirm_psw)></td>
+    <td  colspan="3"><input type="password" name="user_password1" size="15" check="vPassword2(user_password,this)" label="${lang.label.confirm_psw}"></td>
+   </tr>
+   <tr>
+    <td><call draw_label(lang.mysql.role)></td>
+    <td  colspan="3">
+      <select name="user_role">
+        <option value="1">${lang.mysql.role_r}</option>
+        <option value="2">${lang.mysql.role_rw}</option>
+        <option value="3">${lang.mysql.role_dba}</option>
+      </select>
+    </td>
+   </tr>
+
+<tr>
+   <td   class="control_align_center" colspan="4">
+     <input type="submit" value="${lang.button.add}">
+   </td>
+</form>
+</tr>
+<assign mysql_users = mysql.getChildren("MySQLUser")>
+<if mysql_users>
+<tr>
+<td  colspan="4" class="control_header"><call draw_header(lang.mysql.adduser.headerpriv + database.db_name)></td>
+</tr>
+<tr>
+<td   width="30%"><call draw_label(lang.mysql.pick)></td>
+<td  colspan="3">
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/MySQL/add_exist_user.sbm">
+<input type="hidden" name="db_id" value="${request.db_id}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${request.ftemplate}">
+  <select name="u_id">
+   <list mysql_users as m_user>
+    <option value="${m_user}">${m_user.name}</option>
+   </list>
+  </select>
+</td>
+<tr>
+<td   width="30%"><call draw_label(lang.mysql.role)></td>
+<td  colspan="3">
+<select name="user_role">
+  <option value="1">${lang.mysql.role_r}</option>
+  <option value="2">${lang.mysql.role_rw}</option>
+  <option value="3">${lang.mysql.role_dba}</option>
+</select>
+</td>
+</tr>
+<tr><td   class="control_align_center" colspan="4">
+ <input type="submit" value="${lang.mysql.grant}">
+</td>
+</tr>
+</form>
+</if>
+
+<call draw_table_footer()>

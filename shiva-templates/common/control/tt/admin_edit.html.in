@@ -1,0 +1,309 @@
+<!-- BEGIN ./control/tt/admin_edit.html  -->
+<call draw_tooltip()>
+
+<yafv s_admin>
+<include "control/tt/ttfunctions.fn">
+<call setTTAdmin()>
+
+<if ttadmin>
+
+<assign ticket=ttadmin.getTicket(request.ttid)>
+<if request.mailsort><assign mailsort = request.mailsort>
+  <else> <if settings.TT_FRESHEST_TYPE == "email"><assign mailsort = "1"><else><assign mailsort = "0"></if>
+</if> 
+<if request.ntemplate><assign stemplate = request.ntemplate>
+<else><if request.stemplate><assign stemplate = request.stemplate>
+<else><assign stemplate = template>
+</if></if>
+
+
+<call gain_sc_params("")>
+
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+<assign resellers = reseller_su.resellers>
+<list resellers as reseller>
+  <if reseller.id == request.sc_reseller>
+    <assign ticket = reseller_su.getTicket(reseller.id, request.ttid)>
+  </if>
+</list>
+</if>
+
+<if ticket && ticket.status == "OK">
+
+<SCRIPT language="Javascript"><!--
+  function raiseUploaderForm(uplFormName, targFormName, fileFieldName) {
+    var uploader=window.open("${config.CLIENT_CP_URL}?template_name=misc/standalone_uploader_form.html"
+	+"&uploader_form="+uplFormName+"&target_form="+targFormName+"&file_field="+fileFieldName,
+	"Uploader", "resizable=yes,scrollbars=no,width=330,height=150");
+    uploader.focus();
+  }
+
+  function addOption(value, text) {
+    nop=new Option();
+    nop.value = value;
+    nop.text = text;
+    nop.selected = true;
+    sel = document.forms['tt'].elements['att_cid'];
+    sel.options[sel.options.length] = nop;
+  }
+
+  function addNotes(fromField, intoField) {
+    intoField.value = fromField.value;
+  }
+//--></SCRIPT>
+
+<h3 align="center"> ${lang.tt.infomain} <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/add_edit.html"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.addinfo)>   
+ <if (ticket.assigned.id != ttadmin.id) || (ticket.closed)> / <call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_assign.sbm&ntemplate="+stemplate+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id+sc_params, lang.tt.admin.pickup)><else>&nbsp;</if>)
+<font color="${design.color("important_color")}">
+ <if (ticket.assigned.id == "")> <br> ${lang.tt.info.nassign} </if></font>
+</h3>
+
+<call draw_table_header("6","")>  
+<tr>
+<td colspan="5">
+<table class="inner_control">
+<tr>
+<td>
+<call draw_label_bold(lang.tt.adminedit.header+toolbox.html_encode(ticket.id) + ":  " + toolbox.html_encode(ticket.title))>
+</td>
+<td nowrap colspan>
+   	    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+              <input type="hidden" name="template_name" value="submit/tt/admin_close.sbm">
+              <input type="hidden" name="stemplate" value="${stemplate}">
+              <input type="hidden" name="ftemplate" value="${template}">
+              <input type="hidden" name="ttid" value="${request.ttid}">
+	      <call draw_sc_form_params()>
+              <input type="submit" value="${lang.tt.admin.close}">
+            </form>
+</td>
+<if ticket.assigned>	    
+<td nowrap colspan>	    
+	      <form action="${config.CLIENT_CP_URL}" method="POST" onSubmit="javascript:addNotes(document.forms['tt'].elements['note'], this.elements['note'])" accept-charset="UTF-8">
+              <input type="hidden" name="template_name" value="submit/tt/admin_release.sbm">
+              <input type="hidden" name="stemplate" value="${stemplate}">
+              <input type="hidden" name="ftemplate" value="${template}">
+              <input type="hidden" name="ttid" value="${request.ttid}">
+              <input type="hidden" name="note" value="">
+	      <call draw_sc_form_params()>
+              <input type="submit" value="${lang.tt.admin.release}">
+            </form>
+</td>
+</if>
+</tr>
+</table>
+</td>
+<td nowrap colspan>
+   	    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+              <input type="hidden" name="template_name" value="submit/tt/admin_delete.sbm">
+              <input type="hidden" name="stemplate" value="tt/new_tt_admin.html">
+              <input type="hidden" name="ftemplate" value="${template}">
+              <input type="hidden" name="ttid" value="${request.ttid}">
+	      <call draw_sc_form_params()>
+              <input type="submit" value="${lang.tt.admin.delete}">
+            </form>
+</td>
+</tr>
+
+<if account.plan.getResourceType("ttadmin").getValue("_ASSIGN_TT") == "TRUE">
+	      <form action="${config.CLIENT_CP_URL}" method="POST" name="main" onSubmit="javascript:addNotes(document.forms['tt'].elements['note'], this.elements['note'])" check! accept-charset="UTF-8">	
+<tr>
+	<td class="control_header_align_center" width="18%"><call draw_header(lang.tt.adminedit.assign)></td>
+	<td class="control_header_align_center" width="18%"><call draw_header(lang.tt.state)></td>
+	<td class="control_header_align_center" width="18%"><call draw_header(lang.tt.queue)></td>	
+	<td class="control_header_align_center" width="18%"><call draw_header(lang.tt.priority)></td>
+	<td class="control_header_align_center" width="18%"><call draw_header(lang.tt.sticky)></td>
+	<td rowspan="2" width="10%" nowrap>
+        <input type="submit" value="${lang.button.change}"> 
+        </td> 
+	</tr>
+	
+	<tr>
+	  <td class="control_align_center" width="18%" nowrap>
+              <select name="assign_to" size="1">
+                <assign nassigned = "SELECTED">  	      
+                <list ttadmin.ttadmin_list as admid>
+                  <if ((ticket.assigned.id!="") && (admid==ticket.assigned.id))>
+                    <assign selected="SELECTED"><assign nassigned = "">
+                  <else>
+                    <assign selected="">
+                  </if>
+                  <assign admname = ttadmin.NameById(admid)>
+                  <option value="${admid}" ${selected}>${admname}</option>
+                </list>
+	          <option value="0" ${nassigned}>nobody</option> 	
+              </select>
+          </td>
+	  <td class="control_align_center" width="18%" nowrap>
+           <select name="state" size="1">
+             <call show_ticket_states_options(ticket.state)> 
+           </select> 
+          </td>
+	  <td class="control_align_center" width="18%" nowrap>
+	      <assign queue=ttadmin.getQueue(ticket.qid)> 
+              <select name="qid" size="1">
+              <list ttadmin.queue_list as que_id>
+	      <assign que=ttadmin.getQueue(que_id)> 
+		<option value="${que.id}" <if que.id == ticket.qid>SELECTED</if>>${que.name}</option>
+              </list>
+              </select>
+          </td>
+          <td class="control_align_center" width="18%" nowrap>
+	      <call draw_sc_form_params()>
+	      <input type="text" name="priority" value="${ticket.priority}" check="vPercentReq" size="5">
+	  </td>      
+	  <td class="control_align_center" width="18%" nowrap>  
+          <if ticket.sticky == "1"><assign v_sel = "CHECKED"><else><assign v_sel = ""></if>
+          <input type="checkbox" name="sticky" onClick="checkForm(this.form)" value="1" ${v_sel}>
+	      <input type="hidden" name="template_name" value="submit/tt/change_prop.sbm">
+              <input type="hidden" name="stemplate" value="${stemplate}">
+	      <input type="hidden" name="ftemplate" value="${template}">
+              <input type="hidden" name="ttid" value="${request.ttid}">
+              <input type="hidden" name="note" value="">
+	    
+	</td></tr>
+	</form>
+	
+      <call draw_table_footer()>
+<br>
+
+<call draw_table_header("7", lang.tt.accinfo)>
+
+<tr>
+<td width="30%" colspan="7">
+   <call draw_label(lang.label.username)>:&nbsp;<if ticket.username><call draw_label_bold(ticket.username)><else>&nbsp;</if>
+</td>
+</tr>
+
+<tr>
+<td  width="30%" colspan="7">
+  <call draw_label(lang.tt.email)>&nbsp;<call draw_label(toolbox.html_encode(ticket.email))>&nbsp;<if ticket.isWebOnly><i><call draw_label(lang.tt.web)></i></if>
+</td>
+</tr>
+
+<!--TR with Account Info -->
+<tr>
+  <td NOWRAP colspan="7">
+    <if ticket.aid>
+      <call draw_tlink(config.CLIENT_CP_URL+"?template_name=account_preview/display.html&aid="+ticket.aid, "APREVIEW", "[Account Info# "+ticket.aid+"]")>
+      <if account.getChild("su")>
+        <call draw_login_account(config.CLIENT_CP_URL+"?template_name=submit/admin/login.sbm&login="+toolbox.url_escape(ticket.username)+"&account_id="+ticket.aid, lang.search.changelogin)>
+      </if>
+      &nbsp;
+      <call draw_edit(config.CLIENT_CP_URL+"?template_name=search/accounts.html&sc_account_id="+ticket.aid, lang.button.search)>
+    <else>
+      <call draw_label(lang.tt.adminedit.noinfo)>
+    </if>
+      &nbsp; 
+      <call draw_palink(config.CLIENT_CP_URL+"?template_name=tt/change_acc.html&ttid="+request.ttid, "change", lang.button.change)>    
+      <call draw_sc_form_params()>
+  </td>
+</tr> 
+<!--End of TR with Account Info -->
+
+<if ticket.email == "">
+   <tr><td colspan="7" valign="center" class="control_header_align_center"><h4> ${lang.tt.user.tickets} </h4></td></tr>
+<else>   
+  <if mailsort == "0"> <tr><td class="control_header_align_center" valign="center" colspan="7"><h4> ${lang.tt.user.tickets} /
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html&mailsort=1"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.email.tickets)></h4></td></tr></if>
+  <if mailsort == "1"> <tr><td valign="center"  class="control_header_align_center" colspan="7"><h4> ${lang.tt.email.tickets} /
+    <call draw_link(config.CLIENT_CP_URL+"?template_name=tt/admin_edit.html&mailsort=0"+"&stemplate="+template+"&ftemplate="+template+"&ttid="+ticket.id, lang.tt.user.tickets)></h4></td></tr></if>
+</if>   
+<include "control/tt/user_tickets.html">
+<call draw_table_footer()>
+<br>
+
+<call draw_table_header("1", lang.tt.thread)>
+<!--History -->
+<include "control/tt/display_tt.html">
+<!--End of history -->
+<call draw_table_footer()>
+<br>
+
+<call check_to_answer(ticket)>
+
+<form name="tt" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/admin_edit_save.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="ttid" value="${request.ttid}">
+<compress>
+<list params as sc_param>
+ <if sc_param.name && (toolbox.startsWith(sc_param.name,"sc_")=="1")>
+   <input type="hidden" name="${sc_param["name"]}" value="${sc_param["value"]}">
+ </if>
+</list>
+</compress>
+
+<call draw_table_header("2", lang.tt.adminedit.answer)>
+<if unable_answer__mes == "">
+  <call draw_suggestions("document.forms['tt'].elements['answer']")>
+<!--TR with CC -->
+  <tr>
+  <td width="20%"><call draw_label(lang.tt.cc)></td>
+  <td><input type="text" name="cc" value="${toolbox.html_encode(ticket.cc)}" size=50></td>
+  </tr>
+<!--End of TR with CC -->
+<!--TRs with answer -->
+  <tr>
+  <td colspan="2">
+    <textarea name="answer" rows="10" cols="70"></textarea><br>
+    <call spellcheck("tt", "answer")>
+  </td>
+  </tr>
+<!--End of TRs with answer -->
+<!-- Attachments -->
+  <tr>
+  <td valign="top"><call draw_label(lang.tt.attachments)></td>
+  <td>
+    <table class="inner_control" width="100%">
+      <tr>
+      <td width="10%">
+	<select NAME="att_cid" SIZE=5 MULTIPLE>
+	  <option value="NA">${lang.tt.select_attachments}</option>
+	</select>
+      </td>
+      <td width="5%">&nbsp;</td>
+      <td>
+        <call draw_onclick_palink("attachments", "raiseUploaderForm('upload', 'tt', 'att')", lang.tt.click_att_upload)>
+      </td>
+      </tr>
+    </table>
+  </td>
+  </tr>
+<!-- Attachments -->
+
+<else>
+  <tr>
+    <td colspan="2"><call draw_label_bold(unable_answer__mes)></td>
+  </tr>
+</if>
+
+<!--Notes TRs -->
+  <tr>
+    <td  colspan="2" class="control_header"><call draw_header(lang.tt.adminedit.notes)></td>
+  </tr>
+  <tr>
+    <td colspan="2"><textarea name="note" rows="5" cols="70"></textarea><br><call spellcheck("tt", "note")></td>
+  </tr>
+<!--End of Notes TRs -->
+
+<tr><td  colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+</form>
+
+<call draw_table_footer()>
+
+</if>
+
+<call spellCheckInit()>
+
+<else>
+  <call draw_table_header("", "")>
+  <tr><td><call draw_label(lang.tt.admin.ticket_unavailable)></td></tr>
+  <call draw_table_footer()>
+</if>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/tt/admin_edit.html  -->

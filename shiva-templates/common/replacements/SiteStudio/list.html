@@ -1,0 +1,27 @@
+<!-- BEGIN ./SiteStudio/list.html -->
+<assign template="list.html">
+<assign x="">
+<assign sslist = account.getChildren("site_studio")>
+<list sslist as ss><assign x=x+"."></list>
+<if !x><include "add.html">
+<else><if x=="."><include "edit.html">
+<else>
+<include "functions">
+<call draw_menu("SiteStudio-edit")>
+<call draw_tooltip()>
+
+
+
+
+<call draw_table_header("2", "Site Studio Accounts")>
+
+
+<list sslist as ss>
+<tr>
+<td>${ss.login} (${ss.server})</td><td> <a href="${config.CLIENT_CP_URL}?template_name=edit.html&rid=${ss}">Edit</a>/<a href="${config.CLIENT_CP_URL}?template_name=submit/remove.sbm&did=${ss}&stemplate=${template}">Delete</a></td>
+</tr>
+</list>
+
+<call draw_table_footer()>
+</if></if>
+<!-- END ./SiteStudio/list.html -->

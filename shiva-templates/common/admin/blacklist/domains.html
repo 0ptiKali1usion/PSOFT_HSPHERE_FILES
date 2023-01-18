@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/admin/blacklist/domains.html -->
+<assign template="admin/blacklist/domains.html">
+<include "functions">
+<assign header=lang.signup.guard.domains.header>
+<assign description=lang.signup.guard.domains.desc>
+<assign list_type="1">
+<call draw_menu("signup_guard")>
+<include "control/admin/blacklist.html">
+<call bottom()>
+<!-- END ./common/admin/blacklist/domains.html -->

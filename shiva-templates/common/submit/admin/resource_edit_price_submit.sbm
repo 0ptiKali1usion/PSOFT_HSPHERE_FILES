@@ -1,0 +1,77 @@
+<if request.done>
+  <include request.stemplate>
+<else><if request.edit>
+  <include request.ftemplate>
+<else>
+  <compress>
+  <assign admin = account.getChild("admin")> 
+  <assign plan = admin.getPlan(request.plan_id)>
+  <assign rtype = plan.getResourceType(request.r_id)>
+  
+  <assign name="_FREE_UNITS_">                                                                
+  <assign result=yafv.common.s_admin.vUnits(lang.label.free_units, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign unsuccess="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+  <else>
+      <assign unsuccess="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>    
+  <assign name="_SETUP_PRICE_">
+  <assign result=yafv.common.s_admin.vPrice(lang.label.setup_fee, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign unsuccess="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+      <if request[name]><assign setup_flag="true"></if>
+  <else>
+      <assign unsuccess="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>    
+  <assign name="_USAGE_PRICE_">                                                                
+  <assign result=yafv.common.s_admin.vPrice(lang.label.usage_fee, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign unsuccess="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+      <if request[name]><assign usage_flag="true"></if>
+  <else>
+      <assign unsuccess="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>    
+  <assign name="_UNIT_PRICE_">                                                                
+  <assign result=yafv.common.s_admin.vPrice(lang.label.unit_fee, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign unsuccess="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+      <if request[name]><assign unit_flag="true"><assign refund_flag="true"></if>
+  <else>
+      <assign unsuccess="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>    
+  <assign name="_REFUND_PRICE_">                                                                
+  <assign result=yafv.common.s_admin.vPercent(lang.label.refund_perc, request[name])>
+  <if result.status=="OK">
+      <assign result=rtype.putValue(name, toolbox.numberToUSLocale(request[name]))>
+      <if result.status!="OK">
+          <assign unsuccess="1">
+          <assign res=session.addMessage(result.msg)>
+      </if>
+      <if request[name]><assign refund_flag="true"></if>
+  <else>
+      <assign unsuccess="1">
+      <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+  </if>    
+  </compress>
+  <include "submit/admin/price_edit_submit.sbm">
+</if></if>

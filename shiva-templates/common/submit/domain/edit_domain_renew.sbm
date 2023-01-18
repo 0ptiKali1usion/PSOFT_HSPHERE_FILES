@@ -1,0 +1,24 @@
+<!-- BEGIN ./domain/edit_domain_renew.sbm -->
+<assign result=yafv.common.s_domain.vRenew(lang.label.opensrs.renew_edit.validation, request.renew_period, request.mode)>
+<if result.status=="OK">
+    <assign osrs=account.getResource(request.oid)>
+    <if request.mode =="manual">
+	<assign result=osrs.setAutoRenew("0")>
+    <else>
+	<assign result=osrs.setAutoRenew(request.renew_period)>
+    </if>
+    <if result.status=="OK">
+        <assign success="1">
+    <else>
+        <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <include request.stemplate>
+<else>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/edit_domain_renew.sbm  -->

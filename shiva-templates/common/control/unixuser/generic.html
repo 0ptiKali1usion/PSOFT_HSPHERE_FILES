@@ -1,0 +1,187 @@
+<!-- BEGIN control/unixuser/generic.html  -->
+<if account.plan.values["_CREATED_BY_"] == "mailonly"><assign isMailOnly = "1"></if>
+<if account.plan.values["_CREATED_BY_"] == "msexchange"><assign isMSEXCHANGE = "1"></if>
+<function draw_domains(domain_type)>
+<assign domains = domainManager.getChildren(domain_type)>
+<list domains as domain>
+  <if !isMSEXCHANGE>
+  <call draw_link(config.CLIENT_CP_URL+"?template_name="+domain_edit_template+"&rid="+domain,domain.name)>
+  <call draw_edit(config.CLIENT_CP_URL+"?template_name="+domain_edit_template+"&rid="+domain, lang.unixuser.generic.edit)>
+  <if !isMailOnly>
+    <call draw_preview("http://" +domain.name, lang.unixuser.generic.opensite)>
+    <if domain.getChild("ip").shared=="1">
+      <assign domain_alias = domain.getChild("hosting").getChild("idomain_alias").alias>
+      <if domain_alias>
+	<call draw_label(" ("+domain_alias)><call draw_preview("http://" +domain_alias, lang.unixuser.generic.preview)><call draw_label(")")>
+      </if>
+    <else>
+      <assign domain_ip = toolbox.int2ext(domain.getChild("ip").ip)>
+      <if domain_ip>
+	<call draw_label(" ("+domain_ip)><call draw_preview("http://" +domain_ip, lang.unixuser.generic.preview)><call draw_label(")")>
+     </if>
+    </if>
+  </if>
+    <else>
+      <if isMSEXCHANGE>
+      <call draw_label(domain.name)>
+      </if>
+  </if>
+  <br>
+</list>
+</function>
+
+<function draw_domain_tts(domain_type)>
+<assign domains = domainManager.getChildren(domain_type)>
+<if domains><assign domainFound = "1"></if>
+<list domains as domain><call draw_tt_help(domain,"user-ai_pref-domain","")><br></list>
+</function>
+
+<assign unixuser = account.getChild("unixuser")>
+<if unixuser>
+  <assign domainManager = unixuser>
+  <assign platform_type = unixuser.host.platform_type>
+<else>
+  <if (isMSEXCHANGE)>
+    <assign domainManager = account.getChild("bizorg")>
+    <assign platform_type = "unix">
+  <else>
+  <assign domainManager = account>
+  <assign platform_type = "unix">
+  </if>
+</if>
+
+<if platform_type == "win2k">
+    <assign domain_edit_template="windomain/edit.html">
+<else> 
+    <assign domain_edit_template="domain/edit.html">
+</if>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("3", lang.unixuser.generic.header)>
+
+<tr>
+ <td width="5%" class="control_header_align_center"><call draw_TT_header()></td>
+ <td width="30%" class="control_header_align_center"><call draw_header(lang.label.parameter)></td>
+ <td width="65%" class="control_header_align_center"><call draw_header(lang.label.value)></td>
+</tr>
+
+<tr>
+   <td><call draw_tt_help(account.id,"user-ai_quick-plan","Click to get help")></td>
+   <td><call draw_label(lang.label.plan)></td>
+   <td><call draw_label(account.plan.description)>&nbsp;<call draw_change(config.CLIENT_CP_URL+"?template_name=misc/changeplan.html&stemplate="+template, lang.label.changeplan)></td></tr>
+<tr>
+   <td><call draw_tt_help("","user-ai_quick-username","")></td>
+   <td><call draw_label(lang.unixuser.generic.acclogin)></td>
+   <td><call draw_label(user.login)></td>
+</tr>
+
+<if unixuser>
+<tr>
+   <td><call draw_tt_help("","user-ai_quick-ftplogin","")></td>
+   <td><call draw_label(lang.label.ftplogin)></td>
+   <td><call draw_label(unixuser.login)></td>
+</tr>
+
+<tr>
+   <td    nowrap><call draw_tt_help(account.id,"user-ai_pref-ftppassword","")></td>
+   <td><call draw_label(lang.label.ftppsw)></td>
+   <td><call draw_change(config.CLIENT_CP_URL+"?stemplate="+template+"&template_name=unixuser/change.html"+"&rid="+unixuser, lang.label.changepassword)></td>
+</tr>
+    <assign quota = unixuser.getChild("quota")>
+<tr>
+   <td     nowrap><call draw_tt_help(quota,"user-ai_pref-quota","")></td>
+   <td><call draw_label(lang.label.quota)></td>
+   <td><if quota.limitFiles != "unlimited"><call draw_label(toolbox.compose(lang.unixuser.limit_quota, quota.usedMb, quota.limitMb, quota.usedFiles, quota.limitFiles))><else><call draw_label(toolbox.compose(lang.unixuser.unlimited_quota, quota.usedMb, quota.limitMb, quota.usedFiles))></if><call draw_change(config.CLIENT_CP_URL+"?stemplate="+template+"&template_name=unixuser/change_quota.html"+"&rid="+unixuser, lang.label.changequota)></td>
+</tr> 
+    <if account.plan.isResourceAvailable("traffic")>
+	<assign traffic = account.getChild("traffic")>
+	<if traffic><assign res=traffic.reload></if>
+<tr>
+        <td    nowrap><call draw_tt_help(traffic,"user-ai_pref-totaltraffic","")></td>
+        <td><call draw_label(lang.label.sumtraffic)></td>
+        <td><call draw_label(toolbox.compose(lang.unixuser.traffic, traffic.text_traffic, traffic.size))><call draw_change(config.CLIENT_CP_URL+"?template_name=misc/change_traffic.html&rid_parent="+unixuser+"&ftemplate="+template+"&stemplate="+template, lang.label.changetraffic)></td>
+</tr>
+    </if> 
+<tr>
+   <td><call draw_tt_help("","user-ai_pref-group","")></td>
+   <td><call draw_label(lang.label.group)></td>
+   <td><call draw_label(unixuser.group)></td>
+</tr>
+<if SESSION_PLATFORM != "win2k">
+<tr>
+   <td><call draw_tt_help("","user-ai_pref-homedir","")></td>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td><call draw_label(unixuser.dir)></td>
+</tr>
+</if>
+<tr>
+   <td><call draw_tt_help("","user-ai_pref-hostname","")></td>
+   <td><call draw_label(lang.label.hostname)></td>
+   <td><call draw_label(unixuser.host.name)></td>
+</tr>
+</if>
+
+<tr>
+  <td     valign="top" nowrap >
+    <assign domainFound = "">
+    <call draw_domain_tts("domain")>
+    <call draw_domain_tts("nodomain")>
+    <call draw_domain_tts("3ldomain")>
+    <call draw_domain_tts("parked_domain")>
+    <call draw_domain_tts("service_domain")>
+    <if !domainFound>&nbsp;</if>
+  </td>	
+  <td><call draw_label(lang.label.dname)></td>
+  <td nowrap  valign="top" nowrap>
+    <call draw_domains("domain")>
+    <call draw_domains("nodomain")>
+    <call draw_domains("3ldomain")>
+    <call draw_domains("parked_domain")>
+    <call draw_domains("service_domain")>
+    <if !domainFound>&nbsp;</if>
+  </td>
+</tr>
+<if account.plan.isResourceAvailable("antispam") && !config.IRIS_USER>
+  <tr>
+    <td valign="top" width="1%" class="control_align_center" nowrap></td>
+    <td><call draw_label(lang.label.antispam)></td>
+    <td>
+    <assign state=account.preferences.spamcheck>
+    <if state=="off"><assign state=""></if>
+    <call draw_state(state, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_spamcheck.sbm&state=off&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_spamcheck.sbm"+"&state=on"+"&stemplate="+template+"&ftemplate="+template)>&nbsp;<call draw_label(lang.email.include_for_new)></td>
+  </tr> 
+  <tr>
+    <td valign="top" width="1%" class="control_align_center" nowrap></td>
+    <td>&nbsp;</td>
+    <td><call draw_add(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_add_antispams.sbm&range=mailbox&next_template=submit/unixuser/add_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.add_for_all_mailboxes)><call draw_label(lang.email.for_all_mailboxes)>&nbsp;&nbsp;&nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_add_antispams.sbm&range=all&next_template=submit/unixuser/add_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.add_for_all_mailobjects)><call draw_label(lang.email.for_all_mailresources)>
+    <if account.findChild("antispam")>
+      <br><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_delete_antispams.sbm&next_template=submit/email/delete_antispams.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.delete_all)><call draw_label(lang.email.all_antispams)>
+    </if>
+    </td>
+  </tr>
+</if>
+<if account.plan.isResourceAvailable("antivirus") && !config.IRIS_USER>
+  <tr>
+    <td valign="top" width="1%" class="control_align_center" nowrap></td>
+    <td><call draw_label(lang.label.antivirus)></td>
+    <td>
+    <assign state=account.preferences.viruscheck>
+    <if state=="off"><assign state=""></if>
+    <call draw_state(state, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_viruscheck.sbm&state=off&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?template_name=submit/unixuser/turn_viruscheck.sbm&state=on&stemplate="+template+"&ftemplate="+template)>&nbsp;<call draw_label(lang.email.include_for_new)></td>
+  </tr>
+  <tr>
+    <td valign="top" width="1%" class="control_align_center" nowrap></td>
+    <td>&nbsp;</td>
+    <td><call draw_add(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_add_antiviruses.sbm&range=mailbox&next_template=submit/unixuser/add_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antivirus.add_for_all_mailboxes)><call draw_label(lang.email.for_all_mailboxes)>&nbsp;&nbsp;&nbsp;<call draw_add(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_add_antiviruses.sbm&range=all&next_template=submit/unixuser/add_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antispam.add_for_all_mailobjects)><call draw_label(lang.email.for_all_mailresources)>
+    <if account.findChild("antivirus")>
+      <br><call draw_delete(config.CLIENT_CP_URL+"?template_name=submit/unixuser/estimate_delete_antiviruses.sbm&next_template=submit/email/delete_antiviruses.sbm&stemplate="+template+"&ftemplate="+template, lang.email.antivirus.delete_all)><call draw_label(lang.email.all_antiviruses)>
+    </if>
+    </td>
+  </tr>
+</if>
+
+
+<call draw_table_footer()>
+<!--  END control/unixuser/generic.html  -->

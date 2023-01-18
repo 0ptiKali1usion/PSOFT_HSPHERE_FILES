@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/email/mod_mlist_save.sbm  -->
+<assign mlist = account.getResource(request.uid)>
+<list params as param>
+  <if toolbox.consists(param.name, "param")=="1">
+    <assign flag = flag + param.value>
+  </if>
+</list>
+<assign result=yafv.checkall(
+    yafv.common.s_email.vEmailOpt(lang.email.owner_email, request.owner),
+    yafv.common.s_email.vListFlag(lang.email.allowed_flag, flag),
+    yafv.common.s_email.vStringSafeOptional(lang.label.descr, request.description))>
+<if result.status=="OK">
+   <if toolbox.consists(flag, "A")=="1">
+     <assign archive_web_access = "">
+   <else>
+     <assign archive_web_access = request.archive_web_access>
+   </if>
+   <assign result = mlist.update(flag, request.owner, archive_web_access, request.description)>
+   <if result.status == "OK">
+      <assign success="1">
+      <assign res = session.addMessage(lang.msg.configuration_saved)>
+   <else>
+      <assign res = session.addMessage(lang.msg.configuration_failed_save)>
+      <assign res = session.addMessage(result.msg)>
+   </if>
+<else>
+   <list result.msgs as msg><assign res = session.addMessage(msg)></list>
+</if>
+
+<if success>
+   <assign type = "mailing_list">	
+   <include request.stemplate>
+<else>
+   <include request.ftemplate>
+</if>
+<!--  END ./submit/email/mod_mlist_save.sbm  -->

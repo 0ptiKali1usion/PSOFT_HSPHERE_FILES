@@ -1,0 +1,18 @@
+<!-- BEGIN ./uploader.html  -->
+<HTML>
+<head>
+<SCRIPT LANGUAGE="JavaScript"><!--
+   function Retval() {
+     <list retvals as retval>
+	opener.addOption( "${retval.value}", "${retval.value}".split('|')[0]);
+     </list>
+     window.close();
+     return true;
+   }
+//--></SCRIPT>
+</head>
+<body onLoad="Retval();">
+<a href="#"  onClick="Retval();">Wait please ...</a>
+</body>
+</HTML>
+<!--  END ./uploader.html  -->

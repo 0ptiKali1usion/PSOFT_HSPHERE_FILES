@@ -1,0 +1,7 @@
+<center> spamdchildren </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>Specifies the number of forked spamd child processes.
+<br>Default: 10.
+<br>We recommend to increase it for servers with large number of smtpd connections.
+<br>

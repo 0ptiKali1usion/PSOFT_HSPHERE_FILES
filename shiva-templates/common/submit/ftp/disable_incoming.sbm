@@ -1,0 +1,13 @@
+<!-- BEGIN ./ftp/disable_incoming.sbm  -->
+<assign result=account.getResource(request.did).update("0")>
+<if result.status=="OK">
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_disabled, lang.label.ftp_anonymous_incoming, ""))>
+  <include request.stemplate>
+<else>
+  <assign res = session.addMessage(toolbox.compose(
+    lang.msg.name_res_failed_disable, lang.label.ftp_anonymous_incoming, ""))>
+  <assign res = session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+<!--  END ./ftp/disable_incoming.sbm  -->

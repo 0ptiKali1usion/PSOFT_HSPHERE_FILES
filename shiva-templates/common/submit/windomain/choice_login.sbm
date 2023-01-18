@@ -1,0 +1,28 @@
+<!-- BEGIN ./submit/windomain/choice_login.sbm -->
+<html>
+<head>
+</head>
+<body bgcolor="${design.color("bgcolor")}">
+
+<assign login=account.getResource(request.mssql_login)>
+<assign hosting=account.getResource(request.rid)>
+<assign unixuser=account.getChild("unixuser")>
+<assign mssql=account.getChild("MSSQL")>
+
+<assign url="http://" + hosting.parent.name+"/MSSQL/app/connect.aspx">
+<assign hostip = toolbox.int2ext(mssql.host.ip)>
+<form action="${url}" method="post" name="mssqllogin" accept-charset="UTF-8">
+
+<input type="hidden" name="DataSource" value="${hostip}">
+${toolbox.int2ext(host.ip)}
+<input type="hidden" name="UID" value="${login.name}">
+<input type="hidden" name="PWD" value="${login.password}">
+</form>
+
+<script language="javascript">
+document.mssqllogin.submit();
+</script>
+
+</body>
+</html>
+<!-- END ./submit/windomain/choice_login.sbm --> 

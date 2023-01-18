@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/CyberCash.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "KEY", request.key, "LOGIN", request.login, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.CyberCash", "TEMPLATE", "admin/merchant/CyberCash.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "KEY", request.key, "LOGIN", request.login, "PASSWORD", request.password, "CLASS_NAME", "psoft.epayment.CyberCash", "TEMPLATE", "admin/merchant/CyberCash.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/CyberCash.sbm -->

@@ -1,0 +1,16 @@
+<tr>
+   <td ><call draw_label(lang.label.username)></td>
+   <td ><input type="text" name="login" value="${login}" check="vUsername" label="${lang.label.username}"></td>
+   <assign excludeFields=excludeFields+"login;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.label.password)></td>
+   <td ><input type="password" name="password" check="vPassword1(password,login)" label="${lang.label.password}"></td>
+   <assign excludeFields=excludeFields+"password;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.label.confirm_psw)></td>
+   <td ><input type="password" name="password2" check="vPassword2(password,this)" label="${lang.label.confirm_psw}"></td>
+   <assign excludeFields=excludeFields+"password2;">
+</tr>
+

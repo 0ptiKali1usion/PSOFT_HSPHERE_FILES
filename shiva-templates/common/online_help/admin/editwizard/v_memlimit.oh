@@ -1,0 +1,10 @@
+<center>VPS memory limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	Memory Limit is the maximum total memory usage for processes running and libraries loaded on a VPS server.<br>
+<br>
+ <i>Memory Limit</i> depends on tasks running on a VPS server.<br>
+ <i>Memory Limit</i> cannot be exceeded. No more memory will be allocated if VPS total memory usage reaches <i>Memory Limit</i>.
+VPS server total memory usage = resident/virtual memory usage + system SWAP<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* Minimal VPS installation requires ~15-20Mb allocated memory.</i>

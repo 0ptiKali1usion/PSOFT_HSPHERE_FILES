@@ -1,0 +1,47 @@
+<!-- BEGIN ./submit/admin/settings/info.sbm -->
+<assign result=yafv.checkall(
+  yafv.common.s_admin.vSinglename(lang.bci.ownerfname, request.ofname),
+  yafv.common.s_admin.vSinglename(lang.bci.ownerlname, request.olname),
+  yafv.common.s_admin.vOrganization(lang.bci.company, request.name),
+  yafv.common.s_admin.vAddress(lang.bci.adr1, request.address),
+  yafv.common.s_admin.vCity(lang.bci.city, request.city),
+  yafv.common.s_admin.vStateOther(lang.label.state_other, request.state2),
+  yafv.common.s_admin.vCountry(lang.bci.country, request.country),
+  yafv.common.s_admin.vPostal_Code(lang.bci.pcode, request.zip),
+  yafv.common.s_admin.vEmail(lang.bci.email, request.email),
+  yafv.common.s_admin.vDNSEmail(lang.admin.info.hostmaster, request.hostmaster),
+  yafv.common.s_admin.vPhoneCountry(lang.bci.phone, request.phone, request.country),
+  yafv.common.s_admin.vFaxCountry(lang.bci.phone, request.fax, request.country))>
+<if result.status=="OK">
+  <assign admin = account.getChild("admin")>
+  <call save("ofname")>
+  <call save("olname")>
+  <call save("name")>
+  <call save("address")>
+  <call save("address2")>
+  <call save("address3")>
+  <call save("city")>
+  <call save("state")>
+  <call save("state2")>
+  <call save("country")>
+  <call save("zip")>
+  <call save("phone")>
+  <call save("fax")>
+  <call save("email")>
+  <call save("hostmaster")>
+  <call save("website")>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+    <assign failure="1">
+</if>
+<if !failure>
+  <include request.stemplate>
+<else>
+  <include request.ftemplate>
+</if>
+<compress>
+<function save(name)>
+    <assign res = admin.setSettingsValue(name, request[name])>
+</function>
+</compress>
+<!-- END ./submit/admin/settings/info.sbm -->

@@ -1,0 +1,10 @@
+<!-- BEGIN ./eeman/tp_delete.sbm  -->
+<assign eeman = account.getChild("eeman")>
+<assign result=eeman.deleteTransferProcess(request.tp_id)> 
+<if result.status=="OK">
+<include request.stemplate>
+<else>
+<assign res=session.addMessage(result.msg)>
+<include request.ftemplate>
+</if>
+<!--  END ./eeman/tp_delete.sbm  -->

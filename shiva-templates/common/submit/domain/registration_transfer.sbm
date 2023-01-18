@@ -1,0 +1,17 @@
+<!-- BEGIN ./domain/registration_transfer.sbm  -->
+<assign result=yafv.common.s_domain.vTransferDomainName(lang.label.domain.name,request.domain_name)>
+
+<if result.status=="OK">
+    <assign success="1">
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+
+<if success>
+    <assign name = request.domain_name>
+    <include "domain/domain_lookup.html">
+<else>
+    <assign vdomain_name=toolbox.html_encode(request.domain_name)>
+    <include request.ftemplate>
+</if>
+<!--  END ./domain/registration_transfer.sbm  -->

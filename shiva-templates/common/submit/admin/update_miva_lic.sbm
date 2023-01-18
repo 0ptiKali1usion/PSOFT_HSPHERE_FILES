@@ -1,0 +1,12 @@
+<assign lic_man = account.getChild("miva_lic_manager")>
+<if lic_man.getLicenseState(request.old_lic)=="0">
+<assign result = lic_man.updateLicenseNumber(request.old_lic,request.miva_lic)>
+<if result.status=="OK">
+  <assign res=session.addMessage(toolbox.compose(
+    lang.msg.name_res_updated,lang.license,""))>
+  <include request.stemplate>
+<else>
+  <assign res=session.addMessage(result.msg)>
+  <include request.ftemplate>
+</if>
+</if>

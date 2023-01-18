@@ -1,0 +1,27 @@
+<!-- BEGIN ./tt/queue_admins.html  -->
+<assign ttadmin=account.getChild("ttadmin")>
+<assign qid=request.quid>
+<assign que=ttadmin.getQueue(qid)>
+<call draw_table_header("2", lang.queue.subscr.header + toolbox.html_encode(que.name))>
+<form name="admin_lst" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/queue_admins.sbm">
+<input type="hidden" name="quid" value="${qid}">
+<list ttadmin.ttadmin_list as admid>
+<assign admname = ttadmin.NameById(admid)>
+<tr><td height="30">
+<call draw_label(admname)>
+</td>
+<td>
+ <if ttadmin.isSubscribed(qid, admid) != "0"><assign v_sel ="CHECKED"><else><assign v_sel = ""></if>
+ <input type="checkbox" name="subscr" onClick="checkForm(this.form)" value="${admid}"} ${v_sel}>
+</td>
+</tr></list>
+<tr>
+  <td colspan="2" class="control_align_center"><input type="submit" value=${lang.button.apply}></td>
+</tr>
+</form>
+<call draw_table_footer()>
+
+
+
+<!--  END ./tt/queue_admins.html  -->

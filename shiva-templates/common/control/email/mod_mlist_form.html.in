@@ -1,0 +1,178 @@
+<!-- BEGIN ./control/email/mod_mlist_form.html  -->
+<call draw_tooltip()>
+<yafv s_email>
+<assign mlist = account.getResource(request.uid)>
+<assign stat = mlist.stat()>
+<compress>
+<if stat.error != "ERROR"><assign flag = stat.flag></if>
+<function isChecked(option)>
+   <if toolbox.consists(flag, option)=="1">CHECKED</if>
+</function>
+</compress>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_mod_mlist" check! accept-charset="UTF-8">
+
+<call draw_table_header("4", toolbox.compose(lang.email.modmlistform.edit,mlist.fullemail))>
+<tr>
+  <td colspan=2 width="50%"><call draw_label(lang.email.modmlistform.header)></td>
+  <td colspan=2>
+    <input type="hidden" name="template_name" value="submit/email/mod_mlist_save.sbm">
+    <input type="hidden" name="rid" value="${request.rid}">
+    <input type="hidden" name="uid" value="${request.uid}">
+    <input type="hidden" name="md_id" value="${request.md_id}">
+    <input type="hidden" name="mo_id" value="${mlist}">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="sc_page" value="${request.sc_page}">
+    <input type="text" size="30" name="owner" value="${stat.owner}" label="${lang.email.modmlistform.header}" check="vEmailOpt">
+</td>
+</tr>
+
+<if !config.IRIS_USER>
+  <if !vdescription>
+    <assign vdescription=mlist.description>
+  </if>
+  <tr>
+    <td colspan=2 width="50%"><call draw_label(lang.label.descr)></td>
+    <td colspan=2><input type="text" size="50" name="description" value="${vdescription}" check="vStringSafeOptional"></td>
+  </tr>
+  <assign exist_archived=mlist.existArchive()>
+  <assign mail_domain=account.getResource(request.md_id)>
+    
+    <if mlist.archive_web_access>
+      <assign val_archive_web_access="CHECKED">
+    </if>
+    <if val_archive_web_access || exist_archived=="1">
+      <tr>
+      <td colspan=4>	
+      <input type="checkbox" name="archive_web_access" value="1" ${val_archive_web_access}>
+	<if exist_archived=="1"><call draw_label(lang.email.modmlistform.archive_web2)>
+	<else><call draw_label(lang.email.modmlistform.archive_web)></if>
+      <if val_archive_web_access>	
+        &nbsp;&nbsp;
+        <call draw_label(lang.email.modmlistform.archive)>&nbsp;<call draw_preview("http://mail."+mail_domain.name+"/cgi-bin/surfml?ml="+mlist.email,lang.email.modmlistform.archive)>
+      </if>
+      </td>
+      </tr>	
+    </if>
+</if>
+<tr>
+   <td><input type=radio name=param1 value="a" <call isChecked("a")>></td>
+   <td><call draw_label(lang.email.modmlistform.a_yes)>
+       <if !config.IRIS_USER && (!val_archive_web_access && exist_archived=="0")>
+	  <if mlist.archive_web_access>
+	    <assign val_archive_web_access="CHECKED">
+	  </if>
+	  &nbsp;&nbsp;<input type="checkbox" name="archive_web_access" value="1" ${val_archive_web_access}><call draw_label(lang.email.modmlistform.archive_web)>
+       </if>
+   </td>
+   <td><input type=radio name=param1 value="A" <call isChecked("A")>></td>
+   <td><call draw_label(lang.email.modmlistform.a_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param2 value="b" <call isChecked("b")>></td>
+   <td><call draw_label(lang.email.modmlistform.b_yes)></td>
+   <td><input type=radio name=param2 value="B" <call isChecked("B")>></td>
+   <td><call draw_label(lang.email.modmlistform.b_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param3 value="d" <call isChecked("d")>></td>
+   <td><call draw_label(lang.email.modmlistform.d_yes)></td>
+   <td><input type=radio name=param3 value="D" <call isChecked("D")>></td>
+   <td><call draw_label(lang.email.modmlistform.d_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param4 value="f" <call isChecked("f")>></td>
+   <td><call draw_label(lang.email.modmlistform.f_yes)></td>
+   <td><input type=radio name=param4 value="F" <call isChecked("F")>></td>
+   <td><call draw_label(lang.email.modmlistform.f_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param5 value="g" <call isChecked("g")>></td>
+   <td><call draw_label(lang.email.modmlistform.g_yes)></td>
+   <td><input type=radio name=param5 value="G" <call isChecked("G")>></td>
+   <td><call draw_label(lang.email.modmlistform.g_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param6 value="h" <call isChecked("h")>></td>
+   <td><call draw_label(lang.email.modmlistform.h_yes)></td>
+   <td><input type=radio name=param6 value="H" <call isChecked("H")>></td>
+   <td><call draw_label(lang.email.modmlistform.h_no)></td>
+</tr>
+<!--tr>
+   <td><input type=radio name=param7 value="i" <call isChecked("i")>></td>
+   <td><call draw_label(lang.email.modmlistform.i_yes)></td>
+   <td><input type=radio name=param7 value="I" <call isChecked("I")>></td>
+   <td><call draw_label(lang.email.modmlistform.i_no)></td>
+</tr-->
+<tr>
+   <td><input type=radio name=param8 value="j" <call isChecked("j")>></td>
+   <td><call draw_label(lang.email.modmlistform.j_yes)></td>
+   <td><input type=radio name=param8 value="J" <call isChecked("J")>></td>
+   <td><call draw_label(lang.email.modmlistform.j_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param9 value="l" <call isChecked("l")>></td>
+   <td><call draw_label(lang.email.modmlistform.l_yes)></td>
+   <td><input type=radio name=param9 value="L" <call isChecked("L")>></td>
+   <td><call draw_label(lang.email.modmlistform.l_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param10 value="m" <call isChecked("m")>></td>
+   <td><call draw_label(lang.email.modmlistform.m_yes)></td>
+   <td><input type=radio name=param10 value="M" <call isChecked("M")>></td>
+   <td><call draw_label(lang.email.modmlistform.m_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param18 value="n" <call isChecked("n")>></td>
+   <td><call draw_label(lang.email.modmlistform.n_yes)></td>
+   <td><input type=radio name=param18 value="N" <call isChecked("N")>></td>
+   <td><call draw_label(lang.email.modmlistform.n_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param11 value="o" <call isChecked("o")>></td>
+   <td><call draw_label(lang.email.modmlistform.o_yes)></td>
+   <td><input type=radio name=param11 value="O" <call isChecked("O")>></td>
+   <td><call draw_label(lang.email.modmlistform.o_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param12 value="p" <call isChecked("p")>></td>
+   <td><call draw_label(lang.email.modmlistform.p_yes)></td>
+   <td><input type=radio name=param12 value="P" <call isChecked("P")>></td>
+   <td><call draw_label(lang.email.modmlistform.p_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param13 value="q" <call isChecked("q")>></td>
+   <td><call draw_label(lang.email.modmlistform.q_yes)></td>
+   <td><input type=radio name=param13 value="Q" <call isChecked("Q")>></td>
+   <td><call draw_label(lang.email.modmlistform.q_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param14 value="r" <call isChecked("r")>></td>
+   <td><call draw_label(lang.email.modmlistform.r_yes)></td>
+   <td><input type=radio name=param14 value="R" <call isChecked("R")>></td>
+   <td><call draw_label(lang.email.modmlistform.r_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param15 value="s" <call isChecked("s")>></td>
+   <td><call draw_label(lang.email.modmlistform.s_yes)></td>
+   <td><input type=radio name=param15 value="S" <call isChecked("S")>></td>
+   <td><call draw_label(lang.email.modmlistform.s_no)></td>
+</tr>
+<tr>
+   <td><input type=radio name=param16 value="u" <call isChecked("u")>></td>
+   <td><call draw_label(lang.email.modmlistform.u_yes)></td>
+   <td><input type=radio name=param16 value="U" <call isChecked("U")>></td>
+   <td><call draw_label(lang.email.modmlistform.u_no)></td>
+</tr>
+<tr>
+  <td colspan=4 class="control_align_center">
+    <if mlist.trailer><assign vv = "t"><else><assign vv = "T"></if>
+    <input type=hidden name=param17 value="${vv}">
+    <input type="submit" value="${lang.button.submit}">
+  </td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!-- END ./control/email/mod_mlist_form.html  -->

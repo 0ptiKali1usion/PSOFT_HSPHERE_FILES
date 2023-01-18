@@ -1,0 +1,7 @@
+<!-- BEGIN submit/signup/order_info_extra.sbm  -->
+<if request.back == "">
+  <include "signup/end_osrs.html">
+<else>
+  <include "signup/order_info_extra.html">
+</if>
+<!-- END submit/signup/order_info_extra.sbm  -->

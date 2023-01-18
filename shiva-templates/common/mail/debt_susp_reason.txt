@@ -1,0 +1,3 @@
+As of ${current_date}, your account has an outstanding balance of ${toolbox.displayBalance(bill.balance)}.
+Please remit payment to have your account resumed.  If payment is not remitted
+in a timely manner your account will be permanently deleted on ${delete_date}.

@@ -1,0 +1,20 @@
+<assign gmainAdmin=account.getChild("generalMaintainAdmin")>
+<list request.check_admin as admin>
+   <assign result=gmainAdmin.removeAdmins(request.contract_id,admin)>
+</list>
+<list request.uncheck_admin as admin>
+   <assign result=gmainAdmin.setAdmins(request.contract_id,admin)>
+</list>
+<list request.check_maintainer as maintainer>
+   <assign result=gmainAdmin.removeMaintainers(request.contract_id,maintainer)>
+</list>
+<list request.uncheck_maintainer as maintainer>
+   <assign result=gmainAdmin.setMaintainers(request.contract_id,maintainer)>
+</list>
+<include request.template>
+<if result.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(lang.msg.maintain_setting_error)>
+ <include request.ftemplate>
+</if> 

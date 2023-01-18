@@ -1,0 +1,47 @@
+<!-- BEGIN ./control/tt/tt_mass_action_gr.html  -->
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+<call draw_tooltip()>
+
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_action" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/mass_action_gr.sbm">
+<input type="hidden" name="stemplate" value="tt/new_tt_admin.html">
+<input type="hidden" name="ttid" value="${request.ttid}">
+
+
+
+
+
+<call draw_table_header("2", lang.tt.adminmass.title)>
+
+
+<tr>
+<td><call draw_label(lang.tt.adminmass.selected)></td>
+<td><call draw_label(request.size)></td>
+</tr>
+<tr>
+<td><call draw_label(lang.label.action)></td>
+<td>
+<select name="maction">
+<option value="close">${lang.tt.admin.close}
+<option value="delete">${lang.label.del}
+<option value="assign">${lang.tt.adminedit.assign}
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.tt.adminmass.assignto)></td><td>
+<select name="admin_id">
+  <list ttadmin.admin_list as adm><option value="${adm.id}">${adm.name}</list>
+</select>
+</td></tr>
+
+<tr><td colspan="2" class="control_align_center"><input type="submit" value="${lang.button.submit}"></td></tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./control/tt/tt_mass_action_gr.html  -->

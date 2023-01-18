@@ -1,0 +1,10 @@
+<!-- BEGIN ./common/submit/kb/importkb.sbm -->
+<assign result = account.getChild("ttadmin").kb_manager.import(request.kb_cid)>
+<if result>
+	<assign res=session.addMessage(result.msg)>
+        <include request.stemplate>
+<else>
+        <assign res="Success importing KnowledgeBase"+result.name>
+        <include request.stemplate>
+</if>
+<!-- END ./common/submit/kb/importkb.sbm -->

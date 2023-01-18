@@ -1,0 +1,10 @@
+<center>VPS CPU hard limit</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+	CPU Hard Limit is the maximum CPU usage (of all host server CPUs) for a VPS server.<br>
+<br>
+<i>CPU Hard Limit</i> cannot be exceeded. When usage reaches <i>CPU Hard Limit</i>, new task will be waiting for free CPU resources.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* CPU Hard Limit must be less than 100%. </i>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
+	<i>* CPU Hard Limit depends on VPS task priority. </i>	

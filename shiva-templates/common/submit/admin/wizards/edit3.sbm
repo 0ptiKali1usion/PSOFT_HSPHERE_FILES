@@ -1,0 +1,114 @@
+<!-- BEGIN ./submit/admin/wizards/edit3.sbm -->
+<assign admin = account.getChild("admin")>
+<assign plan = admin.getPlan(request.plan_id)>
+<assign oldValues = toolbox.new_hash>
+<assign changer=admin.getPlanChanger(plan.id)>
+<assign wizard=changer.getWizard()>
+
+<assign failure="">
+<assign ending="_"+request.period_id>
+
+<compress>
+<list wizard.categories.category as cat>
+<call listCat(cat)>
+</list>
+
+<function listCat(cat)>
+<list cat["*"] as r>
+<call checkElement(r)>
+</list>
+</function>
+</compress>
+
+<function checkElement(r)>
+<switch r.node_name>
+<case "resource">
+  <if ((request["i_"+r("name")] || r("required")=="1") && r("noprice")!="1" && toolbox.getResourcePriceType(toolbox.getTypeId(r("name"))))>
+       <call vServicePrice(r)>
+  </if>
+  <break>
+<case "LogicalGroup">
+<!-- logical group - do nothing -->
+  <break>
+<case "ifresource">
+  <if !admin.isResourceDisabled(r("name")) && request["i_"+r("name")]>
+    <call listCat(r)>
+  </if>
+  <break>
+<case "ifgroup">
+  <if admin.thereAreAvailableGroups(r("name"))>
+    <call listCat(r)>
+  </if>
+  <break>
+</switch>
+</function>
+
+
+<if !failure>
+    <if request.periods == toolbox.add(request.period_id, "1")>
+       <include "submit/admin/wizards/edit_final.sbm">
+    <else>
+       <assign period_id=request.period_id>
+       <include request.stemplate>
+    </if>
+<else>
+    <assign period_id=toolbox.sub(request.period_id, "1")>
+    <include request.ftemplate>
+</if>
+
+<function vServicePrice(r_node)>
+  <assign tag = r_node("name")>
+  <assign check_free_opt_val = r_node("check_free_opt")>
+  <if request["i_"+tag] || ((r("required") == "1")
+	&& (!isReseller || (r("adminonly") != "1")) && (r("noprice") != "1")
+	&& toolbox.getResourcePriceType(toolbox.getTypeId(tag)))>
+     <assign priceType = toolbox.getResourcePriceType(toolbox.getTypeId(tag))>
+     <assign name = toolbox.getResourceDescription(toolbox.getTypeId(tag))>
+     <if toolbox.consists(priceType,"F")=="1" || toolbox.consists(priceType,"M")=="1">
+	<assign free_param_name = "f_" + tag + ending>
+	<if check_free_opt_val>
+	  <assign res = yafv.common.s_wizard[check_free_opt_val](
+		toolbox.compose(lang.msg.res_price_free,name), request[free_param_name])>
+	<else>
+	  <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_free,name), request[free_param_name])>
+	</if>
+        <assign r = oldValues.put(free_param_name, toolbox.html_encode(request[free_param_name]))>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"S")=="1">
+        <assign r = oldValues.put("s_"+tag+ending,toolbox.html_encode(request["s_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["s_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"R")=="1">
+        <assign r = oldValues.put("m_"+tag+ending,toolbox.html_encode(request["m_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["m_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+
+     <if toolbox.consists(priceType,"U")=="1">
+        <assign r = oldValues.put("u_"+tag+ending,toolbox.html_encode(request["u_"+tag+ending]))>
+        <assign res = yafv.common.s_wizard.vPriceOpt(
+		toolbox.compose(lang.msg.res_price_setup_fee,name),request["u_"+tag+ending])>
+        <if res.status != "OK">
+           <assign failure="1">
+           <list res.msgs as msg><assign r=session.addMessage(msg)></list>
+        </if>
+     </if>
+  </if>
+</function>
+<!-- END ./submit/admin/wizards/edit3.sbm -->

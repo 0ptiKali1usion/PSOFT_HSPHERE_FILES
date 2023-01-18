@@ -1,0 +1,6 @@
+<center> webAppIsolatedLevel </center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br>web applications isolated level; can be one of the folowing values : 0 = inproc 1 = outproc 2 = pooled
+<br>
+

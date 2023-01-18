@@ -1,0 +1,56 @@
+<!-- BEGIN control/eeman/assign_plan_to_allocserver.html  -->
+<assign eeman = account.getChild("eeman")>
+<assign admin=account.getChild("admin")>
+
+<assign pserver = eeman.getPserver(request.ps_id)>
+<assign aps = obj.as_manager.getAllocatedPServer(request.pserver_id)>
+<if failure>
+  <assign v_plan_id = request.plan_id>
+<else>
+  <if aps>
+    <assign v_plan_id = aps.plan_id>
+  </if>
+</if>
+
+<call draw_tooltip()>
+<call draw_table_header("3", lang.eeman.allocservers.assignplan)>
+<form name="f_allocservers" action="${config.CLIENT_CP_URL}" method="POST" check! accept-charset="UTF-8">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="hidden" name="template_name" value="submit/eeman/assign_plan_to_allocserver.sbm">
+
+<compress>
+<list params as param>
+    <if param.name != "template_name" && param.name != "next_template" && param.name != "sc_page" && param.name != "ftemplate">
+        <input type="hidden" name="${param.name}" value="${param.value}">
+    </if>
+</list>
+</compress>
+
+
+<tr>
+    <td class="control_header"><call draw_header(lang.eeman.allocservers.pserver_id)></td>
+    <td class="control_header"><call draw_header(lang.eeman.allocservers.pserver_name)></td>
+    <td class="control_header"><call draw_header(lang.eeman.allocservers.plan_name)></td>
+</tr>
+<tr>
+    <td><call draw_label(pserver.id)></td>
+    <td><call draw_label(pserver.name)></td>
+    <td>
+        <select name="plan_id" size="1">
+            <list admin.plans as plan>
+                <if !plan.deleted && plan.values["_CREATED_BY_"]=="6" && plan.areResourcesAvailable("allocated_server")>
+                    <if v_plan_id == plan.id><assign vselected="SELECTED"><else><assign vselected=""</if>
+                        <option value="${plan.id}" ${vselected}>${plan.description}</option>
+                </if>
+            </list>
+        </select>
+    </td>
+</tr>
+<tr>
+    <td class="control_align_center" colspan="3">
+      <input type="submit" value="${lang.button.submit}">
+    </td>
+</tr>
+</form>
+<call draw_table_footer()>
+<!--  END control/eeman/assign_plan_to_allocserver.html  -->

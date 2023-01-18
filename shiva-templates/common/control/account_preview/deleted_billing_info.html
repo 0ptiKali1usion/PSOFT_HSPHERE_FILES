@@ -1,0 +1,55 @@
+<!-- START ./common/control/account_preview/delited_billing_info.html -->
+<assign billing_charged_color = "#FFD800">
+<assign billing_cancelled_color = "#FE6C00">
+<assign billing_light_strip = "#D6D1B6">
+<assign billing_dark_strip = "#B6B196">
+<assign billing_text_color = "#000000">
+<assign color = billing_light_strip>
+
+<assign billman = account.getChild("billman")>
+<assign billviewer = billman.getBillviewer(accountId)>
+<if billviewer>
+<if request.bill_id>
+<assign bill = billviewer.view(request.bill_id)>
+<else>
+<assign bill = billviewer.view()>
+</if>
+
+<call draw_table_header("3", "")>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<tr>
+<td><call draw_label_bold(lang.accprev.bill.preview.choose)></td>
+<td>
+<input name="template_name" type="hidden" value="account_preview/view_deleted.html">
+<input name="display_template" type="hidden" value="deleted_billing_info.html">
+<!--<input name="aid" type="hidden" value="${account.id.id}">-->
+<input name="aid" type="hidden" value="${accountId}">
+<select name="bill_id">
+<list billviewer.list() as b>
+<if b.to>
+<assign billdesc=b.from("short")+" - "+b.to("short")>
+<else>
+<assign billdesc=b.from("short")+" - "+lang.billview.list.opened>
+</if>
+
+<option value="${b.id}" <if b.id == bill.id>SELECTED</if>>${billdesc}
+</list>
+</select>
+</td>
+<td class="control_align_center"><input type="submit" value="${lang.button.go}"></td>
+</tr>
+</form>
+<call draw_table_footer()>
+
+<br>
+<assign taxes = bill.taxes>
+<assign admin_preview="1">
+<if taxes.size && taxes.size != "0">
+<include "/control/billview/show_deleted_taxes.html">
+<else>
+<include "control/billview/show_deleted_no_taxes.html">
+</if>
+
+</if>
+
+<!-- END ./common/control/account_preview/deleted_billing_info.html -->

@@ -1,0 +1,9 @@
+<center>SPF preferences</center>
+<hr>
+&nbsp;&nbsp;&nbsp;&nbsp;
+If SPF mechanism results in a hit, its prefix value is used. The default prefix value is 'pass".<br>
+<br>
+<b>fail</b>: the mail is a forgery, and you can reject it with confidence.<br>
+<b>softfail</b>: the message could be a forgery.<br>
+<b>pass</b>: the mail is not forged, but that doesn't mean it's legitimate.<br>
+<b>neutral</b>: The domain owner has explicitly stated that doesn't know whether the IP is authorized or not.

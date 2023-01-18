@@ -1,0 +1,104 @@
+<!-- BEGIN ./control/admin/ds/ds_manage_filter.html  -->
+<assign admin=account.getChild("admin")>
+<assign ds_manager=account.getChild("ds_manager")>
+
+<call draw_tooltip()>
+<if admin>
+<include "control/misc/mini_calendar.html">
+<form name="f_search" action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+
+<call draw_table_header("2", lang.admin.search_ds_header)>
+<tr>
+<td><call draw_label(lang.admin.search_ds_status)></td>
+<td>
+<select name="sc_status" size="1">
+  <option value="">${lang.label.any}</option>
+  <list ds_manager.all_ds_states as state>
+  <option value="${state}">${lang.admin.ds.status[state]}</option>
+  </list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_template)></td>
+<td>
+<assign dstemplates=ds_manager.templates>
+<select name="sc_template" size="1">
+<option value="">${lang.label.any}
+<list dstemplates as dst>
+<option value="${dst.id}">${dst.name}</option>
+</list>
+</select>
+</td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_os)></td>
+<td><input type="text" name="sc_os"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_cpu)></td>
+<td><input type="text" name="sc_cpu"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_ip)></td>
+<td><input type="text" name="sc_ip"></td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_int_id)></td>
+<td><input type="text" name="sc_int_id"></td>
+</tr>
+<tr>
+ <td><call draw_label(lang.admin.search_ds_created)></td>
+ <td  nowrap>
+ <call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_r_from" size="10" value="01/31/2000">&nbsp;<call draw_calendar("f_search","sc_r_from","")>
+ &nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_r_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_r_to","")>
+ </td>
+</tr>
+<tr>
+ <td><call draw_label(lang.admin.search_ds_taken)></td>
+ <td nowrap>
+   <call draw_label(lang.label.from)>&nbsp;<input type="text" name="sc_u_from" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_u_from","")>
+   &nbsp;<call draw_label(lang.label.to)>&nbsp;<input type="text" name="sc_u_to" size="10" value="">&nbsp;<call draw_calendar("f_search","sc_u_to","")>
+ </td>
+</tr>
+<tr>
+<td><call draw_label(lang.admin.search_ds_user)></td>
+<td><input type="text" name="sc_username"></td>
+</tr>
+
+<assign netswitches = ds_manager.netSwitchList()>
+<if netswitches && (netswitches.size != "0")>
+  <assign v_ns_id = request.sc_ns_id>
+  <tr>
+  <td><call draw_label(lang.admin.ds.netswitch)></td>
+  <td>
+    <select name="sc_ns_id">
+      <if !v_ns_id><assign vselected="SELECTED"><else><assign vselected=""></if>
+      <option value="" ${vselected}>${lang.label.any}</option>
+      <list netswitches as ns>
+        <if ns.reseller_id == reseller_id>
+          <if v_ns_id == ns.id><assign vselected="SELECTED"><else><assign vselected=""></if>
+          <option value="${ns.id}" ${vselected}>${ns.description} (${ns.device})</option>
+        </if>
+      </list>
+    </select>
+  </td>
+  </tr>
+</if>
+
+<tr><td><call draw_label(lang.label.entries)></td>
+<td>
+<call searchStepBox("")>
+</td>
+</tr>
+
+<tr><td  colspan="2" class="control_align_center">
+  <input type="hidden" name="template_name" value="admin/ds/manage.html">
+  <input type="hidden" name="ftemplate" value="${template}">
+  <input type="hidden" name="stemplate" value="${template}">
+  <input type="submit" value="${lang.button.search}">
+</td></tr>
+<call draw_table_footer()>
+</form>
+</if>
+<!--  END ./control/admin/ds/ds_manage_filter.html  -->

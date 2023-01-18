@@ -1,0 +1,19 @@
+<assign result=yafv.common.s_admin.vDayPeriod(lang.label.trial_period, request.dayperiod)>
+<if result.status=="OK">
+   <assign admin = account.getChild("admin")> 
+   <assign plan = admin.getPlan(request.plan_id)>
+   <assign result = plan.putValue("_TRIAL_PERIOD", request.dayperiod)>
+    <if result.status=="OK">
+       <assign success="1"> 
+    <else>
+       <assign res=session.addMessage(result.msg)>
+    </if>
+<else>
+    <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+</if>
+<if success>
+    <include request.stemplate>
+<else>
+    <assign vdayperiod=toolbox.html_encode(request.dayperiod)>
+    <include request.ftemplate>
+</if>

@@ -1,0 +1,39 @@
+<!-- BEGIN ./ftp/ftp_vhost_add_form.html.in  -->
+<assign domain = account.getResource(request.rid)>
+<yafv s_ftp>
+<call draw_tooltip()>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_ftp_vhost_add" check! accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/ftp/ftp_vhost_add_save.sbm">
+<input type="hidden" name="rid" value="${request.rid}">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+
+
+
+<call draw_table_header("2", lang.ftp.ftpvhostaddform.header)>
+
+
+
+<if SESSION_PLATFORM != "win2k">
+<tr>
+   <td><call draw_label(lang.label.home_dir)></td>
+   <td><call draw_label(domain.parent.dir)></td>
+</tr>
+</if>
+
+<tr>
+   <td><call draw_label(lang.ftp.ftpvhostaddform.ftpservername)></td>
+   <td><input type="text" name="server_name" label="${lang.ftp.ftpvhostaddform.ftpservername}" check="vServer_Name"></td>
+</tr>
+<tr>
+   <td><call draw_label(lang.ftp.ftpvhostaddform.ftpadminemail)></td>
+   <td><input type="text" name="admin_email" label="${lang.ftp.ftpvhostaddform.ftpadminemail}" check="vEmail"></td>
+</tr>
+<tr>
+   <td colspan="2"  class="control_align_center" ><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+<!--  END ./ftp/ftp_vhost_add_form.html.in  -->

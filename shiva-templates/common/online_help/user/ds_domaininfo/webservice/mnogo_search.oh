@@ -1,0 +1,14 @@
+<center>
+    mnoGoSearch
+</center>
+<hr>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;
+This is a simple search engine to service your site. <br>
+It  uses MySQL database. So when you launch mnoGoSearch wizard, you'll be prompted to select from the existing MySQL databases or create a new one.
+<br>
+   <br><i>WARNING</i>: Assigning a previously created MySQL database to be used for mnoGoSearch needs, you will remove contents of all its tables.
+<br>The databases used by mnoGoSearch will show among your MySQL databases marked as &quot;(Locked By mnoGoSearch)&quot;
+<br>
+  When you are through with assigning MySQL DB and user, you can immediately go to your search page by clicking the View icon.</p>
+
+Only for Unix based accounts.

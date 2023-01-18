@@ -1,0 +1,469 @@
+<!-- BEGIN ./windomain/webservice.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser = account.getChild("unixuser")>
+<assign ip=hosting.parent.getChild("ip")>
+<assign platform_type = hosting.server>
+
+<call draw_tooltip()>   
+
+
+
+
+
+<call draw_table_header("3", lang.domain.webservice.header)>
+
+
+<tr>
+    <td  width="1%" nowrap><call draw_tt_help(hosting.parent,"user-ds_domaininfo-domainname","")></td>
+    <td    width="39%"><call draw_label(lang.label.dname)></td>
+    <td    width="60%" nowrap><call draw_link(config.CLIENT_CP_URL+"?rid="+hosting.parent+"&template_name=windomain/edit.html",hosting.parent.name)><call draw_preview("http://"+hosting.parent.name, lang.domain.webservice.opensite)></td>
+</tr>
+<tr>
+   <td  width="1%" nowrap><if ip><assign tt_rid=ip><else><assign tt_rid=hosting></if><call draw_tt_help(tt_rid,"user-ds_domaininfo-ipaddress","")></td>
+   <td><call draw_label(lang.label.ip_address)></td>
+   <td    nowrap><if ip><if ip.shared != "1"><call draw_tlink("http://"+toolbox.int2ext(ip.ip),"_blank",toolbox.int2ext(ip.ip))><else><call draw_label(toolbox.int2ext(ip.ip)+" (shared)")></if><else><call draw_label(lang.domain.webservice.virt)></if></td>
+</tr>
+
+<if  account.plan.isResourceAvailable("sitestudio")>
+<assign sitestudio = hosting.getChild("sitestudio")>
+<tr>
+<if account.isDemo>
+<else>
+</if>
+<td  width="1%" nowrap><call draw_tt_help(hosting,"","")></td>
+<td><call draw_label(lang.domain.webservice.sitestudio)></td><compress>
+<if ip>
+  <if ip.shared == "1">
+     <assign instant_alias = hosting.getChild("idomain_alias")>
+     <if instant_alias>
+        <assign tmp_url=instant_alias.alias>
+     <else>
+        <assign tmp_url=hosting.parent.name>
+     </if>
+  <else>
+     <assign tmp_url=toolbox.int2ext(ip.ip)>
+  </if>
+<else>
+  <assign tmp_url="no-ip-address">
+</if>
+</compress>
+<td    nowrap>
+<call onoff(hosting, "sitestudio")>&nbsp;<if sitestudio><if account.isDemo>
+<form method="POST" action="${config.CLIENT_CP_URL}" target="_blank" accept-charset="UTF-8">
+<input type=hidden name="template_name" value="misc/show_demo.html">
+<input type=hidden name="header" value="${quick.quickview.altsitestudio}">
+<input type=hidden name="image" value="ss_demo">
+<input type="submit" value="login">
+<else>
+<form method="POST" action="${config.PATH_SITE_STUDIO}" target="_blank" accept-charset="UTF-8">
+<input type="submit" value="${lang.windomain.webservice.submlogin}">
+<input type=hidden name="action" value="useraction">
+<input type=hidden name="useraction" value="login">
+<input type=hidden name="requestURL" value="${config.SITE_STUDIO_CLASS}">
+<input type=hidden name="login" value="${hosting.parent.id}">
+<input type=hidden name="password" value="${unixuser.password}">
+<input name="email" type="hidden" value="webmaster@${hosting.parent.name}">
+<input name="url" type="hidden" value="http://${tmp_url}/">
+<input name="real_login" type="hidden" value="${unixuser.login}">
+<if unix_user.host.ftp_type == "ServU">
+   <input name="dir" type="hidden" value="/${hosting.local_dir}/">
+<else>
+   <input name="dir" type="hidden" value="/${unixuser.login}/${hosting.local_dir}/">
+</if>
+<input name="server" type="hidden" value="${unixuser.host.name}">
+<input name="port" type="hidden" value="21">
+</if>
+</if>
+</td>
+</form>
+</tr>
+</if>
+<if account.plan.areResourcesAvailable("SITETOOLBOX")>
+<tr  >
+<td  nowrap><call draw_tt_help(hosting,"","")></td>
+<td colspan="2">
+<assign ref_id = settings.toolbox_referralid>
+<if ref_id>
+<call draw_label(lang.admin.sitetoolbox)><call draw_preview("http://"+settings.toolbox_url+"?LNKID="+settings.toolbox_referralid, lang.admin.sitetoolbox)>
+<else>
+<call draw_label(lang.admin.sitetoolbox)><call draw_preview("http://"+settings.toolbox_url, lang.admin.sitetoolbox)>
+</if>
+</td>
+</tr>
+</if>
+ 
+<form action="${config.CLIENT_CP_URL}" method="post" accept-charset="UTF-8">
+<tr>
+   <td colspan="3" valign="top">
+<table class="inner_control_grid">
+<tr>
+<td colspan="4" class="inner_control_grid_header">
+<call draw_header(lang.domain.webservice.settings)>
+</td>
+</tr>
+<tr>
+   <td  width="1%" nowrap><call draw_tt_help(hosting,"","")></td>
+   <td><call draw_label(lang.domain.webservice.indexes)></td>
+<if (vindex =="1") || (!vindex && (hosting.index=="1"))>
+    <assign vchecked="CHECKED">
+<else>
+    <assign vchecked="">
+</if>
+   <td    nowrap>
+<input type="hidden" name="rid" value="${hosting}">
+<input type="hidden" name="template_name" value="submit/windomain/update_webservice.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+<input type="radio" name="index" value="1" ${vchecked}><call draw_label(lang.label.enabled)></td>
+<if (vindex =="0") || (!vindex && (hosting.index=="0"))>
+    <assign vchecked="CHECKED">
+<else>
+    <assign vchecked="">
+</if>                                                                                                         
+   <td    nowrap><input type="radio" name="index" value="0" ${vchecked}><call draw_label(lang.label.disabled)></td>
+</tr>
+<tr>
+<td  width="1%" nowrap><call draw_tt_help(hosting,"","")></td>
+<td><call draw_label(lang.windomain.webservice.servstatus)></td>
+<if (viis_status =="1") || (!viis_status && (hosting.iis_status=="1"))>
+    <assign vchecked="CHECKED">
+<else>
+    <assign vchecked="">
+</if>
+<td><input type="radio" name="iis_status" value="1" ${vchecked}><call draw_label(lang.windomain.webservice.running)></td>
+<if (viis_status =="0") || (!viis_status && (hosting.iis_status=="0"))>
+    <assign vchecked="CHECKED">
+<else>
+    <assign vchecked="">
+</if>
+<td    nowrap><input type="radio" name="iis_status" value="0" ${vchecked}><call draw_label(lang.windomain.webservice.stopped)></td>
+</tr>
+<tr>
+<td  class="inner_control_grid_align_center"  colspan="4"><input type="submit" value="${lang.button.submit}"></td>
+</tr>
+</table>
+</form>
+</td>
+</tr>
+
+<if account.plan.isResourceAvailable("ssl")>
+<tr>
+<assign ssl=hosting.getChild("ssl")><if ssl><assign tmp=ssl><else><assign tmp=hosting></if>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td><call draw_label(lang.domain.webservice.ssl)></td>
+<td><call draw_ssl(hosting,platform_type,template,ip)></td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("sharedssl")>
+<tr>
+   <td    nowrap><assign sharedssl=hosting.getChild("sharedssl")><if sharedssl><call draw_tt_help(sharedssl,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td    valign="middle"><call draw_label(lang.domain.webservice.sharedssl)></td>
+   <td    nowrap><call draw_sharedssl(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("frontpage")>
+<tr>
+<assign frontpage=hosting.getChild("frontpage")><if frontpage><assign tmp=frontpage><else><assign tmp=hosting></if>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td><call draw_label(lang.domain.webservice.frontpage)></td>
+<td><call draw_frontpage(hosting, platform_type, template)></td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("asp_secured_license")>
+<assign asp_secured_license=hosting.getChild("asp_secured_license")>
+</if>
+
+<if account.plan.isResourceAvailable("asp")>
+<assign asp=hosting.getChild("asp")><if asp><assign tmp=asp><else><assign tmp=hosting></if>
+<tr>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td><call draw_label(lang.windomain.webservice.asp)></td>
+<td>
+
+<if asp>
+  <assign mssqlmanager=hosting.getChild("mssqlmanager")>
+  <if mssqlmanager>
+    <call draw_on()><call draw_label(lang.windomain.webservice.mssqlmanager_disable)>
+  <else>
+    <if asp.getChild("asp_secured")>
+      <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/misc/delete_check.sbm&rid="+hosting+"&did="+asp+"&type=asp&ftemplate="+template+"&stemplate="+template+"&next_template=windomain/delete_asp_confirm.html&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+    <else>
+      <call disableWarn(hosting, asp)>
+    </if>
+  </if>
+<else>
+  <call enable(hosting, "asp")>
+</if>
+</td>
+</tr></if>
+
+<if asp>
+<if account.plan.isResourceAvailable("asp_secured")>
+<assign asp_secured=asp.getChild("asp_secured")>
+<if asp_secured><assign tmp1=asp_secured><else><assign tmp1=hosting></if>
+<tr>
+<td  width="1%" nowrap><call draw_tt_help(tmp1,"","")></td>
+<td><call draw_label(lang.windomain.webservice.asp_secured)>
+<if asp_secured_license><call draw_label(lang.windomain.webservice.asp_secured.licensed)>
+<else><call draw_label(lang.windomain.webservice.asp_secured.free_version)>
+</if>
+</td>
+<td>
+<if asp_secured>
+<call draw_palink(config.CLIENT_CP_URL+"?rid="+hosting+"&did="+asp_secured+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&warn=1", "on", lang.functions.action_disable)>
+<call draw_preview("http://"+hosting.parent.name+"/aspsecured/secureadmin.asp", lang.domain.webservice.opensite)>
+<if asp_secured_license>
+<else>
+<call draw_label(lang.windomain.webservice.asp_secured_license.setup)>
+<call addNewWizard(hosting, "asp_secured_license", "windomain/add_asp_secured_license.html", "lang.windomain.webservice.asp_secured_license.setup")>
+</if>
+<else><call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/misc/add_check.sbm&hid="+hosting+"&rid="+asp+"&type=asp_secured&ftemplate="+template +"&stemplate="+template+"&next_template=submit/windomain/set_asp_secured.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM)>
+</if>
+</tr></if>
+</if>
+
+<if account.plan.isResourceAvailable("asp_net")>
+<assign asp_net=hosting.getChild("asp_net")><if asp_net><assign tmp=asp_net><else><assign tmp=hosting></if>
+<tr>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td><call draw_label(lang.windomain.webservice.asp_net)></td>
+<td>
+  <if asp_net>
+    <if mssqlmanager>
+      <call draw_on()><call draw_label(lang.windomain.webservice.mssqlmanager_disable)>
+    <else>
+      <call disableWarn(hosting, asp_net)>
+    </if>
+  <else>
+    <call enable(hosting, "asp_net")>
+  </if>
+</td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("cgidir")>
+<tr>
+<assign cgidir=hosting.getChild("cgidir")><if cgidir><assign tmp=cgidir><else><assign tmp=hosting></if>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.cgidir)></td>
+<td><call draw_cgidir(hosting, platform_type)></td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("cgi")>
+<tr><assign tmp=hosting.getChildren("cgi")>
+<td  width="1%"   valign="top" nowrap><if tmp><list tmp as cgi><call draw_tt_help(cgi,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.cgi)></td>
+<td><call draw_cgi(hosting, platform_type)></td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("mimetype")>
+<tr>
+<assign mimetype=hosting.getChild("mimetype")><if mimetype><assign tmp=mimetype><else><assign tmp=hosting></if>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td     valign="middle"><call draw_label(lang.domain.webservice.mimetype)></td>
+<td><call draw_mime(hosting, platform_type)></td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("empresa")>
+<assign miva = hosting.getChild("empresa")>
+<tr>
+ <td    nowrap><assign tmp=hosting.getChild("empresa")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+ <td    valign="middle"><call draw_label(lang.domain.webservice.empresa)></td>
+ <td    nowrap><call draw_empresa(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("miva")>
+<tr>
+<assign miva=hosting.getChild("miva")><if miva><assign tmp=miva><else><assign tmp=hosting></if>
+<td    width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.miva)></td>
+<td><call draw_miva(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("oscommerce")>
+<tr>
+   <td    nowrap ><assign oscommerce=hosting.getChild("oscommerce")><if oscommerce><call draw_tt_help(oscommerce,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td    valign="middle"><call draw_label(lang.domain.webservice.oscommerce)></td>
+   <td    nowrap><call draw_os_commerce(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("phpbb")>
+<tr>
+   <td    nowrap ><assign phpbb=hosting.getChild("phpbb")><if phpbb><call draw_tt_help(phpbb ,"","")><else><call draw_tt_help(hosting,"","")></if></td>
+   <td    valign="middle"><call draw_label(lang.label.phpbb)></td>
+<td    nowrap><call draw_phpbb(hosting, platform_type)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("php3")>
+<assign php3=hosting.getChild("php3")><if php3><assign tt_rid=php3><else><assign tt_rid=hosting></if>
+<tr><assign tmp=php3.getChildren("php3entry")>
+<td  width="1%"   valign="top" nowrap><call draw_tt_help(tt_rid,"","")><list tmp as php3entry><br><call draw_tt_help(php3entry,"","")></list></td>
+<td    valign="middle" width="39%"><call draw_label(lang.domain.webservice.php3)></td>
+<td><call draw_php(hosting, platform_type)></td>
+</tr></if>                                                                                                                  
+<if account.plan.isResourceAvailable("cf")>
+<assign cf=hosting.getChild("cf")>
+<if cf><assign tt_rid=cf><else><assign tt_rid=hosting></if>
+
+<tr>
+  <td valign="top" width="1%" nowrap><call draw_tt_help(tt_rid,"","")></td>
+  <td valign="middle" width="39%"><call draw_label(lang.windomain.webservice.cf)></td>
+  <td>
+    <if cf><call disable(hosting,cf)><br>
+    	<assign cf_entries =  cf.getCFTypes()>
+    	<list cf_entries as cf_entry>
+    		<call draw_label(cf_entry.name)>
+    		<if cf_entry.value == "1">
+    			<call disableNew(hosting, cf_entry.id)>
+    		</if>
+    		<br>
+    	</list>
+    	<call addNewWizard(hosting, "cfentry", "windomain/add_cf_entry.html", lang.windomain.webservice.addcf)>
+    <else>
+    	<call enable(hosting, "cf")>
+    </if>
+  </td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("ssi")>
+<assign ssi=hosting.getChild("ssi")><if ssi><assign tt_rid=ssi><else><assign tt_rid=hosting></if>
+<tr><assign entries=ssi.getChildren("ssi_entry")>
+<td     valign="top" width="1%" nowrap><call draw_tt_help(tt_rid,"","")><list entries as ssi_entry><br><call draw_tt_help(ssi_entry,"","")></list></td>
+<td    valign="middle" width="39%"><call draw_label(lang.domain.webservice.ssi)></td>
+<td><call draw_ssi(hosting, platform_type)></td>
+</tr>
+<if ssi>
+<tr>
+  <td     valign="middle" width="1%" nowrap><call draw_tt_help(ssi,"","")></td>
+  <td     valign="middle" width="39%"><call draw_label(lang.windomain.webservice.ssiexec)></td>
+  <td><if ssi.exec=="1"><call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/windomain/set_ssi_exec_state.sbm&rid="+hosting+"&aid="+ssi+"&ftemplate="+template+"&stemplate="+template+"&exec_state=0")>
+<else><call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/windomain/set_ssi_exec_state.sbm&rid="+hosting+"&aid="+ssi+"&ftemplate="+template+"&stemplate="+template+"&exec_state=1")>
+</if></td>
+</tr>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("errordoc")>
+<tr><assign tmp=hosting.getChildren("errordoc")>
+<td  width="1%" nowrap><if tmp><list tmp as edoc><call draw_tt_help(edoc,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+<td     valign="middle" width="39%"><call draw_label(lang.domain.webservice.error)></td>
+<td><call draw_errordoc(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("errorlog")>
+<tr>
+<td    width="1%" nowrap><call draw_tt_help(hosting,"","")></td>
+<td     valign="middle"><call draw_label(lang.domain.webservice.errorlog)></td>
+<td><call onoff(hosting, "errorlog")></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("transferlog")>
+<tr>
+<assign transferlog=hosting.getChild("transferlog")>
+<if transferlog><assign tmp=transferlog><else><assign tmp=hosting></if>
+<td  width="1%" nowrap><call draw_tt_help(tmp,"","")></td>
+<td     valign="middle" width="39%"><call draw_label(lang.domain.webservice.transflog)></td>
+<td><call onoff_mod(hosting, "transferlog", "simple")></td>
+</tr>
+</if>
+
+<assign trans=hosting.getChild("transferlog")>
+<if account.plan.isResourceAvailable("webalizer")>
+<if trans>
+<tr>
+   <td    width="1%" nowrap><assign tmp=trans.getChild("webalizer")><if tmp><call draw_tt_help(tmp,"","")><else><call draw_tt_help(trans,"","")></if></td>
+   <td valign="middle"     width="39%"><call draw_label(lang.domain.webservice.webalizer)></td>
+  <td><call draw_webalizer_trans(hosting, platform_type, template)></td>
+</tr>
+<else>
+<tr>
+  <td    width="1%" nowrap><call draw_tt_help(hosting,"","")></td>
+  <td valign="middle"     width="39%"><call draw_label(lang.domain.webservice.webalizer)></td>
+  <td><call draw_webalizer(hosting, platform_type, template)></td>
+</tr>
+</if>
+</if>
+
+<if account.plan.isResourceAvailable("urchin")>
+<tr>
+   <td    width="1%" nowrap><assign tmp=hosting.getChild("urchin")><if tmp><call draw_tt_help(tmp,"user-ds_domaininfo-urchin","")><else><call draw_tt_help(trans,"user-ds_domaininfo-urchin","")></if></td>
+   <td valign="middle"     width="39%"><call draw_label(lang.domain.webservice.urchin)></td>
+   <td><call draw_urchin(hosting, platform_type, template)></td>
+</tr>
+</if>
+
+<if account.plan.isResourceAvailable("urchin4")>
+<tr>
+<td valign="top"    nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-urchin","")></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.urchin4)></td>
+<td    valign="middle"><call draw_urchin4(hosting, platform_type, template)></td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("awstats")>
+<tr>
+<td valign="top"    nowrap><call draw_tt_help(hosting,"user-ds_domaininfo-awstats","")></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.awstats)></td>
+<td    valign="middle"><call draw_awstats(hosting, platform_type, template)></td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("vhost_alias")>
+<tr><assign tmp=hosting.getChildren("vhost_alias")>
+<td     valign="top" width="1%" nowrap><if tmp><list tmp as alias><call draw_tt_help(alias,"","")><br></list><else><call draw_tt_help(hosting,"","")></if></td>
+<td     valign="middle" width="39%"><call draw_label(lang.domain.webservice.servalias)></td>
+<td><call draw_vhost_alias(hosting, platform_type)></td>
+</tr></if>
+
+
+<if account.plan.isResourceAvailable("redirect_url")>
+<tr><assign tmp=hosting.getChildren("redirect_url")>
+<td     valign="top" width="1%" nowrap><if tmp><list tmp as redirect><call draw_tt_help(redirect,"user-ds_domaininfo-redirect","")><br></list><else><call draw_tt_help(hosting,"user-ds_domaininfo-redirect","")></if></td>
+<td     valign="middle" width="39%"><call draw_label(lang.domain.webservice.redirect)></td>
+
+<td    nowrap><call draw_redirect(hosting, platform_type, template)>
+</td>
+</tr></if>
+
+<if account.plan.isResourceAvailable("directory_ind")>
+<assign directory_ind=hosting.getChildren("directory_ind")>
+<tr>
+<td valign="top"    nowrap><call draw_tt_help(directory_ind,"","")></td>
+<td    valign="middle"><call draw_label(lang.domain.webservice.directoryind)></td>
+<td    valign="middle"><call draw_directory_ind(hosting, platform_type, template)></td>
+</tr>
+</if>
+<if account.plan.isResourceAvailable("idomain_alias")>
+   <assign ip=hosting.parent.getChild("ip")>
+   <if ip.shared=="1">
+   <assign ialias=hosting.getChild("idomain_alias")>
+   <tr>
+      <td valign="top"    nowrap><call draw_tt_help(ialias, "user-ds_domaininfo-ws-idomain_alias", "")></td>
+      <td    valign="middle"><call draw_label(lang.domain.ialias)></td>
+      <td    valign="middle"><call onoff(hosting, "idomain_alias")>&nbsp;<if ialias><call draw_label(ialias.alias)><call draw_preview("http://"+ialias.alias, lang.domain.webservice.opensite)></if></td>
+   </tr>
+  </if>
+</if>
+<!--
+<if account.plan.areResourcesAvailable("mssqlmanager") && asp && asp_net>
+<tr >
+<td  WIDTH="1">
+<assign mssqlmanager=hosting.getChild("mssqlmanager")>
+<if mssqlmanager><call draw_tt_help(mssqlmanager,"user-ds_domaininfo-mssqlmanager","")><else><call draw_tt_help(hosting,"user-ds_domaininfo-mssqlmanager","")></if></td>
+<td><call draw_label(lang.mssql.databases.mssqlmanager)></td>
+<td><call draw_state(mssqlmanager, config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=submit/windomain/enable_manager.sbm&state=off&stemplate="+template+"&ftemplate="+template, config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=submit/windomain/enable_manager.sbm&state=on&stemplate="+template+"&ftemplate="+template)>
+<if mssqlmanager><call draw_palink(config.CLIENT_CP_URL+"?template_name=windomain/choice_login.html&rid="+hosting, "lupa", lang.mssql.databases.mssqlmanager)></if>
+</td>
+</tr>
+</if>
+-->
+
+
+<call draw_table_footer()>
+<!--  END ./control/windomain/webservice.html  -->

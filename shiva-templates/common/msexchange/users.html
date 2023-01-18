@@ -1,0 +1,95 @@
+<!--BEGIN: common/msexchange/users.html -->
+<include "functions">
+<call START_PAGE("msexchange/users.html", "he-users")>
+<call draw_tooltip()>
+<call draw_table_header("4", lang.label.mailboxes)>
+<assign bizorg = account.getChild("bizorg")>
+<tr>
+<td>
+<call draw_label(lang.label.owa_server)><br>
+<call draw_label(lang.label.pop3_server)><br>
+<call draw_label(lang.label.smtp_server)><br>
+<call draw_label(lang.label.imap_server)><br>
+<call draw_label(lang.label.rpc_server)>
+</td>
+<td colspan="3"><call draw_label(bizorg.dnsServerName)></td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.label.msexchange.mailstore_quota)></td>
+<assign mailstore_quota=bizorg.getChild("mailstore")>
+<td colspan="3"><call draw_label(toolbox.compose(lang.quick.quickview.usedquota, bizorg.mailStoreUsage, mailstore_quota.size))>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=msexchange/change_mailstore_quota.html&stemplate="+template+"&rid="+mailstore_quota+"&bizorg="+bizorg+"&used="+bizorg.mailStoreUsage, lang.button.change)>
+</td>
+</tr>
+
+<tr>
+<td><call draw_label(lang.label.msexchange.publicstore_quota)></td>
+<assign pubstore_quota=bizorg.getChild("pubstore")>
+<td colspan="3"><call draw_label(toolbox.compose(lang.label.msexchange.public_folder_size, pubstore_quota.size))>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=msexchange/change_mailstore_quota.html&stemplate="+template+"&rid="+pubstore_quota+"&bizorg="+bizorg+"&used="+bizorg.pubStoreUsage, lang.button.change)>
+</td>
+</tr>
+
+<if account.plan.isResourceAvailable("public_folder")>
+<tr>
+<td><call draw_label(lang.label.msexchange.public_folder)></td>
+<assign pf=pubstore_quota.getChild("public_folder")>
+<td colspan="3">
+<call draw_state(pf, config.CLIENT_CP_URL+"?template_name=msexchange/public_folder.sbm&stemplate="+template+"&ftemplate="+template+"&state=OFF&rid="+pubstore_quota, config.CLIENT_CP_URL+"?template_name=msexchange/public_folder.sbm&stemplate="+template+"&ftemplate="+template+"&state=ON&rid="+pubstore_quota)>
+</td>
+</tr>
+</if>
+
+<tr>
+<td><call draw_label(lang.admin.groupplans.header)></td>
+<td colspan="3">
+<list bizorg.availablePlans as plan>
+<call draw_label(plan.settings.description)><br>
+</list>
+</td>
+</tr>
+
+<if bizorg.newPlans.size != "0">
+<tr>
+<td><call draw_label(lang.label.msexchange.new_mailbox_plans)></td>
+<td colspan="3">
+<list bizorg.newPlans as plan>
+<call draw_label(plan.settings.description)>
+<call draw_add(config.CLIENT_CP_URL+"?template_name=msexchange/add_plan.sbm&stemplate="+template+"&ftemplate="+template+"&plan_type="+plan.type, lang.label.msexchange.add_new_mailbox_plan)>
+<br>
+</list>
+</td>
+</tr>
+</if>
+
+<tr>
+<td class="control_header"><call draw_label(lang.label.principalName)></td>
+<td class="control_header"><call draw_label(lang.label.msexchange.plan)></td>
+<td  class="control_header" colspan="2"><call draw_label(lang.email.list2.mboxprop)></td>
+</tr>
+
+<list bizorg.getChildren("bizuser") as bizuser>
+<assign hePlan = bizuser.plan>
+<tr>
+<td><call draw_label(bizuser.principalName + "@" + bizuser.domain.name)></td>
+<td><call draw_label(hePlan.description)></td>
+<td>
+<assign usage=bizuser.usage>
+<assign quotalimit=hePlan.MailboxSize>
+<if usage>
+<call draw_label(lang.label.msexchange.mailbox_size + ": " + quotalimit + "K " + lang.servmon.used + ": " + usage + "K")>
+<else>
+<call draw_label(lang.label.msexchange.mailbox_size + ": " + quotalimit+"K")>
+</if>
+</td>
+<td><call disableNewWarn(bizorg, bizuser)>
+<call draw_change(config.CLIENT_CP_URL+"?template_name=msexchange/change_user.html&rid="+bizuser, lang.label.change)>
+</td>
+</tr>
+</list>
+<tr><td colspan="4"><call draw_label(lang.label.addmailbox)><call draw_palink(config.CLIENT_CP_URL+"?rid="+bizorg+"&aid="+bizorg+"&type=bizuser&stemplate="+template+"&ftemplate="+template+"&template_name=msexchange/add_user.html", "add", lang.label.adduser)>
+</td></tr>
+<call draw_table_footer()>
+<call END_PAGE()>
+<!--END: common/msexchange/users.html -->

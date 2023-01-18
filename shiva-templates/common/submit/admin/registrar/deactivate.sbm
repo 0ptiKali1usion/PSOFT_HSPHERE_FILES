@@ -1,0 +1,10 @@
+<!-- BEGIN submit/admin/registrar/deactivate.sbm -->
+<assign mm=account.getChild("registrar_manager")>
+<assign result=mm.resetActive(request.rid, request.tld)>
+<if result.status!="OK">
+  <assign res = session.addMessage(result.msg)>
+  <include request.ftemplate>
+<else>
+  <include request.stemplate>
+</if>
+<!-- END submit/admin/registrar/deactivate.sbm -->

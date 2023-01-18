@@ -1,0 +1,42 @@
+<!-- BEGIN ./control/mailman/add.html.in -->
+<call draw_tooltip()>
+
+<if account.getChild("admin")>
+
+<yafv s_email>
+<form action="${config.CLIENT_CP_URL}" method="POST" name="f_add_recipient" check! accept-charset="UTF-8">
+<input type="hidden" name="type" value="${request.type}">
+<input type="hidden" name="template_name" value="submit/mailman/add.sbm">
+<input type="hidden" name="stemplate" value="${request.stemplate}">
+<input type="hidden" name="ftemplate" value="${template}">
+<if request.group_id>
+<input type="hidden" name="group_id" value="${request.group_id}">
+</if>
+<if failure>
+    <assign vname=toolbox.html_encode(request.name)>
+    <assign vemail=toolbox.html_encode(request.email)>
+</if>
+
+
+      
+
+
+<call draw_table_header("2", lang.mailman.add.header)>
+
+
+<tr>
+<td><call draw_label(lang.mailman.add.name)></td><td><input type="text" name="name" value="${vname}" label="${lang.mailman.add.name}" check="vString"></td>
+</tr>
+<tr >
+<td><call draw_label(lang.mailman.add.email)></td><td><input type="text" name="email" value="${vemail}" label="${lang.mailman.add.email}" check="vEmail"></td>
+</tr> 
+<tr >
+<td colspan="2" class="control_align_right"><input type="submit" value="${lang.button.add}"></td>
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<else>&nbsp;
+</if>
+<!-- END ./control/mailman/add.html.in -->

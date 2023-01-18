@@ -1,0 +1,12 @@
+<assign admin = account.getChild("admin")>
+<if request.state=="on">
+  <assign result=admin.setSettingsValue("moderated_cc", "1")>
+<else>
+  <assign result=admin.setSettingsValue("moderated_cc", "")>
+</if>
+<if result.status=="OK">
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if>

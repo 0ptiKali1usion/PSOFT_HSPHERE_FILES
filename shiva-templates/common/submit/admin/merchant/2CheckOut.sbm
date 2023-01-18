@@ -1,0 +1,18 @@
+<!-- BEGIN ./submit/admin/merchant/2CheckOut.sbm -->
+<assign admin = account.getChild("admin")>
+<if admin>
+<assign mm=account.getChild("merchant_manager")>
+<if request.use_authorize!=""><assign use_authorize="1"><else><assign use_authorize=""></if>
+<if request.enabled!=""><assign enabled="1"><else><assign enabled=""></if>
+<if request.demo!=""><assign demo="1"><else><assign demo=""></if>
+<if request.v2_support!=""><assign v2_support="1"><else><assign v2_support=""></if>
+
+<assign res = mm.webprocessorparams("2CheckOut","ID",request.id, "Use_Authorize", use_authorize, "enabled", enabled, "demo", demo, "v2_support", v2_support)>
+<if res.status=="OK">
+ <include request.stemplate>
+<else>
+ <assign res=session.addMessage(res.msg)>
+ <include request.ftemplate>
+</if>
+</if>
+<!-- END ./submit/admin/merchant/2CheckOut.sbm -->

@@ -1,0 +1,42 @@
+<!-- BEGIN ./quick/choice_phpmyadmin.html  -->
+<include "control/domain/webservice.fn">
+
+<assign unixuser=account.getChild("unixuser")>
+
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.quick.choicephpmyadmin.select)>
+
+<assign mysql=account.getChild("MySQL")>
+<assign host=mysql.host>
+<assign users=mysql.getChildren("MySQLUser")>
+<tr >
+  <td><call draw_label_bold(lang.label.user)></td>
+  <td><call draw_label_bold(lang.label.login)></td>
+</tr>
+<list users as db_user>
+<assign submit_user=db_user>
+<form action=${config.CLIENT_CP_URL} method="POST" name="${db_user.name}" target="phpmysqladmin" accept-charset="UTF-8">
+	<input type="hidden" name="db_user" value="${db_user}">
+        <input type="hidden" name="template_name" value="submit/quick/choice_phpmyadmin.sbm">
+  <tr >
+    <td><call draw_label(db_user.name)></td>
+    <td>
+      <call draw_onclick_palink("launch", "javascript:window.document.forms['"+db_user.name+"'].submit()", lang.mysql.admdb.myadmincp)>
+    </td>
+  </tr>
+</form>
+</list>
+<if users.size=="1">
+<script language="javascript">
+document.${submit_user.name}.submit();
+</script>
+</if>
+
+<call draw_table_footer()>
+
+<!--  END ./quick/choice_phpmyadmin.html -->

@@ -1,0 +1,36 @@
+<!-- BEGIN ./submit/domain/add_phpbb.sbm  -->
+<assign hosting=account.getResource(request.rid)>	
+<assign php_bb = hosting.getChild("phpbb")>
+<if php_bb>
+  <assign res=session.addMessage(toolbox.compose(lang.msg.name_res_failed_add,lang.label.phpbb))>
+  <include "domain/webservice.html">
+<else> 
+  <assign result=hosting.addChild(request.resource_name,"", db_id, user_id)>
+  <if result.status=="OK">
+      <assign success="1">
+      <if !hosting.getChild("php3")>
+          <assign price = hosting.estimateCreate("php3", "")>
+          <if price.status!="ERROR">
+              <if price.free=="1">
+                  <assign res=hosting.addChild("php3","")>
+                  <if res.status=="OK">
+                      <assign php_added="1">
+                  </if>
+              </if>
+          </if>
+          <if php_added!="1">
+              <assign res=session.addMessage(lang.domain.add_phpbb.php_warn)>
+          </if>
+      </if>
+      <assign res = session.addMessage(toolbox.compose(
+            lang.msg.name_res_added, "phpBB", ""))>
+  <else>
+      <assign res=session.addMessage(result.msg)>
+  </if>
+  <if success>
+      <include request.parent_template>
+  <else>
+      <include request.ftemplate>
+  </if>
+</if>
+<!--  END /submit/domain/add_phpbb.sbm  -->

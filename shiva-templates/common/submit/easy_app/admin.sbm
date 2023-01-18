@@ -1,0 +1,7 @@
+<!-- BEGIN ./submit/easyapp/admin.sbm  -->
+<assign result1 = obj.easyapp.disableAll()>
+<list request.apps_enable as app_id>
+<assign result2 = obj.easyapp.enable(app_id)>
+</list>
+<include "admin/settings/easyapp.html">
+<!--  END ./submit/easyapp/admin.sbm  -->

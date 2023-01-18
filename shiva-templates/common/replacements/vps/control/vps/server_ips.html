@@ -1,0 +1,29 @@
+<!-- BEGIN ./control/vps/server_ips.html  -->
+<assign vps=account.getChild("vps")>
+
+<call draw_tooltip()>
+
+<call draw_table_header("2", lang.vps.iplist.header)>
+
+<assign ips=vps.getChildren("vps_ip")>
+
+<tr>
+ <td width="90%" class="control_header" ><call draw_label(lang.vps.ip.label)></td>
+ <td width="9%" class="control_header" ><call draw_header(lang.label.action)></td>
+</tr>
+</tr> 
+<list ips as vsip>
+<tr>
+   <td  align="center"><call draw_label(toolbox.int2ext(vsip.ip))></td>
+   <td  align="center"><if allow_delete><if vps.isVPSInitialized()><call draw_delete(config.CLIENT_CP_URL+"?rid="+vps+"&did="+vsip+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/delete_check.sbm&next_template=submit/vps/delete_ip.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM, lang.label.delete)><else>&nbsp;</if></if></td>
+<assign allow_delete = "1">
+</tr> 
+</list>
+<if vps.isVPSInitialized()>
+<tr >
+   <td colspan="2" width="100%" align="center" ><call draw_palink(config.CLIENT_CP_URL+"?rid="+vps+"&stemplate="+template+"&ftemplate="+template+"&template_name=submit/misc/add_vps_ip_check.sbm&cur_menuid="+GLOBAL_ACTIVE_ITEM+"&next_template=submit/vps/add_ip.sbm&type=vps_ip&mod=", "add",lang.vps.ip.add.tip)></td>
+</tr>
+</if>
+
+<call draw_table_footer()>
+<!--  END ./control/vps/server_ips.html  -->

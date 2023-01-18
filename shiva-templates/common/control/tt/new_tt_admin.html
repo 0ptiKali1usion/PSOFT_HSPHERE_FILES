@@ -1,0 +1,258 @@
+<!-- BEGIN ./control/tt/new_tt_admin.html  -->
+<call draw_tooltip()>
+<assign ttadmin=account.getChild("ttadmin")>
+<if !ttadmin>
+${session.addMessage(lang.search.permissionsmsg)}
+<else>
+<assign viewer=account.getChild("reportviewer")>
+</if>
+
+
+<SCRIPT language="Javascript"><!--
+function selectall(elements) {
+  var selector = elements["selector"];
+  if (selector != null) {
+    var stat = selector.checked;
+    for (var i = 0; i < elements.length; i++) {
+      var el = elements[i];
+      if (el.type == "checkbox") el.checked = stat;
+    }
+  }
+}
+//--></SCRIPT>
+
+
+<if request.arid><assign report = viewer.getAdvReportById(request.arid)>
+<call advReportInit(report)>
+<assign report_ok="1">
+<else>
+<assign step="50">
+<assign report = viewer.getAdvReport("ttreport")>
+<if request.sc_show != ""><assign show = request.sc_show><else><assign show = "50"></if>
+<assign result = report(request.sc_created_before,
+			request.sc_created_after,
+		        request.sc_closed_before, 
+			request.sc_closed_after,
+                        request.sc_not_closed,
+	              	"unassigned",
+		        request.sc_title,
+			request.sc_type,
+		        request.sc_answered_before,
+			request.sc_answered_after,
+		        request.sc_not_answered,
+		        request.sc_modified_before,
+			request.sc_modified_after,
+		        request.sc_contains,
+			request.sc_match_case,
+			request.sc_id, 
+			request.sc_email,
+			request.sc_state,
+			request.sq_queue,
+			show)>
+<if result.status != "OK"><assign report_ok="0">${session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))}<else><assign report_ok="1"><assign res = report.setStep(step)></if>
+</if>
+
+
+<assign step2="50">
+<assign report2 = viewer.getAdvReport("ttreport")>
+<if request.sc_show2 != ""><assign show2 = request.sc_show2><else><assign show2 = "50"></if>
+<assign result2 = report2(request.sc_created_before,
+			request.sc_created_after,
+		        request.sc_closed_before, 
+			request.sc_closed_after,
+                        request.sc_not_closed,
+	              	request.sc_assigned,
+		        request.sc_title,
+			request.sc_type,
+		        request.sc_answered_before,
+			request.sc_answered_after,
+		        "unanswered",
+		        request.sc_modified_before,
+			request.sc_modified_after,
+		        request.sc_contains,
+			request.sc_match_case,
+			request.sc_id, 
+			request.sc_email,
+			request.sc_state,
+			request.sq_queue,
+			show2)>
+<if result2.status != "OK"><assign report2_ok="0">${session.addMessage(toolbox.compose(lang.label.errorrepmsg, result.msg))}<else><assign report2_ok="1"><assign res2 = report2.setStep(step2)></if>
+
+<!--Step: ${step}-->
+<include "control/tt/ttfunctions.fn">
+
+<call gain_sc_params(report.currentPage)>
+
+<call draw_table_header("8","TT INFO")>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="search/tt_search.html">
+
+<input type="hidden" name="search_step" value="10">
+
+<tr>
+<td colspan="8" class="control_header">
+<call draw_header(lang.label.quicksearch)>
+</td>
+</tr>
+<tr>
+<td colspan="8" nowrap>
+<call draw_label(lang.tt.id)>&nbsp;<input type="text" name="sc_id" size="6">
+&nbsp;
+<call draw_label(lang.label.title)>&nbsp;<input type="text" name="sc_title">
+&nbsp;
+<call draw_label(lang.tt.email)>&nbsp;<input type="text" name="sc_email">
+&nbsp;
+<input type="submit" value="${lang.button.search}">
+</td>
+</tr>
+</form>
+<call draw_table_footer()>
+&nbsp;
+<call draw_table_header("8",lang.tt.admin.hassigned)>
+<include "control/tt/assigned_list.html">
+<call draw_table_footer()>
+&nbsp;
+
+<if report_ok=="1">
+<call draw_table_header("8",lang.tt.newest.header)>
+<tr>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.search.ttsearch.id, "id")></td>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.label.title, "title")></td>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.tt.priority, "priority")></td>  
+  <td class="control_header_align_center"><call advReportLabel(report, lang.search.created, "created")></td>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.search.lastmod, "modified")></td>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.search.type, "type")></td>
+  <td class="control_header_align_center"><call advReportLabel(report, lang.search.ttsearch.state, "state")></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.pickup)></td>
+ </tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/admin_mass_process.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<assign entries=report.page()>
+
+<list entries as entry>
+<if entry.state != "9" && ttadmin.canViewTicket(entry.quid, ttadmin.id) != "0">
+<tr>
+<td class="control_align_center"><call draw_label(entry.id)><br><input type="checkbox" name="ttid" value="${entry.id}">
+</td>
+<td class="control_align_center"><call display_ticket_link_bold_params(entry, sc_params)></td>
+<td class="control_align_center"><call draw_label(entry.priority)></td>
+<td class="control_align_center"><call draw_label(entry.created)></td>
+<td class="control_align_center"><call draw_label(entry.modified)></td>
+<td class="control_align_center"><if entry.type == "0">P<else>I</if></td>
+<td class="control_align_center"><call show_ticket_state(entry.state)>&nbsp;</td>
+<td class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_assign.sbm&ntemplate="+stemplate+"&stemplate="+template+"&ftemplate="+template+"&ttid="+entry.id+sc_params, lang.tt.admin.pickup)></td>
+</tr>
+</if>
+</list>
+<tr><td colspan="7">
+<input type="checkbox" name="selector" onClick="selectall(this.form.elements)" onDblClick="selectall(this.form.elements)">
+<call draw_label_bold(lang.tt.admin.selall)>
+<input type="radio" name="act" value="assign" checked>
+<call draw_label_bold(lang.tt.admin.assign)>
+<input type="radio" name="act" value="close">
+<call draw_label_bold(lang.tt.admin.close)>
+<input type="radio" name="act" value="delete">
+<call draw_label_bold(lang.tt.admin.delete)>
+<if request.stemplate><assign stemplate=request.stemplate><else><assign stemplate="tt/tt_search.html"></if>
+<if request.ftemplate><assign ftemplate=request.ftemplate><else><assign ftemplate="tt/tt_search.html"></if>
+
+&nbsp;<input type="submit" value="${lang.button.apply}">
+
+</td>
+<td align="right" colspan="1"> 
+<call draw_link(config.CLIENT_CP_URL+"/report.csv?template_name=control/search/tt_search.csv&arid="+report.id+"&_content_type=csv", lang.search.export)>
+
+</td></tr>
+</form>
+</if>
+<tr><td align="center" colspan="8">
+         <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+           ${lang.tt.show}	 
+           <select name="sc_show" size="1">
+              <call show_tickets(show)>
+           </select> ${lang.tt.tickets}			   
+	   <input type="hidden" name="template_name" value="tt/new_tt_admin.html">
+
+	   <input type="submit" value="Apply">
+ 
+         </form>	 																            
+</td>
+</tr>
+<call draw_table_footer()>
+&nbsp;
+
+<if report2_ok == "1">
+<call draw_table_header("8",lang.tt.unanswered.header)>
+<tr>
+  <td class="control_header_align_center"><call draw_header(lang.tt.id)></td>
+  <td class="control_header_align_center"><call draw_header(lang.label.title)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.priority)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.created)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.lastmod)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.assigned)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.state)></td>
+  <td class="control_header_align_center"><call draw_header(lang.tt.admin.pickup)></td>
+</tr>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="submit/tt/admin_mass_process.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+
+<assign entries2=report2.page()>
+
+<list entries2 as entry>
+<if ttadmin.canViewTicket(entry.quid, ttadmin.id) != "0" || entry.assigned_id == ttadmin.id>
+<tr>
+<td class="control_align_center"><call draw_label(entry.id)><br><input type="checkbox" name="ttid" value="${entry.id}">
+</td>
+<td class="control_align_center"><call display_ticket_link_bold_params(entry, sc_params)></td>
+<td class="control_align_center"><call draw_label(entry.priority)></td>
+<td class="control_align_center"><call draw_label(entry.created)></td>
+<td class="control_align_center"><call draw_label(entry.modified)></td>
+<td class="control_align_center"><call draw_label(entry.assigned)></td>
+<td class="control_align_center"><call show_ticket_state(entry.state)>&nbsp;</td>
+<td class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/tt/admin_assign.sbm&ntemplate="+stemplate+"&stemplate="+template+"&ftemplate="+template+"&ttid="+entry.id+sc_params, lang.tt.admin.pickup)></td>
+</tr>
+</if>
+</list>
+<tr><td colspan="7">
+<input type="checkbox" name="selector" onClick="selectall(this.form.elements)" onDblClick="selectall(this.form.elements)">
+<call draw_label_bold(lang.tt.admin.selall)>
+<input type="radio" name="act" value="assign" checked>
+<call draw_label_bold(lang.tt.admin.assign)>
+<input type="radio" name="act" value="close">
+<call draw_label_bold(lang.tt.admin.close)>
+<input type="radio" name="act" value="delete">
+<call draw_label_bold(lang.tt.admin.delete)>
+<if request.stemplate><assign stemplate=request.stemplate><else><assign stemplate="tt/tt_search.html"></if>
+<if request.ftemplate><assign ftemplate=request.ftemplate><else><assign ftemplate="tt/tt_search.html"></if>
+
+&nbsp;<input type="submit" value="${lang.button.apply}">
+
+</td>
+<td align="right" colspan="1"> 
+<call draw_link(config.CLIENT_CP_URL+"/report.csv?template_name=control/search/tt_search.csv&arid="+report.id+"&_content_type=csv", lang.search.export)>
+
+</td></tr>
+</form>
+</if>
+<tr><td align="center" colspan="8">
+         <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+           ${lang.tt.show}	 
+           <select name="sc_show2" size="1">
+              <call show_tickets(show2)>
+           </select> ${lang.tt.tickets}			   
+	   <input type="hidden" name="template_name" value="tt/new_tt_admin.html">
+
+	   <input type="submit" value="Apply">
+ 
+         </form>	 																            
+</td>
+</tr>
+<call draw_table_footer()>
+
+
+<!--  END ./control/tt/new_tt_admin.html  -->

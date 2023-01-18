@@ -1,0 +1,15 @@
+<!-- BEGIN ./email/forward_del_subscriber.sbm  -->
+<assign result=yafv.common.s_email.vEmail(lang.label.email,request.email)>
+<if result.status == "OK">
+    <assign forward = account.getResource(request.uid)>
+    <assign result = forward.removeSubscriber(request.email)>
+</if>
+<if result.status == "OK">
+    <assign res=session.addMessage(toolbox.compose(
+      lang.msg.name_res_deleted, lang.label.mail_lsubscriber, ""))>
+    <include request.stemplate>
+<else>
+    <assign res=session.addMessage(result.msg)>
+    <include request.ftemplate>
+</if> 
+<!--  END ./email/forward_del_subscriber.sbm  -->

@@ -1,0 +1,43 @@
+<!-- BEGIN ./MSSQL/add_login.sbm  -->
+<assign check = yafv.checkall(
+    yafv.common.s_mssql.vMSSQLCombLogin(lang.label.username,request.login_name, request.suffix),
+    yafv.common.s_mssql.vPassword1(lang.label.password,request.login_password, request.login_name),
+    yafv.common.s_mssql.vPassword2(lang.label.password2,request.login_password,request.login_password1)
+)>
+<if check.status=="OK">
+  <assign mssql=account.getChild("MSSQL")>
+  <if !mssql>
+    <assign mssql=account.addChild("MSSQL", "")>
+  </if>
+  <if mssql.status!="OK">
+    <assign res=session.addMessage(mssql.msg)>
+  </if>
+  <if mssql.status=="OK">
+    <assign login = mssql.isLoginExist(request.login_name)>
+    <if login>
+	<if login.status=="OK">
+	    <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_exists, lang.label.login_name, request.login_name))>
+	<else>
+	    <assign res = session.addMessage(login.msg)>
+	</if>
+    <else>	
+      <assign result = mssql.addChild("MSSQLLogin","",request.login_name,request.login_password)>
+      <if result.status=="OK">
+        <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_created, lang.label.login_name, request.login_name))>
+        <assign success="1">
+      <else>
+        <assign res=session.addMessage(toolbox.compose(
+	  lang.msg.name_res_failed_create, lang.label.login_name, request.login_name))>
+      </if>
+    </if>
+  </if>
+</if>
+<if success>
+	<include request.stemplate>
+<else>
+    <list check.msgs as msg><assign res=session.addMessage(msg)></list>
+    <include request.ftemplate>
+</if>
+<!--  END ./MSSQL/add_login.sbm  -->

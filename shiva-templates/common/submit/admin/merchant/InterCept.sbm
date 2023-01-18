@@ -1,0 +1,9 @@
+<!-- BEGIN ./admin/merchant/InterCept.sbm -->
+<assign mm=account.getChild("merchant_manager")>
+<if request.mid>
+  <assign result=mm.update(request.mid, "TITLE", request.title, "SERVER", request.server, "PORT", request.port, "COMPANYKEY", request.companykey, "SECURITYKEY", request.securitykey, "TERMINALID", request.terminalid, "CURRCODE", request.currency, "CLASS_NAME", "psoft.epayment.InterCept", "TEMPLATE", "admin/merchant/InterCept.html")>
+<else>
+  <assign result=mm.new("TITLE", request.title, "SERVER", request.server, "PORT", request.port, "COMPANYKEY", request.companykey, "SECURITYKEY", request.securitykey, "TERMINALID", request.terminalid, "CURRCODE", request.currency, "CLASS_NAME", "psoft.epayment.InterCept", "TEMPLATE", "admin/merchant/InterCept.html")>
+</if>
+<if result><assign res=session.addMessage(result.msg)><include request.ftemplate><else><include request.stemplate></if>
+<!-- END ./admin/merchant/InterCept.sbm -->

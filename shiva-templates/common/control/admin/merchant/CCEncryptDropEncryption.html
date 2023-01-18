@@ -1,0 +1,18 @@
+<!-- BEGIN: ./common/control/admin/merchant/CCEncryptDropEncryption.html -->
+<assign admin=account.getChild("admin")>
+<assign reseller_su = account.getChild("reseller_su")>
+<if reseller_su>
+<call draw_tooltip()>
+
+
+
+<call draw_table_header("2", lang.admin.CCEncryption.header)>
+
+
+<tr ><td class="control_align_center"><call draw_important_label(lang.admin.CCEncryption.disable_warn)><br></td></tr>
+<tr ><td class="control_align_center"><call draw_link(config.CLIENT_CP_URL+"?template_name=submit/admin/merchant/drop_encryption.sbm&stemplate="+request.stemplate,lang.admin.CCEncryption.disable_link)></td></tr>
+
+<call draw_table_footer()>
+</if>
+
+<!-- END: ./common/control/admin/merchant/CCEncryptDropEncryption.html -->

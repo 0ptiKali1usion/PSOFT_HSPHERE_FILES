@@ -1,0 +1,18 @@
+<if account.plan.isResourceAvailable("MSSQLQuota")>
+<assign rtype = plans[plan_id].getResourceType("MSSQLQuota")>
+<assign free_new=rtype.values["_FREE_UNITS_"+periodId]>
+<if free_new=="">    
+     <assign free_new=rtype.values["_FREE_UNITS_"]>
+</if>
+<assign msdbs=account.findAllChildren("MSSQLDatabase")>
+<list msdbs as database>
+    <assign old_quota=database.getChild("MSSQLQuota")>
+    <assign quota_size=toolbox.max(toolbox.ceil(old_quota.usedMb),free_new)>
+    <!--${old_quota.limitMb} ${quota_size} ${old_quota.usedMb} ${free_new}--> 
+    <if toolbox.eq(old_quota.limitMb,quota_size)!="1">
+    	<assign silent="1">
+	<!--${database} ${silent} ${quota_size}-->
+    	<include "submit/MSSQL/change_db_quota.sbm">
+    </if>
+</list>
+</if>

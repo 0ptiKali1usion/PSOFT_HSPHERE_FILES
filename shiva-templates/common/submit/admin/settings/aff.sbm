@@ -1,0 +1,21 @@
+<!-- BEGIN ./submit/admin/settings/aff.sbm -->
+
+<assign admin = account.getChild("admin")>
+<assign useaff = request.use_aff>
+<if useaff>
+<call save("use_aff", useaff)>
+</if>
+<assign afflink = request.aff_link>
+<if afflink && (settings["use_aff"]=="1")>
+<call save("aff_link", afflink)>
+<call save("aff_link2", request.aff_link2)>
+<call save("aff_link3", request.aff_link3)>
+<call save("aff_link4", request.aff_link4)>
+<call save("aff_link5", request.aff_link5)>
+</if>
+<include request.stemplate>
+
+<function save(name,value)><assign result = admin.setSettingsValue(name, value)></function>
+
+<!-- END ./submit/admin/settings/aff.sbm -->
+

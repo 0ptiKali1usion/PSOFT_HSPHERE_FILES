@@ -1,0 +1,119 @@
+<!-- BEGIN ./control/adnsmanager/listssl.html  -->
+<call draw_tooltip()>
+<yafv domain/s_domain>
+<assign resellerSu = account.getChild("reseller_su")>
+<if resellerSu>
+  <assign span="4">
+<else>
+  <assign span="3">
+</if>
+<assign admin = account.getChild("admin")>
+
+<if admin>
+<assign dnsmanager=account.getChild("adnsmanager")>
+<if !dnsmanager><assign dnsmanager=account.addChild("adnsmanager","")></if>
+
+<if admin.isResourceDisabled("sharedssl")>
+  <assign i_ssl_zones = dnsmanager.i_ssl_zones>
+  <assign dns_zones = dnsmanager.dns_zones>
+  <assign globally_disabled = "1">
+  <assign i_ssl_available = "">
+  <assign shared_ssl_available = "">
+  <if !resellerSu && toolbox.gt(i_ssl_zones.size, "0")>
+    <list i_ssl_zones as i_ssl_zone>
+      <if i_ssl_zone.is_i_ssl_allowed>
+        <assign i_ssl_available = "1">
+        <assign res = i_ssl_zones.stop>
+      </if>
+    </list>
+  </if>
+  <list dns_zones as dns_zone>
+    <if dns_zone.allow_ssl == "1">
+      <assign shared_ssl_available = "1">
+      <assign res = dns_zones.stop>
+    </if>
+  </list>
+<else>
+  <assign globally_disabled = "">
+  <if !resellerSu && toolbox.gt(dnsmanager.i_ssl_zones.size, "0")>
+    <assign i_ssl_available = "1">
+  </if>
+  <assign shared_ssl_available = "1">
+</if>
+
+<if i_ssl_available || shared_ssl_available>
+
+<call draw_table_header(span, lang.adnsmanager.listssl.header)>
+
+<tr>
+<td  class="control_align_center"><call draw_label_bold(lang.dns.name)></td>
+<td  class="control_align_center"><call draw_label_bold(lang.adnsmanager.list.email)></td>
+<if resellerSu>
+<td  class="control_align_center" width="15%"><call draw_label_bold(lang.adnsmanager.list.shared)></td>
+</if>
+<td  class="control_align_center" width="15%"><call draw_label_bold(lang.adnsmanager.list.controls)></td>
+</tr>
+
+<if i_ssl_available>
+<tr>
+<td  class="control_align_center" colspan="${span}"><call draw_label(lang.adnsmanager.i_ssl_zones.label)></td>
+</tr>
+<list dnsmanager.i_ssl_zones as i_ssl_zone>
+<tr>
+<td><call draw_label(i_ssl_zone.name)></td>
+<td><call draw_label(i_ssl_zone.email)></td>
+<td  class="control_align_center">
+<if i_ssl_zone.is_i_ssl_allowed>
+  <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_i_ssl_usage.sbm&mode=0"+"&zone_id="+i_ssl_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+<else>
+  <if !globally_disabled>
+    <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_i_ssl_usage.sbm&mode=1"+"&zone_id="+i_ssl_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+  </if>
+</if>
+</td>
+</tr>
+</list>
+</if>
+<if !resellerSu>
+<tr><td class="control_align_center" colspan="${span}"><call draw_label(lang.adnsmanager.own_ssl_zones.label)></td></tr>
+</if>
+<list dnsmanager.dns_zones as dns_zone>
+<tr>
+<td><call draw_label(dns_zone.name)></td>
+<td><call draw_label(dns_zone.email)></td>
+<if resellerSu>
+  <td  class="control_align_center">
+  <if dns_zone.allow_ssl=="1">
+     <if dns_zone.share_ssl>
+       <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_share_ssl.sbm&share=0"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+     <else><if !globally_disabled>
+       <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/set_share_ssl.sbm&share=1"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+     </if></if>
+  <else>
+     <call draw_image("off")>
+  </if>
+  </td>
+</if>
+<td  class="control_align_center">
+<if dns_zone.allow_ssl=="1">
+     <call draw_state_on(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/del_ssl.sbm"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+     <call draw_edit(config.CLIENT_CP_URL+"?template_name=adnsmanager/ssl_edit.html"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template, "Edit SSL config")>
+<else><if !globally_disabled>
+     <call draw_state_off(config.CLIENT_CP_URL+"?template_name=submit/adnsmanager/test_shared_tag.sbm"+"&zone_id="+dns_zone.id+"&ftemplate="+template+"&stemplate="+template)>
+</if></if>
+</td>
+</tr>
+</list>
+<call draw_table_footer()>
+
+<else>
+<call draw_table_header("", lang.adnsmanager.listssl.header)>
+
+  <tr><td><call draw_important_label(lang.msg.domain_shared_ssl_unavailable)></td></tr></tr>
+  
+<call draw_table_footer()>
+</if>
+
+<else>&nbsp;
+</if>
+<!--  END ./control/adnsmanager/listssl.html  -->

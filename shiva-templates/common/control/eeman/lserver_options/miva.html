@@ -1,0 +1,32 @@
+<!-- BEGIN ./control/eeman/lserver_options/miva.html  -->
+<if !admin.isResourceDisabled("miva")>
+<assign optManipulator = obj.lserveroptions.getManipulator(lsOptionName, useXML)>
+<form action="${config.CLIENT_CP_URL}" name="f_lserver_option1" method="POST"  accept-charset="UTF-8">
+    <input type="hidden" name="template_name" value="submit/eeman/set_setting.sbm">
+    <input type="hidden" name="stemplate" value="${template}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="rid" value="${lserverId}">
+    <input type="hidden" name="name" value="miva">
+    <input type="hidden" name="useXML" value="${useXML}">
+    <if useXML == "true">
+        <input type="hidden" name="ps_id" value="${request.ps_id}">
+        <input type="hidden" name="ls_id" value="${request.ls_id}">
+    </if>
+<tr>
+  <td><call draw_label(lang.eeman.lserveredit.options.miva)></td>
+  <td>
+    <assign miva=optManipulator.getOption(lserverId)>
+    <!--miva version ${miva}-->
+    <select name="value">
+	<if (miva == "4.14")><assign mv414="SELECTED"></if>
+	<if (miva == "5.0")><assign mv50="SELECTED"></if>
+	<option value="4.14" ${mv414}><call draw_label(lang.eeman.lserveredit.options.miva414)>
+	<option value="5.0" ${mv50}><call draw_label(lang.eeman.lserveredit.options.mv50)>
+    </select>
+    &nbsp;<input type="submit" value="${lang.button.set}">
+  </td>
+</tr>
+<tr>
+</form>
+</if>
+<!-- END ./control/eeman/lserver_options/miva.html  -->

@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<include "functions">
+<html>
+  <head>
+<if request.words>
+
+<style>
+<!--
+
+.menuskin{
+position:absolute;
+width:165px;
+background-color:menu;
+border:2px solid black;
+font:normal 12px Verdana;
+line-height:18px;
+z-index:100;
+visibility:hidden;
+}
+
+.menuskin a{
+text-decoration:none;
+color:black;
+padding-left:10px;
+padding-right:10px;
+}
+
+#mouseoverstyle{
+background-color:highlight;
+}
+
+#mouseoverstyle a{
+color:white;
+}
+-->
+</style>
+
+<assign result=toolbox.spellcheck(request.words)>
+<assign counter=toolbox.counter>
+<script language="JavaScript1.2">
+
+//Pop-it menu- By Dynamic Drive
+//For full source code and more DHTML scripts, visit http://www.dynamicdrive.com
+//This credit MUST stay intact for use
+
+var linkset=new Array()
+//SPECIFY MENU SETS AND THEIR LINKS. FOLLOW SYNTAX LAID OUT
+<list result as text>
+<if text.name!="1">
+linkset[${counter.value}]='';
+<list text.suggestions as sug>
+linkset[${counter.value}]+='<div class="menuitems"><a href="javascript:substitute(${text.offset}, \'${toolbox.js_encode(toolbox.js_encode(sug))}\', \'${toolbox.js_encode(toolbox.js_encode(text.original))}\')">${toolbox.js_encode(sug)}</a></div>'
+</list>
+linkset[${counter.value}]+='<div class="menuitems"><a href="javascript:substitute(${text.offset}, prompt(\'New Value:\', \'${toolbox.js_encode(toolbox.js_encode(toolbox.js_encode(text.original)))}\'), \'${toolbox.js_encode(toolbox.js_encode(text.original))}\')"><i>edit...</i></a></div>'
+<assign r=counter.next>
+</if>
+</list>
+////No need to edit beyond here
+
+var ie4=document.all&&navigator.userAgent.indexOf("Opera")==-1
+var ns6=document.getElementById&&!document.all
+var ns4=document.layers
+
+function showmenu(e,which){
+
+if (!document.all&&!document.getElementById&&!document.layers)
+return
+
+clearhidemenu()
+
+menuobj=ie4? document.all.popmenu : ns6? document.getElementById("popmenu") : ns4? document.popmenu : ""
+menuobj.thestyle=(ie4||ns6)? menuobj.style : menuobj
+
+if (ie4||ns6)
+menuobj.innerHTML=which
+else{
+menuobj.document.write('<layer name=gui bgColor=#E6E6E6 width=165 onmouseover="clearhidemenu()" onmouseout="hidemenu()">'+which+'</layer>')
+menuobj.document.close()
+}
+
+menuobj.contentwidth=(ie4||ns6)? menuobj.offsetWidth : menuobj.document.gui.document.width
+menuobj.contentheight=(ie4||ns6)? menuobj.offsetHeight : menuobj.document.gui.document.height
+eventX=ie4? event.clientX : ns6? e.clientX : e.x
+eventY=ie4? event.clientY : ns6? e.clientY : e.y
+
+//Find out how close the mouse is to the corner of the window
+var rightedge=ie4? document.body.clientWidth-eventX : window.innerWidth-eventX
+var bottomedge=ie4? document.body.clientHeight-eventY : window.innerHeight-eventY
+
+//if the horizontal distance isn't enough to accomodate the width of the context menu
+if (rightedge<menuobj.contentwidth)
+//move the horizontal position of the menu to the left by it's width
+menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX-menuobj.contentwidth : ns6? window.pageXOffset+eventX-menuobj.contentwidth : eventX-menuobj.contentwidth
+else
+//position the horizontal position of the menu where the mouse was clicked
+menuobj.thestyle.left=ie4? document.body.scrollLeft+eventX : ns6? window.pageXOffset+eventX : eventX
+
+//same concept with the vertical position
+if (bottomedge<menuobj.contentheight)
+menuobj.thestyle.top=ie4? document.body.scrollTop+eventY-menuobj.contentheight : ns6? window.pageYOffset+eventY-menuobj.contentheight : eventY-menuobj.contentheight
+else
+menuobj.thestyle.top=ie4? document.body.scrollTop+event.clientY : ns6? window.pageYOffset+eventY : eventY
+menuobj.thestyle.visibility="visible"
+return false
+}
+
+function contains_ns6(a, b) {
+//Determines if 1 element in contained in another- by Brainjar.com
+while (b.parentNode)
+if ((b = b.parentNode) == a)
+return true;
+return false;
+}
+
+function hidemenu(){
+if (window.menuobj)
+menuobj.thestyle.visibility=(ie4||ns6)? "hidden" : "hide"
+}
+
+function dynamichide(e){
+if (ie4&&!menuobj.contains(e.toElement))
+hidemenu()
+else if (ns6&&e.currentTarget!= e.relatedTarget&& !contains_ns6(e.currentTarget, e.relatedTarget))
+hidemenu()
+}
+
+function delayhidemenu(){
+if (ie4||ns6||ns4)
+delayhide=setTimeout("hidemenu()",500)
+}
+
+function clearhidemenu(){
+if (window.delayhide)
+clearTimeout(delayhide)
+}
+
+function highlightmenu(e,state){
+if (document.all)
+source_el=event.srcElement
+else if (document.getElementById)
+source_el=e.target
+if (source_el.className=="menuitems"){
+source_el.id=(state=="on")? "mouseoverstyle" : ""
+}
+else{
+while(source_el.id!="popmenu"){
+source_el=document.getElementById? source_el.parentNode : source_el.parentElement
+if (source_el.className=="menuitems"){
+source_el.id=(state=="on")? "mouseoverstyle" : ""
+}
+}
+}
+}
+
+if (ie4||ns6)
+document.onclick=hidemenu
+
+</script>
+
+<script language="javascript">
+    
+function done() {
+  var form=document.forms["spellcheck"];
+  opener.document.forms[form.form_name.value].elements[form.form_field.value].value=form.words.value;
+  this.close();
+}
+
+function correctOffset(offset, str) {
+  if (!ns4 || ("\n".length == 2)) {
+    return offset
+  } else {
+    var skp = "\n".length;
+    var inc = skp - 2;
+    var ind = str.indexOf("\n", 0);
+    while ((ind > -1) && (ind < offset)) {
+      offset += inc;
+      ind = str.indexOf("\n", ind + skp);
+    }
+    return offset;
+  }
+}
+
+function substitute(offset, sug, orig) {
+  var form=document.forms["spellcheck"];
+  var text=form.words.value;
+  offset = correctOffset(offset, text)
+  form.words.value=
+     text.substring(0, offset)+sug+text.substring(offset+orig.length);
+  form.submit();
+}
+</script>
+
+</if>
+    <title>${lang.spellcheck.label}</title>
+  </head>
+
+  <body>
+<hr>
+<if request.words>
+<div id="popmenu" class="menuskin" onMouseover="clearhidemenu();highlightmenu(event,'on')" onMouseout="highlightmenu(event,'off');dynamichide(event)">
+</div>
+
+<assign counter=toolbox.counter>
+<list result as text><if text.name=="1">${toolbox.formatForHTML(text.value)}<else><a href="#" onMouseOver="showmenu(event, linkset[${counter.value}])" onMouseout="delayhidemenu()">${toolbox.formatForHTML(text.original)}</a>${counter.next}</if></list>
+<br><br>
+<call draw_link("javascript:done()", "["+lang.button.done+"]")>
+<call draw_link("javascript:this.close()", "["+lang.button.cancel+"]")>
+<form name="spellcheck" action="${config.CLIENT_CP_URL}" target="SPELLCHECK" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="template_name" value="tools/spellcheck.html">
+<input type="hidden" name="words" value="${toolbox.html_encode(request.words)}">
+<input type="hidden" name="form_name" value="${request.form_name}">
+<input type="hidden" name="form_field" value="${request.form_field}">
+</form>
+<else><call draw_label(lang.spellcheck.nothing)><br><call draw_link("javascript:this.close()", lang.button.cancel)></if>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!--  BEGIN ./admin/plan_edit.html  -->
+<assign admin = account.getChild("admin")> 
+<assign plan = admin.getPlan(request.plan_id)>
+
+<call draw_tooltip()>
+<if !plan.deleted>
+<form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+<input type="hidden" name="plan_id" value="${plan.id}">
+<input type="hidden" name="template_name" value="submit/admin/plan_edit_rtype.sbm">
+<input type="hidden" name="stemplate" value="${template}">
+<input type="hidden" name="ftemplate" value="${template}">
+</if>
+
+
+
+
+
+<assign tbl_header = lang.admin.planedit.header(plan.description)>
+<if plan.deleted>
+     <assign tbl_header = tbl_header + "&nbsp;"+ lang.admin.planedit.deleted>
+<else>
+  <if plan.disabled=="1">
+    <assign tbl_header = tbl_header + "&nbsp;" + lang.admin.disabled_plan>
+  </if>
+</if>
+<call prepare_table_header("2", tbl_header)>
+<call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_settings.html", lang.admin.planedit.settings)>
+<if !plan.deleted>
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_access.html", lang.admin.planedit.access)>
+  <call add_table_header_link(config.CLIENT_CP_URL+"?plan_id="+plan.id+"&template_name=admin/plan_edit_showable.html", lang.admin.planedit.show)>
+</if>
+<call draw_table_header_prepared()>
+
+<tr>
+  <td class="control_align_center"><call draw_label_bold(lang.label.enabled)></td>
+  <td class="control_align_center"><call draw_label_bold(lang.label.disabled)></td>
+</tr>
+
+<tr>
+<td valign="top" width="50%" >
+<table width="100%" class="inner_control">
+
+<tr valign="top">
+  <td class="control_align_center" nowrap><call draw_label_bold(lang.label.descr)>&nbsp;</td>
+  <td class="control_align_center" nowrap><call draw_label_bold(lang.label.control)></td>
+</tr>
+<list plan.resources as resource>
+<if resource.disabled=="0"><tr>
+<td nowrap><call draw_label(resource.description)>&nbsp;</td>
+<td class="control_align_center" nowrap><call control(resource.type)></td>
+</tr></if>
+</list>
+</table>
+</td>
+
+<td valign="top" width="50%" >
+<table width="100%" class="inner_control">
+<tr valign="top">
+  <td class="control_align_center" nowrap><call draw_label_bold(lang.label.descr)>&nbsp;</td>
+  <td class="control_align_center" nowrap><call draw_label_bold(lang.label.control)>&nbsp;</td>
+</tr>
+<list plan.resources as resource>
+<if resource.disabled=="1"><tr>
+<td nowrap><call draw_label(resource.description)>&nbsp;</td>
+<td class="control_align_center" nowrap><call control(resource.type)></td>
+</tr></if>
+</list>
+</table>
+</td>
+
+</tr>
+
+<call draw_table_footer()>
+</form>
+
+<function control(r_id)>
+<a href="${config.CLIENT_CP_URL}?plan_id=${plan.id}&r_id=${r_id}&template_name=admin/resource_edit.html&stemplate=admin/plan_edit.html"><font size="-1" color="${design.color("link_color")}">${lang.admin.planedit.edit}</font></a>
+<if plan.b_info!="0">
+<a href="${config.CLIENT_CP_URL}?plan_id=${plan.id}&r_id=${r_id}&template_name=admin/resource_edit_price.html&stemplate=admin/plan_edit.html"><font size="-1" color="${design.color("link_color")}">${lang.admin.planedit.price}</font></a></if>
+<if SHOW_RES_ADV == "1">
+<a href="${config.CLIENT_CP_URL}?plan_id=${plan.id}&r_id=${r_id}&template_name=admin/resource_edit_adv.html&stemplate=admin/plan_edit.html"><font size="-1" color="${design.color("link_color")}">${lang.admin.planedit.adv}</font></a>
+</if>
+</function>
+<!--  END ./admin/plan_edit.html  -->

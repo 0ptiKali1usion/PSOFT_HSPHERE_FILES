@@ -1,0 +1,22 @@
+<!-- BEGIN ./submit/eeman/filer_edit.sbm  -->
+<assign result=yafv.checkall(yafv.common.s_hsphere.vFiler(lang.eeman.fserver,request.filer))>
+<if result.status=="OK">
+   <assign eeman = account.getChild("eeman")>
+   <assign lserver=eeman.getLserver(request.rid)>
+   <assign result = lserver.setFileServer(request.filer)>
+   <if result.status!="OK">
+      <assign res=session.addMessage(result.msg)>
+      <assign failure="1">
+   </if>
+<else>
+   <list result.msgs as msg><assign res=session.addMessage(msg)></list>
+   <assign failure="1">
+</if>
+<if failure>
+   <assign filer = request.filer>   	
+   <include request.ftemplate>
+<else>
+   <include request.stemplate>
+</if>
+
+<!--  END ./submit/eeman/filer_edit.sbm  -->

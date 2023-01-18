@@ -1,0 +1,8 @@
+<!-- BEGIN ./search/unsuspend_confirm.html  -->
+<assign template="search/unsuspend_confirm.html">
+<include "functions">
+<if !request.cur_menu><assign cur_menu="search-accounts"><else><assign cur_menu=request.cur_menu></if>
+<call draw_menu(cur_menu)>
+<include "control/search/unsuspend_confirm.html">
+<call bottom()>
+<!--  END ./search/unsuspend_confirm.html  -->

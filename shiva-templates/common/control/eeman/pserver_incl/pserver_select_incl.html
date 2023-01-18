@@ -1,0 +1,14 @@
+<!--  Begin ./control/eeman/pserver_select_incl.html -->
+<assign params = param.param_list> 
+<assign groupname = param.group_name>
+<tr><td><call draw_label(param.param_name)>
+<include "control/eeman/pserver_incl/pserver_param_help_incl.html"></td>
+<td>
+<select name="${groupname}">
+  <list params as param1>
+    <option value="${param1.param_name}" <if param.param_value==param1.param_name>SELECTED</if>>${param1.param_description}</option>
+  </list>
+</select>
+<br>
+</td></tr>
+<!--  END ./control/eeman/pserver_select_incl.html  -->

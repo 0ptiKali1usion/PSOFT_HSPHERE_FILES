@@ -1,0 +1,17 @@
+<!-- BEGIN ./billview/show.html  -->
+<call draw_tooltip()>
+<assign billviewer = account.getChild("billviewer")>
+<assign billing_charged_color = "#FFD800">
+<assign billing_cancelled_color = "#FE6C00">
+<assign billing_light_strip = "#D6D1B6">
+<assign billing_dark_strip = "#B6B196">
+<assign billing_text_color = "#000000">
+<assign color = billing_light_strip>
+<assign bill = user.getBill(request.bill_id,request.account_id)>
+<assign taxes = bill.taxes>
+<if taxes.size != "0">
+<include "/control/billview/show_taxes.html">
+<else>
+<include "control/billview/show_no_taxes.html">
+</if>
+<!--  END ./billview/show.html  -->

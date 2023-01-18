@@ -1,0 +1,108 @@
+<!-- BEGIN ./common/control/signup/pay_info.html.in  -->
+<function setBilDescription(processors, bil_inf)>
+<assign desc="">
+<if bil_inf.type=="CC">
+  <assign desc=bil_inf.pi.info>
+<else>
+  <if bil_inf.type=="Check">
+     <assign desc=lang.label.check>
+  <else>
+     <list processors as processor>
+       <if processor("name")==bil_inf.type><assign desc=lang[processor("description")]></if>
+     </list>
+     <if desc==""><assign desc=lang.label.check></if>
+  </if>
+</if>
+</function>
+
+<if config.REFERRAL_PROGRAM=="ENABLED">
+<tr>
+   <td ><call draw_label(lang.signup.payinfo.refid)></td>
+   <td ><input type="text" name="referal_id"></td>
+   <assign excludeFields=excludeFields+"referal_id;">
+</tr>
+<tr>
+   <td ><call draw_label(lang.signup.payinfo.refgroup)></td>
+   <td ><select name="referal_group"><option value="1">${lang.signup.payinfo.feefix}<option value="2">${lang.signup.payinfo.feeperplan}<option value="3">${lang.signup.payinfo.feetime}<option value="4">${lang.signup.payinfo.feeindef}<option value="5">${lang.signup.payinfo.feeonline}</select></td>
+   <assign excludeFields=excludeFields+"referal_group;">
+</tr>
+</if>
+
+<assign processors = toolbox.getGateways().processors.processor>
+
+<if config.REFERRAL_PROGRAM=="DISABLED">
+<input type="hidden" name="referal_id" value="0">
+<assign excludeFields=excludeFields+"referal_id;">
+<input type="hidden" name="referal_group" value="0">
+<assign excludeFields=excludeFields+"referal_group;">
+</if>
+<assign plan=new_user.plan>
+<if plan.b_info!="0">
+<tr>
+   <td ><call draw_label(lang.label.ptype)></td>
+   <td >
+     <assign cnt="0"> 
+     <select name="_bi_type" size="1">
+       <if toolbox.canUseCC()>
+           <option value="CC">${lang.label.cc}
+	   <assign cnt="1"> 
+       </if>
+       <if settings.checks_disabled=="">
+           <option value="Check">${lang.label.check}
+	   <assign cnt="1"> 
+       </if>
+       <if plan.b_info=="2">
+           <option value="TRIAL">${lang.label.trial}
+	   <assign cnt="1"> 
+       </if>
+       <list processors as processor>
+         <assign name=processor("name")>
+         <if settings[name+"_enabled"]== "1"><option value="${name}">${lang[processor("description")]}</option><assign cnt="1"></if>
+       </list>
+     </select>
+     <if cnt=="0"><call draw_label_bold(lang.signup.payinfo.paytype_warn)></if> 
+    </td>
+</tr>
+<assign periods=plan.values["_PERIOD_TYPES"]>
+<assign excludeFields=excludeFields+"_bi_type;">
+<if periods>
+<tr>
+   <td ><call draw_label(lang.label.bp)></td>
+   <td ><select name="_bp" size="1"><assign counter=toolbox.counter("0", periods)><assign onc=toolbox.counter()><list onc as c><if counter==periods>${c.stop}<else><option value="${counter}">${plan.values["_PERIOD_SIZE_"+counter]} ${plan.values["_PERIOD_TYPE_"+counter]}${counter.next}</if></list></select></td>
+<assign excludeFields=excludeFields+"_bp;">
+</tr>
+</if>
+</if>
+<if  (user) && (request.admin_signup=="")>
+<tr>
+    <td ><call draw_label(lang.signup.payinfo.usebp)></td>
+    <td ><select name="use_bi_id" size="1">
+	<option value="">${lang.signup.payinfo.createbp}</option>
+    <list user.billing_infos as bi>
+      <if request.use_bi_id==bi.bi_id><assign vsel = "SELECTED"><else><assign vsel ="" ></if>
+      <option value="${bi.bi_id}" ${vsel}>
+        <call setBilDescription(processors, bi)>
+        <call draw_label(bi.first_name + " " + bi.last_name + " " + desc)>
+      </option>
+    </list>
+    </select></td>
+<assign excludeFields=excludeFields+"use_bi_id;">
+</tr>
+</if>
+<if new_user.plan.bi_info!="0">
+<tr><td>&nbsp;</td></tr>
+<tr>
+  <td  colspan="2"  ><call draw_label_bold(lang.signup.payinfo.useci)>&nbsp;<input type="checkbox" name="_bi_useci"></td>
+  <assign excludeFields=excludeFields+"_bi_useci;">
+</tr>
+</if>
+
+<if settings.allow_tax_exemption == "1">
+<tr><td>&nbsp;</td></tr>
+<tr>
+<td  valign="top" width="60%"><call draw_label(lang.signup.payinfo.exemption_code_opt)></td>
+<td  valign="top"><input type="text" label="${lang.signup.payinfo.exemption_code}" name="_bi_exemption_code" value="${vexemption_code}" check="vExemptionCode"></td>
+<assign excludeFields=excludeFields+"_bi_exemption_code;">
+</tr>
+</if>
+<!-- END ./common/control/signup/pay_info.html.in  -->

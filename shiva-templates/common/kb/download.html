@@ -1,0 +1,6 @@
+<!-- BEGIN ./common/kb/download.html -->
+<assign kb_man=account.getChild("ttadmin").kb_manager>
+<script language="javascript">
+document.location="${config.DOWNLOAD_URI}?id=${kb_man.export(request.id)}";
+</script>
+<!-- END ./common/kb/download.html -->

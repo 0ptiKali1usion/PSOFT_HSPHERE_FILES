@@ -1,0 +1,8 @@
+<!-- BEGIN ./domain/edit_mount_submit.sbm  -->
+<assign result=account.getResource(request.rid).getChild("servlet").setMount(request.mount)>
+<if result.status=="OK">
+ <assign success="1">
+<else>${session.addMessage(result.msg)}
+</if>
+<if success=="1"><include request.stemplate><else><include request.ftemplate></if>
+<!--  END ./domain/edit_mount_submit.sbm  -->

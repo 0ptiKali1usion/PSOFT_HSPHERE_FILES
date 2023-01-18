@@ -1,0 +1,117 @@
+<!-- BEGIN ./zeus/ssl_edit.html  -->
+<assign hosting=account.getResource(request.rid)>
+<assign ssl=account.getResource(request.uid)>
+<call draw_tooltip()>
+
+
+
+
+
+<call draw_table_header("2", lang.domain.ssledit.header)>
+
+
+<tr>
+  <td   width="20%">
+    <call draw_label_bold(lang.label.dname)>
+  </td>
+  <td   >
+    <call draw_link(config.CLIENT_CP_URL+"?rid="+hosting+"&template_name=zeus/webservice.html", hosting.parent.name)>
+  </td>
+</tr>
+<tr>
+  <td   >
+    <call draw_label_bold(lang.domain.ssledit.instprev)>
+  </td>
+  <td   >
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/domain/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert_only">
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td   >
+    <call draw_label_bold(lang.domain.ssledit.instnew)>
+  </td>
+  <td   >
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/domain/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="key">
+    <call draw_label_bold(lang.domain.ssledit.key)><br>
+    <textarea name="key" rows="10" cols="64" nowrap></textarea><br>
+    <call draw_label_bold(lang.domain.ssledit.file)><br>
+    <textarea name="file" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.domain.ssledit.submit}">
+    </form>
+  </td>
+</tr>
+<!--
+<tr>
+  <td   >
+    <call draw_label_bold(lang.domain.ssledit.chain)>
+  </td>
+  <td   >
+    <if ssl.chain=="1"><call draw_link(config.CLIENT_CP_URL+"?uid="+ssl+"&rid="+hosting+"&template_name=submit/domain/ssl_edit_submit.sbm&type=u_chain&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/domain/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="chain">
+    <textarea name="chain" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td   >
+    <call draw_label_bold(lang.domain.ssledit.auth)>
+  </td>
+  <td   >
+    <if ssl.cert=="1"><call draw_link(config.CLIENT_CP_URL+"?uid="+ssl+"&rid="+hosting+"&template_name=submit/domain/ssl_edit_submit.sbm&type=u_cert&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/domain/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="cert">
+    <textarea name="cert" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+<tr>
+  <td   >
+    <call draw_label_bold(lang.domain.ssledit.revoc)>
+  </td>
+  <td   >
+    <if ssl.rev=="1"><call draw_link(config.CLIENT_CP_URL+"?uid="+ssl+"&rid="+hosting+"&template_name=submit/domain/ssl_edit_submit.sbm&type=u_rev&stemplate="+request.stemplate+"&ftemplate="+template, lang.domain.ssledit.disable)></if><br>
+    <form action="${config.CLIENT_CP_URL}" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="rid" value="${hosting}">
+    <input type="hidden" name="uid" value="${ssl}">
+    <input type="hidden" name="template_name" value="submit/domain/ssl_edit_submit.sbm">
+    <input type="hidden" name="stemplate" value="${request.stemplate}">
+    <input type="hidden" name="ftemplate" value="${template}">
+    <input type="hidden" name="type" value="rev">
+    <textarea name="rev" rows="10" cols="64" nowrap></textarea><br>
+    <input type="submit" value="${lang.button.install}">
+    </form>
+  </td>
+</tr>
+-->
+
+<call draw_table_footer()>
+<!--  END ./zeus/ssl_edit.html  -->
